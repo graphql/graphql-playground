@@ -2,12 +2,14 @@ import * as React from 'react'
 import {
   isType,
 } from 'graphql'
+import * as cx from 'classnames'
 
 import FieldDoc from 'graphiql/dist/components/DocExplorer/FieldDoc'
 import SchemaDoc from './DocExplorer/SchemaDoc'
 import SearchBox from './DocExplorer/SearchBox'
 import SearchResults from 'graphiql/dist/components/DocExplorer/SearchResults'
 import TypeDoc from 'graphiql/dist/components/DocExplorer/TypeDoc'
+// import {$v} from 'graphcool-styles'
 
 /**
  * DocExplorer
@@ -40,7 +42,7 @@ export class DocExplorer extends React.Component<Props, State> {
   constructor(props) {
     super(props)
 
-    this.state = { navStack: [], searchValue: undefined } as State
+    this.state = {navStack: [], searchValue: undefined} as State
   }
 
   shouldComponentUpdate(nextProps, nextState) {
@@ -66,7 +68,7 @@ export class DocExplorer extends React.Component<Props, State> {
       // Schema is undefined when it is being loaded via introspection.
       content =
         <div className="spinner-container">
-          <div className="spinner" />
+          <div className="spinner"/>
         </div>
     } else if (schema === null) {
       // Schema is null when it explicitly does not exist, typically due to
@@ -107,7 +109,7 @@ export class DocExplorer extends React.Component<Props, State> {
       }
     } else if (schema) {
       content =
-        <SchemaDoc schema={schema} onClickType={this.handleClickTypeOrField} />
+        <SchemaDoc schema={schema} onClickType={this.handleClickTypeOrField}/>
     }
 
     let prevName
@@ -122,14 +124,38 @@ export class DocExplorer extends React.Component<Props, State> {
       )
 
     return (
-      <div className="doc-explorer">
+      <div
+        className={cx('doc-explorer', {
+          'show-title': Boolean(prevName),
+        })}
+      >
+        <style jsx={true}>{`
+          .doc-explorer-contents {
+            @inherit: .pa0;
+            border-left: 6px solid $green;
+            top: 0;
+            box-shadow: none;
+          }
+          .doc-explorer-title-bar {
+            z-index: 2;
+          }
+        `}</style>
+        {
+          prevName &&
+          <div
+            className={'doc-explorer-title-bar'}
+          >
+            <div
+              className="doc-explorer-back"
+              onClick={this.handleNavBackClick}>
+              {prevName}
+            </div>
+            <div className="doc-explorer-title">
+              {title}
+            </div>
+          </div>
+        }
         <div className="doc-explorer-contents">
-          <style jsx={true}>{`
-            .doc-explorer-contents {
-              top: 0;
-              @inherit: .pa0;
-            }
-          `}</style>
           <div className="header">
             <SearchBox
               isShown={shouldSearchBoxAppear}
@@ -148,10 +174,10 @@ export class DocExplorer extends React.Component<Props, State> {
     const isCurrentlyShown =
       navStack.length > 0 && navStack[navStack.length - 1] === typeOrField
     if (!isCurrentlyShown) {
-      navStack = navStack.concat([ typeOrField ])
+      navStack = navStack.concat([typeOrField])
     }
 
-    this.setState({ navStack } as State)
+    this.setState({navStack} as State)
   }
 
   // Public API
@@ -159,16 +185,16 @@ export class DocExplorer extends React.Component<Props, State> {
     let navStack = this.state.navStack
     const lastEntry = navStack.length > 0 && navStack[navStack.length - 1]
     if (!lastEntry) {
-      navStack = navStack.concat([ searchItem ])
+      navStack = navStack.concat([searchItem])
     } else if (lastEntry.searchValue !== searchItem.searchValue) {
-      navStack = navStack.slice(0, -1).concat([ searchItem ])
+      navStack = navStack.slice(0, -1).concat([searchItem])
     }
 
-    this.setState({ navStack } as State)
+    this.setState({navStack} as State)
   }
 
   handleNavBackClick = () => {
-    this.setState({ navStack: this.state.navStack.slice(0, -1) } as State)
+    this.setState({navStack: this.state.navStack.slice(0, -1)} as State)
   }
 
   handleClickTypeOrField = typeOrField => {

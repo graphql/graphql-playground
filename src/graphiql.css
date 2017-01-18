@@ -144,7 +144,7 @@
 }
 
 .graphiql-container .resultWrap {
-    border-left: solid 1px #e0e0e0;
+    border-left: none;
     display: -webkit-box;
     display: -ms-flexbox;
     display: flex;
@@ -189,6 +189,17 @@
     position: relative;
 }
 
+.graphiql-container .query-editor .CodeMirror-gutters {
+    border-right: none;
+    background-color: rgb(15,32,45);
+}
+
+.graphiql-container .query-editor .CodeMirror {
+    padding-left: 12px;
+    width: calc(100% - 12px);
+    background-color: rgb(15,32,45);
+}
+
 .graphiql-container .variable-editor {
     display: -webkit-box;
     display: -ms-flexbox;
@@ -201,17 +212,26 @@
     position: relative;
 }
 
+.graphiql-container .variable-editor .CodeMirror {
+    padding-left: 12px;
+    width: calc(100% - 12px);
+    background: #0B1924;
+}
+
+.graphiql-container .variable-editor .CodeMirror-gutters {
+    background: #0B1924;
+    border: none;
+}
+
+
 .graphiql-container .variable-editor-title {
-    background: #eeeeee;
-    border-bottom: 1px solid #d6d6d6;
-    border-top: 1px solid #e0e0e0;
-    color: #777;
-    font-variant: small-caps;
+    background: #0B1924;
+    color: rgba(255,255,255,.3);
+    text-transform: uppercase;
     font-weight: bold;
     letter-spacing: 1px;
     line-height: 14px;
-    padding: 6px 0 8px 43px;
-    text-transform: lowercase;
+    padding: 14px 0 5px 16px;
     -webkit-user-select: none;
     -moz-user-select: none;
     -ms-user-select: none;
@@ -253,12 +273,14 @@
 }
 
 .graphiql-container .result-window .CodeMirror {
-    background: #f6f7f8;
+    padding-left: 10px;
+    padding-top: 117px;
+    background: rgb(23,42,58);
 }
 
 .graphiql-container .result-window .CodeMirror-gutters {
-    background-color: #eeeeee;
-    border-color: #e0e0e0;
+    background-color: transparent;
+    border: none;
     cursor: col-resize;
 }
 
@@ -368,14 +390,15 @@
 }
 
 .graphiql-container .CodeMirror {
-    color: #141823;
+    color: rgba(255,255,255,.3);
     font-family:
+            'Source Code Pro',
             'Consolas',
             'Inconsolata',
             'Droid Sans Mono',
             'Monaco',
             monospace;
-    font-size: 13px;
+    font-size: 16px;
     height: 100%;
     left: 0;
     position: absolute;
@@ -611,7 +634,10 @@ div.CodeMirror-lint-message-error, div.CodeMirror-lint-message-warning {
 }
 .CodeMirror-linenumbers {}
 .CodeMirror-linenumber {
-    color: #999;
+    font-family: Open Sans,sans-serif;
+    font-weight: 600;
+    font-size: 12px;
+    color: rgba(255,255,255,.2);
     min-width: 20px;
     padding: 0 3px 0 5px;
     text-align: right;
@@ -624,7 +650,7 @@ div.CodeMirror-lint-message-error, div.CodeMirror-lint-message-warning {
 /* CURSOR */
 
 .CodeMirror div.CodeMirror-cursor {
-    border-left: 1px solid black;
+    border-left: 1px solid rgba(255,255,255,.4);
 }
 /* Shown when moving in bi-directional text */
 .CodeMirror div.CodeMirror-secondarycursor {
@@ -720,7 +746,9 @@ div.CodeMirror span.CodeMirror-nonmatchingbracket {color: #f22;}
     background: white;
     overflow: hidden;
     position: relative;
+    line-height: 24px;
 }
+
 
 .CodeMirror-scroll {
     height: 100%;
@@ -968,7 +996,7 @@ span.CodeMirror-selectedtext { background: none; }
     flex: 1;
     font-weight: bold;
     overflow-x: hidden;
-    padding: 10px 0 10px 10px;
+    padding: 10px;
     text-align: center;
     text-overflow: ellipsis;
     white-space: nowrap;
@@ -1023,6 +1051,10 @@ span.CodeMirror-selectedtext { background: none; }
     background-color: rgba(0,0,0,.02);
     color: rgba(0,0,0,.5);
     font-size: 16px;
+}
+
+.graphiql-container .show-title .doc-type-description {
+    padding-top: 20px;
 }
 
 .graphiql-container .doc-type-description p:first-child ,

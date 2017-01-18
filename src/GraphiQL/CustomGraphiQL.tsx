@@ -15,7 +15,7 @@ import {
   print,
 } from 'graphql'
 
-import {ExecuteButton} from 'graphiql/dist/components/ExecuteButton'
+import {ExecuteButton} from './ExecuteButton'
 import {ToolbarButton} from 'graphiql/dist/components/ToolbarButton'
 import {QueryEditor} from 'graphiql/dist/components/QueryEditor'
 import {VariableEditor} from 'graphiql/dist/components/VariableEditor'
@@ -238,13 +238,13 @@ export class CustomGraphiQL extends React.Component<Props, State> {
   render() {
     const children = React.Children.toArray(this.props.children)
 
-    const logo =
-      find(children, child => child.type === CustomGraphiQL.Logo) ||
-      <CustomGraphiQL.Logo />
+    // const logo =
+    //   find(children, child => child.type === CustomGraphiQL.Logo) ||
+      {/*<CustomGraphiQL.Logo />*/}
 
-    const toolbar =
-      find(children, child => child.type === CustomGraphiQL.Toolbar) ||
-      <CustomGraphiQL.Toolbar />
+    {/*const toolbar =*/}
+      {/*find(children, child => child.type === CustomGraphiQL.Toolbar) ||*/}
+      {/*<CustomGraphiQL.Toolbar />*/}
 
     const footer = find(children, child => child.type === CustomGraphiQL.Footer)
 
@@ -254,7 +254,9 @@ export class CustomGraphiQL extends React.Component<Props, State> {
     }
 
     const docWrapStyle = {
-      display: this.state.docExplorerOpen ? 'block' : 'none',
+      right: this.state.docExplorerOpen ? 0 : -(this.state.docExplorerWidth - 6),
+      position: this.state.docExplorerOpen ? 'relative' : 'absolute',
+      height: '100%',
       width: this.state.docExplorerWidth,
     }
     const docExplorerWrapClasses = 'docExplorerWrap' +
@@ -271,32 +273,22 @@ export class CustomGraphiQL extends React.Component<Props, State> {
           .graphiql-container {
             font-family: Open Sans,sans-serif;
           }
+
+          .docs-button {
+            @inherit: .absolute, .white, .bgGreen, .pa6, .br2, .z2, .ttu, .fw6, .f14, .ph10, .pointer;
+            padding-bottom: 8px;
+            transform: rotate(-90deg);
+            left: -44px;
+            top: 180px;
+          }
+
+          .top-bar {
+            height: 60px;
+            @inherit: .bgDarkerBlue;
+          }
         `}</style>
         <div className='editorWrap'>
-          <div className='topBarWrap'>
-            <div className='topBar'>
-              {logo}
-              <ExecuteButton
-                isRunning={Boolean(this.state.subscription)}
-                onRun={this.handleRunQuery}
-                onStop={this.handleStopQuery}
-                operations={this.state.operations}
-              />
-              <CustomGraphiQL.ToolbarButton
-                onClick={this.handlePrettifyQuery}
-                title='Prettify Query'
-                label='Prettify'
-              />
-              {toolbar}
-            </div>
-            {
-              !this.state.docExplorerOpen &&
-              <button
-                className='docExplorerShow'
-                onClick={this.handleToggleDocs}>
-                {'Docs'}
-              </button>
-            }
+          <div className='top-bar'>
           </div>
           <div
             ref={n => { this.editorBarComponent = n }}
@@ -329,6 +321,12 @@ export class CustomGraphiQL extends React.Component<Props, State> {
               </div>
             </div>
             <div className='resultWrap'>
+              <ExecuteButton
+                isRunning={Boolean(this.state.subscription)}
+                onRun={this.handleRunQuery}
+                onStop={this.handleStopQuery}
+                operations={this.state.operations}
+              />
               {
                 this.state.isWaitingForResponse &&
                 <div className='spinner-container'>
@@ -344,6 +342,9 @@ export class CustomGraphiQL extends React.Component<Props, State> {
           </div>
         </div>
         <div className={docExplorerWrapClasses} style={docWrapStyle}>
+          <div className="docs-button" onClick={this.handleToggleDocs}>
+            Docs
+          </div>
           <div
             className='docExplorerResizer'
             onMouseDown={this.handleDocsResizeStart}
@@ -756,7 +757,7 @@ export class CustomGraphiQL extends React.Component<Props, State> {
     }
     let target = event.target
     // We use codemirror's gutter as the drag bar.
-    if (target.className.indexOf('CodeMirror-gutter') !== 0) {
+    if (target.className.indexOf && target.className.indexOf('CodeMirror-gutter') !== 0) {
       return false
     }
     // Specifically the result window's drag bar.

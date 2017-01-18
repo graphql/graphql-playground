@@ -17,109 +17,40 @@
   </component>
   <component name="ExecutionTargetManager" SELECTED_TARGET="default_target" />
   <component name="FileEditorManager">
-    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="CustomGraphiQL.tsx" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/GraphiQL/CustomGraphiQL.tsx">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="380">
-              <caret line="278" column="27" lean-forward="false" selection-start-line="278" selection-start-column="27" selection-end-line="278" selection-end-column="27" />
-              <folding>
-                <element signature="n#!!doc" expanded="true" />
-                <element signature="e#194#224#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="DocExplorer.tsx" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/GraphiQL/DocExplorer.tsx">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="200">
-              <caret line="130" column="0" lean-forward="false" selection-start-line="130" selection-start-column="0" selection-end-line="130" selection-end-column="0" />
-              <folding>
-                <element signature="e#0#30#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="SchemaDoc.tsx" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/GraphiQL/DocExplorer/SchemaDoc.tsx">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="400">
-              <caret line="46" column="25" lean-forward="false" selection-start-line="46" selection-start-column="25" selection-end-line="46" selection-end-column="25" />
-              <folding>
-                <element signature="e#194#224#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="graphiql.css" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/graphiql.css">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="429">
-              <caret line="1061" column="22" lean-forward="false" selection-start-line="1061" selection-start-column="22" selection-end-line="1061" selection-end-column="22" />
-              <folding>
-                <element signature="e#26856#27145#2" expanded="true" />
-                <element signature="e#27205#27522#2" expanded="true" />
-                <element signature="e#28053#28342#2" expanded="true" />
-                <element signature="e#28437#28778#2" expanded="true" />
-                <element signature="e#28840#29037#2" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="SearchBox.tsx" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/src/GraphiQL/DocExplorer/SearchBox.tsx">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="340">
-              <caret line="54" column="33" lean-forward="false" selection-start-line="54" selection-start-column="33" selection-end-line="54" selection-end-column="33" />
-              <folding>
-                <element signature="n#!!doc" expanded="true" />
-                <element signature="e#194#225#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="webpack.config.dev.js" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/config/webpack.config.dev.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="220">
-              <caret line="147" column="0" lean-forward="false" selection-start-line="147" selection-start-column="0" selection-end-line="147" selection-end-column="0" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-    </leaf>
+    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300" />
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>semi</find>
-      <find>post</find>
-      <find>cxxpro</find>
-      <find>csspr</find>
-      <find>csspro</find>
-      <find>jsx</find>
-      <find>JSX</find>
-      <find>moveEvent: any</find>
-      <find>styled-jsx</find>
-      <find>babel</find>
-      <find>postcss</find>
-      <find>Docs</find>
-      <find>or</find>
-      <find>for</find>
-      <find>operations</find>
-      <find>raq</find>
-      <find>a gr</find>
-      <find>doc-type-description</find>
-      <find>ro</find>
-      <find>description</find>
-      <find>doc-cate</find>
       <find>keyword</find>
+      <find>docs</find>
+      <find>topbarwrap</find>
+      <find>executebutt</find>
+      <find>executebutto</find>
+      <find>logo</find>
+      <find>foldgutter</find>
+      <find>gutter</find>
+      <find>resultwrap</find>
+      <find>optionsOpen</find>
+      <find>desc</find>
+      <find>doc-explorer-title-bar</find>
+      <find>doc-type-de</find>
+      <find>title</find>
+      <find>titlek</find>
+      <find>doc-explorer-t</find>
+      <find>target.className.in</find>
+      <find>query-editor</find>
+      <find>queryWrap</find>
+      <find>query-edi</find>
+      <find>Codemirror-linenu</find>
+      <find>query-e</find>
+      <find>result-window</find>
+      <find>variable-editor-</find>
+      <find>variable-editor</find>
+      <find>linenumber</find>
+      <find>.codemirror</find>
+      <find>graphiql-container .codemirror</find>
+      <find>cursor</find>
+      <find>selection</find>
     </findStrings>
   </component>
   <component name="IdeDocumentHistory">
@@ -133,22 +64,24 @@
         <option value="$PROJECT_DIR$/src/App.tsx" />
         <option value="$PROJECT_DIR$/tsconfig.json" />
         <option value="$PROJECT_DIR$/.babelrc" />
-        <option value="$PROJECT_DIR$/postcss.config.js" />
         <option value="$PROJECT_DIR$/style.css" />
         <option value="$PROJECT_DIR$/package.json" />
         <option value="$PROJECT_DIR$/node_modules/@types/react/index.d.ts" />
         <option value="$PROJECT_DIR$/src/App.css" />
         <option value="$PROJECT_DIR$/src/Playground.tsx" />
-        <option value="$PROJECT_DIR$/src/index.css" />
         <option value="$PROJECT_DIR$/src/CustomGraphiQL.tsx" />
-        <option value="$PROJECT_DIR$/src/GraphiQL/CustomGraphiQL.tsx" />
         <option value="$PROJECT_DIR$/config/webpack.config.dev.js" />
         <option value="$PROJECT_DIR$/graphiql.css" />
         <option value="$PROJECT_DIR$/src/index.tsx" />
         <option value="$PROJECT_DIR$/src/GraphiQL/DocExplorer/SchemaDoc.tsx" />
-        <option value="$PROJECT_DIR$/src/GraphiQL/DocExplorer.tsx" />
-        <option value="$PROJECT_DIR$/src/graphiql.css" />
         <option value="$PROJECT_DIR$/src/GraphiQL/DocExplorer/SearchBox.tsx" />
+        <option value="$PROJECT_DIR$/variables.js" />
+        <option value="$PROJECT_DIR$/postcss.config.js" />
+        <option value="$PROJECT_DIR$/src/GraphiQL/DocExplorer.tsx" />
+        <option value="$PROJECT_DIR$/src/GraphiQL/CustomGraphiQL.tsx" />
+        <option value="$PROJECT_DIR$/src/GraphiQL/ExecuteButton.tsx" />
+        <option value="$PROJECT_DIR$/src/index.css" />
+        <option value="$PROJECT_DIR$/src/graphiql.css" />
       </list>
     </option>
   </component>
@@ -357,19 +290,19 @@
       <option name="presentableId" value="Default" />
       <updated>1484571565630</updated>
       <workItem from="1484571567914" duration="13443000" />
-      <workItem from="1484644823443" duration="12993000" />
+      <workItem from="1484644823443" duration="24625000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="26436000" />
+    <option name="totallyTimeSpent" value="38068000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="23" width="1280" height="773" extended-state="6" />
-    <editor active="true" />
+    <editor active="false" />
     <layout>
       <window_info id="TypeScript" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.24861" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.24861" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
@@ -543,14 +476,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/postcss.config.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="180">
-          <caret line="9" column="0" lean-forward="true" selection-start-line="9" selection-start-column="0" selection-end-line="9" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/tsconfig.json">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="180">
@@ -575,14 +500,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/index.css">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="160">
-          <caret line="8" column="14" lean-forward="false" selection-start-line="8" selection-start-column="14" selection-end-line="8" selection-end-column="14" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/Playground.tsx">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="280">
@@ -603,29 +520,52 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/config/webpack.config.dev.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="220">
-          <caret line="147" column="0" lean-forward="false" selection-start-line="147" selection-start-column="0" selection-end-line="147" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/index.tsx">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="200">
           <caret line="10" column="0" lean-forward="true" selection-start-line="10" selection-start-column="0" selection-end-line="10" selection-end-column="0" />
           <folding>
-            <element signature="e#0#31#0" expanded="true" />
+            <element signature="e#0#31#0" expanded="false" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/GraphiQL/DocExplorer/SchemaDoc.tsx">
+    <entry file="file://$PROJECT_DIR$/variables.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="400">
-          <caret line="46" column="25" lean-forward="false" selection-start-line="46" selection-start-column="25" selection-end-line="46" selection-end-column="25" />
+        <state relative-caret-position="380">
+          <caret line="19" column="44" lean-forward="true" selection-start-line="19" selection-start-column="44" selection-end-line="19" selection-end-column="44" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/postcss.config.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="80">
+          <caret line="4" column="5" lean-forward="false" selection-start-line="4" selection-start-column="5" selection-end-line="4" selection-end-column="5" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/graphiql.css">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="162">
+          <caret line="910" column="44" lean-forward="false" selection-start-line="910" selection-start-column="44" selection-end-line="910" selection-end-column="44" />
           <folding>
+            <element signature="e#27558#27847#2" expanded="true" />
+            <element signature="e#27907#28224#2" expanded="true" />
+            <element signature="e#28755#29044#2" expanded="true" />
+            <element signature="e#29139#29480#2" expanded="true" />
+            <element signature="e#29542#29739#2" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/GraphiQL/ExecuteButton.tsx">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="40">
+          <caret line="80" column="0" lean-forward="true" selection-start-line="80" selection-start-column="0" selection-end-line="80" selection-end-column="0" />
+          <folding>
+            <element signature="n#!!doc" expanded="true" />
             <element signature="e#194#224#0" expanded="true" />
           </folding>
         </state>
@@ -633,8 +573,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/GraphiQL/CustomGraphiQL.tsx">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="380">
-          <caret line="278" column="27" lean-forward="false" selection-start-line="278" selection-start-column="27" selection-end-line="278" selection-end-column="27" />
+        <state relative-caret-position="288">
+          <caret line="762" column="48" lean-forward="false" selection-start-line="762" selection-start-column="48" selection-end-line="762" selection-end-column="48" />
           <folding>
             <element signature="n#!!doc" expanded="true" />
             <element signature="e#194#224#0" expanded="true" />
@@ -642,38 +582,50 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/src/index.css">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="80">
+          <caret line="4" column="15" lean-forward="false" selection-start-line="4" selection-start-column="15" selection-end-line="4" selection-end-column="15" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/GraphiQL/DocExplorer.tsx">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="200">
-          <caret line="130" column="0" lean-forward="false" selection-start-line="130" selection-start-column="0" selection-end-line="130" selection-end-column="0" />
+        <state relative-caret-position="20">
+          <caret line="133" column="12" lean-forward="false" selection-start-line="133" selection-start-column="12" selection-end-line="133" selection-end-column="12" />
           <folding>
             <element signature="e#0#30#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/graphiql.css">
+    <entry file="file://$PROJECT_DIR$/src/GraphiQL/DocExplorer/SchemaDoc.tsx">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="429">
-          <caret line="1061" column="22" lean-forward="false" selection-start-line="1061" selection-start-column="22" selection-end-line="1061" selection-end-column="22" />
+        <state relative-caret-position="360">
+          <caret line="44" column="37" lean-forward="false" selection-start-line="44" selection-start-column="37" selection-end-line="44" selection-end-column="37" />
           <folding>
-            <element signature="e#26856#27145#2" expanded="true" />
-            <element signature="e#27205#27522#2" expanded="true" />
-            <element signature="e#28053#28342#2" expanded="true" />
-            <element signature="e#28437#28778#2" expanded="true" />
-            <element signature="e#28840#29037#2" expanded="true" />
+            <element signature="e#194#224#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/GraphiQL/DocExplorer/SearchBox.tsx">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="340">
-          <caret line="54" column="33" lean-forward="false" selection-start-line="54" selection-start-column="33" selection-end-line="54" selection-end-column="33" />
+        <state relative-caret-position="360">
+          <caret line="55" column="10" lean-forward="false" selection-start-line="55" selection-start-column="10" selection-end-line="55" selection-end-column="10" />
           <folding>
             <element signature="n#!!doc" expanded="true" />
             <element signature="e#194#225#0" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/config/webpack.config.dev.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="220">
+          <caret line="147" column="0" lean-forward="false" selection-start-line="147" selection-start-column="0" selection-end-line="147" selection-end-column="0" />
+          <folding />
         </state>
       </provider>
     </entry>
