@@ -195,6 +195,7 @@
 }
 
 .graphiql-container .query-editor .CodeMirror {
+    /*padding-top: 117px;*/
     padding-left: 12px;
     width: calc(100% - 12px);
     background-color: rgb(15,32,45);
@@ -274,7 +275,6 @@
 
 .graphiql-container .result-window .CodeMirror {
     padding-left: 10px;
-    padding-top: 117px;
     background: rgb(23,42,58);
 }
 
@@ -398,7 +398,7 @@
             'Droid Sans Mono',
             'Monaco',
             monospace;
-    font-size: 16px;
+    font-size: 14px;
     height: 100%;
     left: 0;
     position: absolute;

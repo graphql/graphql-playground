@@ -32,6 +32,10 @@ import {
   introspectionQuery,
   introspectionQuerySansSubscriptions,
 } from 'graphiql/dist/utility/introspectionQueries'
+import {Endpoint, Viewer} from '../Playground'
+import {download} from './util/index'
+import QueryHeader from './QueryHeader'
+import ResultHeader from './ResultHeader'
 
 /**
  * The top-level React component for CustomGraphiQL, intended to encompass the entire
@@ -54,6 +58,11 @@ interface Props {
   onEditOperationName?: (name: any) => any
   onToggleDocs?: (value: boolean) => any
   getDefaultFieldNames?: () => any
+  selectedEndpoint: Endpoint
+  onChangeEndpoint: Function
+  showViewAs?: boolean
+  selectedViewer?: Viewer
+  onChangeViewer?: Function
 }
 
 interface State {
@@ -290,6 +299,35 @@ export class CustomGraphiQL extends React.Component<Props, State> {
           .queryWrap {
             border-top: 8px solid $darkBlue;
           }
+
+          .graphiql-button {
+            @inherit: .white50, .bgDarkBlue, .ttu, .f14, .fw6, .br2, .pointer, .absolute;
+            top: -57px;
+            right: 25px;
+            padding: 5px 9px 6px 9px;
+            letter-spacing: 0.53px;
+            z-index: 2;
+          }
+
+          .download-button {
+            @inherit: .graphiql-button;
+            background-color: rgb(15,32,45) !important;
+            top: initial !important;
+            bottom: 21px !important;
+          }
+
+          .intro {
+            @inherit: .absolute, .tlCenter, .top50, .left50, .white20, .f16, .tc;
+            font-family: 'Source Code Pro',
+              'Consolas',
+              'Inconsolata',
+              'Droid Sans Mono',
+              'Monaco',
+              monospace;
+            letter-spacing: 0.6px;
+            width: 235px;
+          }
+
         `}</style>
         <div className='editorWrap'>
           <div className='top-bar'>
@@ -299,6 +337,11 @@ export class CustomGraphiQL extends React.Component<Props, State> {
             className='editorBar'
             onMouseDown={this.handleResizeStart}>
             <div className='queryWrap' style={queryWrapStyle}>
+              <QueryHeader
+                selectedEndpoint={this.props.selectedEndpoint}
+                onChangeEndpoint={this.props.onChangeEndpoint}
+                onPrettify={this.handlePrettifyQuery}
+              />
               <QueryEditor
                 ref={n => { this.queryEditorComponent = n }}
                 schema={this.state.schema}
@@ -308,6 +351,7 @@ export class CustomGraphiQL extends React.Component<Props, State> {
                 onRunQuery={this.handleEditorRunQuery}
               />
               <div className='variable-editor' style={variableStyle}>
+                <div className="graphiql-button">Generate Code</div>
                 <div
                   className='variable-editor-title'
                   style={{ cursor: variableOpen ? 'row-resize' : 'n-resize' }}
@@ -325,6 +369,12 @@ export class CustomGraphiQL extends React.Component<Props, State> {
               </div>
             </div>
             <div className='resultWrap'>
+              {this.props.selectedViewer && this.props.onChangeViewer && (
+                <ResultHeader
+                  selectedViewer={this.props.selectedViewer}
+                  onChangeViewer={this.props.onChangeViewer}
+                />
+              )}
               <ExecuteButton
                 isRunning={Boolean(this.state.subscription)}
                 onRun={this.handleRunQuery}
@@ -342,6 +392,14 @@ export class CustomGraphiQL extends React.Component<Props, State> {
                 value={this.state.response}
               />
               {footer}
+              {!this.state.response && (
+                <div className="intro">
+                  Hit the Play Button to get a response here
+                </div>
+              )}
+              {this.state.response && (
+                <div className="download-button" onClick={this.handleDownloadJSON}>Download JSON</div>
+              )}
             </div>
           </div>
         </div>
@@ -860,6 +918,10 @@ export class CustomGraphiQL extends React.Component<Props, State> {
     document.addEventListener('mousemove', onMouseMove)
     document.addEventListener('mouseup', onMouseUp)
   }
+
+  handleDownloadJSON = () => {
+    download(this.state.response, 'result.json', 'application/json')
+  }
 }
 
 // Configure the UI by providing this Component as a child of CustomGraphiQL.
@@ -893,10 +955,13 @@ CustomGraphiQL.Footer = function GraphiQLFooter(props) {
 }
 
 const defaultQuery =
-  `# Welcome to CustomGraphiQL
+  `# Welcome to Graphcool's custom GraphiQL ✌
 #
-# CustomGraphiQL is an in-browser IDE for writing, validating, and
+# GraphiQL is an in-browser IDE for writing, validating, and
 # testing GraphQL queries.
+#
+# In Graphcool's custom GraphiQL you can additionally generate
+# code examples and download the result JSON.
 #
 # Type queries into this side of the screen, and you will
 # see intelligent typeaheads aware of the current GraphQL type schema and
