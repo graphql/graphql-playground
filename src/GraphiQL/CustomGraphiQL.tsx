@@ -291,11 +291,6 @@ export class CustomGraphiQL extends React.Component<Props, State> {
             top: 180px;
           }
 
-          .top-bar {
-            height: 60px;
-            @inherit: .bgDarkerBlue;
-          }
-
           .queryWrap {
             border-top: 8px solid $darkBlue;
           }
@@ -330,8 +325,6 @@ export class CustomGraphiQL extends React.Component<Props, State> {
 
         `}</style>
         <div className='editorWrap'>
-          <div className='top-bar'>
-          </div>
           <div
             ref={n => { this.editorBarComponent = n }}
             className='editorBar'

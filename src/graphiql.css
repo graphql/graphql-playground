@@ -209,7 +209,7 @@
     -webkit-box-direction: normal;
     -ms-flex-direction: column;
     flex-direction: column;
-    height: 29px;
+    height: 43px;
     position: relative;
 }
 
@@ -232,7 +232,7 @@
     font-weight: bold;
     letter-spacing: 1px;
     line-height: 14px;
-    padding: 14px 0 5px 16px;
+    padding: 14px 0 5px 21px;
     -webkit-user-select: none;
     -moz-user-select: none;
     -ms-user-select: none;

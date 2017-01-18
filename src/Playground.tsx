@@ -4,6 +4,7 @@ import * as fetch from 'isomorphic-fetch'
 import {
   buildClientSchema,
 } from 'graphql'
+import {TabBar} from './GraphiQL/TabBar'
 
 const simpleEndpoint = 'https://api.graph.cool/simple/v1/ciwkuhq2s0dbf0131rcb3isiq'
 const relayEndpoint = 'https://api.graph.cool/relay/v1/ciwkuhq2s0dbf0131rcb3isiq'
@@ -11,10 +12,27 @@ const relayEndpoint = 'https://api.graph.cool/relay/v1/ciwkuhq2s0dbf0131rcb3isiq
 export type Endpoint = 'SIMPLE' | 'RELAY'
 export type Viewer = 'ADMIN' | 'EVERYONE' | 'USER'
 
+export interface Session {
+  schema: any
+  selectedEndpoint: Endpoint
+  selectedViewer: Viewer
+  query: string
+  variables: string
+  result: string
+  operationName?: string
+  editorFlex: number
+  variableEditorHeight: number
+  docExploreWidth: number
+  doxExploreOpen: boolean
+  id: string
+}
+
 interface State {
   selectedEndpoint: Endpoint
   selectedViewer: Viewer
   schema: any
+  sessions: Session[]
+  selectedSessionIndex: number
 }
 
 export default class Playground extends React.Component<null,State> {
@@ -25,7 +43,12 @@ export default class Playground extends React.Component<null,State> {
       selectedEndpoint: 'SIMPLE',
       schema: null,
       selectedViewer: 'ADMIN',
+      sessions:[this.getNewSession() as Session],
+      selectedSessionIndex: 0,
     }
+  }
+  getNewSession() {
+    return {id: 'asd'}
   }
   componentWillMount() {
     this.fetchSchema()
@@ -52,22 +75,32 @@ export default class Playground extends React.Component<null,State> {
     })
   }
   render() {
+    const {sessions, selectedSessionIndex} = this.state
     return (
       <div className='root'>
         <style jsx>{`
           .root {
-            @inherit: .h100;
+            @inherit: .h100, .flex, .flexColumn;
           }
         `}</style>
-        <CustomGraphiQL
-          schema={this.state.schema}
-          fetcher={this.fetcher}
-          selectedEndpoint={this.state.selectedEndpoint}
-          onChangeEndpoint={this.handleEndpointChange}
-          showViewAs={true}
-          selectedViewer={this.state.selectedViewer}
-          onChangeViewer={this.handleViewerChange}
+        <TabBar
+          sessions={sessions}
+          selectedSessionIndex={selectedSessionIndex}
         />
+        <div className='root'>
+          {sessions.map(session => (
+            <CustomGraphiQL
+              key={session.id}
+              schema={this.state.schema}
+              fetcher={this.fetcher}
+              selectedEndpoint={this.state.selectedEndpoint}
+              onChangeEndpoint={this.handleEndpointChange}
+              showViewAs={true}
+              selectedViewer={this.state.selectedViewer}
+              onChangeViewer={this.handleViewerChange}
+            />
+          ))}
+        </div>
       </div>
     )
   }

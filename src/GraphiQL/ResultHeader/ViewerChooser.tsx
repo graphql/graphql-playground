@@ -1,6 +1,7 @@
 import * as React from 'react'
 import * as cx from 'classnames'
 import {Viewer} from '../../Playground'
+import {Icon, $v} from 'graphcool-styles'
 
 interface Props {
   selectedViewer: Viewer
@@ -20,15 +21,20 @@ const ViewAs = ({selectedViewer, onChangeViewer}: Props) => (
       }
 
       .viewer {
-        padding: 5px 12px 6px 12px;
-        @inherit: .bgBlack50, .br2, .relative, .pointer, .ttu;
+        padding: 5px 13px 6px 13px;
+        margin: 0 -2px;
+        @inherit: .br2, .relative, .pointer, .ttu, .flex, .itemsCenter;
+        background-color: #08131B;
         &.active {
           padding: 7px 9px 8px 9px;
           background-color: rgb(185,191,196);
           color: rgb(15,32,46);
-          margin: 0 -2px;
           z-index: 2;
         }
+      }
+
+      .viewer-text {
+        @inherit: .ml6;
       }
     `}</style>
 
@@ -48,7 +54,15 @@ const ViewAs = ({selectedViewer, onChangeViewer}: Props) => (
         })}
         onClick={() => onChangeViewer('EVERYONE')}
       >
-        Everyone
+        <Icon
+          src={require('graphcool-styles/icons/fill/world.svg')}
+          color={
+            selectedViewer === 'EVERYONE' ? $v.darkerBlue : $v.white30
+          }
+          width={14}
+          height={14}
+        />
+        <div className='viewer-text'>Everyone</div>
       </div>
       <div
         className={cx('viewer', {
@@ -56,7 +70,15 @@ const ViewAs = ({selectedViewer, onChangeViewer}: Props) => (
         })}
         onClick={() => onChangeViewer('USER')}
       >
-        Select User
+        <Icon
+          src={require('graphcool-styles/icons/fill/user.svg')}
+          color={
+            selectedViewer === 'USER' ? $v.darkerBlue : $v.white30
+          }
+          width={14}
+          height={14}
+        />
+        <div className='viewer-text'>Select User</div>
       </div>
     </div>
   </div>
