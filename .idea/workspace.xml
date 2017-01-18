@@ -44,8 +44,9 @@
       <file leaf-file-name="TabBar.tsx" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/GraphiQL/TabBar.tsx">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="240">
-              <caret line="12" column="8" lean-forward="false" selection-start-line="12" selection-start-column="8" selection-end-line="12" selection-end-column="8" />
+            <state relative-caret-position="400">
+              <caret line="164" column="19" lean-forward="false" selection-start-line="164" selection-start-column="19" selection-end-line="164" selection-end-column="19" />
+              <caret line="165" column="20" lean-forward="false" selection-start-line="165" selection-start-column="20" selection-end-line="165" selection-end-column="20" />
               <folding>
                 <element signature="e#0#30#0" expanded="true" />
               </folding>
@@ -56,8 +57,8 @@
       <file leaf-file-name="ViewerChooser.tsx" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/GraphiQL/ResultHeader/ViewerChooser.tsx">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="120">
-              <caret line="23" column="22" lean-forward="false" selection-start-line="23" selection-start-column="22" selection-end-line="23" selection-end-column="22" />
+            <state relative-caret-position="180">
+              <caret line="56" column="0" lean-forward="false" selection-start-line="56" selection-start-column="0" selection-end-line="56" selection-end-column="0" />
               <folding>
                 <element signature="e#0#30#0" expanded="true" />
               </folding>
@@ -136,8 +137,8 @@
         <option value="$PROJECT_DIR$/src/graphiql.css" />
         <option value="$PROJECT_DIR$/src/GraphiQL/ResultHeader/ViewerChooser.tsx" />
         <option value="$PROJECT_DIR$/src/GraphiQL/CustomGraphiQL.tsx" />
-        <option value="$PROJECT_DIR$/src/GraphiQL/TabBar.tsx" />
         <option value="$PROJECT_DIR$/src/Playground.tsx" />
+        <option value="$PROJECT_DIR$/src/GraphiQL/TabBar.tsx" />
       </list>
     </option>
   </component>
@@ -412,12 +413,12 @@
       <option name="presentableId" value="Default" />
       <updated>1484571565630</updated>
       <workItem from="1484571567914" duration="13443000" />
-      <workItem from="1484644823443" duration="39800000" />
+      <workItem from="1484644823443" duration="43860000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="53243000" />
+    <option name="totallyTimeSpent" value="57303000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="23" width="1280" height="773" extended-state="6" />
@@ -774,16 +775,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/GraphiQL/ResultHeader/ViewerChooser.tsx">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="120">
-          <caret line="23" column="22" lean-forward="false" selection-start-line="23" selection-start-column="22" selection-end-line="23" selection-end-column="22" />
-          <folding>
-            <element signature="e#0#30#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/GraphiQL/CustomGraphiQL.tsx">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="288">
@@ -803,10 +794,21 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/src/GraphiQL/ResultHeader/ViewerChooser.tsx">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="180">
+          <caret line="56" column="0" lean-forward="false" selection-start-line="56" selection-start-column="0" selection-end-line="56" selection-end-column="0" />
+          <folding>
+            <element signature="e#0#30#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/GraphiQL/TabBar.tsx">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="240">
-          <caret line="12" column="8" lean-forward="false" selection-start-line="12" selection-start-column="8" selection-end-line="12" selection-end-column="8" />
+        <state relative-caret-position="400">
+          <caret line="164" column="19" lean-forward="false" selection-start-line="164" selection-start-column="19" selection-end-line="164" selection-end-column="19" />
+          <caret line="165" column="20" lean-forward="false" selection-start-line="165" selection-start-column="20" selection-end-line="165" selection-end-column="20" />
           <folding>
             <element signature="e#0#30#0" expanded="true" />
           </folding>
