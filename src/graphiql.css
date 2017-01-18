@@ -526,37 +526,45 @@ div.CodeMirror-lint-message-error, div.CodeMirror-lint-message-warning {
 }
 
 .graphiql-container div.CodeMirror span.CodeMirror-matchingbracket {
-    color: #555;
+    color: rgba(255,255,255,.4);
     text-decoration: underline;
 }
 
 .graphiql-container div.CodeMirror span.CodeMirror-nonmatchingbracket {
-    color: #f00;
+    color: rgb(242,92,84);
 }
 
 /* Comment */
 .cm-comment {
-    color: #999;
+    color: rgba(255,255,255,.3);
 }
 
 /* Punctuation */
 .cm-punctuation {
-    color: #555;
+    color: rgba(255,255,255,.4);
 }
 
 /* Keyword */
 .cm-keyword {
-    color: #B11A04;
+    color: rgb(42,126,211);
 }
 
 /* OperationName, FragmentName */
 .cm-def {
-    color: #D2054E;
+    color: rgb(56,189,193);
+}
+
+.result-window .cm-def {
+    color: rgb(241,143,1);
 }
 
 /* FieldName */
 .cm-property {
-    color: #1F61A0;
+    color: rgb(41,185,115);
+}
+
+.result-window .cm-property {
+    color: rgb(51,147,220);
 }
 
 /* FieldAlias */
@@ -566,7 +574,7 @@ div.CodeMirror-lint-message-error, div.CodeMirror-lint-message-warning {
 
 /* ArgumentName and ObjectFieldName */
 .cm-attribute {
-    color: #8B2BB9;
+    color: rgb(247,116,102);
 }
 
 /* Number */
@@ -577,6 +585,10 @@ div.CodeMirror-lint-message-error, div.CodeMirror-lint-message-warning {
 /* String */
 .cm-string {
     color: #D64292;
+}
+
+.result-window .cm-string {
+    color: rgb(41,185,115);
 }
 
 /* Boolean */
@@ -591,7 +603,7 @@ div.CodeMirror-lint-message-error, div.CodeMirror-lint-message-warning {
 
 /* Variable */
 .cm-variable {
-    color: #397D13;
+    color: rgb(181,34,130);
 }
 
 /* Directive */
@@ -601,7 +613,7 @@ div.CodeMirror-lint-message-error, div.CodeMirror-lint-message-warning {
 
 /* Type */
 .cm-atom {
-    color: #CA9800;
+    color: rgb(249,233,34);
 }
 /* BASICS */
 

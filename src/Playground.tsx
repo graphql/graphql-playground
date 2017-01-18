@@ -2,7 +2,7 @@ import * as React from 'react'
 import {CustomGraphiQL} from './GraphiQL/CustomGraphiQL'
 import * as fetch from 'isomorphic-fetch'
 
-const ENDPOINT = 'https://api.graph.cool/system'
+const ENDPOINT = 'https://api.graph.cool/simple/v1/ciwkuhq2s0dbf0131rcb3isiq'
 
 export default class Playground extends React.Component<null,null> {
   render() {
