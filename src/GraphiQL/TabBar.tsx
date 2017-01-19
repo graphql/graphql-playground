@@ -100,8 +100,8 @@ export const TabBar = ({sessions, selectedSessionIndex}: Props) => (
         src={require('graphcool-styles/icons/stroke/history.svg')}
         stroke={true}
         strokeWidth={3}
-        width={23}
-        height={20}
+        width={25}
+        height={25}
         color={$v.white40}
       />
       <div className="tab active">

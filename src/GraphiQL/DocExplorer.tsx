@@ -132,9 +132,9 @@ export class DocExplorer extends React.Component<Props, State> {
         <style jsx={true}>{`
           .doc-explorer-contents {
             @inherit: .pa0;
-            border-left: 6px solid $green;
             top: 0;
             box-shadow: none;
+            border-left: 6px solid $green;
           }
           .doc-explorer-title-bar {
             z-index: 2;

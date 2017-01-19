@@ -263,10 +263,9 @@ export class CustomGraphiQL extends React.Component<Props, State> {
     }
 
     const docWrapStyle = {
-      right: this.state.docExplorerOpen ? 0 : -(this.state.docExplorerWidth - 6),
-      position: this.state.docExplorerOpen ? 'relative' : 'absolute',
       height: '100%',
-      width: this.state.docExplorerWidth,
+      // display: this.state.docExplorerOpen ? 'block':'none',
+      width: this.state.docExplorerOpen ? this.state.docExplorerWidth : 0,
     }
     const docExplorerWrapClasses = 'docExplorerWrap' +
       (this.state.docExplorerWidth < 200 ? ' doc-explorer-narrow' : '')
@@ -406,10 +405,8 @@ export class CustomGraphiQL extends React.Component<Props, State> {
           />
           <DocExplorer
             ref={c => { this.docExplorerComponent = c }}
-            schema={this.state.schema}>
-            <div className='docExplorerHide' onClick={this.handleToggleDocs}>
-              {'\u2715'}
-            </div>
+            schema={this.state.schema}
+          >
           </DocExplorer>
         </div>
       </div>
