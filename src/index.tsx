@@ -1,7 +1,7 @@
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 import App from './App';
-import './graphiql.css'
+import './graphiql_light.css'
 import './index.css';
 
 ReactDOM.render(

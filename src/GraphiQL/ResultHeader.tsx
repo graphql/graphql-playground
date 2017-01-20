@@ -3,21 +3,30 @@ import ViewerChooser from './ResultHeader/ViewerChooser'
 import {Viewer} from '../Playground'
 
 interface Props {
-  selectedViewer: Viewer
-  onChangeViewer: Function
+  selectedViewer?: Viewer
+  onChangeViewer?: Function
+  showViewAs?: boolean
+  showResponseTitle?: boolean
 }
 
-const ResultHeader = ({selectedViewer, onChangeViewer}: Props) => (
-  <div className='root'>
+const ResultHeader = ({selectedViewer, onChangeViewer, showViewAs, showResponseTitle}: Props) => (
+  <div className='result-header'>
     <style jsx={true}>{`
-      .root {
-        @inherit: .bgDarkBlue, .pa25, .flex, .justifyEnd, .itemsCenter;
+      .result-header {
+        @inherit: .bgDarkBlue, .pa25, .flex, .justifyBetween, .itemsCenter;
       }
     `}</style>
-    <ViewerChooser
-      selectedViewer={selectedViewer}
-      onChangeViewer={onChangeViewer}
-    />
+    <div>
+      {showResponseTitle && (
+        <div className="editor-title">Response</div>
+      )}
+    </div>
+    {showViewAs && selectedViewer && onChangeViewer && (
+      <ViewerChooser
+        selectedViewer={selectedViewer}
+        onChangeViewer={onChangeViewer}
+      />
+    )}
   </div>
 )
 

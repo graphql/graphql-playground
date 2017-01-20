@@ -83,7 +83,7 @@ export class ExecuteButton extends React.Component<Props, State> {
       <div className="execute-button-wrap">
         <style jsx={true}>{`
           .execute-button-wrap {
-            position: absolute;
+            position: absolute !important;
             left: -62px;
             z-index: 2;
             top: 15px;

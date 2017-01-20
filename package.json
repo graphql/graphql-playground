@@ -1,7 +1,8 @@
 {
-  "name": "playground",
+  "name": "custom-graphiql",
   "version": "0.1.0",
   "private": true,
+  "main": "./build/static/js/main.js",
   "devDependencies": {
     "autoprefixer": "6.5.1",
     "case-sensitive-paths-webpack-plugin": "1.1.4",

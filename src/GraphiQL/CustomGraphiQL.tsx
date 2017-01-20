@@ -44,6 +44,8 @@ import ResultHeader from './ResultHeader'
  * @see https://github.com/graphql/graphiql#usage
  */
 
+type Theme = 'light' | 'dark'
+
 interface Props {
   fetcher: (params: any) => any
   schema?: GraphQLSchema
@@ -61,8 +63,14 @@ interface Props {
   selectedEndpoint: Endpoint
   onChangeEndpoint: Function
   showViewAs?: boolean
+  showCodeGeneration?: boolean
+  showEndpoints?: boolean
+  showQueryTitle?: boolean
+  showResponseTitle?: boolean
+  showDownloadJsonButton?: boolean
   selectedViewer?: Viewer
   onChangeViewer?: Function
+  theme: Theme
 }
 
 interface State {
@@ -333,6 +341,8 @@ export class CustomGraphiQL extends React.Component<Props, State> {
                 selectedEndpoint={this.props.selectedEndpoint}
                 onChangeEndpoint={this.props.onChangeEndpoint}
                 onPrettify={this.handlePrettifyQuery}
+                showEndpoints={this.props.showEndpoints}
+                showQueryTitle={this.props.showQueryTitle}
               />
               <QueryEditor
                 ref={n => { this.queryEditorComponent = n }}
@@ -343,7 +353,9 @@ export class CustomGraphiQL extends React.Component<Props, State> {
                 onRunQuery={this.handleEditorRunQuery}
               />
               <div className='variable-editor' style={variableStyle}>
-                <div className="graphiql-button">Generate Code</div>
+                {this.props.showCodeGeneration && (
+                  <div className="graphiql-button">Generate Code</div>
+                )}
                 <div
                   className='variable-editor-title'
                   style={{ cursor: variableOpen ? 'row-resize' : 'n-resize' }}
@@ -361,12 +373,11 @@ export class CustomGraphiQL extends React.Component<Props, State> {
               </div>
             </div>
             <div className='resultWrap'>
-              {this.props.selectedViewer && this.props.onChangeViewer && (
-                <ResultHeader
-                  selectedViewer={this.props.selectedViewer}
-                  onChangeViewer={this.props.onChangeViewer}
-                />
-              )}
+              <ResultHeader
+                selectedViewer={this.props.selectedViewer}
+                onChangeViewer={this.props.onChangeViewer}
+                showResponseTitle={this.props.showResponseTitle}
+              />
               <ExecuteButton
                 isRunning={Boolean(this.state.subscription)}
                 onRun={this.handleRunQuery}
@@ -389,7 +400,7 @@ export class CustomGraphiQL extends React.Component<Props, State> {
                   Hit the Play Button to get a response here
                 </div>
               )}
-              {this.state.response && (
+              {this.state.response && this.props.showDownloadJsonButton && (
                 <div className="download-button" onClick={this.handleDownloadJSON}>Download JSON</div>
               )}
             </div>

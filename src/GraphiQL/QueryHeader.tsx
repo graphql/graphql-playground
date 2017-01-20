@@ -6,12 +6,14 @@ interface Props {
   selectedEndpoint: Endpoint
   onChangeEndpoint: Function
   onPrettify: any
+  showEndpoints?: boolean
+  showQueryTitle?: boolean
 }
 
-export default ({selectedEndpoint, onChangeEndpoint, onPrettify}: Props) => (
-  <div className='root'>
+const QueryHeader = ({selectedEndpoint, onChangeEndpoint, onPrettify, showEndpoints, showQueryTitle}: Props) => (
+  <div className='query-header'>
     <style jsx={true}>{`
-      .root {
+      .query-header {
         @inherit: .bgDarkerBlue, .pa25, .flex, .justifyBetween, .itemsCenter;
       }
       .graphiql-button {
@@ -21,10 +23,19 @@ export default ({selectedEndpoint, onChangeEndpoint, onPrettify}: Props) => (
         letter-spacing: 0.53px;
       }
     `}</style>
-    <EndpointChooser
-      selectedEndpoint={selectedEndpoint}
-      onChangeEndpoint={onChangeEndpoint}
-    />
+    {showQueryTitle && (
+      <div className="editor-title">
+        Query
+      </div>
+    )}
+    {showEndpoints && (
+      <EndpointChooser
+        selectedEndpoint={selectedEndpoint}
+        onChangeEndpoint={onChangeEndpoint}
+      />
+    )}
     <div className="graphiql-button" onClick={onPrettify}>Prettify</div>
   </div>
 )
+
+export default QueryHeader

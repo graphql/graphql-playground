@@ -87,7 +87,7 @@ export default class Playground extends React.Component<null,State> {
           sessions={sessions}
           selectedSessionIndex={selectedSessionIndex}
         />
-        <div className='root'>
+        <div className='root docs-graphiql'>
           {sessions.map(session => (
             <CustomGraphiQL
               key={session.id}
@@ -95,9 +95,12 @@ export default class Playground extends React.Component<null,State> {
               fetcher={this.fetcher}
               selectedEndpoint={this.state.selectedEndpoint}
               onChangeEndpoint={this.handleEndpointChange}
-              showViewAs={true}
+              showViewAs={false}
+              showQueryTitle={true}
+              showResponseTitle={true}
               selectedViewer={this.state.selectedViewer}
               onChangeViewer={this.handleViewerChange}
+              theme='light'
             />
           ))}
         </div>
