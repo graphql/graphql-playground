@@ -333,7 +333,8 @@
     background: #fafafa;
     height: 45px;
     left: -47px;
-    top: 4px;
+    top: 0px;
+    padding-top: 4px;
 }
 
 .docs-graphiql .resultWrap .graphcool-execute-button {
