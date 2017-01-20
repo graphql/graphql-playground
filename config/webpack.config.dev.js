@@ -141,7 +141,7 @@ module.exports = {
         test: /\.json$/,
         loader: 'json'
       },
-      // "file" loader for svg
+      // "inline" loader for svg
       {
         test: /\.svg$/,
         loader: 'raw!svgo-loader',

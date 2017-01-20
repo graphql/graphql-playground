@@ -407,18 +407,24 @@ export class CustomGraphiQL extends React.Component<Props, State> {
           </div>
         </div>
         <div className={docExplorerWrapClasses} style={docWrapStyle}>
-          <div className="docs-button" onClick={this.handleToggleDocs}>
+          <div
+            className={`docs-button ${!this.state.docExplorerOpen && 'inactive'}`}
+            onClick={this.handleToggleDocs}
+          >
             Docs
           </div>
           <div
             className='docExplorerResizer'
             onMouseDown={this.handleDocsResizeStart}
           />
-          <DocExplorer
-            ref={c => { this.docExplorerComponent = c }}
-            schema={this.state.schema}
-          >
-          </DocExplorer>
+          {this.state.docExplorerOpen && (
+            <DocExplorer
+              ref={c => { this.docExplorerComponent = c }}
+              schema={this.state.schema}
+              open={this.state.doxExploreOpen}
+            >
+            </DocExplorer>
+          )}
         </div>
       </div>
     )

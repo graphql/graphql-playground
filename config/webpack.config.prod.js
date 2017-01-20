@@ -59,6 +59,14 @@ module.exports = {
     // paths.appIndexJs,
     paths.graphiql
   ],
+  externals: {
+    react: {
+      commonjs: 'react',
+      commonjs2: 'react',
+      amd: 'React',
+      root: 'React',
+    },
+  },
   output: {
     // The build folder.
     path: paths.appBuild,
@@ -158,13 +166,10 @@ module.exports = {
         test: /\.json$/,
         loader: 'json'
       },
-      // "file" loader for svg
+      // "inlin" loader for svg
       {
         test: /\.svg$/,
-        loader: 'file',
-        query: {
-          name: 'static/media/[name].[hash:8].[ext]'
-        }
+        loader: 'raw!svgo-loader',
       }
     ]
   },

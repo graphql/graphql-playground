@@ -30,6 +30,7 @@ import TypeDoc from 'graphiql/dist/components/DocExplorer/TypeDoc'
 
 interface Props {
   schema: any
+  open: boolean
 }
 
 interface State {
@@ -126,7 +127,7 @@ export class DocExplorer extends React.Component<Props, State> {
     return (
       <div
         className={cx('doc-explorer', {
-          'show-title': Boolean(prevName),
+          'show-title': Boolean(prevName)
         })}
       >
         <style jsx={true}>{`
