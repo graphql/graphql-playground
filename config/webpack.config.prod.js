@@ -66,6 +66,11 @@ module.exports = {
       amd: 'React',
       root: 'React',
     },
+    graphiql: 'graphiql',
+    graphql: 'graphql',
+    'graphcool-styles': 'graphcool-styles',
+    classnames: 'classnames',
+    'isomorphic-fetch': 'isomorphic-fetch'
   },
   output: {
     // The build folder.
