@@ -8,7 +8,7 @@
 
 
 module.exports = {
-  download
+  download: download
 }
 
 function download(data, strFileName, strMimeType) {

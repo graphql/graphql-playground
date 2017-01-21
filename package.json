@@ -1,6 +1,6 @@
 {
   "name": "graphcool-graphiql",
-  "version": "0.2.1",
+  "version": "0.2.3",
   "main": "./build/static/js/main.js",
   "files": [
     "graphiql_light.css",
