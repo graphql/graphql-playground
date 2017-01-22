@@ -39,7 +39,11 @@ export default class Playground extends React.Component<Props,State> {
   storage: PlaygroundStorage
   constructor(props) {
     super(props)
+    this.storage = new PlaygroundStorage(props.projectId)
 
+    const sessions = this.initSessions()
+
+    const selectedSessionIndex = (parseInt(this.storage.getItem('selectedSessionIndex'), 10) || 0)
     this.state = {
       selectedEndpoint: 'SIMPLE',
       schema: null,
@@ -48,11 +52,10 @@ export default class Playground extends React.Component<Props,State> {
         relay: null,
       },
       selectedViewer: 'ADMIN',
-      sessions: Immutable([]),
-      selectedSessionIndex: 0,
+      sessions,
+      selectedSessionIndex: selectedSessionIndex < sessions.length ? selectedSessionIndex : 0,
     }
 
-    this.storage = new PlaygroundStorage(props.projectId)
 
     if (typeof window === 'object') {
       window.addEventListener('beforeunload', () => {
@@ -68,6 +71,7 @@ export default class Playground extends React.Component<Props,State> {
       .then(this.initSessions)
   }
   componentWillUnmount() {
+    this.storage.setItem('selectedSessionIndex', String(this.state.selectedSessionIndex))
     this.saveSessions()
   }
   fetchSchemas() {
@@ -112,7 +116,7 @@ export default class Playground extends React.Component<Props,State> {
           }
 
           .graphiqls-container {
-            @inherit: .relative;
+            @inherit: .relative, .overflowHidden;
             height: calc(100% - 57px);
           }
 
@@ -198,12 +202,12 @@ export default class Playground extends React.Component<Props,State> {
 
   private initSessions = () => {
     const sessions = this.storage.getSessions()
-    this.setState({
-      sessions,
-    } as State)
-    if (sessions.length === 0) {
-      this.createSession()
+
+    if (sessions.length > 0) {
+      return sessions
     }
+
+    return [this.createSession()]
   }
 
   private saveSessions = () => {
@@ -226,13 +230,7 @@ export default class Playground extends React.Component<Props,State> {
     })
 
     this.storage.saveSession(newSession)
-
-    this.setState((state: State) => {
-      return {
-        ...state,
-        sessions: state.sessions.concat(newSession),
-      }
-    })
+    return newSession
   }
 
   private handleViewerChange = (sessionId: string, viewer: Viewer) => {

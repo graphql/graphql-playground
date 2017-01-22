@@ -10,7 +10,12 @@ export default class PlaygroundStorage {
     this.project = this.getProject()
 
     if (!this.project) {
-      this.project = {}
+      this.project = {
+        sessions: {
+        },
+        data: {
+        },
+      }
       this.saveProject()
     }
     global['s'] = this
@@ -42,14 +47,24 @@ export default class PlaygroundStorage {
   }
 
   public getSessions() {
-    return Object.keys(this.project).filter(key => key !== 'undefined').map(sessionId => this.project[sessionId])
+    return Object.keys(this.project.sessions)
+      .filter(key => key !== 'undefined')
+      .map(sessionId => this.project.sessions[sessionId])
   }
 
   public saveSession(session: Session, save: boolean = true) {
-    this.project[session.id] = session
+    this.project.sessions[session.id] = session
     if (save) {
       this.saveProject()
     }
+  }
+
+  public setItem(key: string, value: string) {
+    this.project.data[key] = value
+  }
+
+  public getItem(key: string) {
+    return this.project.data[key]
   }
 
   public saveProject() {
@@ -64,29 +79,4 @@ export default class PlaygroundStorage {
     } catch (e) {}
     return result
   }
-
-  // private clearSession(sessionId: string) {
-  //   this.project[sessionId] = {}
-  //   this.saveProject()
-  // }
-
-  // private getSessionItem(key: string, sessionId: string) {
-  //   return this.project[sessionId][key]
-  // }
-  //
-  // private setSessionItem(key: string, item: string, sessionId: string, save: boolean) {
-  //   if (typeof sessionId === 'undefined' || sessionId === 'undefined') {
-  //     console.log('Whoopsy oopsy', arguments)
-  //     return
-  //   }
-  //   this.project[sessionId][key] = item
-  //   if (save) {
-  //     this.saveProject()
-  //   }
-  // }
-  //
-  // private removeSessionItem(key: string, sessionId: string) {
-  //   delete this.project[sessionId][key]
-  //   this.saveProject()
-  // }
 }

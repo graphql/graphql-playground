@@ -117,6 +117,7 @@ export const TabBar = ({
       />
       {sessions.map((session, index) => (
         <div
+          key={session.id}
           className={`tab ${index === selectedSessionIndex && 'active'}`}
           onClick={() => onSelectSession(session)}
         >
@@ -198,5 +199,5 @@ function queryContains(query: string, term: string) {
 
   const hasCurlyBraces = i1 > -1 && i2 > -1 && i2 > i1
 
-  return hasCurlyBraces && query.includes(term)
+  return hasCurlyBraces && (term !== 'query' ? query.includes(term) : true)
 }
