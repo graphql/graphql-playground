@@ -11,6 +11,8 @@ import * as cuid from 'cuid'
 import * as Immutable from 'seamless-immutable'
 import PlaygroundStorage from './PlaygroundStorage'
 import * as cx from 'classnames'
+import getQueryTypes from './GraphiQL/util/getQueryTypes'
+import debounce from 'graphiql/dist/utility/debounce'
 
 global['Immutable'] = Immutable
 
@@ -53,9 +55,9 @@ export default class Playground extends React.Component<Props,State> {
       },
       selectedViewer: 'ADMIN',
       sessions,
-      selectedSessionIndex: selectedSessionIndex < sessions.length ? selectedSessionIndex : 0,
+      selectedSessionIndex: selectedSessionIndex < sessions.length && selectedSessionIndex > -1
+        ? selectedSessionIndex : 0,
     }
-
 
     if (typeof window === 'object') {
       window.addEventListener('beforeunload', () => {
@@ -127,7 +129,7 @@ export default class Playground extends React.Component<Props,State> {
         <TabBar
           sessions={sessions}
           selectedSessionIndex={selectedSessionIndex}
-          onNewSession={this.createSession}
+          onNewSession={() => this.handleNewSession()}
           onCloseSession={this.handleCloseSession}
           onOpenHistory={this.handleOpenHistory}
           onSelectSession={this.handleSelectSession}
@@ -172,17 +174,30 @@ export default class Playground extends React.Component<Props,State> {
   }
 
   private handleCloseSession = (session: Session) => {
+    if (this.state.sessions.length === 1) {
+      this.handleNewSession(true)
+    }
     this.setState(state => {
       const i = state.sessions.findIndex(s => s.id === session.id)
 
+      let nextSelectedSession = state.selectedSessionIndex
+      if (nextSelectedSession > state.sessions.length - 2) {
+        // if it's not the last session
+        if (state.sessions.length > 1) {
+          nextSelectedSession--
+        }
+      }
       return {
         ...state,
         sessions: [
           ...state.sessions.slice(0, i),
           ...state.sessions.slice(i + 1, state.sessions.length),
         ],
+        selectedSessionIndex: nextSelectedSession,
       }
     })
+
+    this.storage.removeSession(session)
   }
 
   private handleOpenHistory = () => {
@@ -215,6 +230,17 @@ export default class Playground extends React.Component<Props,State> {
     this.storage.saveProject()
   }
 
+  private handleNewSession = (newIndexZero: boolean = false) => {
+    const session = this.createSession()
+    this.setState(state => {
+      return {
+        ...state,
+        sessions: state.sessions.concat(session),
+        selectedSessionIndex: newIndexZero ? 0 : state.sessions.length,
+      }
+    })
+  }
+
   private createSession = () => {
     const newSession: Session = Immutable({
       id: cuid(),
@@ -227,6 +253,7 @@ export default class Playground extends React.Component<Props,State> {
       hasMutation: false,
       hasSubscription: false,
       hasQuery: false,
+      queryTypes: getQueryTypes(defaultQuery),
     })
 
     this.storage.saveSession(newSession)
@@ -243,6 +270,7 @@ export default class Playground extends React.Component<Props,State> {
 
   private handleQueryChange = (sessionId: string, query: string) => {
     this.setValueInSession(sessionId, 'query', query)
+    this.updateQueryTypes(sessionId, query)
   }
 
   private handleVariableChange = (sessionId: string, variables: string) => {
@@ -253,7 +281,12 @@ export default class Playground extends React.Component<Props,State> {
     this.setValueInSession(sessionId, 'operationName', operationName)
   }
 
-  private setValueInSession(sessionId: string, key: string, value: string) {
+  private updateQueryTypes = debounce(150, (sessionId: string, query: string) => {
+    const queryTypes = getQueryTypes(query)
+    this.setValueInSession(sessionId, 'queryTypes', queryTypes)
+  })
+
+  private setValueInSession(sessionId: string, key: string, value: any) {
     this.setState(state => {
       // TODO optimize the lookup with a lookup table
       const i = state.sessions.findIndex(s => s.id === sessionId)

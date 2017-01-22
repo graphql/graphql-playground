@@ -14,4 +14,12 @@ export interface Session {
   // additional props that are interactive in graphiql, these are not represented in graphiqls state
   selectedEndpoint: Endpoint
   selectedViewer: Viewer
+  queryTypes: QueryTypes
+}
+
+export interface QueryTypes {
+  firstOperationName: string | null
+  subscription: boolean
+  query: boolean
+  mutation: boolean
 }

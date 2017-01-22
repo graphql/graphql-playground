@@ -52,6 +52,10 @@ export default class PlaygroundStorage {
       .map(sessionId => this.project.sessions[sessionId])
   }
 
+  public removeSession(session: Session) {
+    delete this.project.sessions[session.id]
+  }
+
   public saveSession(session: Session, save: boolean = true) {
     this.project.sessions[session.id] = session
     if (save) {

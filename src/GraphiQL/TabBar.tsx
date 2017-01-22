@@ -115,66 +115,73 @@ export const TabBar = ({
         height={25}
         color={$v.white40}
       />
-      {sessions.map((session, index) => (
-        <div
-          key={session.id}
-          className={`tab ${index === selectedSessionIndex && 'active'}`}
-          onClick={() => onSelectSession(session)}
-        >
-          <div className={`icons ${index === selectedSessionIndex && 'active'}`}>
-            {session.subscriptionActive && (
-              <div className='red-dot'></div>
-            )}
-            <div className='query-types'>
-              {queryContains(session.query, 'subscription') && (
-                <div className='query-type subscription'>S</div>
+      {sessions.map((session, index) => {
+        const {queryTypes} = session
+        return (
+          <div
+            key={session.id}
+            className={`tab ${index === selectedSessionIndex && 'active'}`}
+            onClick={() => onSelectSession(session)}
+          >
+            <div className={`icons ${index === selectedSessionIndex && 'active'}`}>
+              {session.subscriptionActive && (
+                <div className='red-dot'></div>
               )}
-              {queryContains(session.query, 'query') && (
-                <div className='query-type query'>Q</div>
-              )}
-              {queryContains(session.query, 'mutation') && (
-                <div className='query-type mutation'>M</div>
-              )}
-            </div>
-            {session.selectedViewer !== 'ADMIN' && (
-              <div className='viewer'>
-                {session.selectedViewer === 'EVERYONE' && (
-                  <Icon
-                    src={require('graphcool-styles/icons/fill/world.svg')}
-                    color={$v.white40}
-                    width={14}
-                    height={14}
-                  />
+              <div className='query-types'>
+                {queryTypes.subscription && (
+                  <div className='query-type subscription'>S</div>
                 )}
-                {session.selectedViewer === 'USER' && (
-                  <Icon
-                    src={require('graphcool-styles/icons/fill/user.svg')}
-                    color={$v.white40}
-                    width={14}
-                    height={14}
-                  />
+                {queryTypes.query && (
+                  <div className='query-type query'>Q</div>
+                )}
+                {queryTypes.mutation && (
+                  <div className='query-type mutation'>M</div>
                 )}
               </div>
-            )}
+              {session.selectedViewer !== 'ADMIN' && (
+                <div className='viewer'>
+                  {session.selectedViewer === 'EVERYONE' && (
+                    <Icon
+                      src={require('graphcool-styles/icons/fill/world.svg')}
+                      color={$v.white40}
+                      width={14}
+                      height={14}
+                    />
+                  )}
+                  {session.selectedViewer === 'USER' && (
+                    <Icon
+                      src={require('graphcool-styles/icons/fill/user.svg')}
+                      color={$v.white40}
+                      width={14}
+                      height={14}
+                    />
+                  )}
+                </div>
+              )}
+            </div>
+            <div className={`operation-name ${index === selectedSessionIndex && 'active'}`}>
+              {session.operationName || queryTypes.firstOperationName || 'New Session'}
+            </div>
+            <div
+              className={`close ${index === selectedSessionIndex && 'active'}`}
+              onClick={(e: any) => {
+              // we don't want selectIndex to be executed
+              e.stopPropagation()
+              onCloseSession(session)
+            }}
+            >
+              <Icon
+                src={require('graphcool-styles/icons/stroke/cross.svg')}
+                stroke={true}
+                color={$v.white40}
+                width={11}
+                height={10}
+                strokeWidth={8}
+              />
+            </div>
           </div>
-          <div className={`operation-name ${index === selectedSessionIndex && 'active'}`}>
-            {session.operationName || `Session ${index + 1}`}
-          </div>
-          <div
-            className={`close ${index === selectedSessionIndex && 'active'}`}
-            onClick={() => onCloseSession(session)}
-          >
-            <Icon
-              src={require('graphcool-styles/icons/stroke/cross.svg')}
-              stroke={true}
-              color={$v.white40}
-              width={11}
-              height={10}
-              strokeWidth={8}
-            />
-          </div>
-        </div>
-      ))}
+        )
+      })}
       <div
         className='tab plus'
         onClick={onNewSession}
@@ -191,13 +198,3 @@ export const TabBar = ({
     </div>
   </div>
 )
-
-function queryContains(query: string, term: string) {
-  // TODO: get the lines of root curly braces and look for the preceding strings
-  const i1 = query.indexOf('{')
-  const i2 = query.lastIndexOf('}')
-
-  const hasCurlyBraces = i1 > -1 && i2 > -1 && i2 > i1
-
-  return hasCurlyBraces && (term !== 'query' ? query.includes(term) : true)
-}
