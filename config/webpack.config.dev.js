@@ -144,7 +144,7 @@ module.exports = {
       // "inline" loader for svg
       {
         test: /\.svg$/,
-        loader: 'raw!svgo-loader',
+        loader: 'raw!svgo',
       }
     ]
   },

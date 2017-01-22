@@ -47,7 +47,7 @@ export class ExecuteButton extends React.Component<Props, State> {
     if (hasOptions && optionsOpen) {
       const highlight = this.state.highlight
       options =
-        <ul className="execute-options">
+        <ul className='execute-options'>
           {operations.map(operation =>
             <li
               key={operation.name ? operation.name.value : '*'}
@@ -56,7 +56,7 @@ export class ExecuteButton extends React.Component<Props, State> {
               onMouseOut={() => this.setState({ highlight: null } as State)}
               onMouseUp={() => this._onOptionSelected(operation)}>
               {operation.name ? operation.name.value : '<Unnamed>'}
-            </li>
+            </li>,
           )}
         </ul>
     }
@@ -76,11 +76,11 @@ export class ExecuteButton extends React.Component<Props, State> {
     }
 
     const pathJSX = this.props.isRunning ?
-      <rect fill="#FFFFFF" x="10" y="10" width="13" height="13" rx="1" /> :
-      <path d="M 11 9 L 24 16 L 11 23 z" />
+      <rect fill='#FFFFFF' x='10' y='10' width='13' height='13' rx='1' /> :
+      <path d='M 11 9 L 24 16 L 11 23 z' />
 
     return (
-      <div className="execute-button-wrap">
+      <div className='execute-button-wrap'>
         <style jsx={true}>{`
           .execute-button-wrap {
             position: absolute !important;
@@ -107,8 +107,8 @@ export class ExecuteButton extends React.Component<Props, State> {
           })}
           onMouseDown={onMouseDown}
           onClick={onClick}
-          title="Execute Query (Ctrl-Enter)">
-          <svg width="35" height="35" viewBox='3.5,4.5,24,24'>{pathJSX}</svg>
+          title='Execute Query (Ctrl-Enter)'>
+          <svg width='35' height='35' viewBox='3.5,4.5,24,24'>{pathJSX}</svg>
         </button>
         {options}
       </div>
@@ -152,4 +152,3 @@ export class ExecuteButton extends React.Component<Props, State> {
     document.addEventListener('mouseup', onMouseUp)
   }
 }
-

@@ -1,10 +1,10 @@
 import * as React from 'react'
-import {Endpoint} from '../Playground'
+import {Endpoint} from '../types'
 import EndpointChooser from './QueryHeader/EndpointChooser'
 
 interface Props {
-  selectedEndpoint: Endpoint
-  onChangeEndpoint: Function
+  selectedEndpoint?: Endpoint
+  onChangeEndpoint?: Function
   onPrettify: any
   showEndpoints?: boolean
   showQueryTitle?: boolean
@@ -24,17 +24,17 @@ const QueryHeader = ({selectedEndpoint, onChangeEndpoint, onPrettify, showEndpoi
       }
     `}</style>
     {showQueryTitle && (
-      <div className="editor-title">
+      <div className='editor-title'>
         Query
       </div>
     )}
-    {showEndpoints && (
+    {showEndpoints && selectedEndpoint && onChangeEndpoint && (
       <EndpointChooser
         selectedEndpoint={selectedEndpoint}
         onChangeEndpoint={onChangeEndpoint}
       />
     )}
-    <div className="graphiql-button" onClick={onPrettify}>Prettify</div>
+    <div className='graphiql-button' onClick={onPrettify}>Prettify</div>
   </div>
 )
 

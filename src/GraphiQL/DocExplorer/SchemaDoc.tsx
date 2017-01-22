@@ -9,7 +9,7 @@
 import * as React from 'react'
 
 import TypeLink from 'graphiql/dist/components/DocExplorer/TypeLink'
-import MarkdownContent from 'graphiql/dist/components/DocExplorer/MarkdownContent';
+import MarkdownContent from 'graphiql/dist/components/DocExplorer/MarkdownContent'
 
 interface Props {
   schema: any
@@ -24,45 +24,45 @@ interface State {
 export default class SchemaDoc extends React.Component<Props, State> {
 
   shouldComponentUpdate(nextProps) {
-    return this.props.schema !== nextProps.schema;
+    return this.props.schema !== nextProps.schema
   }
 
   render() {
-    const schema = this.props.schema;
-    const queryType = schema.getQueryType();
-    const mutationType = schema.getMutationType && schema.getMutationType();
+    const schema = this.props.schema
+    const queryType = schema.getQueryType()
+    const mutationType = schema.getMutationType && schema.getMutationType()
     const subscriptionType =
-      schema.getSubscriptionType && schema.getSubscriptionType();
+      schema.getSubscriptionType && schema.getSubscriptionType()
 
     return (
       <div className='root'>
         <MarkdownContent
-          className="doc-type-description"
+          className='doc-type-description'
           markdown={
             'A GraphQL schema provides a root type for each kind of operation.'
           }
         />
-        <div className="doc-category">
-          <div className="doc-category-title">
+        <div className='doc-category'>
+          <div className='doc-category-title'>
             {'root types'}
           </div>
-          <div className="doc-category-item">
-            <span className="keyword">{'query'}</span>
+          <div className='doc-category-item'>
+            <span className='keyword'>{'query'}</span>
             {': '}
             <TypeLink type={queryType} onClick={this.props.onClickType} />
           </div>
           {
             mutationType &&
-            <div className="doc-category-item">
-              <span className="keyword">{'mutation'}</span>
+            <div className='doc-category-item'>
+              <span className='keyword'>{'mutation'}</span>
               {': '}
               <TypeLink type={mutationType} onClick={this.props.onClickType} />
             </div>
           }
           {
             subscriptionType &&
-            <div className="doc-category-item">
-              <span className="keyword">{'subscription'}</span>
+            <div className='doc-category-item'>
+              <span className='keyword'>{'subscription'}</span>
               {': '}
               <TypeLink
                 type={subscriptionType}
@@ -72,6 +72,6 @@ export default class SchemaDoc extends React.Component<Props, State> {
           }
         </div>
       </div>
-    );
+    )
   }
 }

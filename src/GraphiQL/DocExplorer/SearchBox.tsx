@@ -6,7 +6,7 @@
  *  LICENSE file in the root directory of this source tree.
  */
 
-import * as React from 'react';
+import * as React from 'react'
 import debounce from 'graphiql/dist/utility/debounce'
 import {Icon} from 'graphcool-styles'
 
@@ -23,19 +23,18 @@ export default class SearchBox extends React.Component<Props, State> {
   _debouncedOnSearch: any
 
   constructor(props) {
-    super(props);
+    super(props)
 
     this.state = { value: '' }
 
     this._debouncedOnSearch = debounce(200, () => {
-      this.props.onSearch(this.state.value);
-    });
+      this.props.onSearch(this.state.value)
+    })
   }
-
 
   shouldComponentUpdate(nextProps, nextState) {
     return nextProps.isShown !== this.props.isShown ||
-      nextState.value !== this.state.value;
+      nextState.value !== this.state.value
   }
 
   render() {
@@ -57,23 +56,23 @@ export default class SearchBox extends React.Component<Props, State> {
         `}</style>
         {
           this.props.isShown &&
-            <label className="label">
+            <label className='label'>
               <Icon src={require('graphcool-styles/icons/stroke/search.svg')} stroke={true} strokeWidth={3} />
               <input
-                className="input"
+                className='input'
                 onChange={this.handleChange}
-                type="text"
+                type='text'
                 value={this.state.value}
-                placeholder="Search the schemaa ..."
+                placeholder='Search the schemaa ...'
               />
             </label>
         }
       </div>
-    );
+    )
   }
 
   handleChange = event => {
-    this.setState({ value: event.target.value });
-    this._debouncedOnSearch();
+    this.setState({ value: event.target.value })
+    this._debouncedOnSearch()
   }
 }

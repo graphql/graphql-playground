@@ -10,10 +10,11 @@ import * as React from 'react'
 import * as ReactDOM from 'react-dom'
 import {
   buildClientSchema,
-  GraphQLSchema,
   parse,
   print,
 } from 'graphql'
+
+import {GraphQLSchema} from 'graphql/type/schema'
 
 import {ExecuteButton} from './ExecuteButton'
 import {ToolbarButton} from 'graphiql/dist/components/ToolbarButton'
@@ -32,7 +33,7 @@ import {
   introspectionQuery,
   introspectionQuerySansSubscriptions,
 } from 'graphiql/dist/utility/introspectionQueries'
-import {Endpoint, Viewer} from '../Playground'
+import {Endpoint, Viewer} from '../types'
 import {download} from './util/index'
 import QueryHeader from './QueryHeader'
 import ResultHeader from './ResultHeader'
@@ -44,8 +45,6 @@ import ResultHeader from './ResultHeader'
  * @see https://github.com/graphql/graphiql#usage
  */
 
-type Theme = 'light' | 'dark'
-
 interface Props {
   fetcher: (params: any) => any
   schema?: GraphQLSchema
@@ -53,15 +52,16 @@ interface Props {
   variables?: string
   operationName?: string
   response?: string
+  selectedEndpoint?: Endpoint
+
   storage?: any
   defaultQuery?: string
-  onEditQuery?: (params: any) => Promise<any>
+  onEditQuery?: Function
   onEditVariables?: (variables: any) => any
   onEditOperationName?: (name: any) => any
   onToggleDocs?: (value: boolean) => any
   getDefaultFieldNames?: () => any
-  selectedEndpoint: Endpoint
-  onChangeEndpoint: Function
+  onChangeEndpoint?: Function
   showViewAs?: boolean
   showCodeGeneration?: boolean
   showEndpoints?: boolean
@@ -70,7 +70,6 @@ interface Props {
   showDownloadJsonButton?: boolean
   selectedViewer?: Viewer
   onChangeViewer?: Function
-  theme: Theme
 }
 
 interface State {
@@ -104,20 +103,42 @@ interface ToolbarButtonProps extends SimpleProps {
 
 export class CustomGraphiQL extends React.Component<Props, State> {
 
-  private _storage: any
-  private _editorQueryID: number
-  private codeMirrorSizer
-  private queryEditorComponent
-  private variableEditorComponent
-  private resultComponent
-  private editorBarComponent
-  private docExplorerComponent: any // later React.Component<...>
-
   static Logo: (props: SimpleProps) => JSX.Element
   static Toolbar: (props: SimpleProps) => JSX.Element
   static Footer: (props: SimpleProps) => JSX.Element
   static ToolbarButton: (props: ToolbarButtonProps) => JSX.Element
 
+  public _storage: any
+  public _editorQueryID: number
+  public codeMirrorSizer
+  public queryEditorComponent
+  public variableEditorComponent
+  public resultComponent
+  public editorBarComponent
+  public docExplorerComponent: any // later React.Component<...>
+
+  _updateQueryFacts = debounce(150, query => {
+    const queryFacts = getQueryFacts(this.state.schema, query)
+    if (queryFacts) {
+      // Update operation name should any query names change.
+      const operationName = getSelectedOperationName(
+        this.state.operations,
+        this.state.operationName,
+        queryFacts.operations,
+      )
+
+      // Report changing of operationName if it changed.
+      const onEditOperationName = this.props.onEditOperationName
+      if (onEditOperationName && operationName !== this.state.operationName) {
+        onEditOperationName(operationName)
+      }
+
+      this.setState({
+        operationName,
+        ...queryFacts,
+      })
+    }
+  })
 
   constructor(props) {
     super(props)
@@ -151,7 +172,7 @@ export class CustomGraphiQL extends React.Component<Props, State> {
         getSelectedOperationName(
           null,
           this._storageGet('operationName'),
-          queryFacts && queryFacts.operations
+          queryFacts && queryFacts.operations,
         )
 
     // Initialize state
@@ -168,7 +189,7 @@ export class CustomGraphiQL extends React.Component<Props, State> {
       docExplorerWidth: Number(this._storageGet('docExplorerWidth')) || 350,
       isWaitingForResponse: false,
       subscription: null,
-      ...queryFacts
+      ...queryFacts,
     }
 
     // Ensure only the last executed editor query is rendered.
@@ -177,7 +198,7 @@ export class CustomGraphiQL extends React.Component<Props, State> {
     // Subscribe to the browser window closing, treating it as an unmount.
     if (typeof window === 'object') {
       window.addEventListener('beforeunload', () =>
-        this.componentWillUnmount()
+        this.componentWillUnmount(),
       )
     }
   }
@@ -280,7 +301,7 @@ export class CustomGraphiQL extends React.Component<Props, State> {
 
     const variableOpen = this.state.variableEditorOpen
     const variableStyle = {
-      height: variableOpen ? this.state.variableEditorHeight : null
+      height: variableOpen ? this.state.variableEditorHeight : null,
     }
 
     return (
@@ -354,7 +375,7 @@ export class CustomGraphiQL extends React.Component<Props, State> {
               />
               <div className='variable-editor' style={variableStyle}>
                 {this.props.showCodeGeneration && (
-                  <div className="graphiql-button">Generate Code</div>
+                  <div className='graphiql-button'>Generate Code</div>
                 )}
                 <div
                   className='variable-editor-title'
@@ -396,12 +417,12 @@ export class CustomGraphiQL extends React.Component<Props, State> {
               />
               {footer}
               {!this.state.response && (
-                <div className="intro">
+                <div className='intro'>
                   Hit the Play Button to get a response here
                 </div>
               )}
               {this.state.response && this.props.showDownloadJsonButton && (
-                <div className="download-button" onClick={this.handleDownloadJSON}>Download JSON</div>
+                <div className='download-button' onClick={this.handleDownloadJSON}>Download JSON</div>
               )}
             </div>
           </div>
@@ -440,7 +461,7 @@ export class CustomGraphiQL extends React.Component<Props, State> {
     const {insertions, result} = fillLeafs(
       this.state.schema,
       this.state.query,
-      this.props.getDefaultFieldNames
+      this.props.getDefaultFieldNames,
     )
     if (insertions && insertions.length > 0) {
       const editor = this.queryEditorComponent.getCodeMirror()
@@ -449,20 +470,20 @@ export class CustomGraphiQL extends React.Component<Props, State> {
         const cursorIndex = editor.indexFromPos(cursor)
         editor.setValue(result)
         let added = 0
-        const markers = insertions.map(({index, string}) => editor.markText(
+        const markers = insertions.map(({index, str}) => editor.markText(
           editor.posFromIndex(index + added),
-          editor.posFromIndex(index + (added += string.length)),
+          editor.posFromIndex(index + (added += str.length)),
           {
             className: 'autoInsertedLeaf',
             clearOnEnter: true,
-            title: 'Automatically added leaf fields'
-          }
+            title: 'Automatically added leaf fields',
+          },
         ))
         setTimeout(() => markers.forEach(marker => marker.clear()), 7000)
         let newCursorIndex = cursorIndex
-        insertions.forEach(({index, string}) => {
+        insertions.forEach(({index, str}) => {
           if (index < cursorIndex) {
-            newCursorIndex += string.length
+            newCursorIndex += str.length
           }
         })
         editor.setCursor(editor.posFromIndex(newCursorIndex))
@@ -485,7 +506,7 @@ export class CustomGraphiQL extends React.Component<Props, State> {
     const fetch = observableToPromise(fetcher({query: introspectionQuery}))
     if (!isPromise(fetch)) {
       this.setState({
-        response: 'Fetcher did not return a Promise for introspection.'
+        response: 'Fetcher did not return a Promise for introspection.',
       } as State)
       return
     }
@@ -498,7 +519,7 @@ export class CustomGraphiQL extends React.Component<Props, State> {
       // Try the stock introspection query first, falling back on the
       // sans-subscriptions query for services which do not yet support it.
       const fetch2 = observableToPromise(fetcher({
-        query: introspectionQuerySansSubscriptions
+        query: introspectionQuerySansSubscriptions,
       }))
       if (!isPromise(fetch)) {
         throw new Error('Fetcher did not return a Promise for introspection.')
@@ -523,13 +544,13 @@ export class CustomGraphiQL extends React.Component<Props, State> {
         this.setState({
           // Set schema to `null` to explicitly indicate that no schema exists.
           schema: null,
-          response: responseString
+          response: responseString,
         } as State)
       }
     }).catch(error => {
       this.setState({
         schema: null,
-        response: error && String(error.stack || error)
+        response: error && String(error.stack || error),
       } as State)
     })
   }
@@ -574,7 +595,7 @@ export class CustomGraphiQL extends React.Component<Props, State> {
     const fetch = fetcher({
       query,
       variables: jsonVariables,
-      operationName
+      operationName,
     })
 
     if (isPromise(fetch)) {
@@ -583,7 +604,7 @@ export class CustomGraphiQL extends React.Component<Props, State> {
       fetch.then(cb).catch(error => {
         this.setState({
           isWaitingForResponse: false,
-          response: error && String(error.stack || error)
+          response: error && String(error.stack || error),
         } as State)
       })
     } else if (isObservable(fetch)) {
@@ -596,15 +617,15 @@ export class CustomGraphiQL extends React.Component<Props, State> {
           this.setState({
             isWaitingForResponse: false,
             response: error && String(error.stack || error),
-            subscription: null
+            subscription: null,
           } as State)
         },
         complete: () => {
           this.setState({
             isWaitingForResponse: false,
-            subscription: null
+            subscription: null,
           } as State)
-        }
+        },
       })
 
       return subscription
@@ -653,14 +674,14 @@ export class CustomGraphiQL extends React.Component<Props, State> {
               response: JSON.stringify(result, null, 2),
             } as State)
           }
-        }
+        },
       )
 
       this.setState({subscription} as State)
     } catch (error) {
       this.setState({
         isWaitingForResponse: false,
-        response: error.message
+        response: error.message,
       } as State)
     }
   }
@@ -669,7 +690,7 @@ export class CustomGraphiQL extends React.Component<Props, State> {
     const subscription = this.state.subscription
     this.setState({
       isWaitingForResponse: false,
-      subscription: null
+      subscription: null,
     } as State)
     if (subscription) {
       subscription.unsubscribe()
@@ -721,29 +742,6 @@ export class CustomGraphiQL extends React.Component<Props, State> {
     }
     return null
   }
-
-  _updateQueryFacts = debounce(150, query => {
-    const queryFacts = getQueryFacts(this.state.schema, query)
-    if (queryFacts) {
-      // Update operation name should any query names change.
-      const operationName = getSelectedOperationName(
-        this.state.operations,
-        this.state.operationName,
-        queryFacts.operations
-      )
-
-      // Report changing of operationName if it changed.
-      const onEditOperationName = this.props.onEditOperationName
-      if (onEditOperationName && operationName !== this.state.operationName) {
-        onEditOperationName(operationName)
-      }
-
-      this.setState({
-        operationName,
-        ...queryFacts
-      })
-    }
-  })
 
   handleEditVariables = value => {
     this.setState({variables: value} as State)
@@ -860,7 +858,7 @@ export class CustomGraphiQL extends React.Component<Props, State> {
       } else {
         this.setState({
           docExplorerOpen: true,
-          docExplorerWidth: Math.min(docsSize, 650)
+          docExplorerWidth: Math.min(docsSize, 650),
         } as State)
       }
     }
@@ -901,12 +899,12 @@ export class CustomGraphiQL extends React.Component<Props, State> {
       if (bottomSize < 60) {
         this.setState({
           variableEditorOpen: false,
-          variableEditorHeight: hadHeight
+          variableEditorHeight: hadHeight,
         } as State)
       } else {
         this.setState({
           variableEditorOpen: true,
-          variableEditorHeight: bottomSize
+          variableEditorHeight: bottomSize,
         } as State)
       }
     }
@@ -1000,7 +998,7 @@ function observableToPromise(observable) {
       reject,
       () => {
         reject(new Error('no value resolved'))
-      }
+      },
     )
   })
 }

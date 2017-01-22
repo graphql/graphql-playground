@@ -24,7 +24,7 @@ import TypeDoc from 'graphiql/dist/components/DocExplorer/TypeDoc'
  * Children:
  *
  *   - Any provided children will be positioned in the right-hand-side of the
- *     top bar. Typically this will be a "close" button for temporary explorer.
+ *     top bar. Typically this will be a 'close' button for temporary explorer.
  *
  */
 
@@ -68,14 +68,14 @@ export class DocExplorer extends React.Component<Props, State> {
     if (schema === undefined) {
       // Schema is undefined when it is being loaded via introspection.
       content =
-        <div className="spinner-container">
-          <div className="spinner"/>
+        <div className='spinner-container'>
+          <div className='spinner'/>
         </div>
     } else if (schema === null) {
       // Schema is null when it explicitly does not exist, typically due to
       // an error during introspection.
       content =
-        <div className="error-container">
+        <div className='error-container'>
           {'No Schema Available'}
         </div>
     } else if (navItem) {
@@ -127,7 +127,7 @@ export class DocExplorer extends React.Component<Props, State> {
     return (
       <div
         className={cx('doc-explorer', {
-          'show-title': Boolean(prevName)
+          'show-title': Boolean(prevName),
         })}
       >
         <style jsx={true}>{`
@@ -147,17 +147,17 @@ export class DocExplorer extends React.Component<Props, State> {
             className={'doc-explorer-title-bar'}
           >
             <div
-              className="doc-explorer-back"
+              className='doc-explorer-back'
               onClick={this.handleNavBackClick}>
               {prevName}
             </div>
-            <div className="doc-explorer-title">
+            <div className='doc-explorer-title'>
               {title}
             </div>
           </div>
         }
-        <div className="doc-explorer-contents">
-          <div className="header">
+        <div className='doc-explorer-contents'>
+          <div className='header'>
             <SearchBox
               isShown={shouldSearchBoxAppear}
               onSearch={this.handleSearch}
@@ -205,8 +205,7 @@ export class DocExplorer extends React.Component<Props, State> {
   handleSearch = value => {
     this.showSearch({
       name: 'Search Results',
-      searchValue: value
+      searchValue: value,
     })
   }
 }
-

@@ -1,6 +1,6 @@
 import * as React from 'react'
 import * as cx from 'classnames'
-import {Viewer} from '../../Playground'
+import {Viewer} from '../../types'
 import {Icon, $v} from 'graphcool-styles'
 
 interface Props {
@@ -39,7 +39,7 @@ const ViewAs = ({selectedViewer, onChangeViewer}: Props) => (
     `}</style>
 
     <div>View As</div>
-    <div className="chooser">
+    <div className='chooser'>
       <div
         className={cx('viewer', {
           'active': selectedViewer === 'ADMIN',

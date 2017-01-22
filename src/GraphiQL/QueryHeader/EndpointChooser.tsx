@@ -1,5 +1,5 @@
 import * as React from 'react'
-import {Endpoint} from '../../Playground'
+import {Endpoint} from '../../types'
 import * as cx from 'classnames'
 
 interface Props {
@@ -33,7 +33,7 @@ const EndpointChooser = ({selectedEndpoint, onChangeEndpoint}: Props) => (
     `}</style>
 
     <div>API</div>
-    <div className="chooser">
+    <div className='chooser'>
       <div
         className={cx('endpoint', {
           'active': selectedEndpoint === 'RELAY',

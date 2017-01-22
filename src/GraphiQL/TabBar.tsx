@@ -1,17 +1,28 @@
 import * as React from 'react'
-import {Session} from '../Playground'
+import {Session} from '../types'
 import {Icon, $v} from 'graphcool-styles'
 
 interface Props {
   sessions: Session[]
   selectedSessionIndex: number
+  onNewSession: any
+  onCloseSession: (session: Session) => void
+  onOpenHistory: Function
+  onSelectSession: (session: Session) => void
 }
 
-export const TabBar = ({sessions, selectedSessionIndex}: Props) => (
+export const TabBar = ({
+  sessions,
+  selectedSessionIndex,
+  onNewSession,
+  onSelectSession,
+  onOpenHistory,
+  onCloseSession
+}: Props) => (
   <div className='root'>
     <style jsx={true}>{`
       .root {
-        @inherit: .white;
+        @inherit: .white, .z4;
         height: 57px;
         background-color: #09141C;
 
@@ -26,7 +37,7 @@ export const TabBar = ({sessions, selectedSessionIndex}: Props) => (
       }
 
       .tab {
-        @inherit: .flex, .itemsCenter, .bgDarkerBlue, .br2, .brTop, .ml10, .bbox;
+        @inherit: .flex, .itemsCenter, .bgDarkerBlue, .br2, .brTop, .ml10, .bbox, .pointer;
         height: 43px;
         padding: 10px;
         padding-top: 9px;
@@ -94,7 +105,7 @@ export const TabBar = ({sessions, selectedSessionIndex}: Props) => (
         width: 43px;
       }
     `}</style>
-    <div className="tabs">
+    <div className='tabs'>
       <Icon
         className='icon'
         src={require('graphcool-styles/icons/stroke/history.svg')}
@@ -104,61 +115,69 @@ export const TabBar = ({sessions, selectedSessionIndex}: Props) => (
         height={25}
         color={$v.white40}
       />
-      <div className="tab active">
-        <div className="icons active">
-          <div className="red-dot"></div>
-          <div className="query-types">
-            <div className="query-type subscription">S</div>
+      {sessions.map((session, index) => (
+        <div
+          className={`tab ${index === selectedSessionIndex && 'active'}`}
+          onClick={() => onSelectSession(session)}
+        >
+          <div className={`icons ${index === selectedSessionIndex && 'active'}`}>
+            {session.subscriptionActive && (
+              <div className='red-dot'></div>
+            )}
+            <div className='query-types'>
+              {queryContains(session.query, 'subscription') && (
+                <div className='query-type subscription'>S</div>
+              )}
+              {queryContains(session.query, 'query') && (
+                <div className='query-type query'>Q</div>
+              )}
+              {queryContains(session.query, 'mutation') && (
+                <div className='query-type mutation'>M</div>
+              )}
+            </div>
+            {session.selectedViewer !== 'ADMIN' && (
+              <div className='viewer'>
+                {session.selectedViewer === 'EVERYONE' && (
+                  <Icon
+                    src={require('graphcool-styles/icons/fill/world.svg')}
+                    color={$v.white40}
+                    width={14}
+                    height={14}
+                  />
+                )}
+                {session.selectedViewer === 'USER' && (
+                  <Icon
+                    src={require('graphcool-styles/icons/fill/user.svg')}
+                    color={$v.white40}
+                    width={14}
+                    height={14}
+                  />
+                )}
+              </div>
+            )}
           </div>
-          <div className="viewer">
+          <div className={`operation-name ${index === selectedSessionIndex && 'active'}`}>
+            {session.operationName || `Session ${index + 1}`}
+          </div>
+          <div
+            className={`close ${index === selectedSessionIndex && 'active'}`}
+            onClick={() => onCloseSession(session)}
+          >
             <Icon
-              src={require('graphcool-styles/icons/fill/world.svg')}
+              src={require('graphcool-styles/icons/stroke/cross.svg')}
+              stroke={true}
               color={$v.white40}
-              width={14}
-              height={14}
+              width={11}
+              height={10}
+              strokeWidth={8}
             />
           </div>
         </div>
-        <div className="operation-name active">createField</div>
-        <div className="close active">
-          <Icon
-            src={require('graphcool-styles/icons/stroke/cross.svg')}
-            stroke={true}
-            color={$v.white40}
-            width={11}
-            height={10}
-            strokeWidth={8}
-          />
-        </div>
-      </div>
-      <div className="tab">
-        <div className="icons">
-          <div className="query-types">
-            <div className="query-type query">Q</div>
-            <div className="query-type mutation">M</div>
-          </div>
-          <div className="viewer">
-            <Icon
-              src={require('graphcool-styles/icons/fill/user.svg')}
-              color={$v.white40}
-              width={14}
-              height={14}
-            />
-          </div>
-        </div>
-        <div className="operation-name">createField</div>
-        <div className="close">
-          <Icon
-            src={require('graphcool-styles/icons/stroke/cross.svg')}
-            stroke={true}
-            color={$v.white40}
-            width={11}
-            height={10}
-            strokeWidth={8}
-          />
-        </div>
-      </div>
-      <div className="tab plus">
+      ))}
+      <div
+        className='tab plus'
+        onClick={onNewSession}
+      >
         <Icon
           src={require('graphcool-styles/icons/stroke/add.svg')}
           color='rgba(255,255,255,.15)'
@@ -171,3 +190,13 @@ export const TabBar = ({sessions, selectedSessionIndex}: Props) => (
     </div>
   </div>
 )
+
+function queryContains(query: string, term: string) {
+  // TODO: get the lines of root curly braces and look for the preceding strings
+  const i1 = query.indexOf('{')
+  const i2 = query.lastIndexOf('}')
+
+  const hasCurlyBraces = i1 > -1 && i2 > -1 && i2 > i1
+
+  return hasCurlyBraces && query.includes(term)
+}

@@ -1,6 +1,6 @@
 import * as React from 'react'
 import ViewerChooser from './ResultHeader/ViewerChooser'
-import {Viewer} from '../Playground'
+import {Viewer} from '../types'
 
 interface Props {
   selectedViewer?: Viewer
@@ -18,7 +18,7 @@ const ResultHeader = ({selectedViewer, onChangeViewer, showViewAs, showResponseT
     `}</style>
     <div>
       {showResponseTitle && (
-        <div className="editor-title">Response</div>
+        <div className='editor-title'>Response</div>
       )}
     </div>
     {showViewAs && selectedViewer && onChangeViewer && (
