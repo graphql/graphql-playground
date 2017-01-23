@@ -5,7 +5,9 @@ const isQuerySubscription = (query: string, operationName: string | null): boole
   // takes around 0.02ms -  1ms
   try {
     ast = parse(query)
-  } catch (e) {}
+  } catch (e) {
+    //
+  }
 
   let isSubscription = false
 

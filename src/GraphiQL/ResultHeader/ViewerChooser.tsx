@@ -21,9 +21,9 @@ const ViewAs = ({selectedViewer, onChangeViewer}: Props) => (
       }
 
       .viewer {
+        @inherit: .br2, .relative, .pointer, .ttu, .flex, .itemsCenter;
         padding: 5px 13px 6px 13px;
         margin: 0 -2px;
-        @inherit: .br2, .relative, .pointer, .ttu, .flex, .itemsCenter;
         background-color: #08131B;
         &.active {
           padding: 7px 9px 8px 9px;

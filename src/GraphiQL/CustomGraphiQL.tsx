@@ -466,7 +466,7 @@ export class CustomGraphiQL extends React.Component<Props, State> {
                   >
                     {subscriptionResponse && response.time && (
                       <div className='subscription-time'>
-                        <div className="subscription-time-text">
+                        <div className='subscription-time-text'>
                           {ageOfDate(response.time)}
                         </div>
                       </div>

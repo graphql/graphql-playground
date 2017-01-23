@@ -6,7 +6,9 @@ const getQueryTypes = (query: string): QueryTypes => {
   // takes around 0.02ms -  1ms
   try {
     ast = parse(query)
-  } catch (e) {}
+  } catch (e) {
+    //
+  }
 
   let hasSubscription = false
   let hasQuery = false

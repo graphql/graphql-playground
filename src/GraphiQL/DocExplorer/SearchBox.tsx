@@ -40,7 +40,7 @@ export default class SearchBox extends React.Component<Props, State> {
   render() {
     return (
       <div className='root'>
-        <style jsx={true}>{`
+        <style jsx>{`
           .root {
             @inherit: .pa25;
             background-color: rgba(0,0,0,.02);

@@ -17,7 +17,7 @@ export const TabBar = ({
   onNewSession,
   onSelectSession,
   onOpenHistory,
-  onCloseSession
+  onCloseSession,
 }: Props) => (
   <div className='root'>
     <style jsx={true}>{`
@@ -104,17 +104,26 @@ export const TabBar = ({
         @inherit: .flex, .justifyCenter, .itemsCenter;
         width: 43px;
       }
+
+      .history {
+        @inherit: .pointer;
+      }
     `}</style>
     <div className='tabs'>
-      <Icon
-        className='icon'
-        src={require('graphcool-styles/icons/stroke/history.svg')}
-        stroke={true}
-        strokeWidth={3}
-        width={25}
-        height={25}
-        color={$v.white40}
-      />
+      <div
+        className='history'
+      >
+        <Icon
+          className='icon'
+          src={require('graphcool-styles/icons/stroke/history.svg')}
+          stroke={true}
+          strokeWidth={3}
+          width={25}
+          height={25}
+          color={$v.white40}
+          onClick={onOpenHistory}
+        />
+      </div>
       {sessions.map((session, index) => {
         const {queryTypes} = session
         return (

@@ -40,7 +40,7 @@ export default class PlaygroundStorage {
       },
       removeItem: (key: string) => {
         return localStorage.removeItem(prefix + key)
-      }
+      },
     }
     this.storages[sessionId] = store
     return store
@@ -80,7 +80,9 @@ export default class PlaygroundStorage {
     let result: any = null
     try {
       result = JSON.parse(localStorage.getItem(this.projectId) || '')
-    } catch (e) {}
+    } catch (e) {
+      //
+    }
     return result
   }
 }

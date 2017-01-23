@@ -16,17 +16,18 @@ import debounce from 'graphiql/dist/utility/debounce'
 import {Observable} from 'rxjs/Observable'
 import {Client} from 'subscriptions-transport-ws'
 import isQuerySubscription from './GraphiQL/util/isQuerySubscription'
+import * as Modal from 'react-modal'
+import HistoryPopup from './HistoryPopup'
 
 export type Endpoint = 'SIMPLE' | 'RELAY'
 export type Viewer = 'ADMIN' | 'EVERYONE' | 'USER'
 
 interface State {
-  selectedEndpoint: Endpoint
-  selectedViewer: Viewer
   schema: any
   sessions: Session[]
   selectedSessionIndex: number
   schemaCache: SchemaCache
+  historyOpen: boolean
 }
 
 interface Props {
@@ -41,6 +42,10 @@ interface SchemaCache {
 export default class Playground extends React.Component<Props,State> {
   storage: PlaygroundStorage
   ws: any
+  private updateQueryTypes = debounce(150, (sessionId: string, query: string) => {
+    const queryTypes = getQueryTypes(query)
+    this.setValueInSession(sessionId, 'queryTypes', queryTypes)
+  })
   constructor(props) {
     super(props)
     this.storage = new PlaygroundStorage(props.projectId)
@@ -49,16 +54,15 @@ export default class Playground extends React.Component<Props,State> {
 
     const selectedSessionIndex = (parseInt(this.storage.getItem('selectedSessionIndex'), 10) || 0)
     this.state = {
-      selectedEndpoint: 'SIMPLE',
       schema: null,
       schemaCache: {
         simple: null,
         relay: null,
       },
-      selectedViewer: 'ADMIN',
       sessions,
       selectedSessionIndex: selectedSessionIndex < sessions.length && selectedSessionIndex > -1
         ? selectedSessionIndex : 0,
+      historyOpen: false,
     }
 
     if (typeof window === 'object') {
@@ -167,7 +171,7 @@ export default class Playground extends React.Component<Props,State> {
               <CustomGraphiQL
                 key={session.id}
                 schema={this.state.schemaCache[session.selectedEndpoint]}
-                fetcher={this.fetcher}
+                fetcher={this.fetcher(session)}
                 selectedEndpoint={session.selectedEndpoint}
                 showQueryTitle={false}
                 showResponseTitle={false}
@@ -175,7 +179,7 @@ export default class Playground extends React.Component<Props,State> {
                 showEndpoints={true}
                 showDownloadJsonButton={true}
                 showCodeGeneration={true}
-                selectedViewer={this.state.selectedViewer}
+                selectedViewer={session.selectedViewer}
                 storage={this.storage.getSessionStorage(session.id)}
                 query={session.query}
                 variables={session.variables}
@@ -189,6 +193,17 @@ export default class Playground extends React.Component<Props,State> {
             </div>
           ))}
         </div>
+        <Modal
+          isOpen={this.state.historyOpen}
+          onRequestClose={this.handleCloseHistory}
+          style={{
+            overlay: {
+              zIndex: 20,
+            },
+          }}
+        >
+          <HistoryPopup/>
+        </Modal>
       </div>
     )
   }
@@ -221,7 +236,12 @@ export default class Playground extends React.Component<Props,State> {
   }
 
   private handleOpenHistory = () => {
+    console.log('history oopen')
+    this.setState({ historyOpen: true } as State)
+  }
 
+  private handleCloseHistory = () => {
+    this.setState({ historyOpen: false } as State)
   }
 
   private handleSelectSession = (session: Session) => {
@@ -301,11 +321,6 @@ export default class Playground extends React.Component<Props,State> {
     this.setValueInSession(sessionId, 'operationName', operationName)
   }
 
-  private updateQueryTypes = debounce(150, (sessionId: string, query: string) => {
-    const queryTypes = getQueryTypes(query)
-    this.setValueInSession(sessionId, 'queryTypes', queryTypes)
-  })
-
   private setValueInSession(sessionId: string, key: string, value: any) {
     this.setState(state => {
       // TODO optimize the lookup with a lookup table
@@ -315,10 +330,6 @@ export default class Playground extends React.Component<Props,State> {
         sessions: Immutable.setIn(state.sessions, [i, key], value),
       }
     })
-  }
-
-  private getEndpoint() {
-    return this.state.selectedEndpoint === 'SIMPLE' ? this.getSimpleEndpoint() : this.getRelayEndpoint()
   }
 
   private getSimpleEndpoint() {
@@ -333,9 +344,7 @@ export default class Playground extends React.Component<Props,State> {
     return `ws://subscriptions.graph.cool/${this.props.projectId}`
   }
 
-
-  private fetcher = (graphQLParams) => {
-    const endpoint = this.getEndpoint()
+  private fetcher = (session: Session) => ((graphQLParams) => {
     const {query, operationName} = graphQLParams
 
     if (!query.includes('IntrospectionQuery') && isQuerySubscription(query, operationName)) {
@@ -356,6 +365,7 @@ export default class Playground extends React.Component<Props,State> {
       })
     }
 
+    const endpoint = session.selectedEndpoint === 'SIMPLE' ? this.getSimpleEndpoint() : this.getRelayEndpoint()
     return fetch(endpoint, { // tslint:disable-line
       method: 'post',
       headers: {
@@ -369,5 +379,5 @@ export default class Playground extends React.Component<Props,State> {
     .then((response) => {
       return response.json()
     })
-  }
+  })
 }

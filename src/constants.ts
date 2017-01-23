@@ -111,4 +111,3 @@ export const defaultQuery =
 # will appear in the pane to the right.
 
 `
-
