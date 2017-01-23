@@ -307,6 +307,8 @@ export class CustomGraphiQL extends React.Component<Props, State> {
       height: variableOpen ? this.state.variableEditorHeight : null,
     }
 
+    const subscriptionResponse = this.state.responses.length > 1
+
     return (
       <div className='graphiql-container'>
         <style jsx={true}>{`
@@ -436,7 +438,7 @@ export class CustomGraphiQL extends React.Component<Props, State> {
                 selectedViewer={this.props.selectedViewer}
                 onChangeViewer={this.props.onChangeViewer}
                 showResponseTitle={this.props.showResponseTitle}
-                subscriptionActive={Boolean(this.state.subscription)}
+                subscriptionResponse={subscriptionResponse}
               />
               <ExecuteButton
                 isRunning={Boolean(this.state.subscription)}
@@ -459,10 +461,10 @@ export class CustomGraphiQL extends React.Component<Props, State> {
                   <div
                     key={response.date}
                     style={{
-                      marginTop: this.state.subscription && index === 0 ? 23 : 0,
+                      marginTop: subscriptionResponse && index === 0 ? 23 : 0,
                     }}
                   >
-                    {Boolean(this.state.subscription) && response.time && (
+                    {subscriptionResponse && response.time && (
                       <div className='subscription-time'>
                         <div className="subscription-time-text">
                           {ageOfDate(response.time)}

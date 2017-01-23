@@ -8,15 +8,15 @@ interface Props {
   onChangeViewer?: Function
   showViewAs?: boolean
   showResponseTitle?: boolean
-  subscriptionActive?: boolean
+  subscriptionResponse?: boolean
 }
 
-const ResultHeader = ({selectedViewer, onChangeViewer, showViewAs, showResponseTitle, subscriptionActive}: Props) => (
+const ResultHeader = ({selectedViewer, onChangeViewer, showViewAs, showResponseTitle, subscriptionResponse}: Props) => (
   <div
     className={cx(
       'result-header',
       {
-        'subscription': subscriptionActive,
+        'subscription': subscriptionResponse,
       },
     )}
   >
