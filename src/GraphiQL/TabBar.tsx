@@ -128,14 +128,14 @@ export const TabBar = ({
                 <div className='red-dot'></div>
               )}
               <div className='query-types'>
-                {queryTypes.subscription && (
-                  <div className='query-type subscription'>S</div>
-                )}
                 {queryTypes.query && (
                   <div className='query-type query'>Q</div>
                 )}
                 {queryTypes.mutation && (
                   <div className='query-type mutation'>M</div>
+                )}
+                {queryTypes.subscription && (
+                  <div className='query-type subscription'>S</div>
                 )}
               </div>
               {session.selectedViewer !== 'ADMIN' && (

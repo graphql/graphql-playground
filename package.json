@@ -77,7 +77,9 @@
     "react": "^15.4.2",
     "react-codemirror": "^0.3.0",
     "react-dom": "^15.4.2",
+    "rxjs": "^5.0.3",
     "seamless-immutable": "^7.0.1",
+    "subscriptions-transport-ws": "^0.4.0",
     "svg-loader": "^0.0.2",
     "svgo-loader": "^1.1.2"
   },

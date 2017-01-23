@@ -20,7 +20,6 @@ import {ExecuteButton} from './ExecuteButton'
 import {ToolbarButton} from 'graphiql/dist/components/ToolbarButton'
 import {QueryEditor} from 'graphiql/dist/components/QueryEditor'
 import {VariableEditor} from 'graphiql/dist/components/VariableEditor'
-import {ResultViewer} from 'graphiql/dist/components/ResultViewer'
 import {DocExplorer} from './DocExplorer'
 import CodeMirrorSizer from 'graphiql/dist/utility/CodeMirrorSizer'
 import getQueryFacts from 'graphiql/dist/utility/getQueryFacts'
@@ -37,6 +36,8 @@ import {Endpoint, Viewer} from '../types'
 import {download} from './util/index'
 import QueryHeader from './QueryHeader'
 import ResultHeader from './ResultHeader'
+import {ResultViewer} from './ResultViewer'
+import ageOfDate from './util/ageOfDate'
 
 /**
  * The top-level React component for CustomGraphiQL, intended to encompass the entire
@@ -51,7 +52,7 @@ interface Props {
   query?: string
   variables?: string
   operationName?: string
-  response?: string
+  responses?: string[]
   selectedEndpoint?: Endpoint
 
   storage?: any
@@ -77,7 +78,7 @@ interface State {
   query: any
   variables: any
   operationName: string
-  response: any
+  responses: any[]
   editorFlex: number
   variableEditorOpen: boolean
   variableEditorHeight: number
@@ -181,7 +182,7 @@ export class CustomGraphiQL extends React.Component<Props, State> {
       query,
       variables,
       operationName,
-      response: props.response,
+      responses: props.responses || [],
       editorFlex: Number(this._storageGet('editorFlex')) || 1,
       variableEditorOpen: Boolean(variables),
       variableEditorHeight: Number(this._storageGet('variableEditorHeight')) || 200,
@@ -219,7 +220,7 @@ export class CustomGraphiQL extends React.Component<Props, State> {
     let nextQuery = this.state.query
     let nextVariables = this.state.variables
     let nextOperationName = this.state.operationName
-    let nextResponse = this.state.response
+    let nextResponses = this.state.responses
 
     if (nextProps.schema !== undefined) {
       nextSchema = nextProps.schema
@@ -233,8 +234,8 @@ export class CustomGraphiQL extends React.Component<Props, State> {
     if (nextProps.operationName !== undefined) {
       nextOperationName = nextProps.operationName
     }
-    if (nextProps.response !== undefined) {
-      nextResponse = nextProps.response
+    if (nextProps.responses !== undefined) {
+      nextResponses = nextProps.responses
     }
     if (nextSchema !== this.state.schema ||
       nextQuery !== this.state.query ||
@@ -247,18 +248,20 @@ export class CustomGraphiQL extends React.Component<Props, State> {
       query: nextQuery,
       variables: nextVariables,
       operationName: nextOperationName,
-      response: nextResponse,
+      responses: nextResponses,
     } as State)
   }
 
   componentDidUpdate() {
     // If this update caused DOM nodes to have changed sizes, update the
     // corresponding CodeMirror instance sizes to match.
-    this.codeMirrorSizer.updateSizes([
+    const components = [
       this.queryEditorComponent,
       this.variableEditorComponent,
-      this.resultComponent,
-    ])
+      // this.resultComponent,
+    ]
+    this.codeMirrorSizer.updateSizes(components)
+    this.resultComponent.scrollTop = this.resultComponent.scrollHeight
   }
 
   // When the component is about to unmount, store any persistable state, such
@@ -350,7 +353,41 @@ export class CustomGraphiQL extends React.Component<Props, State> {
             letter-spacing: 0.6px;
             width: 235px;
           }
+          .result-window {
+            @inherit: .bgDarkBlue;
+          }
 
+          .subscription-time {
+            @inherit: .relative;
+            height: 17px;
+            margin-top: 12px;
+            margin-bottom: 4px;
+            &:before {
+              @inherit: .absolute, .w100;
+              content: "";
+              top: 9px;
+              left: 95px;
+              border-top: 1px solid rgba(255,255,255,.2);
+            }
+          }
+
+          .subscription-time-text {
+            @inherit: .bgDarkBlue, .white50, .f12;
+            padding-left: 15px;
+          }
+
+          .listening {
+            @inherit: .f16, .white40, .absolute, .bottom0;
+            font-family: 'Source Code Pro',
+              'Consolas',
+              'Inconsolata',
+              'Droid Sans Mono',
+              'Monaco',
+              monospace;
+            letter-spacing: 0.6px;
+            padding-left: 24px;
+            padding-bottom: 30px;
+          }
         `}</style>
         <div className='editorWrap'>
           <div
@@ -395,9 +432,11 @@ export class CustomGraphiQL extends React.Component<Props, State> {
             </div>
             <div className='resultWrap'>
               <ResultHeader
+                showViewAs={this.props.showViewAs}
                 selectedViewer={this.props.selectedViewer}
                 onChangeViewer={this.props.onChangeViewer}
                 showResponseTitle={this.props.showResponseTitle}
+                subscriptionActive={Boolean(this.state.subscription)}
               />
               <ExecuteButton
                 isRunning={Boolean(this.state.subscription)}
@@ -411,17 +450,41 @@ export class CustomGraphiQL extends React.Component<Props, State> {
                   <div className='spinner'/>
                 </div>
               }
-              <ResultViewer
+
+              <div
+                className='result-window'
                 ref={c => { this.resultComponent = c }}
-                value={this.state.response}
-              />
+              >
+                {this.state.responses.map((response, index) => (
+                  <div
+                    key={response.date}
+                    style={{
+                      marginTop: this.state.subscription && index === 0 ? 23 : 0,
+                    }}
+                  >
+                    {Boolean(this.state.subscription) && response.time && (
+                      <div className='subscription-time'>
+                        <div className="subscription-time-text">
+                          {ageOfDate(response.time)}
+                        </div>
+                      </div>
+                    )}
+                    <ResultViewer
+                      value={response.date}
+                    />
+                  </div>
+                ))}
+              </div>
               {footer}
-              {!this.state.response && (
+              {!this.state.responses || this.state.responses.length === 0 && (
                 <div className='intro'>
                   Hit the Play Button to get a response here
                 </div>
               )}
-              {this.state.response && this.props.showDownloadJsonButton && (
+              {Boolean(this.state.subscription) && (
+                <div className='listening'>Listening &hellip;</div>
+              )}
+              {this.state.responses && this.state.responses.length > 0 && this.props.showDownloadJsonButton && (
                 <div className='download-button' onClick={this.handleDownloadJSON}>Download JSON</div>
               )}
             </div>
@@ -506,7 +569,7 @@ export class CustomGraphiQL extends React.Component<Props, State> {
     const fetch = observableToPromise(fetcher({query: introspectionQuery}))
     if (!isPromise(fetch)) {
       this.setState({
-        response: 'Fetcher did not return a Promise for introspection.',
+        responses: [{date: 'Fetcher did not return a Promise for introspection.'}],
       } as State)
       return
     }
@@ -544,13 +607,13 @@ export class CustomGraphiQL extends React.Component<Props, State> {
         this.setState({
           // Set schema to `null` to explicitly indicate that no schema exists.
           schema: null,
-          response: responseString,
+          responses: [{date: responseString}],
         } as State)
       }
     }).catch(error => {
       this.setState({
         schema: null,
-        response: error && String(error.stack || error),
+        responses: [{date: error && String(error.stack || error)}],
       } as State)
     })
   }
@@ -604,7 +667,7 @@ export class CustomGraphiQL extends React.Component<Props, State> {
       fetch.then(cb).catch(error => {
         this.setState({
           isWaitingForResponse: false,
-          response: error && String(error.stack || error),
+          responses: [{date: error && String(error.stack || error)}],
         } as State)
       })
     } else if (isObservable(fetch)) {
@@ -616,7 +679,7 @@ export class CustomGraphiQL extends React.Component<Props, State> {
         error: error => {
           this.setState({
             isWaitingForResponse: false,
-            response: error && String(error.stack || error),
+            responses: [{date: error && String(error.stack || error)}],
             subscription: null,
           } as State)
         },
@@ -658,7 +721,7 @@ export class CustomGraphiQL extends React.Component<Props, State> {
     try {
       this.setState({
         isWaitingForResponse: true,
-        response: null,
+        responses: [{date: null}],
         operationName,
       } as State)
 
@@ -667,11 +730,26 @@ export class CustomGraphiQL extends React.Component<Props, State> {
         editedQuery,
         variables,
         operationName,
-        result => {
+        (result) => {
           if (queryID === this._editorQueryID) {
+            let isSubscription = false
+            if (result.isSubscription) {
+              isSubscription = true
+              delete result.isSubscription
+            }
+            let responses
+            let response = JSON.stringify(result, null, 2)
+
+            if (isSubscription) {
+              responses = this.state.responses
+                .filter(response => response && response.date)
+                .concat({date: response, time: new Date()})
+            } else {
+              responses = [{date: response}]
+            }
             this.setState({
               isWaitingForResponse: false,
-              response: JSON.stringify(result, null, 2),
+              responses,
             } as State)
           }
         },
@@ -681,7 +759,7 @@ export class CustomGraphiQL extends React.Component<Props, State> {
     } catch (error) {
       this.setState({
         isWaitingForResponse: false,
-        response: error.message,
+        responses: [error.message],
       } as State)
     }
   }
@@ -925,7 +1003,7 @@ export class CustomGraphiQL extends React.Component<Props, State> {
   }
 
   handleDownloadJSON = () => {
-    download(this.state.response, 'result.json', 'application/json')
+    download(this.state.responses[0], 'result.json', 'application/json')
   }
 }
 

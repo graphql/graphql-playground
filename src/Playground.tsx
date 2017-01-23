@@ -13,8 +13,9 @@ import PlaygroundStorage from './PlaygroundStorage'
 import * as cx from 'classnames'
 import getQueryTypes from './GraphiQL/util/getQueryTypes'
 import debounce from 'graphiql/dist/utility/debounce'
-
-global['Immutable'] = Immutable
+import {Observable} from 'rxjs/Observable'
+import {Client} from 'subscriptions-transport-ws'
+import isQuerySubscription from './GraphiQL/util/isQuerySubscription'
 
 export type Endpoint = 'SIMPLE' | 'RELAY'
 export type Viewer = 'ADMIN' | 'EVERYONE' | 'USER'
@@ -39,6 +40,7 @@ interface SchemaCache {
 
 export default class Playground extends React.Component<Props,State> {
   storage: PlaygroundStorage
+  ws: any
   constructor(props) {
     super(props)
     this.storage = new PlaygroundStorage(props.projectId)
@@ -67,6 +69,11 @@ export default class Playground extends React.Component<Props,State> {
     }
     global['p'] = this
   }
+  setWS() {
+    this.ws = new Client(this.getWSEndpoint(), {
+      timeout: 5000,
+    })
+  }
   componentWillMount() {
     // look, if there is a session. if not, initiate one.
     this.fetchSchemas()
@@ -75,6 +82,15 @@ export default class Playground extends React.Component<Props,State> {
   componentWillUnmount() {
     this.storage.setItem('selectedSessionIndex', String(this.state.selectedSessionIndex))
     this.saveSessions()
+  }
+  componentDidMount() {
+    this.setWS()
+  }
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.projectId !== this.props.projectId) {
+      this.setWS()
+      this.fetchSchemas()
+    }
   }
   fetchSchemas() {
     return Promise.all([
@@ -155,6 +171,10 @@ export default class Playground extends React.Component<Props,State> {
                 selectedEndpoint={session.selectedEndpoint}
                 showQueryTitle={false}
                 showResponseTitle={false}
+                showViewAs={true}
+                showEndpoints={true}
+                showDownloadJsonButton={true}
+                showCodeGeneration={true}
                 selectedViewer={this.state.selectedViewer}
                 storage={this.storage.getSessionStorage(session.id)}
                 query={session.query}
@@ -309,8 +329,32 @@ export default class Playground extends React.Component<Props,State> {
     return `https://api.graph.cool/relay/v1/${this.props.projectId}`
   }
 
+  private getWSEndpoint() {
+    return `ws://subscriptions.graph.cool/${this.props.projectId}`
+  }
+
+
   private fetcher = (graphQLParams) => {
     const endpoint = this.getEndpoint()
+    const {query, operationName} = graphQLParams
+
+    if (!query.includes('IntrospectionQuery') && isQuerySubscription(query, operationName)) {
+      return Observable.create(observer => {
+        const id = this.ws.subscribe(graphQLParams, (err, res) => {
+          const data = {data: res, isSubscription: true}
+          // console.log(`Response from ${id}`, err, data)
+          if (err) {
+            observer.completed()
+            return
+          }
+          observer.next(data)
+        })
+
+        return () => {
+          this.ws.unsubscribe(id)
+        }
+      })
+    }
 
     return fetch(endpoint, { // tslint:disable-line
       method: 'post',

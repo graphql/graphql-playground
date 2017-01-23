@@ -175,6 +175,8 @@
     -ms-flex: 1;
     flex: 1;
     position: relative;
+    padding-bottom: 60px;
+    background-color: rgb(23,42,58);
 }
 
 .graphiql-container .docExplorerWrap {
@@ -272,6 +274,7 @@
     flex: 1;
     height: 100%;
     position: relative;
+    overflow: scroll;
 }
 
 .graphiql-container .footer {
@@ -293,8 +296,10 @@
 }
 
 .graphiql-container .result-window .CodeMirror {
+    position: relative;
     padding-left: 10px;
     background: rgb(23,42,58);
+    height: auto;
 }
 
 .graphiql-container .result-window .CodeMirror-gutters {

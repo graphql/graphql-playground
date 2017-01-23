@@ -4,7 +4,7 @@ import Playground from './Playground'
 class App extends React.Component<null, null> {
   render() {
     return (
-      <Playground projectId='ciwkuhq2s0dbf0131rcb3isiq' />
+      <Playground projectId='cirs1ufsg02b101619ru0bx5r' />
     )
   }
 }
