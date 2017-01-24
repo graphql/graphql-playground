@@ -15,6 +15,8 @@ export interface Session {
   selectedEndpoint: Endpoint
   selectedViewer: Viewer
   queryTypes: QueryTypes
+  starred?: boolean
+  date: Date
 }
 
 export interface QueryTypes {
@@ -23,3 +25,5 @@ export interface QueryTypes {
   query: boolean
   mutation: boolean
 }
+
+export type HistoryFilter = 'HISTORY' | 'STARRED'

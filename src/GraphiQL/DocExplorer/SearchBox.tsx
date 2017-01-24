@@ -9,10 +9,13 @@
 import * as React from 'react'
 import debounce from 'graphiql/dist/utility/debounce'
 import {Icon} from 'graphcool-styles'
+import * as cx from 'classnames'
 
 interface Props {
   isShown: boolean
   onSearch: (value: string) => void
+  placeholder?: string
+  clean?: boolean
 }
 
 interface State {
@@ -39,7 +42,7 @@ export default class SearchBox extends React.Component<Props, State> {
 
   render() {
     return (
-      <div className='root'>
+      <div className={cx(!this.props.clean && 'root')}>
         <style jsx>{`
           .root {
             @inherit: .pa25;
@@ -63,7 +66,7 @@ export default class SearchBox extends React.Component<Props, State> {
                 onChange={this.handleChange}
                 type='text'
                 value={this.state.value}
-                placeholder='Search the schema ...'
+                placeholder={this.props.placeholder || 'Search the schema ...'}
               />
             </label>
         }

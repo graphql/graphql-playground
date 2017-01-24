@@ -10,14 +10,13 @@ import {Session} from './types'
 import * as cuid from 'cuid'
 import * as Immutable from 'seamless-immutable'
 import PlaygroundStorage from './PlaygroundStorage'
-import * as cx from 'classnames'
 import getQueryTypes from './GraphiQL/util/getQueryTypes'
 import debounce from 'graphiql/dist/utility/debounce'
 import {Observable} from 'rxjs/Observable'
 import {Client} from 'subscriptions-transport-ws'
 import isQuerySubscription from './GraphiQL/util/isQuerySubscription'
-import * as Modal from 'react-modal'
 import HistoryPopup from './HistoryPopup'
+import * as cx from 'classnames'
 
 export type Endpoint = 'SIMPLE' | 'RELAY'
 export type Viewer = 'ADMIN' | 'EVERYONE' | 'USER'
@@ -62,7 +61,7 @@ export default class Playground extends React.Component<Props,State> {
       sessions,
       selectedSessionIndex: selectedSessionIndex < sessions.length && selectedSessionIndex > -1
         ? selectedSessionIndex : 0,
-      historyOpen: false,
+      historyOpen: true,
     }
 
     if (typeof window === 'object') {
@@ -131,10 +130,21 @@ export default class Playground extends React.Component<Props,State> {
   render() {
     const {sessions, selectedSessionIndex} = this.state
     return (
-      <div className='root'>
+      <div
+        className={cx(
+          'root',
+          {
+            'blur': this.state.historyOpen,
+          },
+        )}
+      >
         <style jsx>{`
           .root {
             @inherit: .h100, .flex, .flexColumn;
+          }
+
+          .blur {
+            filter: blur(5px);
           }
 
           .graphiqls-container {
@@ -193,19 +203,18 @@ export default class Playground extends React.Component<Props,State> {
             </div>
           ))}
         </div>
-        <Modal
+        <HistoryPopup
           isOpen={this.state.historyOpen}
           onRequestClose={this.handleCloseHistory}
-          style={{
-            overlay: {
-              zIndex: 20,
-            },
-          }}
-        >
-          <HistoryPopup/>
-        </Modal>
+          historyItems={this.state.sessions}
+          onItemStarToggled={this.handleItemStarToggled}
+        />
       </div>
     )
+  }
+
+  private handleItemStarToggled = (item: Session) => {
+    this.setValueInSession(item.id, 'starred', !item.starred)
   }
 
   private handleCloseSession = (session: Session) => {
