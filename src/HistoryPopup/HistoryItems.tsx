@@ -25,6 +25,7 @@ const HistoryItems = (
     <style jsx>{`
       .history-items {
         @inherit: .overflowYScroll;
+        max-height: calc(100vh - 121px);
       }
       .item {
         @inherit: .flex, .itemsCenter, .justifyBetween, .bb, .bBlack10, .pointer;
@@ -78,6 +79,7 @@ const HistoryItems = (
       })
       .map((item, index) => (
       <div
+        key={item.id}
         className={cx(
           'item',
           {

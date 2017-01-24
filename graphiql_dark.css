@@ -1394,3 +1394,9 @@ li.CodeMirror-hint-active {
     margin-bottom: -1px;
 }
 
+.history-popup .graphiql-container {
+    height: calc(100% - 81px) !important;
+}
+.history-popup .graphiql-container .queryWrap {
+    border-top: none;
+}

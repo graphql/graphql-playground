@@ -13,6 +13,7 @@ export default class PlaygroundStorage {
       this.project = {
         sessions: {
         },
+        history: [],
         data: {
         },
       }
@@ -61,6 +62,14 @@ export default class PlaygroundStorage {
     if (save) {
       this.saveProject()
     }
+  }
+
+  public addToHistory(session: Session) {
+    this.project.history.unshift(session)
+  }
+
+  public getHistory() {
+    return this.project.history || []
   }
 
   public setItem(key: string, value: string) {

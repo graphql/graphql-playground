@@ -69,8 +69,10 @@ interface Props {
   showQueryTitle?: boolean
   showResponseTitle?: boolean
   showDownloadJsonButton?: boolean
+  disableQueryHeader?: boolean
   selectedViewer?: Viewer
   onChangeViewer?: Function
+  queryOnly?: boolean
 }
 
 interface State {
@@ -261,7 +263,9 @@ export class CustomGraphiQL extends React.Component<Props, State> {
       // this.resultComponent,
     ]
     this.codeMirrorSizer.updateSizes(components)
-    this.resultComponent.scrollTop = this.resultComponent.scrollHeight
+    if (this.resultComponent) {
+      this.resultComponent.scrollTop = this.resultComponent.scrollHeight
+    }
   }
 
   // When the component is about to unmount, store any persistable state, such
@@ -397,13 +401,15 @@ export class CustomGraphiQL extends React.Component<Props, State> {
             className='editorBar'
             onMouseDown={this.handleResizeStart}>
             <div className='queryWrap' style={queryWrapStyle}>
-              <QueryHeader
-                selectedEndpoint={this.props.selectedEndpoint}
-                onChangeEndpoint={this.props.onChangeEndpoint}
-                onPrettify={this.handlePrettifyQuery}
-                showEndpoints={this.props.showEndpoints}
-                showQueryTitle={this.props.showQueryTitle}
-              />
+              {!this.props.disableQueryHeader && (
+                <QueryHeader
+                  selectedEndpoint={this.props.selectedEndpoint}
+                  onChangeEndpoint={this.props.onChangeEndpoint}
+                  onPrettify={this.handlePrettifyQuery}
+                  showEndpoints={this.props.showEndpoints}
+                  showQueryTitle={this.props.showQueryTitle}
+                />
+              )}
               <QueryEditor
                 ref={n => { this.queryEditorComponent = n }}
                 schema={this.state.schema}
@@ -432,86 +438,90 @@ export class CustomGraphiQL extends React.Component<Props, State> {
                 />
               </div>
             </div>
-            <div className='resultWrap'>
-              <ResultHeader
-                showViewAs={this.props.showViewAs}
-                selectedViewer={this.props.selectedViewer}
-                onChangeViewer={this.props.onChangeViewer}
-                showResponseTitle={this.props.showResponseTitle}
-                subscriptionResponse={subscriptionResponse}
-              />
-              <ExecuteButton
-                isRunning={Boolean(this.state.subscription)}
-                onRun={this.handleRunQuery}
-                onStop={this.handleStopQuery}
-                operations={this.state.operations}
-              />
-              {
-                this.state.isWaitingForResponse &&
-                <div className='spinner-container'>
-                  <div className='spinner'/>
-                </div>
-              }
-
-              <div
-                className='result-window'
-                ref={c => { this.resultComponent = c }}
-              >
-                {this.state.responses.map((response, index) => (
-                  <div
-                    key={response.date}
-                    style={{
-                      marginTop: subscriptionResponse && index === 0 ? 23 : 0,
-                    }}
-                  >
-                    {subscriptionResponse && response.time && (
-                      <div className='subscription-time'>
-                        <div className='subscription-time-text'>
-                          {ageOfDate(response.time)}
-                        </div>
-                      </div>
-                    )}
-                    <ResultViewer
-                      value={response.date}
-                    />
+            {!this.props.queryOnly && (
+              <div className='resultWrap'>
+                <ResultHeader
+                  showViewAs={this.props.showViewAs}
+                  selectedViewer={this.props.selectedViewer}
+                  onChangeViewer={this.props.onChangeViewer}
+                  showResponseTitle={this.props.showResponseTitle}
+                  subscriptionResponse={subscriptionResponse}
+                />
+                <ExecuteButton
+                  isRunning={Boolean(this.state.subscription)}
+                  onRun={this.handleRunQuery}
+                  onStop={this.handleStopQuery}
+                  operations={this.state.operations}
+                />
+                {
+                  this.state.isWaitingForResponse &&
+                  <div className='spinner-container'>
+                    <div className='spinner'/>
                   </div>
-                ))}
+                }
+
+                <div
+                  className='result-window'
+                  ref={c => { this.resultComponent = c }}
+                  >
+                  {this.state.responses.map((response, index) => (
+                  <div
+                  key={response.date}
+                  style={{
+                  marginTop: subscriptionResponse && index === 0 ? 23 : 0,
+                  }}
+                  >
+                  {subscriptionResponse && response.time && (
+                  <div className='subscription-time'>
+                  <div className='subscription-time-text'>
+                  {ageOfDate(response.time)}
+                  </div>
+                  </div>
+                  )}
+                  <ResultViewer
+                  value={response.date}
+                  />
+                  </div>
+                  ))}
+                  </div>
+                {footer}
+                {!this.state.responses || this.state.responses.length === 0 && (
+                  <div className='intro'>
+                    Hit the Play Button to get a response here
+                  </div>
+                )}
+                {Boolean(this.state.subscription) && (
+                  <div className='listening'>Listening &hellip;</div>
+                )}
+                {this.state.responses && this.state.responses.length > 0 && this.props.showDownloadJsonButton && (
+                  <div className='download-button' onClick={this.handleDownloadJSON}>Download JSON</div>
+                )}
               </div>
-              {footer}
-              {!this.state.responses || this.state.responses.length === 0 && (
-                <div className='intro'>
-                  Hit the Play Button to get a response here
-                </div>
-              )}
-              {Boolean(this.state.subscription) && (
-                <div className='listening'>Listening &hellip;</div>
-              )}
-              {this.state.responses && this.state.responses.length > 0 && this.props.showDownloadJsonButton && (
-                <div className='download-button' onClick={this.handleDownloadJSON}>Download JSON</div>
-              )}
-            </div>
+            )}
           </div>
         </div>
-        <div className={docExplorerWrapClasses} style={docWrapStyle}>
-          <div
-            className={`docs-button ${!this.state.docExplorerOpen && 'inactive'}`}
-            onClick={this.handleToggleDocs}
-          >
-            Docs
-          </div>
-          <div
-            className='docExplorerResizer'
-            onMouseDown={this.handleDocsResizeStart}
-          />
-          {this.state.docExplorerOpen && (
-            <DocExplorer
-              ref={c => { this.docExplorerComponent = c }}
-              schema={this.state.schema}
-              open={this.state.doxExploreOpen}
+        {!this.props.queryOnly && (
+          <div className={docExplorerWrapClasses} style={docWrapStyle}>
+            <div
+              className={`docs-button ${!this.state.docExplorerOpen && 'inactive'}`}
+              onClick={this.handleToggleDocs}
             >
-            </DocExplorer>
-          )}
-        </div>
+              Docs
+            </div>
+            <div
+              className='docExplorerResizer'
+              onMouseDown={this.handleDocsResizeStart}
+            />
+            {this.state.docExplorerOpen && (
+              <DocExplorer
+                ref={c => { this.docExplorerComponent = c }}
+                schema={this.state.schema}
+                open={this.state.doxExploreOpen}
+              >
+              </DocExplorer>
+            )}
+          </div>
+        )}
       </div>
     )
   }

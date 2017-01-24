@@ -27,13 +27,14 @@ interface State {
   selectedSessionIndex: number
   schemaCache: SchemaCache
   historyOpen: boolean
+  history: Session[]
 }
 
 interface Props {
   projectId: string
 }
 
-interface SchemaCache {
+export interface SchemaCache {
   simple: any
   relay: any
 }
@@ -61,13 +62,13 @@ export default class Playground extends React.Component<Props,State> {
       sessions,
       selectedSessionIndex: selectedSessionIndex < sessions.length && selectedSessionIndex > -1
         ? selectedSessionIndex : 0,
-      historyOpen: true,
+      historyOpen: false,
+      history: this.storage.getHistory(),
     }
 
     if (typeof window === 'object') {
       window.addEventListener('beforeunload', () => {
         this.componentWillUnmount()
-        return 'Are you sure?'
       })
     }
     global['p'] = this
@@ -159,7 +160,7 @@ export default class Playground extends React.Component<Props,State> {
         <TabBar
           sessions={sessions}
           selectedSessionIndex={selectedSessionIndex}
-          onNewSession={() => this.handleNewSession()}
+          onNewSession={() => this.handleNewSession(false)}
           onCloseSession={this.handleCloseSession}
           onOpenHistory={this.handleOpenHistory}
           onSelectSession={this.handleSelectSession}
@@ -203,14 +204,30 @@ export default class Playground extends React.Component<Props,State> {
             </div>
           ))}
         </div>
-        <HistoryPopup
-          isOpen={this.state.historyOpen}
-          onRequestClose={this.handleCloseHistory}
-          historyItems={this.state.sessions}
-          onItemStarToggled={this.handleItemStarToggled}
-        />
+        {this.state.historyOpen && (
+          <HistoryPopup
+            isOpen={this.state.historyOpen}
+            onRequestClose={this.handleCloseHistory}
+            historyItems={this.state.history}
+            onItemStarToggled={this.handleItemStarToggled}
+            fetcherCreater={this.fetcher}
+            schemas={this.state.schemaCache}
+            onCreateSession={this.handleCreateSession}
+          />
+        )}
       </div>
     )
+  }
+
+  private handleCreateSession = (session: Session) => {
+    const newSession = this.createSession(session)
+    this.setState(state => {
+      return {
+        ...state,
+        sessions: state.sessions.concat(newSession),
+        selectedSessionIndex: state.sessions.length,
+      }
+    })
   }
 
   private handleItemStarToggled = (item: Session) => {
@@ -280,6 +297,7 @@ export default class Playground extends React.Component<Props,State> {
   }
 
   private handleNewSession = (newIndexZero: boolean = false) => {
+    console.log('handling new session')
     const session = this.createSession()
     this.setState(state => {
       return {
@@ -290,20 +308,25 @@ export default class Playground extends React.Component<Props,State> {
     })
   }
 
-  private createSession = () => {
-    const newSession: Session = Immutable({
-      id: cuid(),
-      selectedEndpoint: 'SIMPLE',
-      selectedViewer: 'ADMIN',
-      query: defaultQuery,
-      variables: '',
-      result: '',
-      operationName: undefined,
-      hasMutation: false,
-      hasSubscription: false,
-      hasQuery: false,
-      queryTypes: getQueryTypes(defaultQuery),
-    })
+  private createSession = (session?: Session) => {
+    let newSession
+    if (session) {
+      newSession = Immutable.set(session, 'id', cuid())
+    } else {
+      newSession = Immutable({
+        id: cuid(),
+        selectedEndpoint: 'SIMPLE',
+        selectedViewer: 'ADMIN',
+        query: defaultQuery,
+        variables: '',
+        result: '',
+        operationName: undefined,
+        hasMutation: false,
+        hasSubscription: false,
+        hasQuery: false,
+        queryTypes: getQueryTypes(defaultQuery),
+      })
+    }
 
     this.storage.saveSession(newSession)
     return newSession
@@ -353,8 +376,25 @@ export default class Playground extends React.Component<Props,State> {
     return `ws://subscriptions.graph.cool/${this.props.projectId}`
   }
 
+  private addToHistory(session: Session) {
+    const id = cuid()
+    console.log('generating history with', id)
+    const historySession = Immutable.set(session, 'id', id)
+    this.setState(state => {
+      return {
+        ...state,
+        history: [historySession].concat(state.history),
+      }
+    })
+    this.storage.addToHistory(historySession)
+  }
+
   private fetcher = (session: Session) => ((graphQLParams) => {
     const {query, operationName} = graphQLParams
+
+    if (!query.includes('IntrospectionQuery')) {
+      this.addToHistory(session)
+    }
 
     if (!query.includes('IntrospectionQuery') && isQuerySubscription(query, operationName)) {
       return Observable.create(observer => {
