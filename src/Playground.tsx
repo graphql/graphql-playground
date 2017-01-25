@@ -420,7 +420,6 @@ export default class Playground extends React.Component<Props,State> {
   }
 
   private fetcher = (session: Session) => ((graphQLParams) => {
-    console.log('calling fetcher')
     const {query, operationName} = graphQLParams
 
     if (!query.includes('IntrospectionQuery') && !this.historyIncludes(session)) {
@@ -447,14 +446,12 @@ export default class Playground extends React.Component<Props,State> {
       })
     }
 
-
     const endpoint = session.selectedEndpoint === 'SIMPLE' ? this.getSimpleEndpoint() : this.getRelayEndpoint()
-    console.log('fetching', graphQLParams, endpoint)
     return fetch(endpoint, { // tslint:disable-line
       method: 'post',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': session.selectedViewer === 'ADMIN' ? `Bearer ${this.props.authToken}` : ''
+        'Authorization': session.selectedViewer === 'ADMIN' ? `Bearer ${this.props.authToken}` : '',
       },
       body: JSON.stringify(graphQLParams),
     })

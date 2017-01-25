@@ -116,12 +116,9 @@ export class ExecuteButton extends React.Component<Props, State> {
   }
 
   _onClick = () => {
-    console.log('ExecuteButton getting onClick')
     if (this.props.isRunning) {
-      console.log('ExecuteButton getting onStop')
       this.props.onStop()
     } else {
-      console.log('ExecuteButton getting onRun')
       this.props.onRun()
     }
   }
