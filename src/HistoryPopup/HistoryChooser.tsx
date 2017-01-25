@@ -32,7 +32,7 @@ const HistoryChooser = ({selectedFilter, onSelectFilter}: Props) => (
       }
 
     `}</style>
-    <div className="chooser">
+    <div className='chooser'>
       <div
         className={cx(
           'filter',

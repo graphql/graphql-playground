@@ -19,7 +19,7 @@ const HistoryItems = (
     selectedItemIndex,
     onItemStarToggled,
     selectedFilter,
-    searchTerm
+    searchTerm,
   }: Props) => (
   <div className='history-items'>
     <style jsx>{`
@@ -84,13 +84,13 @@ const HistoryItems = (
           'item',
           {
             'active': selectedItemIndex === index,
-          }
+          },
         )}
         onClick={() => onItemSelect(index)}
       >
-        <div className="left">
+        <div className='left'>
           <div
-            className="star"
+            className='star'
             onClick={() => onItemStarToggled(item)}
           >
             <Icon
@@ -104,20 +104,20 @@ const HistoryItems = (
               height={25}
             />
           </div>
-          <div className="operation">
-            <div className="operation-text">
+          <div className='operation'>
+            <div className='operation-text'>
               {item.operationName || item.queryTypes.firstOperationName || 'New Session'}
             </div>
             {item.queryTypes.query && (
-              <div className="operation-icon query">Q</div>
+              <div className='operation-icon query'>Q</div>
             )}
             {item.queryTypes.mutation && (
-              <div className="operation-icon mutation">M</div>
+              <div className='operation-icon mutation'>M</div>
             )}
             {item.queryTypes.subscription && (
-              <div className="operation-icon subscription">S</div>
+              <div className='operation-icon subscription'>S</div>
             )}
-            <div className="viewer">
+            <div className='viewer'>
               {item.selectedViewer === 'EVERYONE' && (
                 <Icon
                   src={require('graphcool-styles/icons/fill/world.svg')}
@@ -137,17 +137,19 @@ const HistoryItems = (
             </div>
           </div>
         </div>
-        <div className="right">
-          <div className="endpoint">
+        <div className='right'>
+          <div className='endpoint'>
             {item.selectedEndpoint === 'SIMPLE' ? (
               'Simple API'
             ) : (
               'Relay API'
             )}
           </div>
-          <div className="date">
-            16/08/17
-          </div>
+          {item.date && (
+            <div className='date'>
+              {item.date.getMonth() + 1}/{item.date.getDay()}/{item.date.getFullYear().toString().slice(2,4)}
+            </div>
+          )}
         </div>
       </div>
     ))}

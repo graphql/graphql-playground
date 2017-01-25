@@ -64,8 +64,14 @@ export default class PlaygroundStorage {
     }
   }
 
+  public syncHistory(history: Session[]) {
+    this.project.history = history
+  }
+
   public addToHistory(session: Session) {
+    // limit by 1000 items
     this.project.history.unshift(session)
+    this.project.history = this.project.history.slice(0, 1000)
   }
 
   public getHistory() {

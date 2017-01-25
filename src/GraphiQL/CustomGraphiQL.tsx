@@ -263,7 +263,7 @@ export class CustomGraphiQL extends React.Component<Props, State> {
       // this.resultComponent,
     ]
     this.codeMirrorSizer.updateSizes(components)
-    if (this.resultComponent) {
+    if (this.resultComponent && Boolean(this.state.subscription)) {
       this.resultComponent.scrollTop = this.resultComponent.scrollHeight
     }
   }
@@ -285,11 +285,15 @@ export class CustomGraphiQL extends React.Component<Props, State> {
 
     // const logo =
     //   find(children, child => child.type === CustomGraphiQL.Logo) ||
-      {/*<CustomGraphiQL.Logo />*/}
+    {/*<CustomGraphiQL.Logo />*/
+    }
 
-    {/*const toolbar =*/}
-      {/*find(children, child => child.type === CustomGraphiQL.Toolbar) ||*/}
-      {/*<CustomGraphiQL.Toolbar />*/}
+    {/*const toolbar =*/
+    }
+    {/*find(children, child => child.type === CustomGraphiQL.Toolbar) ||*/
+    }
+    {/*<CustomGraphiQL.Toolbar />*/
+    }
 
     const footer = find(children, child => child.type === CustomGraphiQL.Footer)
 
@@ -445,7 +449,6 @@ export class CustomGraphiQL extends React.Component<Props, State> {
                   selectedViewer={this.props.selectedViewer}
                   onChangeViewer={this.props.onChangeViewer}
                   showResponseTitle={this.props.showResponseTitle}
-                  subscriptionResponse={subscriptionResponse}
                 />
                 <ExecuteButton
                   isRunning={Boolean(this.state.subscription)}
@@ -463,27 +466,24 @@ export class CustomGraphiQL extends React.Component<Props, State> {
                 <div
                   className='result-window'
                   ref={c => { this.resultComponent = c }}
-                  >
+                >
                   {this.state.responses.map((response, index) => (
-                  <div
-                  key={response.date}
-                  style={{
-                  marginTop: subscriptionResponse && index === 0 ? 23 : 0,
-                  }}
-                  >
-                  {subscriptionResponse && response.time && (
-                  <div className='subscription-time'>
-                  <div className='subscription-time-text'>
-                  {ageOfDate(response.time)}
-                  </div>
-                  </div>
-                  )}
-                  <ResultViewer
-                  value={response.date}
-                  />
-                  </div>
+                    <div
+                      key={response.date}
+                    >
+                      {subscriptionResponse && response.time && (
+                        <div className='subscription-time'>
+                          <div className='subscription-time-text'>
+                            {ageOfDate(response.time)}
+                          </div>
+                        </div>
+                      )}
+                      <ResultViewer
+                        value={response.date}
+                      />
+                    </div>
                   ))}
-                  </div>
+                </div>
                 {footer}
                 {!this.state.responses || this.state.responses.length === 0 && (
                   <div className='intro'>

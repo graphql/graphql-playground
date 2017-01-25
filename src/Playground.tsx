@@ -86,6 +86,8 @@ export default class Playground extends React.Component<Props,State> {
   componentWillUnmount() {
     this.storage.setItem('selectedSessionIndex', String(this.state.selectedSessionIndex))
     this.saveSessions()
+    this.saveHistory()
+    this.storage.saveProject()
   }
   componentDidMount() {
     this.setWS()
@@ -231,7 +233,7 @@ export default class Playground extends React.Component<Props,State> {
   }
 
   private handleItemStarToggled = (item: Session) => {
-    this.setValueInSession(item.id, 'starred', !item.starred)
+    this.setValueInHistory(item.id, 'starred', !item.starred)
   }
 
   private handleCloseSession = (session: Session) => {
@@ -262,7 +264,6 @@ export default class Playground extends React.Component<Props,State> {
   }
 
   private handleOpenHistory = () => {
-    console.log('history oopen')
     this.setState({ historyOpen: true } as State)
   }
 
@@ -293,11 +294,13 @@ export default class Playground extends React.Component<Props,State> {
 
   private saveSessions = () => {
     this.state.sessions.forEach(session => this.storage.saveSession(session, false))
-    this.storage.saveProject()
+  }
+
+  private saveHistory = () => {
+    this.storage.syncHistory(this.state.history)
   }
 
   private handleNewSession = (newIndexZero: boolean = false) => {
-    console.log('handling new session')
     const session = this.createSession()
     this.setState(state => {
       return {
@@ -325,6 +328,7 @@ export default class Playground extends React.Component<Props,State> {
         hasSubscription: false,
         hasQuery: false,
         queryTypes: getQueryTypes(defaultQuery),
+        starred: false,
       })
     }
 
@@ -353,6 +357,17 @@ export default class Playground extends React.Component<Props,State> {
     this.setValueInSession(sessionId, 'operationName', operationName)
   }
 
+  private setValueInHistory(sessionId: string, key: string, value: any) {
+    this.setState(state => {
+      // TODO optimize the lookup with a lookup table
+      const i = state.history.findIndex(s => s.id === sessionId)
+      return {
+        ...state,
+        history: Immutable.setIn(state.history, [i, key], value),
+      }
+    })
+  }
+
   private setValueInSession(sessionId: string, key: string, value: any) {
     this.setState(state => {
       // TODO optimize the lookup with a lookup table
@@ -378,8 +393,10 @@ export default class Playground extends React.Component<Props,State> {
 
   private addToHistory(session: Session) {
     const id = cuid()
-    console.log('generating history with', id)
-    const historySession = Immutable.set(session, 'id', id)
+    const historySession = Immutable.merge(session, {
+      id,
+      date: new Date(),
+    })
     this.setState(state => {
       return {
         ...state,
@@ -389,11 +406,25 @@ export default class Playground extends React.Component<Props,State> {
     this.storage.addToHistory(historySession)
   }
 
+  private historyIncludes(session: Session) {
+    const duplicate = this.state.history
+      .find(item => (
+          session.query === item.query
+          && session.variables === item.variables
+          && session.operationName === item.operationName
+          && session.selectedViewer === item.selectedViewer
+          && session.selectedEndpoint === item.selectedEndpoint
+      ))
+    return Boolean(duplicate)
+  }
+
   private fetcher = (session: Session) => ((graphQLParams) => {
     const {query, operationName} = graphQLParams
 
-    if (!query.includes('IntrospectionQuery')) {
-      this.addToHistory(session)
+    if (!query.includes('IntrospectionQuery') && !this.historyIncludes(session)) {
+      setImmediate(() => {
+        this.addToHistory(session)
+      })
     }
 
     if (!query.includes('IntrospectionQuery') && isQuerySubscription(query, operationName)) {

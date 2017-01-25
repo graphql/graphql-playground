@@ -40,28 +40,28 @@ export default class HistoryPopup extends React.Component<Props,State> {
         onRequestClose={this.props.onRequestClose}
         contentLabel='GraphiQL Session History'
         style={{
-            overlay: {
-              zIndex: 20,
-              backgroundColor: 'transparent',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-            },
-            content: {
-              position: 'relative',
-              width: 976,
-              height: 'auto',
-              top: 'initial',
-              left: 'initial',
-              right: 'initial',
-              bottom: 'initial',
-              borderRadius: 2,
-              padding: 0,
-              border: 'none',
-              background: 'none',
-              boxShadow: '0 1px 7px rgba(0,0,0,.2)',
-            },
-          }}
+          overlay: {
+            zIndex: 20,
+            backgroundColor: 'transparent',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+          },
+          content: {
+            position: 'relative',
+            width: 976,
+            height: 'auto',
+            top: 'initial',
+            left: 'initial',
+            right: 'initial',
+            bottom: 'initial',
+            borderRadius: 2,
+            padding: 0,
+            border: 'none',
+            background: 'none',
+            boxShadow: '0 1px 7px rgba(0,0,0,.2)',
+          },
+        }}
       >
         <style jsx>{`
           .history-popup {
@@ -82,12 +82,19 @@ export default class HistoryPopup extends React.Component<Props,State> {
             }
           }
           .right {
+            @inherit: .z2;
             flex: 0 0 464px;
           }
           .right-header {
             @inherit: .justifyBetween, .flex, .bgDarkBlue, .itemsCenter, .ph25;
             padding-top: 20px;
             padding-bottom: 20px;
+          }
+          .right-empty {
+            @inherit: .bgDarkBlue, .h100, .flex, .justifyCenter, .itemsCenter;
+          }
+          .right-empty-text {
+            @inherit: .f16, .white60;
           }
           .view {
             @inherit: .f14, .white40, .ttu, .fw6;
@@ -115,39 +122,47 @@ export default class HistoryPopup extends React.Component<Props,State> {
               onItemStarToggled={this.props.onItemStarToggled}
             />
           </div>
-          <div className='right'>
-            <div className="right-header">
-              <div className="view">
-                {`${selectedItem.selectedEndpoint} API / View as ${selectedItem.selectedViewer}`}
-              </div>
-              <div
-                className="use"
-                onClick={() => {
-                  this.props.onCreateSession(selectedItem)
-                  this.props.onRequestClose()
-                }}
-              >
-                <div className="use-text">
-                  Use
+          {Boolean(selectedItem) ? (
+            <div className='right'>
+              <div className='right-header'>
+                <div className='view'>
+                  {`${selectedItem.selectedEndpoint} API / View as ${selectedItem.selectedViewer}`}
                 </div>
-                <Icon
-                  src={require('./assets/icons/arrowRight.svg')}
-                  color={$v.white}
-                  stroke
-                  width={13}
-                  height={13}
-                />
+                <div
+                  className='use'
+                  onClick={() => {
+                    this.props.onCreateSession(selectedItem)
+                    this.props.onRequestClose()
+                  }}
+                >
+                  <div className='use-text'>
+                    Use
+                  </div>
+                  <Icon
+                    src={require('./assets/icons/arrowRight.svg')}
+                    color={$v.white}
+                    stroke
+                    width={13}
+                    height={13}
+                  />
+                </div>
+              </div>
+              <CustomGraphiQL
+                schema={this.props.schemas[selectedItem.selectedEndpoint]}
+                variables={selectedItem.variables}
+                query={selectedItem.query}
+                fetcher={this.props.fetcherCreater(selectedItem)}
+                disableQueryHeader
+                queryOnly
+              />
+            </div>
+          ) : (
+            <div className='right'>
+              <div className='right-empty'>
+                <div className='right-empty-text'>No History yet</div>
               </div>
             </div>
-            <CustomGraphiQL
-              schema={this.props.schemas[selectedItem.selectedEndpoint]}
-              variables={selectedItem.variables}
-              query={selectedItem.query}
-              fetcher={this.props.fetcherCreater(selectedItem)}
-              disableQueryHeader
-              queryOnly
-            />
-          </div>
+          )}
         </div>
       </Modal>
     )

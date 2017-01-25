@@ -8,30 +8,26 @@ interface Props {
   onChangeViewer?: Function
   showViewAs?: boolean
   showResponseTitle?: boolean
-  subscriptionResponse?: boolean
 }
 
-const ResultHeader = ({selectedViewer, onChangeViewer, showViewAs, showResponseTitle, subscriptionResponse}: Props) => (
+const ResultHeader = ({selectedViewer, onChangeViewer, showViewAs, showResponseTitle}: Props) => (
   <div
     className={cx(
-      'result-header',
-      {
-        'subscription': subscriptionResponse,
-      },
+      'result-header subscription',
     )}
   >
     <style jsx={true}>{`
       .result-header {
-        @inherit: .bgDarkBlue, .pa25, .flex, .justifyBetween, .itemsCenter, .relative;
+        @inherit: .bgDarkBlue, .flex, .justifyBetween, .itemsCenter, .relative, .pt25, .ph25;
         &.subscription {
           &:after {
             content: "";
             position: absolute;
-            bottom: -40px;
+            bottom: -25px;
             left: 0;
             right: 0;
-            height: 40px;
-            background: linear-gradient(to bottom, rgba(23,42,58,1) 10%,rgba(23,42,58,0) 100%);
+            height: 25px;
+            background: linear-gradient(to bottom, rgba(23,42,58,1) 0%,rgba(23,42,58,0) 100%);
             z-index: 4;
           }
         }
