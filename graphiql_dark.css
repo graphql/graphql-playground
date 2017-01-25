@@ -393,8 +393,19 @@
     margin: 0;
     padding: 8px 0;
     position: absolute;
-    top: 37px;
+    top: 78px;
     z-index: 100;
+}
+
+.graphiql-container .execute-options:before {
+    position: absolute;
+    background: white;
+    content: "";
+    top: -4px;
+    left: 34px;
+    transform: rotate(45deg);
+    width: 8px;
+    height: 8px;
 }
 
 .graphiql-container .execute-options li {
@@ -405,7 +416,7 @@
 }
 
 .graphiql-container .execute-options li.selected {
-    background: #e10098;
+    background: rgb(39,174,96);
     color: white;
 }
 

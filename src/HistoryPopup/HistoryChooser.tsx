@@ -10,16 +10,15 @@ interface Props {
 
 const HistoryChooser = ({selectedFilter, onSelectFilter}: Props) => (
   <div>
-    <style jsx={true}>{`
+    <style jsx>{`
       .chooser {
         @inherit: .flex, .itemsCenter;
       }
 
       .filter {
-        @inherit: .br2, .relative, .pointer, .ttu, .flex, .itemsCenter, .black30, .fw6, .f14;
+        @inherit: .br2, .relative, .pointer, .ttu, .flex, .itemsCenter, .black30, .fw6, .f14, .bgBlack07;
         padding: 5px 13px 6px 13px;
         margin: 0 -2px;
-        background-color: rgba(0,0,0,.07);
         height: 24px;
         &.active {
           @inherit: .z2, .white, .bgGreen;

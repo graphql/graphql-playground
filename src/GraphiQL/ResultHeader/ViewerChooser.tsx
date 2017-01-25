@@ -6,11 +6,12 @@ import {Icon, $v} from 'graphcool-styles'
 interface Props {
   selectedViewer: Viewer
   onChangeViewer: Function
+  showSelectUser?: boolean
 }
 
-const ViewAs = ({selectedViewer, onChangeViewer}: Props) => (
+const ViewAs = ({selectedViewer, onChangeViewer, showSelectUser}: Props) => (
   <div className='root'>
-    <style jsx={true}>{`
+    <style jsx>{`
       .root {
         @inherit: .fw6, .flex, .itemsCenter;
         color: rgba(255,255,255,.25);
@@ -26,9 +27,8 @@ const ViewAs = ({selectedViewer, onChangeViewer}: Props) => (
         margin: 0 -2px;
         background-color: #08131B;
         &.active {
+          @inherit: .bgLightGray, .darkerBlue;
           padding: 7px 9px 8px 9px;
-          background-color: rgb(185,191,196);
-          color: rgb(15,32,46);
           z-index: 2;
         }
       }
@@ -64,22 +64,24 @@ const ViewAs = ({selectedViewer, onChangeViewer}: Props) => (
         />
         <div className='viewer-text'>Everyone</div>
       </div>
-      <div
-        className={cx('viewer', {
-          'active': selectedViewer === 'USER',
-        })}
-        onClick={() => onChangeViewer('USER')}
-      >
-        <Icon
-          src={require('graphcool-styles/icons/fill/user.svg')}
-          color={
-            selectedViewer === 'USER' ? $v.darkerBlue : $v.white30
-          }
-          width={14}
-          height={14}
-        />
-        <div className='viewer-text'>Select User</div>
-      </div>
+      {showSelectUser && (
+        <div
+          className={cx('viewer', {
+            'active': selectedViewer === 'USER',
+          })}
+          onClick={() => onChangeViewer('USER')}
+        >
+          <Icon
+            src={require('graphcool-styles/icons/fill/user.svg')}
+            color={
+              selectedViewer === 'USER' ? $v.darkerBlue : $v.white30
+            }
+            width={14}
+            height={14}
+          />
+          <div className='viewer-text'>Select User</div>
+        </div>
+      )}
     </div>
   </div>
 )

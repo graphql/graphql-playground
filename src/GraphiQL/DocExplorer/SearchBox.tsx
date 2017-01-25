@@ -45,8 +45,7 @@ export default class SearchBox extends React.Component<Props, State> {
       <div className={cx(!this.props.clean && 'root')}>
         <style jsx>{`
           .root {
-            @inherit: .pa25;
-            background-color: rgba(0,0,0,.02);
+            @inherit: .pa25, .bgBlack02;
           }
           .label {
             @inherit: .bgWhite, .bbox, .w100, .flex, .itemsCenter;

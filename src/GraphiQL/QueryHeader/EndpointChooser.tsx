@@ -24,9 +24,8 @@ const EndpointChooser = ({selectedEndpoint, onChangeEndpoint}: Props) => (
         padding: 5px 12px 6px 12px;
         @inherit: .bgBlack50, .br2, .relative, .pointer, .ttu;
         &.active {
+          @inherit: .darkerBlue, .bgLightGray;
           padding: 7px 9px 8px 9px;
-          background-color: rgb(185,191,196);
-          color: rgb(15,32,46);
           margin: 0 -2px;
           z-index: 2;
         }

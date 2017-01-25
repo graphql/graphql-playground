@@ -32,6 +32,7 @@ interface State {
 
 interface Props {
   projectId: string
+  authToken?: string
 }
 
 export interface SchemaCache {
@@ -191,7 +192,7 @@ export default class Playground extends React.Component<Props,State> {
                 showViewAs={true}
                 showEndpoints={true}
                 showDownloadJsonButton={true}
-                showCodeGeneration={true}
+                showCodeGeneration={false}
                 selectedViewer={session.selectedViewer}
                 storage={this.storage.getSessionStorage(session.id)}
                 query={session.query}
@@ -419,6 +420,7 @@ export default class Playground extends React.Component<Props,State> {
   }
 
   private fetcher = (session: Session) => ((graphQLParams) => {
+    console.log('calling fetcher')
     const {query, operationName} = graphQLParams
 
     if (!query.includes('IntrospectionQuery') && !this.historyIncludes(session)) {
@@ -445,14 +447,14 @@ export default class Playground extends React.Component<Props,State> {
       })
     }
 
+
     const endpoint = session.selectedEndpoint === 'SIMPLE' ? this.getSimpleEndpoint() : this.getRelayEndpoint()
+    console.log('fetching', graphQLParams, endpoint)
     return fetch(endpoint, { // tslint:disable-line
       method: 'post',
       headers: {
         'Content-Type': 'application/json',
-        // 'Authorization': this.state.selectedUserId === GUEST.id ?
-        //   '' :
-        //   `Bearer ${this.state.selectedUserToken || this.state.adminToken}`,
+        'Authorization': session.selectedViewer === 'ADMIN' ? `Bearer ${this.props.authToken}` : ''
       },
       body: JSON.stringify(graphQLParams),
     })

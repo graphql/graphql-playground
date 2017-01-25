@@ -2109,9 +2109,9 @@ graceful-fs@^4.1.11, graceful-fs@^4.1.2, graceful-fs@^4.1.4, graceful-fs@^4.1.6,
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/graceful-readlink/-/graceful-readlink-1.0.1.tgz#4cafad76bc62f02fa039b2f94e9a3dd3a391a725"
 
-graphcool-styles@0.0.90:
-  version "0.0.90"
-  resolved "https://registry.yarnpkg.com/graphcool-styles/-/graphcool-styles-0.0.90.tgz#ea7a005f4cad68c8399d0d8405c8c9be19541f37"
+graphcool-styles@0.0.95:
+  version "0.0.95"
+  resolved "https://registry.yarnpkg.com/graphcool-styles/-/graphcool-styles-0.0.95.tgz#98d0a6f506b509cde81335c25f8212e872f6a83b"
   dependencies:
     html-webpack-plugin "^2.24.1"
     interactive "^0.1.9"
@@ -4934,9 +4934,9 @@ style-loader@0.13.1:
   dependencies:
     loader-utils "^0.2.7"
 
-"styled-jsx-postcss@git+https://github.com/aga5tya/styled-jsx-postcss":
+styled-jsx-postcss@^0.1.5:
   version "0.1.5"
-  resolved "git+https://github.com/aga5tya/styled-jsx-postcss#bb13123114fdee5c1e2ffc03e2861cdcec4d7316"
+  resolved "https://registry.yarnpkg.com/styled-jsx-postcss/-/styled-jsx-postcss-0.1.5.tgz#640decbc622ee544987c3f778ddb0e8368ff7c5b"
   dependencies:
     babel-traverse "^6.21.0"
     babylon "^6.14.1"

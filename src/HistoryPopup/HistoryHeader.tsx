@@ -13,13 +13,11 @@ const HistoryHeader = (props: Props) => (
   <div className='history-header'>
     <style jsx>{`
       .history-header {
-        @inherit: .pa16, .flex, .justifyBetween, .itemsCenter;
-        background-color: rgba(0,0,0,.02);
+        @inherit: .pa16, .flex, .justifyBetween, .itemsCenter, .bgBlack02;
       }
 
       .search-box {
-        padding: 0;
-        background-color: transparent;
+        @inherit: .pa0, .bgTransparent;
       }
     `}</style>
     <HistoryChooser

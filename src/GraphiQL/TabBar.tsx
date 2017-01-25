@@ -20,11 +20,11 @@ export const TabBar = ({
   onCloseSession,
 }: Props) => (
   <div className='root'>
-    <style jsx={true}>{`
+    <style jsx>{`
       .root {
         @inherit: .white, .z4;
         height: 57px;
-        background-color: #09141C;
+        background-color: $darkBlueGray;
 
         path {
           stroke: white;
@@ -71,7 +71,7 @@ export const TabBar = ({
       }
 
       .subscription {
-        background-color: rgb(164,3,111);
+        @inherit: .bgPurple;
       }
 
       .query {
@@ -79,7 +79,7 @@ export const TabBar = ({
       }
 
       .mutation {
-        background-color: rgb(241,143,1);
+        @inherit: .bgLightOrange;
       }
 
       .viewer {

@@ -31,7 +31,7 @@ const HistoryItems = (
         @inherit: .flex, .itemsCenter, .justifyBetween, .bb, .bBlack10, .pointer;
         padding: 25px 20px;
         &.active {
-          background-color: rgba(0,0,0,.04);
+          @inherit: .bgBlack04;
         }
       }
       .operation, .star, .viewer, .left, .right {
@@ -49,21 +49,17 @@ const HistoryItems = (
         height: 21px;
         width: 21px;
         &.subscription {
-          color: rgb(164,3,111);
-          background-color: rgba(164,3,111,.2);
+          @inherit: .blue, .bgBlue20;
         }
         &.query {
-          color: rgb(42,126,211);
-          background-color: rgba(42,126,211,.2);
+          @inherit: .blue, .bgBlue20;
         }
         &.mutation {
-          color: rgb(241,143,1);
-          background-color: rgb(241,143,1,.2);
+          @inherit: .lightOrange, .bgLightOrange20;
         }
       }
       .endpoint {
-        @inherit: .black30, .br2, .ph6, .pv4, .ttu, .fw6, .f12, .nowrap;
-        background-color: rgba(0,0,0,.04);
+        @inherit: .black30, .br2, .ph6, .pv4, .ttu, .fw6, .f12, .nowrap, .bgBlack04;
       }
       .date {
         @inherit: .f14, .black50, .ml16;

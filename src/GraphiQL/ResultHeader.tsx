@@ -8,15 +8,16 @@ interface Props {
   onChangeViewer?: Function
   showViewAs?: boolean
   showResponseTitle?: boolean
+  showSelectUser?: boolean
 }
 
-const ResultHeader = ({selectedViewer, onChangeViewer, showViewAs, showResponseTitle}: Props) => (
+const ResultHeader = ({selectedViewer, onChangeViewer, showViewAs, showResponseTitle, showSelectUser}: Props) => (
   <div
     className={cx(
       'result-header subscription',
     )}
   >
-    <style jsx={true}>{`
+    <style jsx>{`
       .result-header {
         @inherit: .bgDarkBlue, .flex, .justifyBetween, .itemsCenter, .relative, .pt25, .ph25;
         &.subscription {
@@ -40,6 +41,7 @@ const ResultHeader = ({selectedViewer, onChangeViewer, showViewAs, showResponseT
     </div>
     {showViewAs && selectedViewer && onChangeViewer && (
       <ViewerChooser
+        showSelectUser={showSelectUser}
         selectedViewer={selectedViewer}
         onChangeViewer={onChangeViewer}
       />

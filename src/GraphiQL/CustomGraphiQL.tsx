@@ -64,6 +64,7 @@ interface Props {
   getDefaultFieldNames?: () => any
   onChangeEndpoint?: Function
   showViewAs?: boolean
+  showSelectUser?: boolean
   showCodeGeneration?: boolean
   showEndpoints?: boolean
   showQueryTitle?: boolean
@@ -319,7 +320,7 @@ export class CustomGraphiQL extends React.Component<Props, State> {
 
     return (
       <div className='graphiql-container'>
-        <style jsx={true}>{`
+        <style jsx>{`
           .graphiql-container {
             font-family: Open Sans,sans-serif;
           }
@@ -347,7 +348,7 @@ export class CustomGraphiQL extends React.Component<Props, State> {
 
           .download-button {
             @inherit: .graphiql-button;
-            background-color: rgb(15,32,45) !important;
+            background-color: $darkerBlue !important;
             top: initial !important;
             bottom: 21px !important;
           }
@@ -377,7 +378,7 @@ export class CustomGraphiQL extends React.Component<Props, State> {
               content: "";
               top: 9px;
               left: 95px;
-              border-top: 1px solid rgba(255,255,255,.2);
+              border-top: 1px solid $white20;
             }
           }
 
@@ -446,6 +447,7 @@ export class CustomGraphiQL extends React.Component<Props, State> {
               <div className='resultWrap'>
                 <ResultHeader
                   showViewAs={this.props.showViewAs}
+                  showSelectUser={this.props.showSelectUser}
                   selectedViewer={this.props.selectedViewer}
                   onChangeViewer={this.props.onChangeViewer}
                   showResponseTitle={this.props.showResponseTitle}
