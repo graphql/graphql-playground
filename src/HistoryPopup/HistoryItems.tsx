@@ -3,7 +3,7 @@ import {Session, HistoryFilter} from '../types'
 import {Icon, $v} from 'graphcool-styles'
 import * as cx from 'classnames'
 
-interface Props {
+export interface Props {
   items: Session[]
   selectedItemIndex: number
   onItemSelect: (index: number) => void

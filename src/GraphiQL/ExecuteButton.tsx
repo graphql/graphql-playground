@@ -9,14 +9,14 @@
 import * as React from 'react'
 import * as cx from 'classnames'
 
-interface Props {
+export interface Props {
   onRun: Function
   onStop: Function
   isRunning: boolean
   operations: any[]
 }
 
-interface State {
+export interface State {
   optionsOpen: boolean
   highlight: any
 }

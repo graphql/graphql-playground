@@ -2,7 +2,7 @@ import * as React from 'react'
 import {Session} from '../types'
 import {Icon, $v} from 'graphcool-styles'
 
-interface Props {
+export interface Props {
   sessions: Session[]
   selectedSessionIndex: number
   onNewSession: any

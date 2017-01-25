@@ -3,7 +3,7 @@ import * as cx from 'classnames'
 import {Viewer} from '../../types'
 import {Icon, $v} from 'graphcool-styles'
 
-interface Props {
+export interface Props {
   selectedViewer: Viewer
   onChangeViewer: Function
   showSelectUser?: boolean

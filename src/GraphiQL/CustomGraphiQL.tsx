@@ -46,7 +46,7 @@ import ageOfDate from './util/ageOfDate'
  * @see https://github.com/graphql/graphiql#usage
  */
 
-interface Props {
+export interface Props {
   fetcher: (params: any) => any
   schema?: GraphQLSchema
   query?: string
@@ -76,7 +76,7 @@ interface Props {
   queryOnly?: boolean
 }
 
-interface State {
+export interface State {
   schema: any
   query: any
   variables: any
@@ -95,11 +95,11 @@ interface State {
   isWaitingForResponse: boolean
 }
 
-interface SimpleProps {
+export interface SimpleProps {
   children?: any
 }
 
-interface ToolbarButtonProps extends SimpleProps {
+export interface ToolbarButtonProps extends SimpleProps {
   onClick: (e: any) => void
   title: string
   label: string

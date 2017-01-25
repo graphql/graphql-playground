@@ -1,7 +1,8 @@
 {
   "name": "graphcool-graphiql",
-  "version": "1.0.1",
-  "main": "./src/lib.tsx",
+  "version": "1.1.1",
+  "main": "./tsbuild/Playground.jsx",
+  "types": "./tsbuild/Playground.d.ts",
   "files": [
     "graphiql_light.css",
     "graphiql_dark.css",
@@ -87,7 +88,7 @@
   },
   "scripts": {
     "start": "node scripts/start.js",
-    "build": "node scripts/build.js",
+    "build": "tsc -d --jsx preserve --allowJs src/Playground.tsx --target es5 --lib es2015,dom --outDir tsbuild",
     "test": "node scripts/test.js --env=jsdom"
   },
   "jest": {

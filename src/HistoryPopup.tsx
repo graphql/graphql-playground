@@ -7,7 +7,7 @@ import {CustomGraphiQL} from './GraphiQL/CustomGraphiQL'
 import {SchemaCache} from './Playground'
 import {$v, Icon} from 'graphcool-styles'
 
-interface Props {
+export interface Props {
   isOpen: boolean
   onRequestClose: Function
   historyItems: Session[]
@@ -17,7 +17,7 @@ interface Props {
   onCreateSession: (session: Session) => void
 }
 
-interface State {
+export interface State {
   selectedFilter: HistoryFilter
   selectedItemIndex: number
   searchTerm: string

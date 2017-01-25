@@ -8,7 +8,7 @@
 
 import * as React from 'react'
 
-interface Props {
+export interface Props {
   value: string
 }
 

@@ -3,7 +3,7 @@ import HistoryChooser from './HistoryChooser'
 import {HistoryFilter} from '../types'
 import SearchBox from '../GraphiQL/DocExplorer/SearchBox'
 
-interface Props {
+export interface Props {
   selectedFilter: HistoryFilter
   onSelectFilter: Function
   onSearch: (value: string) => void

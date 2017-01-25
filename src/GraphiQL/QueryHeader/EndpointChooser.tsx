@@ -3,7 +3,7 @@ import {Endpoint} from '../../types'
 import * as cx from 'classnames'
 import Info from './Info'
 
-interface Props {
+export interface Props {
   selectedEndpoint: Endpoint
   onChangeEndpoint: Function
 }

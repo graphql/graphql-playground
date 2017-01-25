@@ -11,12 +11,12 @@ import * as React from 'react'
 import TypeLink from 'graphiql/dist/components/DocExplorer/TypeLink'
 import MarkdownContent from 'graphiql/dist/components/DocExplorer/MarkdownContent'
 
-interface Props {
+export interface Props {
   schema: any
   onClickType: any
 }
 
-interface State {
+export interface State {
 
 }
 

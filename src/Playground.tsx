@@ -21,7 +21,7 @@ import * as cx from 'classnames'
 export type Endpoint = 'SIMPLE' | 'RELAY'
 export type Viewer = 'ADMIN' | 'EVERYONE' | 'USER'
 
-interface State {
+export interface State {
   schema: any
   sessions: Session[]
   selectedSessionIndex: number
@@ -30,7 +30,7 @@ interface State {
   history: Session[]
 }
 
-interface Props {
+export interface Props {
   projectId: string
   authToken?: string
 }

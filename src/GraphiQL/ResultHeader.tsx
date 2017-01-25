@@ -3,7 +3,7 @@ import ViewerChooser from './ResultHeader/ViewerChooser'
 import {Viewer} from '../types'
 import * as cx from 'classnames'
 
-interface Props {
+export interface Props {
   selectedViewer?: Viewer
   onChangeViewer?: Function
   showViewAs?: boolean

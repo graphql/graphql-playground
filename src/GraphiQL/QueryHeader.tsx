@@ -2,7 +2,7 @@ import * as React from 'react'
 import {Endpoint} from '../types'
 import EndpointChooser from './QueryHeader/EndpointChooser'
 
-interface Props {
+export interface Props {
   selectedEndpoint?: Endpoint
   onChangeEndpoint?: Function
   onPrettify: any

@@ -3,7 +3,7 @@ import {Icon, $v} from 'graphcool-styles'
 import {HistoryFilter} from '../types'
 import * as cx from 'classnames'
 
-interface Props {
+export interface Props {
   selectedFilter: HistoryFilter
   onSelectFilter: Function
 }

@@ -11,14 +11,14 @@ import debounce from 'graphiql/dist/utility/debounce'
 import {Icon} from 'graphcool-styles'
 import * as cx from 'classnames'
 
-interface Props {
+export interface Props {
   isShown: boolean
   onSearch: (value: string) => void
   placeholder?: string
   clean?: boolean
 }
 
-interface State {
+export interface State {
   value: string
 }
 

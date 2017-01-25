@@ -28,12 +28,12 @@ import TypeDoc from 'graphiql/dist/components/DocExplorer/TypeDoc'
  *
  */
 
-interface Props {
+export interface Props {
   schema: any
   open: boolean
 }
 
-interface State {
+export interface State {
   navStack: any[]
   searchValue: any
 }
