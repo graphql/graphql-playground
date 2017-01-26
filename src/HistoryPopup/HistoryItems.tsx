@@ -1,5 +1,5 @@
 import * as React from 'react'
-import {Session, HistoryFilter} from '../types'
+import {Session} from '../types'
 import {Icon, $v} from 'graphcool-styles'
 import * as cx from 'classnames'
 
@@ -8,7 +8,6 @@ export interface Props {
   selectedItemIndex: number
   onItemSelect: (index: number) => void
   onItemStarToggled: (item: Session) => void
-  selectedFilter: HistoryFilter
   searchTerm: string
 }
 
@@ -18,7 +17,6 @@ const HistoryItems = (
     onItemSelect,
     selectedItemIndex,
     onItemStarToggled,
-    selectedFilter,
     searchTerm,
   }: Props) => (
   <div className='history-items'>
@@ -69,10 +67,6 @@ const HistoryItems = (
       }
     `}</style>
     {items
-      .filter(item => {
-        return selectedFilter === 'STARRED' ? item.starred : true
-          && (searchTerm && searchTerm.length > 0 ? item.query.toLowerCase().includes(searchTerm.toLowerCase()) : true)
-      })
       .map((item, index) => (
       <div
         key={item.id}

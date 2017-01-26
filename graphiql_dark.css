@@ -218,7 +218,8 @@
 .graphiql-container .query-editor .CodeMirror {
     /*padding-top: 117px;*/
     padding-left: 12px;
-    width: calc(100% - 12px);
+    /*width: calc(100% - 12px);*/
+    width: calc(100%);
     background-color: rgb(15,32,45);
 }
 
@@ -236,7 +237,8 @@
 
 .graphiql-container .variable-editor .CodeMirror {
     padding-left: 12px;
-    width: calc(100% - 12px);
+    /*width: calc(100% - 12px);*/
+    width: calc(100%);
     background: #0B1924;
 }
 

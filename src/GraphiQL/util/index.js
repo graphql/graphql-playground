@@ -1,4 +1,3 @@
-/* tslint:disable */
 //download.js v3.0, by dandavis; 2008-2014. [CCBY2] see http://danml.com/download.html for tests/usage
 // v1 landed a FF+Chrome compat way of downloading strings to local un-named files, upgraded to use a hidden frame and optional mime
 // v2 added named files via a[download], msSaveBlob, IE (10+) support, and window.URL support for larger+faster saves than dataURLs
@@ -8,19 +7,19 @@
 
 
 
-export {
-  download
+module.exports = {
+  download: download
 }
 
 function download(data, strFileName, strMimeType) {
 
-  var self: any = window, // this script is only for browsers anyway...
+  var self = window, // this script is only for browsers anyway...
     u = "application/octet-stream", // this default mime also triggers iframe downloads
     m = strMimeType || u,
     x = data,
     D = document,
     a = D.createElement("a"),
-    z = function(a){return String(a)},
+    z = function(a){return String(a);},
 
 
     B = self.Blob || self.MozBlob || self.WebKitBlob || z,
@@ -29,14 +28,14 @@ function download(data, strFileName, strMimeType) {
     blob,
     b,
     ua,
-    fr
+    fr;
 
   //if(typeof B.bind === 'function' ){ B=B.bind(self); }
 
   if(String(this)==="true"){ //reverse arguments, allowing download.bind(true, "text/xml", "export.xml") to act as a callback
-    x=[x, m]
-    m=x[0]
-    x=x[1]
+    x=[x, m];
+    m=x[0];
+    x=x[1];
   }
 
 
@@ -71,14 +70,16 @@ function download(data, strFileName, strMimeType) {
       bin= dec(p.pop()),
       mx= bin.length,
       i= 0,
-      uia= new Uint8Array(mx)
+      uia= new Uint8Array(mx);
 
     for(i;i<mx;++i) uia[i]= bin.charCodeAt(i);
 
-    return new B([uia], {type: t})
+    return new B([uia], {type: t});
   }
 
-  function saver(url: any, winMode?: any){
+  function saver(url, winMode){
+
+
     if ('download' in a) { //html5 A[download]
       a.href = url;
       a.setAttribute("download", fn);

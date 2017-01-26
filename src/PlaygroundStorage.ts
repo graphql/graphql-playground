@@ -98,6 +98,12 @@ export default class PlaygroundStorage {
     } catch (e) {
       //
     }
+    if (result && result.history) {
+      result.history = result.history.map(item => ({
+        ...item,
+        date: new Date(item.date),
+      }))
+    }
     return result
   }
 }

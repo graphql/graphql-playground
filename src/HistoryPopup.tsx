@@ -33,7 +33,14 @@ export default class HistoryPopup extends React.Component<Props,State> {
     }
   }
   render() {
-    const selectedItem = this.props.historyItems[this.state.selectedItemIndex]
+    const {searchTerm, selectedFilter} = this.state
+    const items = this.props.historyItems
+      .filter(item => {
+        return selectedFilter === 'STARRED' ? item.starred : true
+          && (searchTerm && searchTerm.length > 0 ? item.query.toLowerCase().includes(searchTerm.toLowerCase()) : true)
+      })
+
+    const selectedItem = items[this.state.selectedItemIndex]
     return (
       <Modal
         isOpen={this.props.isOpen}
@@ -42,7 +49,7 @@ export default class HistoryPopup extends React.Component<Props,State> {
         style={{
           overlay: {
             zIndex: 20,
-            backgroundColor: 'transparent',
+            backgroundColor: 'rgba(15,32,46,.9)',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
@@ -114,9 +121,8 @@ export default class HistoryPopup extends React.Component<Props,State> {
               onSearch={this.handleSearch}
             />
             <HistoryItems
-              items={this.props.historyItems}
+              items={items}
               selectedItemIndex={this.state.selectedItemIndex}
-              selectedFilter={this.state.selectedFilter}
               searchTerm={this.state.searchTerm}
               onItemSelect={this.handleItemSelect}
               onItemStarToggled={this.props.onItemStarToggled}

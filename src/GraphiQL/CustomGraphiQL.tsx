@@ -347,7 +347,11 @@ export class CustomGraphiQL extends React.Component<Props, State> {
           }
 
           .download-button {
-            @inherit: .graphiql-button;
+            @inherit: .white50, .bgDarkBlue, .ttu, .f14, .fw6, .br2, .pointer, .absolute;
+            right: 25px;
+            padding: 5px 9px 6px 9px;
+            letter-spacing: 0.53px;
+            z-index: 2;
             background-color: $darkerBlue !important;
             top: initial !important;
             bottom: 21px !important;

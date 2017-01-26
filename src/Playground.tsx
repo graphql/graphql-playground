@@ -28,17 +28,25 @@ export interface State {
   schemaCache: SchemaCache
   historyOpen: boolean
   history: Session[]
+  httpApiPrefix: string
+  wsApiPrefix: string
 }
 
 export interface Props {
   projectId: string
   authToken?: string
+  httpApiPrefix?: string
+  wsApiPrefix?: string
+  onSuccess?: Function
 }
 
 export interface SchemaCache {
   simple: any
   relay: any
 }
+
+const httpApiPrefix = 'https://api.graph.cool'
+const wsApiPrefix = 'ws://subscriptions.graph.cool'
 
 export default class Playground extends React.Component<Props,State> {
   storage: PlaygroundStorage
@@ -65,6 +73,8 @@ export default class Playground extends React.Component<Props,State> {
         ? selectedSessionIndex : 0,
       historyOpen: false,
       history: this.storage.getHistory(),
+      httpApiPrefix: props.httpApiPrefix || httpApiPrefix,
+      wsApiPrefix: props.wsApiPrefix || wsApiPrefix,
     }
 
     if (typeof window === 'object') {
@@ -133,13 +143,13 @@ export default class Playground extends React.Component<Props,State> {
   }
   render() {
     const {sessions, selectedSessionIndex} = this.state
+    // {
+    //   'blur': this.state.historyOpen,
+    // },
     return (
       <div
         className={cx(
           'root',
-          {
-            'blur': this.state.historyOpen,
-          },
         )}
       >
         <style jsx>{`
@@ -381,15 +391,15 @@ export default class Playground extends React.Component<Props,State> {
   }
 
   private getSimpleEndpoint() {
-    return `https://api.graph.cool/simple/v1/${this.props.projectId}`
+    return `${this.state.httpApiPrefix}/simple/v1/${this.props.projectId}`
   }
 
   private getRelayEndpoint() {
-    return `https://api.graph.cool/relay/v1/${this.props.projectId}`
+    return `${this.state.httpApiPrefix}/relay/v1/${this.props.projectId}`
   }
 
   private getWSEndpoint() {
-    return `ws://subscriptions.graph.cool/${this.props.projectId}`
+    return `${this.state.wsApiPrefix}/${this.props.projectId}`
   }
 
   private addToHistory(session: Session) {
@@ -457,6 +467,12 @@ export default class Playground extends React.Component<Props,State> {
     })
     .then((response) => {
       return response.json()
+    })
+    .then(response => {
+      if (typeof this.props.onSuccess === 'function') {
+        this.props.onSuccess(graphQLParams, response)
+      }
+      return Promise.resolve(response)
     })
   })
 }
