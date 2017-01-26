@@ -15,13 +15,13 @@ class App extends React.Component<null, null> {
         projectId = result[1]
       }
     }
+    // authToken='eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE0ODUzNDk3NzgsImNsaWVudElkIjoiY2lscGV2ZnUxMDAwYjBwbDh3bWRtejVkZCJ9.Tu6Qzrnho8xIJ8BKUYlMAXwRTFN2WXZc__LnFIv0B6U'
 
     return (
       <Playground
         projectId={projectId}
         isEndpoint={true}
         useOriginAsUrl={true}
-        authToken='eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE0ODUzNDk3NzgsImNsaWVudElkIjoiY2lscGV2ZnUxMDAwYjBwbDh3bWRtejVkZCJ9.Tu6Qzrnho8xIJ8BKUYlMAXwRTFN2WXZc__LnFIv0B6U'
       />
     )
   }

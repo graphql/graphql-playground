@@ -48,7 +48,7 @@ export interface SchemaCache {
 }
 
 const httpApiPrefix = 'https://api.graph.cool'
-const wsApiPrefix = 'ws://subscriptions.graph.cool'
+const wsApiPrefix = 'wss://subscriptions.graph.cool'
 
 export default class Playground extends React.Component<Props,State> {
   storage: PlaygroundStorage
@@ -114,7 +114,7 @@ export default class Playground extends React.Component<Props,State> {
   }
   fetchSchemas() {
     return Promise.all([
-      this.props.useOriginAsUrl ? Promise.resolve({}) : this.fetchSchema(this.getRelayEndpoint()),
+      this.props.useOriginAsUrl ? Promise.resolve(null) : this.fetchSchema(this.getRelayEndpoint()),
       this.fetchSchema(this.getSimpleEndpoint()),
     ])
       .then(([relaySchemaData, simpleSchemaData]) => {
@@ -351,7 +351,7 @@ export default class Playground extends React.Component<Props,State> {
       newSession = Immutable({
         id: cuid(),
         selectedEndpoint: 'SIMPLE',
-        selectedViewer: 'ADMIN',
+        selectedViewer: 'EVERYONE',
         query: defaultQuery,
         variables: '',
         result: '',
@@ -372,7 +372,7 @@ export default class Playground extends React.Component<Props,State> {
     return Immutable({
       id: cuid(),
       selectedEndpoint: 'SIMPLE',
-      selectedViewer: 'ADMIN',
+      selectedViewer: 'EVERYONE',
       query,
       variables: '',
       result: '',
@@ -430,7 +430,7 @@ export default class Playground extends React.Component<Props,State> {
 
   private getSimpleEndpoint() {
     if (this.props.useOriginAsUrl) {
-      return '/'
+      return location.pathname
     }
     return `${this.state.httpApiPrefix}/simple/v1/${this.props.projectId}`
   }
@@ -502,7 +502,7 @@ export default class Playground extends React.Component<Props,State> {
       method: 'post',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': session.selectedViewer === 'ADMIN' ? `Bearer ${this.props.authToken}` : '',
+        'Authorization': (session.selectedViewer === 'ADMIN' && this.props.authToken) ? `Bearer ${this.props.authToken}` : '',
       },
       body: JSON.stringify(graphQLParams),
     })
