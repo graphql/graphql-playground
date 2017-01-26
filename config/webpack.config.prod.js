@@ -56,34 +56,18 @@ module.exports = {
   // In production, we only want to load the polyfills and the app code.
   entry: [
     require.resolve('./polyfills'),
-    // paths.appIndexJs,
-    paths.graphiql
+    paths.appIndexJs
   ],
-  externals: {
-    react: {
-      commonjs: 'react',
-      commonjs2: 'react',
-      amd: 'React',
-      root: 'React',
-    },
-    graphiql: 'graphiql',
-    graphql: 'graphql',
-    'graphcool-styles': 'graphcool-styles',
-    classnames: 'classnames',
-    'isomorphic-fetch': 'isomorphic-fetch'
-  },
   output: {
     // The build folder.
     path: paths.appBuild,
     // Generated JS file names (with nested folders).
     // There will be one main bundle, and one file per asynchronous chunk.
     // We don't currently advertise code splitting but Webpack supports it.
-    filename: 'static/js/[name].js',
-    chunkFilename: 'static/js/[name].chunk.js',
+    filename: 'static/js/[name].[chunkhash:8].js',
+    chunkFilename: 'static/js/[name].[chunkhash:8].chunk.js',
     // We inferred the "public path" (such as / or /my-project) from homepage.
-    publicPath: publicPath,
-    library: 'custom-graphiql',
-    libraryTarget: 'umd'
+    publicPath: publicPath
   },
   resolve: {
     // This allows you to set a fallback for where Webpack should look for modules.
@@ -103,7 +87,7 @@ module.exports = {
       'react-native': 'react-native-web'
     }
   },
-  
+
   module: {
     // First, run the linter.
     // It's important to do this before Babel processes the JS.
@@ -171,10 +155,11 @@ module.exports = {
         test: /\.json$/,
         loader: 'json'
       },
-      // "inlin" loader for svg
+      // "file" loader for svg
+      // "inline" loader for svg
       {
         test: /\.svg$/,
-        loader: 'raw!svgo-loader',
+        loader: 'raw!svgo',
       }
     ]
   },
@@ -226,19 +211,19 @@ module.exports = {
     // Try to dedupe duplicated modules, if any:
     new webpack.optimize.DedupePlugin(),
     // Minify the code.
-    // new webpack.optimize.UglifyJsPlugin({
-    //   compress: {
-    //     screw_ie8: true, // React doesn't support IE8
-    //     warnings: false
-    //   },
-    //   mangle: {
-    //     screw_ie8: true
-    //   },
-    //   output: {
-    //     comments: false,
-    //     screw_ie8: true
-    //   }
-    // }),
+    new webpack.optimize.UglifyJsPlugin({
+      compress: {
+        screw_ie8: true, // React doesn't support IE8
+        warnings: false
+      },
+      mangle: {
+        screw_ie8: true
+      },
+      output: {
+        comments: false,
+        screw_ie8: true
+      }
+    }),
     // Note: this won't work without ExtractTextPlugin.extract(..) in `loaders`.
     new ExtractTextPlugin('static/css/[name].[contenthash:8].css'),
     // Generate a manifest file which contains a mapping of all asset filenames
@@ -256,3 +241,4 @@ module.exports = {
     tls: 'empty'
   }
 };
+

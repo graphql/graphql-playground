@@ -6,6 +6,10 @@ body {
   background-color: rgb(15,32,45);
 }
 
+* {
+  box-sizing: border-box;
+}
+
 #root {
   height: 100%;
 }

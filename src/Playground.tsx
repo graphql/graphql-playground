@@ -38,11 +38,13 @@ export interface Props {
   httpApiPrefix?: string
   wsApiPrefix?: string
   onSuccess?: Function
+  useOriginAsUrl?: boolean
+  isEndpoint?: boolean
 }
 
 export interface SchemaCache {
-  simple: any
-  relay: any
+  SIMPLE: any
+  RELAY: any
 }
 
 const httpApiPrefix = 'https://api.graph.cool'
@@ -65,8 +67,8 @@ export default class Playground extends React.Component<Props,State> {
     this.state = {
       schema: null,
       schemaCache: {
-        simple: null,
-        relay: null,
+        SIMPLE: null,
+        RELAY: null,
       },
       sessions,
       selectedSessionIndex: selectedSessionIndex < sessions.length && selectedSessionIndex > -1
@@ -102,6 +104,7 @@ export default class Playground extends React.Component<Props,State> {
   }
   componentDidMount() {
     this.setWS()
+    this.getUrlSession()
   }
   componentWillReceiveProps(nextProps) {
     if (nextProps.projectId !== this.props.projectId) {
@@ -111,17 +114,17 @@ export default class Playground extends React.Component<Props,State> {
   }
   fetchSchemas() {
     return Promise.all([
-      this.fetchSchema(this.getRelayEndpoint()),
+      this.props.useOriginAsUrl ? Promise.resolve({}) : this.fetchSchema(this.getRelayEndpoint()),
       this.fetchSchema(this.getSimpleEndpoint()),
     ])
       .then(([relaySchemaData, simpleSchemaData]) => {
-        const relaySchema = buildClientSchema(relaySchemaData.data)
+        const relaySchema = relaySchemaData && buildClientSchema(relaySchemaData.data)
         const simpleSchema = buildClientSchema(simpleSchemaData.data)
 
         this.setState({
           schemaCache: {
-            relay: relaySchema,
-            simple: simpleSchema,
+            RELAY: relaySchema,
+            SIMPLE: simpleSchema,
           },
         } as State)
       })
@@ -143,6 +146,7 @@ export default class Playground extends React.Component<Props,State> {
   }
   render() {
     const {sessions, selectedSessionIndex} = this.state
+    const {isEndpoint} = this.props
     // {
     //   'blur': this.state.historyOpen,
     // },
@@ -199,8 +203,8 @@ export default class Playground extends React.Component<Props,State> {
                 selectedEndpoint={session.selectedEndpoint}
                 showQueryTitle={false}
                 showResponseTitle={false}
-                showViewAs={true}
-                showEndpoints={true}
+                showViewAs={!isEndpoint}
+                showEndpoints={!isEndpoint}
                 showDownloadJsonButton={true}
                 showCodeGeneration={false}
                 selectedViewer={session.selectedViewer}
@@ -230,6 +234,23 @@ export default class Playground extends React.Component<Props,State> {
         )}
       </div>
     )
+  }
+
+  private getUrlSession() {
+    const prefix = '?query='
+    if (location.search.includes(prefix)) {
+      const uri = location.search.slice(prefix.length, location.search.length)
+      const query = decodeURIComponent(uri)
+      const equivalent = this.state.sessions.findIndex(session => session.query.trim() === query.trim())
+      if (equivalent > -1) {
+        this.setState({
+          selectedSessionIndex: equivalent,
+        } as State)
+      } else {
+        const session = this.createSessionFromQuery(query)
+        this.handleCreateSession(session)
+      }
+    }
   }
 
   private handleCreateSession = (session: Session) => {
@@ -347,6 +368,23 @@ export default class Playground extends React.Component<Props,State> {
     return newSession
   }
 
+  private createSessionFromQuery = (query: string) => {
+    return Immutable({
+      id: cuid(),
+      selectedEndpoint: 'SIMPLE',
+      selectedViewer: 'ADMIN',
+      query,
+      variables: '',
+      result: '',
+      operationName: undefined,
+      hasMutation: false,
+      hasSubscription: false,
+      hasQuery: false,
+      queryTypes: getQueryTypes(query),
+      starred: false,
+    })
+  }
+
   private handleViewerChange = (sessionId: string, viewer: Viewer) => {
     this.setValueInSession(sessionId, 'selectedViewer', viewer)
   }
@@ -391,6 +429,9 @@ export default class Playground extends React.Component<Props,State> {
   }
 
   private getSimpleEndpoint() {
+    if (this.props.useOriginAsUrl) {
+      return '/'
+    }
     return `${this.state.httpApiPrefix}/simple/v1/${this.props.projectId}`
   }
 
@@ -466,13 +507,13 @@ export default class Playground extends React.Component<Props,State> {
       body: JSON.stringify(graphQLParams),
     })
     .then((response) => {
-      return response.json()
-    })
-    .then(response => {
       if (typeof this.props.onSuccess === 'function') {
         this.props.onSuccess(graphQLParams, response)
       }
-      return Promise.resolve(response)
+      if (this.props.useOriginAsUrl) {
+        history.pushState({}, 'Graphcool Playground', `?query=${encodeURIComponent(query)}`)
+      }
+      return response.json()
     })
   })
 }

@@ -16,7 +16,7 @@ const HistoryChooser = ({selectedFilter, onSelectFilter}: Props) => (
       }
 
       .filter {
-        @inherit: .br2, .relative, .pointer, .ttu, .flex, .itemsCenter, .black30, .fw6, .f14, .bgBlack07;
+        @inherit: .br2, .relative, .pointer, .ttu, .flex, .itemsCenter, .black30, .fw6, .f14, .bgBlack07, .cbox;
         padding: 5px 13px 6px 13px;
         margin: 0 -2px;
         height: 24px;

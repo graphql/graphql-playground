@@ -1,8 +1,10 @@
 {
   "name": "graphcool-graphiql",
-  "version": "1.1.1",
+  "version": "1.2.2",
   "main": "./babelbuild/Playground.js",
+  "homepage": "http://graphcool-playground.netlify.com",
   "files": [
+    "babelbuild",
     "base.css",
     "graphiql_light.css",
     "graphiql_dark.css"
@@ -89,6 +91,7 @@
   },
   "scripts": {
     "start": "node scripts/start.js",
+    "build-app": "node scripts/build.js",
     "build": "rm -rf tsbuild; rm -rf babelbuild; tsc --jsx preserve --allowJs src/Playground.tsx --target es5 --lib es2015,dom --outDir tsbuild; babel tsbuild -d babelbuild; cp -r ./src/assets/ ./babelbuild/assets/",
     "test": "node scripts/test.js --env=jsdom"
   },
