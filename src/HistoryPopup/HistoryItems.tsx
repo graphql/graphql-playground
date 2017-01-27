@@ -47,7 +47,7 @@ const HistoryItems = (
         height: 21px;
         width: 21px;
         &.subscription {
-          @inherit: .blue, .bgBlue20;
+          @inherit: .purple, .bgPurple20;
         }
         &.query {
           @inherit: .blue, .bgBlue20;

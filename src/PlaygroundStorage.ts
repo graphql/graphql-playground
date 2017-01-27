@@ -57,7 +57,7 @@ export default class PlaygroundStorage {
     delete this.project.sessions[session.id]
   }
 
-  public saveSession(session: Session, save: boolean = true) {
+  public saveSession(session: Session, save: boolean = false) {
     this.project.sessions[session.id] = session
     if (save) {
       this.saveProject()
