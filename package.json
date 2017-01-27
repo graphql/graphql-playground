@@ -1,6 +1,6 @@
 {
   "name": "graphcool-graphiql",
-  "version": "1.2.4",
+  "version": "1.2.6",
   "main": "./babelbuild/Playground.js",
   "homepage": "http://graphcool-playground.netlify.com",
   "files": [
@@ -73,7 +73,7 @@
     "babel-preset-stage-3": "^6.22.0",
     "classnames": "^2.2.5",
     "cuid": "^1.3.8",
-    "graphcool-styles": "0.0.95",
+    "graphcool-styles": "0.0.96",
     "graphiql": "^0.8.1",
     "graphql": "^0.8.2",
     "isomorphic-fetch": "^2.2.1",

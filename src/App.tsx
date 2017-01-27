@@ -2,7 +2,7 @@ import * as React from 'react'
 import Playground from './Playground'
 
 
-const testProjectId = 'ciwf2nhji00ky01711z4twwvp'
+const testProjectId = 'cirs1ufsg02b101619ru0bx5r'
 const regex = /.*?graph\.cool\/simple\/.{1,2}\/(.{1,25})/
 
 class App extends React.Component<null, null> {
@@ -20,8 +20,7 @@ class App extends React.Component<null, null> {
     return (
       <Playground
         projectId={projectId}
-        isEndpoint={true}
-        useOriginAsUrl={true}
+        isEndpoint={process.env.NODE_ENV.includes('production')}
       />
     )
   }

@@ -473,9 +473,9 @@ export class CustomGraphiQL extends React.Component<Props, State> {
                   className='result-window'
                   ref={c => { this.resultComponent = c }}
                 >
-                  {this.state.responses.map((response, index) => (
+                  {this.state.responses.filter(res => res && res.date).map((response, index) => (
                     <div
-                      key={response.date}
+                      key={response.time}
                     >
                       {subscriptionResponse && response.time && (
                         <div className='subscription-time'>
@@ -587,7 +587,7 @@ export class CustomGraphiQL extends React.Component<Props, State> {
     const fetch = observableToPromise(fetcher({query: introspectionQuery}))
     if (!isPromise(fetch)) {
       this.setState({
-        responses: [{date: 'Fetcher did not return a Promise for introspection.'}],
+        responses: [{date: 'Fetcher did not return a Promise for introspection.', time: new Date()}],
       } as State)
       return
     }
@@ -625,13 +625,13 @@ export class CustomGraphiQL extends React.Component<Props, State> {
         this.setState({
           // Set schema to `null` to explicitly indicate that no schema exists.
           schema: null,
-          responses: [{date: responseString}],
+          responses: [{date: responseString, time: new Date()}],
         } as State)
       }
     }).catch(error => {
       this.setState({
         schema: null,
-        responses: [{date: error && String(error.stack || error)}],
+        responses: [{date: error && String(error.stack || error), time: new Date()}],
       } as State)
     })
   }
@@ -685,7 +685,7 @@ export class CustomGraphiQL extends React.Component<Props, State> {
       fetch.then(cb).catch(error => {
         this.setState({
           isWaitingForResponse: false,
-          responses: [{date: error && String(error.stack || error)}],
+          responses: [{date: error && String(error.stack || error), time: new Date()}],
         } as State)
       })
     } else if (isObservable(fetch)) {
@@ -697,7 +697,7 @@ export class CustomGraphiQL extends React.Component<Props, State> {
         error: error => {
           this.setState({
             isWaitingForResponse: false,
-            responses: [{date: error && String(error.stack || error)}],
+            responses: [{date: error && String(error.stack || error), time: new Date()}],
             subscription: null,
           } as State)
         },
@@ -739,7 +739,7 @@ export class CustomGraphiQL extends React.Component<Props, State> {
     try {
       this.setState({
         isWaitingForResponse: true,
-        responses: [{date: null}],
+        responses: [{date: null, time: new Date()}],
         operationName,
       } as State)
 
@@ -763,7 +763,7 @@ export class CustomGraphiQL extends React.Component<Props, State> {
                 .filter(response => response && response.date)
                 .concat({date: response, time: new Date()})
             } else {
-              responses = [{date: response}]
+              responses = [{date: response, time: new Date()}]
             }
             this.setState({
               isWaitingForResponse: false,
@@ -777,7 +777,7 @@ export class CustomGraphiQL extends React.Component<Props, State> {
     } catch (error) {
       this.setState({
         isWaitingForResponse: false,
-        responses: [error.message],
+        responses: [{date: error.message, time: new Date()}],
       } as State)
     }
   }
@@ -1021,7 +1021,7 @@ export class CustomGraphiQL extends React.Component<Props, State> {
   }
 
   handleDownloadJSON = () => {
-    download(this.state.responses[0], 'result.json', 'application/json')
+    download(this.state.responses[0].date, 'result.json', 'application/json')
   }
 }
 

@@ -30,6 +30,7 @@ export interface State {
   history: Session[]
   httpApiPrefix: string
   wsApiPrefix: string
+  authToken: string
 }
 
 export interface Props {
@@ -38,7 +39,6 @@ export interface Props {
   httpApiPrefix?: string
   wsApiPrefix?: string
   onSuccess?: Function
-  useOriginAsUrl?: boolean
   isEndpoint?: boolean
 }
 
@@ -77,6 +77,7 @@ export default class Playground extends React.Component<Props,State> {
       history: this.storage.getHistory(),
       httpApiPrefix: props.httpApiPrefix || httpApiPrefix,
       wsApiPrefix: props.wsApiPrefix || wsApiPrefix,
+      authToken: localStorage.getItem('token') || props.authToken,
     }
 
     if (typeof window === 'object') {
@@ -114,7 +115,7 @@ export default class Playground extends React.Component<Props,State> {
   }
   fetchSchemas() {
     return Promise.all([
-      this.props.useOriginAsUrl ? Promise.resolve(null) : this.fetchSchema(this.getRelayEndpoint()),
+      this.props.isEndpoint ? Promise.resolve(null) : this.fetchSchema(this.getRelayEndpoint()),
       this.fetchSchema(this.getSimpleEndpoint()),
     ])
       .then(([relaySchemaData, simpleSchemaData]) => {
@@ -167,7 +168,7 @@ export default class Playground extends React.Component<Props,State> {
 
           .graphiqls-container {
             @inherit: .relative, .overflowHidden;
-            height: calc(100% - 57px);
+            height: calc(100vh - 57px);
           }
 
           .graphiql-wrapper {
@@ -325,7 +326,9 @@ export default class Playground extends React.Component<Props,State> {
   }
 
   private saveSessions = () => {
-    this.state.sessions.forEach(session => this.storage.saveSession(session, false))
+    this.state.sessions.forEach(session => this.storage.saveSession(
+      Immutable.set(session, 'subscriptionActive', false), false,
+    ))
   }
 
   private saveHistory = () => {
@@ -351,7 +354,7 @@ export default class Playground extends React.Component<Props,State> {
       newSession = Immutable({
         id: cuid(),
         selectedEndpoint: 'SIMPLE',
-        selectedViewer: 'EVERYONE',
+        selectedViewer: 'ADMIN',
         query: defaultQuery,
         variables: '',
         result: '',
@@ -372,7 +375,7 @@ export default class Playground extends React.Component<Props,State> {
     return Immutable({
       id: cuid(),
       selectedEndpoint: 'SIMPLE',
-      selectedViewer: 'EVERYONE',
+      selectedViewer: 'ADMIN',
       query,
       variables: '',
       result: '',
@@ -429,7 +432,7 @@ export default class Playground extends React.Component<Props,State> {
   }
 
   private getSimpleEndpoint() {
-    if (this.props.useOriginAsUrl) {
+    if (this.props.isEndpoint) {
       return location.pathname
     }
     return `${this.state.httpApiPrefix}/simple/v1/${this.props.projectId}`
@@ -481,28 +484,34 @@ export default class Playground extends React.Component<Props,State> {
 
     if (!query.includes('IntrospectionQuery') && isQuerySubscription(query, operationName)) {
       return Observable.create(observer => {
+        if (!session.subscriptionActive) {
+          this.setValueInSession(session.id, 'subscriptionActive', true)
+        }
         const id = this.ws.subscribe(graphQLParams, (err, res) => {
           const data = {data: res, isSubscription: true}
-          // console.log(`Response from ${id}`, err, data)
           if (err) {
-            observer.completed()
+            observer.unsubscribe()
+            this.setValueInSession(session.id, 'subscriptionActive', false)
             return
           }
           observer.next(data)
         })
 
         return () => {
+          this.setValueInSession(session.id, 'subscriptionActive', false)
           this.ws.unsubscribe(id)
         }
       })
     }
 
     const endpoint = session.selectedEndpoint === 'SIMPLE' ? this.getSimpleEndpoint() : this.getRelayEndpoint()
+
     return fetch(endpoint, { // tslint:disable-line
       method: 'post',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': (session.selectedViewer === 'ADMIN' && this.props.authToken) ? `Bearer ${this.props.authToken}` : '',
+        'Authorization': (session.selectedViewer === 'ADMIN' && this.state.authToken)
+          ? `Bearer ${this.state.authToken}` : '',
       },
       body: JSON.stringify(graphQLParams),
     })
@@ -510,7 +519,7 @@ export default class Playground extends React.Component<Props,State> {
       if (typeof this.props.onSuccess === 'function') {
         this.props.onSuccess(graphQLParams, response)
       }
-      if (this.props.useOriginAsUrl) {
+      if (this.props.isEndpoint) {
         history.pushState({}, 'Graphcool Playground', `?query=${encodeURIComponent(query)}`)
       }
       return response.json()
