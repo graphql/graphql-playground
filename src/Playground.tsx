@@ -58,6 +58,7 @@ const wsApiPrefix = 'wss://subscriptions.graph.cool'
 export default class Playground extends React.Component<Props,State> {
   storage: PlaygroundStorage
   ws: any
+  private initialIndex: number = -1
 
   private updateQueryTypes = debounce(150, (sessionId: string, query: string) => {
     const queryTypes = getQueryTypes(query)
@@ -118,7 +119,11 @@ export default class Playground extends React.Component<Props,State> {
   }
   componentDidMount() {
     this.setWS()
-    this.getUrlSession()
+    if (this.initialIndex > -1) {
+      this.setState({
+        selectedSessionIndex: this.initialIndex,
+      } as State)
+    }
   }
   componentWillReceiveProps(nextProps) {
     if (nextProps.projectId !== this.props.projectId) {
@@ -262,21 +267,20 @@ export default class Playground extends React.Component<Props,State> {
     )
   }
 
-  private getUrlSession() {
+  private getUrlSession(sessions) {
     const prefix = '?query='
     if (location.search.includes(prefix)) {
       const uri = location.search.slice(prefix.length, location.search.length)
       const query = decodeURIComponent(uri)
-      const equivalent = this.state.sessions.findIndex(session => session.query.trim() === query.trim())
+      const equivalent = sessions.findIndex(session => session.query.trim() === query.trim())
       if (equivalent > -1) {
-        this.setState({
-          selectedSessionIndex: equivalent,
-        } as State)
+        this.initialIndex = equivalent
       } else {
-        const session = this.createSessionFromQuery(query)
-        this.handleCreateSession(session)
+        return this.createSessionFromQuery(query)
       }
     }
+
+    return null
   }
 
   private handleCreateSession = (session: Session) => {
@@ -342,6 +346,15 @@ export default class Playground extends React.Component<Props,State> {
 
   private initSessions = () => {
     const sessions = this.storage.getSessions()
+
+    const urlSession = this.getUrlSession(sessions)
+
+    if (urlSession) {
+      if (sessions.length === 1 && sessions[0].query === defaultQuery) {
+        return [urlSession]
+      }
+      return sessions.concat(urlSession)
+    }
 
     if (sessions.length > 0) {
       return sessions
