@@ -229,9 +229,9 @@ export class CustomGraphiQL extends React.Component<Props, State> {
     if (nextProps.schema !== undefined) {
       nextSchema = nextProps.schema
     }
-    if (nextProps.query !== undefined) {
-      nextQuery = nextProps.query
-    }
+    // if (nextProps.query !== undefined) {
+    //   nextQuery = nextProps.query
+    // }
     if (nextProps.variables !== undefined) {
       nextVariables = nextProps.variables
     }
