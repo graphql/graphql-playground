@@ -38,6 +38,7 @@ import QueryHeader from './QueryHeader'
 import ResultHeader from './ResultHeader'
 import {ResultViewer} from './ResultViewer'
 import ageOfDate from './util/ageOfDate'
+import {Response} from '../Playground'
 
 /**
  * The top-level React component for CustomGraphiQL, intended to encompass the entire
@@ -52,7 +53,7 @@ export interface Props {
   query?: string
   variables?: string
   operationName?: string
-  responses?: string[]
+  responses?: Response[]
   selectedEndpoint?: Endpoint
 
   storage?: any
@@ -369,7 +370,7 @@ export class CustomGraphiQL extends React.Component<Props, State> {
             width: 235px;
           }
           .result-window {
-            @inherit: .bgDarkBlue;
+            @inherit: .bgDarkBlue, .nosb;
           }
 
           .subscription-time {

@@ -818,7 +818,7 @@ div.CodeMirror span.CodeMirror-nonmatchingbracket {color: #f22;}
    before actual scrolling happens, thus preventing shaking and
    flickering artifacts. */
 .CodeMirror-vscrollbar, .CodeMirror-hscrollbar, .CodeMirror-scrollbar-filler, .CodeMirror-gutter-filler {
-    display: none;
+    display: none !important;
     position: absolute;
     z-index: 6;
 }

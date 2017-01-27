@@ -20,6 +20,10 @@ import * as cx from 'classnames'
 
 export type Endpoint = 'SIMPLE' | 'RELAY'
 export type Viewer = 'ADMIN' | 'EVERYONE' | 'USER'
+export interface Response {
+  date: string
+  time: Date
+}
 
 export interface State {
   schema: any
@@ -31,6 +35,7 @@ export interface State {
   httpApiPrefix: string
   wsApiPrefix: string
   authToken: string
+  response?: Response
 }
 
 export interface Props {
@@ -53,10 +58,17 @@ const wsApiPrefix = 'wss://subscriptions.graph.cool'
 export default class Playground extends React.Component<Props,State> {
   storage: PlaygroundStorage
   ws: any
+
   private updateQueryTypes = debounce(150, (sessionId: string, query: string) => {
     const queryTypes = getQueryTypes(query)
     this.setValueInSession(sessionId, 'queryTypes', queryTypes)
   })
+
+  private handleQueryChange = debounce(300, (sessionId: string, query: string) => {
+    this.setValueInSession(sessionId, 'query', query)
+    this.updateQueryTypes(sessionId, query)
+  })
+
   constructor(props) {
     super(props)
     this.storage = new PlaygroundStorage(props.projectId)
@@ -78,6 +90,7 @@ export default class Playground extends React.Component<Props,State> {
       httpApiPrefix: props.httpApiPrefix || httpApiPrefix,
       wsApiPrefix: props.wsApiPrefix || wsApiPrefix,
       authToken: localStorage.getItem('token') || props.authToken,
+      response: undefined,
     }
 
     if (typeof window === 'object') {
@@ -119,7 +132,18 @@ export default class Playground extends React.Component<Props,State> {
       this.fetchSchema(this.getSimpleEndpoint()),
     ])
       .then(([relaySchemaData, simpleSchemaData]) => {
-        const relaySchema = relaySchemaData && buildClientSchema(relaySchemaData.data)
+
+        if (!simpleSchemaData || simpleSchemaData.error) {
+          this.setState({
+            response: {
+              date: simpleSchemaData.error,
+              time: new Date(),
+            },
+          } as State)
+          return
+        }
+
+        const relaySchema = relaySchemaData && !relaySchemaData.error && buildClientSchema(relaySchemaData.data)
         const simpleSchema = buildClientSchema(simpleSchemaData.data)
 
         this.setState({
@@ -218,6 +242,7 @@ export default class Playground extends React.Component<Props,State> {
                 onEditOperationName={(name: string) => this.handleOperationNameChange(session.id, name)}
                 onEditVariables={(variables: string) => this.handleVariableChange(session.id, variables)}
                 onEditQuery={(query: string) => this.handleQueryChange(session.id, query)}
+                responses={this.state.response ? [this.state.response] : undefined}
               />
             </div>
           ))}
@@ -394,11 +419,6 @@ export default class Playground extends React.Component<Props,State> {
 
   private handleEndpointChange = (sessionId: string, endpoint: Endpoint) => {
     this.setValueInSession(sessionId, 'selectedEndpoint', endpoint)
-  }
-
-  private handleQueryChange = (sessionId: string, query: string) => {
-    this.setValueInSession(sessionId, 'query', query)
-    this.updateQueryTypes(sessionId, query)
   }
 
   private handleVariableChange = (sessionId: string, variables: string) => {
