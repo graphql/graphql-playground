@@ -1,6 +1,6 @@
 {
   "name": "graphcool-graphiql",
-  "version": "1.2.7",
+  "version": "1.2.8",
   "main": "./babelbuild/Playground.js",
   "homepage": "http://graphcool-playground.netlify.com",
   "files": [
