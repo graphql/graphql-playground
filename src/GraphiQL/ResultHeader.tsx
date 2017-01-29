@@ -11,7 +11,13 @@ export interface Props {
   showSelectUser?: boolean
 }
 
-const ResultHeader = ({selectedViewer, onChangeViewer, showViewAs, showResponseTitle, showSelectUser}: Props) => (
+const ResultHeader = ({
+  selectedViewer,
+  onChangeViewer,
+  showViewAs,
+  showResponseTitle,
+  showSelectUser,
+}: Props) => (
   <div
     className={cx(
       'result-header subscription',

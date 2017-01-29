@@ -6,6 +6,7 @@ import HistoryItems from './HistoryPopup/HistoryItems'
 import {CustomGraphiQL} from './GraphiQL/CustomGraphiQL'
 import {SchemaCache} from './Playground'
 import {$v, Icon} from 'graphcool-styles'
+import {modalStyle} from './constants'
 
 export interface Props {
   isOpen: boolean
@@ -46,29 +47,7 @@ export default class HistoryPopup extends React.Component<Props,State> {
         isOpen={this.props.isOpen}
         onRequestClose={this.props.onRequestClose}
         contentLabel='GraphiQL Session History'
-        style={{
-          overlay: {
-            zIndex: 20,
-            backgroundColor: 'rgba(15,32,46,.9)',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-          },
-          content: {
-            position: 'relative',
-            width: 976,
-            height: 'auto',
-            top: 'initial',
-            left: 'initial',
-            right: 'initial',
-            bottom: 'initial',
-            borderRadius: 2,
-            padding: 0,
-            border: 'none',
-            background: 'none',
-            boxShadow: '0 1px 7px rgba(0,0,0,.2)',
-          },
-        }}
+        style={modalStyle}
       >
         <style jsx>{`
           .history-popup {

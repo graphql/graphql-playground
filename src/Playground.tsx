@@ -17,6 +17,7 @@ import {Client} from 'subscriptions-transport-ws'
 import isQuerySubscription from './GraphiQL/util/isQuerySubscription'
 import HistoryPopup from './HistoryPopup'
 import * as cx from 'classnames'
+import SelectUserPopup from './SelectUserPopup'
 
 export type Endpoint = 'SIMPLE' | 'RELAY'
 export type Viewer = 'ADMIN' | 'EVERYONE' | 'USER'
@@ -36,6 +37,8 @@ export interface State {
   wsApiPrefix: string
   authToken: string
   response?: Response
+  selectUserOpen: boolean
+  userFields: string[]
 }
 
 export interface Props {
@@ -83,6 +86,7 @@ export default class Playground extends React.Component<Props,State> {
         SIMPLE: null,
         RELAY: null,
       },
+      userFields: [],
       sessions,
       selectedSessionIndex: selectedSessionIndex < sessions.length && selectedSessionIndex > -1
         ? selectedSessionIndex : 0,
@@ -92,6 +96,7 @@ export default class Playground extends React.Component<Props,State> {
       wsApiPrefix: props.wsApiPrefix || wsApiPrefix,
       authToken: localStorage.getItem('token') || props.authToken,
       response: undefined,
+      selectUserOpen: true,
     }
 
     if (typeof window === 'object') {
@@ -151,11 +156,25 @@ export default class Playground extends React.Component<Props,State> {
         const relaySchema = relaySchemaData && !relaySchemaData.error && buildClientSchema(relaySchemaData.data)
         const simpleSchema = buildClientSchema(simpleSchemaData.data)
 
+        const userFields = Object.keys(simpleSchema.getType('User').getFields())
+        // put id to beginning
+        userFields.sort((a, b) => {
+          if (a === 'id') {
+            return -1
+          }
+          if (b === 'id') {
+            return 1
+          }
+
+          return a > b ? 1 : -1
+        })
+
         this.setState({
           schemaCache: {
             RELAY: relaySchema,
             SIMPLE: simpleSchema,
           },
+          userFields,
         } as State)
       })
   }
@@ -180,6 +199,9 @@ export default class Playground extends React.Component<Props,State> {
     // {
     //   'blur': this.state.historyOpen,
     // },
+    if (this.state.selectUserOpen && !this.props.authToken) {
+      throw new Error('The "Select User" Popup is open, but no admin token is provided.')
+    }
     return (
       <div
         className={cx(
@@ -234,6 +256,7 @@ export default class Playground extends React.Component<Props,State> {
                 showQueryTitle={false}
                 showResponseTitle={false}
                 showViewAs={!isEndpoint}
+                showSelectUser={!isEndpoint}
                 showEndpoints={!isEndpoint}
                 showDownloadJsonButton={true}
                 showCodeGeneration={false}
@@ -261,6 +284,16 @@ export default class Playground extends React.Component<Props,State> {
             fetcherCreater={this.fetcher}
             schemas={this.state.schemaCache}
             onCreateSession={this.handleCreateSession}
+          />
+        )}
+        {this.state.selectUserOpen && this.props.authToken && (
+          <SelectUserPopup
+            isOpen={this.state.selectUserOpen}
+            onRequestClose={() => {}}
+            projectId={this.props.projectId}
+            adminAuthToken={this.props.authToken}
+            userFields={this.state.userFields}
+            onSelectUser={() => {}}
           />
         )}
       </div>
@@ -428,6 +461,9 @@ export default class Playground extends React.Component<Props,State> {
 
   private handleViewerChange = (sessionId: string, viewer: Viewer) => {
     this.setValueInSession(sessionId, 'selectedViewer', viewer)
+
+    if (viewer === 'USER') {
+    }
   }
 
   private handleEndpointChange = (sessionId: string, endpoint: Endpoint) => {
