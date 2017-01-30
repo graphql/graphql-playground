@@ -28,3 +28,7 @@ export interface QueryTypes {
 }
 
 export type HistoryFilter = 'HISTORY' | 'STARRED'
+
+
+export type Environment = 'Node' | 'Browser'
+export type GraphQLClient = 'fetch' | 'lokka' | 'relay' | 'apollo'

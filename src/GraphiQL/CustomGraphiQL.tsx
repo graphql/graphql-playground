@@ -62,6 +62,7 @@ export interface Props {
   onEditVariables?: (variables: any) => any
   onEditOperationName?: (name: any) => any
   onToggleDocs?: (value: boolean) => any
+  onClickCodeGeneration?: any
   getDefaultFieldNames?: () => any
   onChangeEndpoint?: Function
   showViewAs?: boolean
@@ -430,7 +431,12 @@ export class CustomGraphiQL extends React.Component<Props, State> {
               />
               <div className='variable-editor' style={variableStyle}>
                 {this.props.showCodeGeneration && (
-                  <div className='graphiql-button'>Generate Code</div>
+                  <div
+                    className='graphiql-button'
+                    onClick={this.props.onClickCodeGeneration}
+                  >
+                    Generate Code
+                  </div>
                 )}
                 <div
                   className='variable-editor-title'

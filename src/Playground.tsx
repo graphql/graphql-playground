@@ -19,6 +19,7 @@ import HistoryPopup from './HistoryPopup'
 import * as cx from 'classnames'
 import SelectUserPopup from './SelectUserPopup'
 import calc from 'calculate-size'
+import {CodeGenerationPopup} from './CodeGenerationPopup/CodeGenerationPopup'
 
 export type Endpoint = 'SIMPLE' | 'RELAY'
 export type Viewer = 'ADMIN' | 'EVERYONE' | 'USER'
@@ -50,6 +51,7 @@ export interface State {
   selectUserOpen: boolean
   userFields: string[]
   selectUserSessionId?: string
+  codeGenerationPopupOpen: boolean
 }
 
 export interface SchemaCache {
@@ -59,6 +61,10 @@ export interface SchemaCache {
 
 const httpApiPrefix = 'https://api.graph.cool'
 const wsApiPrefix = 'wss://subscriptions.graph.cool'
+
+export {
+  CustomGraphiQL
+}
 
 export default class Playground extends React.Component<Props,State> {
   storage: PlaygroundStorage
@@ -101,6 +107,7 @@ export default class Playground extends React.Component<Props,State> {
       response: undefined,
       selectUserOpen: false,
       selectUserSessionId: undefined,
+      codeGenerationPopupOpen: false,
     }
 
     if (typeof window === 'object') {
@@ -226,6 +233,10 @@ export default class Playground extends React.Component<Props,State> {
     if (this.state.selectUserOpen && !this.props.adminAuthToken) {
       throw new Error('The "Select User" Popup is open, but no admin token is provided.')
     }
+    const selectedSession = sessions[selectedSessionIndex]
+    const selectedEndpointUrl = isEndpoint ? location.href : selectedSession.selectedEndpoint === 'SIMPLE' ?
+      this.getSimpleEndpoint() : this.getRelayEndpoint()
+
     return (
       <div
         className={cx(
@@ -283,12 +294,13 @@ export default class Playground extends React.Component<Props,State> {
                 showSelectUser={!isEndpoint}
                 showEndpoints={!isEndpoint}
                 showDownloadJsonButton={true}
-                showCodeGeneration={false}
+                showCodeGeneration={true}
                 selectedViewer={session.selectedViewer}
                 storage={this.storage.getSessionStorage(session.id)}
                 query={session.query}
                 variables={session.variables}
                 operationName={session.operationName}
+                onClickCodeGeneration={() => this.handleClickCodeGeneration(session)}
                 onChangeEndpoint={(endpoint: Endpoint) => this.handleEndpointChange(session.id, endpoint)}
                 onChangeViewer={(viewer: Viewer) => this.handleViewerChange(session.id, viewer)}
                 onEditOperationName={(name: string) => this.handleOperationNameChange(session.id, name)}
@@ -321,8 +333,26 @@ export default class Playground extends React.Component<Props,State> {
             endpointUrl={this.getSimpleEndpoint()}
           />
         )}
+        {this.state.codeGenerationPopupOpen && (
+          <CodeGenerationPopup
+            endpointUrl={selectedEndpointUrl}
+            isOpen={this.state.codeGenerationPopupOpen}
+            onRequestClose={this.handleCloseCodeGeneration}
+            query={selectedSession.query}
+          />
+        )}
       </div>
     )
+  }
+
+  private handleClickCodeGeneration = (session) => {
+    this.setState({
+      codeGenerationPopupOpen: true,
+    } as State)
+  }
+
+  private handleCloseCodeGeneration = () => {
+    this.setState({codeGenerationPopupOpen: false} as State)
   }
 
   private handleUserSelection = (user) => {

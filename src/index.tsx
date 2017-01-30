@@ -4,6 +4,7 @@ import App from './App'
 import '../graphiql_dark.css'
 import './index.css'
 import '../base.css'
+import 'graphcool-styles/dist/styles.css'
 
 ReactDOM.render(
   <App />,
