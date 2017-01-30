@@ -111,8 +111,15 @@ export default class TableComponent extends React.Component<Props, State> {
 
   private noRowsRenderer = () => {
     return (
-      <div>
-        No Rows
+      <div className='no-rows'>
+        <style jsx>{`
+         .no-rows {
+           @inherit: .w100, .h100, .flex, .justifyCenter, .itemsCenter;
+         }
+        `}</style>
+        <div>
+          No Users
+        </div>
       </div>
     )
   }
