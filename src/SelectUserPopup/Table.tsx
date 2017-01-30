@@ -26,7 +26,7 @@ export default class TableComponent extends React.Component<Props, State> {
     super(props)
 
     this.state = {
-      height: 350,
+      height: 400,
       rowHeight: 54,
       overscanRowCount: 20,
       selectedRow: -1,
