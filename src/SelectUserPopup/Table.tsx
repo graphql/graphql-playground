@@ -7,6 +7,7 @@ interface Props {
   rowCount: number
   loadMoreRows: (settings: {startIndex: number, stopIndex: number}) => void
   onRowSelection: (input: {index: number}) => void
+  scrollToIndex?: number
 }
 
 interface State {
@@ -89,6 +90,7 @@ export default class TableComponent extends React.Component<Props, State> {
               onRowsRendered={onRowsRendered}
               onRowClick={this.props.onRowSelection}
               rowClassName={this.rowClassName}
+              scrollToIndex={this.props.scrollToIndex}
             >
               {fields.map(field => (
                 <Column

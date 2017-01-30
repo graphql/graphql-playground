@@ -14,6 +14,7 @@ interface State {
   count: number
   query: string
   selectedRowIndex: number
+  scrollToIndex?: number
 }
 
 interface Props {
@@ -41,6 +42,7 @@ export default class SelectUserPopup extends React.Component<Props, State> {
       query: '',
       count: 0,
       selectedRowIndex: -1,
+      scrollToIndex: undefined,
     }
 
     this.getUsers({startIndex: 0, stopIndex: 50}, props.userFields)
@@ -92,7 +94,7 @@ export default class SelectUserPopup extends React.Component<Props, State> {
           margin-top: -24px;
         }
         .search-box {
-          flex: 1 1 400px;
+          flex: 0 1 400px;
         }
       `}</style>
         <style jsx global>{`
@@ -132,6 +134,7 @@ export default class SelectUserPopup extends React.Component<Props, State> {
             rowCount={this.state.count}
             loadMoreRows={this.getUsers}
             onRowSelection={this.handleRowSelection}
+            scrollToIndex={this.state.scrollToIndex}
           />
         </div>
       </Modal>
@@ -229,10 +232,26 @@ export default class SelectUserPopup extends React.Component<Props, State> {
           users = Immutable.set(users, (i + startIndex), user)
         })
 
-        this.setState({
+        let newState = {
           users,
           count: _allUsersMeta.count,
-        } as State)
+        }
+
+        if (this.lastQuery !== this.state.query) {
+
+          newState['scrollToIndex'] = 0
+
+          setTimeout(
+            () => {
+              this.setState({
+                scrollToIndex: undefined,
+              } as State)
+            },
+            150
+          )
+        }
+
+        this.setState(newState as State)
 
         this.lastQuery = query
       })
