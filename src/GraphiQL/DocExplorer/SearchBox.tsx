@@ -48,7 +48,7 @@ export default class SearchBox extends React.Component<Props, State> {
             @inherit: .pa25, .bgBlack02;
           }
           .label {
-            @inherit: .bgWhite, .bbox, .w100, .flex, .itemsCenter;
+            @inherit: .bgWhite, .bbox, .w100, .flex, .itemsCenter, .bgWhite;
             padding: 12px 14px 13px 15px;
             box-shadow: 0 1px 3px rgba(0,0,0,.1);
           }

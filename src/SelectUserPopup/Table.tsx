@@ -1,11 +1,12 @@
 import * as React from 'react'
-import { InfiniteLoader, Grid, AutoSizer } from 'react-virtualized'
+import { InfiniteLoader, Table, Column } from 'react-virtualized'
 
 interface Props {
   rows: any[]
-  fields: string[]
+  fields: any[]
   rowCount: number
   loadMoreRows: (settings: {startIndex: number, stopIndex: number}) => void
+  onRowSelection: (input: {index: number}) => void
 }
 
 interface State {
@@ -19,15 +20,15 @@ function pZ(n: number) {
   return n < 10 ? `0${n}` : n
 }
 
-export default class Table extends React.Component<Props, State> {
+export default class TableComponent extends React.Component<Props, State> {
 
   constructor(props) {
     super(props)
 
     this.state = {
-      height: 300,
+      height: 350,
       rowHeight: 54,
-      overscanRowCount: 10,
+      overscanRowCount: 20,
       selectedRow: -1,
     }
 
@@ -35,45 +36,99 @@ export default class Table extends React.Component<Props, State> {
   }
 
   render() {
-    const { rowCount } = this.props
+    const { rowCount, fields } = this.props
     const { height, rowHeight, overscanRowCount } = this.state
 
     return (
-      <div>
+      <div className='popup-table'>
+        <style jsx global>{`
+          .popup-table {
+            @inherit: .bgBlack02, .w100, .overflowXScroll;
+            padding-top: 30px;
+          }
+          .popup-table .table-row {
+            @inherit: .flex, .pointer;
+            &:focus {
+              outline: none;
+            }
+          }
+          .popup-table .table-row.selected {
+            @inherit: .bgBlue, .white;
+          }
+          .ReactVirtualized__Table__Grid {
+            @inherit: .bgWhite;
+            box-shadow: 0 1px 4px rgba(0,0,0,.1);
+          }
+          .table-header {
+            @inherit: .fw6;
+          }
+          .ReactVirtualized__Table__headerColumn {
+            @inherit: .ph25, .pv16, .bbox, .overflowHidden, .toe;
+          }
+          .ReactVirtualized__Table__rowColumn {
+            @inherit: .overflowHidden, .ph25, .pv16, .toe, .br, .bb, .bBlack10, .nowrap;
+          }
+        `}</style>
         <InfiniteLoader
           isRowLoaded={this.isRowLoaded}
           loadMoreRows={this.props.loadMoreRows}
+          rowCount={rowCount}
         >
           {({ onRowsRendered, registerChild }) => (
-            <AutoSizer disableHeight>
-              {({ width }) => (
-                <Grid
-                  cellRenderer={this.cellRenderer}
-                  className='grid'
-                  noContentRenderer={this.noContentRenderer}
-                  columnWidth={this.getColumnWidth}
-                  columnCount={this.props.fields.length}
-                  overscanRowCount={overscanRowCount}
-                  rowHeight={rowHeight}
-                  rowCount={rowCount}
-                  width={width}
-                  height={height}
-                  registerChild={registerChild}
-                  onRowsRendered={onRowsRendered}
+            <Table
+              headerHeight={54}
+              height={height}
+              noRowsRenderer={this.noRowsRenderer}
+              overscanRowCount={overscanRowCount}
+              rowHeight={rowHeight}
+              rowCount={rowCount}
+              rowGetter={this.rowGetter}
+              headerClassName='table-header'
+              ref={registerChild}
+              width={fields.map(field => field.width).reduce((acc, value) => (acc + value), 0)}
+              onRowsRendered={onRowsRendered}
+              onRowClick={this.props.onRowSelection}
+              rowClassName={this.rowClassName}
+            >
+              {fields.map(field => (
+                <Column
+                  key={field.name}
+                  label={field.name}
+                  dataKey={field.name}
+                  width={field.width}
                 />
-              )}
-            </AutoSizer>
+              ))}
+            </Table>
           )}
         </InfiniteLoader>
       </div>
     )
   }
 
-  private noContentRenderer = () => {
+  private rowClassName = ({index}) => {
+    return `table-row ${this.props.rows[index] && this.props.rows[index].selected ? 'selected' : ''}`
+  }
+
+  private noRowsRenderer = () => {
     return (
       <div>
-        No Cells
+        No Rows
       </div>
+    )
+  }
+
+  private rowGetter = ({ index }) => {
+    let row = this.props.rows[index]
+    if (!row) {
+      return {}
+    }
+
+    return Object.keys(row).reduce(
+      (prev, current) => {
+        prev[current] = this.textToString(row[current])
+        return prev
+      },
+      {},
     )
   }
 
@@ -82,41 +137,38 @@ export default class Table extends React.Component<Props, State> {
       return `${pZ(value.getMonth() + 1)}/${pZ(value.getDate())}/${value.getFullYear().toString().slice(2,4)} ` +
           `${value.getHours()}:${pZ(value.getMinutes())}:${pZ(value.getSeconds())}`
     }
-    return value.toString()
+    return String(value)
   }
 
-  private cellRenderer = ({key, style, columnIndex, rowIndex}) => {
-    const field = this.props.fields[columnIndex]
-    const {selectedRow} = this.state
-    return (
-      <div
-        key={key}
-        style={style}
-        className={`cell ${selectedRow === rowIndex ? 'selected' : ''}`}
-        onClick={() => this.selectRow(rowIndex)}
-      >
-        <style jsx>{`
-          .cell {
-            @inherit: .bbox, .pv16, .ph25, .f16;
-            &.selected {
-              @inherit: .bgBlue, .white;
-            }
-          }
-        `}</style>
-        {this.textToString(this.props.rows[rowIndex][field])}
-      </div>
-    )
-  }
+  // private cellRenderer = ({key, style, columnIndex, rowIndex}) => {
+  //   const field = this.props.fields[columnIndex]
+  //   const {selectedRow} = this.state
+  //   return (
+  //     <div
+  //       key={key}
+  //       style={style}
+  //       className={`cell ${selectedRow === rowIndex ? 'selected' : ''}`}
+  //       onClick={() => this.selectRow(rowIndex)}
+  //     >
+  //       <style jsx>{`
+  //         .cell {
+  //           @inherit: .bbox, .pv16, .ph25, .f16;
+  //           &.selected {
+  //             @inherit: .bgBlue, .white;
+  //           }
+  //         }
+  //       `}</style>
+  //       {this.textToString(this.props.rows[rowIndex][field])}
+  //     </div>
+  //   )
+  // }
 
-  private selectRow(rowIndex: number) {
-    this.setState({selectedRow: rowIndex} as State)
-  }
+  // private selectRow(rowIndex: number) {
+  //   this.setState({selectedRow: rowIndex} as State)
+  // }
 
   private isRowLoaded = ({index}) => {
-    return Boolean(this.props.rows[index])
-  }
-
-  private getColumnWidth = () => {
-    return 250
+    const loaded = Boolean(this.props.rows[index])
+    return loaded
   }
 }

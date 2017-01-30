@@ -18,12 +18,22 @@ import isQuerySubscription from './GraphiQL/util/isQuerySubscription'
 import HistoryPopup from './HistoryPopup'
 import * as cx from 'classnames'
 import SelectUserPopup from './SelectUserPopup'
+import calc from 'calculate-size'
 
 export type Endpoint = 'SIMPLE' | 'RELAY'
 export type Viewer = 'ADMIN' | 'EVERYONE' | 'USER'
 export interface Response {
   date: string
   time: Date
+}
+
+export interface Props {
+  projectId: string
+  adminAuthToken?: string
+  httpApiPrefix?: string
+  wsApiPrefix?: string
+  onSuccess?: Function
+  isEndpoint?: boolean
 }
 
 export interface State {
@@ -35,19 +45,11 @@ export interface State {
   history: Session[]
   httpApiPrefix: string
   wsApiPrefix: string
-  authToken: string
+  adminAuthToken?: string
   response?: Response
   selectUserOpen: boolean
   userFields: string[]
-}
-
-export interface Props {
-  projectId: string
-  authToken?: string
-  httpApiPrefix?: string
-  wsApiPrefix?: string
-  onSuccess?: Function
-  isEndpoint?: boolean
+  selectUserSessionId?: string
 }
 
 export interface SchemaCache {
@@ -94,9 +96,11 @@ export default class Playground extends React.Component<Props,State> {
       history: this.storage.getHistory(),
       httpApiPrefix: props.httpApiPrefix || httpApiPrefix,
       wsApiPrefix: props.wsApiPrefix || wsApiPrefix,
-      authToken: localStorage.getItem('token') || props.authToken,
+      adminAuthToken: (props.adminAuthToken && props.adminAuthToken.length > 0 && props.adminAuthToken)
+        || localStorage.getItem('token'),
       response: undefined,
-      selectUserOpen: true,
+      selectUserOpen: false,
+      selectUserSessionId: undefined,
     }
 
     if (typeof window === 'object') {
@@ -156,17 +160,36 @@ export default class Playground extends React.Component<Props,State> {
         const relaySchema = relaySchemaData && !relaySchemaData.error && buildClientSchema(relaySchemaData.data)
         const simpleSchema = buildClientSchema(simpleSchemaData.data)
 
-        const userFields = Object.keys(simpleSchema.getType('User').getFields())
+        const userSchema = simpleSchema.getType('User').getFields()
+        const userFields = Object.keys(userSchema)
+          .map(fieldName => userSchema[fieldName])
+          .filter(field => field.name !== 'password')
         // put id to beginning
         userFields.sort((a, b) => {
-          if (a === 'id') {
+          if (a.name === 'id') {
             return -1
           }
-          if (b === 'id') {
+          if (b.name === 'id') {
             return 1
           }
 
-          return a > b ? 1 : -1
+          return a.name > b.name ? 1 : -1
+        })
+
+        userFields.map(field => {
+          const size = calc(field.name, {
+            font: 'Open Sans',
+            fontWeight: '600',
+            fontSize: '16px',
+          })
+          let width = size.width
+          if (field.name === 'id') {
+            width = 220
+          }
+          // TODO create type to field width map
+          field.width = Math.max(width, 185) + 50
+
+          return field
         })
 
         this.setState({
@@ -199,7 +222,7 @@ export default class Playground extends React.Component<Props,State> {
     // {
     //   'blur': this.state.historyOpen,
     // },
-    if (this.state.selectUserOpen && !this.props.authToken) {
+    if (this.state.selectUserOpen && !this.props.adminAuthToken) {
       throw new Error('The "Select User" Popup is open, but no admin token is provided.')
     }
     return (
@@ -286,18 +309,54 @@ export default class Playground extends React.Component<Props,State> {
             onCreateSession={this.handleCreateSession}
           />
         )}
-        {this.state.selectUserOpen && this.props.authToken && (
+        {this.state.selectUserOpen && this.props.adminAuthToken && (
           <SelectUserPopup
             isOpen={this.state.selectUserOpen}
-            onRequestClose={() => {}}
+            onRequestClose={this.handleCloseSelectUser}
             projectId={this.props.projectId}
-            adminAuthToken={this.props.authToken}
+            adminAuthToken={this.props.adminAuthToken}
             userFields={this.state.userFields}
-            onSelectUser={() => {}}
+            onSelectUser={this.handleUserSelection}
+            endpointUrl={this.getSimpleEndpoint()}
           />
         )}
       </div>
     )
+  }
+
+  private handleUserSelection = (user) => {
+    const systemApi = 'https://api.graph.cool/system'
+
+    const query = `
+      mutation {
+        signinClientUser(input: {
+          projectId: "${this.props.projectId}"
+          clientUserId: "${user.id}"
+          clientMutationId: "asd"
+        }) {
+          token
+          clientMutationId
+        }
+      }
+    `
+
+    fetch(systemApi, {
+      method: 'post',
+      body: JSON.stringify({query}),
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${this.state.adminAuthToken}`,
+      },
+    })
+      .then(res => res.json())
+      .then(res => {
+        const {token} = res.data.signinClientUser
+
+        if (token && this.state.selectUserSessionId) {
+          this.setValueInSession(this.state.selectUserSessionId, 'selectedUserToken', token)
+        }
+
+      })
   }
 
   private getUrlSession(sessions) {
@@ -463,7 +522,23 @@ export default class Playground extends React.Component<Props,State> {
     this.setValueInSession(sessionId, 'selectedViewer', viewer)
 
     if (viewer === 'USER') {
+      // give the user some time to realize whats going on
+      setTimeout(
+        () => {
+          this.setState({
+            selectUserOpen: true,
+            selectUserSessionId: sessionId,
+          } as State)
+        },
+        300,
+      )
     }
+  }
+
+  private handleCloseSelectUser = () => {
+    this.setState({
+      selectUserOpen: false,
+    } as State)
   }
 
   private handleEndpointChange = (sessionId: string, endpoint: Endpoint) => {
@@ -575,13 +650,19 @@ export default class Playground extends React.Component<Props,State> {
 
     const endpoint = session.selectedEndpoint === 'SIMPLE' ? this.getSimpleEndpoint() : this.getRelayEndpoint()
 
+    const headers = {
+      'Content-Type': 'application/json',
+    }
+
+    if (session.selectedViewer === 'ADMIN' && this.state.adminAuthToken) {
+      headers['Authorization'] = `Bearer ${this.state.adminAuthToken}`
+    } else if (session.selectedViewer === 'USER' && session.selectedUserToken) {
+      headers['Authorization'] = `Bearer ${session.selectedUserToken}`
+    }
+
     return fetch(endpoint, { // tslint:disable-line
       method: 'post',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': (session.selectedViewer === 'ADMIN' && this.state.authToken)
-          ? `Bearer ${this.state.authToken}` : '',
-      },
+      headers,
       body: JSON.stringify(graphQLParams),
     })
     .then((response) => {

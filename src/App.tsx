@@ -15,12 +15,14 @@ class App extends React.Component<null, null> {
         projectId = result[1]
       }
     }
-    /* tslint:disable-line */
+    /* tslint:disable */
+    const adminAuthToken = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE0ODU3ODQ4MjMsImNsaWVudElkIjoiY2lscGV2ZnUxMDAwYjBwbDh3bWRtejVkZCJ9.pxTD8zLOM63lJyWQ4TWrm8OCS74JkgmPgCg6zdCmxVI'
+
 
     return (
       <Playground
         projectId={projectId}
-        authToken='eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE0ODU2ODgwMTUsImNsaWVudElkIjoiY2lscGV2ZnUxMDAwYjBwbDh3bWRtejVkZCIsInByb2plY3RJZCI6ImNpeWZ4aXpzczA5YjAwMTE5dWNxYXBoeXUiLCJwZXJtYW5lbnRBdXRoVG9rZW5JZCI6ImNpeWlrYTlmaTB4bjgwMTIwaWhnYXljdDcifQ.gJS4z1DKjIzYcB3ZHwrVPwthp6rBexiXOJGaptkGhIA'
+        adminAuthToken={adminAuthToken}
         isEndpoint={process.env.NODE_ENV.includes('production')}
       />
     )
