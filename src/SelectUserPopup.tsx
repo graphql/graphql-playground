@@ -103,7 +103,7 @@ export default class SelectUserPopup extends React.Component<Props, State> {
         <div className='select-user-popup'>
           <div className='title-wrapper'>
             <div className='title'>
-              Select a User's view
+              Select a User
             </div>
           </div>
           <Icon

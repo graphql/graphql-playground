@@ -63,7 +63,7 @@ export default class TableComponent extends React.Component<Props, State> {
             @inherit: .fw6;
           }
           .ReactVirtualized__Table__headerColumn {
-            @inherit: .ph25, .pv16, .bbox, .overflowHidden, .toe;
+            @inherit: .ph25, .pv16, .bbox, .overflowHidden, .toe, .black60;
           }
           .ReactVirtualized__Table__rowColumn {
             @inherit: .overflowHidden, .ph25, .pv16, .toe, .br, .bb, .bBlack10, .nowrap;
