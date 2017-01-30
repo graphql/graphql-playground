@@ -206,6 +206,7 @@ export default class Playground extends React.Component<Props,State> {
       method: 'post',
       headers: {
         'Content-Type': 'application/json',
+        'X-GraphCool-Source': 'playground',
         // 'Authorization': this.state.selectedUserId === GUEST.id ?
         //   '' :
         //   `Bearer ${this.state.selectedUserToken || this.state.adminToken}`,
@@ -652,6 +653,7 @@ export default class Playground extends React.Component<Props,State> {
 
     const headers = {
       'Content-Type': 'application/json',
+      'X-GraphCool-Source': 'playground',
     }
 
     if (session.selectedViewer === 'ADMIN' && this.state.adminAuthToken) {
