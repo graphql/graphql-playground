@@ -36,7 +36,7 @@ export class CodeGenerationPopup extends React.Component<Props, State> {
       <Modal
         isOpen={this.props.isOpen}
         onRequestClose={this.props.onRequestClose}
-        contentLabel='GraphiQL Session History'
+        contentLabel='Code Generation'
         style={modalStyle}
       >
         <style jsx={true}>{`

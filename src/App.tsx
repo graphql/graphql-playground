@@ -1,7 +1,8 @@
 import * as React from 'react'
 import Playground from './Playground'
 
-const testProjectId = 'ciyfxizss09b00119ucqaphyu'
+// const testProjectId = 'ciyfxizss09b00119ucqaphyu'
+const testProjectId = 'ciwnb78gb14v40101ut70haxc'
 // const testProjectId = 'cirs1ufsg02b101619ru0bx4r'
 const regex = /.*?graph\.cool\/simple\/.{1,2}\/(.{1,25})/
 

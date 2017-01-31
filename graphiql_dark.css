@@ -1018,6 +1018,7 @@ span.CodeMirror-selectedtext { background: none; }
     -moz-user-select: none;
     -ms-user-select: none;
     user-select: none;
+    background-color: rgba(0,0,0,.02);
 }
 
 .graphiql-container .doc-explorer-title {
@@ -1065,13 +1066,11 @@ span.CodeMirror-selectedtext { background: none; }
 
 .graphiql-container .doc-explorer-contents {
     background-color: #ffffff;
-    border-top: 1px solid #d6d6d6;
     bottom: 0;
     left: 0;
     min-width: 300px;
     overflow-y: auto;
     padding: 20px 15px;
-    position: absolute;
     right: 0;
     top: 47px;
 }

@@ -131,11 +131,15 @@ export class DocExplorer extends React.Component<Props, State> {
         })}
       >
         <style jsx>{`
+          .doc-explorer {
+            @inherit: .relative, .h100;
+            border-left: 6px solid $green;
+          }
           .doc-explorer-contents {
-            @inherit: .pa0;
+            @inherit: .pa0, .overflowYScroll, .nosb, .relative;
             top: 0;
             box-shadow: none;
-            border-left: 6px solid $green;
+            height: calc(100vh - 57px);
           }
           .doc-explorer-title-bar {
             z-index: 2;
