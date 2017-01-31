@@ -1284,7 +1284,7 @@ codemirror-graphql@^0.5.9:
   version "0.5.9"
   resolved "https://registry.yarnpkg.com/codemirror-graphql/-/codemirror-graphql-0.5.9.tgz#b5ca2a84bd0deae7660c726f7feba15149bac8fd"
 
-codemirror@^5.15.2, codemirror@^5.18.2, codemirror@^5.22.2:
+codemirror@^5.15.2, codemirror@^5.22.2:
   version "5.22.2"
   resolved "https://registry.yarnpkg.com/codemirror/-/codemirror-5.22.2.tgz#38274c20e3628b4f7a982bffc2cddb61ceed6a09"
 
@@ -4560,14 +4560,6 @@ react-addons-shallow-compare@^15.4.2:
   dependencies:
     fbjs "^0.8.4"
     object-assign "^4.1.0"
-
-react-codemirror@^0.3.0:
-  version "0.3.0"
-  resolved "https://registry.yarnpkg.com/react-codemirror/-/react-codemirror-0.3.0.tgz#cd6bd6ef458ec1e035cfd8b3fe7b30c8c7883c6c"
-  dependencies:
-    classnames "^2.2.5"
-    codemirror "^5.18.2"
-    lodash.debounce "^4.0.8"
 
 react-dev-utils@^0.4.2:
   version "0.4.2"

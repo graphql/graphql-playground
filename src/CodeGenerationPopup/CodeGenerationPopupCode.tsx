@@ -1,9 +1,9 @@
 import * as React from 'react'
 import * as cx from 'classnames'
 import {$p} from 'graphcool-styles'
-import * as Codemirror from 'react-codemirror'
 import {CodeGenerator} from './codeGeneration'
 import {GraphQLClient, Environment} from '../types'
+const Codemirror: any = require('./CodeMirror')
 
 interface Props {
   query: string

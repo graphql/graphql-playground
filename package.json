@@ -1,6 +1,6 @@
 {
   "name": "graphcool-graphiql",
-  "version": "1.3.20",
+  "version": "1.3.26",
   "main": "./babelbuild/Playground.js",
   "homepage": "http://graphcool-playground.netlify.com",
   "files": [
@@ -71,18 +71,18 @@
     "babel-cli": "^6.22.2",
     "babel-preset-stage-3": "^6.22.0",
     "calculate-size": "^1.1.1",
-    "codemirror": "^5.22.2",
     "classnames": "^2.2.5",
+    "codemirror": "^5.22.2",
     "cuid": "^1.3.8",
     "graphcool-styles": "0.0.98",
     "graphiql": "^0.8.1",
     "graphql": "^0.8.2",
     "isomorphic-fetch": "^2.2.1",
+    "lodash.debounce": "^4.0.8",
     "postcss-modules": "^0.6.4",
     "raw-loader": "^0.5.1",
     "react": "^15.4.2",
     "react-addons-shallow-compare": "^15.4.2",
-    "react-codemirror": "^0.3.0",
     "react-dom": "^15.4.2",
     "react-modal": "^1.6.5",
     "react-virtualized": "^8.11.3",
@@ -95,7 +95,7 @@
   "scripts": {
     "start": "node scripts/start.js",
     "build-app": "node scripts/build.js",
-    "build": "rm -rf tsbuild; rm -rf babelbuild; tsc --jsx preserve --allowJs src/Playground.tsx --target es5 --lib es2015,dom --outDir tsbuild; babel tsbuild -d babelbuild; cp -r ./src/assets/ ./babelbuild/assets/",
+    "build": "rm -rf tsbuild; rm -rf babelbuild; tsc --jsx preserve --allowJs src/Playground.tsx --target es5 --lib es2015,dom --outDir tsbuild; babel tsbuild -d babelbuild; cp -r ./src/assets/ ./babelbuild/assets/; cp src/CodeGenerationPopup/CodeMirror.js ./babelbuild/CodeGenerationPopup/CodeMirror.js",
     "test": "node scripts/test.js --env=jsdom"
   },
   "jest": {

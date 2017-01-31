@@ -34,11 +34,11 @@ const ViewAs = ({selectedViewer, onChangeViewer, showSelectUser}: Props) => (
       }
 
       .viewer-text {
-        @inherit: .ml6;
+        @inherit: .ml6, .nowrap;
       }
     `}</style>
 
-    <div>View As</div>
+    <div className='nowrap'>View As</div>
     <div className='chooser'>
       <div
         className={cx('viewer', {

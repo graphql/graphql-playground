@@ -281,6 +281,7 @@
 .graphiql-container .result-window .CodeMirror {
     position: relative;
     padding-left: 10px;
+    padding-right: 40px;
     background: rgb(23,42,58);
     height: auto;
 }
