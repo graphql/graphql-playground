@@ -42,6 +42,8 @@ export default class HistoryPopup extends React.Component<Props,State> {
       })
 
     const selectedItem = items[this.state.selectedItemIndex]
+    const schema = this.props.schemas[selectedItem.selectedEndpoint]
+
     return (
       <Modal
         isOpen={this.props.isOpen}
@@ -133,7 +135,7 @@ export default class HistoryPopup extends React.Component<Props,State> {
                 </div>
               </div>
               <CustomGraphiQL
-                schema={this.props.schemas[selectedItem.selectedEndpoint]}
+                schema={schema}
                 variables={selectedItem.variables}
                 query={selectedItem.query}
                 fetcher={this.props.fetcherCreater(selectedItem)}

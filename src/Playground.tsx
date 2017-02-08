@@ -170,7 +170,7 @@ export default class Playground extends React.Component<Props,State> {
         const userSchema = simpleSchema.getType('User').getFields()
         const userFields = Object.keys(userSchema)
           .map(fieldName => userSchema[fieldName])
-          .filter(field => field.name !== 'password')
+          .filter(field => field.name !== 'password' && typeof field.type._scalarConfig !== 'undefined')
         // put id to beginning
         userFields.sort((a, b) => {
           if (a.name === 'id') {
