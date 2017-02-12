@@ -115,10 +115,10 @@ export const defaultQuery =
 export const modalStyle = {
   overlay: {
     zIndex: 20,
-      backgroundColor: 'rgba(15,32,46,.9)',
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'center',
+    backgroundColor: 'rgba(15,32,46,.9)',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   content: {
     position: 'relative',

@@ -20,6 +20,7 @@ import * as cx from 'classnames'
 import SelectUserPopup from './SelectUserPopup'
 import calc from 'calculate-size'
 import {CodeGenerationPopup} from './CodeGenerationPopup/CodeGenerationPopup'
+import {GraphQLObjectType, GraphQLList} from 'graphql'
 
 export type Endpoint = 'SIMPLE' | 'RELAY'
 export type Viewer = 'ADMIN' | 'EVERYONE' | 'USER'
@@ -170,7 +171,13 @@ export default class Playground extends React.Component<Props,State> {
         const userSchema = simpleSchema.getType('User').getFields()
         const userFields = Object.keys(userSchema)
           .map(fieldName => userSchema[fieldName])
-          .filter(field => field.name !== 'password' && typeof field.type._scalarConfig !== 'undefined')
+          .filter(field => {
+            // filter password, meta fields and relation fields
+            return field.name[0] !== '_' &&
+              field.name !== 'password' &&
+              !(field.type instanceof GraphQLList || field.type instanceof GraphQLObjectType)
+          })
+
         // put id to beginning
         userFields.sort((a, b) => {
           if (a.name === 'id') {
@@ -214,9 +221,6 @@ export default class Playground extends React.Component<Props,State> {
       headers: {
         'Content-Type': 'application/json',
         'X-GraphCool-Source': 'playground',
-        // 'Authorization': this.state.selectedUserId === GUEST.id ?
-        //   '' :
-        //   `Bearer ${this.state.selectedUserToken || this.state.adminToken}`,
       },
       body: JSON.stringify({query: introspectionQuery}),
     })
@@ -322,7 +326,7 @@ export default class Playground extends React.Component<Props,State> {
             onCreateSession={this.handleCreateSession}
           />
         )}
-        {this.state.selectUserOpen && this.props.adminAuthToken && (
+        {this.props.adminAuthToken && (
           <SelectUserPopup
             isOpen={this.state.selectUserOpen}
             onRequestClose={this.handleCloseSelectUser}
@@ -512,18 +516,20 @@ export default class Playground extends React.Component<Props,State> {
     if (session) {
       newSession = Immutable.set(session, 'id', cuid())
     } else {
+      const query = this.storage.hasExecutedQuery() ? '' : defaultQuery
+
       newSession = Immutable({
         id: cuid(),
         selectedEndpoint: 'SIMPLE',
         selectedViewer: 'ADMIN',
-        query: defaultQuery,
+        query,
         variables: '',
         result: '',
         operationName: undefined,
         hasMutation: false,
         hasSubscription: false,
         hasQuery: false,
-        queryTypes: getQueryTypes(defaultQuery),
+        queryTypes: getQueryTypes(query),
         starred: false,
       })
     }
@@ -704,6 +710,7 @@ export default class Playground extends React.Component<Props,State> {
       if (this.props.isEndpoint) {
         history.pushState({}, 'Graphcool Playground', `?query=${encodeURIComponent(query)}`)
       }
+      this.storage.executedQuery()
       return response.json()
     })
   })

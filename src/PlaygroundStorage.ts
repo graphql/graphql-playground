@@ -11,6 +11,7 @@ export default class PlaygroundStorage {
 
     if (!this.project) {
       this.project = {
+        executedQuery: 0,
         sessions: {
         },
         history: [],
@@ -20,6 +21,18 @@ export default class PlaygroundStorage {
       this.saveProject()
     }
     global['s'] = this
+  }
+
+  public executedQuery() {
+    if (!this.project.executedQuery) {
+      this.project.executedQuery = 1
+    } else {
+      this.project.executedQuery++
+    }
+  }
+
+  public hasExecutedQuery() {
+    return this.project.executedQuery >= 2
   }
 
   public getSessionStorage(sessionId: string) {
