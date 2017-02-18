@@ -182,8 +182,9 @@ export default class Playground extends React.Component<Props,State> {
   extractUserField(simpleSchema) {
     const userSchema = simpleSchema.getType('User')
     if (userSchema) {
-      const userFields = Object.keys(userSchema)
-        .map(fieldName => userSchema[fieldName])
+      const userSchemaFields = userSchema.getFields()
+      const userFields = Object.keys(userSchemaFields)
+        .map(fieldName => userSchemaFields[fieldName])
         .filter(field => {
           // filter password, meta fields and relation fields
           return field.name[0] !== '_' &&
