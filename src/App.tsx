@@ -6,7 +6,7 @@ import Playground from './Playground'
 // const testProjectId = 'ciwm5q6r20lcv0101al2192er'
 // const testProjectId = 'cirs1ufsg02b101619ru0bx4r'
 // const testProjectId = 'cixvxz4yv00an0154bgcerdug'
-const testProjectId = 'ciwnb78gb14v40101ut70haxc'
+const testProjectId = 'ciz6u07s109vlfc645kv4put6'
 const regex = /.*?graph\.cool\/simple\/.{1,2}\/(.{1,25})/
 
 class App extends React.Component<null, null> {
@@ -30,7 +30,8 @@ class App extends React.Component<null, null> {
         projectId={projectId}
         adminAuthToken={adminAuthToken}
         isEndpoint={process.env.NODE_ENV.includes('production')}
-        httpApiPrefix='https://dev.api.graph.cool'
+        httpApiPrefix='http://localhost:60000'
+        wsApiPrefix='ws://localhost:8085'
       />
     )
   }

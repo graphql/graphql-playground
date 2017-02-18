@@ -168,43 +168,7 @@ export default class Playground extends React.Component<Props,State> {
         const relaySchema = relaySchemaData && !relaySchemaData.error && buildClientSchema(relaySchemaData.data)
         const simpleSchema = buildClientSchema(simpleSchemaData.data)
 
-        const userSchema = simpleSchema.getType('User').getFields()
-        const userFields = Object.keys(userSchema)
-          .map(fieldName => userSchema[fieldName])
-          .filter(field => {
-            // filter password, meta fields and relation fields
-            return field.name[0] !== '_' &&
-              field.name !== 'password' &&
-              !(field.type instanceof GraphQLList || field.type instanceof GraphQLObjectType)
-          })
-
-        // put id to beginning
-        userFields.sort((a, b) => {
-          if (a.name === 'id') {
-            return -1
-          }
-          if (b.name === 'id') {
-            return 1
-          }
-
-          return a.name > b.name ? 1 : -1
-        })
-
-        userFields.map(field => {
-          const size = calc(field.name, {
-            font: 'Open Sans',
-            fontWeight: '600',
-            fontSize: '16px',
-          })
-          let width = size.width
-          if (field.name === 'id') {
-            width = 220
-          }
-          // TODO create type to field width map
-          field.width = Math.max(width, 185) + 50
-
-          return field
-        })
+        const userFields = this.extractUserField(simpleSchema)
 
         this.setState({
           schemaCache: {
@@ -214,6 +178,48 @@ export default class Playground extends React.Component<Props,State> {
           userFields,
         } as State)
       })
+  }
+  extractUserField(simpleSchema) {
+    const userSchema = simpleSchema.getType('User')
+    if (userSchema) {
+      const userFields = Object.keys(userSchema)
+        .map(fieldName => userSchema[fieldName])
+        .filter(field => {
+          // filter password, meta fields and relation fields
+          return field.name[0] !== '_' &&
+            field.name !== 'password' && !(field.type instanceof GraphQLList || field.type instanceof GraphQLObjectType)
+        })
+
+      // put id to beginning
+      userFields.sort((a, b) => {
+        if (a.name === 'id') {
+          return -1
+        }
+        if (b.name === 'id') {
+          return 1
+        }
+
+        return a.name > b.name ? 1 : -1
+      })
+
+      return userFields.map(field => {
+        const size = calc(field.name, {
+          font: 'Open Sans',
+          fontWeight: '600',
+          fontSize: '16px',
+        })
+        let width = size.width
+        if (field.name === 'id') {
+          width = 220
+        }
+        // TODO create type to field width map
+        field.width = Math.max(width, 185) + 50
+
+        return field
+      })
+    } else {
+      return []
+    }
   }
   fetchSchema(endpointUrl: string) {
     return fetch(endpointUrl, { // tslint:disable-line
@@ -240,6 +246,7 @@ export default class Playground extends React.Component<Props,State> {
     const selectedSession = sessions[selectedSessionIndex]
     const selectedEndpointUrl = isEndpoint ? location.href : selectedSession.selectedEndpoint === 'SIMPLE' ?
       this.getSimpleEndpoint() : this.getRelayEndpoint()
+    const canSelectUsers = this.state.userFields.length > 0
 
     return (
       <div
@@ -295,7 +302,7 @@ export default class Playground extends React.Component<Props,State> {
                 showQueryTitle={false}
                 showResponseTitle={false}
                 showViewAs={!isEndpoint}
-                showSelectUser={!isEndpoint}
+                showSelectUser={!isEndpoint && canSelectUsers}
                 showEndpoints={!isEndpoint}
                 showDownloadJsonButton={true}
                 showCodeGeneration={true}

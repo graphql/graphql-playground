@@ -139,7 +139,7 @@ export class DocExplorer extends React.Component<Props, State> {
             @inherit: .pa0, .overflowYScroll, .nosb, .relative;
             top: 0;
             box-shadow: none;
-            height: calc(100vh - 57px);
+            height: calc(100% - 57px);
           }
           .doc-explorer-title-bar {
             z-index: 2;

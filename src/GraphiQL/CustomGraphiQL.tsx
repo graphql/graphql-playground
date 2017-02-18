@@ -76,6 +76,7 @@ export interface Props {
   selectedViewer?: Viewer
   onChangeViewer?: Function
   queryOnly?: boolean
+  showDocs?: boolean
   rerenderQuery?: boolean
 }
 
@@ -514,7 +515,7 @@ export class CustomGraphiQL extends React.Component<Props, State> {
             )}
           </div>
         </div>
-        {!this.props.queryOnly && (
+        {(this.props.queryOnly ? this.props.showDocs : true) && (
           <div className={docExplorerWrapClasses} style={docWrapStyle}>
             <div
               className={`docs-button ${!this.state.docExplorerOpen && 'inactive'}`}
