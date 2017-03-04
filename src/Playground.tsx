@@ -13,7 +13,7 @@ import PlaygroundStorage from './PlaygroundStorage'
 import getQueryTypes from './GraphiQL/util/getQueryTypes'
 import debounce from 'graphiql/dist/utility/debounce'
 import {Observable} from 'rxjs/Observable'
-import {Client} from 'subscriptions-transport-ws'
+import {SubscriptionClient} from 'subscriptions-transport-ws'
 import isQuerySubscription from './GraphiQL/util/isQuerySubscription'
 import HistoryPopup from './HistoryPopup'
 import * as cx from 'classnames'
@@ -61,7 +61,7 @@ export interface SchemaCache {
 }
 
 const httpApiPrefix = 'https://api.graph.cool'
-const wsApiPrefix = 'wss://subscriptions.graph.cool'
+const wsApiPrefix = 'wss://dev.subscriptions.graph.cool/v1'
 
 export {
   CustomGraphiQL
@@ -119,7 +119,7 @@ export default class Playground extends React.Component<Props,State> {
     global['p'] = this
   }
   setWS() {
-    this.ws = new Client(this.getWSEndpoint(), {
+    this.ws = new SubscriptionClient(this.getWSEndpoint(), {
       timeout: 5000,
     })
   }
@@ -398,7 +398,6 @@ export default class Playground extends React.Component<Props,State> {
         if (token && this.state.selectUserSessionId) {
           this.setValueInSession(this.state.selectUserSessionId, 'selectedUserToken', token)
         }
-
       })
   }
 
@@ -679,6 +678,8 @@ export default class Playground extends React.Component<Props,State> {
         const id = this.ws.subscribe(graphQLParams, (err, res) => {
           const data = {data: res, isSubscription: true}
           if (err) {
+            console.error(err, res)
+            observer.next(data)
             observer.unsubscribe()
             this.setValueInSession(session.id, 'subscriptionActive', false)
             return
