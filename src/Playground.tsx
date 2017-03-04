@@ -227,7 +227,7 @@ export default class Playground extends React.Component<Props,State> {
       method: 'post',
       headers: {
         'Content-Type': 'application/json',
-        'X-GraphCool-Source': 'playground',
+        'x-graphcool-source': 'console:playground',
       },
       body: JSON.stringify({query: introspectionQuery}),
     })
@@ -698,7 +698,7 @@ export default class Playground extends React.Component<Props,State> {
 
     const headers = {
       'Content-Type': 'application/json',
-      'X-GraphCool-Source': 'playground',
+      'x-graphcool-source': 'console:playground',
     }
 
     if (session.selectedViewer === 'ADMIN' && this.state.adminAuthToken) {
