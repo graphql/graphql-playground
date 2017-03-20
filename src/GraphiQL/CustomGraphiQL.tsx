@@ -18,7 +18,7 @@ import {GraphQLSchema} from 'graphql/type/schema'
 
 import {ExecuteButton} from './ExecuteButton'
 import {ToolbarButton} from 'graphiql/dist/components/ToolbarButton'
-import {QueryEditor} from 'graphiql/dist/components/QueryEditor'
+import {QueryEditor} from './QueryEditor'
 import {VariableEditor} from 'graphiql/dist/components/VariableEditor'
 import {DocExplorer} from './DocExplorer'
 import CodeMirrorSizer from 'graphiql/dist/utility/CodeMirrorSizer'

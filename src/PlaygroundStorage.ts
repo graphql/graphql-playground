@@ -4,14 +4,15 @@ export default class PlaygroundStorage {
   private projectId: string
   private project: any
   private storages: any = {}
+  private executedQueryCount: number
   constructor(projectId: string) {
     this.projectId = projectId
 
     this.project = this.getProject()
+    this.executedQueryCount = this.getExecutedQueryCount()
 
     if (!this.project) {
       this.project = {
-        executedQuery: 0,
         sessions: {
         },
         history: [],
@@ -24,15 +25,15 @@ export default class PlaygroundStorage {
   }
 
   public executedQuery() {
-    if (!this.project.executedQuery) {
-      this.project.executedQuery = 1
+    if (!this.executedQueryCount) {
+      this.executedQueryCount = 1
     } else {
-      this.project.executedQuery++
+      this.executedQueryCount++
     }
   }
 
   public hasExecutedQuery() {
-    return this.project.executedQuery >= 2
+    return this.executedQueryCount >= 2
   }
 
   public getSessionStorage(sessionId: string) {
@@ -102,6 +103,7 @@ export default class PlaygroundStorage {
   public saveProject() {
     const json = JSON.stringify(this.project)
     localStorage.setItem(this.projectId, json)
+    localStorage.setItem('executedQueryCount', this.executedQueryCount.toString())
   }
 
   private getProject() {
@@ -118,5 +120,17 @@ export default class PlaygroundStorage {
       }))
     }
     return result
+  }
+
+  private getExecutedQueryCount() {
+    let count: number = 0
+
+    try {
+      count = parseInt(localStorage.getItem('executedQueryCount') || '0', 10)
+    } catch (e) {
+      //
+    }
+
+    return count
   }
 }
