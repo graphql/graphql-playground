@@ -634,14 +634,6 @@ div.CodeMirror-lint-message-error, div.CodeMirror-lint-message-warning {
 .cm-atom {
     color: rgb(249,233,34);
 }
-/* BASICS */
-
-.CodeMirror {
-    /* Set height, width, borders, and global font properties here */
-    color: black;
-    font-family: monospace;
-    height: 300px;
-}
 
 /* PADDING */
 
