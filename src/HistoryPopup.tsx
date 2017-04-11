@@ -141,6 +141,7 @@ export default class HistoryPopup extends React.Component<Props,State> {
                 fetcher={this.props.fetcherCreater(selectedItem)}
                 disableQueryHeader
                 queryOnly
+                rerenderQuery
               />
             </div>
           ) : (

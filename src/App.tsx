@@ -5,7 +5,7 @@ import Playground from './Playground'
 // const testProjectId = 'ciwnb78gb14v40101ut70haxc'
 // const testProjectId = 'ciwm5q6r20lcv0101al2192er'
 // const testProjectId = 'cirs1ufsg02b101619ru0bx4r'
-const testProjectId = 'aasdf'
+const testProjectId = 'asdf'
 // const testProjectId = 'cirs1ufsg02b101619ru0bx5r'
 const regex = /.*?graph\.cool\/simple\/.{1,2}\/(.{1,25})/
 
@@ -40,14 +40,15 @@ class App extends React.Component<null, null> {
     // const adminAuthToken = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE0ODU3ODQ4MjMsImNsaWVudElkIjoiY2lscGV2ZnUxMDAwYjBwbDh3bWRtejVkZCJ9.pxTD8zLOM63lJyWQ4TWrm8OCS74JkgmPgCg6zdCmxVI'
     // const adminAuthToken = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE0ODY4OTg1ODUsImNsaWVudElkIjoiY2l4dnh4bXI1MDA3NTAxNTRrMTU1NXV0eCJ9.zWohEinj0y7jTx7zMxn5LGnX2ghxiHlkGBfR7uRYWuQ'
     // const adminAuthToken = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE0ODY4OTkzNzMsImNsaWVudElkIjoiY2lscGV2ZnUxMDAwYjBwbDh3bWRtejVkZCJ9.di3RFd4Gowsc2haw7Dlv6k9RceENs5NyrZ4ui_hEO9s'
+    const adminAuthToken = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE0ODU1MTEyNDUsImNsaWVudElkIjoiY2lscGV2ZnUxMDAwYjBwbDh3bWRtejVkZCIsInByb2plY3RJZCI6ImNpcnMxdWZzZzAyYjEwMTYxOXJ1MGJ4NXIiLCJwZXJtYW5lbnRBdXRoVG9rZW5JZCI6ImNpeWZuMWgxZTA1cWMwMTE5NTY5Y2Z2cTUifQ.XSQo8l58zB2koBcB0M-LiDqSjg0-P8tJANcTxOa6RUA'
 
-    // adminAuthToken={adminAuthToken}
     // httpApiPrefix={production ? 'https://api.graph.cool' : 'http://localhost:60000'}
-    const production = process.env.NODE_ENV.includes('production') || true
+    const production = process.env.NODE_ENV.includes('production')
 
     return (
       <Playground
         projectId={projectId}
+        adminAuthToken={adminAuthToken}
         isEndpoint={production}
         wsApiPrefix={subscriptionUrl}
       />

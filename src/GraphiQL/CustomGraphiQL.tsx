@@ -32,7 +32,7 @@ import {
   introspectionQuery,
   introspectionQuerySansSubscriptions,
 } from 'graphiql/dist/utility/introspectionQueries'
-import {Endpoint, Viewer} from '../types'
+import {Endpoint, Viewer, OperationDefinition} from '../types'
 import {download} from './util/index'
 import QueryHeader from './QueryHeader'
 import ResultHeader from './ResultHeader'
@@ -78,6 +78,7 @@ export interface Props {
   queryOnly?: boolean
   showDocs?: boolean
   rerenderQuery?: boolean
+  operations?: OperationDefinition[]
 }
 
 export interface State {
@@ -963,7 +964,7 @@ export class CustomGraphiQL extends React.Component<Props, State> {
       } else {
         this.setState({
           docExplorerOpen: true,
-          docExplorerWidth: Math.min(docsSize, 650),
+          docExplorerWidth: Math.min(docsSize, 850),
         } as State)
       }
     }

@@ -1,5 +1,5 @@
 import { parse } from 'graphql'
-import {QueryTypes} from '../../types'
+import {QueryTypes, OperationDefinition} from '../../types'
 
 const getQueryTypes = (query: string): QueryTypes => {
   let ast: any = null
@@ -14,6 +14,7 @@ const getQueryTypes = (query: string): QueryTypes => {
   let hasQuery = false
   let hasMutation = false
   let firstOperationName = null
+  let operations: OperationDefinition[] = []
 
   if (ast) {
     ast.definitions.forEach(definition => {
@@ -32,6 +33,13 @@ const getQueryTypes = (query: string): QueryTypes => {
       if (definition.operation === 'mutation') {
         hasMutation = true
       }
+      if (definition.name) {
+        operations.push({
+          name: definition.name,
+          startLine: definition.loc.startToken.line,
+          endLine: definition.loc.endToken.line,
+        })
+      }
     })
   }
 
@@ -40,6 +48,7 @@ const getQueryTypes = (query: string): QueryTypes => {
     subscription: hasSubscription,
     query: hasQuery,
     mutation: hasMutation,
+    operations,
   }
 }
 

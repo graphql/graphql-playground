@@ -35,9 +35,11 @@ export class CodeGenerator {
 const client = new Lokka({
   transport: new Transport(
     '${this.endpointUrl}',
-    // {
-    //   Authorization: 'Bearer YOUR_AUTH_TOKEN',
-    // }
+    // headers: {
+    //   {
+    //     Authorization: 'Bearer YOUR_AUTH_TOKEN',
+    //   }
+    // },
    )
 });
 `

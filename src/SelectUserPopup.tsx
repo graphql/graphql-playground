@@ -96,6 +96,19 @@ export default class SelectUserPopup extends React.Component<Props, State> {
         .search-box {
           flex: 0 1 400px;
         }
+        .selected-user {
+          @inherit: .ml25, .flex, .flexColumn, .justifyCenter, .itemsCenter;
+        }
+        .selected-user-id {
+          @inherit: .bgBlack04, .pa6, .br2, .black60, .f14, .fw3, .mt10;
+          font-family:
+            'Source Code Pro',
+            'Consolas',
+            'Inconsolata',
+            'Droid Sans Mono',
+            'Monaco',
+            monospace;
+        }
       `}</style>
         <style jsx global>{`
           .popup-x {
@@ -103,11 +116,17 @@ export default class SelectUserPopup extends React.Component<Props, State> {
           }
         `}</style>
         <div className='select-user-popup'>
-          <div className='title-wrapper'>
-            <div className='title'>
-              Select a User
+            <div className='title-wrapper'>
+              <div className='title'>
+                Select a User
+              </div>
+              {this.state.selectedRowIndex > -1 && (
+                <div className='selected-user'>
+                  <div>Selected User ID</div>
+                  <div className='selected-user-id'>{this.state.users[this.state.selectedRowIndex].id}</div>
+                </div>
+              )}
             </div>
-          </div>
           <Icon
             src={require('graphcool-styles/icons/stroke/cross.svg')}
             stroke={true}

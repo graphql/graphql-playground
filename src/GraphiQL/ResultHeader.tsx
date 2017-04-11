@@ -25,7 +25,8 @@ const ResultHeader = ({
   >
     <style jsx>{`
       .result-header {
-        @inherit: .bgDarkBlue, .flex, .justifyBetween, .itemsCenter, .relative, .pt25, .ph25;
+        @inherit: .bgDarkBlue, .flex, .justifyBetween, .itemsCenter, .relative, .pt25, .mh25, .pl16;
+        height: 75px;
         &.subscription {
           &:after {
             content: "";
@@ -39,19 +40,24 @@ const ResultHeader = ({
           }
         }
       }
+      .inner {
+        @inherit: .absolute;
+      }
     `}</style>
-    <div>
-      {showResponseTitle && (
-        <div className='editor-title'>Response</div>
+    <div className='inner'>
+      <div>
+        {showResponseTitle && (
+          <div className='editor-title'>Response</div>
+        )}
+      </div>
+      {showViewAs && selectedViewer && onChangeViewer && (
+        <ViewerChooser
+          showSelectUser={showSelectUser}
+          selectedViewer={selectedViewer}
+          onChangeViewer={onChangeViewer}
+        />
       )}
     </div>
-    {showViewAs && selectedViewer && onChangeViewer && (
-      <ViewerChooser
-        showSelectUser={showSelectUser}
-        selectedViewer={selectedViewer}
-        onChangeViewer={onChangeViewer}
-      />
-    )}
   </div>
 )
 

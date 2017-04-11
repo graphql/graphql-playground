@@ -86,7 +86,7 @@ export class QueryEditor extends React.Component<Props, null> {
       },
       hintOptions: {
         schema: this.props.schema,
-        closeOnUnfocus: false,
+        closeOnUnfocus: true,
         completeSingle: false,
       },
       gutters: [ 'CodeMirror-linenumbers', 'CodeMirror-foldgutter' ],

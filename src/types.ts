@@ -25,6 +25,13 @@ export interface QueryTypes {
   subscription: boolean
   query: boolean
   mutation: boolean
+  operations: OperationDefinition[]
+}
+
+export interface OperationDefinition {
+  startLine: number
+  endLine: number
+  name: string
 }
 
 export type HistoryFilter = 'HISTORY' | 'STARRED'

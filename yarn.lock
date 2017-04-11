@@ -5191,9 +5191,9 @@ styled-jsx@^0.4.0:
     source-map "^0.5.6"
     string-hash "^1.1.1"
 
-subscriptions-transport-ws@0.5.3:
-  version "0.5.3"
-  resolved "https://registry.yarnpkg.com/subscriptions-transport-ws/-/subscriptions-transport-ws-0.5.3.tgz#ee49e27ea0f85d77470712a4fd37871cf9eeeef8"
+subscriptions-transport-ws@0.5.4:
+  version "0.5.4"
+  resolved "https://registry.yarnpkg.com/subscriptions-transport-ws/-/subscriptions-transport-ws-0.5.4.tgz#1091e55e73bff0d691a86570ac2b97ff6fb35cfc"
   dependencies:
     "@types/ws" "0.0.38"
     backo2 "^1.0.2"

@@ -119,8 +119,16 @@ export default class Playground extends React.Component<Props,State> {
     global['p'] = this
   }
   setWS() {
+    let connectionParams = {}
+    if (this.props.adminAuthToken) {
+      connectionParams['Authorization'] = `Bearer ${this.props.adminAuthToken}`
+    }
+    if (this.ws) {
+      this.ws.unsubscribeAll()
+    }
     this.ws = new SubscriptionClient(this.getWSEndpoint(), {
       timeout: 5000,
+      connectionParams,
     })
   }
   componentWillMount() {
@@ -143,7 +151,7 @@ export default class Playground extends React.Component<Props,State> {
     }
   }
   componentWillReceiveProps(nextProps) {
-    if (nextProps.projectId !== this.props.projectId) {
+    if (nextProps.projectId !== this.props.projectId || nextProps.adminAuthToken !== this.props.adminAuthToken) {
       this.setWS()
       this.fetchSchemas()
     }
@@ -247,7 +255,7 @@ export default class Playground extends React.Component<Props,State> {
     const selectedSession = sessions[selectedSessionIndex]
     const selectedEndpointUrl = isEndpoint ? location.href : selectedSession.selectedEndpoint === 'SIMPLE' ?
       this.getSimpleEndpoint() : this.getRelayEndpoint()
-    const canSelectUsers = this.state.userFields.length > 0
+    // const canSelectUsers = this.state.userFields.length > 0
 
     return (
       <div
@@ -303,7 +311,7 @@ export default class Playground extends React.Component<Props,State> {
                 showQueryTitle={false}
                 showResponseTitle={false}
                 showViewAs={!isEndpoint}
-                showSelectUser={!isEndpoint && canSelectUsers}
+                showSelectUser={true}
                 showEndpoints={!isEndpoint}
                 showDownloadJsonButton={true}
                 showCodeGeneration={true}
@@ -319,6 +327,20 @@ export default class Playground extends React.Component<Props,State> {
                 onEditVariables={(variables: string) => this.handleVariableChange(session.id, variables)}
                 onEditQuery={(query: string) => this.handleQueryChange(session.id, query)}
                 responses={this.state.response ? [this.state.response] : undefined}
+                operations={
+                  [
+                    {
+                      name: 'hans',
+                      startLine: 1,
+                      endLine: 5,
+                    },
+                    {
+                      name: 'peta',
+                      startLine: 6,
+                      endLine: 14,
+                    },
+                  ]
+                }
               />
             </div>
           ))}

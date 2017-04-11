@@ -21,6 +21,8 @@ export interface State {
   highlight: any
 }
 
+let firstTime = true
+
 /**
  * ExecuteButton
  *
@@ -54,7 +56,8 @@ export class ExecuteButton extends React.Component<Props, State> {
               className={operation === highlight ? 'selected' : ''}
               onMouseOver={() => this.setState({ highlight: operation } as State)}
               onMouseOut={() => this.setState({ highlight: null } as State)}
-              onMouseUp={() => this._onOptionSelected(operation)}>
+              onMouseUp={() => this._onOptionSelected(operation)}
+            >
               {operation.name ? operation.name.value : '<Unnamed>'}
             </li>,
           )}
@@ -145,6 +148,10 @@ export class ExecuteButton extends React.Component<Props, State> {
         )
         if (!isOptionsMenuClicked) { // menu calls setState if it was clicked
           this.setState({ optionsOpen: false } as State)
+        }
+        if (firstTime) {
+          this._onOptionSelected(this.props.operations.find(op => op.name.value === upEvent.target.textContent))
+          firstTime = false
         }
       }
     }
