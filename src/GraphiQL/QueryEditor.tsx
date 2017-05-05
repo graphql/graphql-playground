@@ -27,10 +27,11 @@ import onHasCompletion from 'graphiql/dist/utility/onHasCompletion'
 interface Props {
   schema: GraphQLSchema
   value: string
-  onEdit: (value: string) => void
+  onEdit?: (value: string) => void
   onHintInformationRender?: (elem: any) => void
   onRunQuery?: () => void
   placeholder?: string
+  readOnly?: boolean
 }
 
 export class QueryEditor extends React.Component<Props, null> {
@@ -78,6 +79,7 @@ export class QueryEditor extends React.Component<Props, null> {
       autoCloseBrackets: true,
       matchBrackets: true,
       showCursorWhenSelecting: true,
+      readOnly: Boolean(this.props.readOnly),
       foldGutter: {
         minFoldSize: 4
       },

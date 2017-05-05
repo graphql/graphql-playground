@@ -327,20 +327,6 @@ export default class Playground extends React.Component<Props,State> {
                 onEditVariables={(variables: string) => this.handleVariableChange(session.id, variables)}
                 onEditQuery={(query: string) => this.handleQueryChange(session.id, query)}
                 responses={this.state.response ? [this.state.response] : undefined}
-                operations={
-                  [
-                    {
-                      name: 'hans',
-                      startLine: 1,
-                      endLine: 5,
-                    },
-                    {
-                      name: 'peta',
-                      startLine: 6,
-                      endLine: 14,
-                    },
-                  ]
-                }
               />
             </div>
           ))}
@@ -390,7 +376,7 @@ export default class Playground extends React.Component<Props,State> {
   }
 
   private handleUserSelection = (user) => {
-    const systemApi = 'https://api.graph.cool/system'
+    const systemApi = this.getSystemEndpoint()
 
     const query = `
       mutation {
@@ -652,6 +638,10 @@ export default class Playground extends React.Component<Props,State> {
     return `${this.state.httpApiPrefix}/relay/v1/${this.props.projectId}`
   }
 
+  private getSystemEndpoint() {
+    return `${this.state.httpApiPrefix}/system`
+  }
+
   private getWSEndpoint() {
     return `${this.state.wsApiPrefix}/${this.props.projectId}`
   }
@@ -698,14 +688,7 @@ export default class Playground extends React.Component<Props,State> {
           this.setValueInSession(session.id, 'subscriptionActive', true)
         }
         const id = this.ws.subscribe(graphQLParams, (err, res) => {
-          const data = {data: res, isSubscription: true}
-          if (err) {
-            console.error(err, res)
-            observer.next(data)
-            observer.unsubscribe()
-            this.setValueInSession(session.id, 'subscriptionActive', false)
-            return
-          }
+          const data = {data: res, error: err, isSubscription: true}
           observer.next(data)
         })
 
