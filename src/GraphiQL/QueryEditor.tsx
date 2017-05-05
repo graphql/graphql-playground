@@ -32,6 +32,8 @@ interface Props {
   onRunQuery?: () => void
   placeholder?: string
   readOnly?: boolean
+  hideLineNumbers?: boolean
+  disableAutofocus?: boolean
 }
 
 export class QueryEditor extends React.Component<Props, null> {
@@ -68,10 +70,10 @@ export class QueryEditor extends React.Component<Props, null> {
     require('codemirror-graphql/mode')
 
     this.editor = CodeMirror(this._node, {
-      autofocus: true,
+      autofocus: !this.props.disableAutofocus,
       placeholder: this.props.placeholder,
       value: this.props.value || '',
-      lineNumbers: true,
+      lineNumbers: !this.props.hideLineNumbers,
       tabSize: 2,
       mode: 'graphql',
       theme: 'graphiql',
@@ -91,7 +93,8 @@ export class QueryEditor extends React.Component<Props, null> {
         closeOnUnfocus: true,
         completeSingle: false,
       },
-      gutters: [ 'CodeMirror-linenumbers', 'CodeMirror-foldgutter' ],
+      gutters: this.props.hideLineNumbers ? ['CodeMirror-foldgutter']
+        : [ 'CodeMirror-linenumbers', 'CodeMirror-foldgutter' ],
       extraKeys: {
         'Cmd-Space': () => this.editor.showHint({ completeSingle: true }),
         'Ctrl-Space': () => this.editor.showHint({ completeSingle: true }),

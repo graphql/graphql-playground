@@ -39,6 +39,7 @@ import ResultHeader from './ResultHeader'
 import {ResultViewer} from './ResultViewer'
 import ageOfDate from './util/ageOfDate'
 import {Response} from '../Playground'
+import SchemaExplorer from './SchemaExplorer'
 
 /**
  * The top-level React component for CustomGraphiQL, intended to encompass the entire
@@ -79,6 +80,9 @@ export interface Props {
   showDocs?: boolean
   rerenderQuery?: boolean
   operations?: OperationDefinition[]
+  showSchema?: boolean
+  schemaIdl?: string
+  schemaModelName?: string
 }
 
 export interface State {
@@ -90,13 +94,15 @@ export interface State {
   editorFlex: number
   variableEditorOpen: boolean
   variableEditorHeight: number
-  doxExploreOpen: boolean
+  docExploreOpen: boolean
   docExplorerWidth: number
   isWaitingForReponse: boolean
   subscription: any
   variableToType: any
   operations: any[]
   docExplorerOpen: boolean
+  schemaExplorerOpen: boolean
+  schemaExplorerWidth: number
   isWaitingForResponse: boolean
 }
 
@@ -196,6 +202,8 @@ export class CustomGraphiQL extends React.Component<Props, State> {
       variableEditorHeight: Number(this._storageGet('variableEditorHeight')) || 200,
       docExplorerOpen: (this._storageGet('docExplorerOpen') === 'true') || false,
       docExplorerWidth: Number(this._storageGet('docExplorerWidth')) || 350,
+      schemaExplorerOpen: false,
+      schemaExplorerWidth: Number(this._storageGet('schemaExplorerWidth')) || 350,
       isWaitingForResponse: false,
       subscription: null,
       ...queryFacts,
@@ -313,6 +321,12 @@ export class CustomGraphiQL extends React.Component<Props, State> {
       // display: this.state.docExplorerOpen ? 'block':'none',
       width: this.state.docExplorerOpen ? this.state.docExplorerWidth : 0,
     }
+
+    const schemaWrapStyle = {
+      height: '100%',
+      // display: this.state.docExplorerOpen ? 'block':'none',
+      width: this.state.schemaExplorerOpen ? this.state.schemaExplorerWidth : 0,
+    }
     const docExplorerWrapClasses = 'docExplorerWrap' +
       (this.state.docExplorerWidth < 200 ? ' doc-explorer-narrow' : '')
 
@@ -330,12 +344,18 @@ export class CustomGraphiQL extends React.Component<Props, State> {
             font-family: Open Sans,sans-serif;
           }
 
-          .docs-button {
+          .docs-button, .schema-button {
             @inherit: .absolute, .white, .bgGreen, .pa6, .br2, .z2, .ttu, .fw6, .f14, .ph10, .pointer;
             padding-bottom: 8px;
             transform: rotate(-90deg);
             left: -44px;
-            top: 180px;
+            top: 195px;
+          }
+
+          div.schema-button {
+            @p: .bgLightOrange;
+            left: -53px;
+            top: 120px;
           }
 
           .queryWrap {
@@ -532,9 +552,31 @@ export class CustomGraphiQL extends React.Component<Props, State> {
               <DocExplorer
                 ref={c => { this.docExplorerComponent = c }}
                 schema={this.state.schema}
-                open={this.state.doxExploreOpen}
+                open={this.state.docExploreOpen}
               >
               </DocExplorer>
+            )}
+          </div>
+        )}
+        {this.props.showSchema && (
+          <div className={docExplorerWrapClasses} style={schemaWrapStyle}>
+            <div
+              className={`schema-button ${!this.state.schemaExplorerOpen && 'inactive'}`}
+              onClick={this.handleToggleSchema}
+            >
+              Schema
+            </div>
+            <div
+              className='docExplorerResizer'
+              onMouseDown={this.handleSchemaResizeStart}
+            />
+            {this.state.schemaExplorerOpen && (
+              <SchemaExplorer
+                ref={c => { this.docExplorerComponent = c }}
+                idl={this.props.schemaIdl}
+                modelName={this.props.schemaModelName}
+              >
+              </SchemaExplorer>
             )}
           </div>
         )}
@@ -892,6 +934,10 @@ export class CustomGraphiQL extends React.Component<Props, State> {
     this.setState({docExplorerOpen: !this.state.docExplorerOpen} as State)
   }
 
+  handleToggleSchema = () => {
+    this.setState({schemaExplorerOpen: !this.state.schemaExplorerOpen} as State)
+  }
+
   handleResizeStart = downEvent => {
     if (!this._didClickDragBar(downEvent)) {
       return
@@ -972,6 +1018,46 @@ export class CustomGraphiQL extends React.Component<Props, State> {
     let onMouseUp: any = () => {
       if (!this.state.docExplorerOpen) {
         this.setState({docExplorerWidth: hadWidth} as State)
+      }
+
+      document.removeEventListener('mousemove', onMouseMove)
+      document.removeEventListener('mouseup', onMouseUp)
+      onMouseMove = null
+      onMouseUp = null
+    }
+
+    document.addEventListener('mousemove', onMouseMove)
+    document.addEventListener('mouseup', onMouseUp)
+  }
+
+  handleSchemaResizeStart = downEvent => {
+    downEvent.preventDefault()
+
+    const hadWidth = this.state.schemaExplorerWidth
+    const offset = downEvent.clientX - getLeft(downEvent.target)
+
+    let onMouseMove: any = moveEvent => {
+      if (moveEvent.buttons === 0) {
+        return onMouseUp()
+      }
+
+      const app = ReactDOM.findDOMNode(this)
+      const cursorPos = moveEvent.clientX - getLeft(app) - offset
+      const schemaSize = app.clientWidth - cursorPos
+
+      if (schemaSize < 100) {
+        this.setState({schemaExplorerOpen: false} as State)
+      } else {
+        this.setState({
+          schemaExplorerOpen: true,
+          schemaExplorerWidth: Math.min(schemaSize, 850),
+        } as State)
+      }
+    }
+
+    let onMouseUp: any = () => {
+      if (!this.state.schemaExplorerOpen) {
+        this.setState({schemaExplorerWidth: hadWidth} as State)
       }
 
       document.removeEventListener('mousemove', onMouseMove)
