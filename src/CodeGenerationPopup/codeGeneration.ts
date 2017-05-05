@@ -32,15 +32,12 @@ export class CodeGenerator {
     if (this.client === 'lokka') {
 
       return `
+const headers = {
+  Authorization: 'Bearer YOUR_AUTH_TOKEN'
+}
+
 const client = new Lokka({
-  transport: new Transport(
-    '${this.endpointUrl}',
-    // headers: {
-    //   {
-    //     Authorization: 'Bearer YOUR_AUTH_TOKEN',
-    //   }
-    // },
-   )
+  transport: new Transport('${this.endpointUrl}', {headers})
 });
 `
     }

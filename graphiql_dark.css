@@ -635,6 +635,11 @@ div.CodeMirror-lint-message-error, div.CodeMirror-lint-message-warning {
     color: rgb(249,233,34);
 }
 
+/* Comma */
+.cm-ws {
+  color: rgba(255,255,255,.4);
+}
+
 /* PADDING */
 
 .CodeMirror-lines {

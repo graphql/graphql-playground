@@ -25,7 +25,7 @@ export interface QueryTypes {
   subscription: boolean
   query: boolean
   mutation: boolean
-  operations: OperationDefinition[]
+  // operations: OperationDefinition[]
 }
 
 export interface OperationDefinition {

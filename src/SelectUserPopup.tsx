@@ -238,6 +238,7 @@ export default class SelectUserPopup extends React.Component<Props, State> {
     })
       .then(res => res.json())
       .then(res => {
+        console.log(res)
         const {_allUsersMeta, allUsers} = res.data
 
         let {users} = this.state
