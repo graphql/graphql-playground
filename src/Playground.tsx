@@ -53,6 +53,7 @@ export interface State {
   userFields: string[]
   selectUserSessionId?: string
   codeGenerationPopupOpen: boolean
+  disableQueryHeader: boolean
 }
 
 export interface SchemaCache {
@@ -109,6 +110,7 @@ export default class Playground extends React.Component<Props,State> {
       selectUserOpen: false,
       selectUserSessionId: undefined,
       codeGenerationPopupOpen: false,
+      disableQueryHeader: true,
     }
 
     if (typeof window === 'object') {
@@ -149,6 +151,9 @@ export default class Playground extends React.Component<Props,State> {
         selectedSessionIndex: this.initialIndex,
       } as State)
     }
+    setTimeout(() => {
+      this.setState({disableQueryHeader: false} as State)
+    }, 2000)
   }
   componentWillReceiveProps(nextProps) {
     if (nextProps.projectId !== this.props.projectId || nextProps.adminAuthToken !== this.props.adminAuthToken) {
@@ -327,6 +332,8 @@ export default class Playground extends React.Component<Props,State> {
                 onEditVariables={(variables: string) => this.handleVariableChange(session.id, variables)}
                 onEditQuery={(query: string) => this.handleQueryChange(session.id, query)}
                 responses={this.state.response ? [this.state.response] : undefined}
+                disableQueryHeader={this.state.disableQueryHeader}
+                disableResize
               />
             </div>
           ))}

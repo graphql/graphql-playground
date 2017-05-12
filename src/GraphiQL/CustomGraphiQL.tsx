@@ -40,6 +40,7 @@ import {ResultViewer} from './ResultViewer'
 import ageOfDate from './util/ageOfDate'
 import {Response} from '../Playground'
 import SchemaExplorer from './SchemaExplorer'
+const CSSTransitionGroup = require('react-transition-group/CSSTransitionGroup')
 
 /**
  * The top-level React component for CustomGraphiQL, intended to encompass the entire
@@ -83,6 +84,8 @@ export interface Props {
   showSchema?: boolean
   schemaIdl?: string
   schemaModelName?: string
+  disableAutofocus?: boolean
+  disableResize?: boolean
 }
 
 export interface State {
@@ -337,6 +340,8 @@ export class CustomGraphiQL extends React.Component<Props, State> {
 
     const subscriptionResponse = this.state.responses.length > 1
 
+    console.log('csstransitiongroup', CSSTransitionGroup)
+
     return (
       <div className='graphiql-container'>
         <style jsx>{`
@@ -397,6 +402,10 @@ export class CustomGraphiQL extends React.Component<Props, State> {
             @inherit: .bgDarkBlue, .nosb;
           }
 
+          .result-window.disableResize :global(.CodeMirror-gutters) {
+            cursor: default !important;
+          }
+
           .subscription-time {
             @inherit: .relative;
             height: 17px;
@@ -429,21 +438,46 @@ export class CustomGraphiQL extends React.Component<Props, State> {
             padding-bottom: 30px;
           }
         `}</style>
+        <style jsx global>{`
+          .query-header-enter {
+            opacity: 0.01;
+          }
+
+          .query-header-enter.query-header-enter-active {
+            opacity: 1;
+            transition: opacity 500ms ease-in;
+          }
+
+          .query-header-leave {
+            opacity: 1;
+          }
+
+          .query-header-leave.query-header-leave-active {
+            opacity: 0.01;
+            transition: opacity 300ms ease-in;
+          }
+        `}</style>
         <div className='editorWrap'>
           <div
             ref={n => { this.editorBarComponent = n }}
             className='editorBar'
             onMouseDown={this.handleResizeStart}>
             <div className='queryWrap' style={queryWrapStyle}>
-              {!this.props.disableQueryHeader && (
-                <QueryHeader
-                  selectedEndpoint={this.props.selectedEndpoint}
-                  onChangeEndpoint={this.props.onChangeEndpoint}
-                  onPrettify={this.handlePrettifyQuery}
-                  showEndpoints={this.props.showEndpoints}
-                  showQueryTitle={this.props.showQueryTitle}
-                />
-              )}
+              <CSSTransitionGroup
+                transitionName='query-header'
+                transitionEnterTimeout={500}
+                transitionLeaveTimeout={300}
+              >
+                {!this.props.disableQueryHeader && (
+                  <QueryHeader
+                    selectedEndpoint={this.props.selectedEndpoint}
+                    onChangeEndpoint={this.props.onChangeEndpoint}
+                    onPrettify={this.handlePrettifyQuery}
+                    showEndpoints={this.props.showEndpoints}
+                    showQueryTitle={this.props.showQueryTitle}
+                  />
+                )}
+              </CSSTransitionGroup>
               <QueryEditor
                 ref={n => { this.queryEditorComponent = n }}
                 schema={this.state.schema}
@@ -451,6 +485,7 @@ export class CustomGraphiQL extends React.Component<Props, State> {
                 onEdit={this.handleEditQuery}
                 onHintInformationRender={this.handleHintInformationRender}
                 onRunQuery={this.handleEditorRunQuery}
+                disableAutofocus={this.props.disableAutofocus}
               />
               <div className='variable-editor' style={variableStyle}>
                 {this.props.showCodeGeneration && (
@@ -479,13 +514,13 @@ export class CustomGraphiQL extends React.Component<Props, State> {
             </div>
             {!this.props.queryOnly && (
               <div className='resultWrap'>
-                <ResultHeader
-                  showViewAs={this.props.showViewAs}
-                  showSelectUser={this.props.showSelectUser}
-                  selectedViewer={this.props.selectedViewer}
-                  onChangeViewer={this.props.onChangeViewer}
-                  showResponseTitle={this.props.showResponseTitle}
-                />
+                  <ResultHeader
+                    showViewAs={this.props.showViewAs}
+                    showSelectUser={this.props.showSelectUser}
+                    selectedViewer={this.props.selectedViewer}
+                    onChangeViewer={this.props.onChangeViewer}
+                    showResponseTitle={this.props.showResponseTitle}
+                  />
                 <ExecuteButton
                   isRunning={Boolean(this.state.subscription)}
                   onRun={this.handleRunQuery}
@@ -500,7 +535,7 @@ export class CustomGraphiQL extends React.Component<Props, State> {
                 }
 
                 <div
-                  className='result-window'
+                  className={'result-window' + (this.props.disableResize ? ' disableResize' : '')}
                   ref={c => { this.resultComponent = c }}
                 >
                   {this.state.responses.filter(res => res && res.date).map((response, index) => (
@@ -939,6 +974,9 @@ export class CustomGraphiQL extends React.Component<Props, State> {
   }
 
   handleResizeStart = downEvent => {
+    if (this.props.disableResize) {
+      return
+    }
     if (!this._didClickDragBar(downEvent)) {
       return
     }
