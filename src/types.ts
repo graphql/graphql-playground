@@ -18,6 +18,7 @@ export interface Session {
   starred?: boolean
   date: Date
   selectedUserToken?: string
+  subscriptionId?: string
 }
 
 export interface QueryTypes {

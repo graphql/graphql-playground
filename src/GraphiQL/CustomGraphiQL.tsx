@@ -13,6 +13,7 @@ import {
   parse,
   print,
 } from 'graphql'
+import * as cn from 'classnames'
 
 import {GraphQLSchema} from 'graphql/type/schema'
 
@@ -86,6 +87,12 @@ export interface Props {
   schemaModelName?: string
   disableAutofocus?: boolean
   disableResize?: boolean
+
+  onboardingStep?: any
+  tether?: any
+  nextStep?: () => void
+  autofillMutation?: () => void
+  disableAnimation?: boolean
 }
 
 export interface State {
@@ -340,7 +347,7 @@ export class CustomGraphiQL extends React.Component<Props, State> {
 
     const subscriptionResponse = this.state.responses.length > 1
 
-    console.log('csstransitiongroup', CSSTransitionGroup)
+    const Tether = this.props.tether
 
     return (
       <div className='graphiql-container'>
@@ -364,6 +371,7 @@ export class CustomGraphiQL extends React.Component<Props, State> {
           }
 
           .queryWrap {
+            @p: .relative;
             border-top: 8px solid $darkBlue;
           }
 
@@ -437,6 +445,18 @@ export class CustomGraphiQL extends React.Component<Props, State> {
             padding-left: 24px;
             padding-bottom: 30px;
           }
+
+          .onboarding-hint {
+            @p: .absolute, .br2, .z999;
+          }
+          .onboarding-hint.step1 {
+            top: 207px;
+            left: 90px;
+          }
+          .onboarding-hint.step2 {
+            top: 207px;
+            left: 90px;
+          }
         `}</style>
         <style jsx global>{`
           .query-header-enter {
@@ -463,11 +483,20 @@ export class CustomGraphiQL extends React.Component<Props, State> {
             className='editorBar'
             onMouseDown={this.handleResizeStart}>
             <div className='queryWrap' style={queryWrapStyle}>
-              <CSSTransitionGroup
-                transitionName='query-header'
-                transitionEnterTimeout={500}
-                transitionLeaveTimeout={300}
-              >
+              {this.props.disableAnimation ? (
+                <QueryHeader
+                  selectedEndpoint={this.props.selectedEndpoint}
+                  onChangeEndpoint={this.props.onChangeEndpoint}
+                  onPrettify={this.handlePrettifyQuery}
+                  showEndpoints={this.props.showEndpoints}
+                  showQueryTitle={this.props.showQueryTitle}
+                />
+              ) : (
+                <CSSTransitionGroup
+                  transitionName='query-header'
+                  transitionEnterTimeout={500}
+                  transitionLeaveTimeout={300}
+                >
                 {!this.props.disableQueryHeader && (
                   <QueryHeader
                     selectedEndpoint={this.props.selectedEndpoint}
@@ -477,7 +506,8 @@ export class CustomGraphiQL extends React.Component<Props, State> {
                     showQueryTitle={this.props.showQueryTitle}
                   />
                 )}
-              </CSSTransitionGroup>
+                </CSSTransitionGroup>
+              )}
               <QueryEditor
                 ref={n => { this.queryEditorComponent = n }}
                 schema={this.state.schema}
@@ -511,6 +541,45 @@ export class CustomGraphiQL extends React.Component<Props, State> {
                   onRunQuery={this.handleEditorRunQuery}
                 />
               </div>
+              {
+                ['STEP3_UNCOMMENT_DESCRIPTION',
+                 'STEP3_ENTER_MUTATION1_VALUES',
+                 'STEP3_ENTER_MUTATION2_VALUE'].indexOf(this.props.onboardingStep || '') > -1 && (
+                  <Tether
+                    steps={[
+                      {
+                        step: 'STEP3_UNCOMMENT_DESCRIPTION',
+                        title: 'Uncomment the description',
+                        description: 'To add the description to the query, just remove the #',
+                      },
+                      {
+                        step: 'STEP3_ENTER_MUTATION1_VALUES',
+                        title: 'This is a mutation',
+                        description: 'Enter data for the imageUrl and the description',
+                        buttonText: 'Autofill Data',
+                      },
+                      {
+                        step: 'STEP3_ENTER_MUTATION2_VALUE',
+                        title: 'Lets add some more data',
+                        description: 'Enter data for the imageUrl and the description',
+                        buttonText: 'Autofill Data',
+                      },
+                    ]}
+                    onClick={() => {
+                      if (this.props.onboardingStep.startsWith('STEP3_ENTER_MUTATION')
+                        && typeof this.props.autofillMutation === 'function') {
+                        this.props.autofillMutation()
+                      }
+                    }}
+                  >
+                    <div className={cn('onboarding-hint', {
+                      'step1': this.props.onboardingStep === 'STEP3_UNCOMMENT_DESCRIPTION',
+                      'step2': this.props.onboardingStep === 'STEP3_ENTER_MUTATION1_VALUES'
+                      || this.props.onboardingStep === 'STEP3_ENTER_MUTATION2_VALUE',
+                    })}>
+                    </div>
+                  </Tether>
+              )}
             </div>
             {!this.props.queryOnly && (
               <div className='resultWrap'>
@@ -521,12 +590,48 @@ export class CustomGraphiQL extends React.Component<Props, State> {
                     onChangeViewer={this.props.onChangeViewer}
                     showResponseTitle={this.props.showResponseTitle}
                   />
-                <ExecuteButton
-                  isRunning={Boolean(this.state.subscription)}
-                  onRun={this.handleRunQuery}
-                  onStop={this.handleStopQuery}
-                  operations={this.state.operations}
-                />
+                {this.props.tether ? (
+                  <Tether
+                    offsetX={18}
+                    offsetY={25}
+                    steps={[
+                      {
+                        step: 'STEP3_RUN_QUERY1',
+                        title: 'Execute your first query',
+                        description: 'You just wrote your first GraphQL Query! Click here to execute it.',
+                      },
+                      {
+                        step: 'STEP3_RUN_MUTATION1',
+                        title: 'Run your first mutation',
+                        description: 'Awesome! You just wrote your first GraphQL Mutation. Click here to execute it',
+                      },
+                      {
+                        step: 'STEP3_RUN_MUTATION2',
+                        title: 'Lets add more data',
+                      },
+                      {
+                        step: 'STEP3_RUN_QUERY2',
+                        title: 'Let\'s see how the data changed',
+                        description: 'After adding data with the mutations, lets' +
+                        ' see how the result of the query changes',
+                      },
+                    ]}
+                  >
+                    <ExecuteButton
+                      isRunning={Boolean(this.state.subscription)}
+                      onRun={this.handleRunQuery}
+                      onStop={this.handleStopQuery}
+                      operations={this.state.operations}
+                    />
+                  </Tether>
+                ) : (
+                  <ExecuteButton
+                    isRunning={Boolean(this.state.subscription)}
+                    onRun={this.handleRunQuery}
+                    onStop={this.handleStopQuery}
+                    operations={this.state.operations}
+                  />
+                )}
                 {
                   this.state.isWaitingForResponse &&
                   <div className='spinner-container'>

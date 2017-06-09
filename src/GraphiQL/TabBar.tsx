@@ -9,6 +9,9 @@ export interface Props {
   onCloseSession: (session: Session) => void
   onOpenHistory: Function
   onSelectSession: (session: Session) => void
+  onboardingStep?: string
+  tether?: any
+  nextStep?: () => void
 }
 
 export const TabBar = ({
@@ -18,9 +21,15 @@ export const TabBar = ({
   onSelectSession,
   onOpenHistory,
   onCloseSession,
-}: Props) => (
-  <div className='root'>
-    <style jsx>{`
+  onboardingStep,
+  tether,
+  nextStep,
+}: Props) => {
+  const Tether = tether
+
+  return (
+    <div className='root'>
+      <style jsx>{`
       .root {
         @inherit: .white, .z4;
         height: 57px;
@@ -109,101 +118,141 @@ export const TabBar = ({
         @inherit: .pointer;
       }
     `}</style>
-    <div className='tabs'>
-      <div
-        className='history'
-      >
-        <Icon
-          className='icon'
-          src={require('graphcool-styles/icons/stroke/history.svg')}
-          stroke={true}
-          strokeWidth={3}
-          width={25}
-          height={25}
-          color={$v.white40}
-          onClick={onOpenHistory}
-        />
-      </div>
-      {sessions.map((session, index) => {
-        const {queryTypes} = session
-        return (
-          <div
-            key={session.id}
-            className={`tab ${index === selectedSessionIndex && 'active'}`}
-            onClick={() => onSelectSession(session)}
-          >
-            <div className={`icons ${index === selectedSessionIndex && 'active'}`}>
-              {session.subscriptionActive && (
-                <div className='red-dot'></div>
-              )}
-              <div className='query-types'>
-                {queryTypes.query && (
-                  <div className='query-type query'>Q</div>
+      <div className='tabs'>
+        <div
+          className='history'
+        >
+          <Icon
+            className='icon'
+            src={require('graphcool-styles/icons/stroke/history.svg')}
+            stroke={true}
+            strokeWidth={3}
+            width={25}
+            height={25}
+            color={$v.white40}
+            onClick={onOpenHistory}
+          />
+        </div>
+        {sessions.map((session, index) => {
+          const {queryTypes} = session
+          return (
+            <div
+              key={session.id}
+              className={`tab ${index === selectedSessionIndex && 'active'}`}
+              onClick={() => onSelectSession(session)}
+            >
+              <div className={`icons ${index === selectedSessionIndex && 'active'}`}>
+                {session.subscriptionActive && (
+                  <div className='red-dot'></div>
                 )}
-                {queryTypes.mutation && (
-                  <div className='query-type mutation'>M</div>
-                )}
-                {queryTypes.subscription && (
-                  <div className='query-type subscription'>S</div>
-                )}
-              </div>
-              {session.selectedViewer !== 'ADMIN' && (
-                <div className='viewer'>
-                  {session.selectedViewer === 'EVERYONE' && (
-                    <Icon
-                      src={require('graphcool-styles/icons/fill/world.svg')}
-                      color={$v.white40}
-                      width={14}
-                      height={14}
-                    />
+                <div className='query-types'>
+                  {queryTypes.query && (
+                    <div className='query-type query'>Q</div>
                   )}
-                  {session.selectedViewer === 'USER' && (
-                    <Icon
-                      src={require('graphcool-styles/icons/fill/user.svg')}
-                      color={$v.white40}
-                      width={14}
-                      height={14}
-                    />
+                  {queryTypes.mutation && (
+                    <div className='query-type mutation'>M</div>
+                  )}
+                  {queryTypes.subscription && (
+                    <div className='query-type subscription'>S</div>
                   )}
                 </div>
+                {session.selectedViewer !== 'ADMIN' && (
+                  <div className='viewer'>
+                    {session.selectedViewer === 'EVERYONE' && (
+                      <Icon
+                        src={require('graphcool-styles/icons/fill/world.svg')}
+                        color={$v.white40}
+                        width={14}
+                        height={14}
+                      />
+                    )}
+                    {session.selectedViewer === 'USER' && (
+                      <Icon
+                        src={require('graphcool-styles/icons/fill/user.svg')}
+                        color={$v.white40}
+                        width={14}
+                        height={14}
+                      />
+                    )}
+                  </div>
+                )}
+              </div>
+              {tether && onboardingStep === 'STEP3_SELECT_QUERY_TAB' && index === 0 ? (
+                <Tether
+                  steps={[{
+                    step: 'STEP3_SELECT_QUERY_TAB',
+                    title: 'Back to the query',
+                    description: 'After creating the data with our mutations, let\'s see what we got'
+                  }]}
+                >
+                  <div className={`operation-name ${index === selectedSessionIndex && 'active'}`}>
+                    {session.operationName || queryTypes.firstOperationName || 'New Session'}
+                  </div>
+                </Tether>
+              ) : (
+                <div className={`operation-name ${index === selectedSessionIndex && 'active'}`}>
+                  {session.operationName || queryTypes.firstOperationName || 'New Session'}
+                </div>
               )}
+              <div
+                className={`close ${index === selectedSessionIndex && 'active'}`}
+                onClick={(e: any) => {
+                  // we don't want selectIndex to be executed
+                  e.stopPropagation()
+                  onCloseSession(session)
+                }}
+              >
+                <Icon
+                  src={require('graphcool-styles/icons/stroke/cross.svg')}
+                  stroke={true}
+                  color={$v.white40}
+                  width={11}
+                  height={10}
+                  strokeWidth={8}
+                />
+              </div>
             </div>
-            <div className={`operation-name ${index === selectedSessionIndex && 'active'}`}>
-              {session.operationName || queryTypes.firstOperationName || 'New Session'}
-            </div>
+          )
+        })}
+        {tether && onboardingStep === 'STEP3_CREATE_MUTATION_TAB' ? (
+          <Tether
+            offsetY={-7}
+            steps={[{
+              step: 'STEP3_CREATE_MUTATION_TAB',
+              title: 'Apparently, there is no data yet',
+              description: 'Click here to create new data',
+            }]}
+          >
             <div
-              className={`close ${index === selectedSessionIndex && 'active'}`}
-              onClick={(e: any) => {
-              // we don't want selectIndex to be executed
-              e.stopPropagation()
-              onCloseSession(session)
-            }}
+              className='tab plus'
+              onClick={onNewSession}
             >
               <Icon
-                src={require('graphcool-styles/icons/stroke/cross.svg')}
+                src={require('graphcool-styles/icons/stroke/add.svg')}
+                color='rgba(255,255,255,.15)'
+                width={34}
+                height={34}
                 stroke={true}
-                color={$v.white40}
-                width={11}
-                height={10}
-                strokeWidth={8}
+                strokeWidth={4}
               />
             </div>
+          </Tether>
+        ) : (
+          <div
+            className='tab plus'
+            onClick={onNewSession}
+          >
+            <Icon
+              src={require('graphcool-styles/icons/stroke/add.svg')}
+              color='rgba(255,255,255,.15)'
+              width={34}
+              height={34}
+              stroke={true}
+              strokeWidth={4}
+            />
           </div>
-        )
-      })}
-      <div
-        className='tab plus'
-        onClick={onNewSession}
-      >
-        <Icon
-          src={require('graphcool-styles/icons/stroke/add.svg')}
-          color='rgba(255,255,255,.15)'
-          width={34}
-          height={34}
-          stroke={true}
-          strokeWidth={4}
-        />
+        )}
       </div>
     </div>
-  </div>
-)
+  )
+}

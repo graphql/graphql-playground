@@ -9,7 +9,6 @@ export default class PlaygroundStorage {
     this.projectId = projectId
 
     this.project = this.getProject()
-    console.log(this.project)
     this.executedQueryCount = this.getExecutedQueryCount()
 
     if (!this.project) {

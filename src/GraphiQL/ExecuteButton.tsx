@@ -104,7 +104,7 @@ export class ExecuteButton extends React.Component<Props, State> {
             @inherit: .bgrRed;
           }
         `}</style>
-        <button
+        <div
           className={cx('graphcool-execute-button', {
             'running': this.props.isRunning,
           })}
@@ -112,7 +112,7 @@ export class ExecuteButton extends React.Component<Props, State> {
           onClick={onClick}
           title='Execute Query (Ctrl-Enter)'>
           <svg width='35' height='35' viewBox={`${this.props.isRunning ? 4 : 3}.5,4.5,24,24`}>{pathJSX}</svg>
-        </button>
+        </div>
         {options}
       </div>
     )

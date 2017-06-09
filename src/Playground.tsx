@@ -21,6 +21,10 @@ import SelectUserPopup from './SelectUserPopup'
 import calc from 'calculate-size'
 import {CodeGenerationPopup} from './CodeGenerationPopup/CodeGenerationPopup'
 import {GraphQLObjectType, GraphQLList} from 'graphql'
+import {
+  onboardingEmptyMutation, onboardingFilledMutation1, onboardingFilledMutation2, onboardingQuery1,
+  onboardingQuery1Check
+} from './data'
 
 export type Endpoint = 'SIMPLE' | 'RELAY'
 export type Viewer = 'ADMIN' | 'EVERYONE' | 'USER'
@@ -36,6 +40,9 @@ export interface Props {
   wsApiPrefix?: string
   onSuccess?: Function
   isEndpoint?: boolean
+  onboardingStep?: string
+  tether?: any
+  nextStep?: () => void
 }
 
 export interface State {
@@ -61,6 +68,11 @@ export interface SchemaCache {
   RELAY: any
 }
 
+export interface CursorPosition {
+  line: number
+  ch: number
+}
+
 const httpApiPrefix = 'https://api.graph.cool'
 const wsApiPrefix = 'wss://dev.subscriptions.graph.cool/v1'
 
@@ -70,7 +82,9 @@ export {
 
 export default class Playground extends React.Component<Props,State> {
   storage: PlaygroundStorage
-  ws: any
+  wsConnections: {[sessionId: string]: any} = {}
+  observers: {[sessionId: string]: any} = {}
+  graphiqlComponents: any[] = []
   private initialIndex: number = -1
 
   private updateQueryTypes = debounce(150, (sessionId: string, query: string) => {
@@ -81,13 +95,46 @@ export default class Playground extends React.Component<Props,State> {
   private handleQueryChange = debounce(300, (sessionId: string, query: string) => {
     this.setValueInSession(sessionId, 'query', query)
     this.updateQueryTypes(sessionId, query)
+    if (this.props.onboardingStep === 'STEP3_UNCOMMENT_DESCRIPTION' && this.state.selectedSessionIndex === 0) {
+      const trimmedQuery = query.replace(/\s/g, '').replace(',', '')
+      if (trimmedQuery === onboardingQuery1Check && typeof this.props.nextStep === 'function') {
+        this.props.nextStep()
+      }
+    }
+
+    if (
+      (this.props.onboardingStep === 'STEP3_ENTER_MUTATION1_VALUES'
+      || this.props.onboardingStep === 'STEP3_ENTER_MUTATION2_VALUE')
+      && this.state.selectedSessionIndex === 1) {
+      const trimmedTemplate = onboardingEmptyMutation.replace(/\s/g, '')
+      const trimmedQuery = query.replace(/\s/g, '').replace(',', '')
+      if (trimmedQuery !== trimmedTemplate && typeof this.props.nextStep === 'function') {
+        this.props.nextStep()
+      }
+    }
   })
+
+  private autofillMutation = () => {
+    const sessionId = this.state.sessions[this.state.selectedSessionIndex].id
+    console.log('trying to autofill mutation', sessionId)
+    if (this.props.onboardingStep === 'STEP3_ENTER_MUTATION1_VALUES') {
+      console.log('GOING FOR 1')
+      this.setValueInSession(sessionId, 'query', onboardingFilledMutation1)
+    } else if (this.props.onboardingStep === 'STEP3_ENTER_MUTATION2_VALUE') {
+      console.log('GOING FOR 2')
+      this.setValueInSession(sessionId, 'query', onboardingFilledMutation2)
+    }
+    if (typeof this.props.nextStep === 'function') {
+      this.props.nextStep()
+    }
+  }
 
   constructor(props) {
     super(props)
     this.storage = new PlaygroundStorage(props.projectId)
 
     const sessions = this.initSessions()
+
 
     const selectedSessionIndex = (parseInt(this.storage.getItem('selectedSessionIndex'), 10) || 0)
     this.state = {
@@ -110,7 +157,7 @@ export default class Playground extends React.Component<Props,State> {
       selectUserOpen: false,
       selectUserSessionId: undefined,
       codeGenerationPopupOpen: false,
-      disableQueryHeader: true,
+      disableQueryHeader: false,
     }
 
     if (typeof window === 'object') {
@@ -120,15 +167,24 @@ export default class Playground extends React.Component<Props,State> {
     }
     global['p'] = this
   }
-  setWS() {
+  setWS = (session: Session) => {
+    console.log('calling setWS')
     let connectionParams = {}
-    if (this.props.adminAuthToken) {
-      connectionParams['Authorization'] = `Bearer ${this.props.adminAuthToken}`
+
+    if (session.selectedViewer === 'ADMIN' && this.state.adminAuthToken) {
+      connectionParams['Authorization'] = `Bearer ${this.state.adminAuthToken}`
+      console.log('setWS: going for admin')
+    } else if (session.selectedViewer === 'USER' && session.selectedUserToken) {
+      connectionParams['Authorization'] = `Bearer ${session.selectedUserToken}`
+      console.log('setWS: going for user')
+    } else {
+      console.log('going for everyone')
     }
-    if (this.ws) {
-      this.ws.unsubscribeAll()
+
+    if (this.wsConnections[session.id]) {
+      this.wsConnections[session.id].unsubscribeAll()
     }
-    this.ws = new SubscriptionClient(this.getWSEndpoint(), {
+    this.wsConnections[session.id] = new SubscriptionClient(this.getWSEndpoint(), {
       timeout: 5000,
       connectionParams,
     })
@@ -145,19 +201,26 @@ export default class Playground extends React.Component<Props,State> {
     this.storage.saveProject()
   }
   componentDidMount() {
-    this.setWS()
     if (this.initialIndex > -1) {
       this.setState({
         selectedSessionIndex: this.initialIndex,
       } as State)
     }
-    setTimeout(() => {
-      this.setState({disableQueryHeader: false} as State)
-    }, 2000)
+    if (['STEP3_UNCOMMENT_DESCRIPTION', 'STEP3_OPEN_PLAYGROUND'].indexOf(this.props.onboardingStep || '') > -1) {
+      this.setCursor({line: 3, ch: 6})
+    }
+    this.initWebsockets()
+  }
+  initWebsockets() {
+    this.state.sessions.forEach(session => this.setWS(session))
+  }
+  setCursor(position: CursorPosition) {
+    const editor = this.graphiqlComponents[this.state.selectedSessionIndex].queryEditorComponent.editor
+    editor.setCursor(position)
   }
   componentWillReceiveProps(nextProps) {
     if (nextProps.projectId !== this.props.projectId || nextProps.adminAuthToken !== this.props.adminAuthToken) {
-      this.setWS()
+      this.resetSubscriptions()
       this.fetchSchemas()
     }
   }
@@ -293,6 +356,9 @@ export default class Playground extends React.Component<Props,State> {
           onCloseSession={this.handleCloseSession}
           onOpenHistory={this.handleOpenHistory}
           onSelectSession={this.handleSelectSession}
+          onboardingStep={this.props.onboardingStep}
+          nextStep={this.props.nextStep}
+          tether={this.props.tether}
         />
         <div className='graphiqls-container docs-graphiql'>
           {sessions.map((session, index) => (
@@ -334,6 +400,16 @@ export default class Playground extends React.Component<Props,State> {
                 responses={this.state.response ? [this.state.response] : undefined}
                 disableQueryHeader={this.state.disableQueryHeader}
                 disableResize
+                onboardingStep={index === selectedSessionIndex ? this.props.onboardingStep : undefined}
+                tether={this.props.tether}
+                nextStep={this.props.nextStep}
+                ref={ref => this.graphiqlComponents[index] = ref}
+                autofillMutation={this.autofillMutation}
+                rerenderQuery={
+                  this.props.onboardingStep === 'STEP3_ENTER_MUTATION1_VALUES' ||
+                  this.props.onboardingStep === 'STEP3_ENTER_MUTATION2_VALUE'
+                }
+                disableAnimation
               />
             </div>
           ))}
@@ -411,9 +487,30 @@ export default class Playground extends React.Component<Props,State> {
         const {token} = res.data.signinClientUser
 
         if (token && this.state.selectUserSessionId) {
-          this.setValueInSession(this.state.selectUserSessionId, 'selectedUserToken', token)
+          this.setValueInSession(
+            this.state.selectUserSessionId,
+            'selectedUserToken',
+            token,
+            () => {
+              const session = this.state.sessions[this.state.selectedSessionIndex]
+              this.resetSubscription(session)
+            },
+          )
         }
       })
+  }
+
+  private resetSubscriptions() {
+    this.state.sessions.forEach(session => this.resetSubscription(session))
+  }
+
+  private resetSubscription(session: Session) {
+    if (this.observers[session.id]) {
+      this.observers[session.id].complete()
+      delete this.observers[session.id]
+    }
+    this.cancelSubscription(session)
+    this.setWS(session)
   }
 
   private getUrlSession(sessions) {
@@ -486,15 +583,25 @@ export default class Playground extends React.Component<Props,State> {
     this.setState(state => {
       const i = state.sessions.findIndex(s => s.id === session.id)
 
+      if (this.props.onboardingStep === 'STEP3_SELECT_QUERY_TAB'
+        && i === 0
+        && typeof this.props.nextStep === 'function') {
+        this.props.nextStep()
+      }
       return {
         ...state,
         selectedSessionIndex: i,
       }
     })
+
   }
 
   private initSessions = () => {
-    const sessions = this.storage.getSessions()
+    if (['STEP3_UNCOMMENT_DESCRIPTION', 'STEP3_OPEN_PLAYGROUND'].indexOf(this.props.onboardingStep || '') > -1) {
+      return this.initOnboardingSessions()
+    }
+    // defaulting to admin for deserialized sessions
+    const sessions = this.storage.getSessions()//.map(session => Immutable.set(session, 'selectedViewer', 'ADMIN'))
 
     const urlSession = this.getUrlSession(sessions)
 
@@ -512,6 +619,15 @@ export default class Playground extends React.Component<Props,State> {
     return [this.createSession()]
   }
 
+  private initOnboardingSessions() {
+    const session = this.createSession()
+
+    return [{
+      ...session,
+      query: onboardingQuery1,
+    }]
+  }
+
   private saveSessions = () => {
     this.state.sessions.forEach(session => this.storage.saveSession(
       Immutable.set(session, 'subscriptionActive', false), false,
@@ -523,7 +639,19 @@ export default class Playground extends React.Component<Props,State> {
   }
 
   private handleNewSession = (newIndexZero: boolean = false) => {
-    const session = this.createSession()
+    let session = this.createSession()
+    if (this.props.onboardingStep === 'STEP3_CREATE_MUTATION_TAB') {
+      session = Immutable.set(session, 'query', onboardingEmptyMutation)
+      setTimeout(() => {
+        this.setCursor({
+          line: 2,
+          ch: 15,
+        })
+      }, 5)
+      if (typeof this.props.nextStep === 'function') {
+        this.props.nextStep()
+      }
+    }
     this.setState(state => {
       return {
         ...state,
@@ -578,20 +706,28 @@ export default class Playground extends React.Component<Props,State> {
   }
 
   private handleViewerChange = (sessionId: string, viewer: Viewer) => {
-    this.setValueInSession(sessionId, 'selectedViewer', viewer)
+    this.setValueInSession(sessionId, 'selectedViewer', viewer, () => {
+      if (viewer === 'USER') {
+        // give the user some time to realize whats going on
+        setTimeout(
+          () => {
+            this.setState({
+              selectUserOpen: true,
+              selectUserSessionId: sessionId,
+            } as State)
+          },
+          300,
+        )
+      }
 
-    if (viewer === 'USER') {
-      // give the user some time to realize whats going on
-      setTimeout(
-        () => {
-          this.setState({
-            selectUserOpen: true,
-            selectUserSessionId: sessionId,
-          } as State)
-        },
-        300,
-      )
-    }
+      const session = this.state.sessions.find(session => session.id === sessionId)
+
+      if (session) {
+        this.resetSubscription(session)
+      } else {
+        throw new Error('session not found for viewer change')
+      }
+    })
   }
 
   private handleCloseSelectUser = () => {
@@ -623,13 +759,17 @@ export default class Playground extends React.Component<Props,State> {
     })
   }
 
-  private setValueInSession(sessionId: string, key: string, value: any) {
+  private setValueInSession(sessionId: string, key: string, value: any, cb?: () => void) {
     this.setState(state => {
       // TODO optimize the lookup with a lookup table
       const i = state.sessions.findIndex(s => s.id === sessionId)
       return {
         ...state,
         sessions: Immutable.setIn(state.sessions, [i, key], value),
+      }
+    }, () => {
+      if (typeof cb === 'function') {
+        cb()
       }
     })
   }
@@ -680,30 +820,60 @@ export default class Playground extends React.Component<Props,State> {
     return Boolean(duplicate)
   }
 
+  private cancelSubscription = (session: Session) => {
+    this.setValueInSession(session.id, 'subscriptionActive', false)
+    if (session.subscriptionId) {
+      this.wsConnections[session.id].unsubscribe(session.subscriptionId)
+      this.setValueInSession(session.id, 'subscriptionId', null)
+    }
+  }
+
   private fetcher = (session: Session) => ((graphQLParams) => {
     const {query, operationName} = graphQLParams
 
-    if (!query.includes('IntrospectionQuery') && !this.historyIncludes(session)) {
-      setImmediate(() => {
-        this.addToHistory(session)
-      })
-    }
-
-    if (!query.includes('IntrospectionQuery') && isQuerySubscription(query, operationName)) {
-      return Observable.create(observer => {
-        if (!session.subscriptionActive) {
-          this.setValueInSession(session.id, 'subscriptionActive', true)
+    if (!query.includes('IntrospectionQuery')) {
+      if ([
+        'STEP3_RUN_QUERY1', 'STEP3_RUN_MUTATION1', 'STEP3_RUN_MUTATION2', 'STEP3_RUN_QUERY2',
+        ].indexOf(this.props.onboardingStep || '') > -1 && typeof this.props.nextStep === 'function'
+      ) {
+        if (this.props.onboardingStep === 'STEP3_RUN_QUERY2') {
+          setTimeout(() => {
+            // typescript wants to be happy...
+            if (typeof this.props.nextStep === 'function') {
+              this.props.nextStep()
+            }
+          }, 2000)
+        } else {
+          this.props.nextStep()
         }
-        const id = this.ws.subscribe(graphQLParams, (err, res) => {
-          const data = {data: res, error: err, isSubscription: true}
-          observer.next(data)
+      }
+
+      if (!this.historyIncludes(session)) {
+        setImmediate(() => {
+          this.addToHistory(session)
         })
+      }
 
-        return () => {
-          this.setValueInSession(session.id, 'subscriptionActive', false)
-          this.ws.unsubscribe(id)
-        }
-      })
+      if (isQuerySubscription(query, operationName)) {
+        return Observable.create(observer => {
+          this.observers[session.id] = observer
+          if (!session.subscriptionActive) {
+            this.setValueInSession(session.id, 'subscriptionActive', true)
+          }
+          const id = this.wsConnections[session.id].subscribe(graphQLParams, (err, res) => {
+            let data = {data: res, isSubscription: true}
+            if (err) {
+              data['error'] = err
+            }
+            observer.next(data)
+          })
+
+          this.setValueInSession(session.id, 'subscriptionId', id)
+          return () => {
+            this.cancelSubscription(session)
+          }
+        })
+      }
     }
 
     const endpoint = session.selectedEndpoint === 'SIMPLE' ? this.getSimpleEndpoint() : this.getRelayEndpoint()

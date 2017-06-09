@@ -123,6 +123,8 @@ export class QueryEditor extends React.Component<Props, null> {
     this.editor.on('change', this._onEdit)
     this.editor.on('keyup', this._onKeyUp)
     this.editor.on('hasCompletion', this._onHasCompletion)
+
+    global['editor'] = this.editor
   }
 
   componentDidUpdate(prevProps) {

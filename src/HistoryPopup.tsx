@@ -42,7 +42,7 @@ export default class HistoryPopup extends React.Component<Props,State> {
       })
 
     const selectedItem = items[this.state.selectedItemIndex]
-    const schema = this.props.schemas[selectedItem.selectedEndpoint]
+    const schema = selectedItem ? this.props.schemas[selectedItem.selectedEndpoint] : null
 
     return (
       <Modal
