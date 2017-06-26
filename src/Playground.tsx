@@ -169,7 +169,7 @@ export default class Playground extends React.Component<Props,State> {
       this.wsConnections[session.id].unsubscribeAll()
     }
     this.wsConnections[session.id] = new SubscriptionClient(this.getWSEndpoint(), {
-      timeout: 5000,
+      timeout: 20000,
       connectionParams,
     })
   }
