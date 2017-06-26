@@ -13,7 +13,7 @@ module.exports = {
 
 function download(data, strFileName, strMimeType) {
 
-  var self = window, // this script is only for browsers anyway...
+  var self = typeof window !== 'undefined' ? window : {}, // this script is only for browsers anyway...
     u = "application/octet-stream", // this default mime also triggers iframe downloads
     m = strMimeType || u,
     x = data,

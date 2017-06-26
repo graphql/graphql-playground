@@ -174,7 +174,11 @@ export class CustomGraphiQL extends React.Component<Props, State> {
     }
 
     // Cache the storage instance
-    this._storage = props.storage || window.localStorage
+    this._storage = props.storage || typeof window !== 'undefined' ? window.localStorage : {
+      setItem: () => null,
+      removeItem: () => null,
+      getItem: () => null,
+    }
 
     // Determine the initial query to display.
     const query =
