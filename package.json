@@ -1,6 +1,6 @@
 {
   "name": "graphcool-graphiql",
-  "version": "1.8.2",
+  "version": "1.8.4",
   "main": "./babelbuild/Playground.js",
   "homepage": "http://graphcool-playground.netlify.com",
   "files": [
@@ -95,10 +95,11 @@
   },
   "scripts": {
     "start": "node scripts/start.js",
-    "prepublish": "npm run build",
+    "prepublish": "npm run build; npm run bump",
     "build-app": "node scripts/build.js",
     "build": "rm -rf tsbuild; rm -rf babelbuild; tsc --jsx preserve --allowJs src/Playground.tsx --target es5 --lib es2015,dom --outDir tsbuild; babel tsbuild -d babelbuild; cp -r ./src/assets/ ./babelbuild/assets/; cp src/CodeGenerationPopup/CodeMirror.js ./babelbuild/CodeGenerationPopup/CodeMirror.js",
-    "test": "node scripts/test.js --env=jsdom"
+    "test": "node scripts/test.js --env=jsdom",
+    "bump": "npm version patch --no-git-tag-version && git add package.json"
   },
   "jest": {
     "collectCoverageFrom": [
