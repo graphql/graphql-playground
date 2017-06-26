@@ -58,7 +58,12 @@ const EndpointChooser = ({selectedEndpoint, onChangeEndpoint}: Props) => (
             The Simple API is our most simplistic GraphQL API. It is highly recommended in use with Apollo,
             as it is much simpler than the Relay API.
           </div>
-          <a href='https://www.graph.cool/docs/reference/simple-api/overview-heshoov3ai' target='_blank'>Simple API Docs</a>
+          <a
+            href='https://www.graph.cool/docs/reference/simple-api/overview-heshoov3ai'
+            target='_blank'
+          >
+            Simple API Docs
+          </a>
         </div>
       ) : (
         <div>
@@ -66,7 +71,12 @@ const EndpointChooser = ({selectedEndpoint, onChangeEndpoint}: Props) => (
             In order to use Relay, the backend must implement a spec that Relay needs.
             The Relay API fully supports this spec, so you can implement fully-fledged Relay Apps with Graphcool.
           </div>
-          <a href='https://www.graph.cool/docs/reference/relay-api/overview-aizoong9ah' target='_blank'>Relay API Docs</a>
+          <a
+            href='https://www.graph.cool/docs/reference/relay-api/overview-aizoong9ah'
+            target='_blank'
+          >
+            Relay API Docs
+          </a>
         </div>
       )}
     </Info>

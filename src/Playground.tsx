@@ -23,7 +23,7 @@ import {CodeGenerationPopup} from './CodeGenerationPopup/CodeGenerationPopup'
 import {GraphQLObjectType, GraphQLList} from 'graphql'
 import {
   onboardingEmptyMutation, onboardingFilledMutation1, onboardingFilledMutation2, onboardingQuery1,
-  onboardingQuery1Check
+  onboardingQuery1Check,
 } from './data'
 
 export type Endpoint = 'SIMPLE' | 'RELAY'
@@ -77,7 +77,7 @@ const httpApiPrefix = 'https://api.graph.cool'
 const wsApiPrefix = 'wss://dev.subscriptions.graph.cool/v1'
 
 export {
-  CustomGraphiQL
+  CustomGraphiQL,
 }
 
 export default class Playground extends React.Component<Props,State> {
@@ -114,27 +114,11 @@ export default class Playground extends React.Component<Props,State> {
     }
   })
 
-  private autofillMutation = () => {
-    const sessionId = this.state.sessions[this.state.selectedSessionIndex].id
-    console.log('trying to autofill mutation', sessionId)
-    if (this.props.onboardingStep === 'STEP3_ENTER_MUTATION1_VALUES') {
-      console.log('GOING FOR 1')
-      this.setValueInSession(sessionId, 'query', onboardingFilledMutation1)
-    } else if (this.props.onboardingStep === 'STEP3_ENTER_MUTATION2_VALUE') {
-      console.log('GOING FOR 2')
-      this.setValueInSession(sessionId, 'query', onboardingFilledMutation2)
-    }
-    if (typeof this.props.nextStep === 'function') {
-      this.props.nextStep()
-    }
-  }
-
   constructor(props) {
     super(props)
     this.storage = new PlaygroundStorage(props.projectId)
 
     const sessions = this.initSessions()
-
 
     const selectedSessionIndex = (parseInt(this.storage.getItem('selectedSessionIndex'), 10) || 0)
     this.state = {
@@ -333,7 +317,7 @@ export default class Playground extends React.Component<Props,State> {
       >
         <style jsx>{`
           .root {
-            @inherit: .h100, .flex, .flexColumn;
+            @p: .h100, .flex, .flexColumn;
           }
 
           .blur {
@@ -341,12 +325,12 @@ export default class Playground extends React.Component<Props,State> {
           }
 
           .graphiqls-container {
-            @inherit: .relative, .overflowHidden;
+            @p: .relative, .overflowHidden;
             height: calc(100vh - 57px);
           }
 
           .graphiql-wrapper {
-            @inherit: .w100, .h100, .relative;
+            @p: .w100, .h100, .relative;
           }
         `}</style>
         <TabBar
@@ -446,6 +430,21 @@ export default class Playground extends React.Component<Props,State> {
         )}
       </div>
     )
+  }
+
+  private autofillMutation = () => {
+    const sessionId = this.state.sessions[this.state.selectedSessionIndex].id
+    console.log('trying to autofill mutation', sessionId)
+    if (this.props.onboardingStep === 'STEP3_ENTER_MUTATION1_VALUES') {
+      console.log('GOING FOR 1')
+      this.setValueInSession(sessionId, 'query', onboardingFilledMutation1)
+    } else if (this.props.onboardingStep === 'STEP3_ENTER_MUTATION2_VALUE') {
+      console.log('GOING FOR 2')
+      this.setValueInSession(sessionId, 'query', onboardingFilledMutation2)
+    }
+    if (typeof this.props.nextStep === 'function') {
+      this.props.nextStep()
+    }
   }
 
   private handleClickCodeGeneration = (session) => {
@@ -601,7 +600,7 @@ export default class Playground extends React.Component<Props,State> {
       return this.initOnboardingSessions()
     }
     // defaulting to admin for deserialized sessions
-    const sessions = this.storage.getSessions()//.map(session => Immutable.set(session, 'selectedViewer', 'ADMIN'))
+    const sessions = this.storage.getSessions() // .map(session => Immutable.set(session, 'selectedViewer', 'ADMIN'))
 
     const urlSession = this.getUrlSession(sessions)
 
@@ -647,7 +646,7 @@ export default class Playground extends React.Component<Props,State> {
           line: 2,
           ch: 15,
         })
-      }, 5)
+      },         5)
       if (typeof this.props.nextStep === 'function') {
         this.props.nextStep()
       }
@@ -767,7 +766,7 @@ export default class Playground extends React.Component<Props,State> {
         ...state,
         sessions: Immutable.setIn(state.sessions, [i, key], value),
       }
-    }, () => {
+    },            () => {
       if (typeof cb === 'function') {
         cb()
       }
@@ -842,7 +841,7 @@ export default class Playground extends React.Component<Props,State> {
             if (typeof this.props.nextStep === 'function') {
               this.props.nextStep()
             }
-          }, 2000)
+          },         2000)
         } else {
           this.props.nextStep()
         }

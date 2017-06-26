@@ -269,7 +269,7 @@ export default class SelectUserPopup extends React.Component<Props, State> {
                 scrollToIndex: undefined,
               } as State)
             },
-            150
+            150,
           )
         }
 

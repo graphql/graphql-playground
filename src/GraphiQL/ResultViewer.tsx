@@ -22,7 +22,7 @@ export interface Props {
  *   - value: The text of the editor.
  *
  */
-export class ResultViewer extends React.Component<Props, null> {
+export class ResultViewer extends React.Component<Props, {}> {
 
   private _node: any
   private viewer: any

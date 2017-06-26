@@ -1,5 +1,5 @@
 import * as React from 'react' // tslint:disable-line
-import {$p} from 'graphcool-styles'
+import { $p } from 'graphcool-styles'
 import * as cx from 'classnames'
 import calculateSize from 'calculate-size'
 
@@ -36,7 +36,7 @@ const Chooser = (props: Props) => (
             $p.pv6,
             $p.relative,
             $p.itemsCenter,
-           )}
+          )}
         >
           {clients.map(env => {
             const {width} = calculateSize(env.toUpperCase(), {
@@ -52,17 +52,19 @@ const Chooser = (props: Props) => (
                 key={env}
               >
                 <div
-                  className={cx('condition-button', $p.nowrap, $p.absolute, $p.ph10, $p.flex, $p.flexRow, $p.itemsCenter, {
-                  [cx($p.pv6, $p.bgBlack04)]: props.client !== env,
-                  [cx($p.bgGreen, $p.br2, $p.pv8, $p.z1)]: props.client === env,
-                })}
+                  className={cx(
+                    'condition-button', $p.nowrap, $p.absolute, $p.ph10, $p.flex, $p.flexRow, $p.itemsCenter,
+                    {
+                      [cx($p.pv6, $p.bgBlack04)]: props.client !== env,
+                      [cx($p.bgGreen, $p.br2, $p.pv8, $p.z1)]: props.client === env,
+                    })}
                 >
                   <div
                     className={cx($p.ttu, $p.fw6, $p.f14, {
-                    [$p.black30]: props.client !== env,
-                    [$p.white]: props.client === env,
-                  },
-                )}
+                        [$p.black30]: props.client !== env,
+                        [$p.white]: props.client === env,
+                      },
+                    )}
                   >
                     {env}
                   </div>

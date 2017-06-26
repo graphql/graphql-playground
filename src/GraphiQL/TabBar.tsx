@@ -182,7 +182,7 @@ export const TabBar = ({
                   steps={[{
                     step: 'STEP3_SELECT_QUERY_TAB',
                     title: 'Back to the query',
-                    description: 'After creating the data with our mutations, let\'s see what we got'
+                    description: 'After creating the data with our mutations, let\'s see what we got',
                   }]}
                 >
                   <div className={`operation-name ${index === selectedSessionIndex && 'active'}`}>

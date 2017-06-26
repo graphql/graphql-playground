@@ -22,7 +22,7 @@ export default function SchemaExplorer({idl, modelName}: Props) {
           @p: .dn;
         }
       `}</style>
-      <div className="header">Schema for „{modelName}“</div>
+      <div className='header'>Schema for „{modelName}“</div>
       <QueryEditor schema={null} value={idl || ''} readOnly hideLineNumbers />
     </div>
   )

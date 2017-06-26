@@ -10,8 +10,6 @@ import * as React from 'react'
 import { GraphQLSchema } from 'graphql'
 
 import onHasCompletion from 'graphiql/dist/utility/onHasCompletion'
-
-
 /**
  * QueryEditor
  *
@@ -25,7 +23,7 @@ import onHasCompletion from 'graphiql/dist/utility/onHasCompletion'
  *
  */
 interface Props {
-  schema: GraphQLSchema
+  schema: GraphQLSchema | null
   value: string
   onEdit?: (value: string) => void
   onHintInformationRender?: (elem: any) => void
@@ -36,7 +34,7 @@ interface Props {
   disableAutofocus?: boolean
 }
 
-export class QueryEditor extends React.Component<Props, null> {
+export class QueryEditor extends React.Component<Props, {}> {
 
   private cachedValue: string
   private editor: any
@@ -83,7 +81,7 @@ export class QueryEditor extends React.Component<Props, null> {
       showCursorWhenSelecting: true,
       readOnly: Boolean(this.props.readOnly),
       foldGutter: {
-        minFoldSize: 4
+        minFoldSize: 4,
       },
       lint: {
         schema: this.props.schema,
@@ -103,12 +101,12 @@ export class QueryEditor extends React.Component<Props, null> {
 
         'Cmd-Enter': () => {
           if (this.props.onRunQuery) {
-            this.props.onRunQuery();
+            this.props.onRunQuery()
           }
         },
         'Ctrl-Enter': () => {
           if (this.props.onRunQuery) {
-            this.props.onRunQuery();
+            this.props.onRunQuery()
           }
         },
 
@@ -117,7 +115,7 @@ export class QueryEditor extends React.Component<Props, null> {
         'Ctrl-Right': 'goSubwordRight',
         'Alt-Left': 'goGroupLeft',
         'Alt-Right': 'goGroupRight',
-      }
+      },
     })
 
     this.editor.on('change', this._onEdit)
@@ -133,7 +131,7 @@ export class QueryEditor extends React.Component<Props, null> {
     // Ensure the changes caused by this update are not interpretted as
     // user-input changes which could otherwise result in an infinite
     // event loop.
-    this.ignoreChangeEvent = true;
+    this.ignoreChangeEvent = true
     if (this.props.schema !== prevProps.schema) {
       this.editor.options.lint.schema = this.props.schema
       this.editor.options.hintOptions.schema = this.props.schema
@@ -193,9 +191,9 @@ export class QueryEditor extends React.Component<Props, null> {
 
   _onEdit = () => {
     if (!this.ignoreChangeEvent) {
-      this.cachedValue = this.editor.getValue();
+      this.cachedValue = this.editor.getValue()
       if (this.props.onEdit) {
-        this.props.onEdit(this.cachedValue);
+        this.props.onEdit(this.cachedValue)
       }
     }
   }
@@ -205,6 +203,6 @@ export class QueryEditor extends React.Component<Props, null> {
    * about the type and description for the selected context.
    */
   _onHasCompletion = (cm, data) => {
-    onHasCompletion(cm, data, this.props.onHintInformationRender);
+    onHasCompletion(cm, data, this.props.onHintInformationRender)
   }
 }

@@ -14,15 +14,15 @@
   version "7.0.0"
   resolved "https://registry.yarnpkg.com/@types/node/-/node-7.0.0.tgz#c081147b109da5f9c57af70571771be97ce9c0ba"
 
-"@types/react-dom@^0.14.20":
-  version "0.14.20"
-  resolved "https://registry.yarnpkg.com/@types/react-dom/-/react-dom-0.14.20.tgz#6e30d66148e78b29ef593fa91ba30d0175190604"
+"@types/react-dom@^15.5.1":
+  version "15.5.1"
+  resolved "https://registry.yarnpkg.com/@types/react-dom/-/react-dom-15.5.1.tgz#f3c3e14c682785923c7d64583537df319442dec1"
   dependencies:
     "@types/react" "*"
 
-"@types/react@*", "@types/react@^15.0.0":
-  version "15.0.0"
-  resolved "https://registry.yarnpkg.com/@types/react/-/react-15.0.0.tgz#33eb3438130614f25c07c09e46ebec5a8d45b3b0"
+"@types/react@*", "@types/react@^15.0.31":
+  version "15.0.31"
+  resolved "https://registry.yarnpkg.com/@types/react/-/react-15.0.31.tgz#21dfc5d41ee1600ff7d7b738ad21a9502aa3ecf2"
 
 "@types/ws@^3.0.0":
   version "3.0.0"
@@ -555,7 +555,7 @@ babel-plugin-syntax-flow@^6.18.0, babel-plugin-syntax-flow@^6.3.13:
   version "6.18.0"
   resolved "https://registry.yarnpkg.com/babel-plugin-syntax-flow/-/babel-plugin-syntax-flow-6.18.0.tgz#4c3ab20a2af26aa20cd25995c398c4eb70310c8d"
 
-babel-plugin-syntax-jsx@6.18.0, babel-plugin-syntax-jsx@^6.3.13, babel-plugin-syntax-jsx@^6.8.0:
+babel-plugin-syntax-jsx@6.18.0, babel-plugin-syntax-jsx@^6.18.0, babel-plugin-syntax-jsx@^6.3.13, babel-plugin-syntax-jsx@^6.8.0:
   version "6.18.0"
   resolved "https://registry.yarnpkg.com/babel-plugin-syntax-jsx/-/babel-plugin-syntax-jsx-6.18.0.tgz#0af32a9a6e13ca7a3fd5069e62d7b0f58d0d8946"
 
@@ -1444,7 +1444,7 @@ content-type@~1.0.2:
   version "1.0.2"
   resolved "https://registry.yarnpkg.com/content-type/-/content-type-1.0.2.tgz#b7d113aee7a8dd27bd21133c4dc2529df1721eed"
 
-convert-source-map@1.3.0, convert-source-map@^1.1.0:
+convert-source-map@1.3.0, convert-source-map@^1.1.0, convert-source-map@^1.3.0:
   version "1.3.0"
   resolved "https://registry.yarnpkg.com/convert-source-map/-/convert-source-map-1.3.0.tgz#e9f3e9c6e2728efc2676696a70eb382f73106a67"
 
@@ -2330,9 +2330,9 @@ graceful-fs@^4.1.11, graceful-fs@^4.1.2, graceful-fs@^4.1.4, graceful-fs@^4.1.6,
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/graceful-readlink/-/graceful-readlink-1.0.1.tgz#4cafad76bc62f02fa039b2f94e9a3dd3a391a725"
 
-graphcool-styles@0.1.23:
-  version "0.1.23"
-  resolved "https://registry.yarnpkg.com/graphcool-styles/-/graphcool-styles-0.1.23.tgz#6fdc0658fd5a95264200ee0221e21b1914eae0e4"
+graphcool-styles@^0.1.28:
+  version "0.1.28"
+  resolved "https://registry.yarnpkg.com/graphcool-styles/-/graphcool-styles-0.1.28.tgz#058025c30e8fcc48a1401b070307cb71178009b0"
   dependencies:
     html-webpack-plugin "^2.24.1"
     interactive "^0.1.9"
@@ -3707,7 +3707,7 @@ object-keys@^1.0.8:
   version "1.0.11"
   resolved "https://registry.yarnpkg.com/object-keys/-/object-keys-1.0.11.tgz#c54601778ad560f1142ce0e01bcca8b56d13426d"
 
-object.entries@1.0.4:
+object.entries@1.0.4, object.entries@^1.0.4:
   version "1.0.4"
   resolved "https://registry.yarnpkg.com/object.entries/-/object.entries-1.0.4.tgz#1bf9a4dd2288f5b33f3a993d257661f05d161a5f"
   dependencies:
@@ -4154,9 +4154,9 @@ postcss-inherit-parser@^0.1.3:
     debug "^2.2.0"
     postcss "^5.0.10"
 
-postcss-inherit@^4.0.3:
-  version "4.0.3"
-  resolved "https://registry.yarnpkg.com/postcss-inherit/-/postcss-inherit-4.0.3.tgz#9c56372e2764cd23e06aa7fadc9c60975af278c3"
+"postcss-inherit@git+https://github.com/timsuchanek/postcss-inherit#build3":
+  version "4.0.2"
+  resolved "git+https://github.com/timsuchanek/postcss-inherit#1382250ae64c5938cc47d749049dc17ac6f52c9b"
   dependencies:
     debug "^2.2.0"
     postcss "^5.0.10"
@@ -5216,9 +5216,19 @@ style-loader@0.13.1:
   dependencies:
     loader-utils "^0.2.7"
 
-styled-jsx-postcss@asdf:
+"styled-jss@git+https://github.com/timsuchanek/styled-jsx#build":
+  version "0.4.4"
+  resolved "git+https://github.com/timsuchanek/styled-jsx#020e6b771d5c89750a57abf5707dcebb64707f00"
+  dependencies:
+    babel-plugin-syntax-jsx "^6.18.0"
+    convert-source-map "^1.3.0"
+    object.entries "^1.0.4"
+    source-map "^0.5.6"
+    string-hash "^1.1.1"
+
+"styled-jsx-postcss@git+https://github.com/timsuchanek/styled-jsx-postcss#build3":
   version "0.2.0"
-  resolved "https://registry.yarnpkg.com/styled-jsx-postcss/-/styled-jsx-postcss-0.2.0.tgz#c7b486a0228407fcd8890c6b51be31443a01ec07"
+  resolved "git+https://github.com/timsuchanek/styled-jsx-postcss#677ee0fb7f9138047a00e03c8c3e44adbb33cf2a"
   dependencies:
     babel-traverse "^6.21.0"
     babylon "^6.14.1"
@@ -5453,9 +5463,9 @@ type-is@~1.6.13:
     media-typer "0.3.0"
     mime-types "~2.1.13"
 
-typescript@^2.1.4:
-  version "2.1.5"
-  resolved "https://registry.yarnpkg.com/typescript/-/typescript-2.1.5.tgz#6fe9479e00e01855247cea216e7561bafcdbcd4a"
+typescript@2.4.0:
+  version "2.4.0"
+  resolved "https://registry.yarnpkg.com/typescript/-/typescript-2.4.0.tgz#aef5a8d404beba36ad339abf079ddddfffba86dd"
 
 ua-parser-js@^0.7.9:
   version "0.7.12"

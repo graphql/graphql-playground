@@ -93,7 +93,7 @@ export class DocExplorer extends React.Component<Props, State> {
         if (isType(navItem)) {
           content =
             <TypeDoc
-              key={navItem.name}
+              key={(navItem as any).name}
               schema={schema}
               type={navItem}
               onClickType={this.handleClickTypeOrField}
