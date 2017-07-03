@@ -32,6 +32,7 @@ interface Props {
   readOnly?: boolean
   hideLineNumbers?: boolean
   disableAutofocus?: boolean
+  hideGutters?: boolean
 }
 
 export class QueryEditor extends React.Component<Props, {}> {
@@ -67,6 +68,20 @@ export class QueryEditor extends React.Component<Props, {}> {
     require('codemirror-graphql/lint')
     require('codemirror-graphql/mode')
 
+    let gutters: any[] = []
+    if (!this.props.hideLineNumbers) {
+      gutters.push('CodeMirror-linenumbers')
+    }
+    if (!this.props.hideGutters) {
+      gutters.push('CodeMirror-foldgutter')
+    }
+    let foldGutter: any = {}
+    if (!this.props.hideGutters) {
+      foldGutter = {
+        minFoldSize: 4,
+      }
+    }
+
     this.editor = CodeMirror(this._node, {
       autofocus: !this.props.disableAutofocus,
       placeholder: this.props.placeholder,
@@ -80,9 +95,7 @@ export class QueryEditor extends React.Component<Props, {}> {
       matchBrackets: true,
       showCursorWhenSelecting: true,
       readOnly: Boolean(this.props.readOnly),
-      foldGutter: {
-        minFoldSize: 4,
-      },
+      foldGutter,
       lint: {
         schema: this.props.schema,
       },
@@ -91,8 +104,7 @@ export class QueryEditor extends React.Component<Props, {}> {
         closeOnUnfocus: true,
         completeSingle: false,
       },
-      gutters: this.props.hideLineNumbers ? ['CodeMirror-foldgutter']
-        : [ 'CodeMirror-linenumbers', 'CodeMirror-foldgutter' ],
+      gutters,
       extraKeys: {
         'Cmd-Space': () => this.editor.showHint({ completeSingle: true }),
         'Ctrl-Space': () => this.editor.showHint({ completeSingle: true }),

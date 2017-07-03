@@ -93,6 +93,8 @@ export interface Props {
   nextStep?: () => void
   autofillMutation?: () => void
   disableAnimation?: boolean
+  hideLineNumbers?: boolean
+  hideGutters?: boolean
 }
 
 export interface State {
@@ -520,6 +522,8 @@ export class CustomGraphiQL extends React.Component<Props, State> {
                 onHintInformationRender={this.handleHintInformationRender}
                 onRunQuery={this.handleEditorRunQuery}
                 disableAutofocus={this.props.disableAutofocus}
+                hideLineNumbers={this.props.hideLineNumbers}
+                hideGutters={this.props.hideGutters}
               />
               <div className='variable-editor' style={variableStyle}>
                 {this.props.showCodeGeneration && (
@@ -660,6 +664,7 @@ export class CustomGraphiQL extends React.Component<Props, State> {
                       )}
                       <ResultViewer
                         value={response.date}
+                        hideGutters={this.props.hideGutters}
                       />
                     </div>
                   ))}

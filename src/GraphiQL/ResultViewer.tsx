@@ -10,6 +10,7 @@ import * as React from 'react'
 
 export interface Props {
   value: string
+  hideGutters?: boolean
 }
 
 /**
@@ -38,6 +39,17 @@ export class ResultViewer extends React.Component<Props, {}> {
     require('codemirror/keymap/sublime')
     require('codemirror-graphql/results/mode')
 
+    let gutters: any[] = []
+    if (!this.props.hideGutters) {
+      gutters.push('CodeMirror-foldgutter')
+    }
+    let foldGutter: any = {}
+    if (!this.props.hideGutters) {
+      foldGutter = {
+        minFoldSize: 4,
+      }
+    }
+
     this.viewer = CodeMirror(this._node, {
       lineWrapping: true,
       value: this.props.value || '',
@@ -45,10 +57,8 @@ export class ResultViewer extends React.Component<Props, {}> {
       theme: 'graphiql',
       mode: 'graphql-results',
       keyMap: 'sublime',
-      foldGutter: {
-        minFoldSize: 4,
-      },
-      gutters: [ 'CodeMirror-foldgutter' ],
+      foldGutter,
+      gutters,
       extraKeys: {
         // Editor improvements
         'Ctrl-Left': 'goSubwordLeft',
