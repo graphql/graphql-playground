@@ -95,6 +95,7 @@ export interface Props {
   disableAnimation?: boolean
   hideLineNumbers?: boolean
   hideGutters?: boolean
+  readonly?: boolean
 }
 
 export interface State {
@@ -524,6 +525,7 @@ export class CustomGraphiQL extends React.Component<Props, State> {
                 disableAutofocus={this.props.disableAutofocus}
                 hideLineNumbers={this.props.hideLineNumbers}
                 hideGutters={this.props.hideGutters}
+                readOnly={this.props.readonly}
               />
               <div className='variable-editor' style={variableStyle}>
                 {this.props.showCodeGeneration && (

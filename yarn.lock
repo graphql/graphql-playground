@@ -2330,9 +2330,9 @@ graceful-fs@^4.1.11, graceful-fs@^4.1.2, graceful-fs@^4.1.4, graceful-fs@^4.1.6,
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/graceful-readlink/-/graceful-readlink-1.0.1.tgz#4cafad76bc62f02fa039b2f94e9a3dd3a391a725"
 
-graphcool-styles@^0.1.29:
-  version "0.1.29"
-  resolved "https://registry.yarnpkg.com/graphcool-styles/-/graphcool-styles-0.1.29.tgz#93b576fc583ee49317285aab06ed44b5fce2fd6d"
+graphcool-styles@^0.1.31:
+  version "0.1.31"
+  resolved "https://registry.yarnpkg.com/graphcool-styles/-/graphcool-styles-0.1.31.tgz#efb04329a0e5d2788023e45e43925a85664e83dd"
   dependencies:
     html-webpack-plugin "^2.24.1"
     interactive "^0.1.9"
