@@ -1,5 +1,4 @@
 import * as React from 'react'
-import { Endpoint } from '../types'
 
 export interface Props {
   onPrettify: any

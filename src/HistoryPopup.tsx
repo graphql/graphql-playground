@@ -120,7 +120,7 @@ export default class HistoryPopup extends React.Component<Props, State> {
             ? <div className="right">
                 <div className="right-header">
                   <div className="view">
-                    {`${selectedItem.selectedEndpoint} API / View as ${selectedItem.selectedViewer}`}
+                    {`View as ${selectedItem.selectedViewer}`}
                   </div>
                   <div
                     className="use"

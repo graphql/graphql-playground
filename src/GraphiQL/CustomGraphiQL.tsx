@@ -29,7 +29,7 @@ import {
   introspectionQuery,
   introspectionQuerySansSubscriptions,
 } from 'graphiql/dist/utility/introspectionQueries'
-import { Endpoint, Viewer, OperationDefinition } from '../types'
+import { Viewer, OperationDefinition } from '../types'
 import { download } from './util/index'
 import QueryHeader from './QueryHeader'
 import ResultHeader from './ResultHeader'
