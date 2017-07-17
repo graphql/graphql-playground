@@ -55,7 +55,7 @@
     "styled-jsx-postcss": "git+https://github.com/timsuchanek/styled-jsx-postcss#build3",
     "ts-loader": "^1.3.1",
     "tslint": "^5.5.0",
-    "tslint-graphcool-frontend": "^0.0.2",
+    "tslint-graphcool-frontend": "^0.0.3",
     "tslint-loader": "^3.5.3",
     "typescript": "2.4.0",
     "url-loader": "0.5.7",

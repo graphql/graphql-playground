@@ -56,7 +56,7 @@ export class ExecuteButton extends React.Component<Props, State> {
               onMouseOver={() =>
                 this.setState({ highlight: operation } as State)}
               onMouseOut={() => this.setState({ highlight: null } as State)}
-              onMouseUp={() => this._onOptionSelected(operation)}
+              onMouseUp={() => this.onOptionSelected(operation)}
             >
               {operation.name ? operation.name.value : '<Unnamed>'}
             </li>,
@@ -69,14 +69,14 @@ export class ExecuteButton extends React.Component<Props, State> {
     // for which operation to run.
     let onClick
     if (this.props.isRunning || !hasOptions) {
-      onClick = this._onClick
+      onClick = this.onClick
     }
 
     // Allow mouse down if there is no running query, there are options for
     // which operation to run, and the dropdown is currently closed.
     let onMouseDown
     if (!this.props.isRunning && hasOptions && !optionsOpen) {
-      onMouseDown = this._onOptionsOpen
+      onMouseDown = this.onOptionsOpen
     }
 
     const pathJSX = this.props.isRunning
@@ -126,7 +126,7 @@ export class ExecuteButton extends React.Component<Props, State> {
     )
   }
 
-  _onClick = () => {
+  private onClick = () => {
     if (this.props.isRunning) {
       this.props.onStop()
     } else {
@@ -134,12 +134,12 @@ export class ExecuteButton extends React.Component<Props, State> {
     }
   }
 
-  _onOptionSelected = operation => {
+  private onOptionSelected = operation => {
     this.setState({ optionsOpen: false } as State)
     this.props.onRun(operation.name && operation.name.value)
   }
 
-  _onOptionsOpen = downEvent => {
+  private onOptionsOpen = downEvent => {
     let initialPress = true
     const downTarget = downEvent.target
     this.setState({ highlight: null, optionsOpen: true })
@@ -158,7 +158,7 @@ export class ExecuteButton extends React.Component<Props, State> {
           this.setState({ optionsOpen: false } as State)
         }
         if (firstTime) {
-          this._onOptionSelected(
+          this.onOptionSelected(
             this.props.operations.find(
               op => op.name.value === upEvent.target.textContent,
             ),

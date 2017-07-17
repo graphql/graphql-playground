@@ -25,7 +25,12 @@ export default function SchemaExplorer({ idl, modelName }: Props) {
       <div className="header">
         Schema for „{modelName}“
       </div>
-      <QueryEditor schema={null} value={idl || ''} readOnly={true} hideLineNumbers={true} />
+      <QueryEditor
+        schema={null}
+        value={idl || ''}
+        readOnly={true}
+        hideLineNumbers={true}
+      />
     </div>
   )
 }

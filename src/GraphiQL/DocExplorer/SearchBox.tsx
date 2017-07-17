@@ -23,14 +23,14 @@ export interface State {
 }
 
 export default class SearchBox extends React.Component<Props, State> {
-  _debouncedOnSearch: any
+  private debouncedOnSearch: any
 
   constructor(props) {
     super(props)
 
     this.state = { value: '' }
 
-    this._debouncedOnSearch = debounce(200, () => {
+    this.debouncedOnSearch = debounce(200, () => {
       this.props.onSearch(this.state.value)
     })
   }
@@ -79,6 +79,6 @@ export default class SearchBox extends React.Component<Props, State> {
 
   handleChange = event => {
     this.setState({ value: event.target.value })
-    this._debouncedOnSearch()
+    this.debouncedOnSearch()
   }
 }

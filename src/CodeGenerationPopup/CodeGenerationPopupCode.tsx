@@ -3,6 +3,7 @@ import * as cx from 'classnames'
 import { $p } from 'graphcool-styles'
 import { CodeGenerator } from './codeGeneration'
 import { GraphQLClient, Environment } from '../types'
+// tslint:disable-next-line
 const Codemirror: any = require('./CodeMirror')
 
 interface Props {

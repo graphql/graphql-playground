@@ -24,7 +24,7 @@ export interface Props {
  *
  */
 export class ResultViewer extends React.Component<Props, {}> {
-  private _node: any
+  private node: any
   private viewer: any
 
   componentDidMount() {
@@ -49,7 +49,7 @@ export class ResultViewer extends React.Component<Props, {}> {
       }
     }
 
-    this.viewer = CodeMirror(this._node, {
+    this.viewer = CodeMirror(this.node, {
       lineWrapping: true,
       value: this.props.value || '',
       readOnly: true,
@@ -86,7 +86,7 @@ export class ResultViewer extends React.Component<Props, {}> {
       <div
         className="result-codemirror"
         ref={node => {
-          this._node = node
+          this.node = node
         }}
       />
     )
@@ -104,6 +104,6 @@ export class ResultViewer extends React.Component<Props, {}> {
    * Public API for retrieving the DOM client height for this component.
    */
   getClientHeight() {
-    return this._node && this._node.clientHeight
+    return this.node && this.node.clientHeight
   }
 }

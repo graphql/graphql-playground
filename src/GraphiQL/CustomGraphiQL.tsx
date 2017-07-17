@@ -131,8 +131,6 @@ export class CustomGraphiQL extends React.Component<Props, State> {
   static Footer: (props: SimpleProps) => JSX.Element
   static ToolbarButton: (props: ToolbarButtonProps) => JSX.Element
 
-  public _storage: any
-  public _editorQueryID: number
   public codeMirrorSizer
   public queryEditorComponent
   public variableEditorComponent
@@ -140,7 +138,10 @@ export class CustomGraphiQL extends React.Component<Props, State> {
   public editorBarComponent
   public docExplorerComponent: any // later React.Component<...>
 
-  _updateQueryFacts = debounce(150, query => {
+  private storage: any
+  private editorQueryID: number
+
+  private updateQueryFacts = debounce(150, query => {
     const queryFacts = getQueryFacts(this.state.schema, query)
     if (queryFacts) {
       // Update operation name should any query names change.
@@ -172,7 +173,7 @@ export class CustomGraphiQL extends React.Component<Props, State> {
     }
 
     // Cache the storage instance
-    this._storage =
+    this.storage =
       props.storage || typeof window !== 'undefined'
         ? window.localStorage
         : {
@@ -230,7 +231,7 @@ export class CustomGraphiQL extends React.Component<Props, State> {
     }
 
     // Ensure only the last executed editor query is rendered.
-    this._editorQueryID = 0
+    this.editorQueryID = 0
 
     // Subscribe to the browser window closing, treating it as an unmount.
     if (typeof window === 'object') {
@@ -279,7 +280,7 @@ export class CustomGraphiQL extends React.Component<Props, State> {
       nextQuery !== this.state.query ||
       nextOperationName !== this.state.operationName
     ) {
-      this._updateQueryFacts(nextQuery)
+      this.updateQueryFacts(nextQuery)
     }
 
     this.setState(
@@ -895,11 +896,11 @@ export class CustomGraphiQL extends React.Component<Props, State> {
   }
 
   _storageGet(name) {
-    if (this._storage) {
-      const value = this._storage.getItem('graphiql:' + name)
+    if (this.storage) {
+      const value = this.storage.getItem('graphiql:' + name)
       // Clean up any inadvertently saved null/undefined values.
       if (value === 'null' || value === 'undefined') {
-        this._storage.removeItem('graphiql:' + name)
+        this.storage.removeItem('graphiql:' + name)
       } else {
         return value
       }
@@ -907,11 +908,11 @@ export class CustomGraphiQL extends React.Component<Props, State> {
   }
 
   _storageSet(name, value) {
-    if (this._storage) {
+    if (this.storage) {
       if (value) {
-        this._storage.setItem('graphiql:' + name, value)
+        this.storage.setItem('graphiql:' + name, value)
       } else {
-        this._storage.removeItem('graphiql:' + name)
+        this.storage.removeItem('graphiql:' + name)
       }
     }
   }
@@ -987,8 +988,8 @@ export class CustomGraphiQL extends React.Component<Props, State> {
   }
 
   handleRunQuery = selectedOperationName => {
-    this._editorQueryID++
-    const queryID = this._editorQueryID
+    this.editorQueryID++
+    const queryID = this.editorQueryID
 
     // Use the edited query after autoCompleteLeafs() runs or,
     // in case autoCompletion fails (the function returns undefined),
@@ -1022,7 +1023,7 @@ export class CustomGraphiQL extends React.Component<Props, State> {
         variables,
         operationName,
         result => {
-          if (queryID === this._editorQueryID) {
+          if (queryID === this.editorQueryID) {
             let isSubscription = false
             if (result.isSubscription) {
               isSubscription = true
@@ -1111,7 +1112,7 @@ export class CustomGraphiQL extends React.Component<Props, State> {
 
   handleEditQuery = value => {
     if (this.state.schema) {
-      this._updateQueryFacts(value)
+      this.updateQueryFacts(value)
     }
     this.setState({ query: value } as State)
     if (this.props.onEditQuery) {
@@ -1128,35 +1129,20 @@ export class CustomGraphiQL extends React.Component<Props, State> {
   }
 
   handleHintInformationRender = elem => {
-    elem.addEventListener('click', this._onClickHintInformation)
+    elem.addEventListener('click', this.onClickHintInformation)
 
     let onRemoveFn
     elem.addEventListener(
       'DOMNodeRemoved',
       (onRemoveFn = () => {
         elem.removeEventListener('DOMNodeRemoved', onRemoveFn)
-        elem.removeEventListener('click', this._onClickHintInformation)
+        elem.removeEventListener('click', this.onClickHintInformation)
       }),
     )
   }
 
   handleEditorRunQuery = () => {
     this._runQueryAtCursor()
-  }
-
-  _onClickHintInformation = event => {
-    if (event.target.className === 'typeName') {
-      const typeName = event.target.innerHTML
-      const schema = this.state.schema
-      if (schema) {
-        const type = schema.getType(typeName)
-        if (type) {
-          this.setState({ docExplorerOpen: true } as State, () => {
-            this.docExplorerComponent.showDoc(type)
-          })
-        }
-      }
-    }
   }
 
   handleToggleDocs = () => {
@@ -1366,6 +1352,21 @@ export class CustomGraphiQL extends React.Component<Props, State> {
 
   handleDownloadJSON = () => {
     download(this.state.responses[0].date, 'result.json', 'application/json')
+  }
+
+  private onClickHintInformation = event => {
+    if (event.target.className === 'typeName') {
+      const typeName = event.target.innerHTML
+      const schema = this.state.schema
+      if (schema) {
+        const type = schema.getType(typeName)
+        if (type) {
+          this.setState({ docExplorerOpen: true } as State, () => {
+            this.docExplorerComponent.showDoc(type)
+          })
+        }
+      }
+    }
   }
 }
 
