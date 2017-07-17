@@ -164,6 +164,59 @@ export default class Playground extends React.Component<Props, State> {
     }
     ;(global as any).p = this
   }
+
+  componentWillMount() {
+    // look, if there is a session. if not, initiate one.
+    this.fetchSchemas().then(this.initSessions)
+  }
+
+  componentDidMount() {
+    if (this.initialIndex > -1) {
+      this.setState(
+        {
+          selectedSessionIndex: this.initialIndex,
+        } as State,
+      )
+    }
+    if (
+      ['STEP3_UNCOMMENT_DESCRIPTION', 'STEP3_OPEN_PLAYGROUND'].indexOf(
+        this.props.onboardingStep || '',
+      ) > -1
+    ) {
+      this.setCursor({ line: 3, ch: 6 })
+    }
+    this.initWebsockets()
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    if (
+      prevProps.endpoint !== this.props.endpoint ||
+      prevProps.adminAuthToken !== this.props.adminAuthToken
+    ) {
+      this.saveSessions()
+      this.saveHistory()
+      this.storage.saveProject()
+      this.storage = new PlaygroundStorage(this.props.endpoint)
+      const sessions = this.initSessions()
+      this.setState({
+        sessions,
+        history: this.storage.getHistory(),
+      })
+      this.resetSubscriptions()
+      this.fetchSchemas().then(this.initSessions)
+    }
+  }
+
+  componentWillUnmount() {
+    this.storage.setItem(
+      'selectedSessionIndex',
+      String(this.state.selectedSessionIndex),
+    )
+    this.saveSessions()
+    this.saveHistory()
+    this.storage.saveProject()
+  }
+
   setWS = (session: Session) => {
     const connectionParams: any = {}
 
@@ -182,45 +235,6 @@ export default class Playground extends React.Component<Props, State> {
       timeout: 20000,
       connectionParams,
     })
-  }
-  componentWillMount() {
-    // look, if there is a session. if not, initiate one.
-    this.fetchSchemas().then(this.initSessions)
-  }
-  componentDidMount() {
-    if (this.initialIndex > -1) {
-      this.setState(
-        {
-          selectedSessionIndex: this.initialIndex,
-        } as State,
-      )
-    }
-    if (
-      ['STEP3_UNCOMMENT_DESCRIPTION', 'STEP3_OPEN_PLAYGROUND'].indexOf(
-        this.props.onboardingStep || '',
-      ) > -1
-    ) {
-      this.setCursor({ line: 3, ch: 6 })
-    }
-    this.initWebsockets()
-  }
-  componentWillReceiveProps(nextProps) {
-    if (
-      nextProps.endpoint !== this.props.endpoint ||
-      nextProps.adminAuthToken !== this.props.adminAuthToken
-    ) {
-      this.resetSubscriptions()
-      this.fetchSchemas()
-    }
-  }
-  componentWillUnmount() {
-    this.storage.setItem(
-      'selectedSessionIndex',
-      String(this.state.selectedSessionIndex),
-    )
-    this.saveSessions()
-    this.saveHistory()
-    this.storage.saveProject()
   }
   initWebsockets() {
     this.state.sessions.forEach(session => this.setWS(session))
