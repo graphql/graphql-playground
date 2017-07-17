@@ -1,5 +1,5 @@
 import * as React from 'react'
-import {QueryEditor} from './QueryEditor'
+import { QueryEditor } from './QueryEditor'
 
 interface Props {
   idl?: string
@@ -7,9 +7,9 @@ interface Props {
   modelName?: string
 }
 
-export default function SchemaExplorer({idl, modelName}: Props) {
+export default function SchemaExplorer({ idl, modelName }: Props) {
   return (
-    <div className='schema-explorer'>
+    <div className="schema-explorer">
       <style jsx={true}>{`
         .schema-explorer {
           @p: .h100, .flex, .flexColumn, .bgDarkerBlue;
@@ -22,8 +22,15 @@ export default function SchemaExplorer({idl, modelName}: Props) {
           @p: .dn;
         }
       `}</style>
-      <div className='header'>Schema for „{modelName}“</div>
-      <QueryEditor schema={null} value={idl || ''} readOnly hideLineNumbers />
+      <div className="header">
+        Schema for „{modelName}“
+      </div>
+      <QueryEditor
+        schema={null}
+        value={idl || ''}
+        readOnly={true}
+        hideLineNumbers={true}
+      />
     </div>
   )
 }

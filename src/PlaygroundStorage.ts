@@ -1,5 +1,4 @@
-
-import {Session} from './types'
+import { Session } from './types'
 export default class PlaygroundStorage {
   private projectId: string
   private project: any
@@ -13,15 +12,13 @@ export default class PlaygroundStorage {
 
     if (!this.project) {
       this.project = {
-        sessions: {
-        },
+        sessions: {},
         history: [],
-        data: {
-        },
+        data: {},
       }
       this.saveProject()
     }
-    global['s'] = this
+    ;(global as any).s = this
   }
 
   public executedQuery() {
@@ -103,7 +100,10 @@ export default class PlaygroundStorage {
   public saveProject() {
     const json = JSON.stringify(this.project)
     localStorage.setItem(this.projectId, json)
-    localStorage.setItem('executedQueryCount', this.executedQueryCount.toString())
+    localStorage.setItem(
+      'executedQueryCount',
+      this.executedQueryCount.toString(),
+    )
   }
 
   private getProject() {

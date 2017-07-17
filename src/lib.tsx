@@ -1,7 +1,4 @@
 import Playground from './Playground'
-import {CustomGraphiQL} from './GraphiQL/CustomGraphiQL'
+import { CustomGraphiQL } from './GraphiQL/CustomGraphiQL'
 
-export {
-  Playground,
-  CustomGraphiQL,
-}
+export { Playground, CustomGraphiQL }

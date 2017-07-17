@@ -1,12 +1,15 @@
-import {GraphQLClient, Environment} from '../types'
+import { GraphQLClient, Environment } from '../types'
 
 export class CodeGenerator {
-
   private client: GraphQLClient
   private environment: Environment
   private endpointUrl: string
 
-  constructor(client: GraphQLClient, environment: Environment, endpointUrl: string) {
+  constructor(
+    client: GraphQLClient,
+    environment: Environment,
+    endpointUrl: string,
+  ) {
     this.client = client
     this.environment = environment
     this.endpointUrl = endpointUrl
@@ -25,12 +28,13 @@ export class CodeGenerator {
   }
 
   getCode(query: string) {
-    return this.getImports() + this.getTransport() + '\n' + this.getQueryCode(query)
+    return (
+      this.getImports() + this.getTransport() + '\n' + this.getQueryCode(query)
+    )
   }
 
   private getTransport() {
     if (this.client === 'lokka') {
-
       return `
 const headers = {
   Authorization: 'Bearer YOUR_AUTH_TOKEN'

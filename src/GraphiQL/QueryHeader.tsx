@@ -1,17 +1,23 @@
 import * as React from 'react'
-import {Endpoint} from '../types'
+import { Endpoint } from '../types'
 import EndpointChooser from './QueryHeader/EndpointChooser'
 
 export interface Props {
   selectedEndpoint?: Endpoint
-  onChangeEndpoint?: Function
+  onChangeEndpoint?: (data?: any) => void
   onPrettify: any
   showEndpoints?: boolean
   showQueryTitle?: boolean
 }
 
-const QueryHeader = ({selectedEndpoint, onChangeEndpoint, onPrettify, showEndpoints, showQueryTitle}: Props) => (
-  <div className='query-header'>
+const QueryHeader = ({
+  selectedEndpoint,
+  onChangeEndpoint,
+  onPrettify,
+  showEndpoints,
+  showQueryTitle,
+}: Props) =>
+  <div className="query-header">
     <style jsx={true}>{`
       .query-header {
         @inherit: .bgDarkerBlue, .pa25, .flex, .justifyBetween, .itemsCenter;
@@ -23,19 +29,17 @@ const QueryHeader = ({selectedEndpoint, onChangeEndpoint, onPrettify, showEndpoi
         letter-spacing: 0.53px;
       }
     `}</style>
-    {showQueryTitle && (
-      <div className='editor-title'>
-        Query
-      </div>
-    )}
-    {showEndpoints && selectedEndpoint && onChangeEndpoint && (
+    {showQueryTitle && <div className="editor-title">Query</div>}
+    {showEndpoints &&
+      selectedEndpoint &&
+      onChangeEndpoint &&
       <EndpointChooser
         selectedEndpoint={selectedEndpoint}
         onChangeEndpoint={onChangeEndpoint}
-      />
-    )}
-    <div className='graphiql-button' onClick={onPrettify}>Prettify</div>
+      />}
+    <div className="graphiql-button" onClick={onPrettify}>
+      Prettify
+    </div>
   </div>
-)
 
 export default QueryHeader

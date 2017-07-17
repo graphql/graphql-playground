@@ -16,13 +16,8 @@ export interface Props {
   onClickType: any
 }
 
-export interface State {
-
-}
-
 // Render the top level Schema
-export default class SchemaDoc extends React.Component<Props, State> {
-
+export default class SchemaDoc extends React.Component<Props, {}> {
   shouldComponentUpdate(nextProps) {
     return this.props.schema !== nextProps.schema
   }
@@ -35,41 +30,43 @@ export default class SchemaDoc extends React.Component<Props, State> {
       schema.getSubscriptionType && schema.getSubscriptionType()
 
     return (
-      <div className='root'>
+      <div className="root">
         <MarkdownContent
-          className='doc-type-description'
+          className="doc-type-description"
           markdown={
             'A GraphQL schema provides a root type for each kind of operation.'
           }
         />
-        <div className='doc-category'>
-          <div className='doc-category-title'>
+        <div className="doc-category">
+          <div className="doc-category-title">
             {'root types'}
           </div>
-          <div className='doc-category-item'>
-            <span className='keyword'>{'query'}</span>
+          <div className="doc-category-item">
+            <span className="keyword">
+              {'query'}
+            </span>
             {': '}
             <TypeLink type={queryType} onClick={this.props.onClickType} />
           </div>
-          {
-            mutationType &&
-            <div className='doc-category-item'>
-              <span className='keyword'>{'mutation'}</span>
+          {mutationType &&
+            <div className="doc-category-item">
+              <span className="keyword">
+                {'mutation'}
+              </span>
               {': '}
               <TypeLink type={mutationType} onClick={this.props.onClickType} />
-            </div>
-          }
-          {
-            subscriptionType &&
-            <div className='doc-category-item'>
-              <span className='keyword'>{'subscription'}</span>
+            </div>}
+          {subscriptionType &&
+            <div className="doc-category-item">
+              <span className="keyword">
+                {'subscription'}
+              </span>
               {': '}
               <TypeLink
                 type={subscriptionType}
                 onClick={this.props.onClickType}
               />
-            </div>
-          }
+            </div>}
         </div>
       </div>
     )

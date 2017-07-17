@@ -36,11 +36,10 @@ interface Props {
 }
 
 export class QueryEditor extends React.Component<Props, {}> {
-
   private cachedValue: string
   private editor: any
   private ignoreChangeEvent: boolean
-  private _node: any
+  private node: any
 
   constructor(props) {
     super()
@@ -68,7 +67,7 @@ export class QueryEditor extends React.Component<Props, {}> {
     require('codemirror-graphql/lint')
     require('codemirror-graphql/mode')
 
-    let gutters: any[] = []
+    const gutters: any[] = []
     if (!this.props.hideLineNumbers) {
       gutters.push('CodeMirror-linenumbers')
     }
@@ -82,7 +81,7 @@ export class QueryEditor extends React.Component<Props, {}> {
       }
     }
 
-    this.editor = CodeMirror(this._node, {
+    this.editor = CodeMirror(this.node, {
       autofocus: !this.props.disableAutofocus,
       placeholder: this.props.placeholder,
       value: this.props.value || '',
@@ -130,11 +129,10 @@ export class QueryEditor extends React.Component<Props, {}> {
       },
     })
 
-    this.editor.on('change', this._onEdit)
-    this.editor.on('keyup', this._onKeyUp)
-    this.editor.on('hasCompletion', this._onHasCompletion)
-
-    global['editor'] = this.editor
+    this.editor.on('change', this.onEdit)
+    this.editor.on('keyup', this.onKeyUp)
+    this.editor.on('hasCompletion', this.onHasCompletion)
+    ;(global as any).editor = this.editor
   }
 
   componentDidUpdate(prevProps) {
@@ -149,8 +147,10 @@ export class QueryEditor extends React.Component<Props, {}> {
       this.editor.options.hintOptions.schema = this.props.schema
       CodeMirror.signal(this.editor, 'change', this.editor)
     }
-    if (this.props.value !== prevProps.value &&
-      this.props.value !== this.cachedValue) {
+    if (
+      this.props.value !== prevProps.value &&
+      this.props.value !== this.cachedValue
+    ) {
       this.cachedValue = this.props.value
       this.editor.setValue(this.props.value)
     }
@@ -158,17 +158,19 @@ export class QueryEditor extends React.Component<Props, {}> {
   }
 
   componentWillUnmount() {
-    this.editor.off('change', this._onEdit)
-    this.editor.off('keyup', this._onKeyUp)
-    this.editor.off('hasCompletion', this._onHasCompletion)
+    this.editor.off('change', this.onEdit)
+    this.editor.off('keyup', this.onKeyUp)
+    this.editor.off('hasCompletion', this.onHasCompletion)
     this.editor = null
   }
 
   render() {
     return (
       <div
-        className='query-editor'
-        ref={node => { this._node = node }}
+        className="query-editor"
+        ref={node => {
+          this.node = node
+        }}
       />
     )
   }
@@ -185,10 +187,10 @@ export class QueryEditor extends React.Component<Props, {}> {
    * Public API for retrieving the DOM client height for this component.
    */
   getClientHeight() {
-    return this._node && this._node.clientHeight
+    return this.node && this.node.clientHeight
   }
 
-  _onKeyUp = (cm, event) => {
+  private onKeyUp = (cm, event) => {
     const code = event.keyCode
     if (
       (code >= 65 && code <= 90) || // letters
@@ -201,7 +203,7 @@ export class QueryEditor extends React.Component<Props, {}> {
     }
   }
 
-  _onEdit = () => {
+  private onEdit = () => {
     if (!this.ignoreChangeEvent) {
       this.cachedValue = this.editor.getValue()
       if (this.props.onEdit) {
@@ -214,7 +216,7 @@ export class QueryEditor extends React.Component<Props, {}> {
    * Render a custom UI for CodeMirror's hint which includes additional info
    * about the type and description for the selected context.
    */
-  _onHasCompletion = (cm, data) => {
+  private onHasCompletion = (cm, data) => {
     onHasCompletion(cm, data, this.props.onHintInformationRender)
   }
 }

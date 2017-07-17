@@ -10,8 +10,8 @@ import * as React from 'react'
 import * as cx from 'classnames'
 
 export interface Props {
-  onRun: Function
-  onStop: Function
+  onRun: (data?: any) => void
+  onStop: () => void
   isRunning: boolean
   operations: any[]
 }
@@ -30,7 +30,6 @@ let firstTime = true
  * queries to run.
  */
 export class ExecuteButton extends React.Component<Props, State> {
-
   constructor(props) {
     super(props)
 
@@ -48,42 +47,44 @@ export class ExecuteButton extends React.Component<Props, State> {
     let options: any = null
     if (hasOptions && optionsOpen) {
       const highlight = this.state.highlight
-      options =
-        <ul className='execute-options'>
+      options = (
+        <ul className="execute-options">
           {operations.map(operation =>
             <li
               key={operation.name ? operation.name.value : '*'}
               className={operation === highlight ? 'selected' : ''}
-              onMouseOver={() => this.setState({ highlight: operation } as State)}
+              onMouseOver={() =>
+                this.setState({ highlight: operation } as State)}
               onMouseOut={() => this.setState({ highlight: null } as State)}
-              onMouseUp={() => this._onOptionSelected(operation)}
+              onMouseUp={() => this.onOptionSelected(operation)}
             >
               {operation.name ? operation.name.value : '<Unnamed>'}
             </li>,
           )}
         </ul>
+      )
     }
 
     // Allow click event if there is a running query or if there are not options
     // for which operation to run.
     let onClick
     if (this.props.isRunning || !hasOptions) {
-      onClick = this._onClick
+      onClick = this.onClick
     }
 
     // Allow mouse down if there is no running query, there are options for
     // which operation to run, and the dropdown is currently closed.
     let onMouseDown
     if (!this.props.isRunning && hasOptions && !optionsOpen) {
-      onMouseDown = this._onOptionsOpen
+      onMouseDown = this.onOptionsOpen
     }
 
-    const pathJSX = this.props.isRunning ?
-      <rect fill='#FFFFFF' x='10' y='10' width='13' height='13' rx='1' /> :
-      <path d='M 11 9 L 24 16 L 11 23 z' />
+    const pathJSX = this.props.isRunning
+      ? <rect fill="#FFFFFF" x="10" y="10" width="13" height="13" rx="1" />
+      : <path d="M 11 9 L 24 16 L 11 23 z" />
 
     return (
-      <div className='execute-button-wrap'>
+      <div className="execute-button-wrap">
         <style jsx={true}>{`
           .execute-button-wrap {
             position: absolute !important;
@@ -94,8 +95,8 @@ export class ExecuteButton extends React.Component<Props, State> {
 
           .graphcool-execute-button {
             @inherit: .br100, .flex, .itemsCenter, .justifyCenter, .pointer;
-            background-color: rgb(185,191,196);
-            border: 6px solid rgb(11,20,28);
+            background-color: rgb(185, 191, 196);
+            border: 6px solid rgb(11, 20, 28);
             width: 71px;
             height: 71px;
           }
@@ -106,19 +107,26 @@ export class ExecuteButton extends React.Component<Props, State> {
         `}</style>
         <div
           className={cx('graphcool-execute-button', {
-            'running': this.props.isRunning,
+            running: this.props.isRunning,
           })}
           onMouseDown={onMouseDown}
           onClick={onClick}
-          title='Execute Query (Ctrl-Enter)'>
-          <svg width='35' height='35' viewBox={`${this.props.isRunning ? 4 : 3}.5,4.5,24,24`}>{pathJSX}</svg>
+          title="Execute Query (Ctrl-Enter)"
+        >
+          <svg
+            width="35"
+            height="35"
+            viewBox={`${this.props.isRunning ? 4 : 3}.5,4.5,24,24`}
+          >
+            {pathJSX}
+          </svg>
         </div>
         {options}
       </div>
     )
   }
 
-  _onClick = () => {
+  private onClick = () => {
     if (this.props.isRunning) {
       this.props.onStop()
     } else {
@@ -126,12 +134,12 @@ export class ExecuteButton extends React.Component<Props, State> {
     }
   }
 
-  _onOptionSelected = operation => {
+  private onOptionSelected = operation => {
     this.setState({ optionsOpen: false } as State)
     this.props.onRun(operation.name && operation.name.value)
   }
 
-  _onOptionsOpen = downEvent => {
+  private onOptionsOpen = downEvent => {
     let initialPress = true
     const downTarget = downEvent.target
     this.setState({ highlight: null, optionsOpen: true })
@@ -142,15 +150,20 @@ export class ExecuteButton extends React.Component<Props, State> {
       } else {
         document.removeEventListener('mouseup', onMouseUp)
         onMouseUp = null
-        const isOptionsMenuClicked = (
+        const isOptionsMenuClicked =
+          // tslint:disable-next-line
           downTarget.parentNode.compareDocumentPosition(upEvent.target) &
           Node.DOCUMENT_POSITION_CONTAINED_BY
-        )
-        if (!isOptionsMenuClicked) { // menu calls setState if it was clicked
+        if (!isOptionsMenuClicked) {
+          // menu calls setState if it was clicked
           this.setState({ optionsOpen: false } as State)
         }
         if (firstTime) {
-          this._onOptionSelected(this.props.operations.find(op => op.name.value === upEvent.target.textContent))
+          this.onOptionSelected(
+            this.props.operations.find(
+              op => op.name.value === upEvent.target.textContent,
+            ),
+          )
           firstTime = false
         }
       }

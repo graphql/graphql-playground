@@ -92,8 +92,7 @@ export const introspectionQuery = `
   }
 `
 
-export const defaultQuery =
-  `# Welcome to Graphcool's custom GraphiQL ✌
+export const defaultQuery = `# Welcome to Graphcool's custom GraphiQL ✌
 #
 # GraphiQL is an in-browser IDE for writing, validating, and
 # testing GraphQL queries.
@@ -122,16 +121,16 @@ export const modalStyle = {
   },
   content: {
     position: 'relative',
-      width: 976,
-      height: 'auto',
-      top: 'initial',
-      left: 'initial',
-      right: 'initial',
-      bottom: 'initial',
-      borderRadius: 2,
-      padding: 0,
-      border: 'none',
-      background: 'none',
-      boxShadow: '0 1px 7px rgba(0,0,0,.2)',
+    width: 976,
+    height: 'auto',
+    top: 'initial',
+    left: 'initial',
+    right: 'initial',
+    bottom: 'initial',
+    borderRadius: 2,
+    padding: 0,
+    border: 'none',
+    background: 'none',
+    boxShadow: '0 1px 7px rgba(0,0,0,.2)',
   },
 }

@@ -17,7 +17,6 @@ class App extends React.Component<{}, State> {
     }
   }
   render() {
-
     let projectId: any = testProjectId
     if (regex.test(location.href)) {
       const result = regex.exec(location.href)
@@ -26,10 +25,11 @@ class App extends React.Component<{}, State> {
       }
     }
 
-    let isDev = location.href.indexOf('dev.graph.cool') > -1
-    let isLocalhost = location.href.indexOf('localhost') > -1
+    const isDev = location.href.indexOf('dev.graph.cool') > -1
+    const isLocalhost = location.href.indexOf('localhost') > -1
 
     let subscriptionUrl
+    // tslint:disable-next-line
     if (isLocalhost) {
       subscriptionUrl = 'ws://localhost:8085/v1'
     } else if (isDev) {
@@ -48,8 +48,8 @@ class App extends React.Component<{}, State> {
       <Playground
         projectId={projectId}
         wsApiPrefix={subscriptionUrl}
-        adminAuthToken=''
-        httpApiPrefix='https://api.graph.cool'
+        adminAuthToken=""
+        httpApiPrefix="https://api.graph.cool"
       />
     )
   }

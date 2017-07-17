@@ -24,8 +24,7 @@ export interface Props {
  *
  */
 export class ResultViewer extends React.Component<Props, {}> {
-
-  private _node: any
+  private node: any
   private viewer: any
 
   componentDidMount() {
@@ -39,7 +38,7 @@ export class ResultViewer extends React.Component<Props, {}> {
     require('codemirror/keymap/sublime')
     require('codemirror-graphql/results/mode')
 
-    let gutters: any[] = []
+    const gutters: any[] = []
     if (!this.props.hideGutters) {
       gutters.push('CodeMirror-foldgutter')
     }
@@ -50,7 +49,7 @@ export class ResultViewer extends React.Component<Props, {}> {
       }
     }
 
-    this.viewer = CodeMirror(this._node, {
+    this.viewer = CodeMirror(this.node, {
       lineWrapping: true,
       value: this.props.value || '',
       readOnly: true,
@@ -85,8 +84,10 @@ export class ResultViewer extends React.Component<Props, {}> {
   render() {
     return (
       <div
-        className='result-codemirror'
-        ref={node => { this._node = node }}
+        className="result-codemirror"
+        ref={node => {
+          this.node = node
+        }}
       />
     )
   }
@@ -103,6 +104,6 @@ export class ResultViewer extends React.Component<Props, {}> {
    * Public API for retrieving the DOM client height for this component.
    */
   getClientHeight() {
-    return this._node && this._node.clientHeight
+    return this.node && this.node.clientHeight
   }
 }
