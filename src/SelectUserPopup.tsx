@@ -56,7 +56,6 @@ export default class SelectUserPopup extends React.Component<Props, State> {
         maxWidth: window.innerWidth - 100 + 'px',
       },
     } as any
-
     ;(global as any).s = this
   }
 

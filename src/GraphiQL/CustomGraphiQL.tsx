@@ -246,7 +246,8 @@ export class CustomGraphiQL extends React.Component<Props, State> {
     this._ensureOfSchema()
 
     // Utility for keeping CodeMirror correctly sized.
-    this.codeMirrorSizer = new CodeMirrorSizer()(global as any).g = this
+    this.codeMirrorSizer = new CodeMirrorSizer()
+    ;(global as any).g = this
   }
 
   componentWillReceiveProps(nextProps) {

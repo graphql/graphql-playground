@@ -31,7 +31,6 @@ export default class TableComponent extends React.Component<Props, State> {
       overscanRowCount: 20,
       selectedRow: -1,
     } as any
-
     ;(global as any).t = this
   }
 

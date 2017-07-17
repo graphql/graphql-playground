@@ -1,9 +1,8 @@
 {
   "compilerOptions": {
     "outDir": "tsbuild",
-    "module": "commonjs",
     "target": "es5",
-    "lib": ["esnext", "dom"],
+    "lib": ["es2015", "dom"],
     "sourceMap": true,
     "allowJs": true,
     "jsx": "preserve",
