@@ -34,8 +34,10 @@
     "gzip-size": "3.0.0",
     "html-webpack-plugin": "2.24.0",
     "http-proxy-middleware": "0.17.2",
+    "husky": "^0.14.3",
     "jest": "17.0.2",
     "json-loader": "0.5.4",
+    "lint-staged": "^4.0.2",
     "object-assign": "4.1.0",
     "postcss-cssnext": "^2.9.0",
     "postcss-import": "^9.1.0",
@@ -44,6 +46,7 @@
     "postcss-loader": "1.0.0",
     "postcss-nested": "^1.0.0",
     "postcss-simple-vars": "^3.0.0",
+    "prettier": "^1.5.3",
     "promise": "7.1.1",
     "react-dev-utils": "^0.4.2",
     "recursive-readdir": "2.1.0",
@@ -100,7 +103,16 @@
     "build": "rm -rf tsbuild; rm -rf babelbuild; tsc --jsx preserve --allowJs src/Playground.tsx --target es5 --lib es2015,dom --outDir tsbuild; babel tsbuild -d babelbuild; cp -r ./src/assets/ ./babelbuild/assets/; cp src/CodeGenerationPopup/CodeMirror.js ./babelbuild/CodeGenerationPopup/CodeMirror.js",
     "test": "node scripts/test.js --env=jsdom",
     "bump": "npm version patch --no-git-tag-version && git add package.json",
-    "lint": "tslint \"src/**/*.ts{,x}\""
+    "lint": "tslint \"src/**/*.ts{,x}\"",
+    "precommit": "lint-staged",
+    "prettier": "prettier --single-quote --no-semi --trailing-comma all --write *.{ts,tsx} src/**/*.{ts,tsx}"
+  },
+  "lint-staged": {
+    "*.{ts,tsx}": [
+      "prettier --single-quote --no-semi --trailing-comma all --write",
+      "tslint",
+      "git add"
+    ]
   },
   "jest": {
     "collectCoverageFrom": [
