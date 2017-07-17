@@ -47,16 +47,14 @@ export default class SelectUserPopup extends React.Component<Props, State> {
 
     this.getUsers({startIndex: 0, stopIndex: 50}, props.userFields)
 
-    this.style = Object.assign({}, modalStyle, {
+    this.style = {...modalStyle, 
       overlay: modalStyle.overlay,
-      content: Object.assign({}, modalStyle.content, {
+      content: {...modalStyle.content, 
         width: 'auto',
         minWidth: '600px',
-        maxWidth: window.innerWidth - 100 + 'px',
-      }),
-    })
+        maxWidth: window.innerWidth - 100 + 'px'}}
 
-    global['s'] = this
+    global.s = this
   }
 
   componentWillReceiveProps(nextProps) {
@@ -254,14 +252,14 @@ export default class SelectUserPopup extends React.Component<Props, State> {
           users = Immutable.set(users, (i + startIndex), user)
         })
 
-        let newState = {
+        const newState = {
           users,
           count: _allUsersMeta.count,
         }
 
         if (this.lastQuery !== this.state.query) {
 
-          newState['scrollToIndex'] = 0
+          newState.scrollToIndex = 0
 
           setTimeout(
             () => {

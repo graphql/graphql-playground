@@ -51,10 +51,9 @@
     "style-loader": "0.13.1",
     "styled-jsx-postcss": "git+https://github.com/timsuchanek/styled-jsx-postcss#build3",
     "ts-loader": "^1.3.1",
-    "tslint": "^4.0.2",
-    "tslint-config-standard": "^2.0.0",
-    "tslint-loader": "^3.3.0",
-    "tslint-react": "^2.0.0",
+    "tslint": "^5.5.0",
+    "tslint-graphcool-frontend": "^0.0.1",
+    "tslint-loader": "^3.5.3",
     "typescript": "2.4.0",
     "url-loader": "0.5.7",
     "webpack": "1.14.0",
@@ -100,7 +99,8 @@
     "build-app": "node scripts/build.js",
     "build": "rm -rf tsbuild; rm -rf babelbuild; tsc --jsx preserve --allowJs src/Playground.tsx --target es5 --lib es2015,dom --outDir tsbuild; babel tsbuild -d babelbuild; cp -r ./src/assets/ ./babelbuild/assets/; cp src/CodeGenerationPopup/CodeMirror.js ./babelbuild/CodeGenerationPopup/CodeMirror.js",
     "test": "node scripts/test.js --env=jsdom",
-    "bump": "npm version patch --no-git-tag-version && git add package.json"
+    "bump": "npm version patch --no-git-tag-version && git add package.json",
+    "lint": "tslint \"src/**/*.ts{,x}\""
   },
   "jest": {
     "collectCoverageFrom": [

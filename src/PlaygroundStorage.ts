@@ -21,7 +21,7 @@ export default class PlaygroundStorage {
       }
       this.saveProject()
     }
-    global['s'] = this
+    global.s = this
   }
 
   public executedQuery() {

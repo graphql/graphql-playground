@@ -39,7 +39,7 @@ export class ResultViewer extends React.Component<Props, {}> {
     require('codemirror/keymap/sublime')
     require('codemirror-graphql/results/mode')
 
-    let gutters: any[] = []
+    const gutters: any[] = []
     if (!this.props.hideGutters) {
       gutters.push('CodeMirror-foldgutter')
     }

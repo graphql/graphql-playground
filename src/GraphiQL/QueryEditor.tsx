@@ -68,7 +68,7 @@ export class QueryEditor extends React.Component<Props, {}> {
     require('codemirror-graphql/lint')
     require('codemirror-graphql/mode')
 
-    let gutters: any[] = []
+    const gutters: any[] = []
     if (!this.props.hideLineNumbers) {
       gutters.push('CodeMirror-linenumbers')
     }
@@ -134,7 +134,7 @@ export class QueryEditor extends React.Component<Props, {}> {
     this.editor.on('keyup', this._onKeyUp)
     this.editor.on('hasCompletion', this._onHasCompletion)
 
-    global['editor'] = this.editor
+    global.editor = this.editor
   }
 
   componentDidUpdate(prevProps) {

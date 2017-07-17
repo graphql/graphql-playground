@@ -26,8 +26,8 @@ class App extends React.Component<{}, State> {
       }
     }
 
-    let isDev = location.href.indexOf('dev.graph.cool') > -1
-    let isLocalhost = location.href.indexOf('localhost') > -1
+    const isDev = location.href.indexOf('dev.graph.cool') > -1
+    const isLocalhost = location.href.indexOf('localhost') > -1
 
     let subscriptionUrl
     if (isLocalhost) {

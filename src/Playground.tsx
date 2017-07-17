@@ -149,17 +149,17 @@ export default class Playground extends React.Component<Props,State> {
         this.componentWillUnmount()
       })
     }
-    global['p'] = this
+    global.p = this
   }
   setWS = (session: Session) => {
     console.log('calling setWS')
-    let connectionParams = {}
+    const connectionParams = {}
 
     if (session.selectedViewer === 'ADMIN' && this.state.adminAuthToken) {
-      connectionParams['Authorization'] = `Bearer ${this.state.adminAuthToken}`
+      connectionParams.Authorization = `Bearer ${this.state.adminAuthToken}`
       console.log('setWS: going for admin')
     } else if (session.selectedViewer === 'USER' && session.selectedUserToken) {
-      connectionParams['Authorization'] = `Bearer ${session.selectedUserToken}`
+      connectionParams.Authorization = `Bearer ${session.selectedUserToken}`
       console.log('setWS: going for user')
     } else {
       console.log('going for everyone')
@@ -860,9 +860,9 @@ export default class Playground extends React.Component<Props,State> {
             this.setValueInSession(session.id, 'subscriptionActive', true)
           }
           const id = this.wsConnections[session.id].subscribe(graphQLParams, (err, res) => {
-            let data = {data: res, isSubscription: true}
+            const data = {data: res, isSubscription: true}
             if (err) {
-              data['error'] = err
+              data.error = err
             }
             observer.next(data)
           })
@@ -883,9 +883,9 @@ export default class Playground extends React.Component<Props,State> {
     }
 
     if (session.selectedViewer === 'ADMIN' && this.state.adminAuthToken) {
-      headers['Authorization'] = `Bearer ${this.state.adminAuthToken}`
+      headers.Authorization = `Bearer ${this.state.adminAuthToken}`
     } else if (session.selectedViewer === 'USER' && session.selectedUserToken) {
-      headers['Authorization'] = `Bearer ${session.selectedUserToken}`
+      headers.Authorization = `Bearer ${session.selectedUserToken}`
     }
 
     return fetch(endpoint, { // tslint:disable-line

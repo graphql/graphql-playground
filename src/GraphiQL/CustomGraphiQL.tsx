@@ -245,7 +245,7 @@ export class CustomGraphiQL extends React.Component<Props, State> {
     // Utility for keeping CodeMirror correctly sized.
     this.codeMirrorSizer = new CodeMirrorSizer()
 
-    global['g'] = this
+    global.g = this
   }
 
   componentWillReceiveProps(nextProps) {
@@ -959,7 +959,7 @@ export class CustomGraphiQL extends React.Component<Props, State> {
               delete result.isSubscription
             }
             let responses
-            let response = JSON.stringify(result, null, 2)
+            const response = JSON.stringify(result, null, 2)
 
             if (isSubscription) {
               responses = this.state.responses

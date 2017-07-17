@@ -33,7 +33,7 @@ export default class TableComponent extends React.Component<Props, State> {
       selectedRow: -1,
     }
 
-    global['t'] = this
+    global.t = this
   }
 
   render() {
@@ -127,7 +127,7 @@ export default class TableComponent extends React.Component<Props, State> {
   }
 
   private rowGetter = ({ index }) => {
-    let row = this.props.rows[index]
+    const row = this.props.rows[index]
     if (!row) {
       return {}
     }
