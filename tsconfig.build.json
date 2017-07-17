@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "outDir": "build/dist",
+    "outDir": "tsbuild",
     "module": "commonjs",
     "target": "es5",
     "lib": ["esnext", "dom"],
@@ -16,6 +16,9 @@
     "suppressImplicitAnyIndexErrors": true,
     "noUnusedLocals": false
   },
+  "files": [
+    "src/Playground.tsx"
+  ],
   "exclude": [
     "node_modules"
   ],

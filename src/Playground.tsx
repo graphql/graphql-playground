@@ -170,10 +170,10 @@ export default class Playground extends React.Component<Props, State> {
         this.componentWillUnmount()
       })
     }
-    global.p = this
+    ;(global as any).p = this
   }
   setWS = (session: Session) => {
-    const connectionParams = {}
+    const connectionParams: any = {}
 
     if (session.selectedViewer === 'ADMIN' && this.state.adminAuthToken) {
       connectionParams.Authorization = `Bearer ${this.state.adminAuthToken}`
@@ -943,7 +943,7 @@ export default class Playground extends React.Component<Props, State> {
           const id = this.wsConnections[
             session.id
           ].subscribe(graphQLParams, (err, res) => {
-            const data = { data: res, isSubscription: true }
+            const data: any = { data: res, isSubscription: true }
             if (err) {
               data.error = err
             }
@@ -963,7 +963,7 @@ export default class Playground extends React.Component<Props, State> {
         ? this.getSimpleEndpoint()
         : this.getRelayEndpoint()
 
-    const headers = {
+    const headers: any = {
       'Content-Type': 'application/json',
       'x-graphcool-source': 'console:playground',
     }

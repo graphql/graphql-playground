@@ -5,7 +5,7 @@ import Info from './Info'
 
 export interface Props {
   selectedEndpoint: Endpoint
-  onChangeEndpoint: (data: any) => void
+  onChangeEndpoint?: (data?: any) => void
 }
 
 const EndpointChooser = ({ selectedEndpoint, onChangeEndpoint }: Props) =>
@@ -42,7 +42,7 @@ const EndpointChooser = ({ selectedEndpoint, onChangeEndpoint }: Props) =>
         className={cx('endpoint', {
           active: selectedEndpoint === 'RELAY',
         })}
-        onClick={() => onChangeEndpoint('RELAY')}
+        onClick={() => onChangeEndpoint && onChangeEndpoint('RELAY')}
       >
         Relay
       </div>
@@ -50,7 +50,7 @@ const EndpointChooser = ({ selectedEndpoint, onChangeEndpoint }: Props) =>
         className={cx('endpoint', {
           active: selectedEndpoint === 'SIMPLE',
         })}
-        onClick={() => onChangeEndpoint('SIMPLE')}
+        onClick={() => onChangeEndpoint && onChangeEndpoint('SIMPLE')}
       >
         Simple
       </div>

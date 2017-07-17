@@ -55,9 +55,9 @@ export default class SelectUserPopup extends React.Component<Props, State> {
         minWidth: '600px',
         maxWidth: window.innerWidth - 100 + 'px',
       },
-    }
+    } as any
 
-    global.s = this
+    ;(global as any).s = this
   }
 
   componentWillReceiveProps(nextProps) {
@@ -258,7 +258,7 @@ export default class SelectUserPopup extends React.Component<Props, State> {
           users = Immutable.set(users, i + startIndex, user)
         })
 
-        const newState = {
+        const newState: any = {
           users,
           count: _allUsersMeta.count,
         }

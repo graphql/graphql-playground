@@ -10,8 +10,8 @@
     "graphiql_dark.css"
   ],
   "devDependencies": {
-    "@types/jest": "^16.0.4",
-    "@types/node": "^7.0.0",
+    "@types/jest": "^20.0.2",
+    "@types/node": "^8.0.13",
     "@types/react": "^15.0.31",
     "@types/react-dom": "^15.5.1",
     "autoprefixer": "6.5.1",
@@ -70,8 +70,8 @@
     ]
   },
   "dependencies": {
-    "babel-cli": "^6.22.2",
-    "babel-preset-stage-3": "^6.22.0",
+    "babel-cli": "^6.24.1",
+    "babel-preset-stage-3": "^6.24.1",
     "calculate-size": "^1.1.1",
     "classnames": "^2.2.5",
     "codemirror": "^5.22.2",
@@ -92,7 +92,7 @@
     "rxjs": "^5.0.3",
     "seamless-immutable": "^7.0.1",
     "styled-jss": "git+https://github.com/timsuchanek/styled-jsx#build",
-    "subscriptions-transport-ws": "^0.7.1",
+    "subscriptions-transport-ws": "^0.8.1",
     "svg-loader": "^0.0.2",
     "svgo-loader": "^1.1.2"
   },
@@ -100,7 +100,7 @@
     "start": "node scripts/start.js",
     "prepublish": "npm run build",
     "build-app": "node scripts/build.js",
-    "build": "rm -rf tsbuild; rm -rf babelbuild; tsc --jsx preserve --allowJs src/Playground.tsx --target es5 --lib es2015,dom --outDir tsbuild; babel tsbuild -d babelbuild; cp -r ./src/assets/ ./babelbuild/assets/; cp src/CodeGenerationPopup/CodeMirror.js ./babelbuild/CodeGenerationPopup/CodeMirror.js",
+    "build": "rm -rf tsbuild; rm -rf babelbuild; tsc -p tsconfig.build.json; babel tsbuild -d babelbuild; cp -r ./src/assets/ ./babelbuild/assets/; cp src/CodeGenerationPopup/CodeMirror.js ./babelbuild/CodeGenerationPopup/CodeMirror.js",
     "test": "node scripts/test.js --env=jsdom",
     "bump": "npm version patch --no-git-tag-version && git add package.json",
     "lint": "tslint \"src/**/*.ts{,x}\"",

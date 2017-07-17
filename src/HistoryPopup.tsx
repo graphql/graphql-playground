@@ -13,7 +13,7 @@ export interface Props {
   onRequestClose: () => void
   historyItems: Session[]
   onItemStarToggled: (item: Session) => void
-  fetcherCreater: (item: any) => void
+  fetcherCreater: (item: any) => (item: any) => Promise<any>
   schemas: SchemaCache
   onCreateSession: (session: Session) => void
 }

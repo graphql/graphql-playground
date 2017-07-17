@@ -30,9 +30,9 @@ export default class TableComponent extends React.Component<Props, State> {
       rowHeight: 54,
       overscanRowCount: 20,
       selectedRow: -1,
-    }
+    } as any
 
-    global.t = this
+    ;(global as any).t = this
   }
 
   render() {

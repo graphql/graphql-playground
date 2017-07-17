@@ -48,7 +48,7 @@ const CSSTransitionGroup = require('react-transition-group/CSSTransitionGroup')
  */
 
 export interface Props {
-  fetcher: (params: any) => any
+  fetcher: (params: any) => Promise<any>
   schema?: GraphQLSchema
   query?: string
   variables?: string
@@ -64,7 +64,7 @@ export interface Props {
   onToggleDocs?: (value: boolean) => any
   onClickCodeGeneration?: any
   getDefaultFieldNames?: () => any
-  onChangeEndpoint?: (data: any) => void
+  onChangeEndpoint?: (data?: any) => void
   showViewAs?: boolean
   showSelectUser?: boolean
   showCodeGeneration?: boolean
@@ -246,9 +246,7 @@ export class CustomGraphiQL extends React.Component<Props, State> {
     this._ensureOfSchema()
 
     // Utility for keeping CodeMirror correctly sized.
-    this.codeMirrorSizer = new CodeMirrorSizer()
-
-    global.g = this
+    this.codeMirrorSizer = new CodeMirrorSizer()(global as any).g = this
   }
 
   componentWillReceiveProps(nextProps) {
@@ -919,7 +917,7 @@ export class CustomGraphiQL extends React.Component<Props, State> {
   }
 
   _fetchQuery(query, variables, operationName, cb) {
-    const fetcher = this.props.fetcher
+    const fetcher: any = this.props.fetcher
     let jsonVariables = null
 
     try {

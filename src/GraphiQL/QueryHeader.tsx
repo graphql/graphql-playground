@@ -4,7 +4,7 @@ import EndpointChooser from './QueryHeader/EndpointChooser'
 
 export interface Props {
   selectedEndpoint?: Endpoint
-  onChangeEndpoint: (data: any) => void
+  onChangeEndpoint?: (data?: any) => void
   onPrettify: any
   showEndpoints?: boolean
   showQueryTitle?: boolean
