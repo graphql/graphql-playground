@@ -4,7 +4,6 @@ import HistoryHeader from './HistoryPopup/HistoryHeader'
 import { HistoryFilter, Session } from './types'
 import HistoryItems from './HistoryPopup/HistoryItems'
 import { CustomGraphiQL } from './GraphiQL/CustomGraphiQL'
-import { SchemaCache } from './Playground'
 import { $v, Icon } from 'graphcool-styles'
 import { modalStyle } from './constants'
 
@@ -14,7 +13,7 @@ export interface Props {
   historyItems: Session[]
   onItemStarToggled: (item: Session) => void
   fetcherCreater: (item: any) => (item: any) => Promise<any>
-  schemas: SchemaCache
+  schema: any
   onCreateSession: (session: Session) => void
 }
 
@@ -45,9 +44,7 @@ export default class HistoryPopup extends React.Component<Props, State> {
     })
 
     const selectedItem = items[this.state.selectedItemIndex]
-    const schema = selectedItem
-      ? this.props.schemas[selectedItem.selectedEndpoint]
-      : null
+    const schema = this.props.schema
 
     return (
       <Modal

@@ -1,4 +1,3 @@
-export type Endpoint = 'SIMPLE' | 'RELAY'
 export type Viewer = 'ADMIN' | 'EVERYONE' | 'USER'
 
 export interface Session {
@@ -11,7 +10,6 @@ export interface Session {
   subscriptionActive: boolean
 
   // additional props that are interactive in graphiql, these are not represented in graphiqls state
-  selectedEndpoint: Endpoint
   selectedViewer: Viewer
   queryTypes: QueryTypes
   starred?: boolean

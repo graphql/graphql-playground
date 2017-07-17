@@ -54,7 +54,6 @@ export interface Props {
   variables?: string
   operationName?: string
   responses?: Response[]
-  selectedEndpoint?: Endpoint
 
   storage?: any
   defaultQuery?: string
@@ -64,7 +63,6 @@ export interface Props {
   onToggleDocs?: (value: boolean) => any
   onClickCodeGeneration?: any
   getDefaultFieldNames?: () => any
-  onChangeEndpoint?: (data?: any) => void
   showViewAs?: boolean
   showSelectUser?: boolean
   showCodeGeneration?: boolean
@@ -505,8 +503,6 @@ export class CustomGraphiQL extends React.Component<Props, State> {
             <div className="queryWrap" style={queryWrapStyle}>
               {this.props.disableAnimation
                 ? <QueryHeader
-                    selectedEndpoint={this.props.selectedEndpoint}
-                    onChangeEndpoint={this.props.onChangeEndpoint}
                     onPrettify={this.handlePrettifyQuery}
                     showEndpoints={this.props.showEndpoints}
                     showQueryTitle={this.props.showQueryTitle}
@@ -518,8 +514,6 @@ export class CustomGraphiQL extends React.Component<Props, State> {
                   >
                     {!this.props.disableQueryHeader &&
                       <QueryHeader
-                        selectedEndpoint={this.props.selectedEndpoint}
-                        onChangeEndpoint={this.props.onChangeEndpoint}
                         onPrettify={this.handlePrettifyQuery}
                         showEndpoints={this.props.showEndpoints}
                         showQueryTitle={this.props.showQueryTitle}

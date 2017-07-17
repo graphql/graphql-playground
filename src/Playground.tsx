@@ -27,7 +27,6 @@ import {
   onboardingQuery1Check,
 } from './data'
 
-export type Endpoint = 'SIMPLE' | 'RELAY'
 export type Viewer = 'ADMIN' | 'EVERYONE' | 'USER'
 export interface Response {
   date: string
@@ -50,7 +49,7 @@ export interface State {
   schema: any
   sessions: Session[]
   selectedSessionIndex: number
-  schemaCache: SchemaCache
+  schemaCache: any
   historyOpen: boolean
   history: Session[]
   httpApiPrefix: string
@@ -62,11 +61,6 @@ export interface State {
   selectUserSessionId?: string
   codeGenerationPopupOpen: boolean
   disableQueryHeader: boolean
-}
-
-export interface SchemaCache {
-  SIMPLE: any
-  RELAY: any
 }
 
 export interface CursorPosition {
@@ -139,10 +133,7 @@ export default class Playground extends React.Component<Props, State> {
       parseInt(this.storage.getItem('selectedSessionIndex'), 10) || 0
     this.state = {
       schema: null,
-      schemaCache: {
-        SIMPLE: null,
-        RELAY: null,
-      },
+      schemaCache: null,
       userFields: [],
       sessions,
       selectedSessionIndex:
@@ -239,12 +230,7 @@ export default class Playground extends React.Component<Props, State> {
     }
   }
   fetchSchemas() {
-    return Promise.all([
-      this.props.isEndpoint
-        ? Promise.resolve(null)
-        : this.fetchSchema(this.getRelayEndpoint()),
-      this.fetchSchema(this.getSimpleEndpoint()),
-    ]).then(([relaySchemaData, simpleSchemaData]) => {
+    return this.fetchSchema(this.getSimpleEndpoint()).then(simpleSchemaData => {
       if (!simpleSchemaData || simpleSchemaData.error) {
         this.setState(
           {
@@ -257,20 +243,13 @@ export default class Playground extends React.Component<Props, State> {
         return
       }
 
-      const relaySchema =
-        relaySchemaData &&
-        !relaySchemaData.error &&
-        buildClientSchema(relaySchemaData.data)
       const simpleSchema = buildClientSchema(simpleSchemaData.data)
 
       const userFields = this.extractUserField(simpleSchema)
 
       this.setState(
         {
-          schemaCache: {
-            RELAY: relaySchema,
-            SIMPLE: simpleSchema,
-          },
+          schemaCache: simpleSchema,
           userFields,
         } as State,
       )
@@ -352,9 +331,7 @@ export default class Playground extends React.Component<Props, State> {
     const selectedSession = sessions[selectedSessionIndex]
     const selectedEndpointUrl = isEndpoint
       ? location.href
-      : selectedSession.selectedEndpoint === 'SIMPLE'
-        ? this.getSimpleEndpoint()
-        : this.getRelayEndpoint()
+      : this.getSimpleEndpoint()
     // const canSelectUsers = this.state.userFields.length > 0
 
     return (
@@ -401,9 +378,8 @@ export default class Playground extends React.Component<Props, State> {
             >
               <CustomGraphiQL
                 key={session.id}
-                schema={this.state.schemaCache[session.selectedEndpoint]}
+                schema={this.state.schemaCache}
                 fetcher={this.fetcher(session)}
-                selectedEndpoint={session.selectedEndpoint}
                 showQueryTitle={false}
                 showResponseTitle={false}
                 showViewAs={!isEndpoint}
@@ -418,8 +394,6 @@ export default class Playground extends React.Component<Props, State> {
                 operationName={session.operationName}
                 onClickCodeGeneration={() =>
                   this.handleClickCodeGeneration(session)}
-                onChangeEndpoint={(endpoint: Endpoint) =>
-                  this.handleEndpointChange(session.id, endpoint)}
                 onChangeViewer={(viewer: Viewer) =>
                   this.handleViewerChange(session.id, viewer)}
                 onEditOperationName={(name: string) =>
@@ -459,7 +433,7 @@ export default class Playground extends React.Component<Props, State> {
             historyItems={this.state.history}
             onItemStarToggled={this.handleItemStarToggled}
             fetcherCreater={this.fetcher}
-            schemas={this.state.schemaCache}
+            schema={this.state.schemaCache}
             onCreateSession={this.handleCreateSession}
           />}
         {this.props.adminAuthToken &&
@@ -733,7 +707,6 @@ export default class Playground extends React.Component<Props, State> {
 
       newSession = Immutable({
         id: cuid(),
-        selectedEndpoint: 'SIMPLE',
         selectedViewer: 'ADMIN',
         query,
         variables: '',
@@ -754,7 +727,6 @@ export default class Playground extends React.Component<Props, State> {
   private createSessionFromQuery = (query: string) => {
     return Immutable({
       id: cuid(),
-      selectedEndpoint: 'SIMPLE',
       selectedViewer: 'ADMIN',
       query,
       variables: '',
@@ -798,10 +770,6 @@ export default class Playground extends React.Component<Props, State> {
         selectUserOpen: false,
       } as State,
     )
-  }
-
-  private handleEndpointChange = (sessionId: string, endpoint: Endpoint) => {
-    this.setValueInSession(sessionId, 'selectedEndpoint', endpoint)
   }
 
   private handleVariableChange = (sessionId: string, variables: string) => {
@@ -856,10 +824,6 @@ export default class Playground extends React.Component<Props, State> {
     return `${this.state.httpApiPrefix}/simple/v1/${this.props.projectId}`
   }
 
-  private getRelayEndpoint() {
-    return `${this.state.httpApiPrefix}/relay/v1/${this.props.projectId}`
-  }
-
   private getSystemEndpoint() {
     return `${this.state.httpApiPrefix}/system`
   }
@@ -889,8 +853,7 @@ export default class Playground extends React.Component<Props, State> {
         session.query === item.query &&
         session.variables === item.variables &&
         session.operationName === item.operationName &&
-        session.selectedViewer === item.selectedViewer &&
-        session.selectedEndpoint === item.selectedEndpoint,
+        session.selectedViewer === item.selectedViewer,
     )
     return Boolean(duplicate)
   }
@@ -958,10 +921,7 @@ export default class Playground extends React.Component<Props, State> {
       }
     }
 
-    const endpoint =
-      session.selectedEndpoint === 'SIMPLE'
-        ? this.getSimpleEndpoint()
-        : this.getRelayEndpoint()
+    const endpoint = this.getSimpleEndpoint()
 
     const headers: any = {
       'Content-Type': 'application/json',

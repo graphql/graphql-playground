@@ -64,17 +64,6 @@ const HistoryItems = ({
           @inherit: .lightOrange, .bgLightOrange20;
         }
       }
-      .endpoint {
-        @inherit: .black30,
-          .br2,
-          .ph6,
-          .pv4,
-          .ttu,
-          .fw6,
-          .f12,
-          .nowrap,
-          .bgBlack04;
-      }
       .date {
         @inherit: .f14, .black50, .ml16;
       }
@@ -132,9 +121,6 @@ const HistoryItems = ({
           </div>
         </div>
         <div className="right">
-          <div className="endpoint">
-            {item.selectedEndpoint === 'SIMPLE' ? 'Simple API' : 'Relay API'}
-          </div>
           {item.date &&
             <div className="date">
               {item.date.getMonth() + 1}/{item.date.getDay()}/{item.date.getFullYear().toString().slice(2, 4)}
