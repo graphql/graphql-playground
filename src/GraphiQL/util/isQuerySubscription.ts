@@ -1,6 +1,9 @@
 import { parse } from 'graphql'
 
-const isQuerySubscription = (query: string, operationName: string | null): boolean => {
+const isQuerySubscription = (
+  query: string,
+  operationName: string | null,
+): boolean => {
   let ast: any = null
   // takes around 0.02ms -  1ms
   try {

@@ -1,4 +1,3 @@
-
 export type Endpoint = 'SIMPLE' | 'RELAY'
 export type Viewer = 'ADMIN' | 'EVERYONE' | 'USER'
 
@@ -36,7 +35,6 @@ export interface OperationDefinition {
 }
 
 export type HistoryFilter = 'HISTORY' | 'STARRED'
-
 
 export type Environment = 'Node' | 'Browser'
 export type GraphQLClient = 'fetch' | 'lokka' | 'relay' | 'apollo'

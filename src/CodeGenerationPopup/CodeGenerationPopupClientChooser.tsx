@@ -15,7 +15,7 @@ interface Props {
   client: string
 }
 
-const Chooser = (props: Props) => (
+const Chooser = (props: Props) =>
   <div className={cx($p.bb, $p.bt, $p.bl, $p.bBlack10, $p.flex1)}>
     <style jsx>{`
       .condition-button:not(.bgGreen):hover {
@@ -39,32 +39,45 @@ const Chooser = (props: Props) => (
           )}
         >
           {clients.map(env => {
-            const {width} = calculateSize(env.toUpperCase(), {
+            const { width } = calculateSize(env.toUpperCase(), {
               fontSize: '14px',
               fontWeight: '600',
             })
 
             return (
               <div
-                className={cx($p.relative, $p.flex, $p.itemsCenter, $p.justifyCenter, $p.pointer)}
+                className={cx(
+                  $p.relative,
+                  $p.flex,
+                  $p.itemsCenter,
+                  $p.justifyCenter,
+                  $p.pointer,
+                )}
                 onClick={() => props.setClient(env)}
-                style={{width: width + 15}}
+                style={{ width: width + 15 }}
                 key={env}
               >
                 <div
                   className={cx(
-                    'condition-button', $p.nowrap, $p.absolute, $p.ph10, $p.flex, $p.flexRow, $p.itemsCenter,
+                    'condition-button',
+                    $p.nowrap,
+                    $p.absolute,
+                    $p.ph10,
+                    $p.flex,
+                    $p.flexRow,
+                    $p.itemsCenter,
                     {
                       [cx($p.pv6, $p.bgBlack04)]: props.client !== env,
-                      [cx($p.bgGreen, $p.br2, $p.pv8, $p.z1)]: props.client === env,
-                    })}
+                      [cx($p.bgGreen, $p.br2, $p.pv8, $p.z1)]:
+                        props.client === env,
+                    },
+                  )}
                 >
                   <div
                     className={cx($p.ttu, $p.fw6, $p.f14, {
-                        [$p.black30]: props.client !== env,
-                        [$p.white]: props.client === env,
-                      },
-                    )}
+                      [$p.black30]: props.client !== env,
+                      [$p.white]: props.client === env,
+                    })}
                   >
                     {env}
                   </div>
@@ -76,6 +89,5 @@ const Chooser = (props: Props) => (
       </div>
     </div>
   </div>
-)
 
 export default Chooser

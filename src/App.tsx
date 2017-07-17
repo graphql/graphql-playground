@@ -17,7 +17,6 @@ class App extends React.Component<{}, State> {
     }
   }
   render() {
-
     let projectId: any = testProjectId
     if (regex.test(location.href)) {
       const result = regex.exec(location.href)
@@ -48,8 +47,8 @@ class App extends React.Component<{}, State> {
       <Playground
         projectId={projectId}
         wsApiPrefix={subscriptionUrl}
-        adminAuthToken=''
-        httpApiPrefix='https://api.graph.cool'
+        adminAuthToken=""
+        httpApiPrefix="https://api.graph.cool"
       />
     )
   }

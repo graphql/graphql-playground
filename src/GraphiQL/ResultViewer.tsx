@@ -24,7 +24,6 @@ export interface Props {
  *
  */
 export class ResultViewer extends React.Component<Props, {}> {
-
   private _node: any
   private viewer: any
 
@@ -85,8 +84,10 @@ export class ResultViewer extends React.Component<Props, {}> {
   render() {
     return (
       <div
-        className='result-codemirror'
-        ref={node => { this._node = node }}
+        className="result-codemirror"
+        ref={node => {
+          this._node = node
+        }}
       />
     )
   }

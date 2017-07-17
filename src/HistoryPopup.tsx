@@ -1,12 +1,12 @@
 import * as React from 'react'
 import * as Modal from 'react-modal'
 import HistoryHeader from './HistoryPopup/HistoryHeader'
-import {HistoryFilter, Session} from './types'
+import { HistoryFilter, Session } from './types'
 import HistoryItems from './HistoryPopup/HistoryItems'
-import {CustomGraphiQL} from './GraphiQL/CustomGraphiQL'
-import {SchemaCache} from './Playground'
-import {$v, Icon} from 'graphcool-styles'
-import {modalStyle} from './constants'
+import { CustomGraphiQL } from './GraphiQL/CustomGraphiQL'
+import { SchemaCache } from './Playground'
+import { $v, Icon } from 'graphcool-styles'
+import { modalStyle } from './constants'
 
 export interface Props {
   isOpen: boolean
@@ -24,7 +24,7 @@ export interface State {
   searchTerm: string
 }
 
-export default class HistoryPopup extends React.Component<Props,State> {
+export default class HistoryPopup extends React.Component<Props, State> {
   constructor(props) {
     super(props)
     this.state = {
@@ -34,21 +34,26 @@ export default class HistoryPopup extends React.Component<Props,State> {
     }
   }
   render() {
-    const {searchTerm, selectedFilter} = this.state
-    const items = this.props.historyItems
-      .filter(item => {
-        return selectedFilter === 'STARRED' ? item.starred : true
-          && (searchTerm && searchTerm.length > 0 ? item.query.toLowerCase().includes(searchTerm.toLowerCase()) : true)
-      })
+    const { searchTerm, selectedFilter } = this.state
+    const items = this.props.historyItems.filter(item => {
+      return selectedFilter === 'STARRED'
+        ? item.starred
+        : true &&
+          (searchTerm && searchTerm.length > 0
+            ? item.query.toLowerCase().includes(searchTerm.toLowerCase())
+            : true)
+    })
 
     const selectedItem = items[this.state.selectedItemIndex]
-    const schema = selectedItem ? this.props.schemas[selectedItem.selectedEndpoint] : null
+    const schema = selectedItem
+      ? this.props.schemas[selectedItem.selectedEndpoint]
+      : null
 
     return (
       <Modal
         isOpen={this.props.isOpen}
         onRequestClose={this.props.onRequestClose}
-        contentLabel='GraphiQL Session History'
+        contentLabel="GraphiQL Session History"
         style={modalStyle}
       >
         <style jsx>{`
@@ -66,7 +71,11 @@ export default class HistoryPopup extends React.Component<Props,State> {
               left: 0;
               right: 0;
               width: 100%;
-              background: linear-gradient(to bottom, rgba(255,255,255,0) 0%,rgba(255,255,255,1) 100%);
+              background: linear-gradient(
+                to bottom,
+                rgba(255, 255, 255, 0) 0%,
+                rgba(255, 255, 255, 1) 100%
+              );
             }
           }
           .right {
@@ -88,14 +97,15 @@ export default class HistoryPopup extends React.Component<Props,State> {
             @inherit: .f14, .white40, .ttu, .fw6;
           }
           .use {
-            @inherit: .f14, .fw6, .pv10, .ph16, .bgGreen, .flex, .br2, .itemsCenter, .pointer;
+            @inherit: .f14, .fw6, .pv10, .ph16, .bgGreen, .flex, .br2,
+              .itemsCenter, .pointer;
           }
           .use-text {
             @inherit: .mr6, .white;
           }
         `}</style>
-        <div className='history-popup'>
-          <div className='left'>
+        <div className="history-popup">
+          <div className="left">
             <HistoryHeader
               onSelectFilter={this.handleSelectFilter}
               selectedFilter={this.state.selectedFilter}
@@ -109,62 +119,58 @@ export default class HistoryPopup extends React.Component<Props,State> {
               onItemStarToggled={this.props.onItemStarToggled}
             />
           </div>
-          {Boolean(selectedItem) ? (
-            <div className='right'>
-              <div className='right-header'>
-                <div className='view'>
-                  {`${selectedItem.selectedEndpoint} API / View as ${selectedItem.selectedViewer}`}
-                </div>
-                <div
-                  className='use'
-                  onClick={() => {
-                    this.props.onCreateSession(selectedItem)
-                    this.props.onRequestClose()
-                  }}
-                >
-                  <div className='use-text'>
-                    Use
+          {Boolean(selectedItem)
+            ? <div className="right">
+                <div className="right-header">
+                  <div className="view">
+                    {`${selectedItem.selectedEndpoint} API / View as ${selectedItem.selectedViewer}`}
                   </div>
-                  <Icon
-                    src={require('./assets/icons/arrowRight.svg')}
-                    color={$v.white}
-                    stroke
-                    width={13}
-                    height={13}
-                  />
+                  <div
+                    className="use"
+                    onClick={() => {
+                      this.props.onCreateSession(selectedItem)
+                      this.props.onRequestClose()
+                    }}
+                  >
+                    <div className="use-text">Use</div>
+                    <Icon
+                      src={require('./assets/icons/arrowRight.svg')}
+                      color={$v.white}
+                      stroke
+                      width={13}
+                      height={13}
+                    />
+                  </div>
                 </div>
+                <CustomGraphiQL
+                  schema={schema}
+                  variables={selectedItem.variables}
+                  query={selectedItem.query}
+                  fetcher={this.props.fetcherCreater(selectedItem)}
+                  disableQueryHeader
+                  queryOnly
+                  rerenderQuery
+                />
               </div>
-              <CustomGraphiQL
-                schema={schema}
-                variables={selectedItem.variables}
-                query={selectedItem.query}
-                fetcher={this.props.fetcherCreater(selectedItem)}
-                disableQueryHeader
-                queryOnly
-                rerenderQuery
-              />
-            </div>
-          ) : (
-            <div className='right'>
-              <div className='right-empty'>
-                <div className='right-empty-text'>No History yet</div>
-              </div>
-            </div>
-          )}
+            : <div className="right">
+                <div className="right-empty">
+                  <div className="right-empty-text">No History yet</div>
+                </div>
+              </div>}
         </div>
       </Modal>
     )
   }
 
   private handleItemSelect = (index: number) => {
-    this.setState({selectedItemIndex: index} as State)
+    this.setState({ selectedItemIndex: index } as State)
   }
 
   private handleSelectFilter = (filter: HistoryFilter) => {
-    this.setState({selectedFilter: filter} as State)
+    this.setState({ selectedFilter: filter } as State)
   }
 
   private handleSearch = (term: string) => {
-    this.setState({searchTerm: term} as State)
+    this.setState({ searchTerm: term } as State)
   }
 }

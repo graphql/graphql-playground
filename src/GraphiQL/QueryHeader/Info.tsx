@@ -1,10 +1,11 @@
 import * as React from 'react'
 
-const Info = (props) => (
-  <div className='info'>
+const Info = props =>
+  <div className="info">
     <style jsx>{`
       .question-mark {
-        @inherit: .bgWhite10, .flex, .itemsCenter, .justifyCenter, .white40, .f12, .fw6, .br100, .pointer;
+        @inherit: .bgWhite10, .flex, .itemsCenter, .justifyCenter, .white40,
+          .f12, .fw6, .br100, .pointer;
         width: 18px;
         height: 18px;
       }
@@ -36,15 +37,13 @@ const Info = (props) => (
           @inherit: .bgBlue, .white;
         }
       }
-
     `}</style>
-    <div className='question-mark'>?</div>
-    <div className='tooltip'>
-      <div className='tooltip-content'>
+    <div className="question-mark">?</div>
+    <div className="tooltip">
+      <div className="tooltip-content">
         {props.children}
       </div>
     </div>
   </div>
-)
 
 export default Info

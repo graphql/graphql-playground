@@ -1,6 +1,6 @@
 import * as React from 'react'
 import ViewerChooser from './ResultHeader/ViewerChooser'
-import {Viewer} from '../types'
+import { Viewer } from '../types'
 import * as cx from 'classnames'
 
 export interface Props {
@@ -17,15 +17,18 @@ const ResultHeader = ({
   showViewAs,
   showResponseTitle,
   showSelectUser,
-}: Props) => (
-  <div
-    className={cx(
-      'result-header subscription',
-    )}
-  >
+}: Props) =>
+  <div className={cx('result-header subscription')}>
     <style jsx>{`
       .result-header {
-        @inherit: .bgDarkBlue, .flex, .justifyBetween, .itemsCenter, .relative, .pt25, .mh25, .pl16;
+        @inherit: .bgDarkBlue,
+          .flex,
+          .justifyBetween,
+          .itemsCenter,
+          .relative,
+          .pt25,
+          .mh25,
+          .pl16;
         height: 75px;
         &.subscription {
           &:after {
@@ -35,7 +38,11 @@ const ResultHeader = ({
             left: 0;
             right: 0;
             height: 25px;
-            background: linear-gradient(to bottom, rgba(23,42,58,1) 0%,rgba(23,42,58,0) 100%);
+            background: linear-gradient(
+              to bottom,
+              rgba(23, 42, 58, 1) 0%,
+              rgba(23, 42, 58, 0) 100%
+            );
             z-index: 4;
           }
         }
@@ -44,21 +51,19 @@ const ResultHeader = ({
         @inherit: .absolute;
       }
     `}</style>
-    <div className='inner'>
+    <div className="inner">
       <div>
-        {showResponseTitle && (
-          <div className='editor-title'>Response</div>
-        )}
+        {showResponseTitle && <div className="editor-title">Response</div>}
       </div>
-      {showViewAs && selectedViewer && onChangeViewer && (
+      {showViewAs &&
+        selectedViewer &&
+        onChangeViewer &&
         <ViewerChooser
           showSelectUser={showSelectUser}
           selectedViewer={selectedViewer}
           onChangeViewer={onChangeViewer}
-        />
-      )}
+        />}
     </div>
   </div>
-)
 
 export default ResultHeader

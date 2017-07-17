@@ -1,7 +1,5 @@
 import * as React from 'react'
-import {
-  isType,
-} from 'graphql'
+import { isType } from 'graphql'
 import * as cx from 'classnames'
 
 import FieldDoc from 'graphiql/dist/components/DocExplorer/FieldDoc'
@@ -39,11 +37,10 @@ export interface State {
 }
 
 export class DocExplorer extends React.Component<Props, State> {
-
   constructor(props) {
     super(props)
 
-    this.state = {navStack: [], searchValue: undefined} as State
+    this.state = { navStack: [], searchValue: undefined } as State
   }
 
   shouldComponentUpdate(nextProps, nextState) {
@@ -67,31 +64,34 @@ export class DocExplorer extends React.Component<Props, State> {
     let content
     if (schema === undefined) {
       // Schema is undefined when it is being loaded via introspection.
-      content =
-        <div className='spinner-container'>
-          <div className='spinner'/>
+      content = (
+        <div className="spinner-container">
+          <div className="spinner" />
         </div>
+      )
     } else if (schema === null) {
       // Schema is null when it explicitly does not exist, typically due to
       // an error during introspection.
-      content =
-        <div className='error-container'>
+      content = (
+        <div className="error-container">
           {'No Schema Available'}
         </div>
+      )
     } else if (navItem) {
       if (navItem.name === 'Search Results') {
         title = navItem.name
-        content =
+        content = (
           <SearchResults
             searchValue={navItem.searchValue}
             schema={schema}
             onClickType={this.handleClickTypeOrField}
             onClickField={this.handleClickTypeOrField}
           />
+        )
       } else {
         title = navItem.name
         if (isType(navItem)) {
-          content =
+          content = (
             <TypeDoc
               key={(navItem as any).name}
               schema={schema}
@@ -99,18 +99,21 @@ export class DocExplorer extends React.Component<Props, State> {
               onClickType={this.handleClickTypeOrField}
               onClickField={this.handleClickTypeOrField}
             />
+          )
         } else {
-          content =
+          content = (
             <FieldDoc
               key={navItem.name}
               field={navItem}
               onClickType={this.handleClickTypeOrField}
             />
+          )
         }
       }
     } else if (schema) {
-      content =
-        <SchemaDoc schema={schema} onClickType={this.handleClickTypeOrField}/>
+      content = (
+        <SchemaDoc schema={schema} onClickType={this.handleClickTypeOrField} />
+      )
     }
 
     let prevName
@@ -120,9 +123,8 @@ export class DocExplorer extends React.Component<Props, State> {
       prevName = navStack[navStack.length - 2].name
     }
 
-    const shouldSearchBoxAppear = content && (
-        content.type === SearchResults || content.type === SchemaDoc
-      )
+    const shouldSearchBoxAppear =
+      content && (content.type === SearchResults || content.type === SchemaDoc)
 
     return (
       <div
@@ -145,23 +147,20 @@ export class DocExplorer extends React.Component<Props, State> {
             z-index: 2;
           }
         `}</style>
-        {
-          prevName &&
-          <div
-            className={'doc-explorer-title-bar'}
-          >
+        {prevName &&
+          <div className={'doc-explorer-title-bar'}>
             <div
-              className='doc-explorer-back'
-              onClick={this.handleNavBackClick}>
+              className="doc-explorer-back"
+              onClick={this.handleNavBackClick}
+            >
               {prevName}
             </div>
-            <div className='doc-explorer-title'>
+            <div className="doc-explorer-title">
               {title}
             </div>
-          </div>
-        }
-        <div className='doc-explorer-contents'>
-          <div className='header'>
+          </div>}
+        <div className="doc-explorer-contents">
+          <div className="header">
             <SearchBox
               isShown={shouldSearchBoxAppear}
               onSearch={this.handleSearch}
@@ -182,7 +181,7 @@ export class DocExplorer extends React.Component<Props, State> {
       navStack = navStack.concat([typeOrField])
     }
 
-    this.setState({navStack} as State)
+    this.setState({ navStack } as State)
   }
 
   // Public API
@@ -195,11 +194,11 @@ export class DocExplorer extends React.Component<Props, State> {
       navStack = navStack.slice(0, -1).concat([searchItem])
     }
 
-    this.setState({navStack} as State)
+    this.setState({ navStack } as State)
   }
 
   handleNavBackClick = () => {
-    this.setState({navStack: this.state.navStack.slice(0, -1)} as State)
+    this.setState({ navStack: this.state.navStack.slice(0, -1) } as State)
   }
 
   handleClickTypeOrField = typeOrField => {

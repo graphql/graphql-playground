@@ -30,7 +30,6 @@ let firstTime = true
  * queries to run.
  */
 export class ExecuteButton extends React.Component<Props, State> {
-
   constructor(props) {
     super(props)
 
@@ -48,13 +47,14 @@ export class ExecuteButton extends React.Component<Props, State> {
     let options: any = null
     if (hasOptions && optionsOpen) {
       const highlight = this.state.highlight
-      options =
-        <ul className='execute-options'>
+      options = (
+        <ul className="execute-options">
           {operations.map(operation =>
             <li
               key={operation.name ? operation.name.value : '*'}
               className={operation === highlight ? 'selected' : ''}
-              onMouseOver={() => this.setState({ highlight: operation } as State)}
+              onMouseOver={() =>
+                this.setState({ highlight: operation } as State)}
               onMouseOut={() => this.setState({ highlight: null } as State)}
               onMouseUp={() => this._onOptionSelected(operation)}
             >
@@ -62,6 +62,7 @@ export class ExecuteButton extends React.Component<Props, State> {
             </li>,
           )}
         </ul>
+      )
     }
 
     // Allow click event if there is a running query or if there are not options
@@ -78,12 +79,12 @@ export class ExecuteButton extends React.Component<Props, State> {
       onMouseDown = this._onOptionsOpen
     }
 
-    const pathJSX = this.props.isRunning ?
-      <rect fill='#FFFFFF' x='10' y='10' width='13' height='13' rx='1' /> :
-      <path d='M 11 9 L 24 16 L 11 23 z' />
+    const pathJSX = this.props.isRunning
+      ? <rect fill="#FFFFFF" x="10" y="10" width="13" height="13" rx="1" />
+      : <path d="M 11 9 L 24 16 L 11 23 z" />
 
     return (
-      <div className='execute-button-wrap'>
+      <div className="execute-button-wrap">
         <style jsx={true}>{`
           .execute-button-wrap {
             position: absolute !important;
@@ -94,8 +95,8 @@ export class ExecuteButton extends React.Component<Props, State> {
 
           .graphcool-execute-button {
             @inherit: .br100, .flex, .itemsCenter, .justifyCenter, .pointer;
-            background-color: rgb(185,191,196);
-            border: 6px solid rgb(11,20,28);
+            background-color: rgb(185, 191, 196);
+            border: 6px solid rgb(11, 20, 28);
             width: 71px;
             height: 71px;
           }
@@ -106,12 +107,19 @@ export class ExecuteButton extends React.Component<Props, State> {
         `}</style>
         <div
           className={cx('graphcool-execute-button', {
-            'running': this.props.isRunning,
+            running: this.props.isRunning,
           })}
           onMouseDown={onMouseDown}
           onClick={onClick}
-          title='Execute Query (Ctrl-Enter)'>
-          <svg width='35' height='35' viewBox={`${this.props.isRunning ? 4 : 3}.5,4.5,24,24`}>{pathJSX}</svg>
+          title="Execute Query (Ctrl-Enter)"
+        >
+          <svg
+            width="35"
+            height="35"
+            viewBox={`${this.props.isRunning ? 4 : 3}.5,4.5,24,24`}
+          >
+            {pathJSX}
+          </svg>
         </div>
         {options}
       </div>
@@ -142,15 +150,19 @@ export class ExecuteButton extends React.Component<Props, State> {
       } else {
         document.removeEventListener('mouseup', onMouseUp)
         onMouseUp = null
-        const isOptionsMenuClicked = (
+        const isOptionsMenuClicked =
           downTarget.parentNode.compareDocumentPosition(upEvent.target) &
           Node.DOCUMENT_POSITION_CONTAINED_BY
-        )
-        if (!isOptionsMenuClicked) { // menu calls setState if it was clicked
+        if (!isOptionsMenuClicked) {
+          // menu calls setState if it was clicked
           this.setState({ optionsOpen: false } as State)
         }
         if (firstTime) {
-          this._onOptionSelected(this.props.operations.find(op => op.name.value === upEvent.target.textContent))
+          this._onOptionSelected(
+            this.props.operations.find(
+              op => op.name.value === upEvent.target.textContent,
+            ),
+          )
           firstTime = false
         }
       }

@@ -105,7 +105,7 @@
     "bump": "npm version patch --no-git-tag-version && git add package.json",
     "lint": "tslint \"src/**/*.ts{,x}\"",
     "precommit": "lint-staged",
-    "prettier": "prettier --single-quote --no-semi --trailing-comma all --write *.{ts,tsx} src/**/*.{ts,tsx}"
+    "prettier": "prettier --single-quote --no-semi --trailing-comma all --write *.{ts,tsx} 'src/**/*.{ts,tsx}'"
   },
   "lint-staged": {
     "*.{ts,tsx}": [

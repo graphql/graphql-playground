@@ -1,5 +1,5 @@
 import * as React from 'react'
-import {Endpoint} from '../../types'
+import { Endpoint } from '../../types'
 import * as cx from 'classnames'
 import Info from './Info'
 
@@ -8,12 +8,12 @@ export interface Props {
   onChangeEndpoint: Function
 }
 
-const EndpointChooser = ({selectedEndpoint, onChangeEndpoint}: Props) => (
-  <div className='root'>
+const EndpointChooser = ({ selectedEndpoint, onChangeEndpoint }: Props) =>
+  <div className="root">
     <style jsx={true}>{`
       .root {
         @inherit: .fw6, .flex, .itemsCenter;
-        color: rgba(255,255,255,.25);
+        color: rgba(255, 255, 255, .25);
       }
 
       .chooser {
@@ -37,50 +37,53 @@ const EndpointChooser = ({selectedEndpoint, onChangeEndpoint}: Props) => (
     `}</style>
 
     <div>API</div>
-    <div className='chooser'>
+    <div className="chooser">
       <div
         className={cx('endpoint', {
-          'active': selectedEndpoint === 'RELAY',
+          active: selectedEndpoint === 'RELAY',
         })}
         onClick={() => onChangeEndpoint('RELAY')}
-      >Relay</div>
+      >
+        Relay
+      </div>
       <div
         className={cx('endpoint', {
-          'active': selectedEndpoint === 'SIMPLE',
+          active: selectedEndpoint === 'SIMPLE',
         })}
         onClick={() => onChangeEndpoint('SIMPLE')}
-      >Simple</div>
+      >
+        Simple
+      </div>
     </div>
     <Info>
-      {selectedEndpoint === 'SIMPLE' ? (
-        <div>
-          <div>
-            The Simple API is our most simplistic GraphQL API. It is highly recommended in use with Apollo,
-            as it is much simpler than the Relay API.
+      {selectedEndpoint === 'SIMPLE'
+        ? <div>
+            <div>
+              The Simple API is our most simplistic GraphQL API. It is highly
+              recommended in use with Apollo, as it is much simpler than the
+              Relay API.
+            </div>
+            <a
+              href="https://www.graph.cool/docs/reference/simple-api/overview-heshoov3ai"
+              target="_blank"
+            >
+              Simple API Docs
+            </a>
           </div>
-          <a
-            href='https://www.graph.cool/docs/reference/simple-api/overview-heshoov3ai'
-            target='_blank'
-          >
-            Simple API Docs
-          </a>
-        </div>
-      ) : (
-        <div>
-          <div>
-            In order to use Relay, the backend must implement a spec that Relay needs.
-            The Relay API fully supports this spec, so you can implement fully-fledged Relay Apps with Graphcool.
-          </div>
-          <a
-            href='https://www.graph.cool/docs/reference/relay-api/overview-aizoong9ah'
-            target='_blank'
-          >
-            Relay API Docs
-          </a>
-        </div>
-      )}
+        : <div>
+            <div>
+              In order to use Relay, the backend must implement a spec that
+              Relay needs. The Relay API fully supports this spec, so you can
+              implement fully-fledged Relay Apps with Graphcool.
+            </div>
+            <a
+              href="https://www.graph.cool/docs/reference/relay-api/overview-aizoong9ah"
+              target="_blank"
+            >
+              Relay API Docs
+            </a>
+          </div>}
     </Info>
   </div>
-)
 
 export default EndpointChooser

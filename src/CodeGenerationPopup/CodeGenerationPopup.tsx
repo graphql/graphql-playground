@@ -3,9 +3,9 @@ import CodeGenerationPopupCode from './CodeGenerationPopupCode'
 import CodeGenerationPopupHeader from './CodeGenerationPopupHeader'
 import CodeGenerationPopupEnvironmentChooser from './CodeGenerationPopupEnvironmentChooser'
 import CodeGenerationPopupClientChooser from './CodeGenerationPopupClientChooser'
-import {modalStyle} from '../constants'
+import { modalStyle } from '../constants'
 import * as Modal from 'react-modal'
-import {Environment, GraphQLClient} from '../types'
+import { Environment, GraphQLClient } from '../types'
 
 interface Props {
   query: string
@@ -20,7 +20,6 @@ interface State {
 }
 
 export class CodeGenerationPopup extends React.Component<Props, State> {
-
   constructor(props) {
     super(props)
     this.state = {
@@ -30,13 +29,13 @@ export class CodeGenerationPopup extends React.Component<Props, State> {
   }
 
   render() {
-    const {query, endpointUrl} = this.props
+    const { query, endpointUrl } = this.props
     const queryActive = Boolean(query) && query.length > 0
     return (
       <Modal
         isOpen={this.props.isOpen}
         onRequestClose={this.props.onRequestClose}
-        contentLabel='Code Generation'
+        contentLabel="Code Generation"
         style={modalStyle}
       >
         <style jsx={true}>{`
@@ -51,14 +50,10 @@ export class CodeGenerationPopup extends React.Component<Props, State> {
             @inherit: .flex, .w100;
           }
         `}</style>
-        <div className='code-generation-popup-wrapper'>
-          <div
-            className='code-generation-popup'
-          >
-            <CodeGenerationPopupHeader
-              queryActive={queryActive}
-            />
-            <div className='choosers'>
+        <div className="code-generation-popup-wrapper">
+          <div className="code-generation-popup">
+            <CodeGenerationPopupHeader queryActive={queryActive} />
+            <div className="choosers">
               <CodeGenerationPopupEnvironmentChooser
                 environment={this.state.selectedEnv}
                 setEnvironment={this.handleSetEnvironment}
@@ -81,10 +76,10 @@ export class CodeGenerationPopup extends React.Component<Props, State> {
   }
 
   private handleSetClient = (client: GraphQLClient) => {
-    this.setState({selectedClient: client} as State)
+    this.setState({ selectedClient: client } as State)
   }
 
   private handleSetEnvironment = (env: Environment) => {
-    this.setState({selectedEnv: env} as State)
+    this.setState({ selectedEnv: env } as State)
   }
 }

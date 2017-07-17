@@ -8,38 +8,34 @@
 
 import * as React from 'react'
 import * as ReactDOM from 'react-dom'
-import {
-  buildClientSchema,
-  parse,
-  print,
-} from 'graphql'
+import { buildClientSchema, parse, print } from 'graphql'
 import * as cn from 'classnames'
 
-import {GraphQLSchema} from 'graphql/type/schema'
+import { GraphQLSchema } from 'graphql/type/schema'
 
-import {ExecuteButton} from './ExecuteButton'
-import {ToolbarButton} from 'graphiql/dist/components/ToolbarButton'
-import {QueryEditor} from './QueryEditor'
-import {VariableEditor} from 'graphiql/dist/components/VariableEditor'
-import {DocExplorer} from './DocExplorer'
+import { ExecuteButton } from './ExecuteButton'
+import { ToolbarButton } from 'graphiql/dist/components/ToolbarButton'
+import { QueryEditor } from './QueryEditor'
+import { VariableEditor } from 'graphiql/dist/components/VariableEditor'
+import { DocExplorer } from './DocExplorer'
 import CodeMirrorSizer from 'graphiql/dist/utility/CodeMirrorSizer'
 import getQueryFacts from 'graphiql/dist/utility/getQueryFacts'
 import getSelectedOperationName from 'graphiql/dist/utility/getSelectedOperationName'
 import debounce from 'graphiql/dist/utility/debounce'
 import find from 'graphiql/dist/utility/find'
-import {fillLeafs} from 'graphiql/dist/utility/fillLeafs'
-import {getLeft, getTop} from 'graphiql/dist/utility/elementPosition'
+import { fillLeafs } from 'graphiql/dist/utility/fillLeafs'
+import { getLeft, getTop } from 'graphiql/dist/utility/elementPosition'
 import {
   introspectionQuery,
   introspectionQuerySansSubscriptions,
 } from 'graphiql/dist/utility/introspectionQueries'
-import {Endpoint, Viewer, OperationDefinition} from '../types'
-import {download} from './util/index'
+import { Endpoint, Viewer, OperationDefinition } from '../types'
+import { download } from './util/index'
 import QueryHeader from './QueryHeader'
 import ResultHeader from './ResultHeader'
-import {ResultViewer} from './ResultViewer'
+import { ResultViewer } from './ResultViewer'
 import ageOfDate from './util/ageOfDate'
-import {Response} from '../Playground'
+import { Response } from '../Playground'
 import SchemaExplorer from './SchemaExplorer'
 const CSSTransitionGroup = require('react-transition-group/CSSTransitionGroup')
 
@@ -130,7 +126,6 @@ export interface ToolbarButtonProps extends SimpleProps {
 }
 
 export class CustomGraphiQL extends React.Component<Props, State> {
-
   static Logo: (props: SimpleProps) => JSX.Element
   static Toolbar: (props: SimpleProps) => JSX.Element
   static Footer: (props: SimpleProps) => JSX.Element
@@ -177,35 +172,41 @@ export class CustomGraphiQL extends React.Component<Props, State> {
     }
 
     // Cache the storage instance
-    this._storage = props.storage || typeof window !== 'undefined' ? window.localStorage : {
-      setItem: () => null,
-      removeItem: () => null,
-      getItem: () => null,
-    }
+    this._storage =
+      props.storage || typeof window !== 'undefined'
+        ? window.localStorage
+        : {
+            setItem: () => null,
+            removeItem: () => null,
+            getItem: () => null,
+          }
 
     // Determine the initial query to display.
     const query =
-      props.query !== undefined ? props.query :
-        this._storageGet('query') !== null ? this._storageGet('query') :
-          props.defaultQuery !== undefined ? props.defaultQuery :
-            defaultQuery
+      props.query !== undefined
+        ? props.query
+        : this._storageGet('query') !== null
+          ? this._storageGet('query')
+          : props.defaultQuery !== undefined ? props.defaultQuery : defaultQuery
 
     // Get the initial query facts.
     const queryFacts = getQueryFacts(props.schema, query)
 
     // Determine the initial variables to display.
     const variables =
-      props.variables !== undefined ? props.variables :
-        this._storageGet('variables')
+      props.variables !== undefined
+        ? props.variables
+        : this._storageGet('variables')
 
     // Determine the initial operationName to use.
     const operationName =
-      props.operationName !== undefined ? props.operationName :
-        getSelectedOperationName(
-          null,
-          this._storageGet('operationName'),
-          queryFacts && queryFacts.operations,
-        )
+      props.operationName !== undefined
+        ? props.operationName
+        : getSelectedOperationName(
+            null,
+            this._storageGet('operationName'),
+            queryFacts && queryFacts.operations,
+          )
 
     // Initialize state
     this.state = {
@@ -216,11 +217,13 @@ export class CustomGraphiQL extends React.Component<Props, State> {
       responses: props.responses || [],
       editorFlex: Number(this._storageGet('editorFlex')) || 1,
       variableEditorOpen: Boolean(variables),
-      variableEditorHeight: Number(this._storageGet('variableEditorHeight')) || 200,
-      docExplorerOpen: (this._storageGet('docExplorerOpen') === 'true') || false,
+      variableEditorHeight:
+        Number(this._storageGet('variableEditorHeight')) || 200,
+      docExplorerOpen: this._storageGet('docExplorerOpen') === 'true' || false,
       docExplorerWidth: Number(this._storageGet('docExplorerWidth')) || 350,
       schemaExplorerOpen: false,
-      schemaExplorerWidth: Number(this._storageGet('schemaExplorerWidth')) || 350,
+      schemaExplorerWidth:
+        Number(this._storageGet('schemaExplorerWidth')) || 350,
       isWaitingForResponse: false,
       subscription: null,
       ...queryFacts,
@@ -231,9 +234,7 @@ export class CustomGraphiQL extends React.Component<Props, State> {
 
     // Subscribe to the browser window closing, treating it as an unmount.
     if (typeof window === 'object') {
-      window.addEventListener('beforeunload', () =>
-        this.componentWillUnmount(),
-      )
+      window.addEventListener('beforeunload', () => this.componentWillUnmount())
     }
   }
 
@@ -258,7 +259,10 @@ export class CustomGraphiQL extends React.Component<Props, State> {
     if (nextProps.schema !== undefined) {
       nextSchema = nextProps.schema
     }
-    if (nextProps.query !== undefined && (this.props.rerenderQuery || nextProps.rerenderQuery)) {
+    if (
+      nextProps.query !== undefined &&
+      (this.props.rerenderQuery || nextProps.rerenderQuery)
+    ) {
       nextQuery = nextProps.query
     }
     if (nextProps.variables !== undefined) {
@@ -270,19 +274,23 @@ export class CustomGraphiQL extends React.Component<Props, State> {
     if (nextProps.responses !== undefined) {
       nextResponses = nextProps.responses
     }
-    if (nextSchema !== this.state.schema ||
+    if (
+      nextSchema !== this.state.schema ||
       nextQuery !== this.state.query ||
-      nextOperationName !== this.state.operationName) {
+      nextOperationName !== this.state.operationName
+    ) {
       this._updateQueryFacts(nextQuery)
     }
 
-    this.setState({
-      schema: nextSchema,
-      query: nextQuery,
-      variables: nextVariables,
-      operationName: nextOperationName,
-      responses: nextResponses,
-    } as State)
+    this.setState(
+      {
+        schema: nextSchema,
+        query: nextQuery,
+        variables: nextVariables,
+        operationName: nextOperationName,
+        responses: nextResponses,
+      } as State,
+    )
   }
 
   componentDidUpdate() {
@@ -316,14 +324,18 @@ export class CustomGraphiQL extends React.Component<Props, State> {
 
     // const logo =
     //   find(children, child => child.type === CustomGraphiQL.Logo) ||
-    {/*<CustomGraphiQL.Logo />*/
+    {
+      /*<CustomGraphiQL.Logo />*/
     }
 
-    {/*const toolbar =*/
+    {
+      /*const toolbar =*/
     }
-    {/*find(children, child => child.type === CustomGraphiQL.Toolbar) ||*/
+    {
+      /*find(children, child => child.type === CustomGraphiQL.Toolbar) ||*/
     }
-    {/*<CustomGraphiQL.Toolbar />*/
+    {
+      /*<CustomGraphiQL.Toolbar />*/
     }
 
     const footer = find(children, child => child.type === CustomGraphiQL.Footer)
@@ -344,7 +356,8 @@ export class CustomGraphiQL extends React.Component<Props, State> {
       // display: this.state.docExplorerOpen ? 'block':'none',
       width: this.state.schemaExplorerOpen ? this.state.schemaExplorerWidth : 0,
     }
-    const docExplorerWrapClasses = 'docExplorerWrap' +
+    const docExplorerWrapClasses =
+      'docExplorerWrap' +
       (this.state.docExplorerWidth < 200 ? ' doc-explorer-narrow' : '')
 
     const variableOpen = this.state.variableEditorOpen
@@ -357,14 +370,16 @@ export class CustomGraphiQL extends React.Component<Props, State> {
     const Tether = this.props.tether
 
     return (
-      <div className='graphiql-container'>
+      <div className="graphiql-container">
         <style jsx>{`
           .graphiql-container {
-            font-family: Open Sans,sans-serif;
+            font-family: Open Sans, sans-serif;
           }
 
-          .docs-button, .schema-button {
-            @inherit: .absolute, .white, .bgGreen, .pa6, .br2, .z2, .ttu, .fw6, .f14, .ph10, .pointer;
+          .docs-button,
+          .schema-button {
+            @inherit: .absolute, .white, .bgGreen, .pa6, .br2, .z2, .ttu, .fw6,
+              .f14, .ph10, .pointer;
             padding-bottom: 8px;
             transform: rotate(-90deg);
             left: -44px;
@@ -383,7 +398,8 @@ export class CustomGraphiQL extends React.Component<Props, State> {
           }
 
           .graphiql-button {
-            @inherit: .white50, .bgDarkBlue, .ttu, .f14, .fw6, .br2, .pointer, .absolute;
+            @inherit: .white50, .bgDarkBlue, .ttu, .f14, .fw6, .br2, .pointer,
+              .absolute;
             top: -57px;
             right: 25px;
             padding: 5px 9px 6px 9px;
@@ -392,7 +408,8 @@ export class CustomGraphiQL extends React.Component<Props, State> {
           }
 
           .download-button {
-            @inherit: .white50, .bgDarkBlue, .ttu, .f14, .fw6, .br2, .pointer, .absolute;
+            @inherit: .white50, .bgDarkBlue, .ttu, .f14, .fw6, .br2, .pointer,
+              .absolute;
             right: 25px;
             padding: 5px 9px 6px 9px;
             letter-spacing: 0.53px;
@@ -404,12 +421,8 @@ export class CustomGraphiQL extends React.Component<Props, State> {
 
           .intro {
             @inherit: .absolute, .tlCenter, .top50, .left50, .white20, .f16, .tc;
-            font-family: 'Source Code Pro',
-              'Consolas',
-              'Inconsolata',
-              'Droid Sans Mono',
-              'Monaco',
-              monospace;
+            font-family: 'Source Code Pro', 'Consolas', 'Inconsolata',
+              'Droid Sans Mono', 'Monaco', monospace;
             letter-spacing: 0.6px;
             width: 235px;
           }
@@ -442,12 +455,8 @@ export class CustomGraphiQL extends React.Component<Props, State> {
 
           .listening {
             @inherit: .f16, .white40, .absolute, .bottom0;
-            font-family: 'Source Code Pro',
-              'Consolas',
-              'Inconsolata',
-              'Droid Sans Mono',
-              'Monaco',
-              monospace;
+            font-family: 'Source Code Pro', 'Consolas', 'Inconsolata',
+              'Droid Sans Mono', 'Monaco', monospace;
             letter-spacing: 0.6px;
             padding-left: 24px;
             padding-bottom: 30px;
@@ -484,39 +493,41 @@ export class CustomGraphiQL extends React.Component<Props, State> {
             transition: opacity 300ms ease-in;
           }
         `}</style>
-        <div className='editorWrap'>
+        <div className="editorWrap">
           <div
-            ref={n => { this.editorBarComponent = n }}
-            className='editorBar'
-            onMouseDown={this.handleResizeStart}>
-            <div className='queryWrap' style={queryWrapStyle}>
-              {this.props.disableAnimation ? (
-                <QueryHeader
-                  selectedEndpoint={this.props.selectedEndpoint}
-                  onChangeEndpoint={this.props.onChangeEndpoint}
-                  onPrettify={this.handlePrettifyQuery}
-                  showEndpoints={this.props.showEndpoints}
-                  showQueryTitle={this.props.showQueryTitle}
-                />
-              ) : (
-                <CSSTransitionGroup
-                  transitionName='query-header'
-                  transitionEnterTimeout={500}
-                  transitionLeaveTimeout={300}
-                >
-                {!this.props.disableQueryHeader && (
-                  <QueryHeader
+            ref={n => {
+              this.editorBarComponent = n
+            }}
+            className="editorBar"
+            onMouseDown={this.handleResizeStart}
+          >
+            <div className="queryWrap" style={queryWrapStyle}>
+              {this.props.disableAnimation
+                ? <QueryHeader
                     selectedEndpoint={this.props.selectedEndpoint}
                     onChangeEndpoint={this.props.onChangeEndpoint}
                     onPrettify={this.handlePrettifyQuery}
                     showEndpoints={this.props.showEndpoints}
                     showQueryTitle={this.props.showQueryTitle}
                   />
-                )}
-                </CSSTransitionGroup>
-              )}
+                : <CSSTransitionGroup
+                    transitionName="query-header"
+                    transitionEnterTimeout={500}
+                    transitionLeaveTimeout={300}
+                  >
+                    {!this.props.disableQueryHeader &&
+                      <QueryHeader
+                        selectedEndpoint={this.props.selectedEndpoint}
+                        onChangeEndpoint={this.props.onChangeEndpoint}
+                        onPrettify={this.handlePrettifyQuery}
+                        showEndpoints={this.props.showEndpoints}
+                        showQueryTitle={this.props.showQueryTitle}
+                      />}
+                  </CSSTransitionGroup>}
               <QueryEditor
-                ref={n => { this.queryEditorComponent = n }}
+                ref={n => {
+                  this.queryEditorComponent = n
+                }}
                 schema={this.state.schema}
                 value={this.state.query}
                 onEdit={this.handleEditQuery}
@@ -527,23 +538,25 @@ export class CustomGraphiQL extends React.Component<Props, State> {
                 hideGutters={this.props.hideGutters}
                 readOnly={this.props.readonly}
               />
-              <div className='variable-editor' style={variableStyle}>
-                {this.props.showCodeGeneration && (
+              <div className="variable-editor" style={variableStyle}>
+                {this.props.showCodeGeneration &&
                   <div
-                    className='graphiql-button'
+                    className="graphiql-button"
                     onClick={this.props.onClickCodeGeneration}
                   >
                     Generate Code
-                  </div>
-                )}
+                  </div>}
                 <div
-                  className='variable-editor-title'
+                  className="variable-editor-title"
                   style={{ cursor: variableOpen ? 'row-resize' : 'n-resize' }}
-                  onMouseDown={this.handleVariableResizeStart}>
+                  onMouseDown={this.handleVariableResizeStart}
+                >
                   {'Query Variables'}
                 </div>
                 <VariableEditor
-                  ref={n => { this.variableEditorComponent = n }}
+                  ref={n => {
+                    this.variableEditorComponent = n
+                  }}
                   value={this.state.variables}
                   variableToType={this.state.variableToType}
                   onEdit={this.handleEditVariables}
@@ -551,186 +564,207 @@ export class CustomGraphiQL extends React.Component<Props, State> {
                   onRunQuery={this.handleEditorRunQuery}
                 />
               </div>
-              {
-                ['STEP3_UNCOMMENT_DESCRIPTION',
-                 'STEP3_ENTER_MUTATION1_VALUES',
-                 'STEP3_ENTER_MUTATION2_VALUE'].indexOf(this.props.onboardingStep || '') > -1 && (
-                  <Tether
-                    steps={[
-                      {
-                        step: 'STEP3_UNCOMMENT_DESCRIPTION',
-                        title: 'Uncomment the description',
-                        description: 'To add the description to the query, just remove the #',
-                      },
-                      {
-                        step: 'STEP3_ENTER_MUTATION1_VALUES',
-                        title: 'This is a mutation',
-                        description: 'Enter data for the imageUrl and the description',
-                        buttonText: 'Autofill Data',
-                      },
-                      {
-                        step: 'STEP3_ENTER_MUTATION2_VALUE',
-                        title: 'Lets add some more data',
-                        description: 'Enter data for the imageUrl and the description',
-                        buttonText: 'Autofill Data',
-                      },
-                    ]}
-                    onClick={() => {
-                      if (this.props.onboardingStep.startsWith('STEP3_ENTER_MUTATION')
-                        && typeof this.props.autofillMutation === 'function') {
-                        this.props.autofillMutation()
-                      }
-                    }}
-                  >
-                    <div className={cn('onboarding-hint', {
-                      'step1': this.props.onboardingStep === 'STEP3_UNCOMMENT_DESCRIPTION',
-                      'step2': this.props.onboardingStep === 'STEP3_ENTER_MUTATION1_VALUES'
-                      || this.props.onboardingStep === 'STEP3_ENTER_MUTATION2_VALUE',
-                    })}>
-                    </div>
-                  </Tether>
-              )}
-            </div>
-            {!this.props.queryOnly && (
-              <div className='resultWrap'>
-                  <ResultHeader
-                    showViewAs={this.props.showViewAs}
-                    showSelectUser={this.props.showSelectUser}
-                    selectedViewer={this.props.selectedViewer}
-                    onChangeViewer={this.props.onChangeViewer}
-                    showResponseTitle={this.props.showResponseTitle}
+              {[
+                'STEP3_UNCOMMENT_DESCRIPTION',
+                'STEP3_ENTER_MUTATION1_VALUES',
+                'STEP3_ENTER_MUTATION2_VALUE',
+              ].indexOf(this.props.onboardingStep || '') > -1 &&
+                <Tether
+                  steps={[
+                    {
+                      step: 'STEP3_UNCOMMENT_DESCRIPTION',
+                      title: 'Uncomment the description',
+                      description:
+                        'To add the description to the query, just remove the #',
+                    },
+                    {
+                      step: 'STEP3_ENTER_MUTATION1_VALUES',
+                      title: 'This is a mutation',
+                      description:
+                        'Enter data for the imageUrl and the description',
+                      buttonText: 'Autofill Data',
+                    },
+                    {
+                      step: 'STEP3_ENTER_MUTATION2_VALUE',
+                      title: 'Lets add some more data',
+                      description:
+                        'Enter data for the imageUrl and the description',
+                      buttonText: 'Autofill Data',
+                    },
+                  ]}
+                  onClick={() => {
+                    if (
+                      this.props.onboardingStep.startsWith(
+                        'STEP3_ENTER_MUTATION',
+                      ) &&
+                      typeof this.props.autofillMutation === 'function'
+                    ) {
+                      this.props.autofillMutation()
+                    }
+                  }}
+                >
+                  <div
+                    className={cn('onboarding-hint', {
+                      step1:
+                        this.props.onboardingStep ===
+                        'STEP3_UNCOMMENT_DESCRIPTION',
+                      step2:
+                        this.props.onboardingStep ===
+                          'STEP3_ENTER_MUTATION1_VALUES' ||
+                        this.props.onboardingStep ===
+                          'STEP3_ENTER_MUTATION2_VALUE',
+                    })}
                   />
-                {this.props.tether ? (
-                  <Tether
-                    offsetX={18}
-                    offsetY={25}
-                    steps={[
-                      {
-                        step: 'STEP3_RUN_QUERY1',
-                        title: 'Execute your first query',
-                        description: 'You just wrote your first GraphQL Query! Click here to execute it.',
-                      },
-                      {
-                        step: 'STEP3_RUN_MUTATION1',
-                        title: 'Run your first mutation',
-                        description: 'Awesome! You just wrote your first GraphQL Mutation. Click here to execute it',
-                      },
-                      {
-                        step: 'STEP3_RUN_MUTATION2',
-                        title: 'Lets add more data',
-                      },
-                      {
-                        step: 'STEP3_RUN_QUERY2',
-                        title: 'Let\'s see how the data changed',
-                        description: 'After adding data with the mutations, lets' +
-                        ' see how the result of the query changes',
-                      },
-                    ]}
-                  >
-                    <ExecuteButton
+                </Tether>}
+            </div>
+            {!this.props.queryOnly &&
+              <div className="resultWrap">
+                <ResultHeader
+                  showViewAs={this.props.showViewAs}
+                  showSelectUser={this.props.showSelectUser}
+                  selectedViewer={this.props.selectedViewer}
+                  onChangeViewer={this.props.onChangeViewer}
+                  showResponseTitle={this.props.showResponseTitle}
+                />
+                {this.props.tether
+                  ? <Tether
+                      offsetX={18}
+                      offsetY={25}
+                      steps={[
+                        {
+                          step: 'STEP3_RUN_QUERY1',
+                          title: 'Execute your first query',
+                          description:
+                            'You just wrote your first GraphQL Query! Click here to execute it.',
+                        },
+                        {
+                          step: 'STEP3_RUN_MUTATION1',
+                          title: 'Run your first mutation',
+                          description:
+                            'Awesome! You just wrote your first GraphQL Mutation. Click here to execute it',
+                        },
+                        {
+                          step: 'STEP3_RUN_MUTATION2',
+                          title: 'Lets add more data',
+                        },
+                        {
+                          step: 'STEP3_RUN_QUERY2',
+                          title: "Let's see how the data changed",
+                          description:
+                            'After adding data with the mutations, lets' +
+                            ' see how the result of the query changes',
+                        },
+                      ]}
+                    >
+                      <ExecuteButton
+                        isRunning={Boolean(this.state.subscription)}
+                        onRun={this.handleRunQuery}
+                        onStop={this.handleStopQuery}
+                        operations={this.state.operations}
+                      />
+                    </Tether>
+                  : <ExecuteButton
                       isRunning={Boolean(this.state.subscription)}
                       onRun={this.handleRunQuery}
                       onStop={this.handleStopQuery}
                       operations={this.state.operations}
-                    />
-                  </Tether>
-                ) : (
-                  <ExecuteButton
-                    isRunning={Boolean(this.state.subscription)}
-                    onRun={this.handleRunQuery}
-                    onStop={this.handleStopQuery}
-                    operations={this.state.operations}
-                  />
-                )}
-                {
-                  this.state.isWaitingForResponse &&
-                  <div className='spinner-container'>
-                    <div className='spinner'/>
-                  </div>
-                }
+                    />}
+                {this.state.isWaitingForResponse &&
+                  <div className="spinner-container">
+                    <div className="spinner" />
+                  </div>}
 
                 <div
-                  className={'result-window' + (this.props.disableResize ? ' disableResize' : '')}
-                  ref={c => { this.resultComponent = c }}
+                  className={
+                    'result-window' +
+                    (this.props.disableResize ? ' disableResize' : '')
+                  }
+                  ref={c => {
+                    this.resultComponent = c
+                  }}
                 >
-                  {this.state.responses.filter(res => res && res.date).map((response, index) => (
-                    <div
-                      key={response.time}
-                    >
-                      {subscriptionResponse && response.time && (
-                        <div className='subscription-time'>
-                          <div className='subscription-time-text'>
-                            {ageOfDate(response.time)}
-                          </div>
-                        </div>
-                      )}
-                      <ResultViewer
-                        value={response.date}
-                        hideGutters={this.props.hideGutters}
-                      />
-                    </div>
-                  ))}
+                  {this.state.responses
+                    .filter(res => res && res.date)
+                    .map((response, index) =>
+                      <div key={response.time}>
+                        {subscriptionResponse &&
+                          response.time &&
+                          <div className="subscription-time">
+                            <div className="subscription-time-text">
+                              {ageOfDate(response.time)}
+                            </div>
+                          </div>}
+                        <ResultViewer
+                          value={response.date}
+                          hideGutters={this.props.hideGutters}
+                        />
+                      </div>,
+                    )}
                 </div>
                 {footer}
-                {!this.state.responses || this.state.responses.length === 0 && (
-                  <div className='intro'>
-                    Hit the Play Button to get a response here
-                  </div>
-                )}
-                {Boolean(this.state.subscription) && (
-                  <div className='listening'>Listening &hellip;</div>
-                )}
-                {this.state.responses && this.state.responses.length > 0 && this.props.showDownloadJsonButton && (
-                  <div className='download-button' onClick={this.handleDownloadJSON}>Download JSON</div>
-                )}
-              </div>
-            )}
+                {!this.state.responses ||
+                  (this.state.responses.length === 0 &&
+                    <div className="intro">
+                      Hit the Play Button to get a response here
+                    </div>)}
+                {Boolean(this.state.subscription) &&
+                  <div className="listening">Listening &hellip;</div>}
+                {this.state.responses &&
+                  this.state.responses.length > 0 &&
+                  this.props.showDownloadJsonButton &&
+                  <div
+                    className="download-button"
+                    onClick={this.handleDownloadJSON}
+                  >
+                    Download JSON
+                  </div>}
+              </div>}
           </div>
         </div>
-        {(this.props.queryOnly ? this.props.showDocs : true) && (
+        {(this.props.queryOnly ? this.props.showDocs : true) &&
           <div className={docExplorerWrapClasses} style={docWrapStyle}>
             <div
-              className={`docs-button ${!this.state.docExplorerOpen && 'inactive'}`}
+              className={`docs-button ${!this.state.docExplorerOpen &&
+                'inactive'}`}
               onClick={this.handleToggleDocs}
             >
               Docs
             </div>
             <div
-              className='docExplorerResizer'
+              className="docExplorerResizer"
               onMouseDown={this.handleDocsResizeStart}
             />
-            {this.state.docExplorerOpen && (
+            {this.state.docExplorerOpen &&
               <DocExplorer
-                ref={c => { this.docExplorerComponent = c }}
+                ref={c => {
+                  this.docExplorerComponent = c
+                }}
                 schema={this.state.schema}
                 open={this.state.docExploreOpen}
-              >
-              </DocExplorer>
-            )}
-          </div>
-        )}
-        {this.props.showSchema && (
+              />}
+          </div>}
+        {this.props.showSchema &&
           <div className={docExplorerWrapClasses} style={schemaWrapStyle}>
             <div
-              className={`schema-button ${!this.state.schemaExplorerOpen && 'inactive'}`}
+              className={`schema-button ${!this.state.schemaExplorerOpen &&
+                'inactive'}`}
               onClick={this.handleToggleSchema}
             >
               Schema
             </div>
             <div
-              className='docExplorerResizer'
+              className="docExplorerResizer"
               onMouseDown={this.handleSchemaResizeStart}
             />
-            {this.state.schemaExplorerOpen && (
+            {this.state.schemaExplorerOpen &&
               <SchemaExplorer
-                ref={c => { this.docExplorerComponent = c }}
+                ref={c => {
+                  this.docExplorerComponent = c
+                }}
                 idl={this.props.schemaIdl}
                 modelName={this.props.schemaModelName}
-              >
-              </SchemaExplorer>
-            )}
-          </div>
-        )}
+              />}
+          </div>}
       </div>
     )
   }
@@ -742,7 +776,7 @@ export class CustomGraphiQL extends React.Component<Props, State> {
    * @public
    */
   autoCompleteLeafs() {
-    const {insertions, result} = fillLeafs(
+    const { insertions, result } = fillLeafs(
       this.state.schema,
       this.state.query,
       this.props.getDefaultFieldNames,
@@ -754,18 +788,20 @@ export class CustomGraphiQL extends React.Component<Props, State> {
         const cursorIndex = editor.indexFromPos(cursor)
         editor.setValue(result)
         let added = 0
-        const markers = insertions.map(({index, str}) => editor.markText(
-          editor.posFromIndex(index + added),
-          editor.posFromIndex(index + (added += str.length)),
-          {
-            className: 'autoInsertedLeaf',
-            clearOnEnter: true,
-            title: 'Automatically added leaf fields',
-          },
-        ))
+        const markers = insertions.map(({ index, str }) =>
+          editor.markText(
+            editor.posFromIndex(index + added),
+            editor.posFromIndex(index + (added += str.length)),
+            {
+              className: 'autoInsertedLeaf',
+              clearOnEnter: true,
+              title: 'Automatically added leaf fields',
+            },
+          ),
+        )
         setTimeout(() => markers.forEach(marker => marker.clear()), 7000)
         let newCursorIndex = cursorIndex
-        insertions.forEach(({index, str}) => {
+        insertions.forEach(({ index, str }) => {
           if (index < cursorIndex) {
             newCursorIndex += str.length
           }
@@ -787,56 +823,75 @@ export class CustomGraphiQL extends React.Component<Props, State> {
 
     const fetcher = this.props.fetcher
 
-    const fetch = observableToPromise(fetcher({query: introspectionQuery}))
+    const fetch = observableToPromise(fetcher({ query: introspectionQuery }))
     if (!isPromise(fetch)) {
-      this.setState({
-        responses: [{date: 'Fetcher did not return a Promise for introspection.', time: new Date()}],
-      } as State)
+      this.setState(
+        {
+          responses: [
+            {
+              date: 'Fetcher did not return a Promise for introspection.',
+              time: new Date(),
+            },
+          ],
+        } as State,
+      )
       return
     }
 
-    fetch.then(result => {
-      if (result.data) {
-        return result
-      }
+    fetch
+      .then(result => {
+        if (result.data) {
+          return result
+        }
 
-      // Try the stock introspection query first, falling back on the
-      // sans-subscriptions query for services which do not yet support it.
-      const fetch2 = observableToPromise(fetcher({
-        query: introspectionQuerySansSubscriptions,
-      }))
-      if (!isPromise(fetch)) {
-        throw new Error('Fetcher did not return a Promise for introspection.')
-      }
-      return fetch2
-    }).then(result => {
-      // If a schema was provided while this fetch was underway, then
-      // satisfy the race condition by respecting the already
-      // provided schema.
-      if (this.state.schema !== undefined) {
-        return
-      }
+        // Try the stock introspection query first, falling back on the
+        // sans-subscriptions query for services which do not yet support it.
+        const fetch2 = observableToPromise(
+          fetcher({
+            query: introspectionQuerySansSubscriptions,
+          }),
+        )
+        if (!isPromise(fetch)) {
+          throw new Error('Fetcher did not return a Promise for introspection.')
+        }
+        return fetch2
+      })
+      .then(result => {
+        // If a schema was provided while this fetch was underway, then
+        // satisfy the race condition by respecting the already
+        // provided schema.
+        if (this.state.schema !== undefined) {
+          return
+        }
 
-      if (result && result.data) {
-        const schema = buildClientSchema(result.data)
-        const queryFacts = getQueryFacts(schema, this.state.query)
-        this.setState({schema, ...queryFacts})
-      } else {
-        const responseString = typeof result === 'string' ?
-          result :
-          JSON.stringify(result, null, 2)
-        this.setState({
-          // Set schema to `null` to explicitly indicate that no schema exists.
-          schema: null,
-          responses: [{date: responseString, time: new Date()}],
-        } as State)
-      }
-    }).catch(error => {
-      this.setState({
-        schema: null,
-        responses: [{date: error && String(error.stack || error), time: new Date()}],
-      } as State)
-    })
+        if (result && result.data) {
+          const schema = buildClientSchema(result.data)
+          const queryFacts = getQueryFacts(schema, this.state.query)
+          this.setState({ schema, ...queryFacts })
+        } else {
+          const responseString =
+            typeof result === 'string'
+              ? result
+              : JSON.stringify(result, null, 2)
+          this.setState(
+            {
+              // Set schema to `null` to explicitly indicate that no schema exists.
+              schema: null,
+              responses: [{ date: responseString, time: new Date() }],
+            } as State,
+          )
+        }
+      })
+      .catch(error => {
+        this.setState(
+          {
+            schema: null,
+            responses: [
+              { date: error && String(error.stack || error), time: new Date() },
+            ],
+          } as State,
+        )
+      })
   }
 
   _storageGet(name) {
@@ -886,10 +941,14 @@ export class CustomGraphiQL extends React.Component<Props, State> {
       // If fetcher returned a Promise, then call the callback when the promise
       // resolves, otherwise handle the error.
       fetch.then(cb).catch(error => {
-        this.setState({
-          isWaitingForResponse: false,
-          responses: [{date: error && String(error.stack || error), time: new Date()}],
-        } as State)
+        this.setState(
+          {
+            isWaitingForResponse: false,
+            responses: [
+              { date: error && String(error.stack || error), time: new Date() },
+            ],
+          } as State,
+        )
       })
     } else if (isObservable(fetch)) {
       // If the fetcher returned an Observable, then subscribe to it, calling
@@ -898,17 +957,26 @@ export class CustomGraphiQL extends React.Component<Props, State> {
       const subscription = fetch.subscribe({
         next: cb,
         error: error => {
-          this.setState({
-            isWaitingForResponse: false,
-            responses: [{date: error && String(error.stack || error), time: new Date()}],
-            subscription: null,
-          } as State)
+          this.setState(
+            {
+              isWaitingForResponse: false,
+              responses: [
+                {
+                  date: error && String(error.stack || error),
+                  time: new Date(),
+                },
+              ],
+              subscription: null,
+            } as State,
+          )
         },
         complete: () => {
-          this.setState({
-            isWaitingForResponse: false,
-            subscription: null,
-          } as State)
+          this.setState(
+            {
+              isWaitingForResponse: false,
+              subscription: null,
+            } as State,
+          )
         },
       })
 
@@ -940,18 +1008,20 @@ export class CustomGraphiQL extends React.Component<Props, State> {
     }
 
     try {
-      this.setState({
-        isWaitingForResponse: true,
-        responses: [{date: null, time: new Date()}],
-        operationName,
-      } as State)
+      this.setState(
+        {
+          isWaitingForResponse: true,
+          responses: [{ date: null, time: new Date() }],
+          operationName,
+        } as State,
+      )
 
       // _fetchQuery may return a subscription.
       const subscription = this._fetchQuery(
         editedQuery,
         variables,
         operationName,
-        (result) => {
+        result => {
           if (queryID === this._editorQueryID) {
             let isSubscription = false
             if (result.isSubscription) {
@@ -964,33 +1034,39 @@ export class CustomGraphiQL extends React.Component<Props, State> {
             if (isSubscription) {
               responses = this.state.responses
                 .filter(response => response && response.date)
-                .concat({date: response, time: new Date()})
+                .concat({ date: response, time: new Date() })
             } else {
-              responses = [{date: response, time: new Date()}]
+              responses = [{ date: response, time: new Date() }]
             }
-            this.setState({
-              isWaitingForResponse: false,
-              responses,
-            } as State)
+            this.setState(
+              {
+                isWaitingForResponse: false,
+                responses,
+              } as State,
+            )
           }
         },
       )
 
-      this.setState({subscription} as State)
+      this.setState({ subscription } as State)
     } catch (error) {
-      this.setState({
-        isWaitingForResponse: false,
-        responses: [{date: error.message, time: new Date()}],
-      } as State)
+      this.setState(
+        {
+          isWaitingForResponse: false,
+          responses: [{ date: error.message, time: new Date() }],
+        } as State,
+      )
     }
   }
 
   handleStopQuery = () => {
     const subscription = this.state.subscription
-    this.setState({
-      isWaitingForResponse: false,
-      subscription: null,
-    } as State)
+    this.setState(
+      {
+        isWaitingForResponse: false,
+        subscription: null,
+      } as State,
+    )
     if (subscription) {
       subscription.unsubscribe()
     }
@@ -1013,8 +1089,10 @@ export class CustomGraphiQL extends React.Component<Props, State> {
         // Loop through all operations to see if one contains the cursor.
         for (let i = 0; i < operations.length; i++) {
           const operation = operations[i]
-          if (operation.loc.start <= cursorIndex &&
-            operation.loc.end >= cursorIndex) {
+          if (
+            operation.loc.start <= cursorIndex &&
+            operation.loc.end >= cursorIndex
+          ) {
             operationName = operation.name && operation.name.value
             break
           }
@@ -1035,7 +1113,7 @@ export class CustomGraphiQL extends React.Component<Props, State> {
     if (this.state.schema) {
       this._updateQueryFacts(value)
     }
-    this.setState({query: value} as State)
+    this.setState({ query: value } as State)
     if (this.props.onEditQuery) {
       return this.props.onEditQuery(value)
     }
@@ -1043,7 +1121,7 @@ export class CustomGraphiQL extends React.Component<Props, State> {
   }
 
   handleEditVariables = value => {
-    this.setState({variables: value} as State)
+    this.setState({ variables: value } as State)
     if (this.props.onEditVariables) {
       this.props.onEditVariables(value)
     }
@@ -1053,10 +1131,13 @@ export class CustomGraphiQL extends React.Component<Props, State> {
     elem.addEventListener('click', this._onClickHintInformation)
 
     let onRemoveFn
-    elem.addEventListener('DOMNodeRemoved', onRemoveFn = () => {
-      elem.removeEventListener('DOMNodeRemoved', onRemoveFn)
-      elem.removeEventListener('click', this._onClickHintInformation)
-    })
+    elem.addEventListener(
+      'DOMNodeRemoved',
+      (onRemoveFn = () => {
+        elem.removeEventListener('DOMNodeRemoved', onRemoveFn)
+        elem.removeEventListener('click', this._onClickHintInformation)
+      }),
+    )
   }
 
   handleEditorRunQuery = () => {
@@ -1070,7 +1151,7 @@ export class CustomGraphiQL extends React.Component<Props, State> {
       if (schema) {
         const type = schema.getType(typeName)
         if (type) {
-          this.setState({docExplorerOpen: true} as State, () => {
+          this.setState({ docExplorerOpen: true } as State, () => {
             this.docExplorerComponent.showDoc(type)
           })
         }
@@ -1082,11 +1163,13 @@ export class CustomGraphiQL extends React.Component<Props, State> {
     if (typeof this.props.onToggleDocs === 'function') {
       this.props.onToggleDocs(!this.state.docExplorerOpen)
     }
-    this.setState({docExplorerOpen: !this.state.docExplorerOpen} as State)
+    this.setState({ docExplorerOpen: !this.state.docExplorerOpen } as State)
   }
 
   handleToggleSchema = () => {
-    this.setState({schemaExplorerOpen: !this.state.schemaExplorerOpen} as State)
+    this.setState(
+      { schemaExplorerOpen: !this.state.schemaExplorerOpen } as State,
+    )
   }
 
   handleResizeStart = downEvent => {
@@ -1109,7 +1192,7 @@ export class CustomGraphiQL extends React.Component<Props, State> {
       const editorBar = ReactDOM.findDOMNode(this.editorBarComponent)
       const leftSize = moveEvent.clientX - getLeft(editorBar) - offset
       const rightSize = editorBar.clientWidth - leftSize
-      this.setState({editorFlex: leftSize / rightSize} as State)
+      this.setState({ editorFlex: leftSize / rightSize } as State)
     }
 
     let onMouseUp: any = () => {
@@ -1130,7 +1213,10 @@ export class CustomGraphiQL extends React.Component<Props, State> {
     }
     let target = event.target
     // We use codemirror's gutter as the drag bar.
-    if (target.className.indexOf && target.className.indexOf('CodeMirror-gutter') !== 0) {
+    if (
+      target.className.indexOf &&
+      target.className.indexOf('CodeMirror-gutter') !== 0
+    ) {
       return false
     }
     // Specifically the result window's drag bar.
@@ -1160,18 +1246,20 @@ export class CustomGraphiQL extends React.Component<Props, State> {
       const docsSize = app.clientWidth - cursorPos
 
       if (docsSize < 100) {
-        this.setState({docExplorerOpen: false} as State)
+        this.setState({ docExplorerOpen: false } as State)
       } else {
-        this.setState({
-          docExplorerOpen: true,
-          docExplorerWidth: Math.min(docsSize, 850),
-        } as State)
+        this.setState(
+          {
+            docExplorerOpen: true,
+            docExplorerWidth: Math.min(docsSize, 850),
+          } as State,
+        )
       }
     }
 
     let onMouseUp: any = () => {
       if (!this.state.docExplorerOpen) {
-        this.setState({docExplorerWidth: hadWidth} as State)
+        this.setState({ docExplorerWidth: hadWidth } as State)
       }
 
       document.removeEventListener('mousemove', onMouseMove)
@@ -1200,18 +1288,20 @@ export class CustomGraphiQL extends React.Component<Props, State> {
       const schemaSize = app.clientWidth - cursorPos
 
       if (schemaSize < 100) {
-        this.setState({schemaExplorerOpen: false} as State)
+        this.setState({ schemaExplorerOpen: false } as State)
       } else {
-        this.setState({
-          schemaExplorerOpen: true,
-          schemaExplorerWidth: Math.min(schemaSize, 850),
-        } as State)
+        this.setState(
+          {
+            schemaExplorerOpen: true,
+            schemaExplorerWidth: Math.min(schemaSize, 850),
+          } as State,
+        )
       }
     }
 
     let onMouseUp: any = () => {
       if (!this.state.schemaExplorerOpen) {
-        this.setState({schemaExplorerWidth: hadWidth} as State)
+        this.setState({ schemaExplorerWidth: hadWidth } as State)
       }
 
       document.removeEventListener('mousemove', onMouseMove)
@@ -1243,21 +1333,25 @@ export class CustomGraphiQL extends React.Component<Props, State> {
       const topSize = moveEvent.clientY - getTop(editorBar) - offset
       const bottomSize = editorBar.clientHeight - topSize
       if (bottomSize < 60) {
-        this.setState({
-          variableEditorOpen: false,
-          variableEditorHeight: hadHeight,
-        } as State)
+        this.setState(
+          {
+            variableEditorOpen: false,
+            variableEditorHeight: hadHeight,
+          } as State,
+        )
       } else {
-        this.setState({
-          variableEditorOpen: true,
-          variableEditorHeight: bottomSize,
-        } as State)
+        this.setState(
+          {
+            variableEditorOpen: true,
+            variableEditorHeight: bottomSize,
+          } as State,
+        )
       }
     }
 
     let onMouseUp: any = () => {
       if (!didMove) {
-        this.setState({variableEditorOpen: !wasOpen} as State)
+        this.setState({ variableEditorOpen: !wasOpen } as State)
       }
 
       document.removeEventListener('mousemove', onMouseMove)
@@ -1278,8 +1372,15 @@ export class CustomGraphiQL extends React.Component<Props, State> {
 // Configure the UI by providing this Component as a child of CustomGraphiQL.
 CustomGraphiQL.Logo = function GraphiQLLogo(props) {
   return (
-    <div className='title'>
-      {props.children || <span>{'Graph'}<em>{'i'}</em>{'QL'}</span>}
+    <div className="title">
+      {props.children ||
+        <span>
+          {'Graph'}
+          <em>
+            {'i'}
+          </em>
+          {'QL'}
+        </span>}
     </div>
   )
 }
@@ -1287,7 +1388,7 @@ CustomGraphiQL.Logo = function GraphiQLLogo(props) {
 // Configure the UI by providing this Component as a child of CustomGraphiQL.
 CustomGraphiQL.Toolbar = function GraphiQLToolbar(props) {
   return (
-    <div className='toolbar'>
+    <div className="toolbar">
       {props.children}
     </div>
   )
@@ -1299,14 +1400,13 @@ CustomGraphiQL.ToolbarButton = ToolbarButton
 // Configure the UI by providing this Component as a child of CustomGraphiQL.
 CustomGraphiQL.Footer = function GraphiQLFooter(props) {
   return (
-    <div className='footer'>
+    <div className="footer">
       {props.children}
     </div>
   )
 }
 
-const defaultQuery =
-  `# Welcome to Graphcool's custom GraphiQL ✌
+const defaultQuery = `# Welcome to Graphcool's custom GraphiQL ✌
 #
 # GraphiQL is an in-browser IDE for writing, validating, and
 # testing GraphQL queries.

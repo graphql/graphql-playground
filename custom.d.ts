@@ -1,8 +1,8 @@
 import 'react'
 // Augmentation of React
-declare module "react" {
+declare module 'react' {
   interface HTMLProps<T> {
-    jsx?: boolean;
-    global?: boolean;
+    jsx?: boolean
+    global?: boolean
   }
 }

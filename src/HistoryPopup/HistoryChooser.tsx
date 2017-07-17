@@ -1,6 +1,6 @@
 import * as React from 'react'
-import {Icon, $v} from 'graphcool-styles'
-import {HistoryFilter} from '../types'
+import { Icon, $v } from 'graphcool-styles'
+import { HistoryFilter } from '../types'
 import * as cx from 'classnames'
 
 export interface Props {
@@ -8,7 +8,7 @@ export interface Props {
   onSelectFilter: Function
 }
 
-const HistoryChooser = ({selectedFilter, onSelectFilter}: Props) => (
+const HistoryChooser = ({ selectedFilter, onSelectFilter }: Props) =>
   <div>
     <style jsx>{`
       .chooser {
@@ -16,7 +16,17 @@ const HistoryChooser = ({selectedFilter, onSelectFilter}: Props) => (
       }
 
       .filter {
-        @inherit: .br2, .relative, .pointer, .ttu, .flex, .itemsCenter, .black30, .fw6, .f14, .bgBlack07, .cbox;
+        @inherit: .br2,
+          .relative,
+          .pointer,
+          .ttu,
+          .flex,
+          .itemsCenter,
+          .black30,
+          .fw6,
+          .f14,
+          .bgBlack07,
+          .cbox;
         padding: 5px 13px 6px 13px;
         margin: 0 -2px;
         height: 24px;
@@ -29,51 +39,39 @@ const HistoryChooser = ({selectedFilter, onSelectFilter}: Props) => (
       .filter-text {
         @inherit: .ml6;
       }
-
     `}</style>
-    <div className='chooser'>
+    <div className="chooser">
       <div
-        className={cx(
-          'filter',
-          {
-            'active': selectedFilter === 'HISTORY',
-          },
-        )}
+        className={cx('filter', {
+          active: selectedFilter === 'HISTORY',
+        })}
         onClick={() => onSelectFilter('HISTORY')}
       >
         <Icon
           src={require('graphcool-styles/icons/stroke/history.svg')}
-          color={
-            selectedFilter === 'HISTORY' ? $v.white : $v.gray30
-          }
+          color={selectedFilter === 'HISTORY' ? $v.white : $v.gray30}
           stroke={true}
           strokeWidth={3}
           width={25}
           height={25}
         />
-        <div className='filter-text'>History</div>
+        <div className="filter-text">History</div>
       </div>
       <div
-        className={cx(
-          'filter',
-          {
-            'active': selectedFilter === 'STARRED',
-          },
-        )}
+        className={cx('filter', {
+          active: selectedFilter === 'STARRED',
+        })}
         onClick={() => onSelectFilter('STARRED')}
       >
         <Icon
           src={require('../assets/icons/star.svg')}
-          color={
-            selectedFilter === 'STARRED' ? $v.white : $v.gray30
-          }
+          color={selectedFilter === 'STARRED' ? $v.white : $v.gray30}
           width={16}
           height={16}
         />
-        <div className='filter-text'>Starred</div>
+        <div className="filter-text">Starred</div>
       </div>
     </div>
   </div>
-)
 
 export default HistoryChooser

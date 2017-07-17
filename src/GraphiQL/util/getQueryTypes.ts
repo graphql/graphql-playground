@@ -1,5 +1,5 @@
 import { parse } from 'graphql'
-import {QueryTypes} from '../../types'
+import { QueryTypes } from '../../types'
 
 const getQueryTypes = (query: string): QueryTypes => {
   let ast: any = null
@@ -19,7 +19,8 @@ const getQueryTypes = (query: string): QueryTypes => {
   if (ast) {
     ast.definitions.forEach(definition => {
       if (!firstOperationName) {
-        firstOperationName = definition.selectionSet &&
+        firstOperationName =
+          definition.selectionSet &&
           definition.selectionSet.selections &&
           definition.selectionSet.selections.length > 0 &&
           definition.selectionSet.selections[0].name.value

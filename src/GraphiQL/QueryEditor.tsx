@@ -36,7 +36,6 @@ interface Props {
 }
 
 export class QueryEditor extends React.Component<Props, {}> {
-
   private cachedValue: string
   private editor: any
   private ignoreChangeEvent: boolean
@@ -149,8 +148,10 @@ export class QueryEditor extends React.Component<Props, {}> {
       this.editor.options.hintOptions.schema = this.props.schema
       CodeMirror.signal(this.editor, 'change', this.editor)
     }
-    if (this.props.value !== prevProps.value &&
-      this.props.value !== this.cachedValue) {
+    if (
+      this.props.value !== prevProps.value &&
+      this.props.value !== this.cachedValue
+    ) {
       this.cachedValue = this.props.value
       this.editor.setValue(this.props.value)
     }
@@ -167,8 +168,10 @@ export class QueryEditor extends React.Component<Props, {}> {
   render() {
     return (
       <div
-        className='query-editor'
-        ref={node => { this._node = node }}
+        className="query-editor"
+        ref={node => {
+          this._node = node
+        }}
       />
     )
   }

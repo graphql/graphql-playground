@@ -1,6 +1,6 @@
 import * as React from 'react'
 import HistoryChooser from './HistoryChooser'
-import {HistoryFilter} from '../types'
+import { HistoryFilter } from '../types'
 import SearchBox from '../GraphiQL/DocExplorer/SearchBox'
 
 export interface Props {
@@ -9,8 +9,8 @@ export interface Props {
   onSearch: (value: string) => void
 }
 
-const HistoryHeader = (props: Props) => (
-  <div className='history-header'>
+const HistoryHeader = (props: Props) =>
+  <div className="history-header">
     <style jsx>{`
       .history-header {
         @inherit: .pa16, .flex, .justifyBetween, .itemsCenter, .bgBlack02;
@@ -25,12 +25,11 @@ const HistoryHeader = (props: Props) => (
       selectedFilter={props.selectedFilter}
     />
     <SearchBox
-      placeholder='Search the history...'
+      placeholder="Search the history..."
       onSearch={props.onSearch}
       clean
       isShown
     />
   </div>
-)
 
 export default HistoryHeader

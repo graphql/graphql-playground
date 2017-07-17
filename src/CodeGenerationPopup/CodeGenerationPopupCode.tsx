@@ -1,8 +1,8 @@
 import * as React from 'react'
 import * as cx from 'classnames'
-import {$p} from 'graphcool-styles'
-import {CodeGenerator} from './codeGeneration'
-import {GraphQLClient, Environment} from '../types'
+import { $p } from 'graphcool-styles'
+import { CodeGenerator } from './codeGeneration'
+import { GraphQLClient, Environment } from '../types'
 const Codemirror: any = require('./CodeMirror')
 
 interface Props {
@@ -12,7 +12,10 @@ interface Props {
   environment: Environment
 }
 
-export default class CodeGenerationPopupCode extends React.Component<Props, {}> {
+export default class CodeGenerationPopupCode extends React.Component<
+  Props,
+  {}
+> {
   componentWillMount() {
     require('codemirror/lib/codemirror.css')
     require('codemirror/theme/dracula.css')
@@ -20,7 +23,7 @@ export default class CodeGenerationPopupCode extends React.Component<Props, {}> 
     require('codemirror/mode/shell/shell')
   }
   render() {
-    const {client, environment, endpointUrl, query} = this.props
+    const { client, environment, endpointUrl, query } = this.props
 
     const generator = new CodeGenerator(client, environment, endpointUrl)
     const projectSetup = generator.getSetup()
@@ -49,7 +52,7 @@ export default class CodeGenerationPopupCode extends React.Component<Props, {}> 
             viewportMargin: Infinity,
             theme: 'dracula',
           }}
-          onFocusChange={(focused) => {
+          onFocusChange={focused => {
             if (focused) {
               // TODO track
             }
@@ -65,7 +68,7 @@ export default class CodeGenerationPopupCode extends React.Component<Props, {}> 
             mode: 'javascript',
             theme: 'dracula',
           }}
-          onFocusChange={(focused) => {
+          onFocusChange={focused => {
             if (focused) {
               // TODO track
             }
