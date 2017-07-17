@@ -34,6 +34,7 @@ export interface Response {
 }
 
 export interface Props {
+  endpoint: string
   projectId: string
   adminAuthToken?: string
   httpApiPrefix?: string
@@ -125,7 +126,7 @@ export default class Playground extends React.Component<Props, State> {
 
   constructor(props) {
     super(props)
-    this.storage = new PlaygroundStorage(props.projectId)
+    this.storage = new PlaygroundStorage(props.endpoint)
 
     const sessions = this.initSessions()
 
@@ -186,15 +187,6 @@ export default class Playground extends React.Component<Props, State> {
     // look, if there is a session. if not, initiate one.
     this.fetchSchemas().then(this.initSessions)
   }
-  componentWillUnmount() {
-    this.storage.setItem(
-      'selectedSessionIndex',
-      String(this.state.selectedSessionIndex),
-    )
-    this.saveSessions()
-    this.saveHistory()
-    this.storage.saveProject()
-  }
   componentDidMount() {
     if (this.initialIndex > -1) {
       this.setState(
@@ -212,6 +204,24 @@ export default class Playground extends React.Component<Props, State> {
     }
     this.initWebsockets()
   }
+  componentWillReceiveProps(nextProps) {
+    if (
+      nextProps.endpoint !== this.props.endpoint ||
+      nextProps.adminAuthToken !== this.props.adminAuthToken
+    ) {
+      this.resetSubscriptions()
+      this.fetchSchemas()
+    }
+  }
+  componentWillUnmount() {
+    this.storage.setItem(
+      'selectedSessionIndex',
+      String(this.state.selectedSessionIndex),
+    )
+    this.saveSessions()
+    this.saveHistory()
+    this.storage.saveProject()
+  }
   initWebsockets() {
     this.state.sessions.forEach(session => this.setWS(session))
   }
@@ -219,15 +229,6 @@ export default class Playground extends React.Component<Props, State> {
     const editor = this.graphiqlComponents[this.state.selectedSessionIndex]
       .queryEditorComponent.editor
     editor.setCursor(position)
-  }
-  componentWillReceiveProps(nextProps) {
-    if (
-      nextProps.projectId !== this.props.projectId ||
-      nextProps.adminAuthToken !== this.props.adminAuthToken
-    ) {
-      this.resetSubscriptions()
-      this.fetchSchemas()
-    }
   }
   fetchSchemas() {
     return this.fetchSchema(this.getSimpleEndpoint()).then(simpleSchemaData => {
@@ -440,7 +441,6 @@ export default class Playground extends React.Component<Props, State> {
           <SelectUserPopup
             isOpen={this.state.selectUserOpen}
             onRequestClose={this.handleCloseSelectUser}
-            projectId={this.props.projectId}
             adminAuthToken={this.props.adminAuthToken}
             userFields={this.state.userFields}
             onSelectUser={this.handleUserSelection}
@@ -821,7 +821,7 @@ export default class Playground extends React.Component<Props, State> {
     if (this.props.isEndpoint) {
       return location.pathname
     }
-    return `${this.state.httpApiPrefix}/simple/v1/${this.props.projectId}`
+    return this.props.endpoint
   }
 
   private getSystemEndpoint() {

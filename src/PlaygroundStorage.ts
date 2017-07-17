@@ -1,11 +1,13 @@
 import { Session } from './types'
+
 export default class PlaygroundStorage {
-  private projectId: string
+  private endpoint: string
   private project: any
   private storages: any = {}
   private executedQueryCount: number
-  constructor(projectId: string) {
-    this.projectId = projectId
+
+  constructor(endpoint: string) {
+    this.endpoint = endpoint
 
     this.project = this.getProject()
     this.executedQueryCount = this.getExecutedQueryCount()
@@ -37,7 +39,7 @@ export default class PlaygroundStorage {
     if (this.storages[sessionId]) {
       return this.storages[sessionId]
     }
-    const prefix = `${this.projectId}:${sessionId}:`
+    const prefix = `${this.endpoint}:${sessionId}:`
     const store = {
       clear: () => {
         Object.keys(localStorage)
@@ -99,7 +101,7 @@ export default class PlaygroundStorage {
 
   public saveProject() {
     const json = JSON.stringify(this.project)
-    localStorage.setItem(this.projectId, json)
+    localStorage.setItem(this.endpoint, json)
     localStorage.setItem(
       'executedQueryCount',
       this.executedQueryCount.toString(),
@@ -109,7 +111,7 @@ export default class PlaygroundStorage {
   private getProject() {
     let result: any = null
     try {
-      result = JSON.parse(localStorage.getItem(this.projectId) || '')
+      result = JSON.parse(localStorage.getItem(this.endpoint) || '')
     } catch (e) {
       //
     }

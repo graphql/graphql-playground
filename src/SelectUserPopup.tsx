@@ -18,7 +18,6 @@ interface State {
 }
 
 interface Props {
-  projectId: string
   adminAuthToken: string
   userFields: any[]
   onSelectUser: (user: any) => void
