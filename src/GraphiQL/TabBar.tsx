@@ -7,7 +7,7 @@ export interface Props {
   selectedSessionIndex: number
   onNewSession: any
   onCloseSession: (session: Session) => void
-  onOpenHistory: Function
+  onOpenHistory: () => void
   onSelectSession: (session: Session) => void
   onboardingStep?: string
   tether?: any

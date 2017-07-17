@@ -5,7 +5,7 @@ import { Icon, $v } from 'graphcool-styles'
 
 export interface Props {
   selectedViewer: Viewer
-  onChangeViewer: Function
+  onChangeViewer: (data: any) => void
   showSelectUser?: boolean
 }
 

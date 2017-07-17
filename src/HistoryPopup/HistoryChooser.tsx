@@ -5,7 +5,7 @@ import * as cx from 'classnames'
 
 export interface Props {
   selectedFilter: HistoryFilter
-  onSelectFilter: Function
+  onSelectFilter: (filter: any) => void
 }
 
 const HistoryChooser = ({ selectedFilter, onSelectFilter }: Props) =>

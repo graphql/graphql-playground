@@ -8,7 +8,7 @@ const environments = ['Node', 'Browser']
 
 interface Props {
   environment: Environment
-  setEnvironment: Function
+  setEnvironment: (data: any) => void
 }
 
 const Chooser = (props: Props) =>

@@ -29,6 +29,7 @@ class App extends React.Component<{}, State> {
     const isLocalhost = location.href.indexOf('localhost') > -1
 
     let subscriptionUrl
+    // tslint:disable-next-line
     if (isLocalhost) {
       subscriptionUrl = 'ws://localhost:8085/v1'
     } else if (isDev) {

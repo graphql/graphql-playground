@@ -10,8 +10,8 @@ import * as React from 'react'
 import * as cx from 'classnames'
 
 export interface Props {
-  onRun: Function
-  onStop: Function
+  onRun: (data?: any) => void
+  onStop: () => void
   isRunning: boolean
   operations: any[]
 }
@@ -151,6 +151,7 @@ export class ExecuteButton extends React.Component<Props, State> {
         document.removeEventListener('mouseup', onMouseUp)
         onMouseUp = null
         const isOptionsMenuClicked =
+          // tslint:disable-next-line
           downTarget.parentNode.compareDocumentPosition(upEvent.target) &
           Node.DOCUMENT_POSITION_CONTAINED_BY
         if (!isOptionsMenuClicked) {

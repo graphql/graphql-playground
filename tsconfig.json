@@ -26,9 +26,6 @@
     "jest",
     "src/**/*"
   ],
-  "include": [
-    "custom.d.ts"
-  ],
   "types": [
     "typePatches"
   ]

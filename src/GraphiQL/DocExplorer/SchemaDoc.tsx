@@ -16,10 +16,8 @@ export interface Props {
   onClickType: any
 }
 
-export interface State {}
-
 // Render the top level Schema
-export default class SchemaDoc extends React.Component<Props, State> {
+export default class SchemaDoc extends React.Component<Props, {}> {
   shouldComponentUpdate(nextProps) {
     return this.props.schema !== nextProps.schema
   }

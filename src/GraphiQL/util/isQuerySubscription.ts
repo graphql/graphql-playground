@@ -17,6 +17,7 @@ const isQuerySubscription = (
   if (ast) {
     ast.definitions.forEach(definition => {
       if (definition.operation === 'subscription') {
+        // tslint:disable-next-line
         if (operationName && operationName.length > 0) {
           isSubscription = definition.name.value === operationName
         } else {

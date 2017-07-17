@@ -5,7 +5,7 @@ import SearchBox from '../GraphiQL/DocExplorer/SearchBox'
 
 export interface Props {
   selectedFilter: HistoryFilter
-  onSelectFilter: Function
+  onSelectFilter: (filter: any) => void
   onSearch: (value: string) => void
 }
 

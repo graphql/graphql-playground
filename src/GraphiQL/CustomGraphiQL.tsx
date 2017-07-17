@@ -37,6 +37,7 @@ import { ResultViewer } from './ResultViewer'
 import ageOfDate from './util/ageOfDate'
 import { Response } from '../Playground'
 import SchemaExplorer from './SchemaExplorer'
+// tslint:disable-next-line
 const CSSTransitionGroup = require('react-transition-group/CSSTransitionGroup')
 
 /**
@@ -57,13 +58,13 @@ export interface Props {
 
   storage?: any
   defaultQuery?: string
-  onEditQuery?: Function
+  onEditQuery?: (data: any) => void
   onEditVariables?: (variables: any) => any
   onEditOperationName?: (name: any) => any
   onToggleDocs?: (value: boolean) => any
   onClickCodeGeneration?: any
   getDefaultFieldNames?: () => any
-  onChangeEndpoint?: Function
+  onChangeEndpoint?: (data: any) => void
   showViewAs?: boolean
   showSelectUser?: boolean
   showCodeGeneration?: boolean
@@ -73,7 +74,7 @@ export interface Props {
   showDownloadJsonButton?: boolean
   disableQueryHeader?: boolean
   selectedViewer?: Viewer
-  onChangeViewer?: Function
+  onChangeViewer?: (data: any) => void
   queryOnly?: boolean
   showDocs?: boolean
   rerenderQuery?: boolean
@@ -1034,7 +1035,7 @@ export class CustomGraphiQL extends React.Component<Props, State> {
 
             if (isSubscription) {
               responses = this.state.responses
-                .filter(response => response && response.date)
+                .filter(res => res && res.date)
                 .concat({ date: response, time: new Date() })
             } else {
               responses = [{ date: response, time: new Date() }]
@@ -1088,8 +1089,7 @@ export class CustomGraphiQL extends React.Component<Props, State> {
         const cursorIndex = editor.indexFromPos(cursor)
 
         // Loop through all operations to see if one contains the cursor.
-        for (let i = 0; i < operations.length; i++) {
-          const operation = operations[i]
+        for (const operation of operations) {
           if (
             operation.loc.start <= cursorIndex &&
             operation.loc.end >= cursorIndex

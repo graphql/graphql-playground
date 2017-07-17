@@ -5,7 +5,7 @@ import Info from './Info'
 
 export interface Props {
   selectedEndpoint: Endpoint
-  onChangeEndpoint: Function
+  onChangeEndpoint: (data: any) => void
 }
 
 const EndpointChooser = ({ selectedEndpoint, onChangeEndpoint }: Props) =>

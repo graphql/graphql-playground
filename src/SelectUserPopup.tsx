@@ -21,9 +21,9 @@ interface Props {
   projectId: string
   adminAuthToken: string
   userFields: any[]
-  onSelectUser: Function
+  onSelectUser: (user: any) => void
   isOpen: boolean
-  onRequestClose: Function
+  onRequestClose: () => void
   endpointUrl: string
 }
 
@@ -279,6 +279,7 @@ export default class SelectUserPopup extends React.Component<Props, State> {
 
         this.lastQuery = query
       })
+      // tslint:disable-next-line
       .catch(e => console.error(e))
   }
 }

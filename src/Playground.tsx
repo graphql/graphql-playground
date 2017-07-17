@@ -39,7 +39,7 @@ export interface Props {
   adminAuthToken?: string
   httpApiPrefix?: string
   wsApiPrefix?: string
-  onSuccess?: Function
+  onSuccess?: (graphQLParams: any, response: any) => void
   isEndpoint?: boolean
   onboardingStep?: string
   tether?: any
@@ -173,17 +173,12 @@ export default class Playground extends React.Component<Props, State> {
     global.p = this
   }
   setWS = (session: Session) => {
-    console.log('calling setWS')
     const connectionParams = {}
 
     if (session.selectedViewer === 'ADMIN' && this.state.adminAuthToken) {
       connectionParams.Authorization = `Bearer ${this.state.adminAuthToken}`
-      console.log('setWS: going for admin')
     } else if (session.selectedViewer === 'USER' && session.selectedUserToken) {
       connectionParams.Authorization = `Bearer ${session.selectedUserToken}`
-      console.log('setWS: going for user')
-    } else {
-      console.log('going for everyone')
     }
 
     if (this.wsConnections[session.id]) {
@@ -490,12 +485,9 @@ export default class Playground extends React.Component<Props, State> {
 
   private autofillMutation = () => {
     const sessionId = this.state.sessions[this.state.selectedSessionIndex].id
-    console.log('trying to autofill mutation', sessionId)
     if (this.props.onboardingStep === 'STEP3_ENTER_MUTATION1_VALUES') {
-      console.log('GOING FOR 1')
       this.setValueInSession(sessionId, 'query', onboardingFilledMutation1)
     } else if (this.props.onboardingStep === 'STEP3_ENTER_MUTATION2_VALUE') {
-      console.log('GOING FOR 2')
       this.setValueInSession(sessionId, 'query', onboardingFilledMutation2)
     }
     if (typeof this.props.nextStep === 'function') {
@@ -790,9 +782,7 @@ export default class Playground extends React.Component<Props, State> {
         }, 300)
       }
 
-      const session = this.state.sessions.find(
-        session => session.id === sessionId,
-      )
+      const session = this.state.sessions.find(sess => sess.id === sessionId)
 
       if (session) {
         this.resetSubscription(session)

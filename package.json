@@ -57,7 +57,7 @@
     "tslint": "^5.5.0",
     "tslint-graphcool-frontend": "^0.0.3",
     "tslint-loader": "^3.5.3",
-    "typescript": "2.4.0",
+    "typescript": "^2.4.1",
     "url-loader": "0.5.7",
     "webpack": "1.14.0",
     "webpack-dev-server": "1.16.2",

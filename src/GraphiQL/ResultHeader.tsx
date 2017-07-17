@@ -5,7 +5,7 @@ import * as cx from 'classnames'
 
 export interface Props {
   selectedViewer?: Viewer
-  onChangeViewer?: Function
+  onChangeViewer?: (data: any) => void
   showViewAs?: boolean
   showResponseTitle?: boolean
   showSelectUser?: boolean

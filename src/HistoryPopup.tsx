@@ -10,10 +10,10 @@ import { modalStyle } from './constants'
 
 export interface Props {
   isOpen: boolean
-  onRequestClose: Function
+  onRequestClose: () => void
   historyItems: Session[]
   onItemStarToggled: (item: Session) => void
-  fetcherCreater: Function
+  fetcherCreater: (item: any) => void
   schemas: SchemaCache
   onCreateSession: (session: Session) => void
 }

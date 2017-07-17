@@ -10,7 +10,7 @@ import { Environment, GraphQLClient } from '../types'
 interface Props {
   query: string
   isOpen: boolean
-  onRequestClose: Function
+  onRequestClose: () => void
   endpointUrl: string
 }
 

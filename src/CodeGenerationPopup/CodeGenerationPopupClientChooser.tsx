@@ -11,7 +11,7 @@ const clients = [
 ]
 
 interface Props {
-  setClient: Function
+  setClient: (env: any) => void
   client: string
 }
 
