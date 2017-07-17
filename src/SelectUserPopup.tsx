@@ -77,7 +77,7 @@ export default class SelectUserPopup extends React.Component<Props, State> {
         contentLabel="Select a User"
         style={this.style}
       >
-        <style jsx>{`
+        <style jsx={true}>{`
           .select-user-popup {
             @inherit: .bgWhite, .relative, .mh25;
           }
@@ -105,7 +105,7 @@ export default class SelectUserPopup extends React.Component<Props, State> {
               'Droid Sans Mono', 'Monaco', monospace;
           }
         `}</style>
-        <style jsx global>{`
+        <style jsx={true} global={true}>{`
           .popup-x {
             @inherit: .absolute, .right0, .top0, .pointer, .pt25, .pr25;
           }
@@ -136,8 +136,8 @@ export default class SelectUserPopup extends React.Component<Props, State> {
               <SearchBox
                 placeholder="Search for a user ..."
                 onSearch={this.handleSearch}
-                isShown
-                clean
+                isShown={true}
+                clean={true}
               />
             </div>
           </div>

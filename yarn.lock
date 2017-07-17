@@ -5549,9 +5549,9 @@ tslint-eslint-rules@^4.1.1:
     tslib "^1.0.0"
     tsutils "^1.4.0"
 
-tslint-graphcool-frontend@^0.0.1:
-  version "0.0.1"
-  resolved "https://registry.yarnpkg.com/tslint-graphcool-frontend/-/tslint-graphcool-frontend-0.0.1.tgz#e12b644db3563c0953d46e55715fe62f2a42404e"
+tslint-graphcool-frontend@^0.0.2:
+  version "0.0.2"
+  resolved "https://registry.yarnpkg.com/tslint-graphcool-frontend/-/tslint-graphcool-frontend-0.0.2.tgz#200c5af691429843198ff775a50d8196adb7297f"
   dependencies:
     tslint-config-prettier "^1.1.0"
     tslint-eslint-rules "^4.1.1"

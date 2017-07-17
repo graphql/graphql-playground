@@ -56,7 +56,7 @@ export default class HistoryPopup extends React.Component<Props, State> {
         contentLabel="GraphiQL Session History"
         style={modalStyle}
       >
-        <style jsx>{`
+        <style jsx={true}>{`
           .history-popup {
             @inherit: .flex;
             min-height: 500px;
@@ -136,7 +136,7 @@ export default class HistoryPopup extends React.Component<Props, State> {
                     <Icon
                       src={require('./assets/icons/arrowRight.svg')}
                       color={$v.white}
-                      stroke
+                      stroke={true}
                       width={13}
                       height={13}
                     />
@@ -147,9 +147,9 @@ export default class HistoryPopup extends React.Component<Props, State> {
                   variables={selectedItem.variables}
                   query={selectedItem.query}
                   fetcher={this.props.fetcherCreater(selectedItem)}
-                  disableQueryHeader
-                  queryOnly
-                  rerenderQuery
+                  disableQueryHeader={true}
+                  queryOnly={true}
+                  rerenderQuery={true}
                 />
               </div>
             : <div className="right">

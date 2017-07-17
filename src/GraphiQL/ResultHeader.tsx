@@ -19,7 +19,7 @@ const ResultHeader = ({
   showSelectUser,
 }: Props) =>
   <div className={cx('result-header subscription')}>
-    <style jsx>{`
+    <style jsx={true}>{`
       .result-header {
         @inherit: .bgDarkBlue,
           .flex,

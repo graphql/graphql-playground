@@ -364,7 +364,7 @@ export default class Playground extends React.Component<Props, State> {
 
     return (
       <div className={cx('root')}>
-        <style jsx>{`
+        <style jsx={true}>{`
           .root {
             @p: .h100, .flex, .flexColumn;
           }
@@ -437,7 +437,7 @@ export default class Playground extends React.Component<Props, State> {
                   this.state.response ? [this.state.response] : undefined
                 }
                 disableQueryHeader={this.state.disableQueryHeader}
-                disableResize
+                disableResize={true}
                 onboardingStep={
                   index === selectedSessionIndex
                     ? this.props.onboardingStep
@@ -452,7 +452,7 @@ export default class Playground extends React.Component<Props, State> {
                     'STEP3_ENTER_MUTATION1_VALUES' ||
                   this.props.onboardingStep === 'STEP3_ENTER_MUTATION2_VALUE'
                 }
-                disableAnimation
+                disableAnimation={true}
               />
             </div>,
           )}

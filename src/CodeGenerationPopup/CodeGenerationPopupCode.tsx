@@ -36,7 +36,7 @@ export default class CodeGenerationPopupCode extends React.Component<
             @inherit: .fw3, .f25, .mv16;
           }
         `}</style>
-        <style jsx={true} global>{`
+        <style jsx={true} global={true}>{`
           .code-generation-popup .CodeMirror {
             @inherit: .pa6;
             height: auto;

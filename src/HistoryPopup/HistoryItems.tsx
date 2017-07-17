@@ -19,7 +19,7 @@ const HistoryItems = ({
   searchTerm,
 }: Props) =>
   <div className="history-items">
-    <style jsx>{`
+    <style jsx={true}>{`
       .history-items {
         @inherit: .overflowYScroll;
         max-height: calc(100vh - 121px);

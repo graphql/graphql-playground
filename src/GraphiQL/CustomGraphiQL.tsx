@@ -371,7 +371,7 @@ export class CustomGraphiQL extends React.Component<Props, State> {
 
     return (
       <div className="graphiql-container">
-        <style jsx>{`
+        <style jsx={true}>{`
           .graphiql-container {
             font-family: Open Sans, sans-serif;
           }
@@ -474,7 +474,7 @@ export class CustomGraphiQL extends React.Component<Props, State> {
             left: 90px;
           }
         `}</style>
-        <style jsx global>{`
+        <style jsx={true} global={true}>{`
           .query-header-enter {
             opacity: 0.01;
           }

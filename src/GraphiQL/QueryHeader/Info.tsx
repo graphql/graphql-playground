@@ -2,7 +2,7 @@ import * as React from 'react'
 
 const Info = props =>
   <div className="info">
-    <style jsx>{`
+    <style jsx={true}>{`
       .question-mark {
         @inherit: .bgWhite10, .flex, .itemsCenter, .justifyCenter, .white40,
           .f12, .fw6, .br100, .pointer;

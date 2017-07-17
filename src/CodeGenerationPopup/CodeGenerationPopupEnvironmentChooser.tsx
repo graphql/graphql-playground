@@ -13,7 +13,7 @@ interface Props {
 
 const Chooser = (props: Props) =>
   <div className={cx($p.bt, $p.bb, $p.bBlack10, $p.flex1)}>
-    <style jsx>{`
+    <style jsx={true}>{`
       .condition-button:not(.bgGreen):hover {
         background-color: $gray10;
       }

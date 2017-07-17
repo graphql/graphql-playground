@@ -132,7 +132,7 @@ export class DocExplorer extends React.Component<Props, State> {
           'show-title': Boolean(prevName),
         })}
       >
-        <style jsx>{`
+        <style jsx={true}>{`
           .doc-explorer {
             @inherit: .relative, .h100;
             border-left: 6px solid $green;

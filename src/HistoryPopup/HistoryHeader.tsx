@@ -11,7 +11,7 @@ export interface Props {
 
 const HistoryHeader = (props: Props) =>
   <div className="history-header">
-    <style jsx>{`
+    <style jsx={true}>{`
       .history-header {
         @inherit: .pa16, .flex, .justifyBetween, .itemsCenter, .bgBlack02;
       }
@@ -27,8 +27,8 @@ const HistoryHeader = (props: Props) =>
     <SearchBox
       placeholder="Search the history..."
       onSearch={props.onSearch}
-      clean
-      isShown
+      clean={true}
+      isShown={true}
     />
   </div>
 

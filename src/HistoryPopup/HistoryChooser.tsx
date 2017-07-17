@@ -10,7 +10,7 @@ export interface Props {
 
 const HistoryChooser = ({ selectedFilter, onSelectFilter }: Props) =>
   <div>
-    <style jsx>{`
+    <style jsx={true}>{`
       .chooser {
         @inherit: .flex, .itemsCenter;
       }

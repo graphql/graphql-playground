@@ -41,7 +41,7 @@ export default class TableComponent extends React.Component<Props, State> {
 
     return (
       <div className="popup-table">
-        <style jsx global>{`
+        <style jsx={true} global={true}>{`
           .popup-table {
             @inherit: .bgBlack02, .w100, .overflowXScroll;
             padding-top: 30px;
@@ -118,7 +118,7 @@ export default class TableComponent extends React.Component<Props, State> {
   private noRowsRenderer = () => {
     return (
       <div className="no-rows">
-        <style jsx>{`
+        <style jsx={true}>{`
           .no-rows {
             @inherit: .w100, .h100, .flex, .justifyCenter, .itemsCenter;
           }

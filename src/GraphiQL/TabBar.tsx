@@ -29,7 +29,7 @@ export const TabBar = ({
 
   return (
     <div className="root">
-      <style jsx>{`
+      <style jsx={true}>{`
         .root {
           @inherit: .white, .z4;
           height: 57px;

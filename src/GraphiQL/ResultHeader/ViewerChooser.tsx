@@ -11,7 +11,7 @@ export interface Props {
 
 const ViewAs = ({ selectedViewer, onChangeViewer, showSelectUser }: Props) =>
   <div className="root">
-    <style jsx>{`
+    <style jsx={true}>{`
       .root {
         @inherit: .fw6, .flex, .itemsCenter;
         color: rgba(255, 255, 255, .25);
