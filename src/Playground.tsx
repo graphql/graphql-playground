@@ -35,7 +35,7 @@ export interface Response {
 
 export interface Props {
   endpoint: string
-  projectId: string
+  projectId?: string
   adminAuthToken?: string
   httpApiPrefix?: string
   wsApiPrefix?: string
