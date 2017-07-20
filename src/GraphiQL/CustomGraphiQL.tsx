@@ -37,6 +37,9 @@ import { ResultViewer } from './ResultViewer'
 import ageOfDate from './util/ageOfDate'
 import { Response } from '../Playground'
 import SchemaExplorer from './SchemaExplorer'
+
+import GraphDocs from './DocExplorer/GraphDocs'
+
 // tslint:disable-next-line
 const CSSTransitionGroup = require('react-transition-group/CSSTransitionGroup')
 
@@ -219,7 +222,7 @@ export class CustomGraphiQL extends React.Component<Props, State> {
       variableEditorOpen: Boolean(variables),
       variableEditorHeight:
         Number(this._storageGet('variableEditorHeight')) || 200,
-      docExplorerOpen: this._storageGet('docExplorerOpen') === 'true' || false,
+      docExplorerOpen: false,
       docExplorerWidth: Number(this._storageGet('docExplorerWidth')) || 350,
       schemaExplorerOpen: false,
       schemaExplorerWidth:
@@ -314,8 +317,6 @@ export class CustomGraphiQL extends React.Component<Props, State> {
     this._storageSet('operationName', this.state.operationName)
     this._storageSet('editorFlex', this.state.editorFlex)
     this._storageSet('variableEditorHeight', this.state.variableEditorHeight)
-    this._storageSet('docExplorerWidth', this.state.docExplorerWidth)
-    this._storageSet('docExplorerOpen', this.state.docExplorerOpen)
   }
 
   render() {
@@ -716,7 +717,12 @@ export class CustomGraphiQL extends React.Component<Props, State> {
               </div>}
           </div>
         </div>
-        {(this.props.queryOnly ? this.props.showDocs : true) &&
+        <GraphDocs
+          schema={this.state.schema}
+          storageSet={this._storageSet}
+          storageGet={this._storageGet}
+        />
+        {/*(this.props.queryOnly ? this.props.showDocs : true) &&
           <div className={docExplorerWrapClasses} style={docWrapStyle}>
             <div
               className={`docs-button ${!this.state.docExplorerOpen &&
@@ -737,7 +743,7 @@ export class CustomGraphiQL extends React.Component<Props, State> {
                 schema={this.state.schema}
                 open={this.state.docExploreOpen}
               />}
-          </div>}
+          </div>*/}
         {this.props.showSchema &&
           <div className={docExplorerWrapClasses} style={schemaWrapStyle}>
             <div
@@ -889,7 +895,8 @@ export class CustomGraphiQL extends React.Component<Props, State> {
       })
   }
 
-  _storageGet(name) {
+  // tslint:disable-next-line
+  _storageGet = (name: string): any => {
     if (this.storage) {
       const value = this.storage.getItem('graphiql:' + name)
       // Clean up any inadvertently saved null/undefined values.
@@ -901,9 +908,10 @@ export class CustomGraphiQL extends React.Component<Props, State> {
     }
   }
 
-  _storageSet(name, value) {
+  // tslint:disable-next-line
+  _storageSet = (name: string, value: any): void => {
     if (this.storage) {
-      if (value) {
+      if (value !== undefined) {
         this.storage.setItem('graphiql:' + name, value)
       } else {
         this.storage.removeItem('graphiql:' + name)

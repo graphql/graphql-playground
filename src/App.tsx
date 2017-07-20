@@ -46,7 +46,7 @@ class App extends React.Component<{}, State> {
 
     return (
       <Playground
-        endpoint="https://graphql-europe.org/graphql"
+        endpoint="http://localhost:9002/graphql"
         wsApiPrefix={subscriptionUrl}
         adminAuthToken=""
         httpApiPrefix="https://api.graph.cool"
