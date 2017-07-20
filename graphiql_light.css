@@ -168,8 +168,6 @@
 
 .docs-graphiql .graphiql-container .docExplorerWrap {
     background: white;
-    position: relative;
-    z-index: 3;
 }
 
 .docs-graphiql .graphiql-container .docExplorerResizer {
@@ -210,21 +208,6 @@
 
 .docs-graphiql .graphiql-container .query-header {
     background-color: #F6F7F7 !important;
-    padding: 0 !important;
-    border-top-left-radius: 2px;
-}
-
-.docs-graphiql .graphiql-container .variable-editor {
-    display: -webkit-box;
-    display: -ms-flexbox;
-    display: flex;
-    -webkit-box-orient: vertical;
-    -webkit-box-direction: normal;
-    -ms-flex-direction: column;
-    flex-direction: column;
-    height: 43px;
-    position: relative;
-    display: none;
 }
 
 .docs-graphiql .graphiql-container .variable-editor .CodeMirror {
@@ -333,38 +316,20 @@
     top: 4px;
 }
 
-.docs-graphiql .resultWrap .execute-button-wrap {
-    height: 60px;
-    left: -60px !important;
-    top: 0px;
-    padding-top: 0px;
-    padding-bottom: 6px;
-}
-
 .docs-graphiql .resultWrap .graphcool-execute-button {
-    width: 52px !important;
-    height: 52px !important;
-    top: auto !important;
-    left: auto !important;
-    background-color: #F8D4E7;
-    border: 6px solid #F6F7F7 !important;
+    background-color: #000000;
+    border: 6px solid #eeeff0 !important;
 }
 
 .docs-graphiql .resultWrap .graphcool-execute-button svg {
-    fill: rgba(224, 0, 130, 1) !important;
-    width: 18px;
-    height: 18px;
-    margin-top: 2px;
+    fill: #ffffff !important;
 }
 
 .docs-graphiql .docs-button {
-    top: 25px !important;
     box-shadow: -1px -3px 5px rgba(0,0,0,.05);
 }
 
 .docs-graphiql .docs-button.inactive {
-    z-index: 2 !important;
-    left: -42px;
     background: white;
     color: rgb(168,168,168);
     box-shadow: -1px 0 3px rgba(0,0,0,.15);

@@ -1,11 +1,13 @@
 import * as React from 'react'
 import Playground from './Playground'
+import ThemeProvider from './theme/ThemeProvider'
 
 const testProjectId = 'asdf'
 const regex = /.*?graph\.cool\/simple\/.{1,2}\/(.{1,25})/
 
 interface State {
   stepIndex: number
+  theme: string
 }
 
 class App extends React.Component<{}, State> {
@@ -14,8 +16,14 @@ class App extends React.Component<{}, State> {
 
     this.state = {
       stepIndex: 0,
+      theme: 'light',
     }
   }
+
+  handleChangeTheme = theme => {
+    this.setState({ theme })
+  }
+
   render() {
     let projectId: any = testProjectId
     if (regex.test(location.href)) {
@@ -45,13 +53,15 @@ class App extends React.Component<{}, State> {
     // httpApiPrefix={production ? 'https://api.graph.cool' : 'http://localhost:60000'}
 
     return (
-      <Playground
-        endpoint="http://localhost:9002/graphql"
-        wsApiPrefix={subscriptionUrl}
-        adminAuthToken=""
-        httpApiPrefix="https://api.graph.cool"
-        theme="light"
-      />
+      <ThemeProvider theme={this.state.theme}>
+        <Playground
+          endpoint="http://localhost:9002/graphql"
+          wsApiPrefix={subscriptionUrl}
+          adminAuthToken=""
+          httpApiPrefix="https://api.graph.cool"
+          onChangeTheme={this.handleChangeTheme}
+        />
+      </ThemeProvider>
     )
   }
 }

@@ -26,6 +26,7 @@ import {
   onboardingQuery1,
   onboardingQuery1Check,
 } from './data'
+import withTheme from './theme/withTheme'
 
 export type Viewer = 'ADMIN' | 'EVERYONE' | 'USER'
 export interface Response {
@@ -34,7 +35,8 @@ export interface Response {
 }
 
 export interface Props {
-  theme: 'dark' | 'light'
+  theme?: string
+  onChangeTheme: (theme: string) => void
   endpoint: string
   projectId?: string
   adminAuthToken?: string
@@ -75,7 +77,7 @@ const wsApiPrefix = 'wss://dev.subscriptions.graph.cool/v1'
 
 export { CustomGraphiQL }
 
-export default class Playground extends React.Component<Props, State> {
+class Playground extends React.Component<Props, State> {
   storage: PlaygroundStorage
   wsConnections: { [sessionId: string]: any } = {}
   observers: { [sessionId: string]: any } = {}
@@ -349,7 +351,7 @@ export default class Playground extends React.Component<Props, State> {
       ? location.href
       : this.getSimpleEndpoint()
     // const canSelectUsers = this.state.userFields.length > 0
-
+    const isGraphcoolUrl = this.isGraphcoolUrl(selectedEndpointUrl)
     return (
       <div className={cx('root')}>
         <style jsx={true}>{`
@@ -380,6 +382,7 @@ export default class Playground extends React.Component<Props, State> {
           onboardingStep={this.props.onboardingStep}
           nextStep={this.props.nextStep}
           tether={this.props.tether}
+          onChangeTheme={this.props.onChangeTheme}
         />
         <div
           className={cx('graphiqls-container', {
@@ -398,6 +401,7 @@ export default class Playground extends React.Component<Props, State> {
             >
               <CustomGraphiQL
                 key={session.id}
+                isGraphcoolUrl={isGraphcoolUrl}
                 schema={this.state.schemaCache}
                 fetcher={this.fetcher(session)}
                 showQueryTitle={false}
@@ -835,6 +839,10 @@ export default class Playground extends React.Component<Props, State> {
     )
   }
 
+  private isGraphcoolUrl(endpoint) {
+    return endpoint.startsWith('https://api.graph.cool')
+  }
+
   private getSimpleEndpoint() {
     if (this.props.isEndpoint) {
       return location.pathname
@@ -973,3 +981,5 @@ export default class Playground extends React.Component<Props, State> {
     })
   }
 }
+
+export default withTheme<Props>(Playground)

@@ -51,6 +51,7 @@ const CSSTransitionGroup = require('react-transition-group/CSSTransitionGroup')
 
 export interface Props {
   fetcher: (params: any) => Promise<any>
+  isGraphcoolUrl?: boolean
   schema?: GraphQLSchema
   query?: string
   variables?: string
@@ -608,13 +609,14 @@ export class CustomGraphiQL extends React.Component<Props, State> {
             </div>
             {!this.props.queryOnly &&
               <div className="resultWrap">
-                <ResultHeader
-                  showViewAs={this.props.showViewAs}
-                  showSelectUser={this.props.showSelectUser}
-                  selectedViewer={this.props.selectedViewer}
-                  onChangeViewer={this.props.onChangeViewer}
-                  showResponseTitle={this.props.showResponseTitle}
-                />
+                {this.props.isGraphcoolUrl &&
+                  <ResultHeader
+                    showViewAs={this.props.showViewAs}
+                    showSelectUser={this.props.showSelectUser}
+                    selectedViewer={this.props.selectedViewer}
+                    onChangeViewer={this.props.onChangeViewer}
+                    showResponseTitle={this.props.showResponseTitle}
+                  />}
                 {this.props.tether
                   ? <Tether
                       offsetX={18}
