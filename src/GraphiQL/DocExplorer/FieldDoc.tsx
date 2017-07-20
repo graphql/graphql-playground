@@ -117,8 +117,6 @@ export default class FieldDoc extends React.Component<Props, State> {
       </div>
     )
   }
-
-  private handleShowDeprecated = () => this.setState({ showDeprecated: true })
 }
 
 const scrollToRight = (element: Element, to: number, duration: number) => {

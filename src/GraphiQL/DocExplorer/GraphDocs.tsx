@@ -1,8 +1,6 @@
 import * as React from 'react'
 import * as ReactDOM from 'react-dom'
-import { isType } from 'graphql'
 import { getLeft } from 'graphiql/dist/utility/elementPosition'
-import { DocExplorer } from '../DocExplorer'
 import FieldDoc from './FieldDoc'
 import SearchBox from './SearchBox'
 import SearchResults from './SearchResults'
@@ -23,8 +21,6 @@ export interface State {
 }
 
 export default class GraphDocs extends React.Component<Props, State> {
-  private docExplorerComponent: any
-
   constructor(props) {
     super(props)
     // Take old values from storage

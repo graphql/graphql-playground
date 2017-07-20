@@ -17,7 +17,6 @@ import { ExecuteButton } from './ExecuteButton'
 import { ToolbarButton } from 'graphiql/dist/components/ToolbarButton'
 import { QueryEditor } from './QueryEditor'
 import { VariableEditor } from 'graphiql/dist/components/VariableEditor'
-import { DocExplorer } from './DocExplorer'
 import CodeMirrorSizer from 'graphiql/dist/utility/CodeMirrorSizer'
 import getQueryFacts from 'graphiql/dist/utility/getQueryFacts'
 import getSelectedOperationName from 'graphiql/dist/utility/getSelectedOperationName'
@@ -343,12 +342,6 @@ export class CustomGraphiQL extends React.Component<Props, State> {
     const queryWrapStyle = {
       WebkitFlex: this.state.editorFlex,
       flex: this.state.editorFlex,
-    }
-
-    const docWrapStyle = {
-      height: '100%',
-      // display: this.state.docExplorerOpen ? 'block':'none',
-      width: this.state.docExplorerOpen ? this.state.docExplorerWidth : 0,
     }
 
     const schemaWrapStyle = {

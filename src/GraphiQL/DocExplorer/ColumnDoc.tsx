@@ -1,5 +1,4 @@
 import * as React from 'react'
-import * as classNames from 'classnames'
 
 export interface Props {
   children: any

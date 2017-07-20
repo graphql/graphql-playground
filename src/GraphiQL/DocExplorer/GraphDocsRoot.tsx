@@ -7,9 +7,6 @@ interface Props {
 }
 
 const GraphDocsRoot = ({ schema, onClickType }: Props) => {
-  const type = schema.getQueryType()
-  const fieldMap = type.getFields()
-  const fields = Object.keys(fieldMap).map(name => fieldMap[name])
   const mutationType = schema.getMutationType && schema.getMutationType()
   const subscriptionType =
     schema.getSubscriptionType && schema.getSubscriptionType()

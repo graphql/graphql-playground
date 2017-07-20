@@ -3,7 +3,6 @@ import {
   GraphQLEnumType,
   GraphQLObjectType,
   GraphQLUnionType,
-  GraphQLInterfaceType,
   GraphQLScalarType,
   GraphQLNonNull,
   GraphQLList,
