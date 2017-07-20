@@ -29,6 +29,18 @@ export default class FieldDoc extends React.Component<Props, State> {
   state = { showDeprecated: false }
 
   componentDidMount() {
+    this.scrollToRight()
+  }
+
+  shouldComponentUpdate(nextProps) {
+    if (this.props.field !== nextProps.field) {
+      this.scrollToRight()
+      return true
+    }
+    return false
+  }
+
+  scrollToRight() {
     const explorer = ReactDOM.findDOMNode(this)
     const explorerDoc: any =
       explorer.parentNode && explorer.parentNode.parentNode
@@ -36,12 +48,8 @@ export default class FieldDoc extends React.Component<Props, State> {
     scrollToRight(
       explorerDoc,
       explorerDoc.scrollWidth - explorerDoc.offsetWidth,
-      300,
+      50,
     )
-  }
-
-  shouldComponentUpdate(nextProps) {
-    return this.props.field !== nextProps.field
   }
 
   onClickType = type => {
