@@ -148,18 +148,20 @@ export default class GraphDocs extends React.Component<Props, State> {
 
   private handleClickField = (field, level) => {
     const { navStack } = this.state
-    const isCurrentlyShown =
-      navStack.length > 0 && navStack[navStack.length - 1] === field
     // If type is of type query etc.. empty the list
     if (level === 0) {
       this.setState({ navStack: [field] })
-    } else if (!isCurrentlyShown) {
+    } else {
       let newNavStack = navStack
       if (level < navStack.length) {
         newNavStack = navStack.slice(0, level)
       }
-      newNavStack = newNavStack.concat([field])
-      this.setState({ navStack: newNavStack })
+      const isCurrentlyShown =
+        newNavStack.length > 0 && newNavStack[newNavStack.length - 1] === field
+      if (!isCurrentlyShown) {
+        newNavStack = newNavStack.concat([field])
+        this.setState({ navStack: newNavStack })
+      }
     }
   }
 
