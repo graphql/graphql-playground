@@ -103,6 +103,7 @@
     "build-app": "node scripts/build.js",
     "test": "node scripts/test.js --env=jsdom",
     "bump": "npm version patch --no-git-tag-version && git add package.json",
+    "graphql-faker": "graphql-faker ./tests/schema.faker.graphql",
     "lint": "tslint \"src/**/*.ts{,x}\"",
     "precommit": "lint-staged",
     "prettier": "prettier --single-quote --no-semi --trailing-comma all --write *.{ts,tsx} 'src/**/*.{ts,tsx}'"
