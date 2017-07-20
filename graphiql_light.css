@@ -1,22 +1,3 @@
-
-/* latin-ext */
-@font-face {
-    font-family: 'Source Code Pro';
-    font-style: normal;
-    font-weight: 400;
-    src: local('Source Code Pro'), local('SourceCodePro-Regular'), url(https://fonts.gstatic.com/s/sourcecodepro/v6/mrl8jkM18OlOQN8JLgasD4a1YDtoarzwSXxTHggEXMw.woff2) format('woff2');
-    unicode-range: U+0100-024F, U+1E00-1EFF, U+20A0-20AB, U+20AD-20CF, U+2C60-2C7F, U+A720-A7FF;
-}
-/* latin */
-@font-face {
-    font-family: 'Source Code Pro';
-    font-style: normal;
-    font-weight: 400;
-    src: local('Source Code Pro'), local('SourceCodePro-Regular'), url(https://fonts.gstatic.com/s/sourcecodepro/v6/mrl8jkM18OlOQN8JLgasD5bPFduIYtoLzwST68uhz_Y.woff2) format('woff2');
-    unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2212, U+2215;
-}
-
-
 .docs-graphiql .graphiql-container {
     color: #141823;
     display: -webkit-box;
@@ -39,11 +20,13 @@
             'Lucida Grande',
             arial,
             sans-serif;
+    font-weight: 500;
     font-size: 14px;
     height: 100%;
     margin: 0;
     overflow: visible;
     width: 100%;
+    min-width: unset !important;
 }
 
 .docs-graphiql .graphiql-container .editorWrap {
@@ -57,6 +40,7 @@
     -webkit-box-flex: 1;
     -ms-flex: 1;
     flex: 1;
+    background-color: #F6F7F7 !important;
 }
 
 .docs-graphiql .graphiql-container .title {
@@ -179,6 +163,7 @@
     -ms-flex: 1;
     flex: 1;
     position: relative;
+    background: rgba(23, 42, 58, .02) !important;
 }
 
 .docs-graphiql .graphiql-container .docExplorerWrap {
@@ -218,12 +203,13 @@
 
 .docs-graphiql .graphiql-container .query-editor .CodeMirror {
     /*padding-top: 117px;*/
-    background-color: rgba(0,0,0,.02) !important;
+    padding-top: 16px;
+    background: none;
 }
 
 
 .docs-graphiql .graphiql-container .query-header {
-    background-color: rgba(0,0,0,.02) !important;
+    background-color: #F6F7F7 !important;
     padding: 0 !important;
     border-top-left-radius: 2px;
 }
@@ -238,6 +224,7 @@
     flex-direction: column;
     height: 43px;
     position: relative;
+    display: none;
 }
 
 .docs-graphiql .graphiql-container .variable-editor .CodeMirror {
@@ -295,8 +282,24 @@
     flex: 1;
     height: 100%;
     position: relative;
-    overflow: hidden;
+    overflow: auto;
     border-bottom-right-radius: 2px;
+    background: none !important;
+    padding-top: 0;
+}
+
+.docs-graphiql .result-window > div,
+.docs-graphiql .result-window > div > .result-codemirror,
+.docs-graphiql .result-window > div > .result-codemirror .CodeMirror {
+    height: 100%;
+}
+
+.docs-graphiql .resultWrap .intro {
+    color: rgba(0,0,0,.4);
+}
+
+.result-header.subscription:after {
+    display: none !important;
 }
 
 .docs-graphiql .graphiql-container .footer {
@@ -318,37 +321,40 @@
 }
 
 .docs-graphiql .graphiql-container .result-window .CodeMirror {
-    background: rgba(0,0,0,.02) !important;
+    background: none;
+    padding-left: 30px;
+    padding-top: 16px;
 }
 
 .docs-graphiql .graphiql-container .result-window .CodeMirror-gutters {
     background-color: transparent;
-    border-left: 4px solid rgb(233,233,233);
     border-right: none;
     cursor: col-resize;
     top: 4px;
 }
 
 .docs-graphiql .resultWrap .execute-button-wrap {
-    background: #fafafa;
-    height: 45px;
-    left: -47px;
+    height: 60px;
+    left: -60px !important;
     top: 0px;
-    padding-top: 4px;
+    padding-top: 0px;
+    padding-bottom: 6px;
 }
 
 .docs-graphiql .resultWrap .graphcool-execute-button {
-    border: none;
-    width: 41px;
-    height: 41px;
-    background-color: rgba(28,191,50,.3);
+    width: 52px !important;
+    height: 52px !important;
+    top: auto !important;
+    left: auto !important;
+    background-color: #F8D4E7;
+    border: 6px solid #F6F7F7 !important;
 }
 
 .docs-graphiql .resultWrap .graphcool-execute-button svg {
-    fill: rgb(39,174,96);
-    width: 32px;
-    height: 32px;
-    margin-top: 1px;
+    fill: rgba(224, 0, 130, 1) !important;
+    width: 18px;
+    height: 18px;
+    margin-top: 2px;
 }
 
 .docs-graphiql .docs-button {
@@ -366,13 +372,16 @@
 
 .docs-graphiql .result-header {
     padding: 0 !important;
-    margin-left: 16px;
-    background-color: rgba(0,0,0,.02) !important;
+    padding-left: 16px !important;
+    background-color: #F6F7F7 !important;
     border-top-right-radius: 2px;
 }
 
 .docs-graphiql .result-header .editor-title {
     margin-left: 3px;
+}
+.docs-graphiql .editor-title {
+    background: none !important;
 }
 
 .graphiql-container .result-window .CodeMirror-foldgutter,
@@ -629,13 +638,14 @@
 }
 
 /* Punctuation */
-.docs-graphiql .cm-punctuation {
-    color: rgba(12,198,65,.5);
+.docs-graphiql .cm-punctuation,
+.docs-graphiql .cm-ws {
+    color: rgba(23, 42, 58, 0.8);
 }
 
 /* Keyword */
 .docs-graphiql .cm-keyword {
-    color: rgb(42,126,211);
+    color: #366b6b;
 }
 
 /* OperationName, FragmentName */
@@ -645,7 +655,7 @@
 
 /* FieldName */
 .docs-graphiql .cm-property {
-    color: rgb(95,179,179);
+    color: #328c8c;
 }
 
 /* FieldAlias */
@@ -655,12 +665,12 @@
 
 /* ArgumentName and ObjectFieldName */
 .docs-graphiql .cm-attribute {
-    color: rgb(252,163,105);
+    color: #b56531;
 }
 
 /* Number */
 .docs-graphiql .cm-number {
-    color: #2882F9;
+    color: #1f6ed6;
 }
 
 /* String */
@@ -695,9 +705,11 @@
 
 .docs-graphiql .result-window .cm-property,
 .docs-graphiql .result-window .cm-def,
-.docs-graphiql .result-window .cm-punctuation,
+.docs-graphiql .result-window .cm-punctuation {
+    color: rgba(23, 42, 58, .8)
+}
 .docs-graphiql .result-window .cm-string {
-    color: rgb(95,179,179);
+    color: #D64292;
 }
 /* BASICS */
 
@@ -705,7 +717,7 @@
     /* Set height, width, borders, and global font properties here */
     color: black;
     font-family: monospace;
-    height: 300px;
+    height: auto;
 }
 
 /* PADDING */
@@ -746,7 +758,7 @@
 /* CURSOR */
 
 .docs-graphiql .CodeMirror div.CodeMirror-cursor {
-    border-left: 1px solid rgba(255,255,255,.4);
+    border-left: 1px solid rgba(0,0,0,.4);
 }
 /* Shown when moving in bi-directional text */
 .docs-graphiql .CodeMirror div.CodeMirror-secondarycursor {
@@ -828,7 +840,7 @@
 
 /* Default styles for common addons */
 
-.docs-graphiql div.CodeMirror span.CodeMirror-matchingbracket {color: #0f0;}
+.docs-graphiql div.CodeMirror span.CodeMirror-matchingbracket {color: rgba(23, 42, 58, 0.8) !important;}
 .docs-graphiql div.CodeMirror span.CodeMirror-nonmatchingbracket {color: #f22;}
 .docs-graphiql .CodeMirror-matchingtag { background: rgba(255, 150, 0, .3); }
 .docs-graphiql .CodeMirror-activeline-background {background: #e8f2ff;}
@@ -1004,12 +1016,12 @@
     visibility: visible;
 }
 
-.docs-graphiql .CodeMirror-selected { background: #d9d9d9; }
-.docs-graphiql .CodeMirror-focused .CodeMirror-selected { background: #d7d4f0; }
+.docs-graphiql .CodeMirror-selected { background: #d1e9fd; }
+.docs-graphiql .CodeMirror-focused .CodeMirror-selected { background: #d1e9fd; }
 .docs-graphiql .CodeMirror-crosshair { cursor: crosshair; }
-.docs-graphiql .CodeMirror-line::-moz-selection, .CodeMirror-line > span::-moz-selection, .CodeMirror-line > span > span::-moz-selection { background: #d7d4f0; }
-.docs-graphiql .CodeMirror-line::selection, .CodeMirror-line > span::selection, .CodeMirror-line > span > span::selection { background: #d7d4f0; }
-.docs-graphiql .CodeMirror-line::-moz-selection, .CodeMirror-line > span::-moz-selection, .CodeMirror-line > span > span::-moz-selection { background: #d7d4f0; }
+.docs-graphiql .CodeMirror-line::-moz-selection, .CodeMirror-line > span::-moz-selection, .CodeMirror-line > span > span::-moz-selection { background: #d1e9fd; }
+.docs-graphiql .CodeMirror-line::selection, .CodeMirror-line > span::selection, .CodeMirror-line > span > span::selection { background: #d1e9fd; }
+.docs-graphiql .CodeMirror-line::-moz-selection, .CodeMirror-line > span::-moz-selection, .CodeMirror-line > span > span::-moz-selection { background: #d1e9fd; }
 
 .docs-graphiql .cm-searching {
     background: #ffa;
@@ -1183,15 +1195,12 @@
 }
 
 .docs-graphiql .graphiql-container .doc-category-title {
-    border-top: 1px solid #e0e0e0;
     color: rgba(0,0,0,.3);
     cursor: default;
     font-size: 14px;
     font-weight: 600;
     text-transform: uppercase;
     letter-spacing: 1px;
-    margin: 0 -25px;
-    padding: 15px 25px;
     padding-top: 20px;
     -webkit-user-select: none;
     -moz-user-select: none;
@@ -1201,7 +1210,6 @@
 }
 
 .docs-graphiql .graphiql-container .doc-category-item {
-    margin: 12px 0;
     color: #555;
 }
 

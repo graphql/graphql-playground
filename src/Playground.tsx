@@ -34,6 +34,7 @@ export interface Response {
 }
 
 export interface Props {
+  theme: 'dark' | 'light'
   endpoint: string
   projectId?: string
   adminAuthToken?: string
@@ -334,7 +335,7 @@ export default class Playground extends React.Component<Props, State> {
   }
   render() {
     const { sessions, selectedSessionIndex } = this.state
-    const { isEndpoint } = this.props
+    const { isEndpoint, theme } = this.props
     // {
     //   'blur': this.state.historyOpen,
     // },
@@ -380,7 +381,11 @@ export default class Playground extends React.Component<Props, State> {
           nextStep={this.props.nextStep}
           tether={this.props.tether}
         />
-        <div className="graphiqls-container docs-graphiql">
+        <div
+          className={cx('graphiqls-container', {
+            'docs-graphiql': theme === 'light',
+          })}
+        >
           {sessions.map((session, index) =>
             <div
               key={session.id}

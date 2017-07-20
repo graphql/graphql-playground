@@ -34,7 +34,7 @@ enum Role {
   # Adimn role
   ADMIN
   USER @deprecated(reason: "not cool")
-  # Jedi powa
+  # Jedi
   JEDI
   NO_DESCRIPTION
   DEP_NO_REASON @deprecated

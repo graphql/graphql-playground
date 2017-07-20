@@ -50,6 +50,7 @@ class App extends React.Component<{}, State> {
         wsApiPrefix={subscriptionUrl}
         adminAuthToken=""
         httpApiPrefix="https://api.graph.cool"
+        theme="light"
       />
     )
   }
