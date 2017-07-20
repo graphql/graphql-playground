@@ -6,7 +6,7 @@ export interface Props {
   showQueryTitle?: boolean
 }
 
-const QueryHeader = ({ onPrettify, showEndpoints, showQueryTitle }: Props) =>
+const QueryHeader = ({ onPrettify, showQueryTitle }: Props) =>
   <div className="query-header">
     <style jsx={true}>{`
       .query-header {

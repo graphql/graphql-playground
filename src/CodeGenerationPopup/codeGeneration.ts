@@ -79,7 +79,7 @@ require('isomorphic-fetch')
     if (this.client === 'lokka') {
       return `function getItems() {
   return client.query(\`
-  ${query.split('\n').map((line, i) => '    ' + line).join('\n')}
+  ${query.split('\n').map(line => '    ' + line).join('\n')}
   \`)
 }`
     }
@@ -114,7 +114,7 @@ require('isomorphic-fetch')
     if (this.client === 'lokka') {
       return `function setItem() {
 return client.mutate(\`
-${strippedQuery.split('\n').map((line, i) => '    ' + line).join('\n')}
+${strippedQuery.split('\n').map(line => '    ' + line).join('\n')}
   \`)
 }`
     }

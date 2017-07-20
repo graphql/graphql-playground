@@ -2,10 +2,9 @@ import * as React from 'react'
 
 interface EnumTypeSchemaProps {
   type: any
-  onClickType: (data: any) => void
 }
 
-const EnumTypeSchema = ({ type, onClickType }: EnumTypeSchemaProps) => {
+const EnumTypeSchema = ({ type }: EnumTypeSchemaProps) => {
   const values = type.getValues()
   const deprecatedValues = values.filter((value: any) => value.isDeprecated)
   return (

@@ -188,7 +188,7 @@ export default class Playground extends React.Component<Props, State> {
     this.initWebsockets()
   }
 
-  componentDidUpdate(prevProps, prevState) {
+  componentDidUpdate(prevProps) {
     if (
       prevProps.endpoint !== this.props.endpoint ||
       prevProps.adminAuthToken !== this.props.adminAuthToken
@@ -407,8 +407,7 @@ export default class Playground extends React.Component<Props, State> {
                 query={session.query}
                 variables={session.variables}
                 operationName={session.operationName}
-                onClickCodeGeneration={() =>
-                  this.handleClickCodeGeneration(session)}
+                onClickCodeGeneration={() => this.handleClickCodeGeneration()}
                 onChangeViewer={(viewer: Viewer) =>
                   this.handleViewerChange(session.id, viewer)}
                 onEditOperationName={(name: string) =>
@@ -483,7 +482,7 @@ export default class Playground extends React.Component<Props, State> {
     }
   }
 
-  private handleClickCodeGeneration = session => {
+  private handleClickCodeGeneration = () => {
     this.setState(
       {
         codeGenerationPopupOpen: true,

@@ -674,7 +674,7 @@ export class CustomGraphiQL extends React.Component<Props, State> {
                 >
                   {this.state.responses
                     .filter(res => res && res.date)
-                    .map((response, index) =>
+                    .map(response =>
                       <div key={response.time}>
                         {subscriptionResponse &&
                           response.time &&

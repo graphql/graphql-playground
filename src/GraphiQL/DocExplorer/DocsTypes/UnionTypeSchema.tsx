@@ -3,14 +3,9 @@ import * as React from 'react'
 interface EnumTypeSchemaProps {
   schema: any
   type: any
-  onClickType: (data: any) => void
 }
 
-const UnionTypeSchema = ({
-  schema,
-  type,
-  onClickType,
-}: EnumTypeSchemaProps) => {
+const UnionTypeSchema = ({ schema, type }: EnumTypeSchemaProps) => {
   const types = schema.getPossibleTypes(type)
   return (
     <div className="doc-type-schema">

@@ -53,14 +53,9 @@ export default class TypeDetails extends React.Component<Props, {}> {
         />
         <DocTypeSchema type={type} onClickType={onClickType} />
         {type instanceof GraphQLScalarType && <ScalarTypeSchema type={type} />}
-        {type instanceof GraphQLEnumType &&
-          <EnumTypeSchema type={type} onClickType={onClickType} />}
+        {type instanceof GraphQLEnumType && <EnumTypeSchema type={type} />}
         {type instanceof GraphQLUnionType &&
-          <UnionTypeSchema
-            type={type}
-            schema={schema}
-            onClickType={onClickType}
-          />}
+          <UnionTypeSchema type={type} schema={schema} />}
       </div>
     )
   }

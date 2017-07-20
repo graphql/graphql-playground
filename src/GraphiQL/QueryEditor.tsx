@@ -190,7 +190,7 @@ export class QueryEditor extends React.Component<Props, {}> {
     return this.node && this.node.clientHeight
   }
 
-  private onKeyUp = (cm, event) => {
+  private onKeyUp = (_, event) => {
     const code = event.keyCode
     if (
       (code >= 65 && code <= 90) || // letters

@@ -16,7 +16,6 @@ const HistoryItems = ({
   onItemSelect,
   selectedItemIndex,
   onItemStarToggled,
-  searchTerm,
 }: Props) =>
   <div className="history-items">
     <style jsx={true}>{`

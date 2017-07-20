@@ -23,7 +23,6 @@ export const TabBar = ({
   onCloseSession,
   onboardingStep,
   tether,
-  nextStep,
 }: Props) => {
   const Tether = tether
 

@@ -99,7 +99,7 @@
     "start": "node scripts/start.js",
     "prepublish": "npm run build",
     "build": "rm -rf tsbuild; rm -rf babelbuild; yarn build-package; babel tsbuild -d babelbuild; cp -r ./src/assets/ ./babelbuild/assets/; cp src/CodeGenerationPopup/CodeMirror.js ./babelbuild/CodeGenerationPopup/CodeMirror.js",
-    "build-package": "tsc -p tsconfig.build.json --noUnusedLocals && babel tsbuild -d babelbuild;",
+    "build-package": "tsc -p tsconfig.build.json --noUnusedLocals --noUnusedParameters && babel tsbuild -d babelbuild;",
     "build-app": "node scripts/build.js",
     "test": "node scripts/test.js --env=jsdom",
     "bump": "npm version patch --no-git-tag-version && git add package.json",
