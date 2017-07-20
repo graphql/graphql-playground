@@ -3,12 +3,7 @@ import { $p } from 'graphcool-styles'
 import * as cx from 'classnames'
 import calculateSize from 'calculate-size'
 
-const clients = [
-  'lokka',
-  'fetch',
-  // 'apollo',
-  // 'relay',
-]
+const clients = ['graphql-request', 'fetch']
 
 interface Props {
   setClient: (env: any) => void

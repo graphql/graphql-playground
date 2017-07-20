@@ -18,8 +18,8 @@ export class CodeGenerator {
   getSetup() {
     const template = `$ npm install `
 
-    if (this.client === 'lokka') {
-      return template + `lokka lokka-transport-http`
+    if (this.client === 'graphql-request') {
+      return template + `graphql-request`
     } else if (this.client === 'fetch') {
       return template + `isomorphic-fetch es6-promise`
     }
@@ -34,14 +34,12 @@ export class CodeGenerator {
   }
 
   private getTransport() {
-    if (this.client === 'lokka') {
+    if (this.client === 'graphql-request') {
       return `
-const headers = {
-  Authorization: 'Bearer YOUR_AUTH_TOKEN'
-}
-
-const client = new Lokka({
-  transport: new Transport('${this.endpointUrl}', {headers})
+const client = new GraphQLClient('my-endpoint', {
+  headers: {
+    Authorization: 'Bearer YOUR_AUTH_TOKEN',
+  },
 });
 `
     }
@@ -50,13 +48,14 @@ const client = new Lokka({
   }
 
   private getImports() {
-    if (this.client === 'lokka' && this.environment === 'Node') {
-      return `const Lokka = require('lokka').Lokka;
-const Transport = require('lokka-transport-http').Transport;
+    if (this.client === 'graphql-request' && this.environment === 'Node') {
+      return `const GraphQLClient = require('graphql-request').GraphQLClient
 `
-    } else if (this.client === 'lokka' && this.environment === 'Browser') {
-      return `import {Lokka} from 'lokka'
-import {Transport} from 'lokka-transport-http'
+    } else if (
+      this.client === 'graphql-request' &&
+      this.environment === 'Browser'
+    ) {
+      return `import { GraphQLClient } from 'graphql-request'
 `
     } else if (this.client === 'fetch') {
       return `require('es6-promise').polyfill()
@@ -76,9 +75,9 @@ require('isomorphic-fetch')
   }
 
   private getQuery(query: string) {
-    if (this.client === 'lokka') {
+    if (this.client === 'graphql-request') {
       return `function getItems() {
-  return client.query(\`
+  return client.request((\`
   ${query.split('\n').map(line => '    ' + line).join('\n')}
   \`)
 }`
@@ -111,9 +110,9 @@ require('isomorphic-fetch')
     const curlyIndex = query.indexOf('{')
 
     const strippedQuery = query.slice(curlyIndex, query.length)
-    if (this.client === 'lokka') {
+    if (this.client === 'graphql-request') {
       return `function setItem() {
-return client.mutate(\`
+return client.request(\`
 ${strippedQuery.split('\n').map(line => '    ' + line).join('\n')}
   \`)
 }`

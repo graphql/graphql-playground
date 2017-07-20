@@ -35,4 +35,4 @@ export interface OperationDefinition {
 export type HistoryFilter = 'HISTORY' | 'STARRED'
 
 export type Environment = 'Node' | 'Browser'
-export type GraphQLClient = 'fetch' | 'lokka' | 'relay' | 'apollo'
+export type GraphQLClient = 'fetch' | 'relay' | 'apollo' | 'graphql-request'

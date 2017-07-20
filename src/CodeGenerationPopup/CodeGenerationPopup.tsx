@@ -24,7 +24,7 @@ export class CodeGenerationPopup extends React.Component<Props, State> {
     super(props)
     this.state = {
       selectedEnv: 'Browser',
-      selectedClient: 'lokka',
+      selectedClient: 'graphql-request',
     }
   }
 
