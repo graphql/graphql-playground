@@ -19,6 +19,13 @@ interface Props {
   level: number
 }
 
+const getNode = (type: any): any => {
+  if (type.ofType) {
+    return getNode(type.ofType)
+  }
+  return type
+}
+
 export default class TypeDetails extends React.Component<Props, {}> {
   shouldComponentUpdate(nextProps) {
     return this.props.type !== nextProps.type
@@ -27,15 +34,8 @@ export default class TypeDetails extends React.Component<Props, {}> {
   render() {
     const { schema, level } = this.props
     let { type } = this.props
-    // TODO find a better way to do that
-    if (type instanceof GraphQLNonNull) {
-      type = type.ofType
-    }
-    if (type instanceof GraphQLList) {
-      type = type.ofType
-    }
-    if (type instanceof GraphQLNonNull) {
-      type = type.ofType
+    if (type.ofType) {
+      type = getNode(type.ofType)
     }
     return (
       <div>
