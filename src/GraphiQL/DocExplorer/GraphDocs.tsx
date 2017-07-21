@@ -1,33 +1,38 @@
 import * as React from 'react'
 import * as ReactDOM from 'react-dom'
+import { bindActionCreators } from 'redux'
+import { connect } from 'react-redux'
 import { getLeft } from 'graphiql/dist/utility/elementPosition'
 import FieldDoc from './FieldDoc'
 import SearchBox from './SearchBox'
 import SearchResults from './SearchResults'
 import GraphDocsRoot from './GraphDocsRoot'
 import ColumnDoc from './ColumnDoc'
+import { addStack } from '../../actions/graphiql-docs'
 
 export interface Props {
   schema: any
   storageGet: (key: string) => any
   storageSet: (key: string, val: any) => void
+
+  // Redux
+  navStack: any[]
+  addStack: (field: any, level: number) => void
 }
 
 export interface State {
   docsOpen: boolean
   docsWidth: number
-  navStack: any[]
   searchValue: string
 }
 
-export default class GraphDocs extends React.Component<Props, State> {
+class GraphDocs extends React.Component<Props, State> {
   constructor(props) {
     super(props)
     // Take old values from storage
     this.state = {
       docsOpen: props.storageGet('docExplorerOpen') === 'true' || false,
       docsWidth: Number(props.storageGet('docExplorerWidth')) || 350,
-      navStack: [],
       searchValue: '',
     }
   }
@@ -39,8 +44,8 @@ export default class GraphDocs extends React.Component<Props, State> {
   }
 
   render() {
-    const { schema } = this.props
-    const { docsOpen, docsWidth, navStack, searchValue } = this.state
+    const { schema, navStack } = this.props
+    const { docsOpen, docsWidth, searchValue } = this.state
     const docsStyle = { width: docsOpen ? docsWidth : 0 }
 
     let emptySchema
@@ -147,22 +152,7 @@ export default class GraphDocs extends React.Component<Props, State> {
   }
 
   private handleClickField = (field, level) => {
-    const { navStack } = this.state
-    // If type is of type query etc.. empty the list
-    if (level === 0) {
-      this.setState({ navStack: [field] })
-    } else {
-      let newNavStack = navStack
-      if (level < navStack.length) {
-        newNavStack = navStack.slice(0, level)
-      }
-      const isCurrentlyShown =
-        newNavStack.length > 0 && newNavStack[newNavStack.length - 1] === field
-      if (!isCurrentlyShown) {
-        newNavStack = newNavStack.concat([field])
-        this.setState({ navStack: newNavStack })
-      }
-    }
+    this.props.addStack(field, level)
   }
 
   private handleDocsResizeStart = downEvent => {
@@ -205,3 +195,17 @@ export default class GraphDocs extends React.Component<Props, State> {
     document.addEventListener('mouseup', onMouseUp)
   }
 }
+
+const mapStateToProps = state => ({
+  navStack: state.graphiqlDocs.navStack,
+})
+
+const mapDispatchToProps = dispatch =>
+  bindActionCreators(
+    {
+      addStack,
+    },
+    dispatch,
+  )
+
+export default connect(mapStateToProps, mapDispatchToProps)(GraphDocs)

@@ -1,6 +1,11 @@
 import * as React from 'react'
+import { Provider } from 'react-redux'
+import { createStore } from 'redux'
+import reducers from './reducers'
 import Playground from './Playground'
 import ThemeProvider from './theme/ThemeProvider'
+
+const store = createStore(reducers)
 
 const testProjectId = 'asdf'
 const regex = /.*?graph\.cool\/simple\/.{1,2}\/(.{1,25})/
@@ -53,14 +58,16 @@ class App extends React.Component<{}, State> {
     // httpApiPrefix={production ? 'https://api.graph.cool' : 'http://localhost:60000'}
 
     return (
-      <ThemeProvider theme={this.state.theme}>
-        <Playground
-          endpoint="http://localhost:9002/graphql"
-          wsApiPrefix={subscriptionUrl}
-          adminAuthToken=""
-          httpApiPrefix="https://api.graph.cool"
-        />
-      </ThemeProvider>
+      <Provider store={store}>
+        <ThemeProvider theme={this.state.theme}>
+          <Playground
+            endpoint="http://localhost:9002/graphql"
+            wsApiPrefix={subscriptionUrl}
+            adminAuthToken=""
+            httpApiPrefix="https://api.graph.cool"
+          />
+        </ThemeProvider>
+      </Provider>
     )
   }
 }
