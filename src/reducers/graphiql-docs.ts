@@ -21,7 +21,7 @@ export interface State {
 const defaultState: State = {
   navStack: [],
   docsOpen: false,
-  docsWidth: 350,
+  docsWidth: 300,
 }
 
 export default function graphiqlDocsReducer(

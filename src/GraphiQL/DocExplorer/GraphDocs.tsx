@@ -40,6 +40,18 @@ class GraphDocs extends React.Component<
     }
   }
 
+  componentWillReceiveProps(nextProps: Props & StateFromProps) {
+    // If user use default column size % 300
+    // Make the column follow the clicks
+    if (
+      this.props.navStack.length < nextProps.navStack.length &&
+      nextProps.navStack.length < 3 &&
+      this.props.docsWidth % 300 === 0
+    ) {
+      this.props.changeWidthDocs(300 * (nextProps.navStack.length + 1))
+    }
+  }
+
   render() {
     const { docsOpen, docsWidth, schema, navStack } = this.props
     const { searchValue } = this.state
@@ -158,7 +170,7 @@ class GraphDocs extends React.Component<
         this.props.toggleDocs(false)
       } else {
         this.props.toggleDocs(true)
-        this.props.changeWidthDocs(Math.min(docsSize, 850))
+        this.props.changeWidthDocs(docsSize)
       }
     }
 
