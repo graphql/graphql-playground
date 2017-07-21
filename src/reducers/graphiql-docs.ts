@@ -49,6 +49,13 @@ export default function graphiqlDocsReducer(
       break
 
     case TOOGLE_DOCS:
+      const { open } = action
+      if (open !== undefined) {
+        return {
+          ...state,
+          docsOpen: open,
+        }
+      }
       return {
         ...state,
         docsOpen: !state.docsOpen,

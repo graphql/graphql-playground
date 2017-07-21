@@ -20,7 +20,7 @@ const storage = compose(filter('graphiqlDocs'))(adapter(localStorage))
 
 const reducer = compose(mergePersistedState())(combinedReducers)
 
-const enhancer = compose(persistState(storage, 'graphiql-test'))
+const enhancer = compose(persistState(storage, 'graphiql'))
 
 const functions = [enhancer]
 

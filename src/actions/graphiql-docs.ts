@@ -18,8 +18,10 @@ export const TOOGLE_DOCS: TOOGLE_DOCS = 'toggle docs'
 
 export interface ToggleDocsAction {
   type: TOOGLE_DOCS
+  open?: boolean
 }
 
-export const toggleDocs = (): ToggleDocsAction => ({
+export const toggleDocs = (open: boolean): ToggleDocsAction => ({
   type: TOOGLE_DOCS,
+  open,
 })

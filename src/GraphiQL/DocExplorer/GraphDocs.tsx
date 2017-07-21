@@ -16,7 +16,7 @@ interface StateFromProps {
 }
 
 interface DispatchFromProps {
-  toggleDocs: () => any
+  toggleDocs: (open?: boolean) => any
 }
 
 export interface Props {
@@ -26,7 +26,6 @@ export interface Props {
 }
 
 export interface State {
-  docsOpen: boolean
   docsWidth: number
   searchValue: string
 }
@@ -39,7 +38,6 @@ class GraphDocs extends React.Component<
     super(props)
     // Take old values from storage
     this.state = {
-      docsOpen: props.storageGet('docExplorerOpen') === 'true' || false,
       docsWidth: Number(props.storageGet('docExplorerWidth')) || 350,
       searchValue: '',
     }
@@ -48,7 +46,6 @@ class GraphDocs extends React.Component<
   componentWillUnmount() {
     // Save values for next session when the component is destroyed
     this.props.storageSet('docExplorerWidth', this.state.docsWidth)
-    this.props.storageSet('docExplorerOpen', this.state.docsOpen)
   }
 
   render() {
@@ -166,17 +163,17 @@ class GraphDocs extends React.Component<
       const docsSize = app.clientWidth - cursorPos
 
       if (docsSize < 100) {
-        this.setState({ docsOpen: false })
+        this.props.toggleDocs(false)
       } else {
+        this.props.toggleDocs(true)
         this.setState({
-          docsOpen: true,
           docsWidth: Math.min(docsSize, 850),
         })
       }
     }
 
     let onMouseUp: any = () => {
-      if (!this.state.docsOpen) {
+      if (!this.props.docsOpen) {
         this.setState({ docsWidth: hadWidth })
       }
 
