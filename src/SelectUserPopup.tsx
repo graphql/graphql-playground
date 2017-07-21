@@ -7,7 +7,7 @@ import Table from './SelectUserPopup/Table'
 import SearchBox from './GraphiQL/DocExplorer/SearchBox'
 import * as Immutable from 'seamless-immutable'
 
-interface State {
+export interface State {
   startIndex: number
   stopIndex: number
   users: any[]
@@ -17,7 +17,7 @@ interface State {
   scrollToIndex?: number
 }
 
-interface Props {
+export interface Props {
   adminAuthToken: string
   userFields: any[]
   onSelectUser: (user: any) => void

@@ -1,6 +1,6 @@
 import * as React from 'react'
 
-interface EnumTypeSchemaProps {
+export interface EnumTypeSchemaProps {
   type: any
 }
 

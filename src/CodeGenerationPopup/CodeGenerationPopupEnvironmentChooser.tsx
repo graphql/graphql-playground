@@ -6,7 +6,7 @@ import { Environment } from '../types'
 
 const environments = ['Node', 'Browser']
 
-interface Props {
+export interface Props {
   environment: Environment
   setEnvironment: (data: any) => void
 }

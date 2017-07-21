@@ -2,7 +2,7 @@ import * as React from 'react'
 import * as PropTypes from 'prop-types'
 
 function withTheme<Props = {}>(Component) {
-  class WithTheme extends React.Component<Props, {}> {
+  return class WithTheme extends React.Component<Props, {}> {
     static contextTypes = {
       theme: PropTypes.object,
     }
@@ -15,7 +15,6 @@ function withTheme<Props = {}>(Component) {
       return <Component theme={this.context.theme.theme} {...this.props} />
     }
   }
-  return WithTheme
 }
 
 export default withTheme

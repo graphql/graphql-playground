@@ -9,6 +9,7 @@
     "graphiql_light.css",
     "graphiql_dark.css"
   ],
+  "typings": "babelbuild/index.d.ts",
   "devDependencies": {
     "@types/jest": "^20.0.4",
     "@types/node": "^8.0.14",

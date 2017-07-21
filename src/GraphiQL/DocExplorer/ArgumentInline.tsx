@@ -1,7 +1,7 @@
 import * as React from 'react'
 import { astFromValue, print } from 'graphql'
 
-interface Props {
+export interface Props {
   arg: any
   showDefaultValue?: boolean
 }

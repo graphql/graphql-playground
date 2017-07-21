@@ -4,7 +4,7 @@
     "target": "es5",
     "lib": ["es2015", "dom"],
     "sourceMap": true,
-    "allowJs": true,
+    // "allowJs": true,
     "jsx": "preserve",
     "rootDir": "src",
     "forceConsistentCasingInFileNames": true,
@@ -13,7 +13,8 @@
     "noImplicitAny": false,
     "strictNullChecks": true,
     "suppressImplicitAnyIndexErrors": true,
-    "noUnusedLocals": false
+    "noUnusedLocals": false,
+    "declaration": true
   },
   "files": [
     "src/Playground.tsx"

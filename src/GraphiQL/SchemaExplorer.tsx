@@ -1,7 +1,7 @@
 import * as React from 'react'
 import { QueryEditor } from './QueryEditor'
 
-interface Props {
+export interface Props {
   idl?: string
   ref?: any
   modelName?: string

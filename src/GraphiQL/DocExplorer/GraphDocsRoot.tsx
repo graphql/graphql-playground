@@ -1,7 +1,7 @@
 import * as React from 'react'
 import TypeLink from './TypeLink'
 
-interface Props {
+export interface Props {
   schema: any
 }
 

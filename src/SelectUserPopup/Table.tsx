@@ -1,7 +1,7 @@
 import * as React from 'react'
 import { InfiniteLoader, Table, Column } from 'react-virtualized'
 
-interface Props {
+export interface Props {
   rows: any[]
   fields: any[]
   rowCount: number
@@ -10,7 +10,7 @@ interface Props {
   scrollToIndex?: number
 }
 
-interface State {
+export interface State {
   height: number
   rowHeight: number
   overscanRowCount: number

@@ -11,7 +11,7 @@ import ScalarTypeSchema from './DocsTypes/ScalarType'
 import EnumTypeSchema from './DocsTypes/EnumTypeSchema'
 import UnionTypeSchema from './DocsTypes/UnionTypeSchema'
 
-interface Props {
+export interface Props {
   schema: any
   type: any
   level: number

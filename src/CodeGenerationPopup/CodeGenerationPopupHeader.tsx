@@ -2,7 +2,7 @@ import * as React from 'react' // tslint:disable-line
 import { $p } from 'graphcool-styles'
 import * as cx from 'classnames'
 
-interface Props {
+export interface Props {
   queryActive: boolean
 }
 

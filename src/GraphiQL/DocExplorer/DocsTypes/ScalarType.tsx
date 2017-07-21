@@ -1,6 +1,6 @@
 import * as React from 'react'
 
-interface ScalarTypeSchemaProps {
+export interface ScalarTypeSchemaProps {
   type: any
 }
 

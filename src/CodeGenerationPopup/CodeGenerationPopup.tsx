@@ -7,14 +7,14 @@ import { modalStyle } from '../constants'
 import * as Modal from 'react-modal'
 import { Environment, GraphQLClient } from '../types'
 
-interface Props {
+export interface Props {
   query: string
   isOpen: boolean
   onRequestClose: () => void
   endpointUrl: string
 }
 
-interface State {
+export interface State {
   selectedClient: GraphQLClient
   selectedEnv: Environment
 }

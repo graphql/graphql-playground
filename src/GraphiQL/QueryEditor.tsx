@@ -22,7 +22,7 @@ import onHasCompletion from 'graphiql/dist/utility/onHasCompletion'
  *   - onEdit: A function called when the editor changes, given the edited text.
  *
  */
-interface Props {
+export interface Props {
   schema: GraphQLSchema | null
   value: string
   onEdit?: (value: string) => void

@@ -23,7 +23,7 @@ interface DispatchFromProps {
   addStack: (field: any, level: number) => any
 }
 
-interface Props {
+export interface Props {
   type: any
   level: number
   clickable?: boolean

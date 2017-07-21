@@ -5,7 +5,7 @@ import calculateSize from 'calculate-size'
 
 const clients = ['graphql-request', 'fetch']
 
-interface Props {
+export interface Props {
   setClient: (env: any) => void
   client: string
 }

@@ -6,7 +6,7 @@ import { GraphQLClient, Environment } from '../types'
 // tslint:disable-next-line
 const Codemirror: any = require('./CodeMirror')
 
-interface Props {
+export interface Props {
   query: string
   endpointUrl: string
   client: GraphQLClient

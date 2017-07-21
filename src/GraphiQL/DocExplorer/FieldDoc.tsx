@@ -14,13 +14,13 @@ import MarkdownContent from 'graphiql/dist/components/DocExplorer/MarkdownConten
 import TypeLink from './TypeLink'
 import TypeDetails from './TypeDetails'
 
-interface Props {
+export interface Props {
   schema: any
   field: any
   level: number
 }
 
-interface State {
+export interface State {
   showDeprecated: boolean
 }
 

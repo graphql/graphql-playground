@@ -2,7 +2,7 @@ import * as React from 'react'
 import { astFromValue, print } from 'graphql'
 import TypeLink from './TypeLink'
 
-interface Props {
+export interface Props {
   arg: any
   level: number
   showDefaultValue?: boolean
