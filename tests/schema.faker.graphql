@@ -56,7 +56,7 @@ type Query {
     id: ID
   ): User!
   human: Human
-  employee(id: ID): Employee
+  employee(id: ID, name: String, lorem: String, Ipsum: Int): Employee
   company(id: ID): Company
   allCompanies: [Company!]
 }

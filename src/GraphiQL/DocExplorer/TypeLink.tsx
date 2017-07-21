@@ -9,6 +9,7 @@
 import * as React from 'react'
 import * as classNames from 'classnames'
 import { GraphQLList, GraphQLNonNull, isType } from 'graphql'
+import ArgumentInline from './ArgumentInline'
 
 interface Props {
   type?: any
@@ -49,6 +50,16 @@ export default class TypeLink extends React.Component<Props, {}> {
             <span className="field-name">
               {type.name}
             </span>
+            {type.args &&
+            type.args.length > 0 && [
+              '(',
+              <span key="args">
+                {type.args.map(arg =>
+                  <ArgumentInline key={arg.name} arg={arg} />,
+                )}
+              </span>,
+              ')',
+            ]}
             {': '}
           </span>}
         <span className="type-name">

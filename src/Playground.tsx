@@ -36,7 +36,6 @@ export interface Response {
 
 export interface Props {
   theme?: string
-  onChangeTheme: (theme: string) => void
   endpoint: string
   projectId?: string
   adminAuthToken?: string
@@ -382,7 +381,6 @@ class Playground extends React.Component<Props, State> {
           onboardingStep={this.props.onboardingStep}
           nextStep={this.props.nextStep}
           tether={this.props.tether}
-          onChangeTheme={this.props.onChangeTheme}
         />
         <div
           className={cx('graphiqls-container', {

@@ -15,7 +15,6 @@ export interface Props {
   tether?: any
   nextStep?: () => void
   theme?: string
-  onChangeTheme: (theme: string) => void
 }
 
 export const TabBar = withTheme<
@@ -31,7 +30,6 @@ export const TabBar = withTheme<
     onboardingStep,
     tether,
     theme,
-    onChangeTheme,
   }: Props) => {
     const Tether = tether
 
@@ -150,8 +148,8 @@ export const TabBar = withTheme<
 
           .change-theme {
             @p: .absolute, .pointer;
-            top: 10px;
-            right: 10px;
+            top: 200px;
+            right: 200px;
           }
         `}</style>
         <div className="tabs">
@@ -289,20 +287,6 @@ export const TabBar = withTheme<
                   strokeWidth={4}
                 />
               </div>}
-          <div
-            className="change-theme"
-            onClick={() => onChangeTheme(theme === 'black' ? 'light' : 'black')}
-            title="switch theme"
-          >
-            <Icon
-              src={require('graphcool-styles/icons/stroke/add.svg')}
-              color={theme === 'black' ? $v.white40 : $v.gray40}
-              width={34}
-              height={34}
-              stroke={true}
-              strokeWidth={4}
-            />
-          </div>
         </div>
       </div>
     )
