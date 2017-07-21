@@ -712,11 +712,7 @@ export class CustomGraphiQL extends React.Component<Props, State> {
               </div>}
           </div>
         </div>
-        <GraphDocs
-          schema={this.state.schema}
-          storageSet={this._storageSet}
-          storageGet={this._storageGet}
-        />
+        <GraphDocs schema={this.state.schema} />
         {/*(this.props.queryOnly ? this.props.showDocs : true) &&
           <div className={docExplorerWrapClasses} style={docWrapStyle}>
             <div

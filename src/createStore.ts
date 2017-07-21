@@ -2,6 +2,7 @@ import { compose, createStore } from 'redux'
 import persistState, { mergePersistedState } from 'redux-localstorage'
 import filter from 'redux-localstorage-filter'
 import * as adapter from 'redux-localstorage/lib/adapters/localStorage'
+import * as merge from 'lodash/merge'
 import combinedReducers from './reducers'
 
 let localStorage: any = null
@@ -16,9 +17,15 @@ if (typeof window !== 'undefined') {
   }
 }
 
-const storage = compose(filter('graphiqlDocs'))(adapter(localStorage))
+const storage = compose(
+  filter(['graphiqlDocs.docsOpen', 'graphiqlDocs.docsWidth']),
+)(adapter(localStorage))
 
-const reducer = compose(mergePersistedState())(combinedReducers)
+const reducer = compose(
+  mergePersistedState((initialState, persistedState) => {
+    return merge({}, initialState, persistedState)
+  }),
+)(combinedReducers)
 
 const enhancer = compose(persistState(storage, 'graphiql'))
 

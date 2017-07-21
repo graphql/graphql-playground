@@ -8,7 +8,6 @@
 
 import * as React from 'react'
 
-import Argument from './Argument'
 import TypeLink from './TypeLink'
 
 interface Props {

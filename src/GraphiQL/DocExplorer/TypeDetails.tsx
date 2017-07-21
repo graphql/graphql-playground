@@ -107,17 +107,21 @@ const DocTypeSchema = ({ type, level }: DocTypeSchemaProps) => {
           </span>}
       </div>
       {interfaces.map((data, index) =>
-        <div key={data.name} className="doc-type-schema-line">
-          <span className="doc-type-interface">
-            <span className="field-name">implements</span>{' '}
-            <span className="type-name">{data.name}</span>{' '}
-          </span>
-          {/* Only show curly bracket on last interface */}
-          {index === interfaces.length - 1 &&
-            <span className="type-name">
-              {'{'}
-            </span>}
-        </div>,
+        <TypeLink
+          key={data.name}
+          type={data}
+          level={level}
+          className="doc-type-interface"
+          beforeNode={<span className="field-name">implements</span>}
+          // Only show curly bracket on last interface
+          afterNode={
+            index === interfaces.length - 1
+              ? <span className="type-name">
+                  {'{'}
+                </span>
+              : null
+          }
+        />,
       )}
       {fields
         .filter(data => !data.isDeprecated)

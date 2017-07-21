@@ -3,18 +3,25 @@ import {
   AddStackAction,
   TOOGLE_DOCS,
   ToggleDocsAction,
+  CHANGE_WIDTH_DOCS,
+  ChangeWidthDocsAction,
 } from '../actions/graphiql-docs'
 
-type GraphiqlDocsAction = AddStackAction | ToggleDocsAction
+type GraphiqlDocsAction =
+  | AddStackAction
+  | ToggleDocsAction
+  | ChangeWidthDocsAction
 
 export interface State {
   readonly navStack: any[]
   readonly docsOpen: boolean
+  readonly docsWidth: number
 }
 
 const defaultState: State = {
   navStack: [],
   docsOpen: false,
+  docsWidth: 350,
 }
 
 export default function graphiqlDocsReducer(
@@ -59,6 +66,13 @@ export default function graphiqlDocsReducer(
       return {
         ...state,
         docsOpen: !state.docsOpen,
+      }
+
+    case CHANGE_WIDTH_DOCS:
+      const { width } = action
+      return {
+        ...state,
+        docsWidth: width,
       }
   }
   return state

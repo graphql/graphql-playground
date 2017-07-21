@@ -7,7 +7,7 @@
  */
 
 import * as React from 'react'
-import * as classNames from 'classnames'
+import * as cx from 'classnames'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import { GraphQLList, GraphQLNonNull, isType } from 'graphql'
@@ -27,6 +27,9 @@ interface Props {
   type: any
   level: number
   clickable?: boolean
+  className?: string
+  beforeNode?: JSX.Element | null
+  afterNode?: JSX.Element | null
 }
 
 class TypeLink extends React.Component<
@@ -55,11 +58,21 @@ class TypeLink extends React.Component<
   }
 
   render() {
-    const { type, clickable, navStack, level } = this.props
+    const {
+      type,
+      clickable,
+      navStack,
+      level,
+      className,
+      beforeNode,
+      afterNode,
+    } = this.props
     const isActive = clickable && this.isActive(navStack, type, level)
+    const isGraphqlType = isType(type)
     return (
       <div
-        className={classNames('doc-category-item', {
+        className={cx('doc-category-item', {
+          className,
           clickable,
           active: isActive,
         })}
@@ -73,6 +86,10 @@ class TypeLink extends React.Component<
             & .type-name,
             & .arg-name {
               color: #fff !important;
+            }
+
+            & svg {
+              fill: #fff !important;
             }
           }
         `}</style>
@@ -93,7 +110,9 @@ class TypeLink extends React.Component<
             top: calc(50% - 5px);
           }
         `}</style>
-        {!isType(type) &&
+        {beforeNode}
+        {beforeNode && ' '}
+        {!isGraphqlType &&
           <span>
             <span className="field-name">
               {type.name}
@@ -122,6 +141,8 @@ class TypeLink extends React.Component<
               height={10}
             />
           </span>}
+        {afterNode && ' '}
+        {afterNode}
       </div>
     )
   }

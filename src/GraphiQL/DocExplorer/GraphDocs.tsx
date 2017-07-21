@@ -8,25 +8,24 @@ import SearchBox from './SearchBox'
 import SearchResults from './SearchResults'
 import GraphDocsRoot from './GraphDocsRoot'
 import ColumnDoc from './ColumnDoc'
-import { toggleDocs } from '../../actions/graphiql-docs'
+import { toggleDocs, changeWidthDocs } from '../../actions/graphiql-docs'
 
 interface StateFromProps {
   navStack: any[]
   docsOpen: boolean
+  docsWidth: number
 }
 
 interface DispatchFromProps {
   toggleDocs: (open?: boolean) => any
+  changeWidthDocs: (width: number) => any
 }
 
 export interface Props {
   schema: any
-  storageGet: (key: string) => any
-  storageSet: (key: string, val: any) => void
 }
 
 export interface State {
-  docsWidth: number
   searchValue: string
 }
 
@@ -36,21 +35,14 @@ class GraphDocs extends React.Component<
 > {
   constructor(props) {
     super(props)
-    // Take old values from storage
     this.state = {
-      docsWidth: Number(props.storageGet('docExplorerWidth')) || 350,
       searchValue: '',
     }
   }
 
-  componentWillUnmount() {
-    // Save values for next session when the component is destroyed
-    this.props.storageSet('docExplorerWidth', this.state.docsWidth)
-  }
-
   render() {
-    const { docsOpen, schema, navStack } = this.props
-    const { docsWidth, searchValue } = this.state
+    const { docsOpen, docsWidth, schema, navStack } = this.props
+    const { searchValue } = this.state
     const docsStyle = { width: docsOpen ? docsWidth : 0 }
 
     let emptySchema
@@ -150,7 +142,7 @@ class GraphDocs extends React.Component<
   private handleDocsResizeStart = downEvent => {
     downEvent.preventDefault()
 
-    const hadWidth = this.state.docsWidth
+    const hadWidth = this.props.docsWidth
     const offset = downEvent.clientX - getLeft(downEvent.target)
 
     let onMouseMove: any = moveEvent => {
@@ -166,15 +158,13 @@ class GraphDocs extends React.Component<
         this.props.toggleDocs(false)
       } else {
         this.props.toggleDocs(true)
-        this.setState({
-          docsWidth: Math.min(docsSize, 850),
-        })
+        this.props.changeWidthDocs(Math.min(docsSize, 850))
       }
     }
 
     let onMouseUp: any = () => {
       if (!this.props.docsOpen) {
-        this.setState({ docsWidth: hadWidth })
+        this.props.changeWidthDocs(hadWidth)
       }
 
       document.removeEventListener('mousemove', onMouseMove)
@@ -191,12 +181,14 @@ class GraphDocs extends React.Component<
 const mapStateToProps = ({ graphiqlDocs }) => ({
   navStack: graphiqlDocs.navStack,
   docsOpen: graphiqlDocs.docsOpen,
+  docsWidth: graphiqlDocs.docsWidth,
 })
 
 const mapDispatchToProps = dispatch =>
   bindActionCreators(
     {
       toggleDocs,
+      changeWidthDocs,
     },
     dispatch,
   )
