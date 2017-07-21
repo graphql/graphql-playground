@@ -84,20 +84,6 @@ export default class SearchResults extends React.Component<Props, {}> {
           const match = (
             <div className="doc-category-item" key={typeName + '.' + fieldName}>
               <TypeLink key="type" type={field} level={level} />
-              {matchingArgs && [
-                '(',
-                <span key="args">
-                  {matchingArgs.map(arg =>
-                    <Argument
-                      key={arg.name}
-                      arg={arg}
-                      showDefaultValue={false}
-                      level={level}
-                    />,
-                  )}
-                </span>,
-                ')',
-              ]}
             </div>
           )
 

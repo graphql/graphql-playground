@@ -84,10 +84,10 @@ const DocTypeSchema = ({ type, level }: DocTypeSchemaProps) => {
           @p: .pt20;
         }
         .doc-type-schema-line {
-          @p: .ph10, .pv6;
+          @p: .ph16, .pv6;
         }
         .doc-value-comment {
-          @p: .ph20, .black50;
+          @p: .ph16, .black50;
         }
       `}</style>
       <div className="doc-type-schema-line">
@@ -115,9 +115,11 @@ const DocTypeSchema = ({ type, level }: DocTypeSchemaProps) => {
           <TypeLink type={data} level={level} />
         </div>,
       )}
-      <span className="type-name">
-        {'}'}
-      </span>
+      <div className="doc-type-schema-line">
+        <span className="type-name">
+          {'}'}
+        </span>
+      </div>
     </div>
   )
 }
