@@ -1,3 +1,7 @@
+import { ADD_STACK, AddStackAction } from '../actions/graphiql-docs'
+
+type GraphiqlDocsAction = AddStackAction
+
 export interface State {
   readonly navStack: any[]
 }
@@ -8,10 +12,10 @@ const defaultState: State = {
 
 export default function graphiqlDocsReducer(
   state: State = defaultState,
-  action,
+  action: GraphiqlDocsAction,
 ) {
   switch (action.type) {
-    case 'add stack':
+    case ADD_STACK:
       const { field, level } = action
       // If click at the root level empty the list
       if (level === 0) {
