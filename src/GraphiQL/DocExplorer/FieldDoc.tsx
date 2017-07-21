@@ -103,7 +103,7 @@ export default class FieldDoc extends React.Component<Props, State> {
           }
         `}</style>
         <div className="doc-header">
-          <TypeLink type={field} level={level} />
+          <TypeLink type={field} level={level} clickable={false} />
         </div>
         {!isVarType &&
           <MarkdownContent

@@ -11,6 +11,7 @@ import * as classNames from 'classnames'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import { GraphQLList, GraphQLNonNull, isType } from 'graphql'
+import { Icon } from 'graphcool-styles'
 import ArgumentInline from './ArgumentInline'
 import { addStack } from '../../actions/graphiql-docs'
 
@@ -77,7 +78,7 @@ class TypeLink extends React.Component<
         `}</style>
         <style jsx={true}>{`
           .doc-category-item {
-            @p: .mv0, .ph16, .pv6;
+            @p: .mv0, .ph16, .pv6, .relative;
           }
           .doc-category-item.clickable:hover {
             @p: .pointer, .white;
@@ -85,6 +86,11 @@ class TypeLink extends React.Component<
           }
           .doc-category-item.active {
             @p: .bgBlack07;
+          }
+          .doc-category-icon {
+            @p: .absolute;
+            right: 8px;
+            top: calc(50% - 5px);
           }
         `}</style>
         {!isType(type) &&
@@ -107,6 +113,15 @@ class TypeLink extends React.Component<
         <span className="type-name">
           {renderType(type.type || type)}
         </span>
+        {clickable &&
+          <span className="doc-category-icon">
+            <Icon
+              src={require('graphcool-styles/icons/stroke/arrowRight.svg')}
+              color="#2a7ed3"
+              width={16}
+              height={10}
+            />
+          </span>}
       </div>
     )
   }

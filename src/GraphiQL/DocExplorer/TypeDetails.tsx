@@ -79,6 +79,11 @@ const DocTypeSchema = ({ type, level }: DocTypeSchemaProps) => {
   }
   return (
     <div className="doc-type-schema">
+      <style jsx={true} global={true}>{`
+        .doc-type-schema .doc-category-item {
+          padding-left: 32px;
+        }
+      `}</style>
       <style jsx={true}>{`
         .doc-type-schema {
           @p: .pt20;
@@ -89,20 +94,31 @@ const DocTypeSchema = ({ type, level }: DocTypeSchemaProps) => {
         .doc-value-comment {
           @p: .ph16, .black50;
         }
+        .doc-type-interface {
+          @p: .pl16;
+        }
       `}</style>
       <div className="doc-type-schema-line">
         <span className="field-name">type</span>{' '}
         <span className="type-name">{type.name}</span>{' '}
-        {interfaces.length > 0 &&
-          interfaces.map(data =>
-            <span key={data.name} className="doc-type-interface">
-              <br />
-              <span className="field-name">implements</span>{' '}
-              <span className="type-name">{data.name}</span>{' '}
-            </span>,
-          )}
-        <span className="type-name">{'{'}</span>
+        {interfaces.length === 0 &&
+          <span className="type-name">
+            {'{'}
+          </span>}
       </div>
+      {interfaces.map((data, index) =>
+        <div key={data.name} className="doc-type-schema-line">
+          <span className="doc-type-interface">
+            <span className="field-name">implements</span>{' '}
+            <span className="type-name">{data.name}</span>{' '}
+          </span>
+          {/* Only show curly bracket on last interface */}
+          {index === interfaces.length - 1 &&
+            <span className="type-name">
+              {'{'}
+            </span>}
+        </div>,
+      )}
       {fields
         .filter(data => !data.isDeprecated)
         .map(data => <TypeLink key={data.name} type={data} level={level} />)}
