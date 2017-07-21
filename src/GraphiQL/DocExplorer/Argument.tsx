@@ -4,15 +4,11 @@ import TypeLink from './TypeLink'
 
 interface Props {
   arg: any
+  level: number
   showDefaultValue?: boolean
-  onClickType: (field: any) => void
 }
 
-export default function Argument({
-  arg,
-  onClickType,
-  showDefaultValue,
-}: Props) {
+export default function Argument({ arg, showDefaultValue, level }: Props) {
   return (
     <span className="arg">
       <style jsx={true}>{`
@@ -20,7 +16,7 @@ export default function Argument({
           content: '';
         }
       `}</style>
-      <TypeLink type={arg} onClick={onClickType} />
+      <TypeLink type={arg} level={level} />
       {arg.defaultValue !== undefined &&
         showDefaultValue !== false &&
         <span>

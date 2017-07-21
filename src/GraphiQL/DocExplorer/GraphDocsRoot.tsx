@@ -3,32 +3,18 @@ import TypeLink from './TypeLink'
 
 interface Props {
   schema: any
-  onClickType: (field: any, level: number) => void
 }
 
-const GraphDocsRoot = ({ schema, onClickType }: Props) => {
+const GraphDocsRoot = ({ schema }: Props) => {
   const mutationType = schema.getMutationType && schema.getMutationType()
   const subscriptionType =
     schema.getSubscriptionType && schema.getSubscriptionType()
   return (
     <div>
-      <ShowRootType
-        name="Queries"
-        type={schema.getQueryType()}
-        onClickType={onClickType}
-      />
-      {mutationType &&
-        <ShowRootType
-          name="Mutations"
-          type={mutationType}
-          onClickType={onClickType}
-        />}
+      <ShowRootType name="Queries" type={schema.getQueryType()} />
+      {mutationType && <ShowRootType name="Mutations" type={mutationType} />}
       {subscriptionType &&
-        <ShowRootType
-          name="Subscriptions"
-          type={subscriptionType}
-          onClickType={onClickType}
-        />}
+        <ShowRootType name="Subscriptions" type={subscriptionType} />}
     </div>
   )
 }
@@ -36,10 +22,9 @@ const GraphDocsRoot = ({ schema, onClickType }: Props) => {
 interface ShowRootTypeProps {
   name: string
   type: any
-  onClickType: (field: any, level: number) => void
 }
 
-function ShowRootType({ name, type, onClickType }: ShowRootTypeProps) {
+function ShowRootType({ name, type }: ShowRootTypeProps) {
   const fieldMap = type.getFields()
   const fields = Object.keys(fieldMap).map(fieldName => fieldMap[fieldName])
   return (
@@ -49,13 +34,7 @@ function ShowRootType({ name, type, onClickType }: ShowRootTypeProps) {
       </div>
       {fields
         .filter(field => !field.isDeprecated)
-        .map(field =>
-          <TypeLink
-            key={field.name}
-            type={field}
-            onClick={data => onClickType(data, 0)}
-          />,
-        )}
+        .map(field => <TypeLink key={field.name} type={field} level={0} />)}
     </div>
   )
 }

@@ -14,6 +14,7 @@
     "@types/node": "^8.0.14",
     "@types/react": "15.0.31",
     "@types/react-dom": "^15.5.1",
+    "@types/react-redux": "^4.4.46",
     "autoprefixer": "6.5.1",
     "babel-cli": "^6.24.1",
     "babel-core": "^6.25.0",

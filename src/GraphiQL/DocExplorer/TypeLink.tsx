@@ -8,41 +8,83 @@
 
 import * as React from 'react'
 import * as classNames from 'classnames'
+import { bindActionCreators } from 'redux'
+import { connect } from 'react-redux'
 import { GraphQLList, GraphQLNonNull, isType } from 'graphql'
 import ArgumentInline from './ArgumentInline'
+import { addStack } from '../../actions/graphiql-docs'
 
-interface Props {
-  type?: any
-  onClick?: (field: any) => void
+interface StateFromProps {
+  navStack: any[]
 }
 
-export default class TypeLink extends React.Component<Props, {}> {
-  shouldComponentUpdate(nextProps) {
-    return this.props.type !== nextProps.type
+interface DispatchFromProps {
+  addStack: (field: any, level: number) => any
+}
+
+interface Props {
+  type: any
+  level: number
+  clickable?: boolean
+}
+
+class TypeLink extends React.Component<
+  Props & StateFromProps & DispatchFromProps,
+  {}
+> {
+  static defaultProps: Partial<Props> = {
+    clickable: true,
+  }
+
+  shouldComponentUpdate(nextProps: Props & StateFromProps) {
+    return (
+      this.props.type !== nextProps.type ||
+      this.props.navStack !== nextProps.navStack
+    )
   }
 
   onClick = () => {
-    if (this.props.onClick) {
-      this.props.onClick(this.props.type)
+    if (this.props.clickable) {
+      this.props.addStack(this.props.type, this.props.level)
     }
   }
 
+  isActive(navStack: any[], type: any, level: number) {
+    return navStack[level] === type
+  }
+
   render() {
-    const { type, onClick } = this.props
+    const { type, clickable, navStack, level } = this.props
+    const isActive = clickable && this.isActive(navStack, type, level)
     return (
       <div
-        className={classNames('doc-category-item', { click: onClick })}
+        className={classNames('doc-category-item', {
+          clickable,
+          active: isActive,
+        })}
         onClick={this.onClick}
       >
+        <style jsx={true} global={true}>{`
+          .doc-category-item.clickable:hover {
+            color: #fff !important;
+
+            & .field-name,
+            & .type-name,
+            & .arg-name {
+              color: #fff !important;
+            }
+          }
+        `}</style>
         <style jsx={true}>{`
           .doc-category-item {
             @p: .mv0, .ph16, .pv6;
           }
-          .doc-category-item.click:hover {
-            @p: .bgBlack07;
+          .doc-category-item.clickable:hover {
+            @p: .pointer, .white;
+            background-color: #2a7ed3;
           }
-          .doc-category-item.click {
-            @p: .pointer;
+          .doc-category-item.active {
+            @p: .bgBlack07;
           }
         `}</style>
         {!isType(type) &&
@@ -94,3 +136,20 @@ function renderType(type) {
     </span>
   )
 }
+
+const mapStateToProps = state => ({
+  navStack: state.graphiqlDocs.navStack,
+})
+
+const mapDispatchToProps = dispatch =>
+  bindActionCreators(
+    {
+      addStack,
+    },
+    dispatch,
+  )
+
+export default connect<StateFromProps, DispatchFromProps, Props>(
+  mapStateToProps,
+  mapDispatchToProps,
+)(TypeLink)

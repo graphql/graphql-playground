@@ -1,13 +1,13 @@
-export interface GraphiQlState {
-  navStack: any[]
+export interface State {
+  readonly navStack: any[]
 }
 
-const defaultState = {
+const defaultState: State = {
   navStack: [],
 }
 
 export default function graphiqlDocsReducer(
-  state: GraphiQlState = defaultState,
+  state: State = defaultState,
   action,
 ) {
   switch (action.type) {

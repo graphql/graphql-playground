@@ -18,7 +18,6 @@ interface Props {
   schema: any
   field: any
   level: number
-  onClickType: (field: any, level: number) => void
 }
 
 interface State {
@@ -52,12 +51,8 @@ export default class FieldDoc extends React.Component<Props, State> {
     )
   }
 
-  onClickType = type => {
-    this.props.onClickType(type, this.props.level)
-  }
-
   render() {
-    const { schema, field } = this.props
+    const { schema, field, level } = this.props
     const type = field.type || field
     const isVarType = isType(type)
 
@@ -69,7 +64,7 @@ export default class FieldDoc extends React.Component<Props, State> {
           {field.args.map(arg =>
             <div key={arg.name}>
               <div>
-                <Argument arg={arg} onClickType={this.onClickType} />
+                <Argument arg={arg} level={level} />
               </div>
               <MarkdownContent
                 className="doc-value-description"
@@ -88,7 +83,7 @@ export default class FieldDoc extends React.Component<Props, State> {
         <div>
           <div className="doc-category-title">implementations</div>
           {types.map(data =>
-            <TypeLink key={data.name} type={data} onClick={this.onClickType} />,
+            <TypeLink key={data.name} type={data} level={level} />,
           )}
         </div>
       )
@@ -108,18 +103,14 @@ export default class FieldDoc extends React.Component<Props, State> {
           }
         `}</style>
         <div className="doc-header">
-          <TypeLink type={field} />
+          <TypeLink type={field} level={level} />
         </div>
         {!isVarType &&
           <MarkdownContent
             className="doc-type-description"
             markdown={field.description || 'No Description'}
           />}
-        <TypeDetails
-          type={type}
-          schema={schema}
-          onClickType={this.onClickType}
-        />
+        <TypeDetails type={type} schema={schema} level={level} />
         {argsDef}
         {implementationsDef}
       </div>

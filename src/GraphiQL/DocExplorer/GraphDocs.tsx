@@ -1,6 +1,5 @@
 import * as React from 'react'
 import * as ReactDOM from 'react-dom'
-import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import { getLeft } from 'graphiql/dist/utility/elementPosition'
 import FieldDoc from './FieldDoc'
@@ -8,16 +7,15 @@ import SearchBox from './SearchBox'
 import SearchResults from './SearchResults'
 import GraphDocsRoot from './GraphDocsRoot'
 import ColumnDoc from './ColumnDoc'
-import { addStack } from '../../actions/graphiql-docs'
+
+interface StateFromProps {
+  navStack: any[]
+}
 
 export interface Props {
   schema: any
   storageGet: (key: string) => any
   storageSet: (key: string, val: any) => void
-
-  // Redux
-  navStack: any[]
-  addStack: (field: any, level: number) => void
 }
 
 export interface State {
@@ -26,7 +24,7 @@ export interface State {
   searchValue: string
 }
 
-class GraphDocs extends React.Component<Props, State> {
+class GraphDocs extends React.Component<Props & StateFromProps, State> {
   constructor(props) {
     super(props)
     // Take old values from storage
@@ -120,22 +118,13 @@ class GraphDocs extends React.Component<Props, State> {
                 <SearchResults
                   searchValue={searchValue}
                   schema={schema}
-                  onClickType={type => this.handleClickField(type, 0)}
+                  level={0}
                 />}
-              {!searchValue &&
-                <GraphDocsRoot
-                  schema={schema}
-                  onClickType={this.handleClickField}
-                />}
+              {!searchValue && <GraphDocsRoot schema={schema} />}
             </ColumnDoc>}
           {navStack.map((stack, id) =>
             <ColumnDoc key={id}>
-              <FieldDoc
-                schema={schema}
-                field={stack}
-                onClickType={this.handleClickField}
-                level={id + 1}
-              />
+              <FieldDoc schema={schema} field={stack} level={id + 1} />
             </ColumnDoc>,
           )}
         </div>
@@ -149,10 +138,6 @@ class GraphDocs extends React.Component<Props, State> {
 
   private handleToggleDocs = () => {
     this.setState({ docsOpen: !this.state.docsOpen })
-  }
-
-  private handleClickField = (field, level) => {
-    this.props.addStack(field, level)
   }
 
   private handleDocsResizeStart = downEvent => {
@@ -200,12 +185,6 @@ const mapStateToProps = state => ({
   navStack: state.graphiqlDocs.navStack,
 })
 
-const mapDispatchToProps = dispatch =>
-  bindActionCreators(
-    {
-      addStack,
-    },
-    dispatch,
-  )
-
-export default connect(mapStateToProps, mapDispatchToProps)(GraphDocs)
+export default connect<StateFromProps, {}, Props>(mapStateToProps, {})(
+  GraphDocs,
+)

@@ -15,7 +15,7 @@ interface Props {
   schema: any
   withinType?: any
   searchValue: string
-  onClickType: (data: any) => void
+  level: number
 }
 
 export default class SearchResults extends React.Component<Props, {}> {
@@ -27,10 +27,10 @@ export default class SearchResults extends React.Component<Props, {}> {
   }
 
   render() {
+    const { level } = this.props
     const searchValue = this.props.searchValue
     const withinType = this.props.withinType
     const schema = this.props.schema
-    const onClickType = this.props.onClickType
 
     const matchedWithin: any[] = []
     const matchedTypes: any[] = []
@@ -57,7 +57,7 @@ export default class SearchResults extends React.Component<Props, {}> {
       if (withinType !== type && isMatch(typeName, searchValue)) {
         matchedTypes.push(
           <div className="doc-category-item" key={typeName}>
-            <TypeLink type={type} onClick={onClickType} />
+            <TypeLink type={type} level={level} />
           </div>,
         )
       }
@@ -83,7 +83,7 @@ export default class SearchResults extends React.Component<Props, {}> {
 
           const match = (
             <div className="doc-category-item" key={typeName + '.' + fieldName}>
-              <TypeLink key="type" type={field} onClick={onClickType} />
+              <TypeLink key="type" type={field} level={level} />
               {matchingArgs && [
                 '(',
                 <span key="args">
@@ -91,8 +91,8 @@ export default class SearchResults extends React.Component<Props, {}> {
                     <Argument
                       key={arg.name}
                       arg={arg}
-                      onClickType={onClickType}
                       showDefaultValue={false}
+                      level={level}
                     />,
                   )}
                 </span>,

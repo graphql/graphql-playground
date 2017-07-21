@@ -16,7 +16,7 @@ import UnionTypeSchema from './DocsTypes/UnionTypeSchema'
 interface Props {
   schema: any
   type: any
-  onClickType: (field: any) => void
+  level: number
 }
 
 export default class TypeDetails extends React.Component<Props, {}> {
@@ -25,7 +25,7 @@ export default class TypeDetails extends React.Component<Props, {}> {
   }
 
   render() {
-    const { schema, onClickType } = this.props
+    const { schema, level } = this.props
     let { type } = this.props
     // TODO find a better way to do that
     if (type instanceof GraphQLNonNull) {
@@ -51,7 +51,7 @@ export default class TypeDetails extends React.Component<Props, {}> {
           className="doc-description"
           markdown={type.description || 'No Description'}
         />
-        <DocTypeSchema type={type} onClickType={onClickType} />
+        <DocTypeSchema type={type} level={level} />
         {type instanceof GraphQLScalarType && <ScalarTypeSchema type={type} />}
         {type instanceof GraphQLEnumType && <EnumTypeSchema type={type} />}
         {type instanceof GraphQLUnionType &&
@@ -63,10 +63,10 @@ export default class TypeDetails extends React.Component<Props, {}> {
 
 interface DocTypeSchemaProps {
   type: any
-  onClickType: (data: any) => void
+  level: number
 }
 
-const DocTypeSchema = ({ type, onClickType }: DocTypeSchemaProps) => {
+const DocTypeSchema = ({ type, level }: DocTypeSchemaProps) => {
   if (!type.getFields) {
     return null
   }
@@ -81,13 +81,13 @@ const DocTypeSchema = ({ type, onClickType }: DocTypeSchemaProps) => {
     <div className="doc-type-schema">
       <style jsx={true}>{`
         .doc-type-schema {
-          @p: .ph16, .pt20;
+          @p: .pt20;
         }
         .doc-type-schema-line {
-          @p: .pv6;
+          @p: .ph10, .pv6;
         }
         .doc-value-comment {
-          @p: .ph16, .black50;
+          @p: .ph20, .black50;
         }
       `}</style>
       <div className="doc-type-schema-line">
@@ -105,16 +105,14 @@ const DocTypeSchema = ({ type, onClickType }: DocTypeSchemaProps) => {
       </div>
       {fields
         .filter(data => !data.isDeprecated)
-        .map(data =>
-          <TypeLink key={data.name} type={data} onClick={onClickType} />,
-        )}
+        .map(data => <TypeLink key={data.name} type={data} level={level} />)}
       {deprecatedFields.length > 0 && <br />}
       {deprecatedFields.map(data =>
         <div key={data.name}>
           <span className="doc-value-comment">
             # Deprecated: {data.deprecationReason}
           </span>
-          <TypeLink type={data} onClick={onClickType} />
+          <TypeLink type={data} level={level} />
         </div>,
       )}
       <span className="type-name">
