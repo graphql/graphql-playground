@@ -92,7 +92,8 @@ const DocTypeSchema = ({ type, level }: DocTypeSchemaProps) => {
           @p: .ph16, .pv6;
         }
         .doc-value-comment {
-          @p: .ph16, .black50;
+          @p: .pr16, .black50;
+          padding-left: 32px;
         }
         .doc-type-interface {
           @p: .pl16;
