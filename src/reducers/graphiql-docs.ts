@@ -47,6 +47,7 @@ export default function graphiqlDocsReducer(
         }
       }
       break
+
     case TOOGLE_DOCS:
       return {
         ...state,

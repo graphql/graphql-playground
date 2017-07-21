@@ -1,11 +1,10 @@
 import * as React from 'react'
 import { Provider } from 'react-redux'
-import { createStore } from 'redux'
-import reducers from './reducers'
+import createStore from './createStore'
 import Playground from './Playground'
 import ThemeProvider from './theme/ThemeProvider'
 
-const store = createStore(reducers)
+const store = createStore()
 
 const testProjectId = 'asdf'
 const regex = /.*?graph\.cool\/simple\/.{1,2}\/(.{1,25})/

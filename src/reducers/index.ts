@@ -1,8 +1,8 @@
 import { combineReducers } from 'redux'
 import graphiqlDocs from './graphiql-docs'
 
-const app = combineReducers({
+const combinedReducers = combineReducers({
   graphiqlDocs,
 })
 
-export default app
+export default combinedReducers
