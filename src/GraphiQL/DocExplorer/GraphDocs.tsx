@@ -1,5 +1,6 @@
 import * as React from 'react'
 import * as ReactDOM from 'react-dom'
+import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import { getLeft } from 'graphiql/dist/utility/elementPosition'
 import FieldDoc from './FieldDoc'
@@ -7,9 +8,15 @@ import SearchBox from './SearchBox'
 import SearchResults from './SearchResults'
 import GraphDocsRoot from './GraphDocsRoot'
 import ColumnDoc from './ColumnDoc'
+import { toggleDocs } from '../../actions/graphiql-docs'
 
 interface StateFromProps {
   navStack: any[]
+  docsOpen: boolean
+}
+
+interface DispatchFromProps {
+  toggleDocs: () => any
 }
 
 export interface Props {
@@ -24,7 +31,10 @@ export interface State {
   searchValue: string
 }
 
-class GraphDocs extends React.Component<Props & StateFromProps, State> {
+class GraphDocs extends React.Component<
+  Props & StateFromProps & DispatchFromProps,
+  State
+> {
   constructor(props) {
     super(props)
     // Take old values from storage
@@ -42,8 +52,8 @@ class GraphDocs extends React.Component<Props & StateFromProps, State> {
   }
 
   render() {
-    const { schema, navStack } = this.props
-    const { docsOpen, docsWidth, searchValue } = this.state
+    const { docsOpen, schema, navStack } = this.props
+    const { docsWidth, searchValue } = this.state
     const docsStyle = { width: docsOpen ? docsWidth : 0 }
 
     let emptySchema
@@ -137,7 +147,7 @@ class GraphDocs extends React.Component<Props & StateFromProps, State> {
   }
 
   private handleToggleDocs = () => {
-    this.setState({ docsOpen: !this.state.docsOpen })
+    this.props.toggleDocs()
   }
 
   private handleDocsResizeStart = downEvent => {
@@ -181,10 +191,20 @@ class GraphDocs extends React.Component<Props & StateFromProps, State> {
   }
 }
 
-const mapStateToProps = state => ({
-  navStack: state.graphiqlDocs.navStack,
+const mapStateToProps = ({ graphiqlDocs }) => ({
+  navStack: graphiqlDocs.navStack,
+  docsOpen: graphiqlDocs.docsOpen,
 })
 
-export default connect<StateFromProps, {}, Props>(mapStateToProps, {})(
-  GraphDocs,
-)
+const mapDispatchToProps = dispatch =>
+  bindActionCreators(
+    {
+      toggleDocs,
+    },
+    dispatch,
+  )
+
+export default connect<StateFromProps, DispatchFromProps, Props>(
+  mapStateToProps,
+  mapDispatchToProps,
+)(GraphDocs)

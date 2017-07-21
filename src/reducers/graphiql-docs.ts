@@ -1,13 +1,20 @@
-import { ADD_STACK, AddStackAction } from '../actions/graphiql-docs'
+import {
+  ADD_STACK,
+  AddStackAction,
+  TOOGLE_DOCS,
+  ToggleDocsAction,
+} from '../actions/graphiql-docs'
 
-type GraphiqlDocsAction = AddStackAction
+type GraphiqlDocsAction = AddStackAction | ToggleDocsAction
 
 export interface State {
   readonly navStack: any[]
+  readonly docsOpen: boolean
 }
 
 const defaultState: State = {
   navStack: [],
+  docsOpen: false,
 }
 
 export default function graphiqlDocsReducer(
@@ -39,7 +46,12 @@ export default function graphiqlDocsReducer(
           navStack: [...newNavStack, action.field],
         }
       }
+      break
+    case TOOGLE_DOCS:
+      return {
+        ...state,
+        docsOpen: !state.docsOpen,
+      }
   }
-
   return state
 }

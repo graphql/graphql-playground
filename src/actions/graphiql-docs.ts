@@ -8,7 +8,18 @@ export interface AddStackAction {
 }
 
 export const addStack = (field: any, level: number): AddStackAction => ({
-  type: 'add stack',
+  type: ADD_STACK,
   field,
   level,
+})
+
+export type TOOGLE_DOCS = 'toggle docs'
+export const TOOGLE_DOCS: TOOGLE_DOCS = 'toggle docs'
+
+export interface ToggleDocsAction {
+  type: TOOGLE_DOCS
+}
+
+export const toggleDocs = (): ToggleDocsAction => ({
+  type: TOOGLE_DOCS,
 })
