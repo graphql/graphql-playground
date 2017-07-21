@@ -4,8 +4,6 @@ import {
   GraphQLObjectType,
   GraphQLUnionType,
   GraphQLScalarType,
-  GraphQLNonNull,
-  GraphQLList,
 } from 'graphql'
 import MarkdownContent from 'graphiql/dist/components/DocExplorer/MarkdownContent'
 import TypeLink from './TypeLink'
