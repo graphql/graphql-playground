@@ -81,6 +81,12 @@ const DocTypeSchema = ({ type, level }: DocTypeSchemaProps) => {
         .doc-type-schema .doc-category-item {
           padding-left: 32px;
         }
+        .doc-type-interface .field-name {
+          color: rgb(245, 160, 0);
+        }
+        .doc-type-interface .type-name {
+          color: #f25c54;
+        }
       `}</style>
       <style jsx={true}>{`
         .doc-type-schema {
@@ -96,8 +102,11 @@ const DocTypeSchema = ({ type, level }: DocTypeSchemaProps) => {
         .doc-type-interface {
           @p: .pl16;
         }
+        .type-line .type-name {
+          color: #f25c54;
+        }
       `}</style>
-      <div className="doc-type-schema-line">
+      <div className="doc-type-schema-line type-line">
         <span className="field-name">type</span>{' '}
         <span className="type-name">{type.name}</span>{' '}
         {interfaces.length === 0 &&
@@ -134,7 +143,7 @@ const DocTypeSchema = ({ type, level }: DocTypeSchemaProps) => {
           <TypeLink type={data} level={level} />
         </div>,
       )}
-      <div className="doc-type-schema-line">
+      <div className="doc-type-schema-line type-line">
         <span className="type-name">
           {'}'}
         </span>

@@ -20,7 +20,7 @@ class App extends React.Component<{}, State> {
 
     this.state = {
       stepIndex: 0,
-      theme: 'light',
+      theme: 'black',
     }
   }
 

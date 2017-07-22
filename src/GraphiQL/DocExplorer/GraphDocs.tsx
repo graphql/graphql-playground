@@ -103,11 +103,23 @@ class GraphDocs extends React.Component<
             top: 115px;
           }
           .doc-explorer {
-            @p: .flex, .flexRow;
-            @inherit: .relative, .h100;
+            @p: .flex, .flexRow, .relative;
+            @inherit: .h100;
             border-left: 6px solid $green;
             overflow-x: auto;
             overflow-y: hidden;
+            letter-spacing: 0.3px;
+          }
+          .doc-explorer-gradient {
+            @p: .z1, .absolute, .top0, .bottom0;
+            content: "";
+            width: 20px;
+            left: 6px;
+            background: linear-gradient(
+              to right,
+              rgba(255, 255, 255, 1),
+              rgba(255, 255, 255, 0)
+            );
           }
         `}</style>
         <div className="docs-button" onClick={this.handleToggleDocs}>
@@ -117,13 +129,14 @@ class GraphDocs extends React.Component<
           className="docExplorerResizer"
           onMouseDown={this.handleDocsResizeStart}
         />
+        <div className="doc-explorer-gradient" />
         <div className="doc-explorer">
           {emptySchema &&
             <ColumnDoc>
               {emptySchema}
             </ColumnDoc>}
           {schema &&
-            <ColumnDoc>
+            <ColumnDoc first={true}>
               <SearchBox isShown={true} onSearch={this.handleSearch} />
               {searchValue &&
                 <SearchResults

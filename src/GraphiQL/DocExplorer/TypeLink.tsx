@@ -68,18 +68,21 @@ class TypeLink extends React.Component<
       afterNode,
     } = this.props
     const isActive = clickable && this.isActive(navStack, type, level)
+    const isLastActive = isActive && level === navStack.length - 1
     const isGraphqlType = isType(type)
     return (
       <div
-        className={cx('doc-category-item', {
-          className,
+        className={cx('doc-category-item', className, {
           clickable,
           active: isActive,
+          lastActive: isLastActive,
         })}
         onClick={this.onClick}
       >
         <style jsx={true} global={true}>{`
+          .doc-category-item.lastActive,
           .doc-category-item.clickable:hover {
+            background-color: #2a7ed3 !important;
             color: #fff !important;
 
             & .field-name,
@@ -87,10 +90,9 @@ class TypeLink extends React.Component<
             & .arg-name {
               color: #fff !important;
             }
-
-            & svg {
-              fill: #fff !important;
-            }
+          }
+          .doc-category-item.active:not(.lastActive) svg {
+            fill: #2a7ed3 !important;
           }
         `}</style>
         <style jsx={true}>{`
@@ -99,7 +101,6 @@ class TypeLink extends React.Component<
           }
           .doc-category-item.clickable:hover {
             @p: .pointer, .white;
-            background-color: #2a7ed3;
           }
           .doc-category-item.active {
             @p: .bgBlack07;
@@ -107,7 +108,7 @@ class TypeLink extends React.Component<
           .doc-category-icon {
             @p: .absolute;
             right: 8px;
-            top: calc(50% - 5px);
+            top: calc(50% - 6px);
           }
         `}</style>
         {beforeNode}
@@ -136,9 +137,9 @@ class TypeLink extends React.Component<
           <span className="doc-category-icon">
             <Icon
               src={require('graphcool-styles/icons/stroke/arrowRight.svg')}
-              color="#2a7ed3"
+              color="rgba(0, 0, 0, .2)"
               width={16}
-              height={10}
+              height={12}
             />
           </span>}
         {afterNode && ' '}

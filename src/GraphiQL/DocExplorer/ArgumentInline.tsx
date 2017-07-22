@@ -9,11 +9,6 @@ export interface Props {
 export default function Argument({ arg, showDefaultValue }: Props) {
   return (
     <span className="arg">
-      <style jsx={true}>{`
-        .arg:after {
-          content: '';
-        }
-      `}</style>
       <span className="arg-name">
         {arg.name}
       </span>

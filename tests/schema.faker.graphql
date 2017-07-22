@@ -61,3 +61,7 @@ type Query {
   allCompanies: [Company!]
 }
 
+type Mutation {
+  user: User
+}
+

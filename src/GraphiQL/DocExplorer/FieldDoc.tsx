@@ -66,10 +66,6 @@ export default class FieldDoc extends React.Component<Props, State> {
               <div>
                 <Argument arg={arg} level={level} />
               </div>
-              <MarkdownContent
-                className="doc-value-description"
-                markdown={arg.description}
-              />
             </div>,
           )}
         </div>
@@ -91,6 +87,14 @@ export default class FieldDoc extends React.Component<Props, State> {
 
     return (
       <div>
+        <style jsx={true} global={true}>{`
+          .doc-header .doc-category-item {
+            @p: .fw6, .f14;
+          }
+          .doc-header .doc-category-item .field-name {
+            color: #f25c54;
+          }
+        `}</style>
         <style jsx={true}>{`
           .doc-header {
             @p: .bgBlack02, .pb10, .pt20;
@@ -105,11 +109,10 @@ export default class FieldDoc extends React.Component<Props, State> {
         <div className="doc-header">
           <TypeLink type={field} level={level} clickable={false} />
         </div>
-        {!isVarType &&
-          <MarkdownContent
-            className="doc-type-description"
-            markdown={field.description || 'No Description'}
-          />}
+        <MarkdownContent
+          className="doc-type-description"
+          markdown={field.description || 'No Description'}
+        />
         <TypeDetails type={type} schema={schema} level={level} />
         {argsDef}
         {implementationsDef}

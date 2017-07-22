@@ -1078,6 +1078,9 @@ span.CodeMirror-selectedtext { background: none; }
     background-color: rgba(0,0,0,.02);
     color: rgba(0,0,0,.5);
     font-size: 16px;
+    border-color: rgba(0,0,0,.1);
+    border-bottom-style: solid;
+    border-bottom-width: 1px;
 }
 
 .graphiql-container .show-title .doc-type-description {

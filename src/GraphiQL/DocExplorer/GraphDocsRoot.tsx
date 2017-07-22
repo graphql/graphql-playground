@@ -10,7 +10,12 @@ const GraphDocsRoot = ({ schema }: Props) => {
   const subscriptionType =
     schema.getSubscriptionType && schema.getSubscriptionType()
   return (
-    <div>
+    <div className="doc-root">
+      <style jsx={true} global={true}>{`
+        .doc-root .doc-category-item .field-name {
+          color: #f25c54;
+        }
+      `}</style>
       <ShowRootType name="Queries" type={schema.getQueryType()} />
       {mutationType && <ShowRootType name="Mutations" type={mutationType} />}
       {subscriptionType &&
