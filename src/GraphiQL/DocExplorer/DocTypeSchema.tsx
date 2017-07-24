@@ -1,17 +1,7 @@
 import * as React from 'react'
-import {
-  GraphQLEnumType,
-  GraphQLObjectType,
-  GraphQLUnionType,
-  GraphQLScalarType,
-} from 'graphql'
-import MarkdownContent from 'graphiql/dist/components/DocExplorer/MarkdownContent'
 import TypeLink from './TypeLink'
-import ScalarTypeSchema from './DocsTypes/ScalarType'
-import EnumTypeSchema from './DocsTypes/EnumTypeSchema'
-import UnionTypeSchema from './DocsTypes/UnionTypeSchema'
 
-interface DocTypeSchemaProps {
+export interface DocTypeSchemaProps {
   type: any
   fields: any[]
   interfaces: any[]

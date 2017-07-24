@@ -17,7 +17,7 @@
     "declaration": true
   },
   "files": [
-    "src/Playground.tsx"
+    "src/App.tsx"
   ],
   "exclude": [
     "node_modules"

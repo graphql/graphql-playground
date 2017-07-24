@@ -1,11 +1,4 @@
-import {
-  isType,
-  GraphQLInterfaceType,
-  GraphQLEnumType,
-  GraphQLObjectType,
-  GraphQLUnionType,
-  GraphQLScalarType,
-} from 'graphql'
+import { isType, GraphQLInterfaceType, GraphQLObjectType } from 'graphql'
 
 // Return the deeper type found on object
 // For example [[[Company]!]!]! will return only Company
@@ -16,7 +9,7 @@ export function getDeeperType(type: any): any {
   return type
 }
 
-interface SerializedRoot {
+export interface SerializedRoot {
   queries: any[]
   mutations: any[]
   subscriptions: any[]
@@ -67,7 +60,7 @@ export function getElementRoot(obj: any, index: number) {
   }
 }
 
-interface SerializedObj {
+export interface SerializedObj {
   fields: any[]
   interfaces: any[]
   args: any[]

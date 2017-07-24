@@ -9,14 +9,7 @@
 import * as React from 'react'
 import * as ReactDOM from 'react-dom'
 import Argument from './Argument'
-import {
-  isType,
-  GraphQLInterfaceType,
-  GraphQLEnumType,
-  GraphQLObjectType,
-  GraphQLUnionType,
-  GraphQLScalarType,
-} from 'graphql'
+import { GraphQLEnumType, GraphQLUnionType, GraphQLScalarType } from 'graphql'
 import MarkdownContent from 'graphiql/dist/components/DocExplorer/MarkdownContent'
 import TypeLink from './TypeLink'
 import DocTypeSchema from './DocTypeSchema'
@@ -67,7 +60,6 @@ export default class FieldDoc extends React.Component<Props, State> {
     let type = field.type || field
     const obj = serialize(schema, field)
     type = getDeeperType(type)
-    const isVarType = isType(type)
     const argsOffset = obj.fields.length + obj.interfaces.length
     const implementationsOffset =
       obj.fields.length + obj.interfaces.length + obj.args.length

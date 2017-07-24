@@ -9,7 +9,7 @@ const store = createStore()
 const testProjectId = 'asdf'
 const regex = /.*?graph\.cool\/simple\/.{1,2}\/(.{1,25})/
 
-interface State {
+export interface State {
   stepIndex: number
   theme: string
 }

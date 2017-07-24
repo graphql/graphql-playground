@@ -1,7 +1,7 @@
 import * as React from 'react'
 import * as PropTypes from 'prop-types'
 
-class Theme {
+export class Theme {
   theme: string
   subscriptions: any[]
 
@@ -20,7 +20,7 @@ class Theme {
   }
 }
 
-interface ThemeProviderProps {
+export interface ThemeProviderProps {
   theme: string
 }
 
