@@ -17,15 +17,21 @@ export default function Argument({ arg, showDefaultValue, x, y }: Props) {
           content: '';
         }
       `}</style>
-      <TypeLink type={arg} x={x} y={y} />
-      {arg.defaultValue !== undefined &&
-        showDefaultValue !== false &&
-        <span>
-          {' = '}
-          <span className="arg-default-value">
-            {print(astFromValue(arg.defaultValue, arg.type))}
+      <TypeLink
+        type={arg}
+        x={x}
+        y={y}
+        afterNode={
+          arg.defaultValue !== undefined &&
+          showDefaultValue !== false &&
+          <span>
+            {' = '}
+            <span className="arg-default-value">
+              {print(astFromValue(arg.defaultValue, arg.type))}
+            </span>
           </span>
-        </span>}
+        }
+      />
     </span>
   )
 }

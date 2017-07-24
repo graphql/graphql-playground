@@ -32,8 +32,8 @@ export interface Props {
   y: number
   clickable?: boolean
   className?: string
-  beforeNode?: JSX.Element | null
-  afterNode?: JSX.Element | null
+  beforeNode?: JSX.Element | null | false
+  afterNode?: JSX.Element | null | false
 }
 
 class TypeLink extends React.Component<

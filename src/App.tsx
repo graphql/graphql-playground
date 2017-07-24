@@ -9,6 +9,20 @@ const store = createStore()
 const testProjectId = 'asdf'
 const regex = /.*?graph\.cool\/simple\/.{1,2}\/(.{1,25})/
 
+function getParameterByName(name) {
+  const url = window.location.href
+  name = name.replace(/[\[\]]/g, '\\$&')
+  const regexa = new RegExp('[?&]' + name + '(=([^&#]*)|&|#|$)')
+  const results = regexa.exec(url)
+  if (!results) {
+    return null
+  }
+  if (!results[2]) {
+    return ''
+  }
+  return decodeURIComponent(results[2].replace(/\+/g, ' '))
+}
+
 export interface State {
   stepIndex: number
   theme: string
@@ -29,6 +43,7 @@ class App extends React.Component<{}, State> {
   }
 
   render() {
+    const endpoint = getParameterByName('endpoint')
     let projectId: any = testProjectId
     if (regex.test(location.href)) {
       const result = regex.exec(location.href)
@@ -60,7 +75,7 @@ class App extends React.Component<{}, State> {
       <Provider store={store}>
         <ThemeProvider theme={this.state.theme}>
           <Playground
-            endpoint="http://localhost:9002/graphql"
+            endpoint={endpoint || 'https://graphql-europe.org/graphql'}
             wsApiPrefix={subscriptionUrl}
             adminAuthToken=""
             httpApiPrefix="https://api.graph.cool"

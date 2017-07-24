@@ -16,13 +16,11 @@
     "noUnusedLocals": false,
     "declaration": true
   },
-  "files": [
-    "src/App.tsx"
-  ],
   "exclude": [
     "node_modules"
   ],
   "include": [
+    "./src/**/*",
      "custom.d.ts"
    ]
 }
