@@ -9,10 +9,21 @@
 import * as React from 'react'
 import * as ReactDOM from 'react-dom'
 import Argument from './Argument'
-import { isType, GraphQLInterfaceType } from 'graphql'
+import {
+  isType,
+  GraphQLInterfaceType,
+  GraphQLEnumType,
+  GraphQLObjectType,
+  GraphQLUnionType,
+  GraphQLScalarType,
+} from 'graphql'
 import MarkdownContent from 'graphiql/dist/components/DocExplorer/MarkdownContent'
 import TypeLink from './TypeLink'
-import TypeDetails from './TypeDetails'
+import DocTypeSchema from './DocTypeSchema'
+import ScalarTypeSchema from './DocsTypes/ScalarType'
+import EnumTypeSchema from './DocsTypes/EnumTypeSchema'
+import UnionTypeSchema from './DocsTypes/UnionTypeSchema'
+import { serialize, getDeeperType } from './utils'
 
 export interface Props {
   schema: any
@@ -53,37 +64,13 @@ export default class FieldDoc extends React.Component<Props, State> {
 
   render() {
     const { schema, field, level } = this.props
-    const type = field.type || field
+    let type = field.type || field
+    const obj = serialize(schema, field)
+    type = getDeeperType(type)
     const isVarType = isType(type)
-
-    let argsDef
-    if (field.args && field.args.length > 0) {
-      argsDef = (
-        <div>
-          <div className="doc-category-title">arguments</div>
-          {field.args.map(arg =>
-            <div key={arg.name}>
-              <div>
-                <Argument arg={arg} level={level} />
-              </div>
-            </div>,
-          )}
-        </div>
-      )
-    }
-
-    let implementationsDef
-    if (isVarType && type instanceof GraphQLInterfaceType) {
-      const types = schema.getPossibleTypes(type)
-      implementationsDef = (
-        <div>
-          <div className="doc-category-title">implementations</div>
-          {types.map(data =>
-            <TypeLink key={data.name} type={data} level={level} />,
-          )}
-        </div>
-      )
-    }
+    const argsOffset = obj.fields.length + obj.interfaces.length
+    const implementationsOffset =
+      obj.fields.length + obj.interfaces.length + obj.args.length
 
     return (
       <div>
@@ -93,6 +80,9 @@ export default class FieldDoc extends React.Component<Props, State> {
           }
           .doc-header .doc-category-item .field-name {
             color: #f25c54;
+          }
+          .doc-description {
+            @p: .ph16, .black50;
           }
         `}</style>
         <style jsx={true}>{`
@@ -107,15 +97,58 @@ export default class FieldDoc extends React.Component<Props, State> {
           }
         `}</style>
         <div className="doc-header">
-          <TypeLink type={field} level={level} clickable={false} />
+          <TypeLink type={field} x={level} y={0} clickable={false} />
         </div>
         <MarkdownContent
           className="doc-type-description"
           markdown={field.description || 'No Description'}
         />
-        <TypeDetails type={type} schema={schema} level={level} />
-        {argsDef}
-        {implementationsDef}
+
+        <div className="doc-category-title">
+          {'type details'}
+        </div>
+        <MarkdownContent
+          className="doc-description"
+          markdown={type.description || 'No Description'}
+        />
+
+        {type instanceof GraphQLScalarType && <ScalarTypeSchema type={type} />}
+        {type instanceof GraphQLEnumType && <EnumTypeSchema type={type} />}
+        {type instanceof GraphQLUnionType &&
+          <UnionTypeSchema type={type} schema={schema} />}
+
+        {obj.fields.length > 0 &&
+          <DocTypeSchema
+            type={type}
+            fields={obj.fields}
+            interfaces={obj.interfaces}
+            level={level}
+          />}
+
+        {obj.args.length > 0 &&
+          <div>
+            <div className="doc-category-title">arguments</div>
+            {obj.args.map((arg, index) =>
+              <div key={arg.name}>
+                <div>
+                  <Argument arg={arg} x={level} y={index + argsOffset} />
+                </div>
+              </div>,
+            )}
+          </div>}
+
+        {obj.implementations.length > 0 &&
+          <div>
+            <div className="doc-category-title">implementations</div>
+            {obj.implementations.map((data, index) =>
+              <TypeLink
+                key={data.name}
+                type={data}
+                x={level}
+                y={index + implementationsOffset}
+              />,
+            )}
+          </div>}
       </div>
     )
   }

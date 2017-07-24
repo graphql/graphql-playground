@@ -17,15 +17,19 @@ import { addStack } from '../../actions/graphiql-docs'
 
 interface StateFromProps {
   navStack: any[]
+  keyMove: boolean
 }
 
 interface DispatchFromProps {
-  addStack: (field: any, level: number) => any
+  addStack: (field: any, x: number, y: number) => any
 }
 
 export interface Props {
   type: any
-  level: number
+  // X position in the list
+  x: number
+  // Y position in the list
+  y: number
   clickable?: boolean
   className?: string
   beforeNode?: JSX.Element | null
@@ -43,18 +47,19 @@ class TypeLink extends React.Component<
   shouldComponentUpdate(nextProps: Props & StateFromProps) {
     return (
       this.props.type !== nextProps.type ||
-      this.props.navStack !== nextProps.navStack
+      this.props.navStack[this.props.x] !== nextProps.navStack[this.props.x] ||
+      this.props.keyMove !== nextProps.keyMove
     )
   }
 
   onClick = () => {
     if (this.props.clickable) {
-      this.props.addStack(this.props.type, this.props.level)
+      this.props.addStack(this.props.type, this.props.x, this.props.y)
     }
   }
 
-  isActive(navStack: any[], type: any, level: number) {
-    return navStack[level] === type
+  isActive(navStack: any[], x: number, y: number) {
+    return navStack[x] && navStack[x].x === x && navStack[x].y === y
   }
 
   render() {
@@ -62,26 +67,29 @@ class TypeLink extends React.Component<
       type,
       clickable,
       navStack,
-      level,
       className,
       beforeNode,
       afterNode,
+      x,
+      y,
+      keyMove,
     } = this.props
-    const isActive = clickable && this.isActive(navStack, type, level)
-    const isLastActive = isActive && level === navStack.length - 1
+    const isActive = clickable && this.isActive(navStack, x, y)
+    const isLastActive = isActive && x === navStack.length - 1
     const isGraphqlType = isType(type)
     return (
       <div
         className={cx('doc-category-item', className, {
           clickable,
           active: isActive,
-          lastActive: isLastActive,
+          'last-active': isLastActive,
+          'no-hover': keyMove,
         })}
         onClick={this.onClick}
       >
         <style jsx={true} global={true}>{`
-          .doc-category-item.lastActive,
-          .doc-category-item.clickable:hover {
+          .doc-category-item.last-active,
+          .doc-category-item.clickable:hover:not(.no-hover) {
             background-color: #2a7ed3 !important;
             color: #fff !important;
 
@@ -91,7 +99,7 @@ class TypeLink extends React.Component<
               color: #fff !important;
             }
           }
-          .doc-category-item.active:not(.lastActive) svg {
+          .doc-category-item.active:not(.last-active) svg {
             fill: #2a7ed3 !important;
           }
         `}</style>
@@ -176,6 +184,7 @@ function renderType(type) {
 
 const mapStateToProps = state => ({
   navStack: state.graphiqlDocs.navStack,
+  keyMove: state.graphiqlDocs.keyMove,
 })
 
 const mapDispatchToProps = dispatch =>

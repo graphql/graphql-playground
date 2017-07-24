@@ -1,14 +1,13 @@
 import * as React from 'react'
 import TypeLink from './TypeLink'
+import { serializeRoot } from './utils'
 
 export interface Props {
   schema: any
 }
 
 const GraphDocsRoot = ({ schema }: Props) => {
-  const mutationType = schema.getMutationType && schema.getMutationType()
-  const subscriptionType =
-    schema.getSubscriptionType && schema.getSubscriptionType()
+  const obj = serializeRoot(schema)
   return (
     <div className="doc-root">
       <style jsx={true} global={true}>{`
@@ -16,22 +15,30 @@ const GraphDocsRoot = ({ schema }: Props) => {
           color: #f25c54;
         }
       `}</style>
-      <ShowRootType name="Queries" type={schema.getQueryType()} />
-      {mutationType && <ShowRootType name="Mutations" type={mutationType} />}
-      {subscriptionType &&
-        <ShowRootType name="Subscriptions" type={subscriptionType} />}
+      <ShowRootType name="Queries" fields={obj.queries} offset={0} />
+      {obj.mutations.length > 0 &&
+        <ShowRootType
+          name="Mutations"
+          fields={obj.mutations}
+          offset={obj.queries.length}
+        />}
+      {obj.subscriptions.length > 0 &&
+        <ShowRootType
+          name="Subscriptions"
+          fields={obj.subscriptions}
+          offset={obj.queries.length + obj.mutations.length}
+        />}
     </div>
   )
 }
 
 interface ShowRootTypeProps {
   name: string
-  type: any
+  fields: any[]
+  offset: number
 }
 
-function ShowRootType({ name, type }: ShowRootTypeProps) {
-  const fieldMap = type.getFields()
-  const fields = Object.keys(fieldMap).map(fieldName => fieldMap[fieldName])
+function ShowRootType({ name, fields, offset }: ShowRootTypeProps) {
   return (
     <div>
       <div className="doc-category-title">
@@ -39,7 +46,9 @@ function ShowRootType({ name, type }: ShowRootTypeProps) {
       </div>
       {fields
         .filter(field => !field.isDeprecated)
-        .map(field => <TypeLink key={field.name} type={field} level={0} />)}
+        .map((field, index) =>
+          <TypeLink key={field.name} type={field} x={0} y={offset + index} />,
+        )}
     </div>
   )
 }

@@ -5,23 +5,28 @@ import {
   ToggleDocsAction,
   CHANGE_WIDTH_DOCS,
   ChangeWidthDocsAction,
+  CHANGE_KEY_MOVE,
+  ChangeKeyMoveAction,
 } from '../actions/graphiql-docs'
 
 type GraphiqlDocsAction =
   | AddStackAction
   | ToggleDocsAction
   | ChangeWidthDocsAction
+  | ChangeKeyMoveAction
 
 export interface State {
   readonly navStack: any[]
   readonly docsOpen: boolean
   readonly docsWidth: number
+  readonly keyMove: boolean
 }
 
 const defaultState: State = {
   navStack: [],
   docsOpen: false,
   docsWidth: 300,
+  keyMove: false,
 }
 
 export default function graphiqlDocsReducer(
@@ -30,30 +35,23 @@ export default function graphiqlDocsReducer(
 ) {
   switch (action.type) {
     case ADD_STACK:
-      const { field, level } = action
-      // If click at the root level empty the list
-      if (level === 0) {
-        return {
-          ...state,
-          navStack: [field],
-        }
-      }
+      const { field, x, y } = action
       let newNavStack = state.navStack
       // Reset the list to the level clicked
-      if (level < newNavStack.length) {
-        newNavStack = newNavStack.slice(0, level)
+      if (x < newNavStack.length) {
+        newNavStack = newNavStack.slice(0, x)
       }
-      // Check current item is not the last item of the list
-      const isCurrentlyShown =
-        newNavStack.length > 0 && newNavStack[newNavStack.length - 1] === field
-
-      if (!isCurrentlyShown) {
-        return {
-          ...state,
-          navStack: [...newNavStack, action.field],
-        }
+      return {
+        ...state,
+        navStack: [
+          ...newNavStack,
+          {
+            x,
+            y,
+            field,
+          },
+        ],
       }
-      break
 
     case TOOGLE_DOCS:
       const { open } = action
@@ -73,6 +71,13 @@ export default function graphiqlDocsReducer(
       return {
         ...state,
         docsWidth: width,
+      }
+
+    case CHANGE_KEY_MOVE:
+      const { move } = action
+      return {
+        ...state,
+        keyMove: move,
       }
   }
   return state

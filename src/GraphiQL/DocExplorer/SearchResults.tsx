@@ -56,7 +56,7 @@ export default class SearchResults extends React.Component<Props, {}> {
       if (withinType !== type && isMatch(typeName, searchValue)) {
         matchedTypes.push(
           <div className="doc-category-item" key={typeName}>
-            <TypeLink type={type} level={level} />
+            <TypeLink type={type} x={level} y={matchedTypes.length} />
           </div>,
         )
       }
@@ -82,7 +82,12 @@ export default class SearchResults extends React.Component<Props, {}> {
 
           const match = (
             <div className="doc-category-item" key={typeName + '.' + fieldName}>
-              <TypeLink key="type" type={field} level={level} />
+              <TypeLink
+                key="type"
+                type={field}
+                x={level}
+                y={matchedTypes.length}
+              />
             </div>
           )
 

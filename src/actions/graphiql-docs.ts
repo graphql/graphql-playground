@@ -4,13 +4,15 @@ export const ADD_STACK: ADD_STACK = 'add stack'
 export interface AddStackAction {
   type: ADD_STACK
   field: any
-  level: number
+  x: number
+  y: number
 }
 
-export const addStack = (field: any, level: number): AddStackAction => ({
+export const addStack = (field: any, x: number, y: number): AddStackAction => ({
   type: ADD_STACK,
   field,
-  level,
+  x,
+  y,
 })
 
 export type TOOGLE_DOCS = 'toggle docs'
@@ -37,4 +39,17 @@ export interface ChangeWidthDocsAction {
 export const changeWidthDocs = (width: number): ChangeWidthDocsAction => ({
   type: CHANGE_WIDTH_DOCS,
   width,
+})
+
+export type CHANGE_KEY_MOVE = 'change key move'
+export const CHANGE_KEY_MOVE: CHANGE_KEY_MOVE = 'change key move'
+
+export interface ChangeKeyMoveAction {
+  type: CHANGE_KEY_MOVE
+  move: boolean
+}
+
+export const changeKeyMove = (move: boolean): ChangeKeyMoveAction => ({
+  type: CHANGE_KEY_MOVE,
+  move,
 })

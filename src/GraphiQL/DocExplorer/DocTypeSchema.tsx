@@ -11,70 +11,21 @@ import ScalarTypeSchema from './DocsTypes/ScalarType'
 import EnumTypeSchema from './DocsTypes/EnumTypeSchema'
 import UnionTypeSchema from './DocsTypes/UnionTypeSchema'
 
-export interface Props {
-  schema: any
-  type: any
-  level: number
-}
-
-const getNode = (type: any): any => {
-  if (type.ofType) {
-    return getNode(type.ofType)
-  }
-  return type
-}
-
-export default class TypeDetails extends React.Component<Props, {}> {
-  shouldComponentUpdate(nextProps) {
-    return this.props.type !== nextProps.type
-  }
-
-  render() {
-    const { schema, level } = this.props
-    let { type } = this.props
-    if (type.ofType) {
-      type = getNode(type.ofType)
-    }
-    return (
-      <div>
-        <style jsx={true} global={true}>{`
-          .doc-description {
-            @p: .ph16, .black50;
-          }
-        `}</style>
-        <div className="doc-category-title">
-          {'type details'}
-        </div>
-        <MarkdownContent
-          className="doc-description"
-          markdown={type.description || 'No Description'}
-        />
-        <DocTypeSchema type={type} level={level} />
-        {type instanceof GraphQLScalarType && <ScalarTypeSchema type={type} />}
-        {type instanceof GraphQLEnumType && <EnumTypeSchema type={type} />}
-        {type instanceof GraphQLUnionType &&
-          <UnionTypeSchema type={type} schema={schema} />}
-      </div>
-    )
-  }
-}
-
 interface DocTypeSchemaProps {
   type: any
+  fields: any[]
+  interfaces: any[]
   level: number
 }
 
-const DocTypeSchema = ({ type, level }: DocTypeSchemaProps) => {
-  if (!type.getFields) {
-    return null
-  }
-  const fieldMap = type.getFields()
-  const fields = Object.keys(fieldMap).map(name => fieldMap[name])
+const DocTypeSchema = ({
+  type,
+  fields,
+  interfaces,
+  level,
+}: DocTypeSchemaProps) => {
+  const nonDeprecatedFields = fields.filter(data => !data.isDeprecated)
   const deprecatedFields = fields.filter(data => data.isDeprecated)
-  let interfaces: any[] = []
-  if (type instanceof GraphQLObjectType) {
-    interfaces = type.getInterfaces()
-  }
   return (
     <div className="doc-type-schema">
       <style jsx={true} global={true}>{`
@@ -118,7 +69,8 @@ const DocTypeSchema = ({ type, level }: DocTypeSchemaProps) => {
         <TypeLink
           key={data.name}
           type={data}
-          level={level}
+          x={level}
+          y={index}
           className="doc-type-interface"
           beforeNode={<span className="field-name">implements</span>}
           // Only show curly bracket on last interface
@@ -131,16 +83,25 @@ const DocTypeSchema = ({ type, level }: DocTypeSchemaProps) => {
           }
         />,
       )}
-      {fields
-        .filter(data => !data.isDeprecated)
-        .map(data => <TypeLink key={data.name} type={data} level={level} />)}
+      {nonDeprecatedFields.map((data, index) =>
+        <TypeLink
+          key={data.name}
+          type={data}
+          x={level}
+          y={index + interfaces.length}
+        />,
+      )}
       {deprecatedFields.length > 0 && <br />}
-      {deprecatedFields.map(data =>
+      {deprecatedFields.map((data, index) =>
         <div key={data.name}>
           <span className="doc-value-comment">
             # Deprecated: {data.deprecationReason}
           </span>
-          <TypeLink type={data} level={level} />
+          <TypeLink
+            type={data}
+            x={level}
+            y={index + nonDeprecatedFields.length + interfaces.length}
+          />
         </div>,
       )}
       <div className="doc-type-schema-line type-line">
@@ -151,3 +112,5 @@ const DocTypeSchema = ({ type, level }: DocTypeSchemaProps) => {
     </div>
   )
 }
+
+export default DocTypeSchema

@@ -81,6 +81,7 @@
     "graphiql": "^0.11.2",
     "graphql": "^0.10.5",
     "isomorphic-fetch": "^2.2.1",
+    "keycode": "^2.1.9",
     "lodash": "^4.17.4",
     "lodash.debounce": "^4.0.8",
     "postcss-modules": "^0.6.4",

@@ -1,24 +1,35 @@
 import * as React from 'react'
 import * as ReactDOM from 'react-dom'
+import * as cx from 'classnames'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
+import * as keycode from 'keycode'
 import { getLeft } from 'graphiql/dist/utility/elementPosition'
 import FieldDoc from './FieldDoc'
 import SearchBox from './SearchBox'
 import SearchResults from './SearchResults'
 import GraphDocsRoot from './GraphDocsRoot'
 import ColumnDoc from './ColumnDoc'
-import { toggleDocs, changeWidthDocs } from '../../actions/graphiql-docs'
+import {
+  addStack,
+  toggleDocs,
+  changeWidthDocs,
+  changeKeyMove,
+} from '../../actions/graphiql-docs'
+import { serialize, serializeRoot, getElement, getElementRoot } from './utils'
 
 interface StateFromProps {
   navStack: any[]
   docsOpen: boolean
   docsWidth: number
+  keyMove: boolean
 }
 
 interface DispatchFromProps {
+  addStack: (field: any, x: number, y: number) => any
   toggleDocs: (open?: boolean) => any
   changeWidthDocs: (width: number) => any
+  changeKeyMove: (move: boolean) => any
 }
 
 export interface Props {
@@ -27,6 +38,8 @@ export interface Props {
 
 export interface State {
   searchValue: string
+  clientX?: number
+  clientY?: number
 }
 
 class GraphDocs extends React.Component<
@@ -130,7 +143,12 @@ class GraphDocs extends React.Component<
           onMouseDown={this.handleDocsResizeStart}
         />
         <div className="doc-explorer-gradient" />
-        <div className="doc-explorer">
+        <div
+          className="doc-explorer"
+          onKeyDown={this.handleKeyDown}
+          onMouseMove={this.handleMouseMove}
+          tabIndex={0}
+        >
           {emptySchema &&
             <ColumnDoc>
               {emptySchema}
@@ -146,9 +164,9 @@ class GraphDocs extends React.Component<
                 />}
               {!searchValue && <GraphDocsRoot schema={schema} />}
             </ColumnDoc>}
-          {navStack.map((stack, id) =>
-            <ColumnDoc key={id}>
-              <FieldDoc schema={schema} field={stack} level={id + 1} />
+          {navStack.map((stack, index) =>
+            <ColumnDoc key={index}>
+              <FieldDoc schema={schema} field={stack.field} level={index + 1} />
             </ColumnDoc>,
           )}
         </div>
@@ -162,6 +180,83 @@ class GraphDocs extends React.Component<
 
   private handleToggleDocs = () => {
     this.props.toggleDocs()
+  }
+
+  private handleMouseMove = e => {
+    this.setState({ clientX: e.clientX, clientY: e.clientY })
+    if (
+      this.props.keyMove &&
+      this.state.clientX !== e.clientX &&
+      this.state.clientY !== e.clientY
+    ) {
+      this.props.changeKeyMove(false)
+    }
+  }
+
+  private handleKeyDown = e => {
+    // we don't want to interfer with inputs
+    if (e.target instanceof HTMLInputElement) {
+      return
+    }
+    e.preventDefault()
+    this.props.changeKeyMove(true)
+    const lastNavStack =
+      this.props.navStack.length > 0 &&
+      this.props.navStack[this.props.navStack.length - 1]
+    const beforeLastNavStack =
+      this.props.navStack.length > 0 &&
+      this.props.navStack[this.props.navStack.length - 2]
+    const keyPressed = keycode(e)
+    switch (keyPressed) {
+      case 'left':
+        if (beforeLastNavStack) {
+          this.props.addStack(
+            beforeLastNavStack.field,
+            beforeLastNavStack.x,
+            beforeLastNavStack.y,
+          )
+        }
+        break
+      case 'right':
+        if (lastNavStack) {
+          const obj = serialize(this.props.schema, lastNavStack.field)
+          const firstElement = getElement(obj, 0)
+          if (firstElement) {
+            this.props.addStack(firstElement, lastNavStack.x + 1, 0)
+          }
+        }
+        break
+      case 'up':
+      case 'down':
+        if (beforeLastNavStack) {
+          const obj = serialize(this.props.schema, beforeLastNavStack.field)
+          const element = getElement(
+            obj,
+            keyPressed === 'up' ? lastNavStack.y - 1 : lastNavStack.y + 1,
+          )
+          if (element) {
+            this.props.addStack(
+              element,
+              lastNavStack.x,
+              keyPressed === 'up' ? lastNavStack.y - 1 : lastNavStack.y + 1,
+            )
+          }
+        } else {
+          const obj = serializeRoot(this.props.schema)
+          const element = getElementRoot(
+            obj,
+            keyPressed === 'up' ? lastNavStack.y - 1 : lastNavStack.y + 1,
+          )
+          if (element) {
+            this.props.addStack(
+              element,
+              0,
+              keyPressed === 'up' ? lastNavStack.y - 1 : lastNavStack.y + 1,
+            )
+          }
+        }
+        break
+    }
   }
 
   private handleDocsResizeStart = downEvent => {
@@ -207,13 +302,16 @@ const mapStateToProps = ({ graphiqlDocs }) => ({
   navStack: graphiqlDocs.navStack,
   docsOpen: graphiqlDocs.docsOpen,
   docsWidth: graphiqlDocs.docsWidth,
+  keyMove: graphiqlDocs.keyMove,
 })
 
 const mapDispatchToProps = dispatch =>
   bindActionCreators(
     {
+      addStack,
       toggleDocs,
       changeWidthDocs,
+      changeKeyMove,
     },
     dispatch,
   )

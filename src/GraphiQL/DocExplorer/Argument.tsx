@@ -4,11 +4,12 @@ import TypeLink from './TypeLink'
 
 export interface Props {
   arg: any
-  level: number
+  x: number
+  y: number
   showDefaultValue?: boolean
 }
 
-export default function Argument({ arg, showDefaultValue, level }: Props) {
+export default function Argument({ arg, showDefaultValue, x, y }: Props) {
   return (
     <span className="arg">
       <style jsx={true}>{`
@@ -16,7 +17,7 @@ export default function Argument({ arg, showDefaultValue, level }: Props) {
           content: '';
         }
       `}</style>
-      <TypeLink type={arg} level={level} />
+      <TypeLink type={arg} x={x} y={y} />
       {arg.defaultValue !== undefined &&
         showDefaultValue !== false &&
         <span>
