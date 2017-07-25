@@ -17,7 +17,7 @@ const ToggleButton = ({ checked, onChange, className }: Props) => {
           height: 21px;
         }
         .toggle-slider {
-          @p: .absolute, .pointer, .top0, .left0, .right0, .bottom0, .bgWhite40;
+          @p: .absolute, .pointer, .top0, .left0, .right0, .bottom0, .bgBlack40;
           transition: transform 70ms linear;
           border-radius: 23px;
           &:before {

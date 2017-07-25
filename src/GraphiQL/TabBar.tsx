@@ -161,7 +161,7 @@ export const TabBar = withTheme<
               strokeWidth={3}
               width={25}
               height={25}
-              color={theme === 'black' ? $v.white40 : $v.gray40}
+              color={theme === 'dark' ? $v.white40 : $v.gray40}
               onClick={onOpenHistory}
             />
           </div>
@@ -191,14 +191,14 @@ export const TabBar = withTheme<
                       {session.selectedViewer === 'EVERYONE' &&
                         <Icon
                           src={require('graphcool-styles/icons/fill/world.svg')}
-                          color={theme === 'black' ? $v.white40 : $v.gray40}
+                          color={theme === 'dark' ? $v.white40 : $v.gray40}
                           width={14}
                           height={14}
                         />}
                       {session.selectedViewer === 'USER' &&
                         <Icon
                           src={require('graphcool-styles/icons/fill/user.svg')}
-                          color={theme === 'black' ? $v.white40 : $v.gray40}
+                          color={theme === 'dark' ? $v.white40 : $v.gray40}
                           width={14}
                           height={14}
                         />}
@@ -246,7 +246,7 @@ export const TabBar = withTheme<
                   <Icon
                     src={require('graphcool-styles/icons/stroke/cross.svg')}
                     stroke={true}
-                    color={theme === 'black' ? $v.white40 : $v.gray40}
+                    color={theme === 'dark' ? $v.white40 : $v.gray40}
                     width={11}
                     height={10}
                     strokeWidth={8}
@@ -269,7 +269,7 @@ export const TabBar = withTheme<
                 <div className="tab plus" onClick={onNewSession}>
                   <Icon
                     src={require('graphcool-styles/icons/stroke/add.svg')}
-                    color={theme === 'black' ? $v.white20 : $v.gray20}
+                    color={theme === 'dark' ? $v.white20 : $v.gray20}
                     width={34}
                     height={34}
                     stroke={true}
@@ -280,7 +280,7 @@ export const TabBar = withTheme<
             : <div className="tab plus" onClick={onNewSession}>
                 <Icon
                   src={require('graphcool-styles/icons/stroke/add.svg')}
-                  color={theme === 'black' ? $v.white20 : $v.gray20}
+                  color={theme === 'dark' ? $v.white20 : $v.gray20}
                   width={34}
                   height={34}
                   stroke={true}
