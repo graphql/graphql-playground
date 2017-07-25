@@ -1124,10 +1124,8 @@
 }
 
 .docs-graphiql .graphiql-container .doc-type-description {
-    padding: 0 25px 38px 25px;
     background-color: rgba(0,0,0,.02);
     color: rgba(0,0,0,.5);
-    font-size: 16px;
 }
 
 .docs-graphiql .graphiql-container .show-title .doc-type-description {
