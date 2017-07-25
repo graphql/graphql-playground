@@ -26,7 +26,7 @@ const EnumTypeSchema = ({ type }: EnumTypeSchemaProps) => {
       {values
         .filter((value: any) => !value.isDeprecated)
         .map(value => <Value key={value.name} value={value} />)}
-      {deprecatedValues && <br />}
+      {deprecatedValues.length > 0 && <br />}
       {deprecatedValues.map(value =>
         <Value key={value.name} value={value} isDeprecated={true} />,
       )}

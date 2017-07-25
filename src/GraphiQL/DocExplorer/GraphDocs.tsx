@@ -223,6 +223,12 @@ class GraphDocs extends React.Component<
           if (firstElement) {
             this.props.addStack(firstElement, lastNavStack.x + 1, 0)
           }
+        } else {
+          const obj = serializeRoot(this.props.schema)
+          const element = getElementRoot(obj, 0)
+          if (element) {
+            this.props.addStack(element, 0, 0)
+          }
         }
         break
       case 'up':

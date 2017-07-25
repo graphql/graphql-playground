@@ -46,7 +46,8 @@ export const TabBar = withTheme<
             }
           }
           .root.light {
-            @p: .black50, .bgWhite90;
+            @p: .black50;
+            background-color: rgba(0, 0, 0, .01);
           }
 
           .tabs {

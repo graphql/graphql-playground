@@ -48,6 +48,7 @@ class TypeLink extends React.Component<
     return (
       this.props.type !== nextProps.type ||
       this.props.navStack[this.props.x] !== nextProps.navStack[this.props.x] ||
+      this.props.navStack.length !== nextProps.navStack.length ||
       this.props.keyMove !== nextProps.keyMove
     )
   }
