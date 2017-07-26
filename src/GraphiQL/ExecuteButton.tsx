@@ -97,8 +97,8 @@ export class ExecuteButton extends React.Component<Props, State> {
             @inherit: .br100, .flex, .itemsCenter, .justifyCenter, .pointer;
             background-color: rgb(185, 191, 196);
             border: 6px solid rgb(11, 20, 28);
-            width: 71px;
-            height: 71px;
+            width: 60px;
+            height: 60px;
           }
 
           .running {
