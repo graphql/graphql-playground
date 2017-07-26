@@ -45,6 +45,8 @@ class GraphDocs extends React.Component<
   Props & StateFromProps & DispatchFromProps,
   State
 > {
+  private refDocExplorer: any
+
   constructor(props) {
     super(props)
     this.state = {
@@ -147,6 +149,9 @@ class GraphDocs extends React.Component<
           onKeyDown={this.handleKeyDown}
           onMouseMove={this.handleMouseMove}
           tabIndex={0}
+          ref={element => {
+            this.refDocExplorer = element
+          }}
         >
           {emptySchema &&
             <ColumnDoc>
@@ -178,6 +183,9 @@ class GraphDocs extends React.Component<
   }
 
   private handleToggleDocs = () => {
+    if (!this.props.docsOpen) {
+      this.refDocExplorer.focus()
+    }
     this.props.toggleDocs()
   }
 
