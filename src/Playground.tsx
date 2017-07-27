@@ -410,8 +410,8 @@ class Playground extends React.Component<Props, State> {
                 fetcher={this.fetcher(session)}
                 showQueryTitle={false}
                 showResponseTitle={false}
-                showViewAs={!isEndpoint}
-                showSelectUser={true}
+                showViewAs={!isEndpoint && Boolean(this.props.adminAuthToken)}
+                showSelectUser={Boolean(this.props.adminAuthToken)}
                 showEndpoints={!isEndpoint}
                 showDownloadJsonButton={true}
                 showCodeGeneration={true}

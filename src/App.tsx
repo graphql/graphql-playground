@@ -66,7 +66,6 @@ class App extends React.Component<{}, State> {
           <Playground
             endpoint={endpointUrl}
             wsApiPrefix={subscriptionUrl}
-            adminAuthToken=""
             httpApiPrefix="https://api.graph.cool"
           />
         </ThemeProvider>
