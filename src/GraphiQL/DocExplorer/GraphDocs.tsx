@@ -123,6 +123,7 @@ class GraphDocs extends React.Component<
             overflow-x: auto;
             overflow-y: hidden;
             letter-spacing: 0.3px;
+            outline: none;
           }
           .doc-explorer-gradient {
             @p: .z1, .absolute, .top0, .bottom0;

@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { astFromValue, print } from 'graphql'
+import { astFromValue, print, GraphQLList, GraphQLNonNull } from 'graphql'
 
 export interface Props {
   arg: any
@@ -14,7 +14,7 @@ export default function Argument({ arg, showDefaultValue }: Props) {
       </span>
       {': '}
       <span className="type-name">
-        {arg.type.name}
+        {renderType(arg.type)}
       </span>
       {arg.defaultValue !== undefined &&
         showDefaultValue !== false &&
@@ -24,6 +24,31 @@ export default function Argument({ arg, showDefaultValue }: Props) {
             {print(astFromValue(arg.defaultValue, arg.type))}
           </span>
         </span>}
+    </span>
+  )
+}
+
+function renderType(type) {
+  if (type instanceof GraphQLNonNull) {
+    return (
+      <span>
+        {renderType(type.ofType)}
+        {'!'}
+      </span>
+    )
+  }
+  if (type instanceof GraphQLList) {
+    return (
+      <span>
+        {'['}
+        {renderType(type.ofType)}
+        {']'}
+      </span>
+    )
+  }
+  return (
+    <span>
+      {type.name}
     </span>
   )
 }

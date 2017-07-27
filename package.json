@@ -1,6 +1,6 @@
 {
   "name": "graphql-playground",
-  "version": "0.0.2",
+  "version": "0.0.5",
   "main": "./lib/Playground.js",
   "typings": "./lib/index.d.ts",
   "scripts": {
@@ -9,7 +9,7 @@
     "build": "rm -rf lib; yarn build-app; yarn build-package; yarn build-middleware;",
     "build-package": "rm -rf lib; tsc -p tsconfig.build.json --noUnusedLocals --noUnusedParameters; babel lib -d lib; cp -r ./src/assets/ ./lib/assets/; cp src/CodeGenerationPopup/CodeMirror.js ./lib/CodeGenerationPopup/CodeMirror.js; cd lib && rm -rf *.jsx;",
     "build-app": "node scripts/build.js",
-    "build-middleware": "rm -rf middleware && tsc src/middleware/index.ts --outDir middleware --lib ES6,DOM",
+    "build-middleware": "rm -rf middleware && tsc src/middleware/index.ts --outDir middleware --lib ES6,DOM --declaration",
     "test": "node scripts/test.js --env=jsdom",
     "bump": "npm version patch --no-git-tag-version && git add package.json",
     "graphql-faker": "graphql-faker ./tests/schema.faker.graphql",
