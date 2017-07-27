@@ -1,6 +1,6 @@
 {
-  "name": "graphcool-graphiql",
-  "version": "1.8.12",
+  "name": "graphql-playground",
+  "version": "0.0.1",
   "main": "./lib/Playground.js",
   "typings": "./lib/index.d.ts",
   "scripts": {

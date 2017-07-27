@@ -2,17 +2,112 @@
 # yarn lockfile v1
 
 
+"@types/accepts@*":
+  version "1.3.2"
+  resolved "https://registry.yarnpkg.com/@types/accepts/-/accepts-1.3.2.tgz#52897ad5a51f05ea2f57f8e8136085c7d1c385a5"
+
+"@types/boom@*":
+  version "4.3.5"
+  resolved "https://registry.yarnpkg.com/@types/boom/-/boom-4.3.5.tgz#9ccca31e08c989bce483bd76b2de798526c608f5"
+
+"@types/catbox@*":
+  version "7.1.2"
+  resolved "https://registry.yarnpkg.com/@types/catbox/-/catbox-7.1.2.tgz#6cf6082bdb20066a49f90bff189dd8f44839187c"
+  dependencies:
+    "@types/boom" "*"
+
+"@types/cookies@*":
+  version "0.6.1"
+  resolved "https://registry.yarnpkg.com/@types/cookies/-/cookies-0.6.1.tgz#d12cbd0f8aa6b9f0d3bfb613b958897a0b348731"
+  dependencies:
+    "@types/keygrip" "*"
+    "@types/node" "*"
+
+"@types/express-serve-static-core@*":
+  version "4.0.49"
+  resolved "https://registry.yarnpkg.com/@types/express-serve-static-core/-/express-serve-static-core-4.0.49.tgz#3438d68d26e39db934ba941f18e3862a1beeb722"
+  dependencies:
+    "@types/node" "*"
+
+"@types/express@^4.0.36":
+  version "4.0.36"
+  resolved "https://registry.yarnpkg.com/@types/express/-/express-4.0.36.tgz#14eb47de7ecb10319f0a2fb1cf971aa8680758c2"
+  dependencies:
+    "@types/express-serve-static-core" "*"
+    "@types/serve-static" "*"
+
 "@types/graphql@^0.9.1":
   version "0.9.1"
   resolved "https://registry.yarnpkg.com/@types/graphql/-/graphql-0.9.1.tgz#b04ebe84bc997cc60dbea2ed4d0d4342c737f99d"
+
+"@types/hapi@^16.1.7":
+  version "16.1.7"
+  resolved "https://registry.yarnpkg.com/@types/hapi/-/hapi-16.1.7.tgz#2e0c1833d1d9e12255cca778172f9365c6040cc3"
+  dependencies:
+    "@types/boom" "*"
+    "@types/catbox" "*"
+    "@types/joi" "*"
+    "@types/mimos" "*"
+    "@types/node" "*"
+    "@types/podium" "*"
+    "@types/shot" "*"
+
+"@types/http-assert@*":
+  version "1.2.0"
+  resolved "https://registry.yarnpkg.com/@types/http-assert/-/http-assert-1.2.0.tgz#0b82993036e86c6ff2944e033b73b57e85ccdcab"
 
 "@types/jest@^20.0.4":
   version "20.0.4"
   resolved "https://registry.yarnpkg.com/@types/jest/-/jest-20.0.4.tgz#91e2c76fbe90b3a719b5d689958f0495f005beb9"
 
+"@types/joi@*":
+  version "10.4.0"
+  resolved "https://registry.yarnpkg.com/@types/joi/-/joi-10.4.0.tgz#a4de40cdf2462c7e1c83eb47ca3e19177bcc2ae8"
+
+"@types/keygrip@*":
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/@types/keygrip/-/keygrip-1.0.1.tgz#ff540462d2fb4d0a88441ceaf27d287b01c3d878"
+
+"@types/koa-compose@*":
+  version "3.2.2"
+  resolved "https://registry.yarnpkg.com/@types/koa-compose/-/koa-compose-3.2.2.tgz#dc106e000bbf92a3ac900f756df47344887ee847"
+
+"@types/koa@^2.0.39":
+  version "2.0.39"
+  resolved "https://registry.yarnpkg.com/@types/koa/-/koa-2.0.39.tgz#45ba1249d8849b9b0ff8c1d6d2f80b0838b89ffa"
+  dependencies:
+    "@types/accepts" "*"
+    "@types/cookies" "*"
+    "@types/http-assert" "*"
+    "@types/keygrip" "*"
+    "@types/koa-compose" "*"
+    "@types/node" "*"
+
+"@types/mime-db@*":
+  version "1.27.0"
+  resolved "https://registry.yarnpkg.com/@types/mime-db/-/mime-db-1.27.0.tgz#9bc014a1fd1fdf47649c1a54c6dd7966b8284792"
+
+"@types/mime@*":
+  version "1.3.1"
+  resolved "https://registry.yarnpkg.com/@types/mime/-/mime-1.3.1.tgz#2cf42972d0931c1060c7d5fa6627fce6bd876f2f"
+
+"@types/mimos@*":
+  version "3.0.1"
+  resolved "https://registry.yarnpkg.com/@types/mimos/-/mimos-3.0.1.tgz#59d96abe1c9e487e7463fe41e8d86d76b57a441a"
+  dependencies:
+    "@types/mime-db" "*"
+
+"@types/node@*":
+  version "8.0.17"
+  resolved "https://registry.yarnpkg.com/@types/node/-/node-8.0.17.tgz#677bc8c118cfb76013febb62ede1f31d2c7222a1"
+
 "@types/node@^8.0.14":
   version "8.0.14"
   resolved "https://registry.yarnpkg.com/@types/node/-/node-8.0.14.tgz#4a19dc6bb61d16c01cbadc7b30ac23518fff176b"
+
+"@types/podium@*":
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/@types/podium/-/podium-1.0.0.tgz#bfaa2151be2b1d6109cc69f7faa9dac2cba3bb20"
 
 "@types/react-dom@^15.5.1":
   version "15.5.1"
@@ -30,6 +125,19 @@
 "@types/react@*", "@types/react@15.0.31":
   version "15.0.31"
   resolved "https://registry.yarnpkg.com/@types/react/-/react-15.0.31.tgz#21dfc5d41ee1600ff7d7b738ad21a9502aa3ecf2"
+
+"@types/serve-static@*":
+  version "1.7.31"
+  resolved "https://registry.yarnpkg.com/@types/serve-static/-/serve-static-1.7.31.tgz#15456de8d98d6b4cff31be6c6af7492ae63f521a"
+  dependencies:
+    "@types/express-serve-static-core" "*"
+    "@types/mime" "*"
+
+"@types/shot@*":
+  version "3.4.0"
+  resolved "https://registry.yarnpkg.com/@types/shot/-/shot-3.4.0.tgz#459477c5187d3ebd303660ab099e7e9e0f3b656f"
+  dependencies:
+    "@types/node" "*"
 
 abab@^1.0.3:
   version "1.0.3"
@@ -3918,6 +4026,10 @@ node-libs-browser@^0.7.0:
     url "^0.11.0"
     util "^0.10.3"
     vm-browserify "0.0.4"
+
+node-noop@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/node-noop/-/node-noop-1.0.0.tgz#47a3e7d80cffaa6458364bd22ed85cab3307be79"
 
 node-notifier@^5.0.2:
   version "5.1.2"
