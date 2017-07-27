@@ -7,3 +7,7 @@ declare module 'react' {
     global?: boolean
   }
 }
+
+interface Window {
+  GraphQLPlayground: any
+}
