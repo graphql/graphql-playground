@@ -93,6 +93,7 @@ class TypeLink extends React.Component<
           .doc-category-item.clickable:hover:not(.no-hover) {
             background-color: #2a7ed3 !important;
             color: #fff !important;
+            z-index: 1;
 
             & .field-name,
             & .type-name,
