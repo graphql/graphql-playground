@@ -222,6 +222,12 @@ class Playground extends React.Component<Props, State> {
   setWS = (session: Session) => {
     const connectionParams: any = {}
 
+    if (session.headers) {
+      session.headers.forEach(header => {
+        connectionParams[header.name] = header.value
+      })
+    }
+
     if (session.selectedViewer === 'ADMIN' && this.state.adminAuthToken) {
       connectionParams.Authorization = `Bearer ${this.state.adminAuthToken}`
     } else if (session.selectedViewer === 'USER' && session.selectedUserToken) {
@@ -414,6 +420,7 @@ class Playground extends React.Component<Props, State> {
                 query={session.query}
                 variables={session.variables}
                 operationName={session.operationName}
+                headers={session.headers}
                 onClickCodeGeneration={() => this.handleClickCodeGeneration()}
                 onChangeViewer={(viewer: Viewer) =>
                   this.handleViewerChange(session.id, viewer)}
@@ -423,6 +430,8 @@ class Playground extends React.Component<Props, State> {
                   this.handleVariableChange(session.id, variables)}
                 onEditQuery={(query: string) =>
                   this.handleQueryChange(session.id, query)}
+                onChangeHeaders={(headers: any[]) =>
+                  this.handleChangeHeaders(session.id, headers)}
                 responses={
                   this.state.response ? [this.state.response] : undefined
                 }
@@ -760,6 +769,10 @@ class Playground extends React.Component<Props, State> {
     })
   }
 
+  private handleChangeHeaders = (sessionId: string, headers: any[]) => {
+    this.setValueInSession(sessionId, 'headers', headers)
+  }
+
   private handleViewerChange = (sessionId: string, viewer: Viewer) => {
     this.setValueInSession(sessionId, 'selectedViewer', viewer, () => {
       if (viewer === 'USER') {
@@ -950,6 +963,12 @@ class Playground extends React.Component<Props, State> {
     const headers: any = {
       'Content-Type': 'application/json',
       'x-graphcool-source': 'console:playground',
+    }
+
+    if (session.headers) {
+      session.headers.forEach(header => {
+        headers[header.name] = header.value
+      })
     }
 
     if (session.selectedViewer === 'ADMIN' && this.state.adminAuthToken) {

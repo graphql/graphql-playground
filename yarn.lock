@@ -2628,6 +2628,14 @@ graphcool-styles@^0.1.31:
     react-dom "^15.3.2"
     webpack-dev-server "^1.16.2"
 
+graphcool-tmp-ui@^0.0.6:
+  version "0.0.6"
+  resolved "https://registry.yarnpkg.com/graphcool-tmp-ui/-/graphcool-tmp-ui-0.0.6.tgz#f18a235c8eb4e77e69bde6079369a2cfbaf04de1"
+  dependencies:
+    classnames "^2.2.5"
+    graphcool-styles "^0.1.31"
+    react-modal "^1.6.5"
+
 graphiql@^0.11.2:
   version "0.11.2"
   resolved "https://registry.yarnpkg.com/graphiql/-/graphiql-0.11.2.tgz#7f7864552c340ab4fe6f578ce3f7197905d429db"

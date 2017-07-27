@@ -35,6 +35,7 @@ import ResultHeader from './ResultHeader'
 import { ResultViewer } from './ResultViewer'
 import ageOfDate from './util/ageOfDate'
 import { Response } from '../Playground'
+import HttpHeaders, { Header } from './HttpHeaders'
 import SchemaExplorer from './SchemaExplorer'
 
 import GraphDocs from './DocExplorer/GraphDocs'
@@ -65,6 +66,8 @@ export interface Props {
   onEditOperationName?: (name: any) => any
   onToggleDocs?: (value: boolean) => any
   onClickCodeGeneration?: any
+  onChangeHeaders?: (headers: Header[]) => any
+  headers?: any[]
   getDefaultFieldNames?: () => any
   showViewAs?: boolean
   showSelectUser?: boolean
@@ -392,12 +395,14 @@ export class CustomGraphiQL extends React.Component<Props, State> {
           }
 
           .graphiql-button {
-            @inherit: .white50, .bgDarkBlue, .ttu, .f14, .fw6, .br2, .pointer,
-              .absolute;
-            top: -57px;
-            right: 25px;
+            @inherit: .white50, .bgDarkBlue, .ttu, .f14, .fw6, .br2, .pointer;
             padding: 5px 9px 6px 9px;
             letter-spacing: 0.53px;
+          }
+          .graphiql-button.generate-code {
+            @inherit: .absolute;
+            top: -57px;
+            right: 25px;
             z-index: 2;
           }
 
@@ -529,9 +534,13 @@ export class CustomGraphiQL extends React.Component<Props, State> {
                 readOnly={this.props.readonly}
               />
               <div className="variable-editor" style={variableStyle}>
+                <HttpHeaders
+                  headers={this.props.headers}
+                  onChange={this.props.onChangeHeaders}
+                />
                 {this.props.showCodeGeneration &&
                   <div
-                    className="graphiql-button"
+                    className="graphiql-button generate-code"
                     onClick={this.props.onClickCodeGeneration}
                   >
                     Generate Code

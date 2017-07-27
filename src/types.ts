@@ -16,6 +16,7 @@ export interface Session {
   date: Date
   selectedUserToken?: string
   subscriptionId?: string
+  headers?: any[]
 }
 
 export interface QueryTypes {
