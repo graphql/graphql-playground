@@ -6,9 +6,8 @@ import '../graphiql_light.css'
 import './index.css'
 import '../base.css'
 import 'graphcool-styles/dist/styles.css'
-
 ;(window as any).GraphQLPlayground = {
-  init(element: HTMLElement) {
-    ReactDOM.render(<App />, element)
+  init(element: HTMLElement, options) {
+    ReactDOM.render(<App {...options} />, element)
   },
 }

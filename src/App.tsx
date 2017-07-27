@@ -6,76 +6,65 @@ import ThemeProvider from './theme/ThemeProvider'
 
 const store = createStore()
 
-const testProjectId = 'asdf'
-const regex = /.*?graph\.cool\/simple\/.{1,2}\/(.{1,25})/
-
-function getParameterByName(name) {
+function getParameterByName(name: string): string {
   const url = window.location.href
   name = name.replace(/[\[\]]/g, '\\$&')
   const regexa = new RegExp('[?&]' + name + '(=([^&#]*)|&|#|$)')
   const results = regexa.exec(url)
-  if (!results) {
-    return null
-  }
-  if (!results[2]) {
+  if (!results || !results[2]) {
     return ''
   }
   return decodeURIComponent(results[2].replace(/\+/g, ' '))
 }
 
+export interface Props {
+  endpointUrl?: string
+  subscriptionUrl?: string
+}
+
 export interface State {
-  stepIndex: number
-  theme: string
+  endpointUrl?: string
+  subscriptionUrl?: string
 }
 
 class App extends React.Component<{}, State> {
-  constructor() {
-    super()
+  constructor(props) {
+    super(props)
 
     this.state = {
-      stepIndex: 0,
-      theme: 'black',
+      endpointUrl: props.endpointUrl,
+      subscriptionUrl: props.subscriptionUrl,
     }
-  }
-
-  handleChangeTheme = theme => {
-    this.setState({ theme })
   }
 
   render() {
-    const endpoint = getParameterByName('endpoint')
-    let projectId: any = testProjectId
-    if (regex.test(location.href)) {
-      const result = regex.exec(location.href)
-      if (result) {
-        projectId = result[1]
-      }
+    let { endpointUrl, subscriptionUrl } = this.state
+    // If no  endpointUrl passed tries to get one from url
+    if (!endpointUrl) {
+      endpointUrl = getParameterByName('endpoint')
     }
+    if (!subscriptionUrl) {
+      const isDev = location.href.indexOf('dev.graph.cool') > -1
+      const isLocalhost = location.href.indexOf('localhost') > -1
 
-    const isDev = location.href.indexOf('dev.graph.cool') > -1
-    const isLocalhost = location.href.indexOf('localhost') > -1
+      // tslint:disable-next-line
+      if (isLocalhost) {
+        subscriptionUrl = 'ws://localhost:8085/v1'
+      } else if (isDev) {
+        subscriptionUrl = 'wss://dev.subscriptions.graph.cool/v1'
+      } else {
+        subscriptionUrl = 'wss://subscriptions.graph.cool/v1'
+      }
 
-    let subscriptionUrl
-    // tslint:disable-next-line
-    if (isLocalhost) {
-      subscriptionUrl = 'ws://localhost:8085/v1'
-    } else if (isDev) {
-      subscriptionUrl = 'wss://dev.subscriptions.graph.cool/v1'
-    } else {
+      // TODO remove before publishing app
       subscriptionUrl = 'wss://subscriptions.graph.cool/v1'
     }
 
-    // TODO remove before publishing app
-    subscriptionUrl = 'wss://subscriptions.graph.cool/v1'
-
-    /* tslint:disable */
-    // httpApiPrefix={production ? 'https://api.graph.cool' : 'http://localhost:60000'}
-
     return (
       <Provider store={store}>
-        <ThemeProvider theme={this.state.theme}>
+        <ThemeProvider theme="dark">
           <Playground
-            endpoint={endpoint || 'https://graphql-europe.org/graphql'}
+            endpoint={endpointUrl}
             wsApiPrefix={subscriptionUrl}
             adminAuthToken=""
             httpApiPrefix="https://api.graph.cool"
