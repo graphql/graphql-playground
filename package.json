@@ -1,7 +1,21 @@
 {
   "name": "graphcool-graphiql",
   "version": "1.8.12",
-  "main": "./babelbuild/Playground.js",
+  "main": "./lib/Playground.js",
+  "typings": "lib/index.d.ts",
+  "scripts": {
+    "start": "node scripts/start.js",
+    "prepublish": "npm run build",
+    "build": "rm -rf lib; yarn build-package; babel lib -d lib; cp -r ./src/assets/ ./lib/assets/; cp src/CodeGenerationPopup/CodeMirror.js ./lib/CodeGenerationPopup/CodeMirror.js; cd lib && rm -rf *.jsx",
+    "build-package": "tsc -p tsconfig.build.json --noUnusedLocals --noUnusedParameters",
+    "build-app": "node scripts/build.js",
+    "test": "node scripts/test.js --env=jsdom",
+    "bump": "npm version patch --no-git-tag-version && git add package.json",
+    "graphql-faker": "graphql-faker ./tests/schema.faker.graphql",
+    "lint": "tslint \"src/**/*.ts{,x}\"",
+    "precommit": "lint-staged",
+    "prettier": "prettier --single-quote --no-semi --trailing-comma all --write *.{ts,tsx} 'src/**/*.{ts,tsx}'"
+  },
   "files": [
     "babelbuild",
     "base.css",
@@ -40,6 +54,7 @@
     "jest": "^20.0.4",
     "json-loader": "0.5.4",
     "lint-staged": "^4.0.2",
+    "node-noop": "^1.0.0",
     "object-assign": "4.1.0",
     "postcss-cssnext": "^2.9.0",
     "postcss-import": "^9.1.0",
@@ -100,19 +115,6 @@
     "subscriptions-transport-ws": "^0.8.1",
     "svg-loader": "^0.0.2",
     "svgo-loader": "^1.1.2"
-  },
-  "scripts": {
-    "start": "node scripts/start.js",
-    "prepublish": "npm run build",
-    "build": "rm -rf tsbuild; rm -rf babelbuild; yarn build-package; babel tsbuild -d babelbuild; cp -r ./src/assets/ ./babelbuild/assets/; cp src/CodeGenerationPopup/CodeMirror.js ./babelbuild/CodeGenerationPopup/CodeMirror.js",
-    "build-package": "tsc -p tsconfig.build.json --noUnusedLocals --noUnusedParameters && babel tsbuild -d babelbuild;",
-    "build-app": "node scripts/build.js",
-    "test": "node scripts/test.js --env=jsdom",
-    "bump": "npm version patch --no-git-tag-version && git add package.json",
-    "graphql-faker": "graphql-faker ./tests/schema.faker.graphql",
-    "lint": "tslint \"src/**/*.ts{,x}\"",
-    "precommit": "lint-staged",
-    "prettier": "prettier --single-quote --no-semi --trailing-comma all --write *.{ts,tsx} 'src/**/*.{ts,tsx}'"
   },
   "lint-staged": {
     "*.{ts,tsx}": [

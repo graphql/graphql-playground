@@ -14,5 +14,4 @@
 .env
 npm-debug.log
 .idea
-tsbuild
-babelbuild
+lib
