@@ -118,11 +118,11 @@ class HttpHeaders extends React.Component<Props, State> {
   }
 
   private handleChange = (index: number, header: Header) => {
-    const { headers } = this.props
+    let { headers } = this.props
     if (headers) {
       // If new item add it at the end of the array
       if (index === -1) {
-        headers.push(header)
+        headers = [...headers, header]
       } else {
         headers[index] = header
       }
