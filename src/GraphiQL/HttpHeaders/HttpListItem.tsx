@@ -103,6 +103,7 @@ export default class HttpListItem extends React.Component<Props, State> {
   }
 
   private handleKeyDown = e => {
+    // Handle enter press and save header
     if (keycode(e) === 'enter' && this.state.editing) {
       this.handleValidate()
     }

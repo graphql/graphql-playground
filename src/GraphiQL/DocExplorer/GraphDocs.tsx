@@ -127,6 +127,7 @@ class GraphDocs extends React.Component<
           }
           .doc-explorer-gradient {
             @p: .z1, .absolute, .top0, .bottom0;
+            pointer-events: none;
             content: "";
             width: 20px;
             left: 6px;
