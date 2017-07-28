@@ -217,6 +217,9 @@ class GraphDocs extends React.Component<
       this.props.navStack[this.props.navStack.length - 2]
     const keyPressed = keycode(e)
     switch (keyPressed) {
+      case 'esc':
+        this.props.toggleDocs(false)
+        break
       case 'left':
         if (beforeLastNavStack) {
           this.props.addStack(
