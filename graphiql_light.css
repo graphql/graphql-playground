@@ -200,7 +200,6 @@
 }
 
 .docs-graphiql .graphiql-container .query-editor .CodeMirror {
-    /*padding-top: 117px;*/
     padding-top: 16px;
     background: none;
 }

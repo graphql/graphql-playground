@@ -1,6 +1,6 @@
 {
   "name": "graphql-playground",
-  "version": "0.0.5",
+  "version": "0.0.8",
   "main": "./lib/Playground.js",
   "typings": "./lib/index.d.ts",
   "scripts": {
@@ -98,7 +98,7 @@
     "codemirror": "^5.27.4",
     "cuid": "^1.3.8",
     "graphcool-styles": "^0.1.31",
-    "graphcool-tmp-ui": "^0.0.6",
+    "graphcool-tmp-ui": "^0.0.11",
     "graphiql": "^0.11.2",
     "graphql": "^0.10.5",
     "isomorphic-fetch": "^2.2.1",
