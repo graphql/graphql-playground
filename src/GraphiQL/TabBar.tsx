@@ -72,9 +72,9 @@ export const TabBar = withTheme<
             }
           }
           .light .tab {
-            @p: .bgWhite40;
+            background-color: #eeeff0;
             &.active {
-              @p: .bgWhite60;
+              background-color: #eeeff0;
             }
           }
 
@@ -151,6 +151,11 @@ export const TabBar = withTheme<
             @p: .absolute, .pointer;
             top: 200px;
             right: 200px;
+          }
+          .border-bottom {
+            height: 8px;
+            background-color: #eeeff0;
+            width: 100%;
           }
         `}</style>
         <div className="tabs">
@@ -289,6 +294,7 @@ export const TabBar = withTheme<
                 />
               </div>}
         </div>
+        {theme === 'light' && <div className="border-bottom" />}
       </div>
     )
   },

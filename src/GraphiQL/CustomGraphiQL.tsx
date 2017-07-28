@@ -619,6 +619,8 @@ export class CustomGraphiQL extends React.Component<Props, State> {
             {!this.props.queryOnly &&
               <div className="resultWrap">
                 {this.props.isGraphcoolUrl &&
+                  this.props.showSelectUser &&
+                  this.props.showViewAs &&
                   <ResultHeader
                     showViewAs={this.props.showViewAs}
                     showSelectUser={this.props.showSelectUser}
@@ -1408,24 +1410,7 @@ CustomGraphiQL.Footer = function GraphiQLFooter(props) {
   )
 }
 
-const defaultQuery = `# Welcome to Graphcool's custom GraphiQL ✌
-#
-# GraphiQL is an in-browser IDE for writing, validating, and
-# testing GraphQL queries.
-#
-# In Graphcool's custom GraphiQL you can additionally generate
-# code examples and download the result JSON.
-#
-# Type queries into this side of the screen, and you will
-# see intelligent typeaheads aware of the current GraphQL type schema and
-# live syntax and validation errors highlighted within the text.
-#
-# To bring up the auto-complete at any point, just press Ctrl-Space.
-#
-# Press the run button above, or Cmd-Enter to execute the query, and the result
-# will appear in the pane to the right.
-
-`
+const defaultQuery = '# Try to write your query here'
 
 // Duck-type promise detection.
 function isPromise(value) {

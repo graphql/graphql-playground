@@ -62,7 +62,7 @@ class App extends React.Component<{}, State> {
 
     return (
       <Provider store={store}>
-        <ThemeProvider theme="dark">
+        <ThemeProvider theme="light">
           <Playground
             endpoint={endpointUrl}
             wsApiPrefix={subscriptionUrl}
