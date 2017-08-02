@@ -17,4 +17,4 @@ example/yarn.lock
 npm-debug.log
 .idea
 lib
-middleware
+/middleware
