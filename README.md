@@ -114,7 +114,7 @@ import { koa as playgroundMiddleware } from 'graphql-playground/middleware';
 const app = new Koa();
 const router = new KoaRouter();
 
-router.all('/voyager', playgroundMiddleware({
+router.all('/playground', playgroundMiddleware({
   endpointUrl: '/graphql'
 }));
 
