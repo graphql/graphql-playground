@@ -1,0 +1,11 @@
+{
+  "presets": [
+    "react",
+    "latest"
+  ],
+  "plugins": [
+    "styled-jsx-postcss/babel",
+    "transform-runtime",
+    "transform-async-to-generator"
+  ]
+}

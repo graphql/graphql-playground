@@ -1,0 +1,28 @@
+{
+  "compilerOptions": {
+    "removeComments": true,
+    "module": "commonjs",
+    "jsx": "preserve",
+    "sourceMap": true,
+    "target": "es2015",
+    "moduleResolution": "node",
+    "allowJs": true,
+    "noImplicitReturns": true,
+    "noImplicitThis": true,
+    "lib": ["es2015", "dom"],
+    "outDir": "lib",
+    "baseUrl": "./",
+    "paths": {
+      "*": [ "node_modules/@types/*", "*"]
+    }
+  },
+  "files": [
+    "src/main.tsx"
+  ],
+  "exclude": [
+    "node_modules"
+  ],
+  "include": [
+    "./custom.d.ts"
+  ]
+}

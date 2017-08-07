@@ -1,0 +1,120 @@
+{
+  "private": true,
+  "name": "playground",
+  "description": "Playground app",
+  "version": "0.0.1",
+  "author": {
+    "name": "Graphcool",
+    "email": "contact@graph.cool",
+    "url": "graph.cool"
+  },
+  "main": "main.js",
+  "scripts": {
+    "build": "rm -rf ./dist && NODE_ENV=production GRAPHQL_ENDPOINT=$BACKEND_ADDR/system webpack --config webpack.config.build.js && cp -r static/* dist",
+    "build-electron": "rm -rf ./build-electron && electron-builder",
+    "library": "rm -rf .happypack && NODE_ENV=production webpack --config webpack.library.js -p",
+    "lint": "tslint \"src/**/*.ts{,x}\" && lint-staged",
+    "start": "concurrently 'yarn react-start' 'wait-on http://localhost:4040/ && yarn electron-start'",
+    "react-start": "webpack-dev-server --hot --profile --history-api-fallback --host 0.0.0.0 --port 4040",
+    "electron-start": "electron main",
+    "stats": "NODE_ENV=production webpack --config webpack.library.js  --profile --json > stats.json",
+    "test": "npm run lint",
+    "prettier": "prettier --single-quote --no-semi --trailing-comma all --write '*.{ts,tsx}' 'src/**/*.{ts,tsx}'"
+  },
+  "lint-staged": {
+    "*.{ts,tsx}": [
+      "prettier --single-quote --no-semi --trailing-comma all --write",
+      "tslint",
+      "git add"
+    ]
+  },
+  "pre-push": [
+    "test-quick"
+  ],
+  "build": {
+    "appId": "cool.graph.playground",
+    "mac": {
+      "category": "public.app-category.developer-tools",
+      "icon": "static/icons/icon.icns"
+    },
+    "files": [
+      "main.js",
+      "dist/**/*",
+      "node_modules"
+    ],
+    "directories": {
+      "output": "build-electron"
+    }
+  },
+  "dependencies": {
+    "classnames": "^2.2.5",
+    "date-fns": "^1.28.5",
+    "electron-is-dev": "^0.3.0",
+    "graphcool-styles": "^0.1.31",
+    "graphcool-tmp-ui": "^0.0.11",
+    "graphql-config": "^1.0.0",
+    "graphql-playground": "^0.0.8",
+    "lodash": "^4.17.4",
+    "react": "^15.6.1",
+    "react-dom": "^15.6.1",
+    "react-redux": "^5.0.5",
+    "redux": "^3.7.2",
+    "redux-localstorage": "rc",
+    "redux-localstorage-filter": "^0.1.1",
+    "styled-jsx": "0.5.2",
+    "styled-jsx-postcss": "git+https://github.com/timsuchanek/styled-jsx-postcss#build3",
+    "validator": "^8.0.0"
+  },
+  "devDependencies": {
+    "@types/classnames": "^2.2.0",
+    "@types/node": "^8.0.19",
+    "@types/react": "^15.6.0",
+    "@types/react-addons-test-utils": "^0.14.19",
+    "@types/react-dom": "^15.5.1",
+    "@types/react-redux": "^4.4.47",
+    "awesome-typescript-loader": "^3.2.2",
+    "babel-cli": "^6.11.4",
+    "babel-loader": "^6.2.4",
+    "babel-plugin-transform-runtime": "^6.9.0",
+    "babel-preset-latest": "^6.24.1",
+    "babel-preset-react": "^6.11.1",
+    "babel-preset-react-hmre": "^1.1.1",
+    "babel-runtime": "^6.11.6",
+    "babili-webpack-plugin": "^0.1.2",
+    "concurrently": "^3.5.0",
+    "css-loader": "^0.23.1",
+    "electron": "^1.6.11",
+    "electron-builder": "^19.18.1",
+    "electron-devtools-installer": "^2.2.0",
+    "extract-text-webpack-plugin": "^2.0.0-beta.3",
+    "file-loader": "^0.11.2",
+    "fork-ts-checker-webpack-plugin": "^0.1.5",
+    "happypack": "^3.1.0",
+    "html-webpack-plugin": "^2.30.1",
+    "identity-obj-proxy": "^3.0.0",
+    "json-loader": "^0.5.7",
+    "lint-staged": "^4.0.2",
+    "node-noop": "^1.0.0",
+    "postcss-inherit": "git+https://github.com/timsuchanek/postcss-inherit#build3",
+    "postcss-loader": "^0.9.1",
+    "postcss-simple-vars": "^3.0.0",
+    "prettier": "^1.5.3",
+    "raw-loader": "^0.5.1",
+    "react-addons-test-utils": "^15.3.2",
+    "react-test-renderer": "^15.3.2",
+    "redux-mock-store": "^1.2.1",
+    "style-loader": "^0.18.2",
+    "svgo-loader": "^1.1.0",
+    "ts-loader": "^2.3.2",
+    "tslint": "^5.5.0",
+    "tslint-graphcool-frontend": "^0.0.3",
+    "tslint-loader": "^3.0.0",
+    "typescript": "^2.4.2",
+    "url-loader": "^0.5.9",
+    "wait-on": "^2.0.2",
+    "webpack": "^3.4.1",
+    "webpack-bundle-analyzer": "^2.8.3",
+    "webpack-dev-server": "^2.6.1",
+    "webpack-uglify-parallel": "^0.1.3"
+  }
+}

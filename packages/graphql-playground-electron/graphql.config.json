@@ -1,0 +1,9 @@
+{
+  "schema": {
+    "request": {
+      "url" : "https://dev.api.graph.cool/system",
+      "method" : "POST",
+      "postIntrospectionQuery" : true
+    }
+  }
+}

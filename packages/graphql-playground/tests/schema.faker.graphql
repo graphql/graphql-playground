@@ -1,0 +1,67 @@
+type Company {
+  name: String @fake(type:companyName)
+  industry: String @examples(values: ["IT", "Manufacturing", "Medicine", "Media"])
+  employees: [Employee!]
+}
+
+# Employee type
+type Employee {
+  firstName: String @fake(type: firstName, locale:en_CA)
+  lastName: String @fake(type: lastName, locale:en_CA)
+  address: String @fake(type:streetAddress, options: { useFullAddress: true })
+  subordinates: [Employee!]!
+  company: Company
+}
+
+interface Node {
+  id: ID!
+}
+
+interface Character {
+  id: ID!
+  name: String!
+}
+
+type Human implements Character, Node {
+  id: ID!
+  name: String!
+  totalCredits: Int
+}
+
+union UNIONMASTER = Employee | User | Company
+
+enum Role {
+  # Adimn role
+  ADMIN
+  USER @deprecated(reason: "not cool")
+  # Jedi
+  JEDI
+  NO_DESCRIPTION
+  DEP_NO_REASON @deprecated
+}
+
+type User {
+  # User role lorem ipsum
+  role: Role
+  union: UNIONMASTER
+  dep: String @deprecated(reason: "hey")
+  hey: String!
+  id: ID
+}
+
+type Query {
+  # get first user
+  user(
+    # Hey i am the id
+    id: ID
+  ): User!
+  human: Human
+  employee(id: ID, name: String, lorem: String, Ipsum: Int): Employee
+  company(id: ID): Company
+  allCompanies: [Company!]
+}
+
+type Mutation {
+  user: User
+}
+

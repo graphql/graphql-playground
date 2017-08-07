@@ -1,0 +1,8 @@
+{
+  "extends": [
+    "tslint-graphcool-frontend"
+  ],
+  "rules": {
+    "jsx-no-lambda": false
+  }
+}
