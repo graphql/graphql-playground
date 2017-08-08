@@ -180,18 +180,6 @@ export default class App extends React.Component<{}, State> {
             @p: .br2, .black90, .pointer, .pa10, .fw6, .flex, .itemsCenter,
               .ml20;
           }
-          .wrapper-toggle-theme {
-            position: absolute;
-            right: 20px;
-            top: 17px;
-            z-index: 5;
-          }
-          .wrapper-toggle-theme .tooltip-text {
-            @p: .mr10;
-          }
-          .wrapper-toggle-theme .icon {
-            @p: .pointer, .relative;
-          }
         `}</style>
         <Provider store={store}>
           <ThemeProvider theme={theme}>

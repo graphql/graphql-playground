@@ -7,6 +7,7 @@ import { introspectionQuery, defaultQuery } from '../constants'
 import { Session } from '../types'
 import * as cuid from 'cuid'
 import * as Immutable from 'seamless-immutable'
+import ThemeProvider from './Theme/ThemeProvider'
 import PlaygroundStorage from './PlaygroundStorage'
 import getQueryTypes from './Playground/util/getQueryTypes'
 import debounce from 'graphiql/dist/utility/debounce'
@@ -27,7 +28,7 @@ import {
   onboardingQuery1,
   onboardingQuery1Check,
 } from '../data'
-import withTheme from './Theme/withTheme'
+import ThemeSwitch from './ThemeSwitch'
 
 export type Theme = 'dark' | 'light'
 export type Viewer = 'ADMIN' | 'EVERYONE' | 'USER'
@@ -37,7 +38,6 @@ export interface Response {
 }
 
 export interface Props {
-  theme?: Theme
   endpoint: string
   subscriptionsEndpoint?: string
   projectId?: string
@@ -67,6 +67,7 @@ export interface State {
   selectUserSessionId?: string
   codeGenerationPopupOpen: boolean
   disableQueryHeader: boolean
+  theme: Theme
 }
 
 export interface CursorPosition {
@@ -160,6 +161,7 @@ class Playground extends React.Component<Props, State> {
       selectUserSessionId: undefined,
       codeGenerationPopupOpen: false,
       disableQueryHeader: false,
+      theme: 'light',
     }
 
     if (typeof window === 'object') {
@@ -344,8 +346,8 @@ class Playground extends React.Component<Props, State> {
     })
   }
   render() {
-    const { sessions, selectedSessionIndex } = this.state
-    const { isEndpoint, theme } = this.props
+    const { sessions, selectedSessionIndex, theme } = this.state
+    const { isEndpoint } = this.props
     // {
     //   'blur': this.state.historyOpen,
     // },
@@ -358,135 +360,140 @@ class Playground extends React.Component<Props, State> {
     const selectedEndpointUrl = isEndpoint
       ? location.href
       : this.getSimpleEndpoint()
-    // const canSelectUsers = this.state.userFields.length > 0
     const isGraphcoolUrl = this.isGraphcoolUrl(selectedEndpointUrl)
     return (
-      <div className={cx('root')}>
-        <style jsx={true}>{`
-          .root {
-            @p: .h100, .flex, .flexColumn;
-          }
+      <ThemeProvider theme={this.state.theme}>
+        <div className={cx('playground')}>
+          <style jsx={true}>{`
+            .playground {
+              @p: .h100, .flex, .flexColumn;
+            }
 
-          .blur {
-            filter: blur(5px);
-          }
+            .blur {
+              filter: blur(5px);
+            }
 
-          .graphiqls-container {
-            @p: .relative, .overflowHidden;
-            height: calc(100vh - 57px);
-          }
+            .graphiqls-container {
+              @p: .relative, .overflowHidden;
+              height: calc(100vh - 57px);
+            }
 
-          .graphiql-wrapper {
-            @p: .w100, .h100, .relative;
-          }
-        `}</style>
-        <TabBar
-          sessions={sessions}
-          selectedSessionIndex={selectedSessionIndex}
-          onNewSession={() => this.handleNewSession(false)}
-          onCloseSession={this.handleCloseSession}
-          onOpenHistory={this.handleOpenHistory}
-          onSelectSession={this.handleSelectSession}
-          onboardingStep={this.props.onboardingStep}
-          nextStep={this.props.nextStep}
-          tether={this.props.tether}
-        />
-        <div
-          className={cx('graphiqls-container', {
-            'docs-graphiql': theme === 'light',
-          })}
-        >
-          {sessions.map((session, index) =>
-            <div
-              key={session.id}
-              className={cx('graphiql-wrapper', {
-                active: index === selectedSessionIndex,
-              })}
-              style={{
-                top: `-${100 * selectedSessionIndex}%`,
-              }}
-            >
-              <GraphQLEditor
+            .graphiql-wrapper {
+              @p: .w100, .h100, .relative;
+            }
+          `}</style>
+          <TabBar
+            sessions={sessions}
+            selectedSessionIndex={selectedSessionIndex}
+            onNewSession={() => this.handleNewSession(false)}
+            onCloseSession={this.handleCloseSession}
+            onOpenHistory={this.handleOpenHistory}
+            onSelectSession={this.handleSelectSession}
+            onboardingStep={this.props.onboardingStep}
+            nextStep={this.props.nextStep}
+            tether={this.props.tether}
+          />
+          <div
+            className={cx('graphiqls-container', {
+              'docs-graphiql': theme === 'light',
+            })}
+          >
+            {sessions.map((session, index) =>
+              <div
                 key={session.id}
-                isGraphcoolUrl={isGraphcoolUrl}
-                schema={this.state.schemaCache}
-                fetcher={this.fetcher(session)}
-                showQueryTitle={false}
-                showResponseTitle={false}
-                showViewAs={!isEndpoint && Boolean(this.props.adminAuthToken)}
-                showSelectUser={Boolean(this.props.adminAuthToken)}
-                showEndpoints={!isEndpoint}
-                showDownloadJsonButton={true}
-                showCodeGeneration={true}
-                selectedViewer={session.selectedViewer}
-                storage={this.storage.getSessionStorage(session.id)}
-                query={session.query}
-                variables={session.variables}
-                operationName={session.operationName}
-                headers={session.headers}
-                onClickCodeGeneration={() => this.handleClickCodeGeneration()}
-                onChangeViewer={(viewer: Viewer) =>
-                  this.handleViewerChange(session.id, viewer)}
-                onEditOperationName={(name: string) =>
-                  this.handleOperationNameChange(session.id, name)}
-                onEditVariables={(variables: string) =>
-                  this.handleVariableChange(session.id, variables)}
-                onEditQuery={(query: string) =>
-                  this.handleQueryChange(session.id, query)}
-                onChangeHeaders={(headers: any[]) =>
-                  this.handleChangeHeaders(session.id, headers)}
-                responses={
-                  this.state.response ? [this.state.response] : undefined
-                }
-                disableQueryHeader={this.state.disableQueryHeader}
-                disableResize={true}
-                onboardingStep={
-                  index === selectedSessionIndex
-                    ? this.props.onboardingStep
-                    : undefined
-                }
-                tether={this.props.tether}
-                nextStep={this.props.nextStep}
-                ref={ref => (this.graphiqlComponents[index] = ref)}
-                autofillMutation={this.autofillMutation}
-                rerenderQuery={
-                  this.props.onboardingStep ===
-                    'STEP3_ENTER_MUTATION1_VALUES' ||
-                  this.props.onboardingStep === 'STEP3_ENTER_MUTATION2_VALUE'
-                }
-                disableAnimation={true}
-              />
-            </div>,
-          )}
+                className={cx('graphiql-wrapper', {
+                  active: index === selectedSessionIndex,
+                })}
+                style={{
+                  top: `-${100 * selectedSessionIndex}%`,
+                }}
+              >
+                <GraphQLEditor
+                  key={session.id}
+                  isGraphcoolUrl={isGraphcoolUrl}
+                  schema={this.state.schemaCache}
+                  fetcher={this.fetcher(session)}
+                  showQueryTitle={false}
+                  showResponseTitle={false}
+                  showViewAs={!isEndpoint && Boolean(this.props.adminAuthToken)}
+                  showSelectUser={Boolean(this.props.adminAuthToken)}
+                  showEndpoints={!isEndpoint}
+                  showDownloadJsonButton={true}
+                  showCodeGeneration={true}
+                  selectedViewer={session.selectedViewer}
+                  storage={this.storage.getSessionStorage(session.id)}
+                  query={session.query}
+                  variables={session.variables}
+                  operationName={session.operationName}
+                  headers={session.headers}
+                  onClickCodeGeneration={() => this.handleClickCodeGeneration()}
+                  onChangeViewer={(viewer: Viewer) =>
+                    this.handleViewerChange(session.id, viewer)}
+                  onEditOperationName={(name: string) =>
+                    this.handleOperationNameChange(session.id, name)}
+                  onEditVariables={(variables: string) =>
+                    this.handleVariableChange(session.id, variables)}
+                  onEditQuery={(query: string) =>
+                    this.handleQueryChange(session.id, query)}
+                  onChangeHeaders={(headers: any[]) =>
+                    this.handleChangeHeaders(session.id, headers)}
+                  responses={
+                    this.state.response ? [this.state.response] : undefined
+                  }
+                  disableQueryHeader={this.state.disableQueryHeader}
+                  disableResize={true}
+                  onboardingStep={
+                    index === selectedSessionIndex
+                      ? this.props.onboardingStep
+                      : undefined
+                  }
+                  tether={this.props.tether}
+                  nextStep={this.props.nextStep}
+                  ref={ref => (this.graphiqlComponents[index] = ref)}
+                  autofillMutation={this.autofillMutation}
+                  rerenderQuery={
+                    this.props.onboardingStep ===
+                      'STEP3_ENTER_MUTATION1_VALUES' ||
+                    this.props.onboardingStep === 'STEP3_ENTER_MUTATION2_VALUE'
+                  }
+                  disableAnimation={true}
+                />
+              </div>,
+            )}
+          </div>
+          <GraphDocs schema={this.state.schemaCache} />
+          {this.state.historyOpen &&
+            <HistoryPopup
+              isOpen={this.state.historyOpen}
+              onRequestClose={this.handleCloseHistory}
+              historyItems={this.state.history}
+              onItemStarToggled={this.handleItemStarToggled}
+              fetcherCreater={this.fetcher}
+              schema={this.state.schemaCache}
+              onCreateSession={this.handleCreateSession}
+            />}
+          {this.props.adminAuthToken &&
+            <SelectUserPopup
+              isOpen={this.state.selectUserOpen}
+              onRequestClose={this.handleCloseSelectUser}
+              adminAuthToken={this.props.adminAuthToken}
+              userFields={this.state.userFields}
+              onSelectUser={this.handleUserSelection}
+              endpointUrl={this.getSimpleEndpoint()}
+            />}
+          {this.state.codeGenerationPopupOpen &&
+            <CodeGenerationPopup
+              endpointUrl={selectedEndpointUrl}
+              isOpen={this.state.codeGenerationPopupOpen}
+              onRequestClose={this.handleCloseCodeGeneration}
+              query={selectedSession.query}
+            />}
         </div>
-        <GraphDocs schema={this.state.schemaCache} />
-        {this.state.historyOpen &&
-          <HistoryPopup
-            isOpen={this.state.historyOpen}
-            onRequestClose={this.handleCloseHistory}
-            historyItems={this.state.history}
-            onItemStarToggled={this.handleItemStarToggled}
-            fetcherCreater={this.fetcher}
-            schema={this.state.schemaCache}
-            onCreateSession={this.handleCreateSession}
-          />}
-        {this.props.adminAuthToken &&
-          <SelectUserPopup
-            isOpen={this.state.selectUserOpen}
-            onRequestClose={this.handleCloseSelectUser}
-            adminAuthToken={this.props.adminAuthToken}
-            userFields={this.state.userFields}
-            onSelectUser={this.handleUserSelection}
-            endpointUrl={this.getSimpleEndpoint()}
-          />}
-        {this.state.codeGenerationPopupOpen &&
-          <CodeGenerationPopup
-            endpointUrl={selectedEndpointUrl}
-            isOpen={this.state.codeGenerationPopupOpen}
-            onRequestClose={this.handleCloseCodeGeneration}
-            query={selectedSession.query}
-          />}
-      </div>
+        <ThemeSwitch
+          onToggleTheme={this.toggleTheme}
+          theme={this.state.theme}
+        />
+      </ThemeProvider>
     )
   }
 
@@ -500,6 +507,13 @@ class Playground extends React.Component<Props, State> {
     if (typeof this.props.nextStep === 'function') {
       this.props.nextStep()
     }
+  }
+
+  private toggleTheme = () => {
+    this.setState(state => {
+      const theme = state.theme === 'dark' ? 'light' : 'dark'
+      return { ...state, theme }
+    })
   }
 
   private handleClickCodeGeneration = () => {
@@ -1006,4 +1020,4 @@ class Playground extends React.Component<Props, State> {
   }
 }
 
-export default withTheme<Props>(Playground)
+export default Playground
