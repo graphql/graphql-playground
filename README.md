@@ -1,6 +1,7 @@
 # GraphQL Playground [![npm version](https://badge.fury.io/js/graphql-playground.svg)](https://badge.fury.io/js/graphql-playground)
 GraphQL IDE including interactive Docs & Subscriptions (use as Browser/Native App). A friendly fork of GraphiQL.
 
+
 ## Features
 
 * Syntax highlighting
