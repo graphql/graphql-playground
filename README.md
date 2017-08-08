@@ -46,7 +46,7 @@ ReactDOM.render(<Playground fetcher={graphQLFetcher} />, document.body);
 ```
 
 ## Middleware
-Graphql Voyager has middleware for the next frameworks:
+GraphQL Playground has middleware for the next frameworks:
 
 ### Express
 
@@ -74,8 +74,8 @@ app.listen(3000);
 Hapi middleware supports the following properties:
 
 + `options`
-  + `path` [`string`] - the Voyager middleware url
-  + `voyagerOptions`
+  + `path` [`string`] - the Playground middleware url
+  + `playgroundOptions`
       + `endpointUrl` [`string`] - the GraphQL endpoint url.
 
 #### Usage
