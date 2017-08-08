@@ -31,7 +31,9 @@ export default function historyReducer(
         newHistory = [...state.history, history]
       }
       // Sort by date
-      newHistory.sort((a, b) => new Date(a.lastOpened) < new Date(b.lastOpened))
+      newHistory.sort(
+        (a, b) => (new Date(a.lastOpened) < new Date(b.lastOpened) ? -1 : 1),
+      )
       return {
         ...state,
         history: newHistory,

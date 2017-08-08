@@ -12,17 +12,18 @@
     "lib": ["es2015", "dom"],
     "outDir": "lib",
     "baseUrl": "./",
-    "paths": {
-      "*": [ "node_modules/@types/*", "*"]
-    }
+    "skipDefaultLibCheck": true,
+    "skipLibCheck": true
   },
-  "files": [
-    "src/main.tsx"
-  ],
   "exclude": [
     "node_modules"
   ],
   "include": [
-    "./custom.d.ts"
+    "typings/custom.d.ts",
+    "typings/styled-jsx.d.ts"
+  ],
+  "files": [
+    "src/main.ts",
+    "src/root.tsx"
   ]
 }
