@@ -1,16 +1,16 @@
-const { remote } = require('electron')
-const dev = require('electron-is-dev')
-const path = require('path')
+import { remote } from 'electron'
+import * as dev from 'electron-is-dev'
+import * as path from 'path'
 
-const newWindowConfig = {
+export const newWindowConfig: Electron.BrowserWindowConstructorOptions = {
   width: 1200,
   height: 800,
-  titleBarStyle: 'hiddenInset',
+  titleBarStyle: 'hidden-inset',
   icon: path.join(__dirname, 'dist/assets/icons/png/64x64.png'),
   backgroundColor: '#0F202D',
 }
 
-function createNewWindow() {
+export function createNewWindow() {
   const win = new remote.BrowserWindow(newWindowConfig)
   const url = dev
     ? 'http://localhost:4040'
@@ -18,5 +18,3 @@ function createNewWindow() {
 
   win.loadURL(url)
 }
-
-module.exports = { newWindowConfig, createNewWindow }

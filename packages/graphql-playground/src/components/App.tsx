@@ -2,7 +2,6 @@ import * as React from 'react'
 import { Provider } from 'react-redux'
 import createStore from '../createStore'
 import Playground from './Playground'
-import ThemeProvider from './Theme/ThemeProvider'
 
 const store = createStore()
 
@@ -68,14 +67,12 @@ class App extends React.Component<{}, State> {
 
     return (
       <Provider store={store}>
-        <ThemeProvider theme="light">
-          <Playground
-            endpoint={endpointUrl}
-            subscriptionsEndpoint={subscriptionEndpoint}
-            wsApiPrefix={subscriptionPrefix}
-            httpApiPrefix="https://api.graph.cool"
-          />
-        </ThemeProvider>
+        <Playground
+          endpoint={endpointUrl}
+          subscriptionsEndpoint={subscriptionEndpoint}
+          wsApiPrefix={subscriptionPrefix}
+          httpApiPrefix="https://api.graph.cool"
+        />
       </Provider>
     )
   }

@@ -3,8 +3,8 @@ import { remote } from 'electron'
 import { Provider } from 'react-redux'
 import { Icon, $v } from 'graphcool-styles'
 import * as cx from 'classnames'
-import Playground from 'graphql-playground/lib/Playground'
-import ThemeProvider from 'graphql-playground/lib/theme/ThemeProvider'
+import Playground from 'graphql-playground/lib/components/Playground'
+import ThemeProvider from 'graphql-playground/lib/components/theme/ThemeProvider'
 import ToggleButton from 'graphcool-tmp-ui/lib/ToggleButton'
 import Tooltip from 'graphcool-tmp-ui/lib/Tooltip'
 import {
@@ -30,7 +30,7 @@ interface State {
   projects?: any[]
 }
 
-export default class App extends React.Component<{}, State> {
+export default class ElectronApp extends React.Component<{}, State> {
   state: State = {
     openInitialView: true,
     openTooltipTheme: false,
@@ -61,7 +61,7 @@ export default class App extends React.Component<{}, State> {
         const project = projects[key]
         const endpoints = project.endpointsExtension.getRawEndpointsMap()
         const endpointsState = Object.keys(endpoints).map(a => {
-          const endpoint = endpoints[a]
+          const endpoint: any = endpoints[a]
           endpoint.name = a
           return endpoint
         })
@@ -179,18 +179,6 @@ export default class App extends React.Component<{}, State> {
           .sidenav-footer .button {
             @p: .br2, .black90, .pointer, .pa10, .fw6, .flex, .itemsCenter,
               .ml20;
-          }
-          .wrapper-toggle-theme {
-            position: absolute;
-            right: 20px;
-            top: 17px;
-            z-index: 5;
-          }
-          .wrapper-toggle-theme .tooltip-text {
-            @p: .mr10;
-          }
-          .wrapper-toggle-theme .icon {
-            @p: .pointer, .relative;
           }
         `}</style>
         <Provider store={store}>

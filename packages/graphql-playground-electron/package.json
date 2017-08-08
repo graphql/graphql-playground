@@ -16,10 +16,11 @@
     "lint": "tslint \"src/**/*.ts{,x}\" && lint-staged",
     "start": "concurrently 'yarn react-start' 'wait-on http://localhost:4040/ && yarn electron-start'",
     "react-start": "webpack-dev-server --hot --profile --history-api-fallback --host 0.0.0.0 --port 4040",
-    "electron-start": "electron main",
+    "compile": "rm -rf lib; tsc",
+    "electron-start": "electron lib/src/main",
     "stats": "NODE_ENV=production webpack --config webpack.library.js  --profile --json > stats.json",
     "test": "npm run lint",
-    "prettier": "prettier --single-quote --no-semi --trailing-comma all --write '*.{ts,tsx}' 'src/**/*.{ts,tsx}'"
+    "prettier": "prettier --single-quote --no-semi --trailing-comma all --write '*.{js,ts,tsx}' 'src/**/*.{js,ts,tsx}'"
   },
   "lint-staged": {
     "*.{ts,tsx}": [
@@ -68,9 +69,9 @@
   "devDependencies": {
     "@types/classnames": "^2.2.0",
     "@types/node": "^8.0.19",
-    "@types/react": "^15.6.0",
+    "@types/react": "15.0.31",
     "@types/react-addons-test-utils": "^0.14.19",
-    "@types/react-dom": "^15.5.1",
+    "@types/react-dom": "15.5.1",
     "@types/react-redux": "^4.4.47",
     "awesome-typescript-loader": "^3.2.2",
     "babel-cli": "^6.11.4",
