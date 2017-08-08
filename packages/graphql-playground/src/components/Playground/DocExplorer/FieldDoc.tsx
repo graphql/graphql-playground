@@ -93,7 +93,7 @@ export default class FieldDoc extends React.Component<Props, State> {
         </div>
         <MarkdownContent
           className="doc-type-description"
-          markdown={field.description || 'No Description'}
+          markdown={field.description || ''}
         />
 
         <div className="doc-category-title">
@@ -101,7 +101,7 @@ export default class FieldDoc extends React.Component<Props, State> {
         </div>
         <MarkdownContent
           className="doc-description"
-          markdown={type.description || 'No Description'}
+          markdown={type.description || ''}
         />
 
         {type instanceof GraphQLScalarType && <ScalarTypeSchema type={type} />}
