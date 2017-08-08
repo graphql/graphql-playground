@@ -321,7 +321,9 @@ class GraphDocs extends React.Component<
 
       const app = ReactDOM.findDOMNode(this)
       const cursorPos = moveEvent.clientX - getLeft(app) - offset
-      const docsSize = app.clientWidth - cursorPos
+      const newSize = app.clientWidth - cursorPos
+      const maxSize = window.innerWidth - 50
+      const docsSize = maxSize < newSize ? maxSize : newSize
 
       if (docsSize < 100) {
         this.props.toggleDocs(false)
