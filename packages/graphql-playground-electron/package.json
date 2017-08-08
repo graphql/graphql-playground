@@ -14,7 +14,7 @@
     "build-electron": "rm -rf ./build-electron && electron-builder",
     "library": "rm -rf .happypack && NODE_ENV=production webpack --config webpack.library.js -p",
     "lint": "tslint \"src/**/*.ts{,x}\" && lint-staged",
-    "start": "concurrently 'yarn react-start' 'wait-on http://localhost:4040/ && yarn electron-start'",
+    "start": "yarn run compile; concurrently 'yarn react-start' 'wait-on http://localhost:4040/ && yarn electron-start'",
     "react-start": "webpack-dev-server --hot --profile --history-api-fallback --host 0.0.0.0 --port 4040",
     "compile": "rm -rf lib; tsc",
     "electron-start": "electron lib/src/main",
