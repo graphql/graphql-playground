@@ -4,7 +4,7 @@
     "module": "commonjs",
     "jsx": "preserve",
     "sourceMap": true,
-    "target": "es2015",
+    "target": "es5",
     "moduleResolution": "node",
     "allowJs": true,
     "noImplicitReturns": true,
@@ -23,7 +23,7 @@
     "typings/styled-jsx.d.ts"
   ],
   "files": [
-    "src/main.ts",
-    "src/root.tsx"
+    "src/electron_main.ts",
+    "src/main.tsx"
   ]
 }

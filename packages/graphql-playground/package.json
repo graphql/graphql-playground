@@ -1,6 +1,6 @@
 {
   "name": "graphql-playground",
-  "version": "0.0.8",
+  "version": "0.1.0",
   "main": "./lib/Playground.js",
   "typings": "./lib/index.d.ts",
   "scripts": {
@@ -8,7 +8,7 @@
     "prepublish": "yarn build",
     "copy-styles": "cat src/styles/*.css > playground.css",
     "build": "rm -rf lib; yarn build-app; yarn build-package; yarn build-middleware; yarn copy-styles",
-    "build-package": "rm -rf lib; tsc -p tsconfig.build.json --noUnusedLocals --noUnusedParameters; babel lib -d lib; cp -r ./src/assets/ ./lib/assets/; cp src/CodeGenerationPopup/CodeMirror.js ./lib/CodeGenerationPopup/CodeMirror.js; cd lib && rm -rf *.jsx;",
+    "build-package": "rm -rf lib; tsc -p tsconfig.build.json --noUnusedLocals --noUnusedParameters; babel lib -d lib; cp -r ./src/assets/ ./lib/assets/; cd lib && rm -rf *.jsx;",
     "build-app": "node scripts/build.js",
     "build-middleware": "rm -rf middleware && tsc src/middleware/index.ts --outDir middleware --lib ES6,DOM --declaration",
     "test": "node scripts/test.js --env=jsdom",
@@ -21,7 +21,8 @@
   "files": [
     "build",
     "lib",
-    "middleware"
+    "middleware",
+    "playground.css"
   ],
   "devDependencies": {
     "@types/express": "^4.0.36",

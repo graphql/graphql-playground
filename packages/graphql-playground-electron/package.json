@@ -16,10 +16,11 @@
     "lint": "tslint \"src/**/*.ts{,x}\" && lint-staged",
     "start": "yarn run compile; concurrently 'yarn react-start' 'wait-on http://localhost:4040/ && yarn electron-start'",
     "react-start": "webpack-dev-server --hot --profile --history-api-fallback --host 0.0.0.0 --port 4040",
-    "compile": "rm -rf lib; tsc",
-    "electron-start": "electron lib/src/main",
+    "compile": "rm -rf lib; tsc --target es5",
+    "electron-start": "electron lib/electron_main",
     "stats": "NODE_ENV=production webpack --config webpack.library.js  --profile --json > stats.json",
     "test": "npm run lint",
+    "precommit": "lint-staged",
     "prettier": "prettier --single-quote --no-semi --trailing-comma all --write '*.{js,ts,tsx}' 'src/**/*.{js,ts,tsx}'"
   },
   "lint-staged": {
@@ -48,13 +49,14 @@
     }
   },
   "dependencies": {
+    "7zip": "^0.0.6",
     "classnames": "^2.2.5",
     "date-fns": "^1.28.5",
     "electron-is-dev": "^0.3.0",
     "graphcool-styles": "^0.1.31",
     "graphcool-tmp-ui": "^0.0.11",
     "graphql-config": "^1.0.0",
-    "graphql-playground": "^0.0.8",
+    "graphql-playground": "^0.1.0",
     "lodash": "^4.17.4",
     "react": "^15.6.1",
     "react-dom": "^15.6.1",

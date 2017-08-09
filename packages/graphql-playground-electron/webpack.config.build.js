@@ -11,7 +11,7 @@ module.exports = {
   devtool: 'source-map',
   target: 'electron-renderer',
   entry: {
-    app: ['./src/main'],
+    app: ['./src/root'],
   },
   output: {
     path: __dirname + '/dist',
