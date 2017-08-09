@@ -68,11 +68,7 @@ module.exports = {
   },
   plugins: [
     new webpack.HotModuleReplacementPlugin(),
-    new ForkTsCheckerWebpackPlugin(
-      {
-        // watch: './src',
-      }
-    ),
+    new ForkTsCheckerWebpackPlugin({}),
     new webpack.DefinePlugin({
       __SUBSCRIPTIONS_EU_WEST_1__: JSON.stringify(
         process.env.SUBSCRIPTIONS_EU_WEST_1 ||

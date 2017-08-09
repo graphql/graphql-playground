@@ -117,156 +117,124 @@ export default class ElectronApp extends React.Component<{}, State> {
     } = this.state
 
     return (
-      <div className={cx('root', theme)}>
-        <style jsx={true} global={true}>{`
-          .app-content .left-content {
-            letter-spacing: 0.5px;
-          }
-          .app-endpoint .tabs .history {
-            margin-right: 30px;
-          }
-          .wrapper-toggle-theme .tooltip-container.anchor-right {
-            right: -23px !important;
-          }
-        `}</style>
-        <style jsx={true}>{`
-          .root {
-            @p: .flex, .flexColumn, .bgDarkestBlue;
-          }
-          .root.light {
-            background-color: #dbdee0;
-          }
-          .app-content {
-            @p: .flex, .flexRow;
-          }
-          .app-content .left-content {
-            @p: .white, .relative, .mr6, .bgDarkBlue40;
-            flex: 0 222px;
-            padding-top: 57px;
-          }
-          .app-content .left-content.light {
-            @p: .bgWhite70, .black60;
-          }
-          .app-content .list {
-            @p: .overflowHidden;
-            max-width: 222px;
-          }
-          .left-content .list-item {
-            @p: .pv10, .ph25, .fw6, .toe, .overflowHidden, .nowrap;
-          }
-          .left-content .list-item.list-item-project {
-            @p: .pointer, .pl38, .f12;
-          }
-          .left-content .list-item.list-item-project.active {
-            @p: .bgDarkBlue, .bGreen;
-            border-left-style: solid;
-            border-left-width: 4px;
-            padding-left: 34px;
-          }
-          .left-content.light .list-item.list-item-project.active {
-            background-color: #e7e8ea;
-          }
-          .app-content .playground {
-            @p: .flex1;
-          }
-          .sidenav-footer {
-            @p: .absolute, .bottom0, .w100, .flex, .itemsCenter, .justifyBetween,
-              .pv20, .bgDarkBlue;
-          }
-          .light .sidenav-footer {
-            background-color: #eeeff0;
-          }
-          .sidenav-footer .button {
-            @p: .br2, .black90, .pointer, .pa10, .fw6, .flex, .itemsCenter,
-              .ml20;
-          }
-        `}</style>
-        <Provider store={store}>
-          <ThemeProvider theme={theme}>
-            <InitialView
-              isOpen={openInitialView}
-              onSelectFolder={this.handleSelectFolder}
-              onSelectEndpoint={this.handleSelectEndpoint}
-            />
-            {endpoint &&
-              <div className={cx('app-content', { 'app-endpoint': !projects })}>
-                <div className="wrapper-toggle-theme">
-                  <div className="icon">
-                    <Icon
-                      src={require('graphcool-styles/icons/fill/settings.svg')}
-                      color={theme === 'light' ? $v.gray20 : $v.white20}
-                      width={23}
-                      height={23}
-                      onClick={this.handleToggleTooltipTheme}
-                    />
-                    <Tooltip
-                      open={openTooltipTheme}
-                      onClick={this.handleChangeTheme}
-                      onClose={this.handleToggleTooltipTheme}
-                      anchorOrigin={{
-                        horizontal: 'right',
-                        vertical: 'bottom',
-                      }}
-                    >
-                      <span className="tooltip-text">LIGHT MODE </span>
-                      <ToggleButton
-                        checked={theme === 'light'}
-                        onChange={this.handleChangeTheme}
-                      />
-                    </Tooltip>
+      <Provider store={store}>
+        <div className={cx('root', theme)}>
+          <style jsx={true} global={true}>{`
+            .app-content .left-content {
+              letter-spacing: 0.5px;
+            }
+            .app-endpoint .tabs .history {
+              margin-right: 30px;
+            }
+          `}</style>
+          <style jsx={true}>{`
+            .root {
+              @p: .flex, .flexColumn, .bgDarkestBlue;
+            }
+            .root.light {
+              background-color: #dbdee0;
+            }
+            .app-content {
+              @p: .flex, .flexRow;
+            }
+            .app-content .left-content {
+              @p: .white, .relative, .mr6, .bgDarkBlue40;
+              flex: 0 222px;
+              padding-top: 57px;
+            }
+            .app-content .left-content.light {
+              @p: .bgWhite70, .black60;
+            }
+            .app-content .list {
+              @p: .overflowHidden;
+              max-width: 222px;
+            }
+            .left-content .list-item {
+              @p: .pv10, .ph25, .fw6, .toe, .overflowHidden, .nowrap;
+            }
+            .left-content .list-item.list-item-project {
+              @p: .pointer, .pl38, .f12;
+            }
+            .left-content .list-item.list-item-project.active {
+              @p: .bgDarkBlue, .bGreen;
+              border-left-style: solid;
+              border-left-width: 4px;
+              padding-left: 34px;
+            }
+            .left-content.light .list-item.list-item-project.active {
+              background-color: #e7e8ea;
+            }
+            .app-content .playground {
+              @p: .flex1;
+            }
+            .sidenav-footer {
+              @p: .absolute, .bottom0, .w100, .flex, .itemsCenter,
+                .justifyBetween, .pv20, .bgDarkBlue;
+            }
+            .light .sidenav-footer {
+              background-color: #eeeff0;
+            }
+            .sidenav-footer .button {
+              @p: .br2, .black90, .pointer, .pa10, .fw6, .flex, .itemsCenter,
+                .ml20;
+            }
+          `}</style>
+          <InitialView
+            isOpen={openInitialView}
+            onSelectFolder={this.handleSelectFolder}
+            onSelectEndpoint={this.handleSelectEndpoint}
+          />
+          {endpoint &&
+            <div className={cx('app-content', { 'app-endpoint': !projects })}>
+              {projects &&
+                <div className={cx('left-content', theme)}>
+                  <div className="list">
+                    {projects.map(project =>
+                      <div key={project.name}>
+                        <div className={cx('list-item')}>
+                          {project.name}
+                        </div>
+                        {project.endpoints.map(ept =>
+                          <div
+                            key={ept.name}
+                            className={cx('list-item list-item-project', {
+                              active: activeEndpoint === ept,
+                            })}
+                            // tslint:disable-next-line
+                            onClick={() => this.handleChangeItem(ept)}
+                          >
+                            {ept.name}
+                          </div>,
+                        )}
+                      </div>,
+                    )}
                   </div>
-                </div>
-
-                {projects &&
-                  <div className={cx('left-content', theme)}>
-                    <div className="list">
-                      {projects.map(project =>
-                        <div key={project.name}>
-                          <div className={cx('list-item')}>
-                            {project.name}
-                          </div>
-                          {project.endpoints.map(ept =>
-                            <div
-                              key={ept.name}
-                              className={cx('list-item list-item-project', {
-                                active: activeEndpoint === ept,
-                              })}
-                              // tslint:disable-next-line
-                              onClick={() => this.handleChangeItem(ept)}
-                            >
-                              {ept.name}
-                            </div>,
-                          )}
-                        </div>,
-                      )}
-                    </div>
-                    <div className="sidenav-footer">
-                      <button
-                        className="button"
-                        onClick={this.handleOpenNewWindow}
-                      >
-                        <Icon
-                          src={require('graphcool-styles/icons/stroke/add.svg')}
-                          stroke={true}
-                          color={$v.gray90}
-                          width={14}
-                          height={14}
-                          strokeWidth={6}
-                        />
-                        NEW WINDOW
-                      </button>
-                    </div>
-                  </div>}
-                <div className="playground">
-                  <Playground
-                    endpoint={endpoint}
-                    wsApiPrefix={'wss://subscriptions.graph.cool/v1'}
-                  />
-                </div>
-              </div>}
-          </ThemeProvider>
-        </Provider>
-      </div>
+                  <div className="sidenav-footer">
+                    <button
+                      className="button"
+                      onClick={this.handleOpenNewWindow}
+                    >
+                      <Icon
+                        src={require('graphcool-styles/icons/stroke/add.svg')}
+                        stroke={true}
+                        color={$v.gray90}
+                        width={14}
+                        height={14}
+                        strokeWidth={6}
+                      />
+                      NEW WINDOW
+                    </button>
+                  </div>
+                </div>}
+              <div className="playground">
+                <Playground
+                  endpoint={endpoint}
+                  wsApiPrefix={'wss://subscriptions.graph.cool/v1'}
+                />
+              </div>
+            </div>}
+        </div>
+      </Provider>
     )
   }
 }
