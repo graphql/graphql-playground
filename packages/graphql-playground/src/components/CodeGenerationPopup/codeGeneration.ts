@@ -28,41 +28,50 @@ export class CodeGenerator {
   }
 
   getCode(query: string) {
+    if (this.environment === 'Cli') {
+      return this.getTransport() + this.getQueryCode(query)
+    } else if (this.client === 'fetch') {
+      return this.getImports() + '\n' + this.getQueryCode(query)
+    }
+
     return (
-      this.getImports() + this.getTransport() + '\n' + this.getQueryCode(query)
+      this.getImports() +
+      '\n\n' +
+      this.getTransport() +
+      '\n\n' +
+      this.getQueryCode(query)
     )
   }
 
   private getTransport() {
-    if (this.client === 'graphql-request') {
-      return `
-const client = new GraphQLClient('my-endpoint', {
+    if (this.client === 'graphql-request' && this.environment !== 'Cli') {
+      return `const client = new GraphQLClient('${this.endpointUrl}', {
   headers: {
     Authorization: 'Bearer YOUR_AUTH_TOKEN',
   },
 });
 `
+    } else if (this.environment === 'Cli') {
+      return `curl '${this.endpointUrl}' \ 
+  -H 'Authorization: Bearer YOUR_AUTH_TOKEN' \ 
+  `
     }
-
     return ''
   }
 
   private getImports() {
     if (this.client === 'graphql-request' && this.environment === 'Node') {
-      return `const GraphQLClient = require('graphql-request').GraphQLClient
-`
+      return `const GraphQLClient = require('graphql-request').GraphQLClient`
     } else if (
       this.client === 'graphql-request' &&
       this.environment === 'Browser'
     ) {
-      return `import { GraphQLClient } from 'graphql-request'
-`
+      return `import { GraphQLClient } from 'graphql-request'`
     } else if (this.client === 'fetch') {
       return `require('es6-promise').polyfill()
 require('isomorphic-fetch')
-`
+      `
     }
-
     return ''
   }
 
@@ -76,34 +85,50 @@ require('isomorphic-fetch')
 
   private getQuery(query: string) {
     if (this.client === 'graphql-request') {
-      return `function getItems() {
-  return client.request((\`
-  ${query.split('\n').map(line => '    ' + line).join('\n')}
+      const curlyIndex = query.indexOf('{')
+
+      const strippedQuery = query.slice(curlyIndex, query.length)
+      if (this.client === 'graphql-request') {
+        return `function getItem() {
+  return client.request(\`
+${strippedQuery.split('\n').map(line => '    ' + line).join('\n')}
   \`)
 }`
+      }
     }
 
     if (this.client === 'fetch') {
-      return `function getItems() {` + this.getFetchBody(query) + `}`
+      return `function getItems() { 
+  ${this.getFetchBody(query)}
+}`
+    }
+
+    if (this.client === 'curl') {
+      return `-d '{"query":"${JSON.stringify(query.replace(/\s/g, ''))}"}'`
     }
 
     return ''
   }
 
   private getFetchBody(query: string) {
+    const clearString = query.replace(/\s/g, '')
+
     const jsonQuery = JSON.stringify({
-      query,
+      query: clearString,
     })
-    return `
-    return fetch('${this.endpointUrl}', {
-      method: 'post',
-      headers: {
-        'Content-Type': 'application/json',
-      //   'Authorization': 'Bearer YOUR_AUTH_TOKEN'
-      },
-      body: '${jsonQuery}',
-    })
-`
+
+    return (
+      `return fetch('${this.endpointUrl}', {
+    method: 'post',
+    headers: {
+      'Content-Type': 'application/json',
+    //'Authorization': 'Bearer YOUR_AUTH_TOKEN'
+    },
+    body: '` +
+      `${jsonQuery}` +
+      `', 
+  })`
+    )
   }
 
   private getMutation(query: string) {
@@ -112,14 +137,20 @@ require('isomorphic-fetch')
     const strippedQuery = query.slice(curlyIndex, query.length)
     if (this.client === 'graphql-request') {
       return `function setItem() {
-return client.request(\`
+  return client.request(\`
 ${strippedQuery.split('\n').map(line => '    ' + line).join('\n')}
   \`)
 }`
     }
 
     if (this.client === 'fetch') {
-      return `function setItem() {` + this.getFetchBody(query) + `}`
+      return `function setItem() { 
+  ${this.getFetchBody(query)} 
+}`
+    }
+
+    if (this.client === 'curl') {
+      return `-d '{"query":${JSON.stringify(query.replace(/\s/g, ''))}}'`
     }
 
     return ''
