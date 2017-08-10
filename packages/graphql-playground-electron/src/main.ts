@@ -56,7 +56,7 @@ function createWindow() {
       label: 'Application',
       submenu: [
         {
-          label: 'About Application',
+          label: 'About GraphQL Playground',
           selector: 'orderFrontStandardAboutPanel:',
         },
         {
