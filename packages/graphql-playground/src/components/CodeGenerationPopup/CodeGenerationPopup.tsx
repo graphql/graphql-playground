@@ -30,7 +30,12 @@ export class CodeGenerationPopup extends React.Component<Props, State> {
 
   render() {
     const { query, endpointUrl } = this.props
-    const queryActive = Boolean(query) && query.length > 0
+    const { selectedEnv } = this.state
+    const queryActive =
+      Boolean(query) && query.length > 0 && query.includes('query')
+    const clients =
+      selectedEnv === 'Cli' ? ['curl'] : ['graphql-request', 'fetch']
+
     return (
       <Modal
         isOpen={this.props.isOpen}
@@ -59,8 +64,10 @@ export class CodeGenerationPopup extends React.Component<Props, State> {
                 setEnvironment={this.handleSetEnvironment}
               />
               <CodeGenerationPopupClientChooser
+                environment={this.state.selectedEnv}
                 client={this.state.selectedClient}
                 setClient={this.handleSetClient}
+                clients={clients}
               />
             </div>
             <CodeGenerationPopupCode
@@ -80,6 +87,16 @@ export class CodeGenerationPopup extends React.Component<Props, State> {
   }
 
   private handleSetEnvironment = (env: Environment) => {
-    this.setState({ selectedEnv: env } as State)
+    const { selectedClient } = this.state
+    if (env === 'Cli') {
+      this.setState({ selectedEnv: env, selectedClient: 'curl' } as State)
+    } else {
+      this.setState(
+        {
+          selectedEnv: env,
+          selectedClient: selectedClient === 'curl' ? 'fetch' : selectedClient,
+        } as State,
+      )
+    }
   }
 }

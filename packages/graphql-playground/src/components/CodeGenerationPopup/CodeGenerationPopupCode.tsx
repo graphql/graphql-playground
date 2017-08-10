@@ -29,6 +29,8 @@ export default class CodeGenerationPopupCode extends React.Component<
     const generator = new CodeGenerator(client, environment, endpointUrl)
     const projectSetup = generator.getSetup()
     const code = generator.getCode(query)
+    const title = environment !== 'Cli' ? 'Code' : 'Command'
+    const mode = environment !== 'Cli' ? 'javascript' : 'shell'
 
     return (
       <div className={cx($p.pa38, $p.pt16, 'code-generation-popup')}>
@@ -43,30 +45,35 @@ export default class CodeGenerationPopupCode extends React.Component<
             height: auto;
           }
         `}</style>
-        <h3>Project Setup</h3>
-        <Codemirror
-          key={projectSetup}
-          value={projectSetup}
-          options={{
-            height: 'auto',
-            mode: 'shell',
-            viewportMargin: Infinity,
-            theme: 'dracula',
-          }}
-          onFocusChange={focused => {
-            if (focused) {
-              // TODO track
-            }
-          }}
-        />
-        <h3>Code</h3>
+        {environment !== 'Cli' &&
+          <div>
+            <h3>Project Setup</h3>
+            <Codemirror
+              key={projectSetup}
+              value={projectSetup}
+              options={{
+                height: 'auto',
+                mode: 'shell',
+                viewportMargin: Infinity,
+                theme: 'dracula',
+              }}
+              onFocusChange={focused => {
+                if (focused) {
+                  // TODO track
+                }
+              }}
+            />
+          </div>}
+        <h3>
+          {title}
+        </h3>
         <Codemirror
           key={code}
           value={code}
           options={{
             height: 'auto',
             viewportMargin: Infinity,
-            mode: 'javascript',
+            mode,
             theme: 'dracula',
           }}
           onFocusChange={focused => {

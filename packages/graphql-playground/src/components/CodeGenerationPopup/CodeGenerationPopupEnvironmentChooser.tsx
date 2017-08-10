@@ -4,7 +4,7 @@ import * as cx from 'classnames'
 import calculateSize from 'calculate-size'
 import { Environment } from '../../types'
 
-const environments = ['Node', 'Browser']
+const environments = ['Node', 'Browser', 'Cli']
 
 export interface Props {
   environment: Environment

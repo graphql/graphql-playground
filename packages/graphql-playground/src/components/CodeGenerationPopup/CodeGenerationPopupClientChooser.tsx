@@ -2,10 +2,11 @@ import * as React from 'react' // tslint:disable-line
 import { $p } from 'graphcool-styles'
 import * as cx from 'classnames'
 import calculateSize from 'calculate-size'
-
-const clients = ['graphql-request', 'fetch']
+import { Environment } from '../../types'
 
 export interface Props {
+  environment: Environment
+  clients: string[]
   setClient: (env: any) => void
   client: string
 }
@@ -33,7 +34,7 @@ const Chooser = (props: Props) =>
             $p.itemsCenter,
           )}
         >
-          {clients.map(env => {
+          {props.clients.map(env => {
             const { width } = calculateSize(env.toUpperCase(), {
               fontSize: '14px',
               fontWeight: '600',
@@ -49,7 +50,7 @@ const Chooser = (props: Props) =>
                   $p.pointer,
                 )}
                 onClick={() => props.setClient(env)}
-                style={{ width: width + 15 }}
+                style={{ width: width + 10 }}
                 key={env}
               >
                 <div
