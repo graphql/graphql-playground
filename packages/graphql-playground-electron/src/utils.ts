@@ -3,10 +3,11 @@ import * as dev from 'electron-is-dev'
 import * as path from 'path'
 
 export const newWindowConfig: Electron.BrowserWindowConstructorOptions = {
+  title: 'GraphQL Playground',
   width: 1200,
   height: 800,
   titleBarStyle: 'hidden-inset',
-  icon: path.join(__dirname, 'dist/assets/icons/png/64x64.png'),
+  icon: path.join(__dirname, '../static/icons/icon.icns'),
   backgroundColor: '#0F202D',
 }
 
