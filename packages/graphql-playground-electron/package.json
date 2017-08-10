@@ -8,16 +8,16 @@
     "email": "contact@graph.cool",
     "url": "graph.cool"
   },
-  "main": "main.js",
+  "main": "lib/main.js",
   "scripts": {
     "build": "rm -rf ./dist && NODE_ENV=production GRAPHQL_ENDPOINT=$BACKEND_ADDR/system webpack --config webpack.config.build.js && cp -r static/* dist",
-    "build-electron": "rm -rf ./build-electron && electron-builder",
+    "build-electron": "npm run compile; npm run build; cp -r dist lib; rm -rf ./build-electron && electron-builder",
     "library": "rm -rf .happypack && NODE_ENV=production webpack --config webpack.library.js -p",
     "lint": "tslint \"src/**/*.ts{,x}\" && lint-staged",
     "start": "yarn run compile; concurrently 'yarn react-start' 'wait-on http://localhost:4040/ && yarn electron-start'",
     "react-start": "webpack-dev-server --hot --profile --history-api-fallback --host 0.0.0.0 --port 4040",
     "compile": "rm -rf lib; tsc --target es5",
-    "electron-start": "electron lib/electron_main",
+    "electron-start": "electron lib/main",
     "stats": "NODE_ENV=production webpack --config webpack.library.js  --profile --json > stats.json",
     "test": "npm run lint",
     "precommit": "lint-staged",
@@ -40,7 +40,7 @@
       "icon": "static/icons/icon.icns"
     },
     "files": [
-      "main.js",
+      "lib/**/*",
       "dist/**/*",
       "node_modules"
     ],

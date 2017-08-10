@@ -9,7 +9,7 @@ const HappyPack = require('happypack')
 
 module.exports = {
   devtool: 'cheap-module-eval-source-map',
-  entry: './src/main',
+  entry: './src/root',
   target: 'electron',
   output: {
     filename: '[name].[hash].js',

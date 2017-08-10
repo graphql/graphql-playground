@@ -23,7 +23,7 @@
     "typings/styled-jsx.d.ts"
   ],
   "files": [
-    "src/electron_main.ts",
-    "src/main.tsx"
+    "src/main.ts",
+    "src/root.tsx"
   ]
 }
