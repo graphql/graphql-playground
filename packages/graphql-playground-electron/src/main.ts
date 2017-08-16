@@ -1,8 +1,8 @@
 // TODO enable tslint
 /* tslint:disable */
 import { app, Menu, BrowserWindow } from 'electron'
+import files from './files';
 const dev = require('electron-is-dev')
-
 const path = require('path')
 
 const { newWindowConfig } = require('./utils')
@@ -18,7 +18,7 @@ function createWindow() {
   mainWindow.loadURL(
     dev
       ? 'http://localhost:4040' // Dev server ran by react-scripts
-      : `file://${path.join(__dirname, '/dist/index.html')}`, // Bundled application
+      : `file://${path.join(__dirname, '/dist/index.html')}` // Bundled application
   )
 
   if (dev) {
@@ -27,7 +27,7 @@ function createWindow() {
     const {
       default: installExtension,
       REACT_DEVELOPER_TOOLS,
-      REDUX_DEVTOOLS,
+      REDUX_DEVTOOLS
     } = require('electron-devtools-installer')
 
     installExtension(REACT_DEVELOPER_TOOLS)
@@ -42,7 +42,7 @@ function createWindow() {
   }
 
   // Emitted when the window is closed.
-  mainWindow.on('closed', function() {
+  mainWindow.on('closed', function () {
     // Dereference the window object, usually you would store windows
     // in an array if your app supports multi windows, this is the time
     // when you should delete the corresponding element.
@@ -57,7 +57,7 @@ function createWindow() {
       submenu: [
         {
           label: 'About GraphQL Playground',
-          selector: 'orderFrontStandardAboutPanel:',
+          selector: 'orderFrontStandardAboutPanel:'
         },
         {
           label: 'New window',
@@ -67,9 +67,9 @@ function createWindow() {
             win.loadURL(
               dev
                 ? 'http://localhost:4040'
-                : `file://${path.join(__dirname, '/dist/index.html')}`,
+                : `file://${path.join(__dirname, '/dist/index.html')}`
             )
-          },
+          }
         },
         { type: 'separator' },
         {
@@ -77,9 +77,9 @@ function createWindow() {
           accelerator: 'Command+Q',
           click: () => {
             app.quit()
-          },
-        },
-      ],
+          }
+        }
+      ]
     },
     {
       label: 'Edit',
@@ -93,9 +93,9 @@ function createWindow() {
         {
           label: 'Select All',
           accelerator: 'CmdOrCtrl+A',
-          selector: 'selectAll:',
-        },
-      ],
+          selector: 'selectAll:'
+        }
+      ]
     },
     {
       label: 'Window',
@@ -103,9 +103,9 @@ function createWindow() {
         { label: 'Close Window', accelerator: 'CmdOrCtrl+W' },
         { label: 'Minimize', accelerator: 'CmdOrCtrl+M' },
         { type: 'separator' },
-        { label: 'Toggle Developer Tools', role: 'toggledevtools' },
-      ],
-    },
+        { label: 'Toggle Developer Tools', role: 'toggledevtools' }
+      ]
+    }
   ]
 
   const menu = Menu.buildFromTemplate(template)
@@ -133,3 +133,6 @@ app.on('activate', () => {
     createWindow()
   }
 })
+
+// File ipc events
+files()

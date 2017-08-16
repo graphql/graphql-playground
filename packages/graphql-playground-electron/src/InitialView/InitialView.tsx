@@ -36,7 +36,7 @@ class InitialView extends React.Component<
 > {
   state = {
     endpoint: '',
-    selectedMode: 'local',
+    selectedMode: 'local'
   }
 
   handleRequestClose = () => null
@@ -46,7 +46,7 @@ class InitialView extends React.Component<
     if (isURL(this.state.endpoint)) {
       this.props.selectHistory({
         type: 'endpoint',
-        path: this.state.endpoint,
+        path: this.state.endpoint
       })
       this.props.onSelectEndpoint(this.state.endpoint)
     } else {
@@ -56,7 +56,7 @@ class InitialView extends React.Component<
 
   handleClickLocal = () => {
     const paths = remote.dialog.showOpenDialog({
-      properties: ['openDirectory'],
+      properties: ['openDirectory']
     })
     if (paths && paths[0]) {
       const path = paths[0]
@@ -70,7 +70,7 @@ class InitialView extends React.Component<
       }
       this.props.selectHistory({
         type: 'local',
-        path,
+        path
       })
       this.setState({ endpoint: path } as State)
       this.props.onSelectFolder(path)
@@ -153,7 +153,7 @@ class InitialView extends React.Component<
             background-color: #2a7ed3;
           }
         `}</style>
-        <div className='dragable' />
+        <div className="dragable" />
         <Modal
           isOpen={isOpen}
           contentLabel="initial view"
@@ -187,7 +187,7 @@ class InitialView extends React.Component<
                         Last opened {format(data.lastOpened, 'DD.MM.YYYY')}
                       </span>
                     </div>
-                  </div>,
+                  </div>
                 )}
               </div>
             </div>
@@ -236,18 +236,18 @@ class InitialView extends React.Component<
 }
 
 const mapStateToProps = state => ({
-  history: state.history.history,
+  history: state.history.history
 })
 
 const mapDispatchToProps = dispatch =>
   bindActionCreators(
     {
-      selectHistory,
+      selectHistory
     },
-    dispatch,
+    dispatch
   )
 
 export default connect<StateFromProps, DispatchFromProps, Props>(
   mapStateToProps,
-  mapDispatchToProps,
+  mapDispatchToProps
 )(InitialView)

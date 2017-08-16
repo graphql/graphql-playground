@@ -10,15 +10,28 @@ import Tooltip from 'graphcool-tmp-ui/lib/Tooltip'
 import {
   GraphQLProjectConfig,
   getGraphQLProjectConfig,
-  getGraphQLConfig,
+  getGraphQLConfig
 } from 'graphql-config'
 import { createNewWindow } from './utils'
 import createStore from './createStore'
 import InitialView from './InitialView/InitialView'
+import FileExplorerView from './FileExplorerView/FileExplorerView'
+
+import * as ipcEvents from './ipcEvents';
+
+const electron = window.require('electron')
+const ipcRenderer = electron.ipcRenderer
 
 const store = createStore()
+ipcEvents.default(ipcRenderer, store)
 
 interface State {
+  config?: {
+    configDir?: string
+    includes?: string[]
+    excludes?: string[]
+    schemePath?: string
+  }
   endpoint?: string
   openInitialView: boolean
   openTooltipTheme: boolean
@@ -28,14 +41,28 @@ interface State {
   }
   theme: string
   projects?: any[]
+  files?: [
+    {
+      name: string
+      path: string
+      isDirty: boolean
+    }
+  ]
 }
 
 export default class ElectronApp extends React.Component<{}, State> {
   state: State = {
+    config: {
+      configDir: '',
+      includes: [],
+      excludes: [],
+      schemePath: ''
+    },
     openInitialView: true,
     openTooltipTheme: false,
     activeEndpoint: null,
     theme: 'dark',
+    files: store.getState().files
   }
 
   handleSelectEndpoint = (endpoint: string) => {
@@ -46,6 +73,11 @@ export default class ElectronApp extends React.Component<{}, State> {
     try {
       // Get config from path
       const config = getGraphQLConfig(path)
+      const excludes = config.config.excludes
+      const includes = config.config.includes
+      const configDir = config.configDir
+      const schemePath = config.config.schemaPath
+
       let projects = config.getProjects()
       // If no multi projects
       if (!projects) {
@@ -56,7 +88,8 @@ export default class ElectronApp extends React.Component<{}, State> {
         const folderName = pathSplit[pathSplit.length - 1]
         projects[folderName] = project
       }
-      // Get all enpoints for the project
+
+      // Get all endpoints for the project
       const projectsState = Object.keys(projects).map(key => {
         const project = projects[key]
         const endpoints = project.endpointsExtension.getRawEndpointsMap()
@@ -67,11 +100,16 @@ export default class ElectronApp extends React.Component<{}, State> {
         })
         return {
           name: key,
-          endpoints: endpointsState,
+          endpoints: endpointsState
         }
       })
 
-      // Select first enpoind found
+      // load files
+      if (configDir) {
+        ipcRenderer.send('get-file-tree', { configDir, includes, excludes: ['**/node_modules', ...excludes] })
+      }
+
+      // Select first endpoint found
       const activeEndpoint = projectsState[0].endpoints[0]
 
       this.setState(
@@ -80,7 +118,13 @@ export default class ElectronApp extends React.Component<{}, State> {
           activeEndpoint,
           endpoint: activeEndpoint.url,
           projects: projectsState,
-        } as State,
+          config: {
+            configDir,
+            includes,
+            excludes,
+            schemePath
+          }
+        } as State
       )
     } catch (error) {
       alert(error)
@@ -98,7 +142,7 @@ export default class ElectronApp extends React.Component<{}, State> {
 
   handleChangeTheme = () => {
     this.setState(
-      { theme: this.state.theme === 'dark' ? 'light' : 'dark' } as State,
+      { theme: this.state.theme === 'dark' ? 'light' : 'dark' } as State
     )
   }
 
@@ -114,6 +158,8 @@ export default class ElectronApp extends React.Component<{}, State> {
       openInitialView,
       openTooltipTheme,
       activeEndpoint,
+      files,
+      config
     } = this.state
 
     return (
@@ -148,6 +194,10 @@ export default class ElectronApp extends React.Component<{}, State> {
             .app-content .list {
               @p: .overflowHidden;
               max-width: 222px;
+            }
+            .left-content {
+              @.p .flex .flexColumn .relative
+              height: calc(100vh - 57px);
             }
             .left-content .list-item {
               @p: .pv10, .ph25, .fw6, .toe, .overflowHidden, .nowrap;
@@ -198,17 +248,20 @@ export default class ElectronApp extends React.Component<{}, State> {
                           <div
                             key={ept.name}
                             className={cx('list-item list-item-project', {
-                              active: activeEndpoint === ept,
+                              active: activeEndpoint === ept
                             })}
                             // tslint:disable-next-line
                             onClick={() => this.handleChangeItem(ept)}
                           >
                             {ept.name}
-                          </div>,
+                          </div>
                         )}
-                      </div>,
+                        {files.map}
+                      </div>
                     )}
                   </div>
+                  <FileExplorerView config={this.state.config} />
+
                   <div className="sidenav-footer">
                     <button
                       className="button"
@@ -226,6 +279,8 @@ export default class ElectronApp extends React.Component<{}, State> {
                     </button>
                   </div>
                 </div>}
+
+
               <div className="playground">
                 <Playground
                   endpoint={endpoint}
