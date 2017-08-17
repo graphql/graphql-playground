@@ -1,6 +1,6 @@
 // TODO enable tslint
 /* tslint:disable */
-import { app, Menu, BrowserWindow } from 'electron'
+import { app, Menu, BrowserWindow, globalShortcut } from 'electron'
 const dev = require('electron-is-dev')
 
 const path = require('path')
@@ -10,6 +10,14 @@ const { newWindowConfig } = require('./utils')
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
 let mainWindow
+
+function prevTab() {
+  mainWindow.webContents.send('Tab', 'Prev')
+}
+
+function nextTab() {
+  mainWindow.webContents.send('Tab', 'Next')
+}
 
 function createWindow() {
   // Create the browser window.
@@ -100,6 +108,16 @@ function createWindow() {
     {
       label: 'Window',
       submenu: [
+        {
+          label: 'Next Tab',
+          accelerator: 'Cmd+Alt+Right',
+          click: () => nextTab(),
+        },
+        {
+          label: 'Previous Tab',
+          accelerator: 'Cmd+Alt+Left',
+          click: () => prevTab(),
+        },
         { label: 'Close Window', accelerator: 'CmdOrCtrl+W' },
         { label: 'Minimize', accelerator: 'CmdOrCtrl+M' },
         { type: 'separator' },
@@ -115,7 +133,16 @@ function createWindow() {
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
-app.on('ready', createWindow)
+app.on('ready', () => {
+  createWindow()
+
+  globalShortcut.register('Cmd+Shift+]', () => {
+    nextTab()
+  })
+  globalShortcut.register('Cmd+Shift+[', () => {
+    prevTab()
+  })
+})
 
 // Quit when all windows are closed.
 app.on('window-all-closed', () => {
