@@ -58,6 +58,9 @@ export default class SearchBox extends React.Component<Props, State> {
           .input {
             @inherit: .f16, .ml10;
           }
+          .input::placeholder {
+            color: rgba(0, 0, 0, 0.3);
+          }
         `}</style>
         {this.props.isShown &&
           <label className="label">
@@ -65,6 +68,7 @@ export default class SearchBox extends React.Component<Props, State> {
               src={require('graphcool-styles/icons/stroke/search.svg')}
               stroke={true}
               strokeWidth={3}
+              color={'rgba(0, 0, 0, 0.3)'}
             />
             <input
               className="input"

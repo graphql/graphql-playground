@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { remote } from 'electron'
+import { remote, ipcRenderer } from 'electron'
 import { Provider } from 'react-redux'
 import { Icon, $v } from 'graphcool-styles'
 import * as cx from 'classnames'
@@ -37,6 +37,7 @@ export default class ElectronApp extends React.Component<{}, State> {
     activeEndpoint: null,
     theme: 'dark',
   }
+  private playground: Playground
 
   handleSelectEndpoint = (endpoint: string) => {
     this.setState({ endpoint, openInitialView: false } as State)
@@ -104,6 +105,34 @@ export default class ElectronApp extends React.Component<{}, State> {
 
   handleOpenNewWindow = () => {
     createNewWindow()
+  }
+
+  nextTab = () => {
+    if (this.playground) {
+      this.playground.nextTab()
+    }
+  }
+
+  prevTab = () => {
+    if (this.playground) {
+      this.playground.prevTab()
+    }
+  }
+
+  componentDidMount() {
+    ipcRenderer.on('Tab', this.readMessage)
+  }
+
+  componentWillUnmount() {
+    ipcRenderer.removeListener('Tab', this.readMessage)
+  }
+
+  readMessage = (error, message) => {
+    if (message === 'Next') {
+      this.nextTab()
+    } else {
+      this.prevTab()
+    }
   }
 
   render() {
@@ -228,6 +257,7 @@ export default class ElectronApp extends React.Component<{}, State> {
                 </div>}
               <div className="playground">
                 <Playground
+                  ref={playground => (this.playground = playground)}
                   endpoint={endpoint}
                   wsApiPrefix={'wss://subscriptions.graph.cool/v1'}
                 />
