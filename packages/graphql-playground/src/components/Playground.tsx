@@ -497,6 +497,40 @@ class Playground extends React.Component<Props, State> {
     )
   }
 
+  public nextTab = () => {
+    const { sessions, selectedSessionIndex } = this.state
+    const numberOfSessions = sessions.length
+
+    if (numberOfSessions > 1) {
+      this.setState(state => {
+        return {
+          ...state,
+          selectedSessionIndex:
+            selectedSessionIndex < numberOfSessions - 1
+              ? selectedSessionIndex + 1
+              : 0,
+        }
+      })
+    }
+  }
+
+  public prevTab = () => {
+    const { sessions, selectedSessionIndex } = this.state
+    const numberOfSessions = sessions.length
+
+    if (numberOfSessions > 1) {
+      this.setState(state => {
+        return {
+          ...state,
+          selectedSessionIndex:
+            selectedSessionIndex > 0
+              ? selectedSessionIndex - 1
+              : numberOfSessions - 1,
+        }
+      })
+    }
+  }
+
   private autofillMutation = () => {
     const sessionId = this.state.sessions[this.state.selectedSessionIndex].id
     if (this.props.onboardingStep === 'STEP3_ENTER_MUTATION1_VALUES') {
