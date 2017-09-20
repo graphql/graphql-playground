@@ -7,12 +7,15 @@ import {
 import * as glob from 'globby'
 import * as Bluebird from 'bluebird'
 import * as fs from 'fs'
-import * as dirtToJson from './dirToJson'
+import dirtToJson from './dirToJson'
 import * as shell from 'shelljs'
 
 Bluebird.promisifyAll(fs)
 
-function getTree(configDir, options) {
+function getTree(configDir: string, options: {
+  exclude: any[],
+  include: any[]
+}) {
   return {
     data: dirtToJson(configDir, options)
   }
@@ -20,10 +23,11 @@ function getTree(configDir, options) {
 
 export default function files() {
   const {
-    rm,
     error,
+    ls,
+    mkdir,
     mv,
-    mkdir
+    rm
   } = shell;
 
   // gets file data if has been double clicked via system
@@ -48,11 +52,7 @@ export default function files() {
   // get files structure
   ipcMain.on(
     'get-file-tree',
-    (event, {
-      configDir,
-      excludes = [],
-      includes = []
-    }) => {
+    (event, { configDir, excludes = [], includes = [] }) => {
       const options = {
         exclude: excludes,
         include: includes
@@ -89,13 +89,23 @@ export default function files() {
   }))
 
   // delete file
-  ipcMain.on('delete-file', ((event, filePath) => {
+  ipcMain.on('delete-file', ((event, { configDir, excludes = [], includes = [] }, filePath) => {
+    const options = {
+      exclude: excludes,
+      include: includes
+    }
+
     return fs.unlinkAsync(filePath)
       .then(() => event.sender.send('file-tree-changed', getTree(configDir, options)))
       .catch(error => error)
   }))
 
-  ipcMain.on('create-folder', (event, dirPath) => {
+  ipcMain.on('create-folder', (event, { configDir, excludes = [], includes = [] }, dirPath) => {
+    const options = {
+      exclude: excludes,
+      include: includes
+    }
+
     mkdir('-p', dirPath)
 
     if (error) {
@@ -107,7 +117,12 @@ export default function files() {
     }
   })
 
-  ipcMain.on('delete-folder', (event, dirPath) => {
+  ipcMain.on('delete-folder', (event, { configDir, excludes = [], includes = [] }, dirPath) => {
+    const options = {
+      exclude: excludes,
+      include: includes
+    }
+
     rm('-r', dirPath)
 
     if (error) {
@@ -119,15 +134,24 @@ export default function files() {
     }
   })
 
-  ipcMain.on('move-folder', (event, configDir, from, to) => {
-    mv('', from, to)
-
-    if (error) {
-      event.sender.send('file-tree-changed', {
-        error
-      })
-    } else {
-      event.sender.send('file-tree-changed', getTree(configDir, options))
+  ipcMain.on('file-tree-moved', (event, { from, type, module, to, configDir, excludes, includes }) => {
+    const options = {
+      exclude: excludes,
+      include: includes
     }
+
+    const dest = `${to}/${module}`
+    const fromDirLastIndex = from.lastIndexOf('/')
+    const src = from.substr(0, fromDirLastIndex)
+
+    ls(dest)
+    // console.log(from, to)
+    if (error) {
+      ls(to)
+      if (error) mkdir('p', to)
+      mv(from, `${to}/`)
+    }
+
+    event.sender.send('file-tree-changed', getTree(configDir, options))
   })
 }

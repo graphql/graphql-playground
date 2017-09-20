@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { remote, ipcRenderer } from 'electron'
+import { remote } from 'electron'
 import { Provider } from 'react-redux'
 import { Icon, $v } from 'graphcool-styles'
 import * as cx from 'classnames'
@@ -16,14 +16,18 @@ import { createNewWindow } from './utils'
 import createStore from './createStore'
 import InitialView from './InitialView/InitialView'
 import FileExplorerView from './FileExplorerView/FileExplorerView'
-
-import * as ipcEvents from './ipcEvents';
+import {
+  CONFIG
+} from './actions/files';
+import ipcEvents from './ipcEvents';
 
 const electron = window.require('electron')
 const ipcRenderer = electron.ipcRenderer
 
 const store = createStore()
-ipcEvents.default(ipcRenderer, store)
+ipcEvents(ipcRenderer, store)
+
+window['$store'] = store;
 
 interface State {
   config?: {
@@ -72,11 +76,10 @@ export default class ElectronApp extends React.Component<{}, State> {
 
   handleSelectFolder = (path: string) => {
     try {
+
       // Get config from path
       const config = getGraphQLConfig(path)
-      const excludes = config.config.excludes
-      const includes = config.config.includes
-      const configDir = config.configDir
+      const { config: { excludes, includes, schemaPath }, configDir } = config
       const schemePath = config.config.schemaPath
 
       let projects = config.getProjects()
@@ -107,6 +110,10 @@ export default class ElectronApp extends React.Component<{}, State> {
 
       // load files
       if (configDir) {
+        store.dispatch({
+          config: { excludes, includes, schemaPath },
+          type: CONFIG
+        })
         ipcRenderer.send('get-file-tree', { configDir, includes, excludes: ['**/node_modules', ...excludes] })
       }
 
@@ -225,7 +232,7 @@ export default class ElectronApp extends React.Component<{}, State> {
               max-width: 222px;
             }
             .left-content {
-              @.p .flex .flexColumn .relative
+              @p: .flex, .flexColumn, .relative;
               height: calc(100vh - 57px);
             }
             .left-content .list-item {

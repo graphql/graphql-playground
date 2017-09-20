@@ -8,7 +8,7 @@ import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import * as format from 'date-fns/format'
 import { setFiles, Files, SetFilesAction } from '../actions/files'
-import * as Tree from 'react-ui-tree'
+import * as Tree from 'react-ui-sortable-tree'
 
 const electron = window.require('electron')
 const ipcRenderer = electron.ipcRenderer
@@ -23,11 +23,21 @@ interface DispatchFromProps {
 
 interface State {
   active: string
+  node: {
+    from: string,
+    module: string,
+    to: string,
+    type: string
+  }
 }
 
 
 interface Props {
-
+  config: {
+    configDir: ''
+    excludes: any[],
+    includes: any[]
+  }
 }
 
 class FileExplorer extends React.Component<
@@ -35,11 +45,16 @@ class FileExplorer extends React.Component<
   State
   > {
   state = {
-    active: null
+    active: null,
+    node: null
   }
 
-  handleChange = node => {
-    // console.log(node)
+  handleChange = () => {
+    const { configDir, excludes, includes } = this.props.config
+    this.state.node && ipcRenderer.send(
+      'file-tree-moved',
+      { configDir, excludes, includes, ...this.state.node }
+    )
   }
 
   renderNode = node => {
@@ -70,6 +85,23 @@ class FileExplorer extends React.Component<
 
   isNodeCollapsed = node => { }
 
+  canMoveNode = (from, to, placement, parent) => {
+    const { configDir } = this.props.config
+
+    const parentPath = parent && parent.filePath || configDir
+
+    this.setState({
+      node: {
+        from: from.filePath,
+        module: from.module,
+        to: parentPath,
+        type: from.type
+      }
+    })
+
+    return true;
+  }
+
   render() {
     return (
       <div >
@@ -81,7 +113,8 @@ class FileExplorer extends React.Component<
             transition: all ease 0.1;
           }
           .tree .m-draggable {
-            @p .absolute, .overflowHidden, .o100, .z1, .pv6, .ph4;
+            @p .absolute, .overflowHidden, .z1, .pv6, .ph4;
+            opacity: 0.5;
             height: 16px;
             background: #515151;
             transition: all ease 0.1;     
@@ -127,13 +160,14 @@ class FileExplorer extends React.Component<
           }
 
         `}</style>
-        <div className="tree">
+        <div className="tree m-tree-container">
           <Tree
             paddingLeft={20}
             tree={this.props.files}
             onChange={this.handleChange}
             isNodeCollapsed={this.isNodeCollapsed}
             renderNode={this.renderNode}
+            canMoveNode={this.canMoveNode}
           />
         </div>
       </div>

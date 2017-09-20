@@ -10,11 +10,11 @@ export default function ipcEvents(ipcRenderer, store) {
     error
   }) => {
     if (data.error) {
-
+      // TODO: needs UI Error element
     } else {
       store.dispatch({
-        type: FILES,
-        files: data
+        files: data,
+        type: FILES
       })
     }
   })
@@ -22,7 +22,7 @@ export default function ipcEvents(ipcRenderer, store) {
   // receives file save response
   ipcRenderer.on('file-saved', (event, data) => {
     if (data.error) {
-
+      // TODO: needs UI Error element
     } else {
 
     }
@@ -30,9 +30,8 @@ export default function ipcEvents(ipcRenderer, store) {
 
   // receives file content
   ipcRenderer.on('content-loaded', (event, data) => {
-    console.log(data)
     if (data.error) {
-
+      // TODO: needs UI Error element
     } else {
 
     }

@@ -1,25 +1,24 @@
 'use strict';
 
-const Bluebird = require('bluebird')
-const fs = require('fs')
-const globToRegExp = require('glob-to-regexp');
+import * as Bluebird from 'bluebird'
+import * as fs from 'fs'
+import * as globToRegExp from 'glob-to-regexp'
+import * as path from 'path'
 
 Bluebird.promisifyAll(fs)
 
-const fs = require('fs');
-const PATH = require('path');
 const constants = {
   DIRECTORY: 'directory',
   FILE: 'file'
 }
 
-function safeReadDirSync(path) {
-  let dirData = {};
+function safeReadDirSync(filePath) {
+  let dirData = [];
   try {
-    dirData = fs.readdirSync(path);
+    dirData = fs.readdirSync(filePath);
   } catch (ex) {
     if (ex.code === "EACCES") {
-      //User does not have permissions, ignore directory
+      // User does not have permissions, ignore directory
       return null;
     } else {
       throw ex;
@@ -28,57 +27,65 @@ function safeReadDirSync(path) {
   return dirData;
 }
 
-function checkExclude(options, path) {
+function checkExclude(options, filePath) {
   if (options && options.exclude) {
 
     if (Array.isArray(options.exclude)) {
       return options.exclude.map(item => {
-          // if not regex convert blob to regex
-          const exclude = item instanceof RegExp ? item : globToRegExp(item)
+        // if not regex convert blob to regex
+        const exclude = item instanceof RegExp ? item : globToRegExp(item)
 
-          // test path string
-          return exclude.test(path)
-        })
+        // test filePath string
+        return exclude.test(filePath)
+      })
         .some(t => Boolean(t))
 
     } else {
       // if not regex convert blob to regex
       const exclude = options.exclude instanceof RegExp ? options.exclude : globToRegExp(options.exclude)
 
-      // test path string
-      if (exclude.test(path)) {
+      // test filePath string
+      if (exclude.test(filePath)) {
         return true
       }
     }
   }
 }
 
-function directoryTree(path, options, onEachFile) {
-  const module = PATH.basename(path);
+function directoryTree(filePath, options, onEachFile) {
+  const module = path.basename(filePath);
+  console.log(filePath)
+
   const item = {
     module,
-    path
-  };
+    filePath,
+    size: null,
+    extension: null,
+    type: null,
+    leaf: null,
+    children: null
+  }
+
   let stats;
 
   try {
-    stats = fs.statSync(path);
+    stats = fs.statSync(filePath);
   } catch (e) {
     return null;
   }
 
   // Skip if it matches the exclude regex
-  if (checkExclude(options, path)) {
+  if (checkExclude(options, filePath)) {
     return null
   }
 
 
   if (stats.isFile()) {
 
-    const ext = PATH.extname(path).toLowerCase();
+    const ext = path.extname(filePath).toLowerCase();
 
     // Skip if it does not match the extension regex
-    if (checkExclude(options, path)) {
+    if (checkExclude(options, filePath)) {
       return null
     }
 
@@ -87,16 +94,16 @@ function directoryTree(path, options, onEachFile) {
     item.type = constants.FILE;
     item.leaf = true
     if (onEachFile) {
-      onEachFile(item, PATH);
+      onEachFile(item, path);
     }
   } else if (stats.isDirectory()) {
-    let dirData = safeReadDirSync(path);
+    const dirData = safeReadDirSync(filePath);
     if (dirData === null) {
       return null;
     }
 
     item.children = dirData
-      .map(child => directoryTree(PATH.join(path, child), options, onEachFile))
+      .map(child => directoryTree(path.join(filePath, child), options, onEachFile))
       .filter(e => !!e);
     item.size = item.children.reduce((prev, cur) => prev + cur.size, 0);
     item.type = constants.DIRECTORY;
@@ -106,4 +113,4 @@ function directoryTree(path, options, onEachFile) {
   return item;
 }
 
-module.exports = directoryTree;
+export default directoryTree;

@@ -1,7 +1,7 @@
 // TODO enable tslint
 /* tslint:disable */
 import { app, Menu, BrowserWindow, globalShortcut } from 'electron'
-
+import files from './files';
 const dev = require('electron-is-dev')
 const path = require('path')
 

@@ -70,7 +70,7 @@
     "react-dom": "^15.6.1",
     "react-redux": "^5.0.5",
     "react-treeview": "^0.4.7",
-    "react-ui-tree": "^3.0.0",
+    "react-ui-sortable-tree": "^2.6.14",
     "redux": "^3.7.2",
     "redux-localstorage": "rc",
     "redux-localstorage-filter": "^0.1.1",

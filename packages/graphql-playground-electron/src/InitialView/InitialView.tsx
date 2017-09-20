@@ -33,7 +33,7 @@ interface Props {
 class InitialView extends React.Component<
   Props & StateFromProps & DispatchFromProps,
   State
-> {
+  > {
   state = {
     endpoint: '',
     selectedMode: 'local'
@@ -153,7 +153,7 @@ class InitialView extends React.Component<
             background-color: #2a7ed3;
           }
         `}</style>
-        <div className="dragable" />
+        <div className="draggable" />
         <Modal
           isOpen={isOpen}
           contentLabel="initial view"
