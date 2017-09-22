@@ -8,6 +8,7 @@ import {
   CHANGE_KEY_MOVE,
   ChangeKeyMoveAction,
 } from '../actions/graphiql-docs'
+import { columnWidth } from '../constants'
 
 type GraphiqlDocsAction =
   | AddStackAction
@@ -25,7 +26,7 @@ export interface State {
 const defaultState: State = {
   navStack: [],
   docsOpen: false,
-  docsWidth: 300,
+  docsWidth: columnWidth,
   keyMove: false,
 }
 

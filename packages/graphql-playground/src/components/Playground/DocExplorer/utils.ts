@@ -23,23 +23,32 @@ export function serializeRoot(schema): SerializedRoot {
   }
   const queryType = schema.getQueryType()
   const queryFieldMap = queryType.getFields()
-  obj.queries = Object.keys(queryFieldMap).map(
-    fieldName => queryFieldMap[fieldName],
-  )
+  obj.queries = Object.keys(queryFieldMap).map(fieldName => {
+    const field = queryFieldMap[fieldName]
+    field.path = fieldName
+    field.parent = null
+    return field
+  })
   const mutationType = schema.getMutationType && schema.getMutationType()
   if (mutationType) {
     const mutationFieldMap = mutationType.getFields()
-    obj.mutations = Object.keys(mutationFieldMap).map(
-      fieldName => mutationFieldMap[fieldName],
-    )
+    obj.mutations = Object.keys(mutationFieldMap).map(fieldName => {
+      const field = mutationFieldMap[fieldName]
+      field.path = fieldName
+      field.parent = null
+      return field
+    })
   }
   const subscriptionType =
     schema.getSubscriptionType && schema.getSubscriptionType()
   if (subscriptionType) {
     const subscriptionFieldMap = mutationType.getFields()
-    obj.subscriptions = Object.keys(subscriptionFieldMap).map(
-      fieldName => subscriptionFieldMap[fieldName],
-    )
+    obj.subscriptions = Object.keys(subscriptionFieldMap).map(fieldName => {
+      const field = subscriptionFieldMap[fieldName]
+      field.path = fieldName
+      field.parent = null
+      return field
+    })
   }
   return obj
 }
@@ -82,7 +91,12 @@ export function serialize(schema, field) {
   // Get fields
   if (type.getFields) {
     const fieldMap = type.getFields()
-    obj.fields = Object.keys(fieldMap).map(name => fieldMap[name])
+    obj.fields = Object.keys(fieldMap).map(name => {
+      const f = fieldMap[name]
+      f.parent = field
+      f.path = field.path + `/${name}`
+      return f
+    })
   }
   // Get interfaces
   if (type instanceof GraphQLObjectType) {

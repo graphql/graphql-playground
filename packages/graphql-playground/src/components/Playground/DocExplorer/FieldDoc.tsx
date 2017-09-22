@@ -41,11 +41,7 @@ export default class FieldDoc extends React.Component<Props, State> {
     const explorerDoc: any =
       explorer.parentNode && explorer.parentNode.parentNode
     // TODO see browser compatibility scrollWidth && scrollLeft
-    scrollToRight(
-      explorerDoc,
-      explorerDoc.scrollWidth - explorerDoc.offsetWidth,
-      50,
-    )
+    scrollToRight(explorerDoc, explorerDoc.scrollWidth, 50)
   }
 
   render() {
@@ -82,7 +78,13 @@ export default class FieldDoc extends React.Component<Props, State> {
           }
         `}</style>
         <div className="doc-header">
-          <TypeLink type={field} x={level} y={0} clickable={false} />
+          <TypeLink
+            type={field}
+            x={level}
+            y={0}
+            clickable={false}
+            onSetWidth={this.props.onSetWidth}
+          />
         </div>
         <MarkdownContent
           className="doc-type-description"
@@ -108,6 +110,7 @@ export default class FieldDoc extends React.Component<Props, State> {
             fields={obj.fields}
             interfaces={obj.interfaces}
             level={level}
+            onSetWidth={this.props.onSetWidth}
           />}
 
         {obj.args.length > 0 &&

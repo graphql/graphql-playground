@@ -1,3 +1,5 @@
+export const columnWidth = 250
+
 export const introspectionQuery = `
   query IntrospectionQuery {
     __schema {

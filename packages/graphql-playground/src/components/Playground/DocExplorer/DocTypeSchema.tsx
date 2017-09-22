@@ -6,6 +6,7 @@ export interface DocTypeSchemaProps {
   fields: any[]
   interfaces: any[]
   level: number
+  onSetWidth: (width: number) => void
 }
 
 const DocTypeSchema = ({
@@ -13,6 +14,7 @@ const DocTypeSchema = ({
   fields,
   interfaces,
   level,
+  onSetWidth,
 }: DocTypeSchemaProps) => {
   const nonDeprecatedFields = fields.filter(data => !data.isDeprecated)
   const deprecatedFields = fields.filter(data => data.isDeprecated)
@@ -31,10 +33,11 @@ const DocTypeSchema = ({
       `}</style>
       <style jsx={true}>{`
         .doc-type-schema {
-          @p: .pt20;
+          @p: .pt20, .overflowAuto;
         }
         .doc-type-schema-line {
           @p: .ph16, .pv6;
+          white-space: nowrap;
         }
         .doc-value-comment {
           @p: .pr16, .black50;
@@ -53,13 +56,11 @@ const DocTypeSchema = ({
       <div className="doc-type-schema-line type-line">
         <span className="field-name">type</span>{' '}
         <span className="type-name">{type.name}</span>{' '}
-        {interfaces.length === 0 &&
-          <span className="brace">
-            {`{`}
-          </span>}
+        {interfaces.length === 0 && <span className="brace">{`{`}</span>}
       </div>
       {interfaces.map((data, index) =>
         <TypeLink
+          onSetWidth={onSetWidth}
           key={data.name}
           type={data}
           x={level}
@@ -81,6 +82,7 @@ const DocTypeSchema = ({
           type={data}
           x={level}
           y={index + interfaces.length}
+          onSetWidth={onSetWidth}
         />,
       )}
       {deprecatedFields.length > 0 && <br />}
@@ -93,6 +95,7 @@ const DocTypeSchema = ({
             type={data}
             x={level}
             y={index + nonDeprecatedFields.length + interfaces.length}
+            onSetWidth={onSetWidth}
           />
         </div>,
       )}

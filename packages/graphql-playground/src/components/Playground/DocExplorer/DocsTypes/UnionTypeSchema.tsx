@@ -11,7 +11,7 @@ const UnionTypeSchema = ({ schema, type }: EnumTypeSchemaProps) => {
     <div className="doc-type-schema">
       <style jsx={true}>{`
         .doc-type-schema {
-          @p: .ph16, .pt20;
+          @p: .ph16, .pt20, .overflowAuto;
         }
         .doc-value {
           @p: .ph16;

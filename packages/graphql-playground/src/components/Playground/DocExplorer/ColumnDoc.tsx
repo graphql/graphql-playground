@@ -1,5 +1,6 @@
 import * as React from 'react'
 import * as cx from 'classnames'
+import { columnWidth } from '../../../constants'
 
 export interface Props {
   children: any
@@ -12,7 +13,7 @@ const ColumnDoc = ({
   children,
   first,
   overflow = true,
-  width = 300,
+  width = columnWidth,
 }: Props) => {
   return (
     <div

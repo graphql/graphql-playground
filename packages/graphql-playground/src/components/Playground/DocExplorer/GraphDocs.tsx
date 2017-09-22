@@ -17,6 +17,7 @@ import {
 } from '../../../actions/graphiql-docs'
 import { serialize, serializeRoot, getElement, getElementRoot } from './utils'
 import Spinner from '../../Spinner'
+import { columnWidth } from '../../../constants'
 
 interface StateFromProps {
   navStack: any[]
@@ -55,18 +56,40 @@ class GraphDocs extends React.Component<
       searchValue: '',
       widthMap: {},
     }
+    ;(window as any).d = this
   }
 
   componentWillReceiveProps(nextProps: Props & StateFromProps) {
-    // If user use default column size % 300
+    // If user use default column size % columnWidth
     // Make the column follow the clicks
     if (
-      this.props.navStack.length < nextProps.navStack.length &&
-      nextProps.navStack.length < 3 &&
-      this.props.docsWidth % 300 === 0
+      this.props.navStack.length !== nextProps.navStack.length ||
+      this.props.navStack.slice(-1)[0] !== nextProps.navStack.slice(-1)[0]
     ) {
-      this.props.changeWidthDocs(300 * (nextProps.navStack.length + 1))
+      this.setWidth(nextProps)
     }
+  }
+
+  setWidth(props: any = this.props) {
+    requestAnimationFrame(() => {
+      const width = this.getWidth(props)
+      this.props.changeWidthDocs(Math.min(width, window.innerWidth - 50))
+    })
+  }
+
+  getWidth(props: any = this.props) {
+    const rootWidth = this.state.widthMap.root || columnWidth
+    const stackWidths = props.navStack.map(
+      stack => this.state.widthMap[stack.field.path] || columnWidth,
+    )
+
+    return (
+      [rootWidth].concat(stackWidths).reduce((acc, curr) => acc + curr, 0) + 6
+    )
+  }
+
+  componentDidMount() {
+    this.setWidth()
   }
 
   render() {
@@ -182,7 +205,10 @@ class GraphDocs extends React.Component<
                 {emptySchema}
               </ColumnDoc>}
             {schema &&
-              <ColumnDoc width={this.state.widthMap[0] || 294} overflow={false}>
+              <ColumnDoc
+                width={this.state.widthMap.root || columnWidth - 6}
+                overflow={false}
+              >
                 <SearchBox isShown={true} onSearch={this.handleSearch} />
                 <div className="overflowAuto flexAuto">
                   {searchValue &&
@@ -190,25 +216,25 @@ class GraphDocs extends React.Component<
                       searchValue={searchValue}
                       schema={schema}
                       level={0}
-                      onSetWidth={this.setWidthMap(0)}
+                      onSetWidth={this.setWidthMap('root')}
                     />}
                   {!searchValue &&
                     <GraphDocsRoot
                       schema={schema}
-                      onSetWidth={this.setWidthMap(0)}
+                      onSetWidth={this.setWidthMap('root')}
                     />}
                 </div>
               </ColumnDoc>}
             {navStack.map((stack, index) =>
               <ColumnDoc
                 key={index}
-                width={this.state.widthMap[index + 1] || 300}
+                width={this.state.widthMap[stack.field.path] || columnWidth}
               >
                 <FieldDoc
                   schema={schema}
                   field={stack.field}
                   level={index + 1}
-                  onSetWidth={this.setWidthMap(index + 1)}
+                  onSetWidth={this.setWidthMap(stack.field.path)}
                 />
               </ColumnDoc>,
             )}
@@ -229,13 +255,16 @@ class GraphDocs extends React.Component<
     this.props.toggleDocs()
   }
 
-  private setWidthMap = n => width => {
+  private setWidthMap = (path: string) => width => {
     this.setState(state => {
       return {
         ...state,
         widthMap: {
           ...state.widthMap,
-          [n]: Math.min(Math.max(state.widthMap[n] || 0, width + 50), 450),
+          [path]: Math.min(
+            Math.max(state.widthMap[path] || 0, width + 70),
+            450,
+          ),
         },
       }
     })
