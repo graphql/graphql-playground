@@ -43,6 +43,11 @@
     "files": [
       "lib/**/!(*.map)"
     ],
+    "fileAssociations": {
+      "ext": "graphql",
+      "name": "GraphQL",
+      "role": "Editor"
+    },
     "directories": {
       "output": "build-electron"
     }
@@ -51,6 +56,8 @@
     "classnames": "^2.2.5",
     "date-fns": "^1.28.5",
     "electron-is-dev": "^0.3.0",
+    "glob-to-regexp": "^0.3.0",
+    "globby": "^6.1.0",
     "graphcool-styles": "^0.1.31",
     "graphcool-tmp-ui": "^0.0.11",
     "graphql-config": "^1.0.0",
@@ -58,9 +65,12 @@
     "react": "^15.6.1",
     "react-dom": "^15.6.1",
     "react-redux": "^5.0.5",
+    "react-treeview": "^0.4.7",
+    "react-ui-sortable-tree": "^2.6.14",
     "redux": "^3.7.2",
     "redux-localstorage": "rc",
     "redux-localstorage-filter": "^0.1.1",
+    "shelljs": "^0.7.8",
     "styled-jsx": "0.5.2",
     "styled-jsx-postcss": "git+https://github.com/timsuchanek/styled-jsx-postcss#build3",
     "validator": "^8.0.0"
