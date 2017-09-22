@@ -367,6 +367,7 @@ class Playground extends React.Component<Props, State> {
           <style jsx={true}>{`
             .playground {
               @p: .h100, .flex, .flexColumn;
+              letter-spacing: 0.53px;
             }
 
             .blur {
@@ -461,6 +462,10 @@ class Playground extends React.Component<Props, State> {
               </div>,
             )}
           </div>
+          <ThemeSwitch
+            onToggleTheme={this.toggleTheme}
+            theme={this.state.theme}
+          />
           <GraphDocs schema={this.state.schemaCache} />
           {this.state.historyOpen &&
             <HistoryPopup
@@ -489,10 +494,6 @@ class Playground extends React.Component<Props, State> {
               query={selectedSession.query}
             />}
         </div>
-        <ThemeSwitch
-          onToggleTheme={this.toggleTheme}
-          theme={this.state.theme}
-        />
       </ThemeProvider>
     )
   }

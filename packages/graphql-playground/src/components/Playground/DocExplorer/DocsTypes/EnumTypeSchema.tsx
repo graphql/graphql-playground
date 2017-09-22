@@ -22,7 +22,7 @@ const EnumTypeSchema = ({ type }: EnumTypeSchemaProps) => {
       `}</style>
       <span className="field-name">enum</span>{' '}
       <span className="type-name">{type.name}</span>{' '}
-      <span className="type-name">{'{'}</span>
+      <span className="brace">{'{'}</span>
       {values
         .filter((value: any) => !value.isDeprecated)
         .map(value => <Value key={value.name} value={value} />)}
@@ -30,7 +30,7 @@ const EnumTypeSchema = ({ type }: EnumTypeSchemaProps) => {
       {deprecatedValues.map(value =>
         <Value key={value.name} value={value} isDeprecated={true} />,
       )}
-      <span className="type-name">{'}'}</span>
+      <span className="brace">{'}'}</span>
     </div>
   )
 }

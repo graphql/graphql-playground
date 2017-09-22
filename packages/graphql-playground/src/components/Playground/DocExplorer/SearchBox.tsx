@@ -1,11 +1,3 @@
-/**
- *  Copyright (c) Facebook, Inc.
- *  All rights reserved.
- *
- *  This source code is licensed under the license found in the
- *  LICENSE file in the root directory of this source tree.
- */
-
 import * as React from 'react'
 import debounce from 'graphiql/dist/utility/debounce'
 import { Icon } from 'graphcool-styles'
@@ -44,19 +36,19 @@ export default class SearchBox extends React.Component<Props, State> {
 
   render() {
     return (
-      <div className={cx(!this.props.clean && 'root')}>
+      <div className={cx(!this.props.clean && 'search-box')}>
         <style jsx={true}>{`
-          .root {
-            @inherit: .pa25, .bgBlack02, .bb, .bBlack10, .relative;
+          .search-box {
+            @p: .pa25, .bgBlack02, .bb, .bBlack10, .relative, .flexFixed;
             z-index: 1;
           }
           .label {
-            @inherit: .bgWhite, .bbox, .w100, .flex, .itemsCenter, .bgWhite;
+            @p: .bgWhite, .bbox, .w100, .flex, .itemsCenter, .bgWhite;
             padding: 12px 14px 13px 15px;
             box-shadow: 0 1px 3px rgba(0, 0, 0, .1);
           }
           .input {
-            @inherit: .f16, .ml10;
+            @p: .f16, .ml10;
           }
           .input::placeholder {
             color: rgba(0, 0, 0, 0.3);

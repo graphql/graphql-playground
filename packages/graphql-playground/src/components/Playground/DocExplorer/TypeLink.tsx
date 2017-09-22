@@ -1,11 +1,3 @@
-/**
- *  Copyright (c) Facebook, Inc.
- *  All rights reserved.
- *
- *  This source code is licensed under the license found in the
- *  LICENSE file in the root directory of this source tree.
- */
-
 import * as React from 'react'
 import * as cx from 'classnames'
 import { bindActionCreators } from 'redux'
@@ -34,6 +26,7 @@ export interface Props {
   className?: string
   beforeNode?: JSX.Element | null | false
   afterNode?: JSX.Element | null | false
+  onSetWidth?: (width: number) => void
 }
 
 class TypeLink extends React.Component<
@@ -43,6 +36,7 @@ class TypeLink extends React.Component<
   static defaultProps: Partial<Props> = {
     clickable: true,
   }
+  private ref: any
 
   shouldComponentUpdate(nextProps: Props & StateFromProps) {
     return (
@@ -61,6 +55,24 @@ class TypeLink extends React.Component<
 
   isActive(navStack: any[], x: number, y: number) {
     return navStack[x] && navStack[x].x === x && navStack[x].y === y
+  }
+
+  componentDidMount() {
+    this.sendWidth()
+  }
+
+  componentDidUpdate() {
+    this.sendWidth()
+  }
+
+  sendWidth() {
+    if (typeof this.props.onSetWidth === 'function' && this.ref) {
+      this.props.onSetWidth(this.ref.scrollWidth)
+    }
+  }
+
+  setRef = ref => {
+    this.ref = ref
   }
 
   render() {
@@ -87,7 +99,24 @@ class TypeLink extends React.Component<
           'no-hover': keyMove,
         })}
         onClick={this.onClick}
+        ref={this.setRef}
       >
+        <style jsx={true}>{`
+          .doc-category-item {
+            @p: .mv0, .ph16, .pv6, .relative, .overflowAuto;
+          }
+          .doc-category-item.clickable:hover {
+            @p: .pointer, .white;
+          }
+          .doc-category-item.active {
+            @p: .bgBlack07;
+          }
+          .doc-category-icon {
+            @p: .absolute;
+            right: 10px;
+            top: calc(50% - 4px);
+          }
+        `}</style>
         <style jsx={true} global={true}>{`
           .doc-category-item.last-active,
           .doc-category-item.clickable:hover:not(.no-hover) {
@@ -103,22 +132,6 @@ class TypeLink extends React.Component<
           }
           .doc-category-item.active:not(.last-active) svg {
             fill: #2a7ed3 !important;
-          }
-        `}</style>
-        <style jsx={true}>{`
-          .doc-category-item {
-            @p: .mv0, .ph16, .pv6, .relative;
-          }
-          .doc-category-item.clickable:hover {
-            @p: .pointer, .white;
-          }
-          .doc-category-item.active {
-            @p: .bgBlack07;
-          }
-          .doc-category-icon {
-            @p: .absolute;
-            right: 10px;
-            top: calc(50% - 4px);
           }
         `}</style>
         {beforeNode}

@@ -4,9 +4,10 @@ import { serializeRoot } from './utils'
 
 export interface Props {
   schema: any
+  onSetWidth: (width: number) => void
 }
 
-const GraphDocsRoot = ({ schema }: Props) => {
+const GraphDocsRoot = ({ schema, onSetWidth }: Props) => {
   const obj = serializeRoot(schema)
   return (
     <div className="doc-root">
@@ -15,18 +16,25 @@ const GraphDocsRoot = ({ schema }: Props) => {
           color: #f25c54;
         }
       `}</style>
-      <ShowRootType name="Queries" fields={obj.queries} offset={0} />
+      <ShowRootType
+        name="Queries"
+        fields={obj.queries}
+        offset={0}
+        onSetWidth={onSetWidth}
+      />
       {obj.mutations.length > 0 &&
         <ShowRootType
           name="Mutations"
           fields={obj.mutations}
           offset={obj.queries.length}
+          onSetWidth={onSetWidth}
         />}
       {obj.subscriptions.length > 0 &&
         <ShowRootType
           name="Subscriptions"
           fields={obj.subscriptions}
           offset={obj.queries.length + obj.mutations.length}
+          onSetWidth={onSetWidth}
         />}
     </div>
   )
@@ -36,9 +44,10 @@ interface ShowRootTypeProps {
   name: string
   fields: any[]
   offset: number
+  onSetWidth: (width: number) => void
 }
 
-function ShowRootType({ name, fields, offset }: ShowRootTypeProps) {
+function ShowRootType({ name, fields, offset, onSetWidth }: ShowRootTypeProps) {
   return (
     <div>
       <div className="doc-category-title">
@@ -47,7 +56,13 @@ function ShowRootType({ name, fields, offset }: ShowRootTypeProps) {
       {fields
         .filter(field => !field.isDeprecated)
         .map((field, index) =>
-          <TypeLink key={field.name} type={field} x={0} y={offset + index} />,
+          <TypeLink
+            key={field.name}
+            type={field}
+            x={0}
+            y={offset + index}
+            onSetWidth={onSetWidth}
+          />,
         )}
     </div>
   )

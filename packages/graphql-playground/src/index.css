@@ -15,6 +15,7 @@ body {
   color: rgba(0,0,0,.8);
   line-height: 1.5;
   height: 100vh;
+  letter-spacing: 0.53px;
 }
 
 html, body, p, a, h1, h2, h3, h4, ul, pre, code {

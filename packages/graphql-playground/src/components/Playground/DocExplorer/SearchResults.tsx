@@ -1,11 +1,3 @@
-/**
- *  Copyright (c) Facebook, Inc.
- *  All rights reserved.
- *
- *  This source code is licensed under the license found in the
- *  LICENSE file in the root directory of this source tree.
- */
-
 import * as React from 'react'
 
 import TypeLink from './TypeLink'
@@ -15,6 +7,7 @@ export interface Props {
   withinType?: any
   searchValue: string
   level: number
+  onSetWidth: (width: number) => void
 }
 
 export default class SearchResults extends React.Component<Props, {}> {
@@ -26,7 +19,7 @@ export default class SearchResults extends React.Component<Props, {}> {
   }
 
   render() {
-    const { level } = this.props
+    const { level, onSetWidth } = this.props
     const searchValue = this.props.searchValue
     const withinType = this.props.withinType
     const schema = this.props.schema
@@ -56,7 +49,12 @@ export default class SearchResults extends React.Component<Props, {}> {
       if (withinType !== type && isMatch(typeName, searchValue)) {
         matchedTypes.push(
           <div className="doc-category-item" key={typeName}>
-            <TypeLink type={type} x={level} y={matchedTypes.length} />
+            <TypeLink
+              type={type}
+              x={level}
+              y={matchedTypes.length}
+              onSetWidth={onSetWidth}
+            />
           </div>,
         )
       }
@@ -87,6 +85,7 @@ export default class SearchResults extends React.Component<Props, {}> {
                 type={field}
                 x={level}
                 y={matchedTypes.length}
+                onSetWidth={onSetWidth}
               />
             </div>
           )

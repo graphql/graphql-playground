@@ -7,9 +7,16 @@ export interface Props {
   x: number
   y: number
   showDefaultValue?: boolean
+  onSetWidth: (width: number) => void
 }
 
-export default function Argument({ arg, showDefaultValue, x, y }: Props) {
+export default function Argument({
+  arg,
+  showDefaultValue,
+  x,
+  y,
+  onSetWidth,
+}: Props) {
   return (
     <span className="arg">
       <style jsx={true}>{`
@@ -31,6 +38,7 @@ export default function Argument({ arg, showDefaultValue, x, y }: Props) {
             </span>
           </span>
         }
+        onSetWidth={onSetWidth}
       />
     </span>
   )

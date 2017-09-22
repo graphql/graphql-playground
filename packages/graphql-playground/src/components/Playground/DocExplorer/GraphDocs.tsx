@@ -38,8 +38,7 @@ export interface Props {
 
 export interface State {
   searchValue: string
-  clientX?: number
-  clientY?: number
+  widthMap: any
 }
 
 class GraphDocs extends React.Component<
@@ -47,11 +46,14 @@ class GraphDocs extends React.Component<
   State
 > {
   private refDocExplorer: any
+  private clientX: number = 0
+  private clientY: number = 0
 
   constructor(props) {
     super(props)
     this.state = {
       searchValue: '',
+      widthMap: {},
     }
   }
 
@@ -118,7 +120,7 @@ class GraphDocs extends React.Component<
             padding-bottom: 8px;
             transform: rotate(-90deg);
             left: -50px;
-            top: 115px;
+            top: 129px;
           }
           .doc-explorer {
             @p: .flex, .relative, .h100;
@@ -134,13 +136,13 @@ class GraphDocs extends React.Component<
           .doc-explorer:before {
             @p: .top0, .bottom0, .bgGreen, .absolute, .z3;
             left: -3px;
-            content: "";
+            content: '';
             width: 6px;
           }
           .doc-explorer-gradient {
             @p: .z1, .absolute, .top0, .bottom0;
             pointer-events: none;
-            content: "";
+            content: '';
             width: 20px;
             left: 0px;
             background: linear-gradient(
@@ -153,7 +155,7 @@ class GraphDocs extends React.Component<
             @p: .top0, .bottom0, .absolute, .z5;
             cursor: col-resize;
             left: -10px;
-            content: "";
+            content: '';
             width: 20px;
           }
         `}</style>
@@ -180,22 +182,33 @@ class GraphDocs extends React.Component<
                 {emptySchema}
               </ColumnDoc>}
             {schema &&
-              <ColumnDoc first={true}>
+              <ColumnDoc width={this.state.widthMap[0] || 294} overflow={false}>
                 <SearchBox isShown={true} onSearch={this.handleSearch} />
-                {searchValue &&
-                  <SearchResults
-                    searchValue={searchValue}
-                    schema={schema}
-                    level={0}
-                  />}
-                {!searchValue && <GraphDocsRoot schema={schema} />}
+                <div className="overflowAuto flexAuto">
+                  {searchValue &&
+                    <SearchResults
+                      searchValue={searchValue}
+                      schema={schema}
+                      level={0}
+                      onSetWidth={this.setWidthMap(0)}
+                    />}
+                  {!searchValue &&
+                    <GraphDocsRoot
+                      schema={schema}
+                      onSetWidth={this.setWidthMap(0)}
+                    />}
+                </div>
               </ColumnDoc>}
             {navStack.map((stack, index) =>
-              <ColumnDoc key={index}>
+              <ColumnDoc
+                key={index}
+                width={this.state.widthMap[index + 1] || 300}
+              >
                 <FieldDoc
                   schema={schema}
                   field={stack.field}
                   level={index + 1}
+                  onSetWidth={this.setWidthMap(index + 1)}
                 />
               </ColumnDoc>,
             )}
@@ -216,15 +229,16 @@ class GraphDocs extends React.Component<
     this.props.toggleDocs()
   }
 
-  private handleMouseMove = e => {
-    this.setState({ clientX: e.clientX, clientY: e.clientY })
-    if (
-      this.props.keyMove &&
-      this.state.clientX !== e.clientX &&
-      this.state.clientY !== e.clientY
-    ) {
-      this.props.changeKeyMove(false)
-    }
+  private setWidthMap = n => width => {
+    this.setState(state => {
+      return {
+        ...state,
+        widthMap: {
+          ...state.widthMap,
+          [n]: Math.min(Math.max(state.widthMap[n] || 0, width + 50), 450),
+        },
+      }
+    })
   }
 
   private handleKeyDown = e => {
@@ -346,6 +360,18 @@ class GraphDocs extends React.Component<
 
     document.addEventListener('mousemove', onMouseMove)
     document.addEventListener('mouseup', onMouseUp)
+  }
+
+  private handleMouseMove = e => {
+    this.clientX = e.clientX
+    this.clientY = e.clientY
+    if (
+      this.props.keyMove &&
+      this.clientX !== e.clientX &&
+      this.clientY !== e.clientY
+    ) {
+      this.props.changeKeyMove(false)
+    }
   }
 }
 

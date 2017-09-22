@@ -1,11 +1,3 @@
-/**
- *  Copyright (c) Facebook, Inc.
- *  All rights reserved.
- *
- *  This source code is licensed under the license found in the
- *  LICENSE file in the root directory of this source tree.
- */
-
 import * as React from 'react'
 import * as ReactDOM from 'react-dom'
 import Argument from './Argument'
@@ -22,6 +14,7 @@ export interface Props {
   schema: any
   field: any
   level: number
+  onSetWidth: (width: number) => void
 }
 
 export interface State {
@@ -123,7 +116,12 @@ export default class FieldDoc extends React.Component<Props, State> {
             {obj.args.map((arg, index) =>
               <div key={arg.name}>
                 <div>
-                  <Argument arg={arg} x={level} y={index + argsOffset} />
+                  <Argument
+                    arg={arg}
+                    x={level}
+                    y={index + argsOffset}
+                    onSetWidth={this.props.onSetWidth}
+                  />
                 </div>
               </div>,
             )}
@@ -138,6 +136,7 @@ export default class FieldDoc extends React.Component<Props, State> {
                 type={data}
                 x={level}
                 y={index + implementationsOffset}
+                onSetWidth={this.props.onSetWidth}
               />,
             )}
           </div>}
