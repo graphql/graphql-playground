@@ -33,7 +33,8 @@ export default class ThemeSwitch extends React.Component<Props, State> {
             top: 17px;
           }
           .tooltip-text {
-            @p: .mr10;
+            @p: .mr10, .darkBlue50, .fw6, .ttu, .f14;
+            letter-spacing: 0.53px;
           }
           .icon {
             @p: .pointer, .relative;
