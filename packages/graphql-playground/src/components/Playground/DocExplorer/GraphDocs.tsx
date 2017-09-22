@@ -130,7 +130,12 @@ class GraphDocs extends React.Component<
         <style jsx={true}>{`
           .docs :global(p),
           .docs :global(.doc-category-title) {
-            @p: .pa16;
+            @p: .pa16, .f14;
+          }
+          .graph-docs :global(code) {
+            @p: .mono, .br2;
+            padding: 1px 2px;
+            background: rgba(0, 0, 0, .06);
           }
           .graph-docs {
             @p: .absolute, .right0, .h100, .z999;

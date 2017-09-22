@@ -9,7 +9,7 @@ const ScalarTypeSchema = ({ type }: ScalarTypeSchemaProps) => {
     <div className="doc-type-schema">
       <style jsx={true}>{`
         .doc-type-schema {
-          @p: .ph16, .pt20, .overflowAuto;
+          @p: .ph16, .pt20, .overflowAuto, .f14;
         }
       `}</style>
       <span className="field-name">scalar</span>{' '}

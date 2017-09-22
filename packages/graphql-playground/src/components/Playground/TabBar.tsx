@@ -145,7 +145,9 @@ export const TabBar = withTheme<
           }
 
           .history {
-            @p: .pointer;
+            @p: .pointer, .absolute;
+            top: 14px;
+            right: 58px;
           }
 
           .change-theme {
@@ -160,18 +162,6 @@ export const TabBar = withTheme<
           }
         `}</style>
         <div className={cx('tabs', { isApp })}>
-          <div className="history">
-            <Icon
-              className="icon"
-              src={require('graphcool-styles/icons/stroke/history.svg')}
-              stroke={true}
-              strokeWidth={3}
-              width={25}
-              height={25}
-              color={theme === 'dark' ? $v.white40 : $v.gray40}
-              onClick={onOpenHistory}
-            />
-          </div>
           {sessions.map((session, index) => {
             const { queryTypes } = session
             return (
@@ -294,6 +284,18 @@ export const TabBar = withTheme<
                   strokeWidth={4}
                 />
               </div>}
+          <div className="history">
+            <Icon
+              className="icon"
+              src={require('graphcool-styles/icons/stroke/history.svg')}
+              stroke={true}
+              strokeWidth={4}
+              width={27}
+              height={27}
+              color={theme === 'dark' ? $v.white40 : $v.gray20}
+              onClick={onOpenHistory}
+            />
+          </div>
         </div>
         {theme === 'light' && <div className="border-bottom" />}
       </div>
