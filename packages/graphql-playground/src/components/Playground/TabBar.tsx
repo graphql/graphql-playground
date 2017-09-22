@@ -46,7 +46,7 @@ export const TabBar = withTheme<
             }
           }
           .tabbar.light {
-            @p: .black50;
+            @p: .darkBlue50;
             background-color: #dbdee0;
           }
 
@@ -126,7 +126,8 @@ export const TabBar = withTheme<
           }
 
           .close {
-            @p: .ml10, .o50;
+            @p: .ml10, .o50, .relative;
+            top: 1px;
             &.active {
               @p: .o100;
             }
@@ -246,10 +247,10 @@ export const TabBar = withTheme<
                   <Icon
                     src={require('graphcool-styles/icons/stroke/cross.svg')}
                     stroke={true}
-                    color={theme === 'dark' ? $v.white40 : $v.gray40}
-                    width={11}
-                    height={10}
-                    strokeWidth={8}
+                    color={theme === 'dark' ? $v.white40 : $v.darkBlue40}
+                    width={12}
+                    height={11}
+                    strokeWidth={7}
                   />
                 </div>
               </div>
@@ -269,7 +270,7 @@ export const TabBar = withTheme<
                 <div className="tab plus" onClick={onNewSession}>
                   <Icon
                     src={require('graphcool-styles/icons/stroke/add.svg')}
-                    color={theme === 'dark' ? $v.white20 : $v.gray20}
+                    color={theme === 'dark' ? $v.white20 : $v.darkBlue20}
                     width={34}
                     height={34}
                     stroke={true}
@@ -280,7 +281,7 @@ export const TabBar = withTheme<
             : <div className="tab plus" onClick={onNewSession}>
                 <Icon
                   src={require('graphcool-styles/icons/stroke/add.svg')}
-                  color={theme === 'dark' ? $v.white20 : $v.gray20}
+                  color={theme === 'dark' ? $v.white20 : $v.darkBlue20}
                   width={34}
                   height={34}
                   stroke={true}
