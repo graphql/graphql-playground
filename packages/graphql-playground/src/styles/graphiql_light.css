@@ -1348,9 +1348,12 @@ p:first-child ,
     margin-bottom: -1px;
 }
 
+.graphiql-button, body .docs-graphiql .download-button {
+    letter-spacing: 0.53px !important;
+}
 
 .docs-graphiql .graphiql-button, body .docs-graphiql .download-button {
     margin-top: 5px;
-    background: rgb(242,242,242) !important;
-    color: rgb(168,168,168) !important;
+    background: #E9EAEB !important;
+    color: rgba(15,32,45,0.4) !important;
 }
