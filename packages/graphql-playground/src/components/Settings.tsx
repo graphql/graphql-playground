@@ -8,13 +8,16 @@ import { Theme } from './Playground'
 interface Props {
   theme: Theme
   onToggleTheme: () => void
+  onToggleReload: () => void
+  autoReload: boolean
+  onReload: () => void
 }
 
 interface State {
   open: boolean
 }
 
-export default class ThemeSwitch extends React.Component<Props, State> {
+export default class Settings extends React.Component<Props, State> {
   constructor(props) {
     super(props)
     this.state = {
@@ -23,13 +26,13 @@ export default class ThemeSwitch extends React.Component<Props, State> {
   }
   render() {
     const { open } = this.state
-    const { theme } = this.props
+    const { theme, onToggleReload, autoReload, onReload } = this.props
     return (
       <div className="theme-switch">
         <style jsx={true}>{`
           .theme-switch {
             @p: .absolute, .z999;
-            right: 21px;
+            right: 58px;
             top: 17px;
           }
           .tooltip-text {
@@ -43,6 +46,21 @@ export default class ThemeSwitch extends React.Component<Props, State> {
             @p: .absolute;
             right: -21px;
           }
+          .row {
+            @p: .flex, .itemsCenter;
+          }
+          .row + .row {
+            @p: .mt16;
+          }
+          .button {
+            @p: .br2, .f14, .fw6, .ttu, .darkBlue40;
+            background: #e9eaeb;
+            padding: 5px 9px 6px 9px;
+          }
+          .button:hover {
+            @p: .darkBlue50;
+            background: #dbdcdc;
+          }
         `}</style>
         <div className="icon">
           <Icon
@@ -55,18 +73,40 @@ export default class ThemeSwitch extends React.Component<Props, State> {
           <div className="tooltip">
             <Tooltip
               open={open}
-              onClick={this.props.onToggleTheme}
               onClose={this.toggleTooltip}
               anchorOrigin={{
                 horizontal: 'right',
                 vertical: 'bottom',
               }}
             >
-              <span className="tooltip-text">LIGHT MODE </span>
-              <ToggleButton
-                checked={theme === 'light'}
-                onChange={this.props.onToggleTheme}
-              />
+              <div>
+                <div className="row">
+                  <span
+                    className="tooltip-text"
+                    onClick={this.props.onToggleTheme}
+                  >
+                    LIGHT MODE{' '}
+                  </span>
+                  <ToggleButton
+                    checked={theme === 'light'}
+                    onChange={this.props.onToggleTheme}
+                  />
+                </div>
+                <div className="row">
+                  <span className="tooltip-text" onClick={onToggleReload}>
+                    AUTO-RELOAD SCHEMA{' '}
+                  </span>
+                  <ToggleButton
+                    checked={autoReload}
+                    onChange={onToggleReload}
+                  />
+                </div>
+                <div className="row">
+                  <div className="button" onClick={onReload}>
+                    Reload Schema
+                  </div>
+                </div>
+              </div>
             </Tooltip>
           </div>
         </div>

@@ -147,8 +147,8 @@ export const TabBar = withTheme<
 
           .history {
             @p: .pointer, .absolute;
-            top: 14px;
-            right: 58px;
+            top: 15px;
+            right: 19px;
           }
 
           .change-theme {

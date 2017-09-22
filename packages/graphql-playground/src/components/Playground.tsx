@@ -28,7 +28,8 @@ import {
   onboardingQuery1,
   onboardingQuery1Check,
 } from '../data'
-import ThemeSwitch from './ThemeSwitch'
+import Settings from './Settings'
+import { setInterval } from 'timers'
 
 export type Theme = 'dark' | 'light'
 export type Viewer = 'ADMIN' | 'EVERYONE' | 'USER'
@@ -69,6 +70,7 @@ export interface State {
   codeGenerationPopupOpen: boolean
   disableQueryHeader: boolean
   theme: Theme
+  autoReloadSchema: boolean
 }
 
 export interface CursorPosition {
@@ -87,6 +89,7 @@ class Playground extends React.Component<Props, State> {
   observers: { [sessionId: string]: any } = {}
   graphiqlComponents: any[] = []
   private initialIndex: number = -1
+  private schemaReloadInterval: any
 
   private updateQueryTypes = debounce(
     150,
@@ -164,6 +167,7 @@ class Playground extends React.Component<Props, State> {
       codeGenerationPopupOpen: false,
       disableQueryHeader: false,
       theme: (localStorage.getItem('theme') as Theme) || 'light',
+      autoReloadSchema: false,
     }
 
     if (typeof window === 'object') {
@@ -213,6 +217,17 @@ class Playground extends React.Component<Props, State> {
       })
       this.resetSubscriptions()
       this.fetchSchemas().then(this.initSessions)
+    }
+
+    if (this.state.autoReloadSchema && !this.schemaReloadInterval) {
+      this.schemaReloadInterval = setInterval(() => {
+        this.fetchSchemas()
+      }, 4000)
+    }
+
+    if (!this.state.autoReloadSchema && this.schemaReloadInterval) {
+      clearInterval(this.schemaReloadInterval)
+      this.schemaReloadInterval = null
     }
   }
 
@@ -465,9 +480,12 @@ class Playground extends React.Component<Props, State> {
               </div>,
             )}
           </div>
-          <ThemeSwitch
+          <Settings
             onToggleTheme={this.toggleTheme}
             theme={this.state.theme}
+            autoReload={this.state.autoReloadSchema}
+            onToggleReload={this.toggleSchemaReload}
+            onReload={this.fetchSchemas}
           />
           <GraphDocs schema={this.state.schemaCache} />
           {this.state.historyOpen &&
@@ -500,6 +518,13 @@ class Playground extends React.Component<Props, State> {
         </div>
       </ThemeProvider>
     )
+  }
+
+  toggleSchemaReload = () => {
+    this.setState(state => ({
+      ...state,
+      autoReloadSchema: !state.autoReloadSchema,
+    }))
   }
 
   public nextTab = () => {
