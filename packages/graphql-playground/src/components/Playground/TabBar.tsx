@@ -37,7 +37,7 @@ export const TabBar = withTheme<
       <div className={cx('tabbar', theme)}>
         <style jsx={true}>{`
           .tabbar {
-            @inherit: .white, .z4;
+            @p: .white, .z4;
             height: 57px;
             background-color: $darkBlueGray;
 
@@ -51,12 +51,12 @@ export const TabBar = withTheme<
           }
 
           .tabs {
-            @inherit: .mt16, .ml16, .flex, .itemsCenter;
+            @p: .mt16, .ml16, .flex, .itemsCenter;
             height: 41px;
           }
 
           .tab {
-            @inherit: .flex,
+            @p: .flex,
               .itemsCenter,
               .bgDarkerBlue,
               .br2,
@@ -68,37 +68,31 @@ export const TabBar = withTheme<
             padding: 10px;
             padding-top: 9px;
             &.active {
-              @inherit: .bgDarkBlue;
+              @p: .bgDarkBlue;
             }
           }
           .light .tab {
-            background-color: #eeeff0;
+            background-color: #e7eaec;
             &.active {
               background-color: #eeeff0;
             }
           }
 
           .icons {
-            @inherit: .flex, .itemsCenter, .o50;
+            @p: .flex, .itemsCenter, .o50;
             &.active {
-              @inherit: .o100;
+              @p: .o100;
             }
           }
 
           .red-dot {
-            @inherit: .br100, .bgrRed, .mr10;
+            @p: .br100, .bgrRed, .mr10;
             width: 7px;
             height: 7px;
           }
 
           .query-type {
-            @inherit: .br2,
-              .flex,
-              .itemsCenter,
-              .justifyCenter,
-              .mr4,
-              .fw7,
-              .f12;
+            @p: .br2, .flex, .itemsCenter, .justifyCenter, .mr4, .fw7, .f12;
             height: 21px;
             width: 21px;
             margin-right: 2px;
@@ -109,42 +103,42 @@ export const TabBar = withTheme<
           }
 
           .subscription {
-            @inherit: .bgPurple;
+            @p: .bgPurple;
           }
 
           .query {
-            @inherit: .bgBlue;
+            @p: .bgBlue;
           }
 
           .mutation {
-            @inherit: .bgLightOrange;
+            @p: .bgLightOrange;
           }
 
           .viewer {
-            @inherit: .mr10;
+            @p: .mr10;
           }
 
           .operation-name {
-            @inherit: .o50;
+            @p: .o50;
             &.active {
-              @inherit: .o100;
+              @p: .o100;
             }
           }
 
           .close {
-            @inherit: .ml10, .o50;
+            @p: .ml10, .o50;
             &.active {
-              @inherit: .o100;
+              @p: .o100;
             }
           }
 
           .plus {
-            @inherit: .flex, .justifyCenter, .itemsCenter;
+            @p: .flex, .justifyCenter, .itemsCenter;
             width: 43px;
           }
 
           .history {
-            @inherit: .pointer;
+            @p: .pointer;
           }
 
           .change-theme {
