@@ -3145,6 +3145,14 @@ graphcool-tmp-ui@^0.0.11:
     graphcool-styles "^0.1.31"
     react-modal "^1.6.5"
 
+graphcool-ui@^0.0.13:
+  version "0.0.13"
+  resolved "https://registry.yarnpkg.com/graphcool-ui/-/graphcool-ui-0.0.13.tgz#087b3da14c18746f05e840a6621ff14dadf198c7"
+  dependencies:
+    classnames "^2.2.5"
+    graphcool-styles "^0.1.31"
+    react-modal "^1.6.5"
+
 graphiql@^0.11.2:
   version "0.11.2"
   resolved "https://registry.yarnpkg.com/graphiql/-/graphiql-0.11.2.tgz#7f7864552c340ab4fe6f578ce3f7197905d429db"
@@ -3198,9 +3206,9 @@ graphql-language-service-utils@0.0.17:
     graphql "^0.10.1"
     graphql-language-service-types "0.0.21"
 
-graphql-playground@^0.1.3:
-  version "0.1.3"
-  resolved "https://registry.yarnpkg.com/graphql-playground/-/graphql-playground-0.1.3.tgz#5f8cd6681ee9ec25dcb36bd1a2ce6628c1cc5dfc"
+graphql-playground@^0.1.5:
+  version "0.1.5"
+  resolved "https://registry.yarnpkg.com/graphql-playground/-/graphql-playground-0.1.5.tgz#10b068cc1c9d9dcc52a123427833d7a7af01b85d"
   dependencies:
     calculate-size "^1.1.1"
     classnames "^2.2.5"

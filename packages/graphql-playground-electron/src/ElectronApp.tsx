@@ -5,8 +5,8 @@ import { Icon, $v } from 'graphcool-styles'
 import * as cx from 'classnames'
 import Playground from 'graphql-playground/lib/components/Playground'
 import ThemeProvider from 'graphql-playground/lib/components/theme/ThemeProvider'
-import ToggleButton from 'graphcool-tmp-ui/lib/ToggleButton'
-import Tooltip from 'graphcool-tmp-ui/lib/Tooltip'
+import ToggleButton from 'graphcool-ui/lib/ToggleButton'
+import Tooltip from 'graphcool-ui/lib/Tooltip'
 import {
   GraphQLProjectConfig,
   getGraphQLProjectConfig,
@@ -15,6 +15,7 @@ import {
 import { createNewWindow } from './utils'
 import createStore from './createStore'
 import InitialView from './InitialView/InitialView'
+import * as minimist from 'minimist'
 
 const store = createStore()
 
@@ -31,13 +32,26 @@ interface State {
 }
 
 export default class ElectronApp extends React.Component<{}, State> {
-  state: State = {
-    openInitialView: true,
-    openTooltipTheme: false,
-    activeEndpoint: null,
-    theme: 'dark',
-  }
   private playground: Playground
+
+  constructor() {
+    super()
+    const endpoint = this.getEndpointFromArgs()
+    this.state = {
+      openInitialView: !endpoint,
+      openTooltipTheme: false,
+      activeEndpoint: null,
+      theme: 'dark',
+      endpoint,
+    }
+  }
+
+  getEndpointFromArgs(): string | undefined {
+    const argv = process.argv
+    const args = minimist(argv.slice(2))
+
+    return args.endpoint
+  }
 
   handleSelectEndpoint = (endpoint: string) => {
     this.setState({ endpoint, openInitialView: false } as State)

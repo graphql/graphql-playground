@@ -4,12 +4,13 @@ import { remote } from 'electron'
 import { existsSync } from 'fs'
 import { resolve } from 'path'
 import { Icon, $v } from 'graphcool-styles'
-import Modal from 'graphcool-tmp-ui/lib/Modal'
-import Toggle from 'graphcool-tmp-ui/lib/Toggle'
+import Modal from 'graphcool-ui/lib/Modal'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import * as format from 'date-fns/format'
 import { selectHistory, History } from '../actions/history'
+import Toggle from './Toggle'
+import { examples } from './data'
 
 interface StateFromProps {
   history: History[]
@@ -30,13 +31,38 @@ interface Props {
   onSelectFolder: (config: string) => void
 }
 
+const modalStyle = {
+  overlay: {
+    zIndex: 20,
+    backgroundColor: 'rgba(15,32,46,.9)',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    '-webkit-app-region': 'drag',
+  },
+  content: {
+    position: 'relative',
+    width: 976,
+    height: 'auto',
+    top: 'initial',
+    left: 'initial',
+    right: 'initial',
+    bottom: 'initial',
+    borderRadius: 2,
+    padding: 0,
+    border: 'none',
+    background: 'none',
+    boxShadow: '0 1px 7px rgba(0,0,0,.2)',
+  },
+}
+
 class InitialView extends React.Component<
   Props & StateFromProps & DispatchFromProps,
   State
 > {
   state = {
     endpoint: '',
-    selectedMode: 'local',
+    selectedMode: 'url endpoint',
   }
 
   handleRequestClose = () => null
@@ -98,6 +124,7 @@ class InitialView extends React.Component<
     const { isOpen, history } = this.props
     const { endpoint, selectedMode } = this.state
     const choicesMode = ['local', 'url endpoint']
+
     return (
       <div>
         <style jsx={true}>{`
@@ -143,54 +170,89 @@ class InitialView extends React.Component<
             @p: .justifyCenter, .flex;
           }
           .initial-view-workspace .container-input {
-            @p: .ph10, .pv6, .mh38, .mt20, .black30, .ba, .bBlack10, .br2, .flex;
+            @p: .ph10, .pv6, .mh38, .mt20, .darkBlue40, .ba, .bBlack10, .br2,
+              .flex, .f14;
           }
           .initial-view-workspace .container-input input {
-            @p: .black50, .w100;
+            @p: .darkBlue60, .w100, .f14;
           }
           .initial-view-workspace .container-input button {
-            @p: .white, .br2, .pv6, .ph10, .pointer;
+            @p: .white, .br2, .pv6, .ph10, .pointer, .f14, .fw6;
+            letter-spacing: 0.53px;
             background-color: #2a7ed3;
           }
         `}</style>
-        <div className='dragable' />
+        <div className="dragable" />
         <Modal
           isOpen={isOpen}
           contentLabel="initial view"
           onRequestClose={this.handleRequestClose}
+          style={modalStyle}
         >
           <div className="initial-view-content">
-            <div className="initial-view-recent">
-              <div className="initial-view-recent-header">RECENT</div>
-              <div className="initial-view-recent-list">
-                {history.map(data =>
-                  <div
-                    className="list-item"
-                    // tslint:disable-next-line
-                    onClick={() => this.handleClickHistory(data)}
-                  >
-                    <div className="list-item-name" title={data.path}>
-                      {data.path}
-                    </div>
-                    <div className="list-item-date">
-                      <Icon
-                        src={
-                          data.type === 'local'
-                            ? require('../icons/folder.svg')
-                            : require('graphcool-styles/icons/fill/world.svg')
-                        }
-                        color={$v.gray40}
-                        width={14}
-                        height={14}
-                      />
-                      <span>
-                        Last opened {format(data.lastOpened, 'DD.MM.YYYY')}
-                      </span>
-                    </div>
-                  </div>,
-                )}
-              </div>
-            </div>
+            {history.length > 0
+              ? <div className="initial-view-recent">
+                  <div className="initial-view-recent-header">RECENT</div>
+                  <div className="initial-view-recent-list">
+                    {history.map(data =>
+                      <div
+                        className="list-item"
+                        // tslint:disable-next-line
+                        onClick={() => this.handleClickHistory(data)}
+                      >
+                        <div className="list-item-name" title={data.path}>
+                          {data.path}
+                        </div>
+                        <div className="list-item-date">
+                          <Icon
+                            src={
+                              data.type === 'local'
+                                ? require('../icons/folder.svg')
+                                : require('graphcool-styles/icons/fill/world.svg')
+                            }
+                            color={$v.gray40}
+                            width={14}
+                            height={14}
+                          />
+                          <span>
+                            Last opened {format(data.lastOpened, 'DD.MM.YYYY')}
+                          </span>
+                        </div>
+                      </div>,
+                    )}
+                  </div>
+                </div>
+              : <div className="initial-view-recent">
+                  <div className="initial-view-recent-header">EXAMPLES</div>
+                  <div className="initial-view-recent-list">
+                    {examples.map(example =>
+                      <div
+                        className="list-item"
+                        // tslint:disable-next-line
+                        onClick={() =>
+                          this.props.onSelectEndpoint(example.endpoint)}
+                      >
+                        <div
+                          className="list-item-name"
+                          title={example.endpoint}
+                        >
+                          {example.name}
+                        </div>
+                        <div className="list-item-date">
+                          <Icon
+                            src={require('graphcool-styles/icons/fill/world.svg')}
+                            color={$v.gray40}
+                            width={14}
+                            height={14}
+                          />
+                          <span>
+                            {example.endpoint}
+                          </span>
+                        </div>
+                      </div>,
+                    )}
+                  </div>
+                </div>}
             <div className="initial-view-workspace">
               <h1 className="title">New workspace</h1>
               <p className="description">
@@ -204,6 +266,16 @@ class InitialView extends React.Component<
                   onChange={this.handleChangeMode}
                 />
               </div>
+              {selectedMode === 'url endpoint' &&
+                <form className="container-input" onSubmit={this.handleSubmit}>
+                  <input
+                    className="input"
+                    placeholder="Enter endpoint url..."
+                    value={endpoint}
+                    onChange={this.handleChangeEndpoint}
+                  />
+                  <button>OPEN</button>
+                </form>}
               {selectedMode === 'local' &&
                 <div
                   className="container-input"
@@ -217,16 +289,6 @@ class InitialView extends React.Component<
                   />
                   <button>OPEN</button>
                 </div>}
-              {selectedMode === 'url endpoint' &&
-                <form className="container-input" onSubmit={this.handleSubmit}>
-                  <input
-                    className="input"
-                    placeholder="Enter endpoint url..."
-                    value={endpoint}
-                    onChange={this.handleChangeEndpoint}
-                  />
-                  <button>OPEN</button>
-                </form>}
             </div>
           </div>
         </Modal>
