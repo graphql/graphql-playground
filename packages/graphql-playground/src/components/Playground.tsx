@@ -49,6 +49,7 @@ export interface Props {
   onboardingStep?: string
   tether?: any
   nextStep?: () => void
+  isApp?: boolean
 }
 
 export interface State {
@@ -394,6 +395,7 @@ class Playground extends React.Component<Props, State> {
             onboardingStep={this.props.onboardingStep}
             nextStep={this.props.nextStep}
             tether={this.props.tether}
+            isApp={this.props.isApp}
           />
           <div
             className={cx('graphiqls-container', {

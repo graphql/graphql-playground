@@ -15,6 +15,7 @@ export interface Props {
   tether?: any
   nextStep?: () => void
   theme?: string
+  isApp?: boolean
 }
 
 export const TabBar = withTheme<
@@ -30,6 +31,7 @@ export const TabBar = withTheme<
     onboardingStep,
     tether,
     theme,
+    isApp,
   }: Props) => {
     const Tether = tether
 
@@ -53,6 +55,10 @@ export const TabBar = withTheme<
           .tabs {
             @p: .mt16, .ml16, .flex, .itemsCenter;
             height: 41px;
+          }
+
+          .tabs.isApp {
+            padding-left: 82px;
           }
 
           .tab {
@@ -153,7 +159,7 @@ export const TabBar = withTheme<
             width: 100%;
           }
         `}</style>
-        <div className="tabs">
+        <div className={cx('tabs', { isApp })}>
           <div className="history">
             <Icon
               className="icon"

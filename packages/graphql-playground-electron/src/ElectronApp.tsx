@@ -260,6 +260,7 @@ export default class ElectronApp extends React.Component<{}, State> {
                   ref={playground => (this.playground = playground)}
                   endpoint={endpoint}
                   wsApiPrefix={'wss://subscriptions.graph.cool/v1'}
+                  isApp={true}
                 />
               </div>
             </div>}
