@@ -27,6 +27,7 @@ export interface Props {
   beforeNode?: JSX.Element | null | false
   afterNode?: JSX.Element | null | false
   onSetWidth: (width: number) => void
+  showParentName?: boolean
 }
 
 class TypeLink extends React.Component<
@@ -86,10 +87,19 @@ class TypeLink extends React.Component<
       x,
       y,
       keyMove,
+      showParentName,
     } = this.props
     const isActive = clickable && this.isActive(navStack, x, y)
     const isLastActive = isActive && x === navStack.length - 1
     const isGraphqlType = isType(type)
+
+    const fieldName =
+      showParentName && type.parent
+        ? <span>
+            {type.parent.name}.<b>{type.name}</b>
+          </span>
+        : type.name
+
     return (
       <div
         className={cx('doc-category-item', className, {
@@ -133,13 +143,16 @@ class TypeLink extends React.Component<
           .doc-category-item.active:not(.last-active) svg {
             fill: #2a7ed3 !important;
           }
+          .doc-category-item b {
+            @p: .fw6;
+          }
         `}</style>
         {beforeNode}
         {beforeNode && ' '}
         {!isGraphqlType &&
           <span>
             <span className="field-name">
-              {type.name}
+              {fieldName}
             </span>
             {type.args &&
             type.args.length > 0 && [

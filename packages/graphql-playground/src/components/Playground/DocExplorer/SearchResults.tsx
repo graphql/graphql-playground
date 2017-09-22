@@ -37,6 +37,7 @@ export default class SearchResults extends React.Component<Props, {}> {
       typeNames.unshift(withinType.name)
     }
 
+    let count = 0
     for (const typeName of typeNames) {
       if (
         matchedWithin.length + matchedTypes.length + matchedFields.length >=
@@ -52,7 +53,7 @@ export default class SearchResults extends React.Component<Props, {}> {
             <TypeLink
               type={type}
               x={level}
-              y={matchedTypes.length}
+              y={count++}
               onSetWidth={onSetWidth}
             />
           </div>,
@@ -63,6 +64,7 @@ export default class SearchResults extends React.Component<Props, {}> {
         const fields = type.getFields()
         Object.keys(fields).forEach(fieldName => {
           const field = fields[fieldName]
+          field.parent = type
           let matchingArgs
 
           if (!isMatch(fieldName, searchValue)) {
@@ -84,8 +86,9 @@ export default class SearchResults extends React.Component<Props, {}> {
                 key="type"
                 type={field}
                 x={level}
-                y={matchedTypes.length}
+                y={count++}
                 onSetWidth={onSetWidth}
+                showParentName={true}
               />
             </div>
           )
