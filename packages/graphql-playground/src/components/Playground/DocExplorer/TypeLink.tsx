@@ -113,7 +113,7 @@ class TypeLink extends React.Component<
       >
         <style jsx={true}>{`
           .doc-category-item {
-            @p: .mv0, .ph16, .pv6, .relative, .overflowAuto;
+            @p: .mv0, .ph16, .pv6, .relative, .overflowAuto, .f14;
             transition: $duration background-color;
           }
           .doc-category-item.clickable:hover {

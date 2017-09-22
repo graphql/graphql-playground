@@ -1,4 +1,4 @@
-export const columnWidth = 250
+export const columnWidth = 300
 
 export const introspectionQuery = `
   query IntrospectionQuery {

@@ -259,15 +259,13 @@ class GraphDocs extends React.Component<
 
   private setWidthMap = (path: string) => width => {
     this.setState(state => {
+      const widthMap = {
+        ...state.widthMap,
+        [path]: Math.min(Math.max(state.widthMap[path] || 0, width), 450),
+      }
       return {
         ...state,
-        widthMap: {
-          ...state.widthMap,
-          [path]: Math.min(
-            Math.max(state.widthMap[path] || 0, width + 70),
-            450,
-          ),
-        },
+        widthMap,
       }
     })
   }

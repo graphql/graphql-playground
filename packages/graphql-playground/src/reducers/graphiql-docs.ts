@@ -38,6 +38,9 @@ export default function graphiqlDocsReducer(
     case ADD_STACK:
       const { field, x, y } = action
       let newNavStack = state.navStack
+      if (!field.path) {
+        field.path = field.name
+      }
       // Reset the list to the level clicked
       if (x < newNavStack.length) {
         newNavStack = newNavStack.slice(0, x)
