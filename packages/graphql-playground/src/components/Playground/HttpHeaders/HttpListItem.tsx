@@ -52,7 +52,7 @@ export default class HttpListItem extends React.Component<Props, State> {
             flex: 0 60%;
           }
           .row input {
-            @p: .f14, .black50, .w100;
+            @p: .f14, .darkBlue50, .w100;
             background: transparent;
           }
           .row .icon {
@@ -82,7 +82,7 @@ export default class HttpListItem extends React.Component<Props, State> {
           ? <div className="icon" onClick={this.handleValidate}>
               <Icon
                 src={require('graphcool-styles/icons/fill/check.svg')}
-                color={$v.gray40}
+                color={$v.darkBlue50}
                 width={20}
                 height={20}
               />
@@ -90,7 +90,7 @@ export default class HttpListItem extends React.Component<Props, State> {
           : <div className="icon" onClick={this.handleDelete}>
               <Icon
                 src={require('graphcool-styles/icons/stroke/cross.svg')}
-                color={$v.gray40}
+                color={$v.darkBlue50}
                 width={10}
                 height={10}
                 stroke={true}

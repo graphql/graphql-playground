@@ -3,6 +3,7 @@ import * as cx from 'classnames'
 import { $p } from 'graphcool-styles'
 import { CodeGenerator } from './codeGeneration'
 import { GraphQLClient, Environment } from '../../types'
+import withTheme from '../Theme/withTheme'
 // tslint:disable-next-line
 const Codemirror: any = require('react-codemirror')
 
@@ -13,18 +14,20 @@ export interface Props {
   environment: Environment
 }
 
-export default class CodeGenerationPopupCode extends React.Component<
-  Props,
-  {}
-> {
+interface Theme {
+  theme: string
+}
+
+class CodeGenerationPopupCode extends React.Component<Props & Theme, {}> {
   componentWillMount() {
     require('codemirror/lib/codemirror.css')
     require('codemirror/theme/dracula.css')
+    require('codemirror/theme/duotone-light.css')
     require('codemirror/mode/javascript/javascript')
     require('codemirror/mode/shell/shell')
   }
   render() {
-    const { client, environment, endpointUrl, query } = this.props
+    const { client, environment, endpointUrl, query, theme } = this.props
 
     const generator = new CodeGenerator(client, environment, endpointUrl)
     const projectSetup = generator.getSetup()
@@ -32,16 +35,18 @@ export default class CodeGenerationPopupCode extends React.Component<
     const title = environment !== 'Cli' ? 'Code' : 'Command'
     const mode = environment !== 'Cli' ? 'javascript' : 'shell'
 
+    const codeTheme = theme === 'light' ? 'duotone-light' : 'dracula'
+
     return (
       <div className={cx($p.pa38, $p.pt16, 'code-generation-popup')}>
         <style jsx={true}>{`
           h3 {
-            @inherit: .fw3, .f25, .mv16;
+            @p: .fw3, .f25, .mv16;
           }
         `}</style>
         <style jsx={true} global={true}>{`
           .code-generation-popup .CodeMirror {
-            @inherit: .pa6;
+            @p: .pa6;
             height: auto;
           }
         `}</style>
@@ -55,7 +60,7 @@ export default class CodeGenerationPopupCode extends React.Component<
                 height: 'auto',
                 mode: 'shell',
                 viewportMargin: Infinity,
-                theme: 'dracula',
+                theme: codeTheme,
               }}
               onFocusChange={focused => {
                 if (focused) {
@@ -74,7 +79,7 @@ export default class CodeGenerationPopupCode extends React.Component<
             height: 'auto',
             viewportMargin: Infinity,
             mode,
-            theme: 'dracula',
+            theme: codeTheme,
           }}
           onFocusChange={focused => {
             if (focused) {
@@ -86,3 +91,5 @@ export default class CodeGenerationPopupCode extends React.Component<
     )
   }
 }
+
+export default withTheme<Props>(CodeGenerationPopupCode)

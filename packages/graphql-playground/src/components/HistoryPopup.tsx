@@ -6,6 +6,8 @@ import HistoryItems from './HistoryPopup/HistoryItems'
 import { GraphQLEditor } from './Playground/GraphQLEditor'
 import { $v, Icon } from 'graphcool-styles'
 import { modalStyle } from '../constants'
+import withTheme from './Theme/withTheme'
+import * as cn from 'classnames'
 
 export interface Props {
   isOpen: boolean
@@ -15,6 +17,11 @@ export interface Props {
   fetcherCreater: (item: any) => (item: any) => Promise<any>
   schema: any
   onCreateSession: (session: Session) => void
+  isGraphcool: boolean
+}
+
+interface Theme {
+  theme: string
 }
 
 export interface State {
@@ -23,7 +30,7 @@ export interface State {
   searchTerm: string
 }
 
-export default class HistoryPopup extends React.Component<Props, State> {
+class HistoryPopup extends React.Component<Props & Theme, State> {
   constructor(props) {
     super(props)
     this.state = {
@@ -34,6 +41,7 @@ export default class HistoryPopup extends React.Component<Props, State> {
   }
   render() {
     const { searchTerm, selectedFilter } = this.state
+    const { theme } = this.props
     const items = this.props.historyItems.filter(item => {
       return selectedFilter === 'STARRED'
         ? item.starred
@@ -45,23 +53,33 @@ export default class HistoryPopup extends React.Component<Props, State> {
 
     const selectedItem = items[this.state.selectedItemIndex]
     const schema = this.props.schema
+    let customModalStyle = modalStyle
+    if (theme === 'light') {
+      customModalStyle = {
+        ...modalStyle,
+        overlay: {
+          ...modalStyle.overlay,
+          backgroundColor: 'rgba(255,255,255,0.9)',
+        },
+      }
+    }
 
     return (
       <Modal
         isOpen={this.props.isOpen}
         onRequestClose={this.props.onRequestClose}
         contentLabel="GraphiQL Session History"
-        style={modalStyle}
+        style={customModalStyle}
       >
         <style jsx={true}>{`
           .history-popup {
-            @inherit: .flex;
+            @p: .flex;
             min-height: 500px;
           }
           .left {
-            @inherit: .flex1, .bgWhite;
+            @p: .flex1, .bgWhite;
             &:after {
-              content: "";
+              content: '';
               position: absolute;
               bottom: 0px;
               height: 50px;
@@ -76,32 +94,44 @@ export default class HistoryPopup extends React.Component<Props, State> {
             }
           }
           .right {
-            @inherit: .z2;
+            @p: .z2;
             flex: 0 0 464px;
           }
           .right-header {
-            @inherit: .justifyBetween, .flex, .bgDarkBlue, .itemsCenter, .ph25;
+            @p: .justifyBetween, .flex, .bgDarkBlue, .itemsCenter, .ph25;
             padding-top: 20px;
             padding-bottom: 20px;
           }
+          .right-header.light {
+            background-color: #f6f7f7;
+          }
           .right-empty {
-            @inherit: .bgDarkBlue, .h100, .flex, .justifyCenter, .itemsCenter;
+            @p: .bgDarkBlue, .h100, .flex, .justifyCenter, .itemsCenter;
+          }
+          .right-empty.light {
+            background-color: #f6f7f7;
           }
           .right-empty-text {
-            @inherit: .f16, .white60;
+            @p: .f16, .white60;
           }
           .view {
-            @inherit: .f14, .white40, .ttu, .fw6;
+            @p: .f14, .white40, .ttu, .fw6;
           }
           .use {
-            @inherit: .f14, .fw6, .pv10, .ph16, .bgGreen, .flex, .br2,
-              .itemsCenter, .pointer;
+            @p: .f14, .fw6, .pv10, .ph16, .bgGreen, .flex, .br2, .itemsCenter,
+              .pointer;
           }
           .use-text {
-            @inherit: .mr6, .white;
+            @p: .mr6, .white;
+          }
+          .graphiql-wrapper {
+            @p: .w100, .h100, .relative, .flex, .flexAuto;
+          }
+          .big {
+            @p: .h100, .flex, .flexAuto;
           }
         `}</style>
-        <div className="history-popup">
+        <div className={cn('history-popup', theme)}>
           <div className="left">
             <HistoryHeader
               onSelectFilter={this.handleSelectFilter}
@@ -117,10 +147,11 @@ export default class HistoryPopup extends React.Component<Props, State> {
             />
           </div>
           {Boolean(selectedItem)
-            ? <div className="right">
-                <div className="right-header">
+            ? <div className={cn('right', theme)}>
+                <div className={cn('right-header', theme)}>
                   <div className="view">
-                    {`View as ${selectedItem.selectedViewer}`}
+                    {this.props.isGraphcool &&
+                      `View as ${selectedItem.selectedViewer}`}
                   </div>
                   <div
                     className="use"
@@ -139,18 +170,28 @@ export default class HistoryPopup extends React.Component<Props, State> {
                     />
                   </div>
                 </div>
-                <GraphQLEditor
-                  schema={schema}
-                  variables={selectedItem.variables}
-                  query={selectedItem.query}
-                  fetcher={this.props.fetcherCreater(selectedItem)}
-                  disableQueryHeader={true}
-                  queryOnly={true}
-                  rerenderQuery={true}
-                />
+                <div
+                  className={cn('big', { 'docs-graphiql': theme === 'light' })}
+                >
+                  <div
+                    className={cn('big', {
+                      'graphiql-wrapper': theme === 'light',
+                    })}
+                  >
+                    <GraphQLEditor
+                      schema={schema}
+                      variables={selectedItem.variables}
+                      query={selectedItem.query}
+                      fetcher={this.props.fetcherCreater(selectedItem)}
+                      disableQueryHeader={true}
+                      queryOnly={true}
+                      rerenderQuery={true}
+                    />
+                  </div>
+                </div>
               </div>
-            : <div className="right">
-                <div className="right-empty">
+            : <div className={cn('right', theme)}>
+                <div className={cn('right-empty', theme)}>
                   <div className="right-empty-text">No History yet</div>
                 </div>
               </div>}
@@ -171,3 +212,5 @@ export default class HistoryPopup extends React.Component<Props, State> {
     this.setState({ searchTerm: term } as State)
   }
 }
+
+export default withTheme<Props>(HistoryPopup)

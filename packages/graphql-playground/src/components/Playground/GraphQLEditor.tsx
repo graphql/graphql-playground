@@ -356,8 +356,8 @@ export class GraphQLEditor extends React.Component<Props, State> {
 
           .docs-button,
           .schema-button {
-            @inherit: .absolute, .white, .bgGreen, .pa6, .br2, .z2, .ttu, .fw6,
-              .f14, .ph10, .pointer;
+            @p: .absolute, .white, .bgGreen, .pa6, .br2, .z2, .ttu, .fw6, .f14,
+              .ph10, .pointer;
             padding-bottom: 8px;
             transform: rotate(-90deg);
             left: -44px;
@@ -376,19 +376,19 @@ export class GraphQLEditor extends React.Component<Props, State> {
           }
 
           .graphiql-button {
-            @inherit: .white50, .bgDarkBlue, .ttu, .f14, .fw6, .br2, .pointer;
+            @p: .white50, .bgDarkBlue, .ttu, .f14, .fw6, .br2, .pointer;
             padding: 5px 9px 6px 9px;
             letter-spacing: 0.53px;
           }
           .graphiql-button.generate-code {
-            @inherit: .absolute;
+            @p: .absolute;
             top: -57px;
             right: 25px;
             z-index: 2;
           }
 
           .download-button {
-            @inherit: .white50, .bgDarkBlue, .ttu, .f14, .fw6, .br2, .pointer,
+            @p: .white50, .bgDarkBlue, .ttu, .f14, .fw6, .br2, .pointer,
               .absolute;
             right: 25px;
             padding: 5px 9px 6px 9px;
@@ -400,14 +400,14 @@ export class GraphQLEditor extends React.Component<Props, State> {
           }
 
           .intro {
-            @inherit: .absolute, .tlCenter, .top50, .left50, .white20, .f16, .tc;
+            @p: .absolute, .tlCenter, .top50, .left50, .white20, .f16, .tc;
             font-family: 'Source Code Pro', 'Consolas', 'Inconsolata',
               'Droid Sans Mono', 'Monaco', monospace;
             letter-spacing: 0.6px;
             width: 235px;
           }
           .result-window {
-            @inherit: .bgDarkBlue, .nosb;
+            @p: .bgDarkBlue, .nosb;
           }
 
           .result-window.disableResize :global(.CodeMirror-gutters) {
@@ -415,12 +415,12 @@ export class GraphQLEditor extends React.Component<Props, State> {
           }
 
           .subscription-time {
-            @inherit: .relative;
+            @p: .relative;
             height: 17px;
             margin-top: 12px;
             margin-bottom: 4px;
             &:before {
-              @inherit: .absolute, .w100;
+              @p: .absolute, .w100;
               content: "";
               top: 9px;
               left: 95px;
@@ -429,12 +429,12 @@ export class GraphQLEditor extends React.Component<Props, State> {
           }
 
           .subscription-time-text {
-            @inherit: .bgDarkBlue, .white50, .f12;
+            @p: .bgDarkBlue, .white50, .f12;
             padding-left: 15px;
           }
 
           .listening {
-            @inherit: .f16, .white40, .absolute, .bottom0;
+            @p: .f16, .white40, .absolute, .bottom0;
             font-family: 'Source Code Pro', 'Consolas', 'Inconsolata',
               'Droid Sans Mono', 'Monaco', monospace;
             letter-spacing: 0.6px;

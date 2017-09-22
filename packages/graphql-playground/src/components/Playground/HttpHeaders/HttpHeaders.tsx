@@ -61,7 +61,7 @@ class HttpHeaders extends React.Component<Props, State> {
             @p: .flex, .flexRow, .itemsCenter, .bb, .bBlack10, .ph16, .pv10;
           }
           .row.row-inactive {
-            @p: .black30, .pointer;
+            @p: .pointer, .darkBlue50;
             border: none;
           }
         `}</style>

@@ -18,7 +18,7 @@ import HistoryPopup from './HistoryPopup'
 import * as cx from 'classnames'
 import SelectUserPopup from './SelectUserPopup'
 import calc from 'calculate-size'
-import { CodeGenerationPopup } from './CodeGenerationPopup/CodeGenerationPopup'
+import CodeGenerationPopup from './CodeGenerationPopup/CodeGenerationPopup'
 import { GraphQLObjectType, GraphQLList } from 'graphql'
 import GraphDocs from './Playground/DocExplorer/GraphDocs'
 import {
@@ -138,6 +138,7 @@ class Playground extends React.Component<Props, State> {
 
     const selectedSessionIndex =
       parseInt(this.storage.getItem('selectedSessionIndex'), 10) || 0
+
     this.state = {
       schema: null,
       schemaCache: null,
@@ -161,7 +162,7 @@ class Playground extends React.Component<Props, State> {
       selectUserSessionId: undefined,
       codeGenerationPopupOpen: false,
       disableQueryHeader: false,
-      theme: 'light',
+      theme: (localStorage.getItem('theme') as Theme) || 'light',
     }
 
     if (typeof window === 'object') {
@@ -476,6 +477,7 @@ class Playground extends React.Component<Props, State> {
               fetcherCreater={this.fetcher}
               schema={this.state.schemaCache}
               onCreateSession={this.handleCreateSession}
+              isGraphcool={isGraphcoolUrl}
             />}
           {this.props.adminAuthToken &&
             <SelectUserPopup
@@ -547,6 +549,7 @@ class Playground extends React.Component<Props, State> {
   private toggleTheme = () => {
     this.setState(state => {
       const theme = state.theme === 'dark' ? 'light' : 'dark'
+      localStorage.setItem('theme', theme)
       return { ...state, theme }
     })
   }

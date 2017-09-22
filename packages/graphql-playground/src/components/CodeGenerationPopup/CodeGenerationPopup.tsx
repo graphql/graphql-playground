@@ -6,6 +6,7 @@ import CodeGenerationPopupClientChooser from './CodeGenerationPopupClientChooser
 import { modalStyle } from '../../constants'
 import * as Modal from 'react-modal'
 import { Environment, GraphQLClient } from '../../types'
+import withTheme from '../Theme/withTheme'
 
 export interface Props {
   query: string
@@ -14,12 +15,16 @@ export interface Props {
   endpointUrl: string
 }
 
+interface Theme {
+  theme: string
+}
+
 export interface State {
   selectedClient: GraphQLClient
   selectedEnv: Environment
 }
 
-export class CodeGenerationPopup extends React.Component<Props, State> {
+class CodeGenerationPopup extends React.Component<Props & Theme, State> {
   constructor(props) {
     super(props)
     this.state = {
@@ -29,30 +34,41 @@ export class CodeGenerationPopup extends React.Component<Props, State> {
   }
 
   render() {
-    const { query, endpointUrl } = this.props
+    const { query, endpointUrl, theme } = this.props
     const { selectedEnv } = this.state
     const queryActive =
       Boolean(query) && query.length > 0 && query.includes('query')
     const clients =
       selectedEnv === 'Cli' ? ['curl'] : ['graphql-request', 'fetch']
 
+    let customModalStyle = modalStyle
+    if (theme === 'light') {
+      customModalStyle = {
+        ...modalStyle,
+        overlay: {
+          ...modalStyle.overlay,
+          backgroundColor: 'rgba(255,255,255,0.9)',
+        },
+      }
+    }
+
     return (
       <Modal
         isOpen={this.props.isOpen}
         onRequestClose={this.props.onRequestClose}
         contentLabel="Code Generation"
-        style={modalStyle}
+        style={customModalStyle}
       >
         <style jsx={true}>{`
           .code-generation-popup-wrapper {
-            @inherit: .overflowScroll, .buttonShadow;
+            @p: .overflowScroll, .buttonShadow;
             max-height: calc(100vh - 50px);
           }
           .code-generation-popup {
-            @inherit: .bgWhite, .br2, .flex, .flexColumn, .overflowXHidden;
+            @p: .bgWhite, .br2, .flex, .flexColumn, .overflowXHidden;
           }
           .choosers {
-            @inherit: .flex, .w100;
+            @p: .flex, .w100;
           }
         `}</style>
         <div className="code-generation-popup-wrapper">
@@ -100,3 +116,5 @@ export class CodeGenerationPopup extends React.Component<Props, State> {
     }
   }
 }
+
+export default withTheme<Props>(CodeGenerationPopup)
