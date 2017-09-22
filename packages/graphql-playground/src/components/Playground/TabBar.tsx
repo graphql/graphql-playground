@@ -42,6 +42,7 @@ export const TabBar = withTheme<
             @p: .white, .z4;
             height: 57px;
             background-color: $darkBlueGray;
+            -webkit-app-region: drag;
 
             path {
               stroke: white;
