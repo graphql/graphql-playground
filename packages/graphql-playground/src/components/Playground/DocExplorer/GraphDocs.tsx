@@ -64,7 +64,8 @@ class GraphDocs extends React.Component<
     // Make the column follow the clicks
     if (
       this.props.navStack.length !== nextProps.navStack.length ||
-      this.props.navStack.slice(-1)[0] !== nextProps.navStack.slice(-1)[0]
+      this.props.navStack.slice(-1)[0] !== nextProps.navStack.slice(-1)[0] ||
+      (!this.props.schema && nextProps.schema)
     ) {
       this.setWidth(nextProps)
     }
@@ -253,6 +254,7 @@ class GraphDocs extends React.Component<
       this.refDocExplorer.focus()
     }
     this.props.toggleDocs()
+    this.setWidth()
   }
 
   private setWidthMap = (path: string) => width => {
