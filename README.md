@@ -2,7 +2,7 @@
 GraphQL IDE including interactive Docs & Subscriptions (use as Browser/Native App). A friendly fork of GraphiQL.
 
 
-[![](https://i.imgur.com/oodaQSG.png)](https://s3-eu-west-1.amazonaws.com/graphcool-assets/graphql-playground/GraphQL+Playground-0.1.1.dmg)
+![](https://i.imgur.com/JkiNjQo.png)
 
 ## Features
 
