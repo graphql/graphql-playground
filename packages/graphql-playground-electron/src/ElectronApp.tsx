@@ -166,9 +166,6 @@ export default class ElectronApp extends React.Component<{}, State> {
             .app-content .left-content {
               letter-spacing: 0.5px;
             }
-            .app-endpoint .tabs .history {
-              margin-right: 30px;
-            }
           `}</style>
           <style jsx={true}>{`
             .root {
