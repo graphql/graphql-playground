@@ -17,7 +17,7 @@ GraphQL IDE including interactive Docs & Subscriptions (use as Browser/Native Ap
 
 ## Getting Started
 There are multiple ways to use the GraphQL Playground.
-- [Download](https://s3-eu-west-1.amazonaws.com/graphcool-assets/graphql-playground/GraphQL+Playground-0.1.1.dmg) it as an Electron App
+- [Download](https://s3-eu-west-1.amazonaws.com/graphcool-assets/graphql-playground/GraphQL+Playground-0.1.2.dmg) it as an Electron App
 - Use it as a [React Component](#react-component)
 - Include it in your graphql-js server with the [Middleware](#middleware)
 
