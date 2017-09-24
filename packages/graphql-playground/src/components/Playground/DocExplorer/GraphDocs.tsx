@@ -84,9 +84,7 @@ class GraphDocs extends React.Component<
       stack => this.state.widthMap[stack.field.path] || columnWidth,
     )
 
-    return (
-      [rootWidth].concat(stackWidths).reduce((acc, curr) => acc + curr, 0) + 6
-    )
+    return [rootWidth].concat(stackWidths).reduce((acc, curr) => acc + curr, 0)
   }
 
   componentDidMount() {
@@ -158,7 +156,7 @@ class GraphDocs extends React.Component<
             box-shadow: -1px 1px 6px 0 rgba(0, 0, 0, 0.3);
           }
           .doc-explorer-container {
-            @p: .flex, .relative, .h100;
+            @p: .flex, .relative, .h100, .w100;
             overflow-x: auto;
             overflow-y: hidden;
           }
@@ -212,7 +210,7 @@ class GraphDocs extends React.Component<
               </ColumnDoc>}
             {schema &&
               <ColumnDoc
-                width={this.state.widthMap.root || columnWidth - 6}
+                width={this.state.widthMap.root || columnWidth - 1}
                 overflow={false}
               >
                 <SearchBox isShown={true} onSearch={this.handleSearch} />
