@@ -10,6 +10,7 @@ import * as React from 'react'
 import * as cx from 'classnames'
 import withTheme from '../Theme/withTheme'
 import * as cn from 'classnames'
+import ExecuteButtonOperation from './ExecuteButtonOperation'
 
 export interface Props {
   onRun: (data?: any) => void
@@ -52,16 +53,14 @@ class ExecuteButton extends React.Component<Props & { theme: string }, State> {
       options = (
         <ul className="execute-options">
           {operations.map(operation =>
-            <li
+            <ExecuteButtonOperation
+              operation={operation}
+              onMouseOver={this.handleMouseOver}
+              onMouseOut={this.handleMouseOut}
+              onMouseUp={this.handleMouseUp}
+              highlight={highlight}
               key={operation.name ? operation.name.value : '*'}
-              className={operation === highlight ? 'selected' : ''}
-              onMouseOver={() =>
-                this.setState({ highlight: operation } as State)}
-              onMouseOut={() => this.setState({ highlight: null } as State)}
-              onMouseUp={() => this.onOptionSelected(operation)}
-            >
-              {operation.name ? operation.name.value : '<Unnamed>'}
-            </li>,
+            />,
           )}
         </ul>
       )
@@ -136,6 +135,18 @@ class ExecuteButton extends React.Component<Props & { theme: string }, State> {
         {options}
       </div>
     )
+  }
+
+  private handleMouseOver = (operation: any) => {
+    this.setState({ highlight: operation })
+  }
+
+  private handleMouseOut = () => {
+    this.setState({ highlight: null })
+  }
+
+  private handleMouseUp = (operation: any) => {
+    this.onOptionSelected(operation)
   }
 
   private onClick = () => {

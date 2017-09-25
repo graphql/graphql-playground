@@ -153,13 +153,7 @@ class HistoryPopup extends React.Component<Props & Theme, State> {
                     {this.props.isGraphcool &&
                       `View as ${selectedItem.selectedViewer}`}
                   </div>
-                  <div
-                    className="use"
-                    onClick={() => {
-                      this.props.onCreateSession(selectedItem)
-                      this.props.onRequestClose()
-                    }}
-                  >
+                  <div className="use" onClick={this.handleClickUse}>
                     <div className="use-text">Use</div>
                     <Icon
                       src={require('../assets/icons/arrowRight.svg')}
@@ -198,6 +192,22 @@ class HistoryPopup extends React.Component<Props & Theme, State> {
         </div>
       </Modal>
     )
+  }
+
+  private handleClickUse = () => {
+    const { searchTerm, selectedFilter } = this.state
+    // TODO refactor
+    const items = this.props.historyItems.filter(item => {
+      return selectedFilter === 'STARRED'
+        ? item.starred
+        : true &&
+          (searchTerm && searchTerm.length > 0
+            ? item.query.toLowerCase().includes(searchTerm.toLowerCase())
+            : true)
+    })
+    const selectedItem = items[this.state.selectedItemIndex]
+    this.props.onCreateSession(selectedItem)
+    this.props.onRequestClose()
   }
 
   private fetcher = params => {

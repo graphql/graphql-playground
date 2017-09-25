@@ -2,6 +2,7 @@ import { pick } from 'lodash'
 
 const cache: any = {}
 
+// TODO remove
 export default function shouldUpdate(
   name: string | null,
   instance,
@@ -28,8 +29,6 @@ export default function shouldUpdate(
 
   const propsEqual = shallowEqual(oldProps, newProps)
   const stateEqual = shallowEqual(instance.state, nextState)
-  // TODO add comparison for state
-  console.log(`comparison ${propsEqual} ${stateEqual}`)
 
   return !propsEqual && !stateEqual
 }

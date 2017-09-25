@@ -83,12 +83,7 @@ export class ResultViewer extends React.Component<Props, {}> {
 
   render() {
     return (
-      <div
-        className="result-codemirror"
-        ref={node => {
-          this.node = node
-        }}
-      >
+      <div className="result-codemirror" ref={this.setRef}>
         <style jsx={true}>{`
           .result-codemirror :global(.CodeMirror) {
             @p: .bbox, .pt38, .pl38;
@@ -97,6 +92,10 @@ export class ResultViewer extends React.Component<Props, {}> {
         `}</style>
       </div>
     )
+  }
+
+  setRef = ref => {
+    this.node = ref
   }
 
   /**

@@ -198,9 +198,7 @@ class GraphDocs extends React.Component<
           onKeyDown={this.handleKeyDown}
           onMouseMove={this.handleMouseMove}
           tabIndex={0}
-          ref={element => {
-            this.refDocExplorer = element
-          }}
+          ref={this.setDocExplorerRef}
         >
           <div className="doc-explorer-container">
             {emptySchema &&
@@ -232,6 +230,10 @@ class GraphDocs extends React.Component<
         </div>
       </div>
     )
+  }
+
+  private setDocExplorerRef = ref => {
+    this.refDocExplorer = ref
   }
 
   private handleSearch = (value: string) => {

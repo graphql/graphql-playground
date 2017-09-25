@@ -61,7 +61,7 @@ export default class HttpListItem extends React.Component<Props, State> {
         `}</style>
         <div className="name input">
           <input
-            ref={ref => (this.inputRef = ref)}
+            ref={this.setRef}
             name="name"
             placeholder="Type a name..."
             value={name}
@@ -99,6 +99,10 @@ export default class HttpListItem extends React.Component<Props, State> {
             </div>}
       </div>
     )
+  }
+
+  private setRef = ref => {
+    this.inputRef = ref
   }
 
   private handleKeyDown = e => {

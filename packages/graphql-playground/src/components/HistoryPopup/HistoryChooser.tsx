@@ -8,6 +8,8 @@ export interface Props {
   onSelectFilter: (filter: any) => void
 }
 
+/* tslint:disable */
+
 const HistoryChooser = ({ selectedFilter, onSelectFilter }: Props) =>
   <div>
     <style jsx={true}>{`

@@ -1,4 +1,4 @@
-import * as React from 'react' // tslint:disable-line
+import * as React from 'react'
 import { $p } from 'graphcool-styles'
 import * as cx from 'classnames'
 import calculateSize from 'calculate-size'
@@ -10,6 +10,8 @@ export interface Props {
   setClient: (env: any) => void
   client: string
 }
+
+/* tslint:disable */
 
 const Chooser = (props: Props) =>
   <div className={cx($p.bb, $p.bt, $p.bl, $p.bBlack10, $p.flex1)}>

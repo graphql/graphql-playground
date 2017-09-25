@@ -62,11 +62,6 @@ class CodeGenerationPopupCode extends React.Component<Props & Theme, {}> {
                 viewportMargin: Infinity,
                 theme: codeTheme,
               }}
-              onFocusChange={focused => {
-                if (focused) {
-                  // TODO track
-                }
-              }}
             />
           </div>}
         <h3>
@@ -80,11 +75,6 @@ class CodeGenerationPopupCode extends React.Component<Props & Theme, {}> {
             viewportMargin: Infinity,
             mode,
             theme: codeTheme,
-          }}
-          onFocusChange={focused => {
-            if (focused) {
-              // TODO track
-            }
           }}
         />
       </div>

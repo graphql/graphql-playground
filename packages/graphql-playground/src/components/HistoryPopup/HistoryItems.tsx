@@ -11,6 +11,7 @@ export interface Props {
   searchTerm: string
 }
 
+/* tslint:disable */
 const HistoryItems = ({
   items,
   onItemSelect,

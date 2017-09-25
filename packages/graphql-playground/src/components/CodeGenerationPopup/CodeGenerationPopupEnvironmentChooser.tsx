@@ -11,6 +11,7 @@ export interface Props {
   setEnvironment: (data: any) => void
 }
 
+/* tslint:disable */
 const Chooser = (props: Props) =>
   <div className={cx($p.bt, $p.bb, $p.bBlack10, $p.flex1)}>
     <style jsx={true}>{`

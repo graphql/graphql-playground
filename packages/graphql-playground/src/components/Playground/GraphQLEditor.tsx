@@ -480,9 +480,7 @@ export class GraphQLEditor extends React.Component<Props, State> {
         `}</style>
         <div className="editorWrap">
           <div
-            ref={n => {
-              this.editorBarComponent = n
-            }}
+            ref={this.setEditorBarComponent}
             className="editorBar"
             onMouseDown={this.handleResizeStart}
           >
@@ -506,9 +504,7 @@ export class GraphQLEditor extends React.Component<Props, State> {
                       />}
                   </CSSTransitionGroup>}
               <QueryEditor
-                ref={n => {
-                  this.queryEditorComponent = n
-                }}
+                ref={this.setQueryEditorComponent}
                 schema={this.state.schema}
                 value={this.state.query}
                 onEdit={this.handleEditQuery}
@@ -539,9 +535,7 @@ export class GraphQLEditor extends React.Component<Props, State> {
                   {'Query Variables'}
                 </div>
                 <VariableEditor
-                  ref={n => {
-                    this.variableEditorComponent = n
-                  }}
+                  ref={this.setVariableEditorComponent}
                   value={this.state.variables}
                   variableToType={this.state.variableToType}
                   onEdit={this.handleEditVariables}
@@ -577,16 +571,7 @@ export class GraphQLEditor extends React.Component<Props, State> {
                       buttonText: 'Autofill Data',
                     },
                   ]}
-                  onClick={() => {
-                    if (
-                      this.props.onboardingStep.startsWith(
-                        'STEP3_ENTER_MUTATION',
-                      ) &&
-                      typeof this.props.autofillMutation === 'function'
-                    ) {
-                      this.props.autofillMutation()
-                    }
-                  }}
+                  onClick={this.tetherClick}
                 >
                   <div
                     className={cn('onboarding-hint', {
@@ -664,9 +649,7 @@ export class GraphQLEditor extends React.Component<Props, State> {
                     'result-window' +
                     (this.props.disableResize ? ' disableResize' : '')
                   }
-                  ref={c => {
-                    this.resultComponent = c
-                  }}
+                  ref={this.setResultComponent}
                 >
                   {this.state.responses
                     .filter(res => res && res.date)
@@ -708,6 +691,31 @@ export class GraphQLEditor extends React.Component<Props, State> {
         </div>
       </div>
     )
+  }
+
+  tetherClick = () => {
+    if (
+      this.props.onboardingStep.startsWith('STEP3_ENTER_MUTATION') &&
+      typeof this.props.autofillMutation === 'function'
+    ) {
+      this.props.autofillMutation()
+    }
+  }
+
+  setEditorBarComponent = ref => {
+    this.editorBarComponent = ref
+  }
+
+  setQueryEditorComponent = ref => {
+    this.queryEditorComponent = ref
+  }
+
+  setVariableEditorComponent = ref => {
+    this.variableEditorComponent = ref
+  }
+
+  setResultComponent = ref => {
+    this.resultComponent = ref
   }
 
   /**

@@ -77,7 +77,6 @@ export interface SerializedObj {
 }
 // Serialize field
 export function serialize(schema, field) {
-  const start = performance.now()
   const obj: SerializedObj = {
     fields: [],
     interfaces: [],
@@ -109,7 +108,6 @@ export function serialize(schema, field) {
   if (isVarType && type instanceof GraphQLInterfaceType) {
     obj.implementations = schema.getPossibleTypes(type)
   }
-  console.log('serialize', performance.now() - start)
   return obj
 }
 

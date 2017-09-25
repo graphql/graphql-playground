@@ -165,14 +165,11 @@ export class QueryEditor extends React.Component<Props, {}> {
   }
 
   render() {
-    return (
-      <div
-        className="query-editor"
-        ref={node => {
-          this.node = node
-        }}
-      />
-    )
+    return <div className="query-editor" ref={this.setRef} />
+  }
+
+  setRef = ref => {
+    this.node = ref
   }
 
   /**
