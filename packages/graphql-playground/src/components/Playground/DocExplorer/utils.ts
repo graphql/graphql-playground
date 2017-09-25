@@ -3,7 +3,7 @@ import { isType, GraphQLInterfaceType, GraphQLObjectType } from 'graphql'
 // Return the deeper type found on object
 // For example [[[Company]!]!]! will return only Company
 export function getDeeperType(type: any, depth: number = 0): any {
-  if (type.ofType && depth < 3) {
+  if (type.ofType && depth < 5) {
     return getDeeperType(type.ofType, depth + 1)
   }
   return type
@@ -14,6 +14,15 @@ export interface SerializedRoot {
   mutations: any[]
   subscriptions: any[]
 }
+
+export function getRootMap(schema): any {
+  return {
+    ...schema.getQueryType().getFields(),
+    ...schema.getMutationType && schema.getMutationType().getFields(),
+    ...schema.getSubscriptionType && schema.getSubscriptionType().getFields(),
+  }
+}
+
 // Serialize schema to get root object
 export function serializeRoot(schema): SerializedRoot {
   const obj: SerializedRoot = {
@@ -129,4 +138,34 @@ export function getElement(obj: any, index: number) {
   if (obj.implementations[index - i]) {
     return obj.implementations[index - i]
   }
+}
+
+export function getElementIndex(schema: any, main: any, element: any) {
+  const obj = serialize(schema, main)
+  const interfaceIndex = obj.interfaces.indexOf(element)
+  if (interfaceIndex > -1) {
+    return interfaceIndex
+  }
+
+  const fieldsIndex = obj.fields.indexOf(element)
+  if (fieldsIndex > -1) {
+    return obj.interfaces.length + fieldsIndex
+  }
+
+  const argsIndex = obj.args.indexOf(element)
+  if (argsIndex > -1) {
+    return obj.interfaces.length + obj.fields.length + argsIndex
+  }
+
+  const implementationIndex = obj.implementations.indexOf(element)
+  if (implementationIndex > -1) {
+    return (
+      obj.interfaces.length +
+      obj.fields.length +
+      obj.args.length +
+      implementationIndex
+    )
+  }
+
+  return 0
 }

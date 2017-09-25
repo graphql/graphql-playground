@@ -1,12 +1,14 @@
 import {
   ADD_STACK,
   AddStackAction,
-  TOOGLE_DOCS,
-  ToggleDocsAction,
-  CHANGE_WIDTH_DOCS,
-  ChangeWidthDocsAction,
   CHANGE_KEY_MOVE,
+  CHANGE_WIDTH_DOCS,
   ChangeKeyMoveAction,
+  ChangeWidthDocsAction,
+  SET_STACKS,
+  SetStacksAction,
+  ToggleDocsAction,
+  TOOGLE_DOCS,
 } from '../actions/graphiql-docs'
 import { columnWidth } from '../constants'
 
@@ -15,6 +17,7 @@ type GraphiqlDocsAction =
   | ToggleDocsAction
   | ChangeWidthDocsAction
   | ChangeKeyMoveAction
+  | SetStacksAction
 
 export interface DocsState {
   readonly navStack: any[]
@@ -35,6 +38,11 @@ export default function graphiqlDocsReducer(
   action: GraphiqlDocsAction,
 ) {
   switch (action.type) {
+    case SET_STACKS:
+      return {
+        ...state,
+        navStack: action.stacks,
+      }
     case ADD_STACK:
       const { field, x, y } = action
       let newNavStack = state.navStack

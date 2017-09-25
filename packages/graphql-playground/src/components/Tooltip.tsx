@@ -1,7 +1,6 @@
 import * as React from 'react'
 import * as ReactDOM from 'react-dom'
 import * as cx from 'classnames'
-import shouldUpdate from './Playground/util/shouldUpdate'
 
 export interface Props {
   open: boolean
@@ -20,10 +19,6 @@ class Tooltip extends React.PureComponent<Props, {}> {
       vertical: 'top',
       horizontal: 'center',
     },
-  }
-
-  shouldComponentUpdate(nextProps, nextState) {
-    return shouldUpdate(null, this, nextProps, nextState)
   }
 
   componentDidMount() {

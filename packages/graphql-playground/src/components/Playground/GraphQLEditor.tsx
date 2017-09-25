@@ -20,7 +20,7 @@ import {
   introspectionQuery,
   introspectionQuerySansSubscriptions,
 } from 'graphiql/dist/utility/introspectionQueries'
-import { Viewer, OperationDefinition } from '../../types'
+import { OperationDefinition, Viewer } from '../../types'
 import { download } from './util/index'
 import QueryHeader from './QueryHeader'
 import ResultHeader from './ResultHeader'
@@ -31,7 +31,6 @@ import HttpHeaders, { Header } from './HttpHeaders'
 
 import { defaultQuery } from '../../constants'
 import Spinner from '../Spinner'
-import shouldUpdate from './util/shouldUpdate'
 
 // tslint:disable-next-line
 const CSSTransitionGroup = require('react-transition-group/CSSTransitionGroup')
@@ -121,7 +120,7 @@ export interface ToolbarButtonProps extends SimpleProps {
   label: string
 }
 
-export class GraphQLEditor extends React.Component<Props, State> {
+export class GraphQLEditor extends React.PureComponent<Props, State> {
   static Logo: (props: SimpleProps) => JSX.Element
   static Toolbar: (props: SimpleProps) => JSX.Element
   static Footer: (props: SimpleProps) => JSX.Element
@@ -311,10 +310,6 @@ export class GraphQLEditor extends React.Component<Props, State> {
     this._storageSet('operationName', this.state.operationName)
     this._storageSet('editorFlex', this.state.editorFlex)
     this._storageSet('variableEditorHeight', this.state.variableEditorHeight)
-  }
-
-  shouldComponentUpdate(nextProps, nextState) {
-    return shouldUpdate(null, this, nextProps, nextState)
   }
 
   render() {

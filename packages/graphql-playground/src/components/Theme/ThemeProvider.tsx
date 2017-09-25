@@ -25,7 +25,7 @@ export interface ThemeProviderProps {
 }
 
 // tslint:disable-next-line
-export default class ThemeProvider extends React.Component<
+export default class ThemeProvider extends React.PureComponent<
   ThemeProviderProps,
   {}
 > {

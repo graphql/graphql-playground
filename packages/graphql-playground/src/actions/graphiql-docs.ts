@@ -1,12 +1,25 @@
 export type ADD_STACK = 'add stack'
 export const ADD_STACK: ADD_STACK = 'add stack'
 
+export type SET_STACKS = 'set stacks'
+export const SET_STACKS: SET_STACKS = 'set stacks'
+
 export interface AddStackAction {
   type: ADD_STACK
   field: any
   x: number
   y: number
 }
+
+export interface SetStacksAction {
+  type: SET_STACKS
+  stacks: any[]
+}
+
+export const setStacks = (stacks: any[]): SetStacksAction => ({
+  type: SET_STACKS,
+  stacks,
+})
 
 export const addStack = (field: any, x: number, y: number): AddStackAction => ({
   type: ADD_STACK,

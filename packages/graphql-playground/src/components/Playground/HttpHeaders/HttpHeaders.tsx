@@ -1,7 +1,6 @@
 import * as React from 'react'
 import Tooltip from '../../Tooltip'
 import HttpListItem from './HttpListItem'
-import shouldUpdate from '../util/shouldUpdate'
 
 export interface Header {
   name: string
@@ -29,10 +28,6 @@ class HttpHeaders extends React.PureComponent<Props, State> {
       open: false,
       newHeader: false,
     }
-  }
-
-  shouldComponentUpdate(nextProps, nextState) {
-    return shouldUpdate(null, this, nextProps, nextState)
   }
 
   render() {

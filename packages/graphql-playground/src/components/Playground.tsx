@@ -31,6 +31,10 @@ import Settings from './Settings'
 import { connect } from 'react-redux'
 import { DocsState } from '../reducers/graphiql-docs'
 import GraphQLEditorSession from './Playground/GraphQLEditorSession'
+import { getDeeperType } from '../../lib/components/Playground/DocExplorer/utils'
+import { getElementIndex, getRootMap } from './Playground/DocExplorer/utils'
+import { setStacks } from '../actions/graphiql-docs'
+import { isEqual } from 'lodash'
 
 export type Theme = 'dark' | 'light'
 export type Viewer = 'ADMIN' | 'EVERYONE' | 'USER'
@@ -52,6 +56,7 @@ export interface Props {
   tether?: any
   nextStep?: () => void
   isApp?: boolean
+  setStacks?: (stack: any[]) => void
 }
 
 export interface State {
@@ -91,6 +96,7 @@ class Playground extends React.PureComponent<Props & DocsState, State> {
   graphiqlComponents: any[] = []
   private initialIndex: number = -1
   private schemaReloadInterval: any
+  private rawSchemaCache: any = null
 
   private updateQueryTypes = debounce(
     150,
@@ -276,7 +282,7 @@ class Playground extends React.PureComponent<Props & DocsState, State> {
       .queryEditorComponent.editor
     editor.setCursor(position)
   }
-  fetchSchemas() {
+  fetchSchemas = () => {
     return this.fetchSchema(this.getSimpleEndpoint()).then(simpleSchemaData => {
       if (!simpleSchemaData || simpleSchemaData.error) {
         this.setState(
@@ -290,9 +296,16 @@ class Playground extends React.PureComponent<Props & DocsState, State> {
         return
       }
 
-      const simpleSchema = buildClientSchema(simpleSchemaData.data)
+      if (isEqual(this.rawSchemaCache, simpleSchemaData.data)) {
+        return
+      }
 
+      this.rawSchemaCache = simpleSchemaData.data
+
+      const simpleSchema = buildClientSchema(simpleSchemaData.data)
       const userFields = this.extractUserField(simpleSchema)
+
+      this.renewStack(simpleSchema)
 
       this.setState(
         {
@@ -301,6 +314,63 @@ class Playground extends React.PureComponent<Props & DocsState, State> {
         } as State,
       )
     })
+  }
+  renewStack(schema) {
+    const rootMap = getRootMap(schema)
+    const stacks = this.props.navStack
+      .map(stack => {
+        return this.getNewStack(rootMap, schema, stack)
+      })
+      .filter(s => s)
+    this.props.setStacks!(stacks)
+  }
+  getNewStack(root, schema, stack) {
+    const path = stack.field.path
+    const splittedPath = path.split('/')
+    let pointer: any = null
+    let count = 0
+    let lastPointer: any = null
+    let y = -1
+    while (splittedPath.length > 0) {
+      const currentPath: string = splittedPath.shift()!
+      if (count === 0) {
+        pointer = root[currentPath]
+        y = Object.keys(root).indexOf(currentPath)
+      } else {
+        const argFound = pointer.args.find(arg => arg.name === currentPath)
+        lastPointer = pointer
+        if (argFound) {
+          pointer = argFound
+        } else {
+          if (pointer.type.ofType) {
+            pointer = getDeeperType(pointer.type.ofType)
+          }
+          if (pointer.type) {
+            pointer = pointer.type
+          }
+          pointer =
+            pointer.getFields()[currentPath] ||
+            pointer.getInterfaces().find(i => i.name === currentPath)
+        }
+      }
+      if (lastPointer) {
+        y = getElementIndex(schema, lastPointer, pointer)
+      }
+      count++
+    }
+
+    if (!pointer) {
+      return null
+    }
+
+    pointer.path = path
+    pointer.parent = lastPointer
+
+    return {
+      ...stack,
+      y,
+      field: pointer,
+    }
   }
   extractUserField(simpleSchema) {
     const userSchema = simpleSchema.getType('User')
@@ -1075,4 +1145,6 @@ class Playground extends React.PureComponent<Props & DocsState, State> {
   }
 }
 
-export default connect<any, any, Props>(state => state.graphiqlDocs)(Playground)
+export default connect<any, any, Props>(state => state.graphiqlDocs, {
+  setStacks,
+})(Playground)
