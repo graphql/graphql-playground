@@ -405,7 +405,7 @@ class Playground extends React.PureComponent<Props & DocsState, State> {
           <TabBar
             sessions={sessions}
             selectedSessionIndex={selectedSessionIndex}
-            onNewSession={() => this.handleNewSession(false)}
+            onNewSession={this.handleNewSessionWithoutNewIndexZero}
             onCloseSession={this.handleCloseSession}
             onOpenHistory={this.handleOpenHistory}
             onSelectSession={this.handleSelectSession}
@@ -771,6 +771,10 @@ class Playground extends React.PureComponent<Props & DocsState, State> {
 
   private saveHistory = () => {
     this.storage.syncHistory(this.state.history)
+  }
+
+  private handleNewSessionWithoutNewIndexZero = () => {
+    return this.handleNewSession(false)
   }
 
   private handleNewSession = (newIndexZero: boolean = false) => {

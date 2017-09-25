@@ -3,6 +3,7 @@ import * as cx from 'classnames'
 import { Session } from '../../types'
 import { Icon, $v } from 'graphcool-styles'
 import withTheme from '../Theme/withTheme'
+import Tab from './Tab'
 
 export interface Props {
   sessions: Session[]
@@ -32,12 +33,35 @@ export const TabBar = withTheme<
     tether,
     theme,
     isApp,
+    nextStep,
   }: Props) => {
     const Tether = tether
 
     return (
       <div className={cx('tabbar', theme)}>
         <style jsx={true}>{`
+          .tab {
+            @p: .flex,
+              .itemsCenter,
+              .bgDarkerBlue,
+              .br2,
+              .brTop,
+              .ml10,
+              .bbox,
+              .pointer;
+            height: 43px;
+            padding: 10px;
+            padding-top: 9px;
+            &.active {
+              @p: .bgDarkBlue;
+            }
+          }
+          .light .tab {
+            background-color: #e7eaec;
+            &.active {
+              background-color: #eeeff0;
+            }
+          }
           .tabbar {
             @p: .white, .z4;
             height: 57px;
@@ -60,29 +84,6 @@ export const TabBar = withTheme<
 
           .tabs.isApp {
             padding-left: 82px;
-          }
-
-          .tab {
-            @p: .flex,
-              .itemsCenter,
-              .bgDarkerBlue,
-              .br2,
-              .brTop,
-              .ml10,
-              .bbox,
-              .pointer;
-            height: 43px;
-            padding: 10px;
-            padding-top: 9px;
-            &.active {
-              @p: .bgDarkBlue;
-            }
-          }
-          .light .tab {
-            background-color: #e7eaec;
-            &.active {
-              background-color: #eeeff0;
-            }
           }
 
           .icons {
@@ -163,96 +164,18 @@ export const TabBar = withTheme<
           }
         `}</style>
         <div className={cx('tabs', { isApp })}>
-          {sessions.map((session, index) => {
-            const { queryTypes } = session
-            return (
-              <div
-                key={session.id}
-                className={`tab ${index === selectedSessionIndex && 'active'}`}
-                onClick={() => onSelectSession(session)}
-              >
-                <div
-                  className={`icons ${index === selectedSessionIndex &&
-                    'active'}`}
-                >
-                  {session.subscriptionActive && <div className="red-dot" />}
-                  <div className="query-types">
-                    {queryTypes.query &&
-                      <div className="query-type query">Q</div>}
-                    {queryTypes.mutation &&
-                      <div className="query-type mutation">M</div>}
-                    {queryTypes.subscription &&
-                      <div className="query-type subscription">S</div>}
-                  </div>
-                  {session.selectedViewer !== 'ADMIN' &&
-                    <div className="viewer">
-                      {session.selectedViewer === 'EVERYONE' &&
-                        <Icon
-                          src={require('graphcool-styles/icons/fill/world.svg')}
-                          color={theme === 'dark' ? $v.white40 : $v.gray40}
-                          width={14}
-                          height={14}
-                        />}
-                      {session.selectedViewer === 'USER' &&
-                        <Icon
-                          src={require('graphcool-styles/icons/fill/user.svg')}
-                          color={theme === 'dark' ? $v.white40 : $v.gray40}
-                          width={14}
-                          height={14}
-                        />}
-                    </div>}
-                </div>
-                {tether &&
-                onboardingStep === 'STEP3_SELECT_QUERY_TAB' &&
-                index === 0
-                  ? <Tether
-                      steps={[
-                        {
-                          step: 'STEP3_SELECT_QUERY_TAB',
-                          title: 'Back to the query',
-                          description:
-                            "After creating the data with our mutations, let's see what we got",
-                        },
-                      ]}
-                    >
-                      <div
-                        className={`operation-name ${index ===
-                          selectedSessionIndex && 'active'}`}
-                      >
-                        {session.operationName ||
-                          queryTypes.firstOperationName ||
-                          'New Session'}
-                      </div>
-                    </Tether>
-                  : <div
-                      className={`operation-name ${index ===
-                        selectedSessionIndex && 'active'}`}
-                    >
-                      {session.operationName ||
-                        queryTypes.firstOperationName ||
-                        'New Session'}
-                    </div>}
-                <div
-                  className={`close ${index === selectedSessionIndex &&
-                    'active'}`}
-                  onClick={(e: any) => {
-                    // we don't want selectIndex to be executed
-                    e.stopPropagation()
-                    onCloseSession(session)
-                  }}
-                >
-                  <Icon
-                    src={require('graphcool-styles/icons/stroke/cross.svg')}
-                    stroke={true}
-                    color={theme === 'dark' ? $v.white40 : $v.darkBlue40}
-                    width={12}
-                    height={11}
-                    strokeWidth={7}
-                  />
-                </div>
-              </div>
-            )
-          })}
+          {sessions.map((session, index) =>
+            <Tab
+              session={session}
+              index={index}
+              onSelectSession={onSelectSession}
+              selectedSessionIndex={selectedSessionIndex}
+              onCloseSession={onCloseSession}
+              tether={tether}
+              theme={theme}
+              onboardingStep={onboardingStep}
+            />,
+          )}
           {tether && onboardingStep === 'STEP3_CREATE_MUTATION_TAB'
             ? <Tether
                 offsetY={-7}
