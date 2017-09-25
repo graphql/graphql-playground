@@ -5,9 +5,6 @@ import { connect } from 'react-redux'
 import * as keycode from 'keycode'
 import { getLeft } from 'graphiql/dist/utility/elementPosition'
 import FieldDoc from './FieldDoc'
-import SearchBox from './SearchBox'
-import SearchResults from './SearchResults'
-import GraphDocsRoot from './GraphDocsRoot'
 import ColumnDoc from './ColumnDoc'
 import {
   addStack,
@@ -18,6 +15,7 @@ import {
 import { serialize, serializeRoot, getElement, getElementRoot } from './utils'
 import Spinner from '../../Spinner'
 import { columnWidth } from '../../../constants'
+import RootColumn from './RootColumn'
 
 interface StateFromProps {
   navStack: any[]
@@ -49,6 +47,7 @@ class GraphDocs extends React.Component<
   private refDocExplorer: any
   private clientX: number = 0
   private clientY: number = 0
+  private setRootWidth: any
 
   constructor(props) {
     super(props)
@@ -57,6 +56,7 @@ class GraphDocs extends React.Component<
       widthMap: {},
     }
     ;(window as any).d = this
+    this.setRootWidth = this.setWidthMap('root')
   }
 
   componentWillReceiveProps(nextProps: Props & StateFromProps) {
@@ -93,7 +93,6 @@ class GraphDocs extends React.Component<
 
   render() {
     const { docsOpen, docsWidth, schema, navStack } = this.props
-    const { searchValue } = this.state
     const docsStyle = { width: docsOpen ? docsWidth : 0 }
 
     let emptySchema
@@ -133,7 +132,7 @@ class GraphDocs extends React.Component<
           .graph-docs :global(code) {
             @p: .mono, .br2;
             padding: 1px 2px;
-            background: rgba(0, 0, 0, .06);
+            background: rgba(0, 0, 0, 0.06);
           }
           .graph-docs {
             @p: .absolute, .right0, .h100, .z999;
@@ -209,26 +208,13 @@ class GraphDocs extends React.Component<
                 {emptySchema}
               </ColumnDoc>}
             {schema &&
-              <ColumnDoc
+              <RootColumn
+                schema={schema}
                 width={this.state.widthMap.root || columnWidth - 1}
-                overflow={false}
-              >
-                <SearchBox isShown={true} onSearch={this.handleSearch} />
-                <div className="overflowAuto flexAuto">
-                  {searchValue &&
-                    <SearchResults
-                      searchValue={searchValue}
-                      schema={schema}
-                      level={0}
-                      onSetWidth={this.setWidthMap('root')}
-                    />}
-                  {!searchValue &&
-                    <GraphDocsRoot
-                      schema={schema}
-                      onSetWidth={this.setWidthMap('root')}
-                    />}
-                </div>
-              </ColumnDoc>}
+                searchValue={this.state.searchValue}
+                setWidth={this.setRootWidth}
+                handleSearch={this.handleSearch}
+              />}
             {navStack.map((stack, index) =>
               <ColumnDoc
                 key={index}
@@ -261,16 +247,16 @@ class GraphDocs extends React.Component<
   }
 
   private setWidthMap = (path: string) => width => {
-    this.setState(state => {
-      const widthMap = {
-        ...state.widthMap,
-        [path]: Math.min(Math.max(state.widthMap[path] || 0, width), 450),
-      }
-      return {
-        ...state,
-        widthMap,
-      }
-    })
+    // this.setState(state => {
+    //   const widthMap = {
+    //     ...state.widthMap,
+    //     [path]: Math.min(Math.max(state.widthMap[path] || 0, width), 450),
+    //   }
+    //   return {
+    //     ...state,
+    //     widthMap,
+    //   }
+    // })
   }
 
   private handleKeyDown = e => {

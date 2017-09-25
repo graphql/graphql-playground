@@ -2,7 +2,7 @@ import * as React from 'react'
 import Icon from 'graphcool-styles/dist/components/Icon/Icon'
 import { $v } from 'graphcool-styles'
 import ToggleButton from './ToggleButton'
-import Tooltip from 'graphcool-tmp-ui/lib/Tooltip'
+import Tooltip from './Tooltip'
 import { Theme } from './Playground'
 
 interface Props {

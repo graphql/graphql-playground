@@ -7,37 +7,40 @@ export interface Props {
   onSetWidth: (width: number) => void
 }
 
-const GraphDocsRoot = ({ schema, onSetWidth }: Props) => {
-  const obj = serializeRoot(schema)
-  return (
-    <div className="doc-root">
-      <style jsx={true} global={true}>{`
-        .doc-root .doc-category-item .field-name {
-          color: #f25c54;
-        }
-      `}</style>
-      <ShowRootType
-        name="Queries"
-        fields={obj.queries}
-        offset={0}
-        onSetWidth={onSetWidth}
-      />
-      {obj.mutations.length > 0 &&
+export default class GraphDocsRoot extends React.PureComponent<Props, {}> {
+  render() {
+    const { schema, onSetWidth } = this.props
+    const obj = serializeRoot(schema)
+    return (
+      <div className="doc-root">
+        <style jsx={true} global={true}>{`
+          .doc-root .doc-category-item .field-name {
+            color: #f25c54;
+          }
+        `}</style>
         <ShowRootType
-          name="Mutations"
-          fields={obj.mutations}
-          offset={obj.queries.length}
+          name="Queries"
+          fields={obj.queries}
+          offset={0}
           onSetWidth={onSetWidth}
-        />}
-      {obj.subscriptions.length > 0 &&
-        <ShowRootType
-          name="Subscriptions"
-          fields={obj.subscriptions}
-          offset={obj.queries.length + obj.mutations.length}
-          onSetWidth={onSetWidth}
-        />}
-    </div>
-  )
+        />
+        {obj.mutations.length > 0 &&
+          <ShowRootType
+            name="Mutations"
+            fields={obj.mutations}
+            offset={obj.queries.length}
+            onSetWidth={onSetWidth}
+          />}
+        {obj.subscriptions.length > 0 &&
+          <ShowRootType
+            name="Subscriptions"
+            fields={obj.subscriptions}
+            offset={obj.queries.length + obj.mutations.length}
+            onSetWidth={onSetWidth}
+          />}
+      </div>
+    )
+  }
 }
 
 interface ShowRootTypeProps {
@@ -67,5 +70,3 @@ function ShowRootType({ name, fields, offset, onSetWidth }: ShowRootTypeProps) {
     </div>
   )
 }
-
-export default GraphDocsRoot

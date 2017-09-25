@@ -1,6 +1,7 @@
 import * as React from 'react'
-import Tooltip from 'graphcool-tmp-ui/lib/Tooltip'
+import Tooltip from '../../Tooltip'
 import HttpListItem from './HttpListItem'
+import shouldUpdate from '../util/shouldUpdate'
 
 export interface Header {
   name: string
@@ -17,7 +18,7 @@ export interface State {
   newHeader: boolean
 }
 
-class HttpHeaders extends React.Component<Props, State> {
+class HttpHeaders extends React.PureComponent<Props, State> {
   static defaultProps = {
     headers: [],
   }
@@ -28,6 +29,10 @@ class HttpHeaders extends React.Component<Props, State> {
       open: false,
       newHeader: false,
     }
+  }
+
+  shouldComponentUpdate(nextProps, nextState) {
+    return shouldUpdate(null, this, nextProps, nextState)
   }
 
   render() {

@@ -31,6 +31,7 @@ import HttpHeaders, { Header } from './HttpHeaders'
 
 import { defaultQuery } from '../../constants'
 import Spinner from '../Spinner'
+import shouldUpdate from './util/shouldUpdate'
 
 // tslint:disable-next-line
 const CSSTransitionGroup = require('react-transition-group/CSSTransitionGroup')
@@ -57,8 +58,10 @@ export interface Props {
   onToggleDocs?: (value: boolean) => any
   onClickCodeGeneration?: any
   onChangeHeaders?: (headers: Header[]) => any
-  headers?: any[]
   getDefaultFieldNames?: () => any
+  autofillMutation?: () => void
+  onChangeViewer?: (data: any) => void
+  headers?: any[]
   showViewAs?: boolean
   showSelectUser?: boolean
   showCodeGeneration?: boolean
@@ -68,7 +71,6 @@ export interface Props {
   showDownloadJsonButton?: boolean
   disableQueryHeader?: boolean
   selectedViewer?: Viewer
-  onChangeViewer?: (data: any) => void
   queryOnly?: boolean
   showDocs?: boolean
   rerenderQuery?: boolean
@@ -82,7 +84,6 @@ export interface Props {
   onboardingStep?: any
   tether?: any
   nextStep?: () => void
-  autofillMutation?: () => void
   disableAnimation?: boolean
   hideLineNumbers?: boolean
   hideGutters?: boolean
@@ -310,6 +311,10 @@ export class GraphQLEditor extends React.Component<Props, State> {
     this._storageSet('operationName', this.state.operationName)
     this._storageSet('editorFlex', this.state.editorFlex)
     this._storageSet('variableEditorHeight', this.state.variableEditorHeight)
+  }
+
+  shouldComponentUpdate(nextProps, nextState) {
+    return shouldUpdate(null, this, nextProps, nextState)
   }
 
   render() {

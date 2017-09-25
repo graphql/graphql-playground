@@ -16,14 +16,14 @@ type GraphiqlDocsAction =
   | ChangeWidthDocsAction
   | ChangeKeyMoveAction
 
-export interface State {
+export interface DocsState {
   readonly navStack: any[]
   readonly docsOpen: boolean
   readonly docsWidth: number
   readonly keyMove: boolean
 }
 
-const defaultState: State = {
+const defaultState: DocsState = {
   navStack: [],
   docsOpen: false,
   docsWidth: columnWidth,
@@ -31,7 +31,7 @@ const defaultState: State = {
 }
 
 export default function graphiqlDocsReducer(
-  state: State = defaultState,
+  state: DocsState = defaultState,
   action: GraphiqlDocsAction,
 ) {
   switch (action.type) {

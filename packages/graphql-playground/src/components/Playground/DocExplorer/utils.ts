@@ -2,9 +2,9 @@ import { isType, GraphQLInterfaceType, GraphQLObjectType } from 'graphql'
 
 // Return the deeper type found on object
 // For example [[[Company]!]!]! will return only Company
-export function getDeeperType(type: any): any {
-  if (type.ofType) {
-    return getDeeperType(type.ofType)
+export function getDeeperType(type: any, depth: number = 0): any {
+  if (type.ofType && depth < 3) {
+    return getDeeperType(type.ofType, depth + 1)
   }
   return type
 }
@@ -77,6 +77,7 @@ export interface SerializedObj {
 }
 // Serialize field
 export function serialize(schema, field) {
+  const start = performance.now()
   const obj: SerializedObj = {
     fields: [],
     interfaces: [],
@@ -108,6 +109,7 @@ export function serialize(schema, field) {
   if (isVarType && type instanceof GraphQLInterfaceType) {
     obj.implementations = schema.getPossibleTypes(type)
   }
+  console.log('serialize', performance.now() - start)
   return obj
 }
 

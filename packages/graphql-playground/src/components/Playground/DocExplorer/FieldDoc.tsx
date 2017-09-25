@@ -21,7 +21,7 @@ export interface State {
   showDeprecated: boolean
 }
 
-export default class FieldDoc extends React.Component<Props, State> {
+export default class FieldDoc extends React.PureComponent<Props, State> {
   state = { showDeprecated: false }
 
   componentDidMount() {

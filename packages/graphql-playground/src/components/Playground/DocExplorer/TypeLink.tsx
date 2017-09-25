@@ -30,7 +30,7 @@ export interface Props {
   showParentName?: boolean
 }
 
-class TypeLink extends React.Component<
+class TypeLink extends React.PureComponent<
   Props & StateFromProps & DispatchFromProps,
   {}
 > {

@@ -1,9 +1,9 @@
 import * as React from 'react'
 import { GraphQLEditor } from './Playground/GraphQLEditor'
 import * as fetch from 'isomorphic-fetch'
-import { buildClientSchema } from 'graphql'
+import { buildClientSchema, GraphQLList, GraphQLObjectType } from 'graphql'
 import { TabBar } from './Playground/TabBar'
-import { introspectionQuery, defaultQuery } from '../constants'
+import { defaultQuery, introspectionQuery } from '../constants'
 import { Session } from '../types'
 import * as cuid from 'cuid'
 import * as Immutable from 'seamless-immutable'
@@ -19,7 +19,6 @@ import * as cx from 'classnames'
 import SelectUserPopup from './SelectUserPopup'
 import calc from 'calculate-size'
 import CodeGenerationPopup from './CodeGenerationPopup/CodeGenerationPopup'
-import { GraphQLObjectType, GraphQLList } from 'graphql'
 import GraphDocs from './Playground/DocExplorer/GraphDocs'
 import {
   onboardingEmptyMutation,
@@ -29,7 +28,9 @@ import {
   onboardingQuery1Check,
 } from '../data'
 import Settings from './Settings'
-import { setInterval } from 'timers'
+import { connect } from 'react-redux'
+import { DocsState } from '../reducers/graphiql-docs'
+import GraphQLEditorSession from './Playground/GraphQLEditorSession'
 
 export type Theme = 'dark' | 'light'
 export type Viewer = 'ADMIN' | 'EVERYONE' | 'USER'
@@ -83,7 +84,7 @@ const wsApiPrefix = 'wss://dev.subscriptions.graph.cool/v1'
 
 export { GraphQLEditor }
 
-class Playground extends React.Component<Props, State> {
+class Playground extends React.PureComponent<Props & DocsState, State> {
   storage: PlaygroundStorage
   wsConnections: { [sessionId: string]: any } = {}
   observers: { [sessionId: string]: any } = {}
@@ -220,13 +221,14 @@ class Playground extends React.Component<Props, State> {
     }
 
     if (this.state.autoReloadSchema && !this.schemaReloadInterval) {
-      this.schemaReloadInterval = setInterval(() => {
+      this.fetchSchemas()
+      this.schemaReloadInterval = window.setInterval(() => {
         this.fetchSchemas()
       }, 4000)
     }
 
     if (!this.state.autoReloadSchema && this.schemaReloadInterval) {
-      clearInterval(this.schemaReloadInterval)
+      window.clearInterval(this.schemaReloadInterval)
       this.schemaReloadInterval = null
     }
   }
@@ -427,40 +429,26 @@ class Playground extends React.Component<Props, State> {
                   top: `-${100 * selectedSessionIndex}%`,
                 }}
               >
-                <GraphQLEditor
+                <GraphQLEditorSession
                   key={session.id}
+                  session={session}
+                  index={index}
+                  schemaCache={this.state.schemaCache}
                   isGraphcoolUrl={isGraphcoolUrl}
-                  schema={this.state.schemaCache}
-                  fetcher={this.fetcher(session)}
-                  showQueryTitle={false}
-                  showResponseTitle={false}
-                  showViewAs={!isEndpoint && Boolean(this.props.adminAuthToken)}
-                  showSelectUser={Boolean(this.props.adminAuthToken)}
-                  showEndpoints={!isEndpoint}
-                  showDownloadJsonButton={true}
-                  showCodeGeneration={true}
-                  selectedViewer={session.selectedViewer}
+                  fetcher={this.fetcher}
+                  adminAuthToken={this.props.adminAuthToken}
+                  isEndpoint={Boolean(isEndpoint)}
                   storage={this.storage.getSessionStorage(session.id)}
-                  query={session.query}
-                  variables={session.variables}
-                  operationName={session.operationName}
-                  headers={session.headers}
-                  onClickCodeGeneration={() => this.handleClickCodeGeneration()}
-                  onChangeViewer={(viewer: Viewer) =>
-                    this.handleViewerChange(session.id, viewer)}
-                  onEditOperationName={(name: string) =>
-                    this.handleOperationNameChange(session.id, name)}
-                  onEditVariables={(variables: string) =>
-                    this.handleVariableChange(session.id, variables)}
-                  onEditQuery={(query: string) =>
-                    this.handleQueryChange(session.id, query)}
-                  onChangeHeaders={(headers: any[]) =>
-                    this.handleChangeHeaders(session.id, headers)}
+                  onClickCodeGeneration={this.handleClickCodeGeneration}
+                  onChangeViewer={this.handleViewerChange}
+                  onEditOperationName={this.handleOperationNameChange}
+                  onEditVariables={this.handleVariableChange}
+                  onEditQuery={this.handleQueryChange}
+                  onChangeHeaders={this.handleChangeHeaders}
                   responses={
                     this.state.response ? [this.state.response] : undefined
                   }
                   disableQueryHeader={this.state.disableQueryHeader}
-                  disableResize={true}
                   onboardingStep={
                     index === selectedSessionIndex
                       ? this.props.onboardingStep
@@ -468,14 +456,8 @@ class Playground extends React.Component<Props, State> {
                   }
                   tether={this.props.tether}
                   nextStep={this.props.nextStep}
-                  ref={ref => (this.graphiqlComponents[index] = ref)}
+                  onRef={this.setRef}
                   autofillMutation={this.autofillMutation}
-                  rerenderQuery={
-                    this.props.onboardingStep ===
-                      'STEP3_ENTER_MUTATION1_VALUES' ||
-                    this.props.onboardingStep === 'STEP3_ENTER_MUTATION2_VALUE'
-                  }
-                  disableAnimation={true}
                 />
               </div>,
             )}
@@ -518,6 +500,10 @@ class Playground extends React.Component<Props, State> {
         </div>
       </ThemeProvider>
     )
+  }
+
+  setRef = (index: number, ref: any) => {
+    this.graphiqlComponents[index] = ref
   }
 
   toggleSchemaReload = () => {
@@ -989,7 +975,7 @@ class Playground extends React.Component<Props, State> {
     }
   }
 
-  private fetcher = (session: Session) => graphQLParams => {
+  private fetcher = (session: Session, graphQLParams) => {
     const { query, operationName } = graphQLParams
 
     if (!query.includes('IntrospectionQuery')) {
@@ -1085,4 +1071,4 @@ class Playground extends React.Component<Props, State> {
   }
 }
 
-export default Playground
+export default connect<any, any, Props>(state => state.graphiqlDocs)(Playground)

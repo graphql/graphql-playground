@@ -14,7 +14,7 @@ export interface Props {
   onRequestClose: () => void
   historyItems: Session[]
   onItemStarToggled: (item: Session) => void
-  fetcherCreater: (item: any) => (item: any) => Promise<any>
+  fetcherCreater: (item: any, params: any) => Promise<any>
   schema: any
   onCreateSession: (session: Session) => void
   isGraphcool: boolean
@@ -182,7 +182,7 @@ class HistoryPopup extends React.Component<Props & Theme, State> {
                       schema={schema}
                       variables={selectedItem.variables}
                       query={selectedItem.query}
-                      fetcher={this.props.fetcherCreater(selectedItem)}
+                      fetcher={this.fetcher}
                       disableQueryHeader={true}
                       queryOnly={true}
                       rerenderQuery={true}
@@ -198,6 +198,20 @@ class HistoryPopup extends React.Component<Props & Theme, State> {
         </div>
       </Modal>
     )
+  }
+
+  private fetcher = params => {
+    const { searchTerm, selectedFilter } = this.state
+    const items = this.props.historyItems.filter(item => {
+      return selectedFilter === 'STARRED'
+        ? item.starred
+        : true &&
+          (searchTerm && searchTerm.length > 0
+            ? item.query.toLowerCase().includes(searchTerm.toLowerCase())
+            : true)
+    })
+    const selectedItem = items[this.state.selectedItemIndex]
+    return this.props.fetcherCreater(selectedItem, params)
   }
 
   private handleItemSelect = (index: number) => {
