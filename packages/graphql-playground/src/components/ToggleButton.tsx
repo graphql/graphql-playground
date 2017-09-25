@@ -1,7 +1,7 @@
 import * as React from 'react'
 import * as cx from 'classnames'
 
-interface Props {
+export interface Props {
   checked: boolean
   onChange: (e: any) => void
   className?: string
@@ -9,7 +9,7 @@ interface Props {
 
 const ToggleButton = ({ checked, onChange, className }: Props) => {
   return (
-    <div className={cx('toggle-button', className)}>
+    <div className={cx('toggle-button', className)} onClick={onChange}>
       <style jsx={true}>{`
         .toggle-button {
           @p: .relative, .dib;
@@ -43,12 +43,7 @@ const ToggleButton = ({ checked, onChange, className }: Props) => {
           }
         }
       `}</style>
-      <input
-        className="toggle-input"
-        type="checkbox"
-        checked={checked}
-        onChange={onChange}
-      />
+      <input className="toggle-input" type="checkbox" checked={checked} />
       <div className="toggle-slider" />
     </div>
   )

@@ -1,7 +1,7 @@
 import * as React from 'react'
 import Icon from 'graphcool-styles/dist/components/Icon/Icon'
 import { $v } from 'graphcool-styles'
-import ToggleButton from 'graphcool-tmp-ui/lib/ToggleButton'
+import ToggleButton from './ToggleButton'
 import Tooltip from 'graphcool-tmp-ui/lib/Tooltip'
 import { Theme } from './Playground'
 
@@ -28,11 +28,12 @@ export default class Settings extends React.Component<Props, State> {
     const { open } = this.state
     const { theme, onToggleReload, autoReload, onReload } = this.props
     return (
-      <div className="theme-switch">
+      <div className="settings">
         <style jsx={true}>{`
-          .theme-switch {
-            @p: .absolute, .z999;
-            right: 58px;
+          .settings {
+            @p: .absolute;
+            z-index: 1005;
+            right: 20px;
             top: 17px;
           }
           .tooltip-text {

@@ -3,7 +3,7 @@
   "name": "playground",
   "productName": "GraphQL Playground",
   "description": "Playground app",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "author": {
     "name": "Graphcool",
     "email": "contact@graph.cool",

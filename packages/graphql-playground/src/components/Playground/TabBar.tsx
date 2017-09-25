@@ -148,7 +148,7 @@ export const TabBar = withTheme<
           .history {
             @p: .pointer, .absolute;
             top: 15px;
-            right: 19px;
+            right: 56px;
           }
 
           .change-theme {
@@ -293,7 +293,7 @@ export const TabBar = withTheme<
               strokeWidth={4}
               width={27}
               height={27}
-              color={theme === 'dark' ? $v.white40 : $v.gray20}
+              color={theme === 'dark' ? $v.white20 : $v.gray20}
               onClick={onOpenHistory}
             />
           </div>
