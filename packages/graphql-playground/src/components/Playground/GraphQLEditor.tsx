@@ -724,21 +724,25 @@ export class GraphQLEditor extends React.Component<Props, State> {
         const cursorIndex = editor.indexFromPos(cursor)
         editor.setValue(result)
         let added = 0
-        const markers = insertions.map(({ index, str }) =>
-          editor.markText(
-            editor.posFromIndex(index + added),
-            editor.posFromIndex(index + (added += str.length)),
-            {
-              className: 'autoInsertedLeaf',
-              clearOnEnter: true,
-              title: 'Automatically added leaf fields',
-            },
-          ),
-        )
-        setTimeout(() => markers.forEach(marker => marker.clear()), 7000)
+        try {
+          const markers = insertions.map(({ index, str }) =>
+            editor.markText(
+              editor.posFromIndex(index + added),
+              editor.posFromIndex(index + (added += str.length)),
+              {
+                className: 'autoInsertedLeaf',
+                clearOnEnter: true,
+                title: 'Automatically added leaf fields',
+              },
+            ),
+          )
+          setTimeout(() => markers.forEach(marker => marker.clear()), 7000)
+        } catch (e) {
+          //
+        }
         let newCursorIndex = cursorIndex
         insertions.forEach(({ index, str }) => {
-          if (index < cursorIndex) {
+          if (index < cursorIndex && str) {
             newCursorIndex += str.length
           }
         })

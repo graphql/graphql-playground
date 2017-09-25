@@ -17,7 +17,9 @@ if (typeof window !== 'undefined') {
   }
 }
 
-const storage = compose(
+const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose
+
+const storage = composeEnhancers(
   filter([
     'graphiqlDocs.docsOpen',
     'graphiqlDocs.docsWidth',
@@ -25,18 +27,19 @@ const storage = compose(
   ]),
 )(adapter(localStorage))
 
-const reducer = compose(
+const reducer = composeEnhancers(
   mergePersistedState((initialState, persistedState) => {
     return merge({}, initialState, persistedState)
   }),
 )(combinedReducers)
 
-const enhancer = compose(persistState(storage, 'graphiql'))
+const enhancer = composeEnhancers(persistState(storage, 'graphiql'))
 
 const functions = [enhancer]
+//
+// if (window.__REDUX_DEVTOOLS_EXTENSION__) {
+//   functions.push(window.__REDUX_DEVTOOLS_EXTENSION__())
+// }
 
-if (window.__REDUX_DEVTOOLS_EXTENSION__) {
-  functions.push(window.__REDUX_DEVTOOLS_EXTENSION__())
-}
-
-export default () => createStore(reducer, compose.apply(null, functions))
+export default () =>
+  createStore(reducer, composeEnhancers.apply(null, functions))

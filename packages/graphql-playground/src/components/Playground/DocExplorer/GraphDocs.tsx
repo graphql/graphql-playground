@@ -162,7 +162,7 @@ class GraphDocs extends React.Component<
           }
           .doc-explorer:before {
             @p: .top0, .bottom0, .bgGreen, .absolute, .z3;
-            left: -3px;
+            left: 0px;
             content: '';
             width: 6px;
           }
@@ -181,7 +181,7 @@ class GraphDocs extends React.Component<
           .docExplorerResizer {
             @p: .top0, .bottom0, .absolute, .z5;
             cursor: col-resize;
-            left: -10px;
+            left: -7px;
             content: '';
             width: 20px;
           }
