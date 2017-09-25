@@ -8,8 +8,8 @@ import 'graphcool-styles/dist/styles.css'
 
 if (process.env.NODE_ENV !== 'production') {
   /* tslint:disable-next-line */
-  const { whyDidYouUpdate } = require('why-did-you-update')
-  whyDidYouUpdate(React)
+  // const { whyDidYouUpdate } = require('why-did-you-update')
+  // whyDidYouUpdate(React)
 }
 
 ;(window as any).GraphQLPlayground = {
