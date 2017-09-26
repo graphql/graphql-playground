@@ -43,7 +43,7 @@ export default class EndpointPopup extends React.Component<Props, State> {
           this.setState({ valid: false })
         })
     }
-  }, 1000)
+  }, 500)
   constructor(props) {
     super()
     this.state = {
@@ -103,7 +103,7 @@ export default class EndpointPopup extends React.Component<Props, State> {
               <h1>GraphQL Playground</h1>
             </div>
           </div>
-          <form action="" onSubmit={this.close}>
+          <form action="" onSubmit={this.submit}>
             <input
               type="text"
               placeholder="Enter an endpoint url..."
@@ -124,6 +124,11 @@ export default class EndpointPopup extends React.Component<Props, State> {
 
   private onChangeEndpoint = e => {
     this.setState({ endpoint: e.target.value }, this.checkEndpoint)
+  }
+
+  private submit = e => {
+    e.preventDefault()
+    this.close()
   }
 
   private close = () => {
