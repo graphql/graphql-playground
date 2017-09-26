@@ -586,6 +586,29 @@ export class Playground extends React.PureComponent<Props & DocsState, State> {
     }))
   }
 
+  public handleNewSession = (newIndexZero: boolean = false) => {
+    let session = this.createSession()
+    if (this.props.onboardingStep === 'STEP3_CREATE_MUTATION_TAB') {
+      session = Immutable.set(session, 'query', onboardingEmptyMutation)
+      setTimeout(() => {
+        this.setCursor({
+          line: 2,
+          ch: 15,
+        })
+      }, 5)
+      if (typeof this.props.nextStep === 'function') {
+        this.props.nextStep()
+      }
+    }
+    this.setState(state => {
+      return {
+        ...state,
+        sessions: state.sessions.concat(session),
+        selectedSessionIndex: newIndexZero ? 0 : state.sessions.length,
+      }
+    })
+  }
+
   public nextTab = () => {
     const { sessions, selectedSessionIndex } = this.state
     const numberOfSessions = sessions.length
@@ -848,29 +871,6 @@ export class Playground extends React.PureComponent<Props & DocsState, State> {
 
   private handleNewSessionWithoutNewIndexZero = () => {
     return this.handleNewSession(false)
-  }
-
-  private handleNewSession = (newIndexZero: boolean = false) => {
-    let session = this.createSession()
-    if (this.props.onboardingStep === 'STEP3_CREATE_MUTATION_TAB') {
-      session = Immutable.set(session, 'query', onboardingEmptyMutation)
-      setTimeout(() => {
-        this.setCursor({
-          line: 2,
-          ch: 15,
-        })
-      }, 5)
-      if (typeof this.props.nextStep === 'function') {
-        this.props.nextStep()
-      }
-    }
-    this.setState(state => {
-      return {
-        ...state,
-        sessions: state.sessions.concat(session),
-        selectedSessionIndex: newIndexZero ? 0 : state.sessions.length,
-      }
-    })
   }
 
   private createSession = (session?: Session) => {

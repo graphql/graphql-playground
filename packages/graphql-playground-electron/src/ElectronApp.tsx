@@ -13,6 +13,7 @@ import InitialView from './InitialView/InitialView'
 import * as minimist from 'minimist'
 
 const store = createStore()
+declare var p: IPlayground
 
 interface State {
   endpoint?: string
@@ -118,14 +119,20 @@ export default class ElectronApp extends React.Component<{}, State> {
   }
 
   nextTab = () => {
-    if (this.playground) {
-      this.playground.nextTab()
+    if (p) {
+      p.nextTab()
     }
   }
 
   prevTab = () => {
-    if (this.playground) {
-      this.playground.prevTab()
+    if (p) {
+      p.prevTab()
+    }
+  }
+
+  newTab = () => {
+    if (p) {
+      ;(p as any).handleNewSession()
     }
   }
 
@@ -138,10 +145,16 @@ export default class ElectronApp extends React.Component<{}, State> {
   }
 
   readMessage = (error, message) => {
-    if (message === 'Next') {
-      this.nextTab()
-    } else {
-      this.prevTab()
+    switch (message) {
+      case 'Next':
+        this.nextTab()
+        break
+      case 'Prev':
+        this.prevTab()
+        break
+      case 'New':
+        this.newTab()
+        break
     }
   }
 

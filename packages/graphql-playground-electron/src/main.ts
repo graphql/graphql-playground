@@ -2,6 +2,7 @@
 /* tslint:disable */
 import { app, Menu, BrowserWindow, globalShortcut } from 'electron'
 const dev = require('electron-is-dev')
+import * as electronLocalShortcut from 'electron-localshortcut'
 
 const path = require('path')
 
@@ -17,6 +18,10 @@ function prevTab() {
 
 function nextTab() {
   mainWindow.webContents.send('Tab', 'Next')
+}
+
+function newTab() {
+  mainWindow.webContents.send('Tab', 'New')
 }
 
 function createWindow() {
@@ -118,6 +123,11 @@ function createWindow() {
           accelerator: 'Cmd+Alt+Left',
           click: () => prevTab(),
         },
+        {
+          label: 'New Tab',
+          accelerator: 'CmdOrCtrl+T',
+          click: () => newTab(),
+        },
         { label: 'Close Window', accelerator: 'CmdOrCtrl+W' },
         { label: 'Minimize', accelerator: 'CmdOrCtrl+M' },
         { type: 'separator' },
@@ -125,6 +135,14 @@ function createWindow() {
       ],
     },
   ]
+
+  electronLocalShortcut.register(mainWindow, 'Cmd+Shift+]', () => {
+    nextTab()
+  })
+
+  electronLocalShortcut.register(mainWindow, 'Cmd+Shift+[', () => {
+    prevTab()
+  })
 
   const menu = Menu.buildFromTemplate(template)
   Menu.setApplicationMenu(menu)
@@ -135,13 +153,6 @@ function createWindow() {
 // Some APIs can only be used after this event occurs.
 app.on('ready', () => {
   createWindow()
-
-  globalShortcut.register('Cmd+Shift+]', () => {
-    nextTab()
-  })
-  globalShortcut.register('Cmd+Shift+[', () => {
-    prevTab()
-  })
 })
 
 // Quit when all windows are closed.
@@ -159,4 +170,9 @@ app.on('activate', () => {
   if (mainWindow === null) {
     createWindow()
   }
+})
+
+app.on('will-quit', () => {
+  // Unregister all shortcuts.
+  globalShortcut.unregisterAll()
 })
