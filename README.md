@@ -2,8 +2,6 @@
 
 GraphQL IDE including interactive Docs & Subscriptions (use as Browser/Native App). A friendly fork of [GraphiQL](https://github.com/graphql/graphiql).
 
-![](https://i.imgur.com/JkiNjQo.png)
-
 ## Features
 
 * Syntax highlighting
@@ -14,6 +12,8 @@ GraphQL IDE including interactive Docs & Subscriptions (use as Browser/Native Ap
 * Interactive Docs with arrow-key control
 * Interactive GraphQL Subscriptions
 * `graphql-config` support
+
+![](https://i.imgur.com/JkiNjQo.png)
 
 ## Getting Started
 There are multiple ways to use the GraphQL Playground.
