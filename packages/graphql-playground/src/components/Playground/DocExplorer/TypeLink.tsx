@@ -145,6 +145,9 @@ class TypeLink extends React.PureComponent<
           .doc-category-item.clickable:hover {
             @p: .pointer, .white;
           }
+          .doc-category-item.clickable:hover :global(.brace) {
+            @p: .white;
+          }
           .doc-category-item.active {
             @p: .bgBlack07;
           }
