@@ -18,6 +18,7 @@ interface Props {
   onToggleHistory: () => void
   onShare: () => void
   shareUrl?: string
+  // reshare: boolean
 }
 
 interface State {
@@ -43,6 +44,7 @@ export default class Share extends React.Component<Props, State> {
       theme,
       shareUrl,
       onShare,
+      reshare,
     } = this.props
     return (
       <div className="settings">

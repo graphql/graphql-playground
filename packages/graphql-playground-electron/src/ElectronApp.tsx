@@ -327,7 +327,7 @@ export default class ElectronApp extends React.Component<{}, State> {
     })
       .then(res => res.json())
       .then(res => {
-        const shareUrl = `https://graphql-bin.com/${res.data.addSession.id}`
+        const shareUrl = `https://graphqlbin.com/${res.data.addSession.id}`
         // const shareUrl = `${location.origin}/${res.data.addSession.id}`
         this.setState({ shareUrl })
       })
