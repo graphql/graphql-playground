@@ -1,19 +1,19 @@
-# GraphQL Playground [![npm version](https://badge.fury.io/js/graphql-playground.svg)](https://badge.fury.io/js/graphql-playground)
-GraphQL IDE including interactive Docs & Subscriptions (use as Browser/Native App). A friendly fork of GraphiQL.
+![](https://imgur.com/XP2chWw.png)
 
-
-![](https://i.imgur.com/JkiNjQo.png)
+GraphQL IDE including interactive Docs & Subscriptions (use as Browser/Native App). A friendly fork of [GraphiQL](https://github.com/graphql/graphiql).
 
 ## Features
 
 * Syntax highlighting
-* Intelligent type ahead of fields, arguments, types, and more.
-* Real-time error highlighting and reporting.
-* Automatic query completion.
-* Run and inspect query results.
+* Intelligent type ahead of fields, arguments, types, and more
+* Real-time error highlighting and reporting
+* Automatic query completion
+* Run and inspect query results
 * Interactive Docs with arrow-key control
 * Interactive GraphQL Subscriptions
 * `graphql-config` support
+
+![](https://i.imgur.com/JkiNjQo.png)
 
 ## Getting Started
 There are multiple ways to use the GraphQL Playground.
@@ -126,7 +126,8 @@ app.use(router.allowedMethods());
 app.listen(3001);
 ```
 
-## Development of GraphQL Playground
+## Development of GraphQL Playground [![npm version](https://badge.fury.io/js/graphql-playground.svg)](https://badge.fury.io/js/graphql-playground)
+
 ```sh
 $ cd packages/graphql-playground
 $ yarn install
