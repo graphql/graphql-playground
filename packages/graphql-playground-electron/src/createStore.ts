@@ -17,7 +17,7 @@ if (typeof window !== 'undefined') {
   }
 }
 
-const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose
+const composeEnhancers = compose
 
 const storage = composeEnhancers(
   filter([

@@ -3127,6 +3127,17 @@ graceful-fs@^4.1.11, graceful-fs@^4.1.2, graceful-fs@^4.1.4, graceful-fs@^4.1.6,
   version "4.1.11"
   resolved "https://registry.yarnpkg.com/graceful-fs/-/graceful-fs-4.1.11.tgz#0e8bdfe4d1ddb8854d64e04ea7c00e2a026e5658"
 
+graphcool-styles@0.2.4:
+  version "0.2.4"
+  resolved "https://registry.yarnpkg.com/graphcool-styles/-/graphcool-styles-0.2.4.tgz#c04aa8a440280e910e4c9cfa1ef97052d1060198"
+  dependencies:
+    html-webpack-plugin "^2.24.1"
+    interactive "^0.1.9"
+    isomorphic-fetch "^2.2.1"
+    object-assign "^4.1.0"
+    react-dom "^15.3.2"
+    webpack-dev-server "^1.16.2"
+
 graphcool-styles@^0.1.31:
   version "0.1.31"
   resolved "https://registry.yarnpkg.com/graphcool-styles/-/graphcool-styles-0.1.31.tgz#efb04329a0e5d2788023e45e43925a85664e83dd"
@@ -3206,15 +3217,15 @@ graphql-language-service-utils@0.0.17:
     graphql "^0.10.1"
     graphql-language-service-types "0.0.21"
 
-graphql-playground@^0.1.7:
-  version "0.1.7"
-  resolved "https://registry.yarnpkg.com/graphql-playground/-/graphql-playground-0.1.7.tgz#4eb8c631bc2fafc7fabf57e62cd1749a5f3e8cc7"
+graphql-playground@0.1.9:
+  version "0.1.9"
+  resolved "https://registry.yarnpkg.com/graphql-playground/-/graphql-playground-0.1.9.tgz#4668a303b5892e60d436ab75ad3ef93a1d15dd67"
   dependencies:
     calculate-size "^1.1.1"
     classnames "^2.2.5"
     codemirror "^5.27.4"
     cuid "^1.3.8"
-    graphcool-styles "^0.1.31"
+    graphcool-styles "0.2.4"
     graphcool-tmp-ui "^0.0.11"
     graphiql "^0.11.2"
     graphql "^0.10.5"

@@ -36,7 +36,7 @@ export default class Tab extends React.PureComponent<Props, {}> {
     return (
       <div
         key={session.id}
-        className={`tab ${index === selectedSessionIndex && 'active'}`}
+        className={`tab ${index === selectedSessionIndex && 'active'} ${theme}`}
         onClick={this.handleSelectSession}
       >
         <style jsx={true}>{`
@@ -56,7 +56,7 @@ export default class Tab extends React.PureComponent<Props, {}> {
               @p: .bgDarkBlue;
             }
           }
-          .light .tab {
+          .light.tab {
             background-color: #e7eaec;
             &.active {
               background-color: #eeeff0;

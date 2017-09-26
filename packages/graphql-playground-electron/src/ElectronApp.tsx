@@ -6,14 +6,7 @@ import * as cx from 'classnames'
 import Playground, {
   Playground as IPlayground,
 } from 'graphql-playground/lib/components/Playground'
-import ThemeProvider from 'graphql-playground/lib/components/theme/ThemeProvider'
-import ToggleButton from 'graphcool-ui/lib/ToggleButton'
-import Tooltip from 'graphcool-ui/lib/Tooltip'
-import {
-  GraphQLProjectConfig,
-  getGraphQLProjectConfig,
-  getGraphQLConfig,
-} from 'graphql-config'
+import { getGraphQLConfig } from 'graphql-config'
 import { createNewWindow } from './utils'
 import createStore from './createStore'
 import InitialView from './InitialView/InitialView'
@@ -34,7 +27,7 @@ interface State {
 }
 
 export default class ElectronApp extends React.Component<{}, State> {
-  private playground: React.ComponentClass<Props>
+  private playground: IPlayground
 
   constructor() {
     super()
@@ -46,6 +39,7 @@ export default class ElectronApp extends React.Component<{}, State> {
       theme: 'dark',
       endpoint,
     }
+    ;(global as any).a = this
   }
 
   getEndpointFromArgs(): string | undefined {
@@ -270,15 +264,19 @@ export default class ElectronApp extends React.Component<{}, State> {
                 </div>}
               <div className="playground">
                 <Playground
-                  ref={playground => (this.playground = playground)}
+                  ref={this.setRef}
                   endpoint={endpoint}
                   wsApiPrefix={'wss://subscriptions.graph.cool/v1'}
-                  isApp={true}
+                  isApp={!projects}
                 />
               </div>
             </div>}
         </div>
       </Provider>
     )
+  }
+
+  private setRef = ref => {
+    this.playground = ref
   }
 }
