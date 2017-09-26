@@ -83,7 +83,7 @@ export const TabBar = withTheme<
           }
 
           .tabs.isApp {
-            padding-left: 82px;
+            padding-left: 52px;
           }
 
           .icons {

@@ -184,6 +184,9 @@ export default class ElectronApp extends React.Component<{}, State> {
             .app-content .left-content {
               letter-spacing: 0.5px;
             }
+            body .root .tabs.isApp {
+              padding-left: 58px;
+            }
           `}</style>
           <style jsx={true}>{`
             .root {
@@ -195,6 +198,7 @@ export default class ElectronApp extends React.Component<{}, State> {
             .app-content {
               @p: .flex, .flexRow;
             }
+
             .app-content .left-content {
               @p: .white, .relative, .mr6, .bgDarkBlue40;
               flex: 0 222px;
