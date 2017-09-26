@@ -108,6 +108,11 @@ export default class SearchResults extends React.Component<Props, {}> {
     ) {
       return (
         <span className="doc-alert-text">
+          <style jsx={true}>{`
+            .doc-alert-text {
+              @p: .ml25, .mt16, .db;
+            }
+          `}</style>
           {'No results found.'}
         </span>
       )

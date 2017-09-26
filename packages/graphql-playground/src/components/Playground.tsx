@@ -31,8 +31,11 @@ import Settings from './Settings'
 import { connect } from 'react-redux'
 import { DocsState } from '../reducers/graphiql-docs'
 import GraphQLEditorSession from './Playground/GraphQLEditorSession'
-import { getDeeperType } from '../../lib/components/Playground/DocExplorer/utils'
-import { getElementIndex, getRootMap } from './Playground/DocExplorer/utils'
+import {
+  getElementIndex,
+  getRootMap,
+  getDeeperType,
+} from './Playground/DocExplorer/utils'
 import { setStacks } from '../actions/graphiql-docs'
 import { isEqual } from 'lodash'
 
@@ -89,7 +92,7 @@ const wsApiPrefix = 'wss://dev.subscriptions.graph.cool/v1'
 
 export { GraphQLEditor }
 
-class Playground extends React.PureComponent<Props & DocsState, State> {
+export class Playground extends React.PureComponent<Props & DocsState, State> {
   storage: PlaygroundStorage
   wsConnections: { [sessionId: string]: any } = {}
   observers: { [sessionId: string]: any } = {}

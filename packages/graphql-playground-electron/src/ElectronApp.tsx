@@ -3,7 +3,9 @@ import { remote, ipcRenderer } from 'electron'
 import { Provider } from 'react-redux'
 import { Icon, $v } from 'graphcool-styles'
 import * as cx from 'classnames'
-import Playground from 'graphql-playground/lib/components/Playground'
+import Playground, {
+  Playground as IPlayground,
+} from 'graphql-playground/lib/components/Playground'
 import ThemeProvider from 'graphql-playground/lib/components/theme/ThemeProvider'
 import ToggleButton from 'graphcool-ui/lib/ToggleButton'
 import Tooltip from 'graphcool-ui/lib/Tooltip'
@@ -32,7 +34,7 @@ interface State {
 }
 
 export default class ElectronApp extends React.Component<{}, State> {
-  private playground: Playground
+  private playground: React.ComponentClass<Props>
 
   constructor() {
     super()
