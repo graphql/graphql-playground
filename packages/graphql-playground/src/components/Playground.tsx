@@ -189,7 +189,7 @@ export class Playground extends React.PureComponent<Props & DocsState, State> {
       selectUserSessionId: undefined,
       codeGenerationPopupOpen: false,
       disableQueryHeader: false,
-      theme: (localStorage.getItem('theme') as Theme) || 'light',
+      theme: (localStorage.getItem('theme') as Theme) || 'dark',
       autoReloadSchema: false,
       useVim: localStorage.getItem('useVim') === 'true' || false,
       shareAllTabs: true,

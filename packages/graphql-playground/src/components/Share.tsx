@@ -6,6 +6,7 @@ import Tooltip from './Tooltip'
 import { Theme } from './Playground'
 import * as cn from 'classnames'
 import { Button } from './Button'
+import * as Copy from 'react-copy-to-clipboard'
 
 interface Props {
   theme: Theme
@@ -64,8 +65,11 @@ export default class Share extends React.Component<Props, State> {
             right: -21px;
           }
           .row {
-            @p: .flex, .itemsCenter, .justifyBetween;
+            @p: .flex, .itemsCenter, .justifyBetween, .relative;
             min-width: 245px;
+          }
+          .copy {
+            @p: .absolute, .right0;
           }
           .row + .row {
             @p: .mt16;
@@ -100,6 +104,9 @@ export default class Share extends React.Component<Props, State> {
           input {
             @p: .bgDarkBlue10, .br2, .pv6, .ph10, .fw6, .darkBlue, .f12, .db,
               .w100;
+          }
+          .copy:hover :global(svg) {
+            fill: $darkBlue60;
           }
         `}</style>
         <div className="icon">
@@ -156,6 +163,16 @@ export default class Share extends React.Component<Props, State> {
                     </div>
                   : <div className="row">
                       <input value={shareUrl} disabled={true} />
+                      <div className="copy">
+                        <Copy text={shareUrl}>
+                          <Icon
+                            src={require('graphcool-styles/icons/fill/copy.svg')}
+                            color={$v.darkBlue30}
+                            width={25}
+                            height={25}
+                          />
+                        </Copy>
+                      </div>
                     </div>}
               </div>
             </Tooltip>

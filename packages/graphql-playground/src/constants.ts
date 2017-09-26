@@ -98,7 +98,7 @@ export const defaultQuery = '# Try to write your query here\n'
 
 export const modalStyle = {
   overlay: {
-    zIndex: 20,
+    zIndex: 99999,
     backgroundColor: 'rgba(15,32,46,.9)',
     display: 'flex',
     alignItems: 'center',

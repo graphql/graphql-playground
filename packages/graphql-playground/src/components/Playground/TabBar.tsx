@@ -78,7 +78,7 @@ export const TabBar = withTheme<
           }
 
           .tabs {
-            @p: .mt16, .ml16, .flex, .itemsCenter;
+            @p: .mt16, .ml16, .flex, .itemsCenter, .z0;
             height: 41px;
           }
 

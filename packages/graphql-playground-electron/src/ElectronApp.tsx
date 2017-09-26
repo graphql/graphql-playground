@@ -25,6 +25,9 @@ interface State {
   }
   theme: string
   projects?: any[]
+  shareUrl?: string
+  loading: boolean
+  session?: any
 }
 
 export default class ElectronApp extends React.Component<{}, State> {
@@ -39,13 +42,19 @@ export default class ElectronApp extends React.Component<{}, State> {
       activeEndpoint: null,
       theme: 'dark',
       endpoint,
+      loading: false,
     }
     ;(global as any).a = this
+    ;(global as any).r = remote
   }
 
   getEndpointFromArgs(): string | undefined {
-    const argv = process.argv
+    const argv = remote.process.argv
     const args = minimist(argv.slice(2))
+
+    if (argv.length === 3 && argv[1] === 'endpoint') {
+      return argv[2]
+    }
 
     return args.endpoint
   }
@@ -282,12 +291,42 @@ export default class ElectronApp extends React.Component<{}, State> {
                   wsApiPrefix={'wss://subscriptions.graph.cool/v1'}
                   isApp={!projects}
                   onChangeEndpoint={this.handleChangeEndpoint}
+                  share={this.share}
+                  shareUrl={this.state.shareUrl}
                 />
               </div>
             </div>}
         </div>
       </Provider>
     )
+  }
+
+  private share = (session: any) => {
+    fetch('https://api.graph.cool/simple/v1/cj81hi46q03c30196uxaswrz2', {
+      method: 'post',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        query: `
+        mutation ($session: String! $endpoint: String!) {
+          addSession(session: $session endpoint: $endpoint) {
+            id
+          }
+        }
+      `,
+        variables: {
+          session: JSON.stringify(session),
+          endpoint: this.state.endpoint,
+        },
+      }),
+    })
+      .then(res => res.json())
+      .then(res => {
+        const shareUrl = `https://graphql-bin.com/${res.data.addSession.id}`
+        // const shareUrl = `${location.origin}/${res.data.addSession.id}`
+        this.setState({ shareUrl })
+      })
   }
 
   private setRef = ref => {

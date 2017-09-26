@@ -123,7 +123,10 @@ const HistoryItems = ({
         <div className="right">
           {item.date &&
             <div className="date">
-              {item.date.getMonth() + 1}/{item.date.getDay()}/{item.date.getFullYear().toString().slice(2, 4)}
+              {typeof item.date.getMonth === 'function' &&
+                <span>
+                  {item.date.getMonth() + 1}/{item.date.getDay()}/{item.date.getFullYear().toString().slice(2, 4)}
+                </span>}
             </div>}
         </div>
       </div>,

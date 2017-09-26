@@ -135,7 +135,8 @@ class GraphDocs extends React.Component<
             background: rgba(0, 0, 0, 0.06);
           }
           .graph-docs {
-            @p: .absolute, .right0, .h100, .z999;
+            @p: .absolute, .right0, .h100;
+            z-index: 2000;
             margin-right: -1px;
           }
           .docs-button {
