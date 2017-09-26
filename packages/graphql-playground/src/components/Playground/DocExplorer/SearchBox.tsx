@@ -41,6 +41,7 @@ export default class SearchBox extends React.Component<Props, State> {
           .search-box {
             @p: .pa25, .bgBlack02, .bb, .bBlack10, .relative, .flexFixed;
             z-index: 1;
+            margin-left: 6px;
           }
           .label {
             @p: .bgWhite, .bbox, .w100, .flex, .itemsCenter, .bgWhite;

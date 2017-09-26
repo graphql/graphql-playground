@@ -70,6 +70,7 @@ function ShowRootType({ name, fields, offset, onSetWidth }: ShowRootTypeProps) {
             x={0}
             y={offset + index}
             onSetWidth={onSetWidth}
+            collapsable={true}
           />,
         )}
     </div>

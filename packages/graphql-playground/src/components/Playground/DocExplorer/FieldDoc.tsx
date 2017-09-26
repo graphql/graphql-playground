@@ -140,6 +140,7 @@ export default class FieldDoc extends React.PureComponent<Props, State> {
                 x={level}
                 y={index + implementationsOffset}
                 onSetWidth={this.props.onSetWidth}
+                collapsable={true}
               />,
             )}
           </div>}

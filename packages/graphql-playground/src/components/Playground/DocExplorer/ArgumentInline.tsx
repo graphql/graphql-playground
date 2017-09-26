@@ -8,7 +8,12 @@ export interface Props {
 
 export default function Argument({ arg, showDefaultValue }: Props) {
   return (
-    <span className="arg">
+    <div className="arg">
+      <style jsx={true}>{`
+        .arg {
+          @p: .ml16;
+        }
+      `}</style>
       <span className="arg-name">
         {arg.name}
       </span>
@@ -24,7 +29,7 @@ export default function Argument({ arg, showDefaultValue }: Props) {
             {print(astFromValue(arg.defaultValue, arg.type))}
           </span>
         </span>}
-    </span>
+    </div>
   )
 }
 

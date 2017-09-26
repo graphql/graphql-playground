@@ -28,23 +28,37 @@ export interface Props {
   afterNode?: JSX.Element | null | false
   onSetWidth: (width: number) => void
   showParentName?: boolean
+  collapsable?: boolean
+}
+
+interface State {
+  collapsed: boolean
 }
 
 class TypeLink extends React.PureComponent<
   Props & StateFromProps & DispatchFromProps,
-  {}
+  State
 > {
   static defaultProps: Partial<Props> = {
     clickable: true,
+    collapsable: false,
   }
   private ref: any
 
-  shouldComponentUpdate(nextProps: Props & StateFromProps) {
+  constructor(props) {
+    super(props)
+    this.state = {
+      collapsed: false,
+    }
+  }
+
+  shouldComponentUpdate(nextProps: Props & StateFromProps, nextState: State) {
     return (
       this.props.type !== nextProps.type ||
       this.props.navStack[this.props.x] !== nextProps.navStack[this.props.x] ||
       this.props.navStack.length !== nextProps.navStack.length ||
-      this.props.keyMove !== nextProps.keyMove
+      this.props.keyMove !== nextProps.keyMove ||
+      this.state.collapsed !== nextState.collapsed
     )
   }
 
@@ -59,16 +73,28 @@ class TypeLink extends React.PureComponent<
   }
 
   componentDidMount() {
-    this.sendWidth()
+    this.updateSize()
   }
 
   componentDidUpdate() {
-    this.sendWidth()
+    this.updateSize()
   }
 
-  sendWidth() {
-    if (typeof this.props.onSetWidth === 'function' && this.ref) {
-      this.props.onSetWidth(this.ref.scrollWidth)
+  updateSize() {
+    if (this.ref) {
+      if (typeof this.props.onSetWidth === 'function') {
+        this.props.onSetWidth(this.ref.scrollWidth)
+      }
+
+      const LINE_HEIGHT = 31
+
+      if (
+        this.ref.scrollHeight > LINE_HEIGHT &&
+        !this.state.collapsed &&
+        this.props.collapsable
+      ) {
+        this.setState({ collapsed: true })
+      }
     }
   }
 
@@ -147,6 +173,9 @@ class TypeLink extends React.PureComponent<
           .doc-category-item b {
             @p: .fw6;
           }
+          .dots {
+            @p: .fw6;
+          }
         `}</style>
         {beforeNode}
         {beforeNode && ' '}
@@ -159,9 +188,11 @@ class TypeLink extends React.PureComponent<
             type.args.length > 0 && [
               '(',
               <span key="args">
-                {type.args.map(arg =>
-                  <ArgumentInline key={arg.name} arg={arg} />,
-                )}
+                {this.state.collapsed
+                  ? <span className="dots">...</span>
+                  : type.args.map(arg =>
+                      <ArgumentInline key={arg.name} arg={arg} />,
+                    )}
               </span>,
               ')',
             ]}

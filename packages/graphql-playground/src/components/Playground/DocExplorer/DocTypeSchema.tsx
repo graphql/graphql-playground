@@ -65,6 +65,7 @@ const DocTypeSchema = ({
           type={data}
           x={level}
           y={index}
+          collapsable={true}
           className="doc-type-interface"
           beforeNode={<span className="field-name">implements</span>}
           afterNode={
@@ -83,6 +84,7 @@ const DocTypeSchema = ({
           x={level}
           y={index + interfaces.length}
           onSetWidth={onSetWidth}
+          collapsable={true}
         />,
       )}
       {deprecatedFields.length > 0 && <br />}
@@ -96,6 +98,7 @@ const DocTypeSchema = ({
             x={level}
             y={index + nonDeprecatedFields.length + interfaces.length}
             onSetWidth={onSetWidth}
+            collapsable={true}
           />
         </div>,
       )}
