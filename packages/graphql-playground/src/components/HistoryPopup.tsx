@@ -180,6 +180,7 @@ class HistoryPopup extends React.Component<Props & Theme, State> {
                       disableQueryHeader={true}
                       queryOnly={true}
                       rerenderQuery={true}
+                      isActive={false}
                     />
                   </div>
                 </div>

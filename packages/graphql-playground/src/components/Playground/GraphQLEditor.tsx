@@ -48,6 +48,7 @@ export interface Props {
   variables?: string
   operationName?: string
   responses?: Response[]
+  isActive: boolean
 
   storage?: any
   defaultQuery?: string
@@ -349,10 +350,16 @@ export class GraphQLEditor extends React.PureComponent<Props, State> {
     const Tether = this.props.tether
 
     return (
-      <div className="graphiql-container">
+      <div
+        className={cn('graphiql-container', { isActive: this.props.isActive })}
+      >
         <style jsx={true}>{`
           .graphiql-container {
             font-family: Open Sans, sans-serif;
+            display: none;
+          }
+          .graphiql-container.isActive {
+            display: flex;
           }
 
           .docs-button,

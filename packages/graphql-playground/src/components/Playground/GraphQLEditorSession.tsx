@@ -26,6 +26,7 @@ interface Props {
   disableResize?: boolean
   responses?: any
   useVim: boolean
+  isActive: boolean
 
   onboardingStep?: any
   tether?: any
@@ -52,9 +53,11 @@ export default class GraphQLEditorSession extends React.PureComponent<
       onboardingStep,
       tether,
       nextStep,
+      isActive,
     } = this.props
     return (
       <GraphQLEditor
+        isActive={isActive}
         key={session.id}
         isGraphcoolUrl={isGraphcoolUrl}
         schema={schemaCache}
@@ -92,6 +95,7 @@ export default class GraphQLEditorSession extends React.PureComponent<
           this.props.onboardingStep === 'STEP3_ENTER_MUTATION2_VALUE'
         }
         disableAnimation={true}
+        disableAutofocus={!isActive}
       />
     )
   }

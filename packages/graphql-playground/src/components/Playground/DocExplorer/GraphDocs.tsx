@@ -16,6 +16,7 @@ import { serialize, serializeRoot, getElement, getElementRoot } from './utils'
 import Spinner from '../../Spinner'
 import { columnWidth } from '../../../constants'
 import RootColumn from './RootColumn'
+import * as cn from 'classnames'
 
 interface StateFromProps {
   navStack: any[]
@@ -110,7 +111,10 @@ class GraphDocs extends React.Component<
     }
 
     return (
-      <div className="graph-docs docExplorerWrap docs" style={docsStyle}>
+      <div
+        className={cn('graph-docs docExplorerWrap docs', { open: docsOpen })}
+        style={docsStyle}
+      >
         <style jsx={true} global={true}>{`
           .graphiql-container .doc-category-title {
             @p: .mh0, .ph16;
@@ -136,8 +140,10 @@ class GraphDocs extends React.Component<
           }
           .graph-docs {
             @p: .absolute, .right0, .h100;
-            z-index: 2000;
             margin-right: -1px;
+          }
+          .graph-docs.open {
+            z-index: 2000;
           }
           .docs-button {
             @p: .absolute, .white, .bgGreen, .pv6, .br2, .z2, .ttu, .fw6, .f12,
