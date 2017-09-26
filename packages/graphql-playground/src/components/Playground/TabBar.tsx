@@ -168,6 +168,14 @@ export const TabBar = withTheme<
           .light.tab:hover {
             background-color: #eeeff0;
           }
+          .history:hover :global(.icon) :global(svg),
+          .history.open :global(.icon) :global(svg) {
+            stroke: $white60;
+          }
+          .history.light:hover :global(.icon) :global(svg),
+          .history.light.open :global(.icon) :global(svg) {
+            stroke: $darkBlue60;
+          }
         `}</style>
         <div className={cx('tabs', { isApp })}>
           {sessions.map((session, index) =>
@@ -214,7 +222,7 @@ export const TabBar = withTheme<
                   strokeWidth={4}
                 />
               </div>}
-          <div className="history">
+          <div className={cx('history', theme)}>
             <Icon
               className="icon"
               src={require('graphcool-styles/icons/stroke/history.svg')}

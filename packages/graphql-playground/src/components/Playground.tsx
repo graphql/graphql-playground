@@ -639,6 +639,14 @@ export class Playground extends React.PureComponent<Props & DocsState, State> {
         this.props.nextStep()
       }
     }
+    if (session.query === defaultQuery) {
+      setTimeout(() => {
+        this.setCursor({
+          line: 1,
+          ch: 0,
+        })
+      }, 5)
+    }
     this.setState(state => {
       return {
         ...state,
@@ -878,6 +886,14 @@ export class Playground extends React.PureComponent<Props & DocsState, State> {
     }
 
     if (sessions.length > 0) {
+      if (sessions.length === 1 && sessions[0].query === defaultQuery) {
+        setTimeout(() => {
+          this.setCursor({
+            line: 1,
+            ch: 0,
+          })
+        }, 5)
+      }
       return sessions
     }
 
@@ -917,7 +933,11 @@ export class Playground extends React.PureComponent<Props & DocsState, State> {
     if (session) {
       newSession = Immutable.set(session, 'id', cuid())
     } else {
-      const query = this.storage.hasExecutedQuery() ? '' : defaultQuery
+      const query =
+        this.storage.hasExecutedQuery() ||
+        (this.state && this.state.sessions && this.state.sessions.length > 0)
+          ? ''
+          : defaultQuery
 
       newSession = Immutable({
         id: cuid(),

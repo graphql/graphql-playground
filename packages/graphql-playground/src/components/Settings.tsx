@@ -4,6 +4,7 @@ import { $v } from 'graphcool-styles'
 import ToggleButton from './ToggleButton'
 import Tooltip from './Tooltip'
 import { Theme } from './Playground'
+import * as cn from 'classnames'
 
 interface Props {
   theme: Theme
@@ -56,6 +57,14 @@ export default class Settings extends React.Component<Props, State> {
           .icon {
             @p: .pointer, .relative;
           }
+          .icon:hover :global(.settings-icon) :global(svg),
+          .icon.open :global(.settings-icon) :global(svg) {
+            fill: $white60;
+          }
+          .icon.light:hover :global(.settings-icon) :global(svg),
+          .icon.light.open :global(.settings-icon) :global(svg) {
+            fill: $darkBlue60;
+          }
           .tooltip {
             @p: .absolute;
             right: -21px;
@@ -81,13 +90,14 @@ export default class Settings extends React.Component<Props, State> {
               .w100;
           }
         `}</style>
-        <div className="icon">
+        <div className={cn('icon', theme, { open })}>
           <Icon
             src={require('graphcool-styles/icons/fill/settings.svg')}
-            color={theme === 'light' ? $v.gray20 : $v.white20}
+            color={theme === 'light' ? $v.darkBlue20 : $v.white20}
             width={23}
             height={23}
             onClick={this.toggleTooltip}
+            className={'settings-icon'}
           />
           <div className="tooltip">
             <Tooltip
