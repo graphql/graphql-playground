@@ -1,23 +1,27 @@
 ![](https://imgur.com/k3uWfzZ.png)
 
-GraphQL IDE including interactive Docs & Subscriptions (use as Browser/Native App). A friendly fork of [GraphiQL](https://github.com/graphql/graphiql).
+GraphQL IDE for better development workflows (GraphQL Subscriptions, interactive docs & collaboration)
 
-⬇️ **Download the [desktop app]() or use the web version at [graphqlbin.com](https//www.graphqlbin.com).**
-
-## Features
-
-* Syntax highlighting
-* Intelligent type ahead of fields, arguments, types, and more
-* Real-time error highlighting and reporting
-* Automatic query completion
-* Run and inspect query results
-* Interactive Docs with arrow-key control
-* Interactive GraphQL Subscriptions
-* `graphql-config` support
+**Download the [desktop app]() or use the web version at [graphqlbin.com](https//www.graphqlbin.com).**
 
 ![](https://imgur.com/6IC6Huj.png)
 
-## How is this different from [GraphiQL](https://github.com/graphql/graphiql)?
+## Features
+
+* Context-aware autocompletion & error highlighting
+* Interactive, multi-column docs (keyboard support)
+* Supports real-time GraphQL Subscriptions
+
+## FAQ
+
+### How is this different from [GraphiQL](https://github.com/graphql/graphiql)?
+
+### What's the difference between the desktop app and the web version?
+
+The desktop app is the same as the web version but includes these additional features:
+
+* Support for [graphql-config](https://github.com/graphcool/graphql-config) enabling features like multi-environment setups.
+* Double click on `*.graphql` files.
 
 
 ## Code Usage
