@@ -129,7 +129,6 @@ class GraphDocs extends React.Component<
           }
         `}</style>
         <style jsx={true}>{`
-          .docs :global(p),
           .docs :global(.doc-category-title) {
             @p: .pa16, .f14;
           }
