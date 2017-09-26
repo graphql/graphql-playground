@@ -15,12 +15,25 @@ GraphQL IDE for better development workflows (GraphQL Subscriptions, interactive
 
 ### How is this different from [GraphiQL](https://github.com/graphql/graphiql)?
 
+GraphQL Playground uses components of GraphiQL under the hood but is meant as a more powerful GraphQL IDE enabling better (local) development workflows. Compared to GraphiQL, the GraphQL Playground ships with the following additional features:
+
+* Interactive, multi-column schema documentation
+* Automatic schema reloading
+* Support for GraphQL Subscriptions
+* Query history
+* Configuration of HTTP headers
+* Tabs
+
+See the following question for more additonal features.
+
 ### What's the difference between the desktop app and the web version?
 
 The desktop app is the same as the web version but includes these additional features:
 
 * Support for [graphql-config](https://github.com/graphcool/graphql-config) enabling features like multi-environment setups.
 * Double click on `*.graphql` files.
+
+### How does GraphQL Bin work?
 
 
 ## Code Usage
