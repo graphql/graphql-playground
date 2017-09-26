@@ -1,8 +1,8 @@
 import { Session } from '../types'
 
 export default class PlaygroundStorage {
+  project: any
   private endpoint: string
-  private project: any
   private storages: any = {}
   private executedQueryCount: number
 

@@ -1,6 +1,6 @@
 import * as React from 'react'
 import * as ReactDOM from 'react-dom'
-import App from './components/App'
+import Root from './components/Root'
 import './styles/graphiql_dark.css'
 import './styles/graphiql_light.css'
 import './index.css'
@@ -12,8 +12,9 @@ if (process.env.NODE_ENV !== 'production') {
   // whyDidYouUpdate(React)
 }
 
-;(window as any).GraphQLPlayground = {
+/* tslint:disable-next-line */
+;(window as any)['GraphQLPlayground'] = {
   init(element: HTMLElement, options) {
-    ReactDOM.render(<App {...options} />, element)
+    ReactDOM.render(<Root {...options} />, element)
   },
 }

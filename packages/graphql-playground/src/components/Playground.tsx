@@ -38,6 +38,7 @@ import {
 } from './Playground/DocExplorer/utils'
 import { setStacks } from '../actions/graphiql-docs'
 import { isEqual } from 'lodash'
+import Share from './Share'
 
 export type Theme = 'dark' | 'light'
 export type Viewer = 'ADMIN' | 'EVERYONE' | 'USER'
@@ -61,6 +62,9 @@ export interface Props {
   isApp?: boolean
   setStacks?: (stack: any[]) => void
   onChangeEndpoint: (endpoint: string) => void
+  share: (state: any) => void
+  shareUrl?: string
+  session?: any
 }
 
 export interface State {
@@ -82,6 +86,10 @@ export interface State {
   theme: Theme
   autoReloadSchema: boolean
   useVim: boolean
+
+  shareAllTabs: boolean
+  shareHttpHeaders: boolean
+  shareHistory: boolean
 }
 
 export interface CursorPosition {
@@ -149,6 +157,9 @@ export class Playground extends React.PureComponent<Props & DocsState, State> {
   constructor(props) {
     super(props)
     this.storage = new PlaygroundStorage(props.endpoint)
+    if (props.session) {
+      this.storage.setState(props.session)
+    }
 
     const sessions = this.initSessions()
 
@@ -181,6 +192,9 @@ export class Playground extends React.PureComponent<Props & DocsState, State> {
       theme: (localStorage.getItem('theme') as Theme) || 'light',
       autoReloadSchema: false,
       useVim: localStorage.getItem('useVim') === 'true' || false,
+      shareAllTabs: true,
+      shareHttpHeaders: true,
+      shareHistory: true,
     }
 
     if (typeof window === 'object') {
@@ -219,9 +233,9 @@ export class Playground extends React.PureComponent<Props & DocsState, State> {
       prevProps.endpoint !== this.props.endpoint ||
       prevProps.adminAuthToken !== this.props.adminAuthToken
     ) {
-      // this.saveSessions()
-      // this.saveHistory()
-      // this.storage.saveProject()
+      this.saveSessions()
+      this.saveHistory()
+      this.storage.saveProject()
       // this.storage = new PlaygroundStorage(this.props.endpoint)
       // const sessions = this.initSessions()
       // this.setState({
@@ -555,6 +569,17 @@ export class Playground extends React.PureComponent<Props & DocsState, State> {
             useVim={this.state.useVim}
             onToggleUseVim={this.toggleUseVim}
           />
+          <Share
+            theme={this.state.theme}
+            onShare={this.share}
+            onToggleHistory={this.toggleShareHistory}
+            onToggleAllTabs={this.toggleShareAllTabs}
+            onToggleHttpHeaders={this.toggleShareHTTPHeaders}
+            history={this.state.shareHistory}
+            allTabs={this.state.shareAllTabs}
+            httpHeaders={this.state.shareHttpHeaders}
+            shareUrl={this.props.shareUrl}
+          />
           <GraphDocs schema={this.state.schemaCache} />
           {this.state.historyOpen &&
             <HistoryPopup
@@ -831,7 +856,7 @@ export class Playground extends React.PureComponent<Props & DocsState, State> {
     })
   }
 
-  private initSessions = (force: boolean = false) => {
+  private initSessions = () => {
     if (
       ['STEP3_UNCOMMENT_DESCRIPTION', 'STEP3_OPEN_PLAYGROUND'].indexOf(
         this.props.onboardingStep || '',
@@ -851,7 +876,7 @@ export class Playground extends React.PureComponent<Props & DocsState, State> {
       return sessions.concat(urlSession)
     }
 
-    if (sessions.length > 0 && !force) {
+    if (sessions.length > 0) {
       return sessions
     }
 
@@ -1171,6 +1196,29 @@ export class Playground extends React.PureComponent<Props & DocsState, State> {
         localStorage.setItem('useVim', String(this.state.useVim))
       },
     )
+  }
+
+  private toggleShareAllTabs = () => {
+    this.setState(state => ({ ...state, shareAllTabs: !state.shareAllTabs }))
+  }
+
+  private toggleShareHTTPHeaders = () => {
+    this.setState(state => ({
+      ...state,
+      shareHttpHeaders: !state.shareHttpHeaders,
+    }))
+  }
+
+  private toggleShareHistory = () => {
+    this.setState(state => ({ ...state, shareHisotry: !state.shareHistory }))
+  }
+
+  private share = () => {
+    // noop
+    this.saveSessions()
+    this.saveHistory()
+    this.storage.saveProject()
+    this.props.share(this.storage.project)
   }
 }
 

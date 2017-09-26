@@ -50,7 +50,7 @@ export function A({
     >
       <style jsx={true}>{`
         .link {
-          @p: .pointer, .dib, .blue, .f14;
+          @p: .pointer, .dib, .blue, .f14, .flex, .itemsCenter;
         }
 
         .link.gray {
@@ -106,7 +106,7 @@ export function A({
         }
 
         .button {
-          @p: .br2, .pv10, .ph16, .buttonShadow, .white, .bgBlue;
+          @p: .br2, .pv6, .ph10, .buttonShadow, .white, .bgBlue;
           transition: background .25s ease, box-shadow .25s ease,
             transform .25s ease;
         }

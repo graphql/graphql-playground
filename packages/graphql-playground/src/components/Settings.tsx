@@ -61,7 +61,8 @@ export default class Settings extends React.Component<Props, State> {
             right: -21px;
           }
           .row {
-            @p: .flex, .itemsCenter;
+            @p: .flex, .itemsCenter, .justifyBetween;
+            min-width: 245px;
           }
           .row + .row {
             @p: .mt16;

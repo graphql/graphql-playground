@@ -160,6 +160,10 @@ export class QueryEditor extends React.Component<Props, {}> {
       this.editor.options.keyMap = this.props.useVim ? 'vim' : 'sublime'
       CodeMirror.signal(this.editor, 'change', this.editor)
     }
+    if (this.props.readOnly !== prevProps.readOnly) {
+      this.editor.options.readOnly = this.props.readOnly
+      CodeMirror.signal(this.editor, 'change', this.editor)
+    }
     this.ignoreChangeEvent = false
   }
 
