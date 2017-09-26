@@ -1,0 +1,7 @@
+type Customer {
+  id: ID! @isUnique
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  name: String!
+  email: String
+}

@@ -1,0 +1,9 @@
+type Movie {
+  id: ID! @isUnique
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  oldid: String
+  description: String
+  released: String
+  title: String
+}
