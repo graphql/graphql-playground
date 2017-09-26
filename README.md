@@ -13,7 +13,7 @@ GraphQL IDE including interactive Docs & Subscriptions (use as Browser/Native Ap
 * Interactive GraphQL Subscriptions
 * `graphql-config` support
 
-![](https://i.imgur.com/JkiNjQo.png)
+![](https://imgur.com/6IC6Huj.png)
 
 ## Getting Started
 There are multiple ways to use the GraphQL Playground.
