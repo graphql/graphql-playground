@@ -14,7 +14,7 @@
   "scripts": {
     "build": "rm -rf ./dist && NODE_ENV=production GRAPHQL_ENDPOINT=$BACKEND_ADDR/system webpack --config webpack.config.build.js && cp -r static/* dist",
     "build-electron": "npm run compile; npm run build; cp -r dist lib; rm -rf ./build-electron && electron-builder",
-    "electron-builder": "electron-builder -l",
+    "release": "npm run build-electron",
     "library": "rm -rf .happypack && NODE_ENV=production webpack --config webpack.library.js -p",
     "lint": "tslint \"src/**/*.ts{,x}\" && lint-staged",
     "start": "yarn run compile; concurrently 'yarn react-start' 'wait-on http://localhost:4040/ && yarn electron-start'",
@@ -41,6 +41,9 @@
     "mac": {
       "category": "public.app-category.developer-tools",
       "icon": "static/icons/icon.icns"
+    },
+    "win": {
+      "icon": "static/icons/icon.ico"
     },
     "nsis": {
       "oneClick": false,
