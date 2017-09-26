@@ -3,7 +3,7 @@
   "name": "playground",
   "productName": "GraphQL Playground",
   "description": "Playground app",
-  "version": "0.1.2",
+  "version": "1.0.0",
   "author": {
     "name": "Graphcool",
     "email": "contact@graph.cool",
@@ -22,7 +22,7 @@
     "stats": "NODE_ENV=production webpack --config webpack.library.js  --profile --json > stats.json",
     "test": "npm run lint",
     "precommit": "lint-staged",
-    "prettier": "prettier --single-quote --no-semi --trailing-comma all --write '*.{js,ts,tsx}' 'src/**/*.{js,ts,tsx}'",
+    "prettier": "prettier --single-quote --no-semi --trailing-comma all --write '*.{js,ts,tsx}' 'src/**/*.{js,ts,tsx}'"
   },
   "lint-staged": {
     "*.{ts,tsx}": [
@@ -97,7 +97,7 @@
     "extract-text-webpack-plugin": "^2.0.0-beta.3",
     "file-loader": "^0.11.2",
     "fork-ts-checker-webpack-plugin": "^0.1.5",
-    "graphql-playground": "^0.1.10",
+    "graphql-playground": "^0.1.11",
     "happypack": "^3.1.0",
     "html-webpack-plugin": "^2.30.1",
     "identity-obj-proxy": "^3.0.0",

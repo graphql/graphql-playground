@@ -52,10 +52,11 @@ export function serializeRoot(schema): SerializedRoot {
       return field
     })
   }
+  ;(window as any).ss = schema
   const subscriptionType =
     schema.getSubscriptionType && schema.getSubscriptionType()
   if (subscriptionType) {
-    const subscriptionFieldMap = mutationType.getFields()
+    const subscriptionFieldMap = subscriptionType.getFields()
     obj.subscriptions = Object.keys(subscriptionFieldMap).map(fieldName => {
       const field = subscriptionFieldMap[fieldName]
       field.path = fieldName
