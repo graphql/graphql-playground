@@ -22,7 +22,7 @@
     "stats": "NODE_ENV=production webpack --config webpack.library.js  --profile --json > stats.json",
     "test": "npm run lint",
     "precommit": "lint-staged",
-    "prettier": "prettier --single-quote --no-semi --trailing-comma all --write '*.{js,ts,tsx}' 'src/**/*.{js,ts,tsx}'"
+    "prettier": "prettier --single-quote --no-semi --trailing-comma all --write '*.{js,ts,tsx}' 'src/**/*.{js,ts,tsx}'",
   },
   "lint-staged": {
     "*.{ts,tsx}": [
@@ -45,6 +45,11 @@
     ],
     "directories": {
       "output": "build-electron"
+    },
+    "fileAssociations": {
+      "ext": "graphql",
+      "name": "GraphQL",
+      "role": "Editor"
     }
   },
   "dependencies": {
