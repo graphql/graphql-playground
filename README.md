@@ -1,4 +1,4 @@
-<p align="center"><img src="https://imgur.com/vk3MaNE.png"></p>
+![](https://imgur.com/k3uWfzZ.png)
 
 GraphQL IDE including interactive Docs & Subscriptions (use as Browser/Native App). A friendly fork of [GraphiQL](https://github.com/graphql/graphiql).
 
