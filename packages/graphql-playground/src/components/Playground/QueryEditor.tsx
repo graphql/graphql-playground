@@ -33,6 +33,7 @@ export interface Props {
   hideLineNumbers?: boolean
   disableAutofocus?: boolean
   hideGutters?: boolean
+  useVim?: boolean
 }
 
 export class QueryEditor extends React.Component<Props, {}> {
@@ -63,6 +64,7 @@ export class QueryEditor extends React.Component<Props, {}> {
     require('codemirror/addon/lint/lint')
     require('codemirror/addon/display/placeholder')
     require('codemirror/keymap/sublime')
+    require('codemirror/keymap/vim')
     require('codemirror-graphql/hint')
     require('codemirror-graphql/lint')
     require('codemirror-graphql/mode')
@@ -89,7 +91,7 @@ export class QueryEditor extends React.Component<Props, {}> {
       tabSize: 2,
       mode: 'graphql',
       theme: 'graphiql',
-      keyMap: 'sublime',
+      keyMap: this.props.useVim ? 'vim' : 'sublime',
       autoCloseBrackets: true,
       matchBrackets: true,
       showCursorWhenSelecting: true,
@@ -100,7 +102,7 @@ export class QueryEditor extends React.Component<Props, {}> {
       },
       hintOptions: {
         schema: this.props.schema,
-        closeOnUnfocus: false,
+        closeOnUnfocus: true,
         completeSingle: false,
       },
       gutters,
@@ -154,6 +156,10 @@ export class QueryEditor extends React.Component<Props, {}> {
       this.cachedValue = this.props.value
       this.editor.setValue(this.props.value)
     }
+    if (this.props.useVim !== prevProps.useVim) {
+      this.editor.options.keyMap = this.props.useVim ? 'vim' : 'sublime'
+      CodeMirror.signal(this.editor, 'change', this.editor)
+    }
     this.ignoreChangeEvent = false
   }
 
@@ -188,6 +194,9 @@ export class QueryEditor extends React.Component<Props, {}> {
   }
 
   private onKeyUp = (_, event) => {
+    if (this.props.useVim) {
+      return
+    }
     const code = event.keyCode
     if (
       (code >= 65 && code <= 90) || // letters

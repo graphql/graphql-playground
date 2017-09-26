@@ -281,6 +281,7 @@ export default class ElectronApp extends React.Component<{}, State> {
                   endpoint={endpoint}
                   wsApiPrefix={'wss://subscriptions.graph.cool/v1'}
                   isApp={!projects}
+                  onChangeEndpoint={this.handleChangeEndpoint}
                 />
               </div>
             </div>}
@@ -291,5 +292,9 @@ export default class ElectronApp extends React.Component<{}, State> {
 
   private setRef = ref => {
     this.playground = ref
+  }
+
+  private handleChangeEndpoint = endpoint => {
+    this.setState({ endpoint })
   }
 }

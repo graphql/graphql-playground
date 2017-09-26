@@ -607,7 +607,8 @@ div.CodeMirror-lint-message-error, div.CodeMirror-lint-message-warning {
     border-left: 1px solid silver;
 }
 .CodeMirror.cm-fat-cursor div.CodeMirror-cursor {
-    background: #7e7;
+    background: rgba(255,255,255,.6);
+    color: white;
     border: 0;
     width: auto;
 }

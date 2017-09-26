@@ -25,6 +25,7 @@ interface Props {
   disableQueryHeader?: boolean
   disableResize?: boolean
   responses?: any
+  useVim: boolean
 
   onboardingStep?: any
   tether?: any
@@ -85,6 +86,7 @@ export default class GraphQLEditorSession extends React.PureComponent<
         nextStep={nextStep}
         ref={this.setRef}
         autofillMutation={this.props.autofillMutation}
+        useVim={this.props.useVim}
         rerenderQuery={
           this.props.onboardingStep === 'STEP3_ENTER_MUTATION1_VALUES' ||
           this.props.onboardingStep === 'STEP3_ENTER_MUTATION2_VALUE'

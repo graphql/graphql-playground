@@ -72,9 +72,14 @@ class App extends React.Component<{}, State> {
           subscriptionsEndpoint={subscriptionEndpoint}
           wsApiPrefix={subscriptionPrefix}
           httpApiPrefix="https://api.graph.cool"
+          onChangeEndpoint={this.handleChangeEndpoint}
         />
       </Provider>
     )
+  }
+
+  private handleChangeEndpoint = endpointUrl => {
+    this.setState({ endpointUrl })
   }
 }
 

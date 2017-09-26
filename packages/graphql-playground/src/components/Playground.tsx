@@ -60,6 +60,7 @@ export interface Props {
   nextStep?: () => void
   isApp?: boolean
   setStacks?: (stack: any[]) => void
+  onChangeEndpoint: (endpoint: string) => void
 }
 
 export interface State {
@@ -80,6 +81,7 @@ export interface State {
   disableQueryHeader: boolean
   theme: Theme
   autoReloadSchema: boolean
+  useVim: boolean
 }
 
 export interface CursorPosition {
@@ -178,6 +180,7 @@ export class Playground extends React.PureComponent<Props & DocsState, State> {
       disableQueryHeader: false,
       theme: (localStorage.getItem('theme') as Theme) || 'light',
       autoReloadSchema: false,
+      useVim: localStorage.getItem('useVim') === 'true' || false,
     }
 
     if (typeof window === 'object') {
@@ -216,16 +219,16 @@ export class Playground extends React.PureComponent<Props & DocsState, State> {
       prevProps.endpoint !== this.props.endpoint ||
       prevProps.adminAuthToken !== this.props.adminAuthToken
     ) {
-      this.saveSessions()
-      this.saveHistory()
-      this.storage.saveProject()
-      this.storage = new PlaygroundStorage(this.props.endpoint)
-      const sessions = this.initSessions()
-      this.setState({
-        sessions,
-        history: this.storage.getHistory(),
-      })
-      this.resetSubscriptions()
+      // this.saveSessions()
+      // this.saveHistory()
+      // this.storage.saveProject()
+      // this.storage = new PlaygroundStorage(this.props.endpoint)
+      // const sessions = this.initSessions()
+      // this.setState({
+      //   sessions,
+      //   history: this.storage.getHistory(),
+      // })
+      // this.resetSubscriptions()
       this.fetchSchemas().then(this.initSessions)
     }
 
@@ -240,6 +243,44 @@ export class Playground extends React.PureComponent<Props & DocsState, State> {
       window.clearInterval(this.schemaReloadInterval)
       this.schemaReloadInterval = null
     }
+  }
+
+  fetchSchemas = () => {
+    return this.fetchSchema(this.getSimpleEndpoint()).then(simpleSchemaData => {
+      if (!simpleSchemaData || simpleSchemaData.error) {
+        this.setState(
+          {
+            response: {
+              date: simpleSchemaData.error,
+              time: new Date(),
+            },
+          } as State,
+        )
+        return
+      }
+
+      if (isEqual(this.rawSchemaCache, simpleSchemaData.data)) {
+        return
+      }
+
+      this.rawSchemaCache = simpleSchemaData.data
+
+      if (!simpleSchemaData.data) {
+        return
+      }
+
+      const simpleSchema = buildClientSchema(simpleSchemaData.data)
+      const userFields = this.extractUserField(simpleSchema)
+
+      this.renewStack(simpleSchema)
+
+      this.setState(
+        {
+          schemaCache: simpleSchema,
+          userFields,
+        } as State,
+      )
+    })
   }
 
   componentWillUnmount() {
@@ -284,39 +325,6 @@ export class Playground extends React.PureComponent<Props & DocsState, State> {
     const editor = this.graphiqlComponents[this.state.selectedSessionIndex]
       .queryEditorComponent.editor
     editor.setCursor(position)
-  }
-  fetchSchemas = () => {
-    return this.fetchSchema(this.getSimpleEndpoint()).then(simpleSchemaData => {
-      if (!simpleSchemaData || simpleSchemaData.error) {
-        this.setState(
-          {
-            response: {
-              date: simpleSchemaData.error,
-              time: new Date(),
-            },
-          } as State,
-        )
-        return
-      }
-
-      if (isEqual(this.rawSchemaCache, simpleSchemaData.data)) {
-        return
-      }
-
-      this.rawSchemaCache = simpleSchemaData.data
-
-      const simpleSchema = buildClientSchema(simpleSchemaData.data)
-      const userFields = this.extractUserField(simpleSchema)
-
-      this.renewStack(simpleSchema)
-
-      this.setState(
-        {
-          schemaCache: simpleSchema,
-          userFields,
-        } as State,
-      )
-    })
   }
   renewStack(schema) {
     const rootMap = getRootMap(schema)
@@ -531,6 +539,7 @@ export class Playground extends React.PureComponent<Props & DocsState, State> {
                   nextStep={this.props.nextStep}
                   onRef={this.setRef}
                   autofillMutation={this.autofillMutation}
+                  useVim={this.state.useVim && index === selectedSessionIndex}
                 />
               </div>,
             )}
@@ -541,6 +550,10 @@ export class Playground extends React.PureComponent<Props & DocsState, State> {
             autoReload={this.state.autoReloadSchema}
             onToggleReload={this.toggleSchemaReload}
             onReload={this.fetchSchemas}
+            endpoint={this.props.endpoint}
+            onChangeEndpoint={this.props.onChangeEndpoint}
+            useVim={this.state.useVim}
+            onToggleUseVim={this.toggleUseVim}
           />
           <GraphDocs schema={this.state.schemaCache} />
           {this.state.historyOpen &&
@@ -718,10 +731,10 @@ export class Playground extends React.PureComponent<Props & DocsState, State> {
         }
       })
   }
-
-  private resetSubscriptions() {
-    this.state.sessions.forEach(session => this.resetSubscription(session))
-  }
+  //
+  // private resetSubscriptions() {
+  //   this.state.sessions.forEach(session => this.resetSubscription(session))
+  // }
 
   private resetSubscription(session: Session) {
     if (this.observers[session.id]) {
@@ -818,7 +831,7 @@ export class Playground extends React.PureComponent<Props & DocsState, State> {
     })
   }
 
-  private initSessions = () => {
+  private initSessions = (force: boolean = false) => {
     if (
       ['STEP3_UNCOMMENT_DESCRIPTION', 'STEP3_OPEN_PLAYGROUND'].indexOf(
         this.props.onboardingStep || '',
@@ -838,7 +851,7 @@ export class Playground extends React.PureComponent<Props & DocsState, State> {
       return sessions.concat(urlSession)
     }
 
-    if (sessions.length > 0) {
+    if (sessions.length > 0 && !force) {
       return sessions
     }
 
@@ -1012,9 +1025,13 @@ export class Playground extends React.PureComponent<Props & DocsState, State> {
   }
 
   private getWSEndpoint() {
+    const projectId =
+      this.props.projectId ||
+      (this.props.endpoint.includes('graph.cool') &&
+        this.props.endpoint.split('/').slice(-1)[0])
     return (
       this.props.subscriptionsEndpoint ||
-      `${this.state.wsApiPrefix}/${this.props.projectId}`
+      `${this.state.wsApiPrefix}/${projectId}`
     )
   }
 
@@ -1145,6 +1162,15 @@ export class Playground extends React.PureComponent<Props & DocsState, State> {
       this.storage.executedQuery()
       return response.json()
     })
+  }
+
+  private toggleUseVim = () => {
+    this.setState(
+      state => ({ ...state, useVim: !state.useVim }),
+      () => {
+        localStorage.setItem('useVim', String(this.state.useVim))
+      },
+    )
   }
 }
 

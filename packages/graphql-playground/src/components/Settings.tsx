@@ -9,12 +9,17 @@ interface Props {
   theme: Theme
   onToggleTheme: () => void
   onToggleReload: () => void
+  useVim: boolean
+  onToggleUseVim: () => void
   autoReload: boolean
   onReload: () => void
+  endpoint: string
+  onChangeEndpoint: (endpoint: string) => void
 }
 
 interface State {
   open: boolean
+  endpointUrl: string
 }
 
 export default class Settings extends React.Component<Props, State> {
@@ -22,11 +27,19 @@ export default class Settings extends React.Component<Props, State> {
     super(props)
     this.state = {
       open: false,
+      endpointUrl: props.endpoint,
     }
   }
   render() {
     const { open } = this.state
-    const { theme, onToggleReload, autoReload, onReload } = this.props
+    const {
+      theme,
+      onToggleReload,
+      autoReload,
+      onReload,
+      useVim,
+      onToggleUseVim,
+    } = this.props
     return (
       <div className="settings">
         <style jsx={true}>{`
@@ -62,6 +75,10 @@ export default class Settings extends React.Component<Props, State> {
             @p: .darkBlue50;
             background: #dbdcdc;
           }
+          input {
+            @p: .bgDarkBlue10, .br2, .pv6, .ph10, .fw6, .darkBlue, .f12, .db,
+              .w100;
+          }
         `}</style>
         <div className="icon">
           <Icon
@@ -94,6 +111,12 @@ export default class Settings extends React.Component<Props, State> {
                   />
                 </div>
                 <div className="row">
+                  <span className="tooltip-text" onClick={onToggleUseVim}>
+                    VIM MODE{' '}
+                  </span>
+                  <ToggleButton checked={useVim} onChange={onToggleUseVim} />
+                </div>
+                <div className="row">
                   <span className="tooltip-text" onClick={onToggleReload}>
                     AUTO-RELOAD SCHEMA{' '}
                   </span>
@@ -107,12 +130,23 @@ export default class Settings extends React.Component<Props, State> {
                     Reload Schema
                   </div>
                 </div>
+                <div className="row">
+                  <input
+                    value={this.props.endpoint}
+                    placeholder="Enter an endpoint..."
+                    onChange={this.handleChangeEndpoint}
+                  />
+                </div>
               </div>
             </Tooltip>
           </div>
         </div>
       </div>
     )
+  }
+
+  private handleChangeEndpoint = e => {
+    this.props.onChangeEndpoint(e.target.value)
   }
 
   private toggleTooltip = () => {

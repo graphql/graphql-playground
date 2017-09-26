@@ -18,6 +18,11 @@ export class Theme {
   subscribe(f) {
     this.subscriptions.push(f)
   }
+
+  unsubscribe(f) {
+    const i = this.subscriptions.indexOf(f)
+    this.subscriptions.splice(i, 1)
+  }
 }
 
 export interface ThemeProviderProps {

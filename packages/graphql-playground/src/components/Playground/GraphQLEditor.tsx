@@ -87,6 +87,7 @@ export interface Props {
   hideLineNumbers?: boolean
   hideGutters?: boolean
   readonly?: boolean
+  useVim?: boolean
 }
 
 export interface State {
@@ -509,6 +510,7 @@ export class GraphQLEditor extends React.PureComponent<Props, State> {
                 hideLineNumbers={this.props.hideLineNumbers}
                 hideGutters={this.props.hideGutters}
                 readOnly={this.props.readonly}
+                useVim={this.props.useVim}
               />
               <div className="variable-editor" style={variableStyle}>
                 <HttpHeaders

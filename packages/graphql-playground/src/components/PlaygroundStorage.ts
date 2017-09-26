@@ -60,6 +60,10 @@ export default class PlaygroundStorage {
     return store
   }
 
+  public setState(project) {
+    this.project = project
+  }
+
   public getSessions() {
     return Object.keys(this.project.sessions)
       .filter(key => key !== 'undefined')

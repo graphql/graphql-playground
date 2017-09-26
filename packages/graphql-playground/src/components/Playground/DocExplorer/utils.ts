@@ -18,8 +18,12 @@ export interface SerializedRoot {
 export function getRootMap(schema): any {
   return {
     ...schema.getQueryType().getFields(),
-    ...schema.getMutationType && schema.getMutationType().getFields(),
-    ...schema.getSubscriptionType && schema.getSubscriptionType().getFields(),
+    ...schema.getMutationType &&
+      schema.getMutationType() &&
+      schema.getMutationType().getFields(),
+    ...schema.getSubscriptionType &&
+      schema.getSubscriptionType() &&
+      schema.getSubscriptionType().getFields(),
   }
 }
 

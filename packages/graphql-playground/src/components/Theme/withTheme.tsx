@@ -6,10 +6,23 @@ function withTheme<Props = {}>(Component): React.ComponentClass<Props> {
     static contextTypes = {
       theme: PropTypes.object,
     }
+    mounted: boolean
+
+    rerender = () => {
+      if (this.mounted) {
+        this.forceUpdate()
+      }
+    }
 
     componentDidMount() {
       // subscribe to future theme changes
-      this.context.theme.subscribe(() => this.forceUpdate())
+      this.mounted = true
+      this.context.theme.subscribe(this.rerender)
+    }
+
+    componentWillUnmount() {
+      this.mounted = false
+      this.context.theme.unsubscribe(this.rerender)
     }
 
     render() {
