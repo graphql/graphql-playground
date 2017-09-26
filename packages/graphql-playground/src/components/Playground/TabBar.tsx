@@ -162,6 +162,12 @@ export const TabBar = withTheme<
             background-color: #eeeff0;
             width: 100%;
           }
+          .tab:hover {
+            @p: .bgDarkBlue;
+          }
+          .light.tab:hover {
+            background-color: #eeeff0;
+          }
         `}</style>
         <div className={cx('tabs', { isApp })}>
           {sessions.map((session, index) =>

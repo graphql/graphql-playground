@@ -74,7 +74,7 @@ class GraphDocs extends React.Component<
   setWidth(props: any = this.props) {
     requestAnimationFrame(() => {
       const width = this.getWidth(props)
-      this.props.changeWidthDocs(Math.min(width, window.innerWidth - 50))
+      this.props.changeWidthDocs(Math.min(width, window.innerWidth - 86))
     })
   }
 
@@ -136,6 +136,7 @@ class GraphDocs extends React.Component<
           }
           .graph-docs {
             @p: .absolute, .right0, .h100, .z999;
+            margin-right: -1px;
           }
           .docs-button {
             @p: .absolute, .white, .bgGreen, .pv6, .br2, .z2, .ttu, .fw6, .f12,

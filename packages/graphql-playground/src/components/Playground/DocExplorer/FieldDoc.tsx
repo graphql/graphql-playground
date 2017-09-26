@@ -76,6 +76,9 @@ export default class FieldDoc extends React.PureComponent<Props, State> {
           .doc-deprecation {
             @p: .ph16, .black50;
           }
+          .markdown-content {
+            @p: .pb20;
+          }
         `}</style>
         <div className="doc-header">
           <TypeLink
@@ -94,11 +97,14 @@ export default class FieldDoc extends React.PureComponent<Props, State> {
         <div className="doc-category-title">
           {'type details'}
         </div>
-        <MarkdownContent
-          className="doc-description"
-          markdown={type.description || ''}
-        />
-
+        {type.description &&
+          type.description.length > 0 &&
+          <div className="markdown-content">
+            <MarkdownContent
+              className="doc-description"
+              markdown={type.description || ''}
+            />
+          </div>}
         {type instanceof GraphQLScalarType && <ScalarTypeSchema type={type} />}
         {type instanceof GraphQLEnumType && <EnumTypeSchema type={type} />}
         {type instanceof GraphQLUnionType &&

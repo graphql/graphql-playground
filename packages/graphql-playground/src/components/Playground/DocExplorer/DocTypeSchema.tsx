@@ -33,7 +33,7 @@ const DocTypeSchema = ({
       `}</style>
       <style jsx={true}>{`
         .doc-type-schema {
-          @p: .pt20, .overflowAuto, .f14;
+          @p: .overflowAuto, .f14;
         }
         .doc-type-schema-line {
           @p: .ph16, .pv6;

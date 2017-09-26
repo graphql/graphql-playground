@@ -62,6 +62,12 @@ export default class Tab extends React.PureComponent<Props, {}> {
               background-color: #eeeff0;
             }
           }
+          .tab:hover {
+            @p: .bgDarkBlue;
+          }
+          .light.tab:hover {
+            background-color: #eeeff0;
+          }
 
           .icons {
             @p: .flex, .itemsCenter, .o50;
