@@ -1,15 +1,15 @@
-![](https://imgur.com/k3uWfzZ.png)
+<img src="https://imgur.com/y661WCV.png" width="400">
 
 GraphQL IDE for better development workflows (GraphQL Subscriptions, interactive docs & collaboration). <br />
-**You can download the [desktop app](https://github.com/graphcool/graphql-playground/releases) or use the web version at [graphqlbin.com](https://www.graphqlbin.com).**
+**You can download the [desktop app](https://github.com/graphcool/graphql-playground/releases) or use the web version at graphqlbin.com: [Demo](https://www.graphqlbin.com/RVIn)**
 
-![](https://imgur.com/6IC6Huj.png)
+[![](https://imgur.com/6IC6Huj.png)](https://www.graphqlbin.com/RVIn)
 
 ## Features
 
-* Context-aware autocompletion & error highlighting
-* Interactive, multi-column docs (keyboard support)
-* Supports real-time GraphQL Subscriptions
+* ✨ Context-aware autocompletion & error highlighting
+* 📚 Interactive, multi-column docs (keyboard support)
+* ⚡️ Supports real-time GraphQL Subscriptions
 
 ## FAQ
 
@@ -34,6 +34,12 @@ The desktop app is the same as the web version but includes these additional fea
 * Double click on `*.graphql` files.
 
 ### How does GraphQL Bin work?
+
+You can easily share your Playgrounds with others by clicking on the "Share" button and sharing the generated link. You can think about GraphQL Bin like Pastebin for your GraphQL queries including the context (endpoint, HTTP headers, open tabs etc).
+
+![](https://imgur.com/H1n64lL.png)
+
+> You can also find the announcement blog post [here](https://blog.graph.cool/introducing-graphql-playground-f1e0a018f05d).
 
 
 ## Code Usage
