@@ -1229,6 +1229,8 @@ span.CodeMirror-selectedtext { background: none; }
     position: absolute;
     z-index: 10;
     border-radius: 2px;
+    top: 0 !important;
+    left: 0 !important;
 }
 
 .CodeMirror-hints-wrapper {
