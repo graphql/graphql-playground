@@ -143,7 +143,7 @@ class TypeLink extends React.PureComponent<
             transition: $duration background-color;
           }
           .doc-category-item.clickable:hover {
-            @p: .pointer, .white;
+            @p: .pointer, .white, .bgBlue;
           }
           .doc-category-item.clickable:hover :global(.brace) {
             @p: .white;

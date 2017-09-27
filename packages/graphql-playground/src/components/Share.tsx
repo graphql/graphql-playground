@@ -6,7 +6,7 @@ import Tooltip from './Tooltip'
 import { Theme } from './Playground'
 import * as cn from 'classnames'
 import { Button } from './Button'
-import * as Copy from 'react-copy-to-clipboard'
+import Copy from './Copy'
 
 interface Props {
   theme: Theme
@@ -173,7 +173,7 @@ export default class Share extends React.Component<Props, State> {
                 <div className="row">
                   <div />
                   <Button hideArrow={true} onClick={onShare}>
-                    {reshare || shareUrl ? 'Reshare' : 'Share'}
+                    {reshare && shareUrl ? 'Reshare' : 'Share'}
                   </Button>
                 </div>
               </div>
