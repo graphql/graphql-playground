@@ -1,6 +1,6 @@
 {
   "name": "graphql-playground",
-  "version": "0.1.15",
+  "version": "0.1.17",
   "main": "./lib/Playground.js",
   "typings": "./lib/index.d.ts",
   "scripts": {

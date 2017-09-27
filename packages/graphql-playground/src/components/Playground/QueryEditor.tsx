@@ -9,7 +9,7 @@
 import * as React from 'react'
 import { GraphQLSchema } from 'graphql'
 
-import onHasCompletion from 'graphiql/dist/utility/onHasCompletion'
+import onHasCompletion from './onHasCompletion'
 /**
  * QueryEditor
  *

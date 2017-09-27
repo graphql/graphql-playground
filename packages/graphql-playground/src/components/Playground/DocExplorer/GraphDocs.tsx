@@ -120,12 +120,18 @@ class GraphDocs extends React.Component<
             @p: .mh0, .ph16;
             border: none;
           }
+          .doc-type-description p {
+            @p: .pa16, .f14;
+          }
           .graphiql-container .doc-type-description {
             @p: .mh0, .ph16, .f14;
           }
           .doc-header .doc-category-item {
             @p: .f16;
             word-wrap: break-word;
+          }
+          .doc-description p {
+            @p: .f14;
           }
         `}</style>
         <style jsx={true}>{`

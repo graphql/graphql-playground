@@ -127,7 +127,7 @@
     "extract-text-webpack-plugin": "^2.0.0-beta.3",
     "file-loader": "^0.11.2",
     "fork-ts-checker-webpack-plugin": "^0.1.5",
-    "graphql-playground": "0.1.15",
+    "graphql-playground": "0.1.17",
     "happypack": "^3.1.0",
     "html-webpack-plugin": "^2.30.1",
     "identity-obj-proxy": "^3.0.0",
