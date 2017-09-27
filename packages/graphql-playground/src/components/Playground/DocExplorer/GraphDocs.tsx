@@ -85,7 +85,7 @@ class GraphDocs extends React.Component<
       stack => this.state.widthMap[stack.field.path] || columnWidth,
     )
 
-    return [rootWidth].concat(stackWidths).reduce((acc, curr) => acc + curr, 0)
+    return [rootWidth].concat(stackWidths).reduce((acc, curr) => acc + curr, 2)
   }
 
   componentDidMount() {
