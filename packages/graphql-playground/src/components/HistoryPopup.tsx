@@ -78,20 +78,6 @@ class HistoryPopup extends React.Component<Props & Theme, State> {
           }
           .left {
             @p: .flex1, .bgWhite;
-            &:after {
-              content: '';
-              position: absolute;
-              bottom: 0px;
-              height: 50px;
-              left: 0;
-              right: 0;
-              width: 100%;
-              background: linear-gradient(
-                to bottom,
-                rgba(255, 255, 255, 0) 0%,
-                rgba(255, 255, 255, 1) 100%
-              );
-            }
           }
           .right {
             @p: .z2;
@@ -149,10 +135,7 @@ class HistoryPopup extends React.Component<Props & Theme, State> {
           {Boolean(selectedItem)
             ? <div className={cn('right', theme)}>
                 <div className={cn('right-header', theme)}>
-                  <div className="view">
-                    {this.props.isGraphcool &&
-                      `View as ${selectedItem.selectedViewer}`}
-                  </div>
+                  <div className="view" />
                   <div className="use" onClick={this.handleClickUse}>
                     <div className="use-text">Use</div>
                     <Icon
@@ -180,7 +163,8 @@ class HistoryPopup extends React.Component<Props & Theme, State> {
                       disableQueryHeader={true}
                       queryOnly={true}
                       rerenderQuery={true}
-                      isActive={false}
+                      isActive={true}
+                      readonly={true}
                     />
                   </div>
                 </div>
