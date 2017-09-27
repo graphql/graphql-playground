@@ -1,11 +1,11 @@
 {
   "name": "graphql-playground",
-  "version": "0.1.13",
+  "version": "0.1.15",
   "main": "./lib/Playground.js",
   "typings": "./lib/index.d.ts",
   "scripts": {
     "start": "node scripts/start.js",
-    "prepublish-only": "yarn build",
+    "prepublish": "yarn build",
     "copy-styles": "cat src/styles/*.css > playground.css",
     "build": "rm -rf lib; yarn build-app; yarn build-package; yarn build-middleware; yarn copy-styles",
     "build-package": "rm -rf lib; tsc -p tsconfig.build.json --noUnusedLocals --noUnusedParameters; babel lib -d lib; cp -r ./src/assets/ ./lib/assets/; cd lib && rm -rf *.jsx;",

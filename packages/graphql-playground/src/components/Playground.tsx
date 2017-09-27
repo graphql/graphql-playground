@@ -37,7 +37,7 @@ import {
   getDeeperType,
 } from './Playground/DocExplorer/utils'
 import { setStacks } from '../actions/graphiql-docs'
-import { isEqual } from 'lodash'
+import { isEqual, mapValues } from 'lodash'
 import Share from './Share'
 
 export type Theme = 'dark' | 'light'
@@ -1237,14 +1237,45 @@ export class Playground extends React.PureComponent<Props & DocsState, State> {
   }
 
   private toggleShareHistory = () => {
-    this.setState(state => ({ ...state, shareHisotry: !state.shareHistory }))
+    this.setState(state => ({ ...state, shareHistory: !state.shareHistory }))
   }
 
   private share = () => {
     this.saveSessions()
     this.saveHistory()
     this.storage.saveProject()
-    this.props.share(this.storage.project)
+    let sharingProject: any = this.storage.project
+
+    if (!this.state.shareHttpHeaders) {
+      sharingProject = {
+        ...sharingProject,
+        sessions: mapValues(sharingProject.sessions, (session: Session) => {
+          session.headers = []
+          return session
+        }),
+      }
+    }
+
+    if (!this.state.shareAllTabs) {
+      const currentSession: Session = this.state.sessions[
+        this.state.selectedSessionIndex
+      ]
+      sharingProject = {
+        ...sharingProject,
+        sessions: {
+          [currentSession.id]: currentSession,
+        },
+      }
+    }
+
+    if (!this.state.shareHistory) {
+      sharingProject = {
+        ...sharingProject,
+        history: [],
+      }
+    }
+
+    this.props.share(sharingProject)
     this.setState({ changed: false })
   }
 }
