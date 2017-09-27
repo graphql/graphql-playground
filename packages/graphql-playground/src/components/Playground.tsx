@@ -90,6 +90,7 @@ export interface State {
   shareAllTabs: boolean
   shareHttpHeaders: boolean
   shareHistory: boolean
+  changed: boolean
 }
 
 export interface CursorPosition {
@@ -195,6 +196,7 @@ export class Playground extends React.PureComponent<Props & DocsState, State> {
       shareAllTabs: true,
       shareHttpHeaders: true,
       shareHistory: true,
+      changed: false,
     }
 
     if (typeof window === 'object') {
@@ -580,6 +582,7 @@ export class Playground extends React.PureComponent<Props & DocsState, State> {
             allTabs={this.state.shareAllTabs}
             httpHeaders={this.state.shareHttpHeaders}
             shareUrl={this.props.shareUrl}
+            reshare={this.state.changed}
           />
           <GraphDocs schema={this.state.schemaCache} />
           {this.state.historyOpen &&
@@ -652,6 +655,7 @@ export class Playground extends React.PureComponent<Props & DocsState, State> {
         ...state,
         sessions: state.sessions.concat(session),
         selectedSessionIndex: newIndexZero ? 0 : state.sessions.length,
+        changed: true,
       }
     })
   }
@@ -833,6 +837,7 @@ export class Playground extends React.PureComponent<Props & DocsState, State> {
           ...state.sessions.slice(i + 1, state.sessions.length),
         ],
         selectedSessionIndex: nextSelectedSession,
+        changed: true,
       }
     })
 
@@ -1045,6 +1050,7 @@ export class Playground extends React.PureComponent<Props & DocsState, State> {
         return {
           ...state,
           sessions: Immutable.setIn(state.sessions, [i, key], value),
+          changed: true,
         }
       },
       () => {
@@ -1235,11 +1241,11 @@ export class Playground extends React.PureComponent<Props & DocsState, State> {
   }
 
   private share = () => {
-    // noop
     this.saveSessions()
     this.saveHistory()
     this.storage.saveProject()
     this.props.share(this.storage.project)
+    this.setState({ changed: false })
   }
 }
 

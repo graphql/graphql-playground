@@ -18,7 +18,7 @@ interface Props {
   onToggleHistory: () => void
   onShare: () => void
   shareUrl?: string
-  // reshare: boolean
+  reshare: boolean
 }
 
 interface State {
@@ -156,26 +156,26 @@ export default class Share extends React.Component<Props, State> {
                   </span>
                   <ToggleButton checked={history} onChange={onToggleHistory} />
                 </div>
-                {!shareUrl
-                  ? <div className="row">
-                      <div />
-                      <Button hideArrow={true} onClick={onShare}>
-                        Share
-                      </Button>
+                {shareUrl &&
+                  <div className="row">
+                    <input value={shareUrl} disabled={true} />
+                    <div className="copy">
+                      <Copy text={shareUrl}>
+                        <Icon
+                          src={require('graphcool-styles/icons/fill/copy.svg')}
+                          color={$v.darkBlue30}
+                          width={25}
+                          height={25}
+                        />
+                      </Copy>
                     </div>
-                  : <div className="row">
-                      <input value={shareUrl} disabled={true} />
-                      <div className="copy">
-                        <Copy text={shareUrl}>
-                          <Icon
-                            src={require('graphcool-styles/icons/fill/copy.svg')}
-                            color={$v.darkBlue30}
-                            width={25}
-                            height={25}
-                          />
-                        </Copy>
-                      </div>
-                    </div>}
+                  </div>}
+                <div className="row">
+                  <div />
+                  <Button hideArrow={true} onClick={onShare}>
+                    {reshare || shareUrl ? 'Reshare' : 'Share'}
+                  </Button>
+                </div>
               </div>
             </Tooltip>
           </div>
