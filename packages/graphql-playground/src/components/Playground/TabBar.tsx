@@ -78,8 +78,9 @@ export const TabBar = withTheme<
           }
 
           .tabs {
-            @p: .mt16, .ml16, .flex, .itemsCenter, .z0;
+            @p: .mt16, .ml16, .flex, .itemsCenter, .z0, .overflowAuto;
             height: 41px;
+            margin-right: 200px;
           }
 
           .tabs.isApp {

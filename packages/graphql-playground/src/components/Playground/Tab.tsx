@@ -48,7 +48,8 @@ export default class Tab extends React.PureComponent<Props, {}> {
               .brTop,
               .ml10,
               .bbox,
-              .pointer;
+              .pointer,
+              .nowrap;
             height: 43px;
             padding: 10px;
             padding-top: 9px;
