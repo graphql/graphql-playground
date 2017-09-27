@@ -1,4 +1,4 @@
-![](https://imgur.com/k3uWfzZ.png | width=10)
+![](https://imgur.com/y661WCV.png)
 
 GraphQL IDE for better development workflows (GraphQL Subscriptions, interactive docs & collaboration). <br />
 **You can download the [desktop app](https://github.com/graphcool/graphql-playground/releases) or use the web version at graphqlbin.com: [Demo](https://www.graphqlbin.com/RVIn)**
