@@ -4,6 +4,7 @@ import createStore from '../createStore'
 import Playground from './Playground'
 import 'isomorphic-fetch'
 import EndpointPopup from './EndpointPopup'
+import Loading from './Loading'
 // import {BrowserRouter} from 'react-router-dom'
 
 const store = createStore()
@@ -124,7 +125,7 @@ class App extends React.Component<Props, State> {
             }
           `}</style>
           {this.state.loading
-            ? <div className="loading">Loading</div>
+            ? <Loading />
             : !this.state.endpoint || this.state.endpoint.length === 0
               ? <EndpointPopup
                   onRequestClose={this.handleChangeEndpoint}
