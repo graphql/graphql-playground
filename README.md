@@ -42,9 +42,12 @@ You can easily share your Playgrounds with others by clicking on the "Share" but
 > You can also find the announcement blog post [here](https://blog.graph.cool/introducing-graphql-playground-f1e0a018f05d).
 
 
-## Code Usage
+## Usage
 
-First you need to install `graphql-playground` via NPM. Then choose one of the following options to use the Playground in your own app/server.
+[examples/latest.html](https://github.com/graphcool/graphql-playground/blob/master/packages/graphql-playground/examples/latest.html) contains a simple example on how to use the latest playground in your application.
+
+You also can use the latest playground based on the npm package.
+In order to do that, first you need to install `graphql-playground` via NPM. Then choose one of the following options to use the Playground in your own app/server.
 
 ```
 yarn add graphql-playground
