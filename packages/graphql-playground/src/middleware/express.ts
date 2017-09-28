@@ -3,15 +3,16 @@ import renderPlaygroundPage, {
   MiddlewareOptions,
 } from './render-playground-page'
 
+/* tslint:disable */
 const { version } = require('../package.json')
 
-export interface ExpressVoyagerMiddleware {
-  (_req: Request, res: Response, next: () => void): void
-}
+export type ExpressPlaygroundMiddleware = (
+  _req: Request,
+  res: Response,
+  next: () => void,
+) => void
 
-export interface Register {
-  (options): ExpressVoyagerMiddleware
-}
+export type Register = (options) => ExpressPlaygroundMiddleware
 
 const express: Register = function voyagerExpress(options) {
   const middlewareOptions: MiddlewareOptions = {

@@ -15,7 +15,7 @@ interface Props {
   autoReload: boolean
   onReload: () => void
   endpoint: string
-  onChangeEndpoint: (endpoint: string) => void
+  onChangeEndpoint?: (endpoint: string) => void
 }
 
 interface State {
@@ -157,7 +157,9 @@ export default class Settings extends React.Component<Props, State> {
   }
 
   private handleChangeEndpoint = e => {
-    this.props.onChangeEndpoint(e.target.value)
+    if (typeof this.props.onChangeEndpoint === 'function') {
+      this.props.onChangeEndpoint(e.target.value)
+    }
   }
 
   private toggleTooltip = () => {

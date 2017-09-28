@@ -1,0 +1,20 @@
+import * as React from 'react'
+import * as ReactDOM from 'react-dom'
+import MiddlewareApp from './components/MiddlewareApp'
+import './styles/graphiql_dark.css'
+import './styles/graphiql_light.css'
+import './index.css'
+import 'graphcool-styles/dist/styles.css'
+
+if (process.env.NODE_ENV !== 'production') {
+  /* tslint:disable-next-line */
+  // const { whyDidYouUpdate } = require('why-did-you-update')
+  // whyDidYouUpdate(React)
+}
+
+/* tslint:disable-next-line */
+;(window as any)['GraphQLPlayground'] = {
+  init(element: HTMLElement, options) {
+    ReactDOM.render(<MiddlewareApp {...options} />, element)
+  },
+}

@@ -61,7 +61,7 @@ export interface Props {
   nextStep?: () => void
   isApp?: boolean
   setStacks?: (stack: any[]) => void
-  onChangeEndpoint: (endpoint: string) => void
+  onChangeEndpoint?: (endpoint: string) => void
   share: (state: any) => void
   shareUrl?: string
   session?: any

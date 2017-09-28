@@ -1,6 +1,6 @@
 {
   "name": "graphql-playground",
-  "version": "0.1.17",
+  "version": "0.1.18",
   "main": "./lib/Playground.js",
   "typings": "./lib/index.d.ts",
   "scripts": {
@@ -11,6 +11,7 @@
     "build-package": "rm -rf lib; tsc -p tsconfig.build.json --noUnusedLocals --noUnusedParameters; babel lib -d lib; cp -r ./src/assets/ ./lib/assets/; cd lib && rm -rf *.jsx;",
     "build-app": "node scripts/build.js",
     "build-middleware": "rm -rf middleware && tsc src/middleware/index.ts --outDir middleware --lib ES6,DOM --declaration",
+    "build-middleware-app": "node scripts/build.middleware.js",
     "test": "node scripts/test.js --env=jsdom",
     "bump": "npm version patch --no-git-tag-version && git add package.json",
     "graphql-faker": "graphql-faker ./tests/schema.faker.graphql",

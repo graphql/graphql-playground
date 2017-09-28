@@ -12,8 +12,8 @@ export default function renderPlaygroundPage(options: MiddlewareOptions) {
   <meta charset=utf-8 />
   <meta name="viewport" content="user-scalable=no, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, minimal-ui">
   <title>Graphcool Playground</title>
-  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/graphql-playground@${options.version}/build/static/css/main.css" />
-  <script src="//cdn.jsdelivr.net/npm/graphql-playground@${options.version}/build/static/js/main.js"></script>
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/graphql-playground@${options.version}/middleware-build/static/css/main.css" />
+  <script src="//cdn.jsdelivr.net/npm/graphql-playground@${options.version}/middleware-build/static/js/main.js"></script>
 </head>
 <body>
   <div id="root">
