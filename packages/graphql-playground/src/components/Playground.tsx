@@ -451,12 +451,21 @@ export class Playground extends React.PureComponent<Props & DocsState, State> {
     }
   }
   fetchSchema(endpointUrl: string) {
+    const additionalHeaders = {}
+
+    const headers = this.state.sessions[this.state.selectedSessionIndex].headers
+
+    if (headers) {
+      headers.forEach(header => (additionalHeaders[header.name] = header.value))
+    }
+
     return fetch(endpointUrl, {
       // tslint:disable-line
       method: 'post',
       headers: {
         'Content-Type': 'application/json',
         'x-graphcool-source': 'console:playground',
+        ...additionalHeaders,
       },
       body: JSON.stringify({ query: introspectionQuery }),
     }).then(response => {
