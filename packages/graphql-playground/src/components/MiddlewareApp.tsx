@@ -34,9 +34,14 @@ class MiddlewareApp extends React.Component<{}, State> {
     super(props)
 
     this.state = {
-      endpoint: props.endpoint,
-      subscriptionPrefix: props.subscriptionPrefix,
-      subscriptionEndpoint: props.subscriptionEndpoint,
+      endpoint: props.endpoint || location.href,
+      subscriptionPrefix:
+        localStorage.getItem('last-subscriptions-endpoint') ||
+        props.subscriptionPrefix,
+      subscriptionEndpoint:
+        localStorage.getItem('last-endpoint') ||
+        props.subscriptionEndpoint ||
+        location.href,
     }
   }
 
@@ -75,6 +80,8 @@ class MiddlewareApp extends React.Component<{}, State> {
           httpApiPrefix="https://api.graph.cool"
           share={this.share}
           shareUrl={this.state.shareUrl}
+          onChangeEndpoint={this.handleChangeEndpoint}
+          onChangeSubscriptionsEndpoint={this.handleChangeSubscriptionsEndpoint}
         />
       </Provider>
     )
@@ -106,6 +113,16 @@ class MiddlewareApp extends React.Component<{}, State> {
         // const shareUrl = `${location.origin}/${res.data.addSession.id}`
         this.setState({ shareUrl })
       })
+  }
+
+  private handleChangeEndpoint = endpoint => {
+    this.setState({ endpoint })
+    localStorage.setItem('last-endpoint', endpoint)
+  }
+
+  private handleChangeSubscriptionsEndpoint = subscriptionEndpoint => {
+    this.setState({ subscriptionEndpoint })
+    localStorage.setItem('last-subscriptions-endpoint', subscriptionEndpoint)
   }
 }
 

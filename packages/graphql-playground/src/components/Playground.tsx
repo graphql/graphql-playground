@@ -65,6 +65,7 @@ export interface Props {
   share: (state: any) => void
   shareUrl?: string
   session?: any
+  onChangeSubscriptionsEndpoint?: (endpoint: string) => void
 }
 
 export interface State {
@@ -230,21 +231,22 @@ export class Playground extends React.PureComponent<Props & DocsState, State> {
     this.initWebsockets()
   }
 
-  componentDidUpdate(prevProps) {
+  componentDidUpdate(prevProps: Props) {
     if (
       prevProps.endpoint !== this.props.endpoint ||
-      prevProps.adminAuthToken !== this.props.adminAuthToken
+      prevProps.adminAuthToken !== this.props.adminAuthToken ||
+      prevProps.subscriptionsEndpoint !== this.props.subscriptionsEndpoint
     ) {
       this.saveSessions()
       this.saveHistory()
       this.storage.saveProject()
-      // this.storage = new PlaygroundStorage(this.props.endpoint)
-      // const sessions = this.initSessions()
-      // this.setState({
-      //   sessions,
-      //   history: this.storage.getHistory(),
-      // })
-      // this.resetSubscriptions()
+      this.storage = new PlaygroundStorage(this.props.endpoint)
+      const sessions = this.initSessions()
+      this.setState({
+        sessions,
+        history: this.storage.getHistory(),
+      })
+      this.resetSubscriptions()
       this.fetchSchemas().then(this.initSessions)
     }
 
@@ -571,6 +573,10 @@ export class Playground extends React.PureComponent<Props & DocsState, State> {
             onChangeEndpoint={this.props.onChangeEndpoint}
             useVim={this.state.useVim}
             onToggleUseVim={this.toggleUseVim}
+            subscriptionsEndpoint={this.props.subscriptionsEndpoint || ''}
+            onChangeSubscriptionsEndpoint={
+              this.props.onChangeSubscriptionsEndpoint
+            }
           />
           <Share
             theme={this.state.theme}
@@ -769,10 +775,10 @@ export class Playground extends React.PureComponent<Props & DocsState, State> {
         }
       })
   }
-  //
-  // private resetSubscriptions() {
-  //   this.state.sessions.forEach(session => this.resetSubscription(session))
-  // }
+
+  private resetSubscriptions() {
+    this.state.sessions.forEach(session => this.resetSubscription(session))
+  }
 
   private resetSubscription(session: Session) {
     if (this.observers[session.id]) {

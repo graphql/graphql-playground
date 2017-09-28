@@ -16,6 +16,8 @@ interface Props {
   onReload: () => void
   endpoint: string
   onChangeEndpoint?: (endpoint: string) => void
+  subscriptionsEndpoint: string
+  onChangeSubscriptionsEndpoint?: (endpoint: string) => void
 }
 
 interface State {
@@ -142,11 +144,24 @@ export default class Settings extends React.Component<Props, State> {
                   </div>
                 </div>
                 <div className="row">
-                  <input
-                    value={this.props.endpoint}
-                    placeholder="Enter an endpoint..."
-                    onChange={this.handleChangeEndpoint}
-                  />
+                  <div>
+                    <div>Endpoint</div>
+                    <input
+                      value={this.props.endpoint}
+                      placeholder="Enter an endpoint..."
+                      onChange={this.handleChangeEndpoint}
+                    />
+                  </div>
+                </div>
+                <div className="row">
+                  <div>
+                    <div>Subscriptions Endpoint</div>
+                    <input
+                      value={this.props.subscriptionsEndpoint}
+                      placeholder="Enter a subscriptions endpoint..."
+                      onChange={this.handleChangeSubscriptionsEndpoint}
+                    />
+                  </div>
                 </div>
               </div>
             </Tooltip>
@@ -159,6 +174,12 @@ export default class Settings extends React.Component<Props, State> {
   private handleChangeEndpoint = e => {
     if (typeof this.props.onChangeEndpoint === 'function') {
       this.props.onChangeEndpoint(e.target.value)
+    }
+  }
+
+  private handleChangeSubscriptionsEndpoint = e => {
+    if (typeof this.props.onChangeSubscriptionsEndpoint === 'function') {
+      this.props.onChangeSubscriptionsEndpoint(e.target.value)
     }
   }
 

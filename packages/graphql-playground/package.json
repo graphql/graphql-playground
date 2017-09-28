@@ -1,10 +1,11 @@
 {
   "name": "graphql-playground",
-  "version": "1.0.0",
+  "version": "1.0.2",
   "main": "./lib/Playground.js",
   "typings": "./lib/index.d.ts",
   "scripts": {
     "start": "node scripts/start.js",
+    "start-middleware": "node scripts/start.middleware.js",
     "prepublish": "yarn build",
     "copy-styles": "cat src/styles/*.css > playground.css",
     "build": "rm -rf lib; yarn build-app; yarn build-middleware-app; yarn build-package; yarn build-middleware; yarn copy-styles",
