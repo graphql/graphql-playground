@@ -62,7 +62,7 @@ import { express as middleware } from 'graphql-playground/middleware';
 
 const app = express();
 
-app.use('/playground', middleware({ endpointUrl: '/graphql' }));
+app.use('/playground', middleware({ endpoint: '/graphql' }));
 
 app.listen(3000);
 ```
@@ -92,7 +92,7 @@ server.register({
   register: middleware,
   options: {
     path: '/playground',
-    endpointUrl: '/graphql'
+    endpoint: '/graphql'
   }
 },() => server.start());
 ```
@@ -103,7 +103,8 @@ server.register({
 Koa middleware supports the following properties:
 
 + `options`
-  + `endpointUrl` [`string`] - the GraphQL endpoint url.
+  + `endpoint` [`string`] - the GraphQL endpoint url.
+  + `subscriptionEndpoint` [`string`] - the GraphQL subscription endpoint url.
 
 #### Usage
 ```js
@@ -115,7 +116,7 @@ const app = new Koa();
 const router = new KoaRouter();
 
 router.all('/voyager', playgroundMiddleware({
-  endpointUrl: '/graphql'
+  endpoint: '/graphql'
 }));
 
 app.use(router.routes());

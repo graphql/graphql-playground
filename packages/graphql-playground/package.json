@@ -1,8 +1,8 @@
 {
   "name": "graphql-playground",
-  "version": "1.0.3",
-  "main": "./lib/Playground.js",
-  "typings": "./lib/index.d.ts",
+  "version": "1.0.4",
+  "main": "./lib/lib.js",
+  "typings": "./lib/lib.d.ts",
   "scripts": {
     "start": "node scripts/start.js",
     "start-middleware": "node scripts/start.middleware.js",
