@@ -69,7 +69,7 @@ class InitialView extends React.Component<
 
   handleSubmit = e => {
     e.preventDefault()
-    if (isURL(this.state.endpoint)) {
+    if (isURL(this.state.endpoint, { require_tld: false })) {
       this.props.selectHistory({
         type: 'endpoint',
         path: this.state.endpoint,
