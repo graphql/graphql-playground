@@ -45,7 +45,7 @@ ReactDOM.render(<Playground fetcher={graphQLFetcher} />, document.body);
 ```
 
 ## Middleware
-Graphql Voyager has middleware for the next frameworks:
+Graphql Playground has middleware for the next frameworks:
 
 ### Express
 
