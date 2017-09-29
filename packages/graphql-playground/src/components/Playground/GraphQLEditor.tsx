@@ -137,6 +137,7 @@ export class GraphQLEditor extends React.PureComponent<Props, State> {
 
   private storage: any
   private editorQueryID: number
+  private resultID: number = 0
 
   private updateQueryFacts = debounce(150, query => {
     const queryFacts = getQueryFacts(this.state.schema, query)
@@ -356,10 +357,6 @@ export class GraphQLEditor extends React.PureComponent<Props, State> {
         <style jsx={true}>{`
           .graphiql-container {
             font-family: Open Sans, sans-serif;
-            display: none;
-          }
-          .graphiql-container.isActive {
-            display: flex;
           }
 
           .docs-button,
@@ -658,7 +655,7 @@ export class GraphQLEditor extends React.PureComponent<Props, State> {
                   {this.state.responses
                     .filter(res => res && res.date)
                     .map(response =>
-                      <div key={response.time}>
+                      <div key={response.resultID}>
                         {subscriptionResponse &&
                           response.time &&
                           <div className="subscription-time">
@@ -914,6 +911,7 @@ export class GraphQLEditor extends React.PureComponent<Props, State> {
       // the callback on each next value, and handling both errors and the
       // completion of the Observable. Returns a Subscription object.
       const subscription = fetch.subscribe({
+        // next: cb,
         next: cb,
         error: error => {
           this.setState(
@@ -993,9 +991,15 @@ export class GraphQLEditor extends React.PureComponent<Props, State> {
             if (isSubscription) {
               responses = this.state.responses
                 .filter(res => res && res.date)
-                .concat({ date: response, time: new Date() })
+                .concat({
+                  date: response,
+                  time: new Date(),
+                  resultID: this.resultID++,
+                })
             } else {
-              responses = [{ date: response, time: new Date() }]
+              responses = [
+                { date: response, time: new Date(), resultID: this.resultID++ },
+              ]
             }
             this.setState(
               {
@@ -1374,6 +1378,7 @@ function observableToPromise(observable) {
   if (!isObservable(observable)) {
     return observable
   }
+
   return new Promise((resolve, reject) => {
     const subscription = observable.subscribe(
       v => {

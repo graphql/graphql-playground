@@ -269,10 +269,6 @@
     padding-top: 0;
 }
 
-.result-codemirror {
-    background-color: #eeeff0;
-}
-
 .docs-graphiql .result-window > div,
 .docs-graphiql .result-window > div > .result-codemirror,
 .docs-graphiql .result-window > div > .result-codemirror .CodeMirror {

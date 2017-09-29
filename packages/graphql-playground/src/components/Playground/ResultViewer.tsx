@@ -49,9 +49,11 @@ export class ResultViewer extends React.Component<Props, {}> {
       }
     }
 
+    const value = this.props.value || ''
+
     this.viewer = CodeMirror(this.node, {
       lineWrapping: true,
-      value: this.props.value || '',
+      value,
       readOnly: true,
       theme: 'graphiql',
       mode: 'graphql-results',
@@ -74,7 +76,8 @@ export class ResultViewer extends React.Component<Props, {}> {
   }
 
   componentDidUpdate() {
-    this.viewer.setValue(this.props.value || '')
+    const value = this.props.value || ''
+    this.viewer.setValue(value)
   }
 
   componentWillUnmount() {
@@ -88,6 +91,7 @@ export class ResultViewer extends React.Component<Props, {}> {
           .result-codemirror :global(.CodeMirror) {
             @p: .bbox, .pt38, .pl38;
             background: none;
+            position: relative !important;
           }
         `}</style>
       </div>

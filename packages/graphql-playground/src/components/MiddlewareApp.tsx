@@ -23,9 +23,9 @@ export interface Props {
 }
 
 export interface State {
-  endpoint?: string
+  endpoint: string
   subscriptionPrefix?: string
-  subscriptionEndpoint?: string
+  subscriptionEndpoint: string
   shareUrl?: string
 }
 
@@ -41,7 +41,7 @@ class MiddlewareApp extends React.Component<{}, State> {
       subscriptionEndpoint:
         localStorage.getItem('last-endpoint') ||
         props.subscriptionEndpoint ||
-        location.href,
+        getSubscriptionsUrl(location.href),
     }
   }
 
@@ -74,8 +74,8 @@ class MiddlewareApp extends React.Component<{}, State> {
     return (
       <Provider store={store}>
         <Playground
-          endpoint={endpoint}
-          subscriptionsEndpoint={subscriptionEndpoint}
+          endpoint={this.state.endpoint}
+          subscriptionsEndpoint={this.state.subscriptionEndpoint}
           wsApiPrefix={subscriptionPrefix}
           httpApiPrefix="https://api.graph.cool"
           share={this.share}
@@ -127,3 +127,10 @@ class MiddlewareApp extends React.Component<{}, State> {
 }
 
 export default MiddlewareApp
+
+function getSubscriptionsUrl(href) {
+  if (href.includes('graph.cool')) {
+    return `wss://subscriptions.graph.cool/v1/${href.split('/').slice(-1)[0]}`
+  }
+  return href
+}

@@ -329,6 +329,7 @@ export class Playground extends React.PureComponent<Props & DocsState, State> {
     if (this.wsConnections[session.id]) {
       this.wsConnections[session.id].unsubscribeAll()
     }
+
     this.wsConnections[
       session.id
     ] = new SubscriptionClient(this.getWSEndpoint(), {
@@ -1168,12 +1169,14 @@ export class Playground extends React.PureComponent<Props & DocsState, State> {
       }
 
       if (isQuerySubscription(query, operationName)) {
+        /* tslint:disable-next-line */
+        const that = this
         return Observable.create(observer => {
-          this.observers[session.id] = observer
+          that.observers[session.id] = observer
           if (!session.subscriptionActive) {
             this.setValueInSession(session.id, 'subscriptionActive', true)
           }
-          const id = this.wsConnections[
+          const id = that.wsConnections[
             session.id
           ].subscribe(graphQLParams, (err, res) => {
             const data: any = { data: res, isSubscription: true }
@@ -1183,9 +1186,9 @@ export class Playground extends React.PureComponent<Props & DocsState, State> {
             observer.next(data)
           })
 
-          this.setValueInSession(session.id, 'subscriptionId', id)
+          that.setValueInSession(session.id, 'subscriptionId', id)
           return () => {
-            this.cancelSubscription(session)
+            that.cancelSubscription(session)
           }
         })
       }
