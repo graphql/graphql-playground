@@ -80,7 +80,7 @@ ReactDOM.render(<Playground fetcher={graphQLFetcher} />, document.body)
 Express middleware supports the following properties:
 
 + `options`
-  + `endpointUrl` [`string`] - the GraphQL endpoint url.
+  + `endpoint` [`string`] - the GraphQL endpoint url.
 
 #### Usage
 ```js
@@ -89,7 +89,7 @@ import { express as playground } from 'graphql-playground/middleware'
 
 const app = express()
 
-app.use('/playground', playground({ endpointUrl: '/graphql' }))
+app.use('/playground', playground({ endpoint: '/graphql' }))
 
 app.listen(3000)
 ```
@@ -102,7 +102,8 @@ Hapi middleware supports the following properties:
 + `options`
   + `path` [`string`] - the Playground middleware url
   + `playgroundOptions`
-      + `endpointUrl` [`string`] - the GraphQL endpoint url.
+      + `endpoint` [`string`] - the GraphQL endpoint url.
+      + `subscriptionEndpoint` [`string`] - the GraphQL subscription endpoint url.
 
 #### Usage
 ```js
@@ -119,7 +120,7 @@ server.register({
   register: playground,
   options: {
     path: '/playground',
-    endpointUrl: '/graphql'
+    endpoint: '/graphql'
   }
 },() => server.start())
 ```
@@ -130,7 +131,8 @@ server.register({
 Koa middleware supports the following properties:
 
 + `options`
-  + `endpointUrl` [`string`] - the GraphQL endpoint url.
+  + `endpoint` [`string`] - the GraphQL endpoint url.
+  + `subscriptionEndpoint` [`string`] - the GraphQL subscription endpoint url.
 
 #### Usage
 ```js
@@ -142,7 +144,7 @@ const app = new Koa()
 const router = new KoaRouter()
 
 router.all('/playground', playground({
-  endpointUrl: '/graphql'
+  endpoint: '/graphql'
 }))
 
 app.use(router.routes())
