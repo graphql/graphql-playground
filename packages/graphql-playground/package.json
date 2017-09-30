@@ -126,7 +126,8 @@
     "rxjs": "^5.0.3",
     "seamless-immutable": "^7.0.1",
     "subscriptions-transport-ws": "^0.8.1",
-    "svgo-loader": "^1.1.2"
+    "svgo-loader": "^1.1.2",
+    "validator": "^9.0.0"
   },
   "lint-staged": {
     "*.{ts,tsx}": [
