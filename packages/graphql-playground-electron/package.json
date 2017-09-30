@@ -19,7 +19,7 @@
     "release": "npm run build && electron-builder -lmw",
     "library": "rm -rf .happypack && NODE_ENV=production webpack --config webpack.library.js -p",
     "lint": "tslint \"src/**/*.ts{,x}\" && lint-staged",
-    "start": "yarn build-ts && concurrently 'yarn react-start' 'wait-on http://localhost:4040/ && yarn electron-start'",
+    "start": "yarn build-ts && concurrently \"yarn react-start\" \"wait-on http://localhost:4040/ && yarn electron-start\"",
     "react-start": "webpack-dev-server --hot --profile --history-api-fallback --host 0.0.0.0 --port 4040",
     "electron-start": "electron lib/main",
     "stats": "NODE_ENV=production webpack --config webpack.library.js  --profile --json > stats.json",
