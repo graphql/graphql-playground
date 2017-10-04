@@ -67,10 +67,10 @@ const Value = ({ value, isDeprecated, first }: ValueProps) =>
     </div>
     {value.description &&
       <div className="doc-value-comment">
-        # {value.description}
+        {value.description}
       </div>}
     {isDeprecated &&
       <div className="doc-value-comment">
-        # Deprecated: {value.deprecationReason}
+        Deprecated: {value.deprecationReason}
       </div>}
   </div>
