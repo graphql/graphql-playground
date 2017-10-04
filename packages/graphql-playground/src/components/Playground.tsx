@@ -206,6 +206,7 @@ export class Playground extends React.PureComponent<Props & DocsState, State> {
       })
     }
     ;(global as any).p = this
+    this.fetcher = this.fetcher.bind(this)
   }
 
   componentWillMount() {
@@ -242,12 +243,16 @@ export class Playground extends React.PureComponent<Props & DocsState, State> {
       this.storage.saveProject()
       this.storage = new PlaygroundStorage(this.props.endpoint)
       const sessions = this.initSessions()
-      this.setState({
-        sessions,
-        history: this.storage.getHistory(),
-      })
-      this.resetSubscriptions()
-      this.fetchSchemas().then(this.initSessions)
+      this.setState(
+        {
+          sessions,
+          history: this.storage.getHistory(),
+        },
+        () => {
+          this.resetSubscriptions()
+          this.fetchSchemas().then(this.initSessions)
+        },
+      )
     }
 
     if (this.state.autoReloadSchema && !this.schemaReloadInterval) {
@@ -1132,7 +1137,9 @@ export class Playground extends React.PureComponent<Props & DocsState, State> {
   private cancelSubscription = (session: Session) => {
     this.setValueInSession(session.id, 'subscriptionActive', false)
     if (session.subscriptionId) {
-      this.wsConnections[session.id].unsubscribe(session.subscriptionId)
+      if (this.wsConnections[session.id]) {
+        this.wsConnections[session.id].unsubscribe(session.subscriptionId)
+      }
       this.setValueInSession(session.id, 'subscriptionId', null)
     }
   }
@@ -1170,15 +1177,15 @@ export class Playground extends React.PureComponent<Props & DocsState, State> {
 
       if (isQuerySubscription(query, operationName)) {
         /* tslint:disable-next-line */
-        const that = this
         return Observable.create(observer => {
-          that.observers[session.id] = observer
+          this.observers[session.id] = observer
           if (!session.subscriptionActive) {
             this.setValueInSession(session.id, 'subscriptionActive', true)
           }
-          const id = that.wsConnections[
-            session.id
-          ].subscribe(graphQLParams, (err, res) => {
+
+          const wsConnection = this.wsConnections[session.id]
+
+          const id = wsConnection.subscribe(graphQLParams, (err, res) => {
             const data: any = { data: res, isSubscription: true }
             if (err) {
               data.error = err
@@ -1186,9 +1193,9 @@ export class Playground extends React.PureComponent<Props & DocsState, State> {
             observer.next(data)
           })
 
-          that.setValueInSession(session.id, 'subscriptionId', id)
+          this.setValueInSession(session.id, 'subscriptionId', id)
           return () => {
-            that.cancelSubscription(session)
+            this.cancelSubscription(session)
           }
         })
       }

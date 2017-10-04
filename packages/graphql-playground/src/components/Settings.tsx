@@ -91,6 +91,10 @@ export default class Settings extends React.Component<Props, State> {
             @p: .bgDarkBlue10, .br2, .pv6, .ph10, .fw6, .darkBlue, .f12, .db,
               .w100;
           }
+          .inner-row {
+            @p: .w100;
+            padding-right: 20px;
+          }
         `}</style>
         <div className={cn('icon', theme, { open })}>
           <Icon
@@ -144,7 +148,7 @@ export default class Settings extends React.Component<Props, State> {
                   </div>
                 </div>
                 <div className="row">
-                  <div>
+                  <div className="inner-row">
                     <div>Endpoint</div>
                     <input
                       value={this.props.endpoint}
@@ -154,7 +158,7 @@ export default class Settings extends React.Component<Props, State> {
                   </div>
                 </div>
                 <div className="row">
-                  <div>
+                  <div className="inner-row">
                     <div>Subscriptions Endpoint</div>
                     <input
                       value={this.props.subscriptionsEndpoint}

@@ -1,6 +1,6 @@
 export interface MiddlewareOptions {
-  endpointUrl: string
-  subscriptionUrl?: string
+  endpoint: string
+  subscriptionEndpoint?: string
   version: string
 }
 
@@ -52,11 +52,11 @@ export default function renderPlaygroundPage(options: MiddlewareOptions) {
 </div>
   <script>
     window.addEventListener('load', function(event) {
-      GraphQLPlayground.init(document.getElementById('root'), {
-        endpointUrl: "${options.endpointUrl}",
-        ${options.subscriptionUrl &&
-          `subscriptionUrl: "${options.subscriptionUrl}"`}
-      })
+      GraphQLPlayground.init(document.getElementById('root'), options: ${JSON.stringify(
+        options,
+        null,
+        2,
+      )}
     })
   </script>
 </body>

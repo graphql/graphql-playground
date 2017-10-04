@@ -130,7 +130,13 @@ export default MiddlewareApp
 
 function getSubscriptionsUrl(href) {
   if (href.includes('graph.cool')) {
-    return `wss://subscriptions.graph.cool/v1/${href.split('/').slice(-1)[0]}`
+    const projectId = href.split('/').slice(-1)[0]
+    return `wss://subscriptions.graph.cool/v1/${projectId}`
+  }
+  if (href.includes('localhost') && href.includes('/simple/')) {
+    // it's a graphcool local endpoint
+    const projectId = href.split('/').slice(-1)[0]
+    return `ws://${location.host}/subscriptions/v1/${projectId}`
   }
   return href
 }
