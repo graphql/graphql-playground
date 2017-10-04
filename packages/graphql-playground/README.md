@@ -1,103 +1,131 @@
-# GraphQL Playground [![npm version](https://badge.fury.io/js/graphql-playground.svg)](https://badge.fury.io/js/graphql-playground)
-GraphQL IDE including interactive Docs & Subscriptions (use as Browser/Native App). A friendly fork of GraphiQL.
+<p align="center"><img src="https://imgur.com/5fzMbyV.png" width="269"></p>
+
+GraphQL IDE for better development workflows (GraphQL Subscriptions, interactive docs & collaboration). <br />
+**You can download the [desktop app](https://github.com/graphcool/graphql-playground/releases) or use the web version at graphqlbin.com: [Demo](https://www.graphqlbin.com/RVIn)**
+
+[![](https://imgur.com/6IC6Huj.png)](https://www.graphqlbin.com/RVIn)
 
 ## Features
 
-* Syntax highlighting
-* Intelligent type ahead of fields, arguments, types, and more.
-* Real-time error highlighting and reporting.
-* Automatic query completion.
-* Run and inspect query results.
-* Interactive Docs with arrow-key control
-* Interactive GraphQL Subscriptions
-* `graphql-config` support
+* ✨ Context-aware autocompletion & error highlighting
+* 📚 Interactive, multi-column docs (keyboard support)
+* ⚡️ Supports real-time GraphQL Subscriptions
 
-## Getting Started
-There are multiple ways to use the GraphQL Playground.
-- [Download](https://we.tl/KV8xLFbpLa) it as an Electron App
-- Use it as a [React Component](#react-component)
-- Include it in your graphql-js server with the [Middleware](#middleware)
+## FAQ
+
+### How is this different from [GraphiQL](https://github.com/graphql/graphiql)?
+
+GraphQL Playground uses components of GraphiQL under the hood but is meant as a more powerful GraphQL IDE enabling better (local) development workflows. Compared to GraphiQL, the GraphQL Playground ships with the following additional features:
+
+* Interactive, multi-column schema documentation
+* Automatic schema reloading
+* Support for GraphQL Subscriptions
+* Query history
+* Configuration of HTTP headers
+* Tabs
+
+See the following question for more additonal features.
+
+### What's the difference between the desktop app and the web version?
+
+The desktop app is the same as the web version but includes these additional features:
+
+* Support for [graphql-config](https://github.com/graphcool/graphql-config) enabling features like multi-environment setups.
+* Double click on `*.graphql` files.
+
+### How does GraphQL Bin work?
+
+You can easily share your Playgrounds with others by clicking on the "Share" button and sharing the generated link. You can think about GraphQL Bin like Pastebin for your GraphQL queries including the context (endpoint, HTTP headers, open tabs etc).
+
+![](https://imgur.com/H1n64lL.png)
+
+> You can also find the announcement blog post [here](https://blog.graph.cool/introducing-graphql-playground-f1e0a018f05d).
 
 
+## Usage
 
-## React Component
+[examples/latest.html](https://github.com/graphcool/graphql-playground/blob/master/packages/graphql-playground/examples/latest.html) contains a simple example on how to use the latest playground in your application.
+
+You also can use the latest playground based on the npm package.
+In order to do that, first you need to install `graphql-playground` via NPM. Then choose one of the following options to use the Playground in your own app/server.
+
 ```
 yarn add graphql-playground
 ```
 
+### As React Component
+
 GraphQL Playground provides a React component responsible for rendering the UI, which should be provided with a function for fetching from GraphQL, we recommend using the [fetch](https://fetch.spec.whatwg.org/) standard API.
 
 ```js
-import React from 'react';
-import ReactDOM from 'react-dom';
-import Playground from 'graphql-playground';
-import fetch from 'isomorphic-fetch';
+import React from 'react'
+import ReactDOM from 'react-dom'
+import Playground from 'graphql-playground'
+import fetch from 'isomorphic-fetch'
 
 function graphQLFetcher(graphQLParams) {
   return fetch(window.location.origin + '/graphql', {
     method: 'post',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(graphQLParams),
-  }).then(response => response.json());
+  }).then(response => response.json())
 }
 
-ReactDOM.render(<Playground fetcher={graphQLFetcher} />, document.body);
+ReactDOM.render(<Playground fetcher={graphQLFetcher} />, document.body)
 ```
 
-## Middleware
-Graphql Voyager has middleware for the next frameworks:
-
-### Express
+### As Express Middleware
 
 #### Properties
 Express middleware supports the following properties:
 
 + `options`
-  + `endpointUrl` [`string`] - the GraphQL endpoint url.
+  + `endpoint` [`string`] - the GraphQL endpoint url.
 
 #### Usage
 ```js
-import express from 'express';
-import { express as middleware } from 'graphql-playground/middleware';
+import express from 'express'
+import { express as playground } from 'graphql-playground/middleware'
 
-const app = express();
+const app = express()
 
-app.use('/playground', middleware({ endpoint: '/graphql' }));
+app.use('/playground', playground({ endpoint: '/graphql' }))
 
-app.listen(3000);
+app.listen(3000)
 ```
 
-### Hapi
+### As Hapi Middleware
 
 #### Properties
 Hapi middleware supports the following properties:
 
 + `options`
-  + `path` [`string`] - the Voyager middleware url
-  + `voyagerOptions`
-      + `endpointUrl` [`string`] - the GraphQL endpoint url.
+  + `path` [`string`] - the Playground middleware url
+  + `playgroundOptions`
+      + `endpoint` [`string`] - the GraphQL endpoint url.
+      + `subscriptionEndpoint` [`string`] - the GraphQL subscription endpoint url.
 
 #### Usage
 ```js
-import hapi from 'hapi';
-import { hapi as middleware } from 'graphql-playground/middleware';
+import hapi from 'hapi'
+import { hapi as playground } from 'graphql-playground/middleware'
 
-const server = new Hapi.Server();
+const server = new Hapi.Server()
 
 server.connection({
   port: 3001
-});
+})
 
 server.register({
-  register: middleware,
+  register: playground,
   options: {
     path: '/playground',
     endpoint: '/graphql'
   }
-},() => server.start());
+},() => server.start())
 ```
 
-### Koa
+### As Koa Middleware
 
 #### Properties
 Koa middleware supports the following properties:
@@ -108,25 +136,30 @@ Koa middleware supports the following properties:
 
 #### Usage
 ```js
-import Koa from 'koa';
-import KoaRouter from 'koa-router';
-import { koa as playgroundMiddleware } from 'graphql-playground/middleware';
+import Koa from 'koa'
+import KoaRouter from 'koa-router'
+import { koa as playground } from 'graphql-playground/middleware'
 
-const app = new Koa();
-const router = new KoaRouter();
+const app = new Koa()
+const router = new KoaRouter()
 
-router.all('/voyager', playgroundMiddleware({
+router.all('/playground', playground({
   endpoint: '/graphql'
-}));
+}))
 
-app.use(router.routes());
-app.use(router.allowedMethods());
-app.listen(3001);
+app.use(router.routes())
+app.use(router.allowedMethods())
+app.listen(3001)
 ```
 
-## Development
+## Development [![npm version](https://badge.fury.io/js/graphql-playground.svg)](https://badge.fury.io/js/graphql-playground)
+
+This is a mono-repo setup containing packages for the `graphql-playground` and `graphql-playground-electron`.
+
 ```sh
-$ npm start
+$ cd packages/graphql-playground
+$ yarn
+$ yarn start
 ```
 Open
 [localhost:3000](http://localhost:3000/?endpoint=https://api.graph.cool/simple/v1/cj56h35ol3y93018144iab4wo&subscription=wss://subscriptions.graph.cool/v1/cj56h35ol3y93018144iab4wo)
