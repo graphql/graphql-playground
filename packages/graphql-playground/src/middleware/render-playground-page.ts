@@ -56,7 +56,7 @@ export default function renderPlaygroundPage(options: MiddlewareOptions) {
         options,
         null,
         2,
-      )}
+      )})
     })
   </script>
 </body>
