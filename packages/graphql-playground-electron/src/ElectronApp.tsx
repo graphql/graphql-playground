@@ -145,6 +145,14 @@ export default class ElectronApp extends React.Component<{}, State> {
     }
   }
 
+  closeTab = () => {
+    if (p) {
+      if (!p.closeTab()) {
+        ipcRenderer.send('async', 'close')
+      }
+    }
+  }
+
   componentDidMount() {
     ipcRenderer.on('Tab', this.readMessage)
   }
@@ -163,6 +171,9 @@ export default class ElectronApp extends React.Component<{}, State> {
         break
       case 'New':
         this.newTab()
+        break
+      case 'Close':
+        this.closeTab()
         break
     }
   }

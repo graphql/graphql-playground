@@ -676,6 +676,15 @@ export class Playground extends React.PureComponent<Props & DocsState, State> {
     })
   }
 
+  public closeTab = () => {
+    const { sessions, selectedSessionIndex } = this.state
+    if (sessions.length > 1) {
+      this.handleCloseSession(sessions[selectedSessionIndex])
+      return true
+    }
+    return false
+  }
+
   public nextTab = () => {
     const { sessions, selectedSessionIndex } = this.state
     const numberOfSessions = sessions.length
