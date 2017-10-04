@@ -25,7 +25,9 @@ const EnumTypeSchema = ({ type }: EnumTypeSchemaProps) => {
       <span className="brace">{'{'}</span>
       {values
         .filter((value: any) => !value.isDeprecated)
-        .map((value, index) => <Value key={value.name} first={index === 0} value={value} />)}
+        .map((value, index) =>
+          <Value key={value.name} first={index === 0} value={value} />,
+        )}
       {deprecatedValues.length > 0 && <br />}
       {deprecatedValues.map(value =>
         <Value key={value.name} value={value} isDeprecated={true} />,
@@ -44,22 +46,23 @@ interface ValueProps {
 }
 
 const Value = ({ value, isDeprecated, first }: ValueProps) =>
-  <div className="doc-value">
+  <div className={`doc-value${first ? ' doc-value--first' : ''}`}>
     <style jsx={true}>{`
+      .doc-value {
+        margin-top: 6px;
+      }
+      .doc-value--first {
+        margin-top: 0px;
+      }
       .doc-value .field-name {
         @p: .ph16;
-      }
-      .field-name {
-        padding-top: 6px;
-      }
-      .field-name--first {
-        padding-top: 0px;
+        color: red;
       }
       .doc-value-comment {
         @p: .ph16, .black50;
       }
     `}</style>
-    <div className={`field-name${first ? ' field-name--first' : ''}`}>
+    <div className="field-name">
       {value.name}
     </div>
     {value.description &&
