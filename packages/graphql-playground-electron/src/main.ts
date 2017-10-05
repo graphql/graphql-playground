@@ -1,12 +1,15 @@
 // TODO enable tslint
 /* tslint:disable */
-import { app, Menu, BrowserWindow, globalShortcut, ipcMain } from 'electron'
+import { app, autoUpdater, Menu, BrowserWindow, globalShortcut, ipcMain } from 'electron'
 const dev = require('electron-is-dev')
 import * as electronLocalShortcut from 'electron-localshortcut'
 
 const path = require('path')
 
 const { newWindowConfig } = require('./utils')
+
+const server = https://hazel-wmigqegsed.now.sh
+const feed = `${server}/update/${process.platform}/${app.getVersion()}`
 
 function focusedWindow() {
   return BrowserWindow.getFocusedWindow()
@@ -26,6 +29,14 @@ function newTab() {
 
 function closeTab() {
   focusedWindow().webContents.send('Tab', 'Close')
+}
+
+function initAutoUpdate() {
+  if (dev) return
+
+  if (process.platform === 'linux') return
+
+  autoUpdater.setFeedURL(feed)
 }
 
 ipcMain.on('async', (event, arg) => {
@@ -173,6 +184,7 @@ const template: any = [
 // Some APIs can only be used after this event occurs.
 app.on('ready', () => {
   createWindow()
+  initAutoUpdate()
 
   const menu = Menu.buildFromTemplate(template)
   Menu.setApplicationMenu(menu)
