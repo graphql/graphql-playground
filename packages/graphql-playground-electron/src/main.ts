@@ -1,6 +1,6 @@
 // TODO enable tslint
 /* tslint:disable */
-import { app, Menu, BrowserWindow, globalShortcut } from 'electron'
+import { app, Menu, BrowserWindow, globalShortcut, ipcMain } from 'electron'
 const dev = require('electron-is-dev')
 import * as electronLocalShortcut from 'electron-localshortcut'
 
@@ -8,27 +8,37 @@ const path = require('path')
 
 const { newWindowConfig } = require('./utils')
 
-// Keep a global reference of the window object, if you don't, the window will
-// be closed automatically when the JavaScript object is garbage collected.
-let mainWindow
+function focusedWindow() {
+  return BrowserWindow.getFocusedWindow()
+}
 
 function prevTab() {
-  mainWindow.webContents.send('Tab', 'Prev')
+  focusedWindow().webContents.send('Tab', 'Prev')
 }
 
 function nextTab() {
-  mainWindow.webContents.send('Tab', 'Next')
+  focusedWindow().webContents.send('Tab', 'Next')
 }
 
 function newTab() {
-  mainWindow.webContents.send('Tab', 'New')
+  focusedWindow().webContents.send('Tab', 'New')
 }
+
+function closeTab() {
+  focusedWindow().webContents.send('Tab', 'Close')
+}
+
+ipcMain.on('async', (event, arg) => {
+  focusedWindow().close()
+})
+
+const windows = new Set([])
 
 function createWindow() {
   // Create the browser window.
-  mainWindow = new BrowserWindow(newWindowConfig)
+  const newWindow = new BrowserWindow(newWindowConfig)
 
-  mainWindow.loadURL(
+  newWindow.loadURL(
     dev
       ? 'http://localhost:4040' // Dev server ran by react-scripts
       : `file://${path.join(__dirname, '/dist/index.html')}`, // Bundled application
@@ -51,108 +61,121 @@ function createWindow() {
       .then(name => console.log(`Added Extension:  ${name}`))
       .catch(err => console.log('An error occurred: ', err))
 
-    mainWindow.webContents.openDevTools()
+    newWindow.webContents.openDevTools()
   }
 
+  windows.add(newWindow)
+
   // Emitted when the window is closed.
-  mainWindow.on('closed', function() {
-    // Dereference the window object, usually you would store windows
-    // in an array if your app supports multi windows, this is the time
-    // when you should delete the corresponding element.
-    mainWindow = null
+  newWindow.on('closed', function() {
+    if (process.platform !== 'darwin' && windows.size === 0) {
+      app.quit()
+    }
   })
 
-  // TODO use proper typing, maybe we need to update to electron 1.7.1 as they fixed some ts definitions
-  // https://github.com/electron/electron/releases/tag/v1.7.1
-  const template: any = [
-    {
-      label: 'Application',
-      submenu: [
-        {
-          label: 'About GraphQL Playground',
-          selector: 'orderFrontStandardAboutPanel:',
-        },
-        {
-          label: 'New window',
-          accelerator: 'CmdOrCtrl+N',
-          click: () => {
-            const win = new BrowserWindow(newWindowConfig)
-            win.loadURL(
-              dev
-                ? 'http://localhost:4040'
-                : `file://${path.join(__dirname, '/dist/index.html')}`,
-            )
-          },
-        },
-        { type: 'separator' },
-        {
-          label: 'Quit',
-          accelerator: 'Command+Q',
-          click: () => {
-            app.quit()
-          },
-        },
-      ],
-    },
-    {
-      label: 'Edit',
-      submenu: [
-        { label: 'Undo', accelerator: 'CmdOrCtrl+Z', selector: 'undo:' },
-        { label: 'Redo', accelerator: 'Shift+CmdOrCtrl+Z', selector: 'redo:' },
-        { type: 'separator' },
-        { label: 'Cut', accelerator: 'CmdOrCtrl+X', selector: 'cut:' },
-        { label: 'Copy', accelerator: 'CmdOrCtrl+C', selector: 'copy:' },
-        { label: 'Paste', accelerator: 'CmdOrCtrl+V', selector: 'paste:' },
-        {
-          label: 'Select All',
-          accelerator: 'CmdOrCtrl+A',
-          selector: 'selectAll:',
-        },
-      ],
-    },
-    {
-      label: 'Window',
-      submenu: [
-        {
-          label: 'Next Tab',
-          accelerator: 'Cmd+Alt+Right',
-          click: () => nextTab(),
-        },
-        {
-          label: 'Previous Tab',
-          accelerator: 'Cmd+Alt+Left',
-          click: () => prevTab(),
-        },
-        {
-          label: 'New Tab',
-          accelerator: 'CmdOrCtrl+T',
-          click: () => newTab(),
-        },
-        { label: 'Close Window', accelerator: 'CmdOrCtrl+W' },
-        { label: 'Minimize', accelerator: 'CmdOrCtrl+M' },
-        { type: 'separator' },
-        { label: 'Toggle Developer Tools', role: 'toggledevtools' },
-      ],
-    },
-  ]
-
-  electronLocalShortcut.register(mainWindow, 'Cmd+Shift+]', () => {
+  electronLocalShortcut.register(newWindow, 'Cmd+Shift+]', () => {
     nextTab()
   })
 
-  electronLocalShortcut.register(mainWindow, 'Cmd+Shift+[', () => {
+  electronLocalShortcut.register(newWindow, 'Cmd+Shift+[', () => {
     prevTab()
   })
 
-  const menu = Menu.buildFromTemplate(template)
-  Menu.setApplicationMenu(menu)
+  return newWindow
 }
+
+// TODO use proper typing, maybe we need to update to electron 1.7.1 as they fixed some ts definitions
+// https://github.com/electron/electron/releases/tag/v1.7.1
+const template: any = [
+  {
+    label: 'Application',
+    submenu: [
+      {
+        label: 'About GraphQL Playground',
+        selector: 'orderFrontStandardAboutPanel:',
+      },
+      { type: 'separator' },
+      {
+        label: 'Quit',
+        accelerator: 'Command+Q',
+        click: () => {
+          app.quit()
+        },
+      },
+    ],
+  },
+  {
+    label: 'File',
+    submenu: [
+      {
+        label: 'New window',
+        accelerator: 'Cmd+N',
+        click: () => {
+          createWindow()
+        },
+      },
+      {
+        label: 'New Tab',
+        accelerator: 'Cmd+T',
+        click: () => newTab(),
+      },
+      { type: 'separator' },
+      { label: 'Close Window', accelerator: 'Cmd+Shift+W' },
+      {
+        label: 'Close Tab',
+        accelerator: 'Cmd+W',
+        click: () => closeTab(),
+      },
+    ],
+  },
+  {
+    label: 'Edit',
+    submenu: [
+      { label: 'Undo', accelerator: 'CmdOrCtrl+Z', selector: 'undo:' },
+      { label: 'Redo', accelerator: 'Shift+CmdOrCtrl+Z', selector: 'redo:' },
+      { type: 'separator' },
+      { label: 'Cut', accelerator: 'CmdOrCtrl+X', selector: 'cut:' },
+      { label: 'Copy', accelerator: 'CmdOrCtrl+C', selector: 'copy:' },
+      { label: 'Paste', accelerator: 'CmdOrCtrl+V', selector: 'paste:' },
+      {
+        label: 'Select All',
+        accelerator: 'CmdOrCtrl+A',
+        selector: 'selectAll:',
+      },
+    ],
+  },
+  {
+    label: 'Window',
+    submenu: [
+      {
+        label: 'Next Tab',
+        accelerator: 'Cmd+Alt+Right',
+        click: () => nextTab(),
+      },
+      {
+        label: 'Previous Tab',
+        accelerator: 'Cmd+Alt+Left',
+        click: () => prevTab(),
+      },
+      {
+        label: 'Minimize',
+        accelerator: 'Cmd+M',
+        click: () => focusedWindow().minimize(),
+      },
+      { type: 'separator' },
+      { label: 'Toggle Developer Tools', role: 'toggledevtools' },
+    ],
+  },
+]
 
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
 app.on('ready', () => {
   createWindow()
+
+  const menu = Menu.buildFromTemplate(template)
+  Menu.setApplicationMenu(menu)
 })
 
 // Quit when all windows are closed.
@@ -167,7 +190,7 @@ app.on('window-all-closed', () => {
 app.on('activate', () => {
   // On OS X it's common to re-create a window in the app when the
   // dock icon is clicked and there are no other windows open.
-  if (mainWindow === null) {
+  if (!windows.size) {
     createWindow()
   }
 })
