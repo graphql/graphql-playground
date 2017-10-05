@@ -8,7 +8,7 @@ const path = require('path')
 
 const { newWindowConfig } = require('./utils')
 
-const server = https://hazel-wmigqegsed.now.sh
+const server = 'https://hazel-wmigqegsed.now.sh'
 const feed = `${server}/update/${process.platform}/${app.getVersion()}`
 
 function focusedWindow() {
