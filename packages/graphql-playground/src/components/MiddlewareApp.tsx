@@ -34,12 +34,13 @@ class MiddlewareApp extends React.Component<{}, State> {
     super(props)
 
     this.state = {
-      endpoint: props.endpoint || location.href,
-      subscriptionPrefix:
-        localStorage.getItem('last-subscriptions-endpoint') ||
-        props.subscriptionPrefix,
-      subscriptionEndpoint:
+      endpoint:
         localStorage.getItem('last-endpoint') ||
+        props.endpoint ||
+        location.href,
+      subscriptionPrefix: props.subscriptionPrefix,
+      subscriptionEndpoint:
+        localStorage.getItem('last-subscriptions-endpoint') ||
         props.subscriptionEndpoint ||
         getSubscriptionsUrl(location.href),
     }
