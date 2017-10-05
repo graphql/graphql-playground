@@ -52,7 +52,7 @@ export default function renderPlaygroundPage(options: MiddlewareOptions) {
 </div>
   <script>
     window.addEventListener('load', function(event) {
-      GraphQLPlayground.init(document.getElementById('root'), options: ${JSON.stringify(
+      GraphQLPlayground.init(document.getElementById('root'), ${JSON.stringify(
         options,
         null,
         2,
