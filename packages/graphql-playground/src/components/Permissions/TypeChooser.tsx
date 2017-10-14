@@ -29,12 +29,12 @@ export default class TypeChooser extends React.Component<Props, {}> {
               .flex,
               .itemsCenter,
               .darkBlue80;
-            padding: 3px 10px 4px 10px;
+            padding: 4px 10px 5px 10px;
             margin: 0 -2px;
             background-color: $darkBlue10;
             &.active {
               @p: .bgBlue, .white;
-              padding: 4px 10px 6px 10px;
+              padding: 5px 10px 7px 10px;
               z-index: 2;
             }
           }

@@ -206,7 +206,7 @@ export default class NewPermissionTab extends React.Component<Props, State> {
                             onChange={this.handleModelNameChange}
                           >
                             {serviceInformation.models.map(model =>
-                              <option value={model.name}>
+                              <option value={model.name} key={model.id}>
                                 {model.name}
                               </option>,
                             )}
@@ -224,7 +224,7 @@ export default class NewPermissionTab extends React.Component<Props, State> {
                               'update',
                               'delete',
                             ].map(operation =>
-                              <option value={operation}>
+                              <option value={operation} key={operation}>
                                 {operation}
                               </option>,
                             )}
@@ -241,7 +241,7 @@ export default class NewPermissionTab extends React.Component<Props, State> {
                           className="w100"
                         >
                           {serviceInformation.relations.map(relation =>
-                            <option value={relation.name}>
+                            <option value={relation.name} key={relation.name}>
                               {relation.name}
                             </option>,
                           )}
@@ -275,6 +275,7 @@ export default class NewPermissionTab extends React.Component<Props, State> {
   }
 
   private newTab = () => {
+    this.toggleTooltip()
     this.props.onNewPermissionTab({
       relationName: this.state.relationName,
       modelName: this.state.modelName,

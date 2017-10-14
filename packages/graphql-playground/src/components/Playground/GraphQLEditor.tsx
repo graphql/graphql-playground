@@ -2,9 +2,7 @@ import * as React from 'react'
 import * as ReactDOM from 'react-dom'
 import { buildClientSchema, parse, print } from 'graphql'
 import * as cn from 'classnames'
-
 import { GraphQLSchema } from 'graphql/type/schema'
-
 import ExecuteButton from './ExecuteButton'
 import { ToolbarButton } from 'graphiql/dist/components/ToolbarButton'
 import { QueryEditor } from './QueryEditor'
@@ -20,7 +18,13 @@ import {
   introspectionQuery,
   introspectionQuerySansSubscriptions,
 } from 'graphiql/dist/utility/introspectionQueries'
-import { OperationDefinition, Viewer } from '../../types'
+import {
+  OperationDefinition,
+  PermissionQueryArgument,
+  PermissionSession,
+  ServiceInformation,
+  Viewer,
+} from '../../types'
 import { download } from './util/index'
 import QueryHeader from './QueryHeader'
 import ResultHeader from './ResultHeader'
@@ -31,6 +35,9 @@ import HttpHeaders, { Header } from './HttpHeaders'
 
 import { defaultQuery } from '../../constants'
 import Spinner from '../Spinner'
+import PermissionVariables from './PermissionVariables'
+import { getVariableNamesFromQuery, putVariablesToQuery } from './ast'
+import { flatMap, groupBy } from 'lodash'
 
 // tslint:disable-next-line
 const CSSTransitionGroup = require('react-transition-group/CSSTransitionGroup')
@@ -89,6 +96,8 @@ export interface Props {
   hideGutters?: boolean
   readonly?: boolean
   useVim?: boolean
+  permission?: PermissionSession
+  serviceInformation?: ServiceInformation
 }
 
 export interface State {
@@ -110,6 +119,7 @@ export interface State {
   schemaExplorerOpen: boolean
   schemaExplorerWidth: number
   isWaitingForResponse: boolean
+  selectedVariableNames: string[]
 }
 
 export interface SimpleProps {
@@ -138,6 +148,19 @@ export class GraphQLEditor extends React.PureComponent<Props, State> {
   private storage: any
   private editorQueryID: number
   private resultID: number = 0
+
+  private reflectQueryVariablesToUI = debounce(150, (query: string) => {
+    const { variables } = getVariableNamesFromQuery(
+      query,
+      true,
+      this.props.schema,
+    )
+    this.setState(
+      {
+        selectedVariableNames: variables,
+      } as State,
+    )
+  })
 
   private updateQueryFacts = debounce(150, query => {
     const queryFacts = getQueryFacts(this.state.schema, query)
@@ -225,6 +248,7 @@ export class GraphQLEditor extends React.PureComponent<Props, State> {
         Number(this._storageGet('schemaExplorerWidth')) || 350,
       isWaitingForResponse: false,
       subscription: null,
+      selectedVariableNames: [],
       ...queryFacts,
     }
 
@@ -245,6 +269,7 @@ export class GraphQLEditor extends React.PureComponent<Props, State> {
     // Utility for keeping CodeMirror correctly sized.
     this.codeMirrorSizer = new CodeMirrorSizer()
     ;(global as any).g = this
+    this.reflectQueryVariablesToUI(this.state.query)
   }
 
   componentWillReceiveProps(nextProps) {
@@ -278,6 +303,9 @@ export class GraphQLEditor extends React.PureComponent<Props, State> {
       nextOperationName !== this.state.operationName
     ) {
       this.updateQueryFacts(nextQuery)
+      if (this.props.permission) {
+        this.reflectQueryVariablesToUI(nextQuery)
+      }
     }
 
     this.setState(
@@ -409,7 +437,7 @@ export class GraphQLEditor extends React.PureComponent<Props, State> {
             margin-bottom: 4px;
             &:before {
               @p: .absolute, .w100;
-              content: "";
+              content: '';
               top: 9px;
               left: 95px;
               border-top: 1px solid $white20;
@@ -571,6 +599,13 @@ export class GraphQLEditor extends React.PureComponent<Props, State> {
                   />
                 </Tether>}
             </div>
+            {this.props.permission &&
+              this.props.serviceInformation &&
+              <PermissionVariables
+                variables={this.getVariables()}
+                selectedVariableNames={this.state.selectedVariableNames}
+                onToggleVariableSelection={this.toggleVariableSelection}
+              />}
             {!this.props.queryOnly &&
               <div className="resultWrap">
                 {this.props.isGraphcoolUrl &&
@@ -627,7 +662,6 @@ export class GraphQLEditor extends React.PureComponent<Props, State> {
                       operations={this.state.operations}
                     />}
                 {this.state.isWaitingForResponse && <Spinner />}
-
                 <div
                   className={
                     'result-window' +
@@ -1098,7 +1132,9 @@ export class GraphQLEditor extends React.PureComponent<Props, State> {
 
   handleToggleSchema = () => {
     this.setState(
-      { schemaExplorerOpen: !this.state.schemaExplorerOpen } as State,
+      {
+        schemaExplorerOpen: !this.state.schemaExplorerOpen,
+      } as State,
     )
   }
 
@@ -1311,6 +1347,83 @@ export class GraphQLEditor extends React.PureComponent<Props, State> {
         }
       }
     }
+  }
+
+  private toggleVariableSelection = (variable: PermissionQueryArgument) => {
+    this.setState(
+      state => {
+        const { selectedVariableNames } = state
+
+        if (selectedVariableNames.includes(variable.name)) {
+          const index = selectedVariableNames.indexOf(variable.name)
+
+          return {
+            ...state,
+            selectedVariableNames: [
+              ...selectedVariableNames.slice(0, index),
+              ...selectedVariableNames.slice(
+                index + 1,
+                selectedVariableNames.length,
+              ),
+            ],
+          }
+        }
+
+        return {
+          ...state,
+          selectedVariableNames: selectedVariableNames.concat(variable.name),
+        }
+      },
+      () => {
+        const variables = this.getSelectedVariables()
+        const newQuery = putVariablesToQuery(this.state.query, variables)
+        this.setState({ query: newQuery })
+        if (typeof this.props.onEditQuery === 'function') {
+          this.props.onEditQuery(newQuery)
+        }
+      },
+    )
+  }
+
+  private getSelectedVariables() {
+    const { selectedVariableNames } = this.state
+    const variables = this.getVariables()
+
+    return flatMap(
+      Object.keys(variables),
+      group => variables[group],
+    ).filter(variable => selectedVariableNames.includes(variable.name))
+  }
+
+  private getPermissionQueryArguments(): PermissionQueryArgument[] {
+    const permission = this.props.permission!
+    const serviceInformation = this.props.serviceInformation!
+    if (permission.modelName && permission.modelName.length > 0) {
+      const model = serviceInformation.models.find(
+        m => m.name === permission.modelName,
+      )!
+      return model[
+        permission.modelOperation as any
+      ] as PermissionQueryArgument[]
+    }
+    if (permission.relationName && permission.relationName.length > 0) {
+      return serviceInformation.relations.find(
+        r => r.name === permission.relationName,
+      )!.permissionQueryArguments
+    }
+    return []
+  }
+
+  private getVariables() {
+    const { permission } = this.props
+    let args = this.getPermissionQueryArguments()
+
+    if (permission!.modelOperation === 'CREATE') {
+      args = args.filter(arg => arg.name !== '$node_id')
+    }
+
+    const variables = groupBy(args, arg => arg.group)
+    return variables
   }
 }
 

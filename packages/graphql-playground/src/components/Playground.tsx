@@ -640,6 +640,8 @@ export class Playground extends React.PureComponent<Props & DocsState, State> {
                   autofillMutation={this.autofillMutation}
                   useVim={this.state.useVim && index === selectedSessionIndex}
                   isActive={index === selectedSessionIndex}
+                  permission={session.permission}
+                  serviceInformation={this.state.serviceInformation}
                 />
               </div>,
             )}

@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { Session } from '../../types'
+import { PermissionSession, ServiceInformation, Session } from '../../types'
 import { GraphQLEditor } from './GraphQLEditor'
 import { Header } from './HttpHeaders/HttpHeaders'
 import { Viewer } from '../Playground'
@@ -31,6 +31,8 @@ interface Props {
   onboardingStep?: any
   tether?: any
   nextStep?: () => void
+  permission?: PermissionSession
+  serviceInformation?: ServiceInformation
 }
 
 export default class GraphQLEditorSession extends React.PureComponent<
@@ -54,6 +56,8 @@ export default class GraphQLEditorSession extends React.PureComponent<
       tether,
       nextStep,
       isActive,
+      permission,
+      serviceInformation,
     } = this.props
     return (
       <GraphQLEditor
@@ -96,6 +100,8 @@ export default class GraphQLEditorSession extends React.PureComponent<
         }
         disableAnimation={true}
         disableAutofocus={!isActive}
+        permission={permission}
+        serviceInformation={serviceInformation}
       />
     )
   }
