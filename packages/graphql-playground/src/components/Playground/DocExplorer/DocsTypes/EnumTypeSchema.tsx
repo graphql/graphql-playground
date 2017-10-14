@@ -29,8 +29,13 @@ const EnumTypeSchema = ({ type }: EnumTypeSchemaProps) => {
           <Value key={value.name} first={index === 0} value={value} />,
         )}
       {deprecatedValues.length > 0 && <br />}
-      {deprecatedValues.map(value =>
-        <Value key={value.name} value={value} isDeprecated={true} />,
+      {deprecatedValues.map((value, index) =>
+        <Value
+          first={index === 0}
+          key={value.name}
+          value={value}
+          isDeprecated={true}
+        />,
       )}
       <span className="brace">{'}'}</span>
     </div>

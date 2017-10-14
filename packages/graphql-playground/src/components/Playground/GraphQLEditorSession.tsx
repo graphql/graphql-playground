@@ -45,7 +45,7 @@ export default class GraphQLEditorSession extends React.PureComponent<
       session,
       isGraphcoolUrl,
       schemaCache,
-      adminAuthToken,
+      // adminAuthToken,
       isEndpoint,
       storage,
       responses,
@@ -64,7 +64,7 @@ export default class GraphQLEditorSession extends React.PureComponent<
         fetcher={this.fetcher}
         showQueryTitle={false}
         showResponseTitle={false}
-        showViewAs={!isEndpoint && Boolean(adminAuthToken)}
+        showViewAs={false /*!isEndpoint && Boolean(adminAuthToken)*/}
         showSelectUser={Boolean(this.props.adminAuthToken)}
         showEndpoints={!isEndpoint}
         showDownloadJsonButton={true}

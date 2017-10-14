@@ -317,23 +317,6 @@ export class GraphQLEditor extends React.PureComponent<Props, State> {
 
   render() {
     const children = React.Children.toArray(this.props.children)
-
-    // const logo =
-    //   find(children, child => child.type === GraphQLEditor.Logo) ||
-    {
-      /*<GraphQLEditor.Logo />*/
-    }
-
-    {
-      /*const toolbar =*/
-    }
-    {
-      /*find(children, child => child.type === GraphQLEditor.Toolbar) ||*/
-    }
-    {
-      /*<GraphQLEditor.Toolbar />*/
-    }
-
     const footer = find(children, child => child.type === GraphQLEditor.Footer)
 
     const queryWrapStyle = {

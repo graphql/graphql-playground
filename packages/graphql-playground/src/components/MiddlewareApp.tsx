@@ -27,6 +27,7 @@ export interface State {
   subscriptionPrefix?: string
   subscriptionEndpoint: string
   shareUrl?: string
+  platformToken?: string
 }
 
 class MiddlewareApp extends React.Component<{}, State> {
@@ -39,10 +40,19 @@ class MiddlewareApp extends React.Component<{}, State> {
         props.endpoint ||
         location.href,
       subscriptionPrefix: props.subscriptionPrefix,
+      platformToken: localStorage.getItem('platform-token') || undefined,
       subscriptionEndpoint:
         localStorage.getItem('last-subscriptions-endpoint') ||
         props.subscriptionEndpoint ||
         getSubscriptionsUrl(location.href),
+    }
+  }
+
+  componentWillMount() {
+    const platformToken = getParameterByName('platform-token')
+    if (platformToken && platformToken.length > 0) {
+      localStorage.setItem('platform-token', platformToken)
+      window.location.replace(window.location.origin + window.location.pathname)
     }
   }
 
@@ -83,6 +93,7 @@ class MiddlewareApp extends React.Component<{}, State> {
           shareUrl={this.state.shareUrl}
           onChangeEndpoint={this.handleChangeEndpoint}
           onChangeSubscriptionsEndpoint={this.handleChangeSubscriptionsEndpoint}
+          adminAuthToken={this.state.platformToken}
         />
       </Provider>
     )

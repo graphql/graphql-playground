@@ -39,6 +39,7 @@ import {
 import { setStacks } from '../actions/graphiql-docs'
 import { isEqual, mapValues } from 'lodash'
 import Share from './Share'
+import NewPermissionTab from './NewPermissionTab'
 
 export type Theme = 'dark' | 'light'
 export type Viewer = 'ADMIN' | 'EVERYONE' | 'USER'
@@ -73,6 +74,7 @@ export interface State {
   sessions: Session[]
   selectedSessionIndex: number
   schemaCache: any
+  permissionSchema?: any
   historyOpen: boolean
   history: Session[]
   httpApiPrefix: string
@@ -230,6 +232,9 @@ export class Playground extends React.PureComponent<Props & DocsState, State> {
       this.setCursor({ line: 3, ch: 6 })
     }
     this.initWebsockets()
+    if (this.props.adminAuthToken) {
+      this.fetchPermissionSchema()
+    }
   }
 
   componentDidUpdate(prevProps: Props) {
@@ -269,7 +274,18 @@ export class Playground extends React.PureComponent<Props & DocsState, State> {
   }
 
   fetchSchemas = () => {
-    return this.fetchSchema(this.getSimpleEndpoint()).then(simpleSchemaData => {
+    const additionalHeaders = {}
+
+    const headers = this.state.sessions[this.state.selectedSessionIndex].headers
+
+    if (headers) {
+      headers.forEach(header => (additionalHeaders[header.name] = header.value))
+    }
+
+    return this.fetchSchema(
+      this.getSimpleEndpoint(),
+      additionalHeaders,
+    ).then(simpleSchemaData => {
       if (!simpleSchemaData || simpleSchemaData.error) {
         this.setState(
           {
@@ -456,28 +472,38 @@ export class Playground extends React.PureComponent<Props & DocsState, State> {
       return []
     }
   }
-  fetchSchema(endpointUrl: string) {
-    const additionalHeaders = {}
 
-    const headers = this.state.sessions[this.state.selectedSessionIndex].headers
-
-    if (headers) {
-      headers.forEach(header => (additionalHeaders[header.name] = header.value))
+  fetchPermissionSchema() {
+    const headers = {
+      Authorization: `Bearer ${this.props.adminAuthToken}`,
     }
+    this.fetchSchema(this.getPermissionEndpoint(), headers).then(schema => {
+      const permissionSchema = buildClientSchema(schema.data)
+      this.setState({
+        permissionSchema,
+      })
+    })
+  }
 
+  getPermissionEndpoint() {
+    return this.props.endpoint + '/permissions'
+  }
+
+  fetchSchema(endpointUrl: string, headers: any = {}) {
     return fetch(endpointUrl, {
       // tslint:disable-line
       method: 'post',
       headers: {
         'Content-Type': 'application/json',
         'x-graphcool-source': 'console:playground',
-        ...additionalHeaders,
+        ...headers,
       },
       body: JSON.stringify({ query: introspectionQuery }),
     }).then(response => {
       return response.json()
     })
   }
+
   render() {
     const { sessions, selectedSessionIndex, theme } = this.state
     const { isEndpoint } = this.props
@@ -579,6 +605,21 @@ export class Playground extends React.PureComponent<Props & DocsState, State> {
             )}
           </div>
           <Settings
+            onToggleTheme={this.toggleTheme}
+            theme={this.state.theme}
+            autoReload={this.state.autoReloadSchema}
+            onToggleReload={this.toggleSchemaReload}
+            onReload={this.fetchSchemas}
+            endpoint={this.props.endpoint}
+            onChangeEndpoint={this.props.onChangeEndpoint}
+            useVim={this.state.useVim}
+            onToggleUseVim={this.toggleUseVim}
+            subscriptionsEndpoint={this.props.subscriptionsEndpoint || ''}
+            onChangeSubscriptionsEndpoint={
+              this.props.onChangeSubscriptionsEndpoint
+            }
+          />
+          <NewPermissionTab
             onToggleTheme={this.toggleTheme}
             theme={this.state.theme}
             autoReload={this.state.autoReloadSchema}

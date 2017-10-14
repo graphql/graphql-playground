@@ -17,6 +17,13 @@ export interface Session {
   selectedUserToken?: string
   subscriptionId?: string
   headers?: any[]
+  permission?: PermissionSession
+}
+
+export interface PermissionSession {
+  relationName?: string
+  modelName?: string
+  modelOperation?: string
 }
 
 export interface QueryTypes {
@@ -24,6 +31,7 @@ export interface QueryTypes {
   subscription: boolean
   query: boolean
   mutation: boolean
+  permission?: boolean
   // operations: OperationDefinition[]
 }
 
