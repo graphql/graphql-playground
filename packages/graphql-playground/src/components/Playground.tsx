@@ -607,9 +607,15 @@ export class Playground extends React.PureComponent<Props & DocsState, State> {
                   key={session.id}
                   session={session}
                   index={index}
-                  schemaCache={this.state.schemaCache}
+                  schemaCache={
+                    session.permission
+                      ? this.state.permissionSchema
+                      : this.state.schemaCache
+                  }
                   isGraphcoolUrl={isGraphcoolUrl}
-                  fetcher={this.fetcher}
+                  fetcher={
+                    session.permission ? this.permissionFetcher : this.fetcher
+                  }
                   adminAuthToken={this.props.adminAuthToken}
                   isEndpoint={Boolean(isEndpoint)}
                   storage={this.storage.getSessionStorage(session.id)}
@@ -706,7 +712,26 @@ export class Playground extends React.PureComponent<Props & DocsState, State> {
   }
 
   handleNewPermissionTab = (permissionSession: PermissionSession) => {
-    //
+    const newSession = Immutable({
+      id: cuid(),
+      selectedViewer: 'ADMIN',
+      query: '',
+      variables: '',
+      result: '',
+      operationName: undefined,
+      hasQuery: false,
+      permission: permissionSession,
+      queryTypes: getQueryTypes(''),
+      starred: false,
+    })
+    this.setState(state => {
+      return {
+        ...state,
+        sessions: state.sessions.concat(newSession),
+        selectedSessionIndex: state.sessions.length,
+        changed: true,
+      }
+    })
   }
 
   setRef = (index: number, ref: any) => {
@@ -1222,6 +1247,35 @@ export class Playground extends React.PureComponent<Props & DocsState, State> {
       }
       this.setValueInSession(session.id, 'subscriptionId', null)
     }
+  }
+
+  private permissionFetcher = (session: Session, graphQLParams) => {
+    const { query } = graphQLParams
+
+    if (!query.includes('IntrospectionQuery')) {
+      if (!this.historyIncludes(session)) {
+        setImmediate(() => {
+          this.addToHistory(session)
+        })
+      }
+    }
+
+    const endpoint = this.getPermissionEndpoint()
+
+    const headers: any = {
+      'Content-Type': 'application/json',
+      'x-graphcool-source': 'console:playground',
+      Authorization: `Bearer ${this.props.adminAuthToken}`,
+    }
+
+    return fetch(endpoint, {
+      method: 'post',
+      headers,
+      body: JSON.stringify(graphQLParams),
+    }).then(response => {
+      this.storage.executedQuery()
+      return response.json()
+    })
   }
 
   private fetcher = (session: Session, graphQLParams) => {

@@ -5,6 +5,7 @@ export interface Session {
 
   query: string
   variables: string
+  result?: string
   // result: string
   operationName?: string
   subscriptionActive: boolean
@@ -14,6 +15,9 @@ export interface Session {
   queryTypes: QueryTypes
   starred?: boolean
   date: Date
+  hasMutation: boolean
+  hasSubscription: boolean
+  hasQuery: boolean
   selectedUserToken?: string
   subscriptionId?: string
   headers?: any[]

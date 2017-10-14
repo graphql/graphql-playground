@@ -156,6 +156,15 @@ export default class Tab extends React.PureComponent<Props, {}> {
             {queryTypes.subscription &&
               <div className="query-type subscription">S</div>}
           </div>
+          {session.permission &&
+            <div className="viewer">
+              <Icon
+                src={require('graphcool-styles/icons/fill/permissions.svg')}
+                width={16}
+                height={16}
+                color={theme === 'dark' ? $v.white40 : $v.gray40}
+              />
+            </div>}
           {session.selectedViewer !== 'ADMIN' &&
             <div className="viewer">
               {session.selectedViewer === 'EVERYONE' &&
@@ -191,6 +200,7 @@ export default class Tab extends React.PureComponent<Props, {}> {
               >
                 {session.operationName ||
                   queryTypes.firstOperationName ||
+                  (session.permission && 'Permission Editor') ||
                   'New Session'}
               </div>
             </Tether>
@@ -200,6 +210,7 @@ export default class Tab extends React.PureComponent<Props, {}> {
             >
               {session.operationName ||
                 queryTypes.firstOperationName ||
+                (session.permission && 'Permission Editor') ||
                 'New Session'}
             </div>}
         <div
