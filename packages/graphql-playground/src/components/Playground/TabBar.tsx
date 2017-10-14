@@ -180,6 +180,7 @@ export const TabBar = withTheme<
         <div className={cx('tabs', { isApp })}>
           {sessions.map((session, index) =>
             <Tab
+              key={session.id}
               session={session}
               index={index}
               onSelectSession={onSelectSession}
