@@ -16,28 +16,28 @@ export default class ViewAs extends React.Component<Props, {}> {
       <div className="root">
         <style jsx={true}>{`
           .root {
-            @inherit: .fw6, .flex, .itemsCenter;
+            @p: .fw6, .flex, .itemsCenter;
             color: rgba(255, 255, 255, .25);
           }
 
           .chooser {
-            @inherit: .ml16, .flex, .itemsCenter;
+            @p: .ml16, .flex, .itemsCenter;
           }
 
           .viewer {
-            @inherit: .br2, .relative, .pointer, .ttu, .flex, .itemsCenter;
+            @p: .br2, .relative, .pointer, .ttu, .flex, .itemsCenter;
             padding: 5px 13px 6px 13px;
             margin: 0 -2px;
             background-color: #08131b;
             &.active {
-              @inherit: .bgLightGray, .darkerBlue;
+              @p: .bgLightGray, .darkerBlue;
               padding: 7px 9px 8px 9px;
               z-index: 2;
             }
           }
 
           .viewer-text {
-            @inherit: .ml6, .nowrap;
+            @p: .ml6, .nowrap;
           }
         `}</style>
 

@@ -4,7 +4,7 @@ import * as fetch from 'isomorphic-fetch'
 import { buildClientSchema, GraphQLList, GraphQLObjectType } from 'graphql'
 import { TabBar } from './Playground/TabBar'
 import { defaultQuery, introspectionQuery } from '../constants'
-import { Session } from '../types'
+import { PermissionSession, ServiceInformation, Session } from '../types'
 import * as cuid from 'cuid'
 import * as Immutable from 'seamless-immutable'
 import ThemeProvider from './Theme/ThemeProvider'
@@ -39,7 +39,8 @@ import {
 import { setStacks } from '../actions/graphiql-docs'
 import { isEqual, mapValues } from 'lodash'
 import Share from './Share'
-import NewPermissionTab from './NewPermissionTab'
+import NewPermissionTab from './Permissions/NewPermissionTab'
+import { serviceInformationQuery } from './constants'
 
 export type Theme = 'dark' | 'light'
 export type Viewer = 'ADMIN' | 'EVERYONE' | 'USER'
@@ -94,6 +95,7 @@ export interface State {
   shareHttpHeaders: boolean
   shareHistory: boolean
   changed: boolean
+  serviceInformation?: ServiceInformation
 }
 
 export interface CursorPosition {
@@ -234,6 +236,7 @@ export class Playground extends React.PureComponent<Props & DocsState, State> {
     this.initWebsockets()
     if (this.props.adminAuthToken) {
       this.fetchPermissionSchema()
+      this.fetchServiceInformation()
     }
   }
 
@@ -485,6 +488,37 @@ export class Playground extends React.PureComponent<Props & DocsState, State> {
     })
   }
 
+  fetchServiceInformation() {
+    const systemApi = this.getSystemEndpoint()
+    const id = this.extractServiceId()
+    fetch(systemApi, {
+      method: 'post',
+      body: JSON.stringify({
+        query: serviceInformationQuery,
+        variables: { id },
+      }),
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${this.state.adminAuthToken}`,
+      },
+    })
+      .then(res => res.json())
+      .then(res => {
+        const { models, relations } = res.data.viewer.project
+
+        this.setState({
+          serviceInformation: {
+            relations: relations.edges.map(edge => edge.node),
+            models: models.edges.map(edge => edge.node),
+          },
+        })
+      })
+  }
+
+  extractServiceId() {
+    return this.props.endpoint.split('/').slice(-1)[0]
+  }
+
   getPermissionEndpoint() {
     return this.props.endpoint + '/permissions'
   }
@@ -619,21 +653,13 @@ export class Playground extends React.PureComponent<Props & DocsState, State> {
               this.props.onChangeSubscriptionsEndpoint
             }
           />
-          <NewPermissionTab
-            onToggleTheme={this.toggleTheme}
-            theme={this.state.theme}
-            autoReload={this.state.autoReloadSchema}
-            onToggleReload={this.toggleSchemaReload}
-            onReload={this.fetchSchemas}
-            endpoint={this.props.endpoint}
-            onChangeEndpoint={this.props.onChangeEndpoint}
-            useVim={this.state.useVim}
-            onToggleUseVim={this.toggleUseVim}
-            subscriptionsEndpoint={this.props.subscriptionsEndpoint || ''}
-            onChangeSubscriptionsEndpoint={
-              this.props.onChangeSubscriptionsEndpoint
-            }
-          />
+          {this.props.adminAuthToken &&
+            this.state.serviceInformation &&
+            <NewPermissionTab
+              serviceInformation={this.state.serviceInformation}
+              theme={this.state.theme}
+              onNewPermissionTab={this.handleNewPermissionTab}
+            />}
           <Share
             theme={this.state.theme}
             onShare={this.share}
@@ -677,6 +703,10 @@ export class Playground extends React.PureComponent<Props & DocsState, State> {
         </div>
       </ThemeProvider>
     )
+  }
+
+  handleNewPermissionTab = (permissionSession: PermissionSession) => {
+    //
   }
 
   setRef = (index: number, ref: any) => {
