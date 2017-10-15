@@ -1360,6 +1360,7 @@ export class Playground extends React.PureComponent<Props & DocsState, State> {
       // tslint:disable-line
       method: 'post',
       headers,
+      credentials: 'include',
       body: JSON.stringify(graphQLParams),
     }).then(response => {
       if (typeof this.props.onSuccess === 'function') {
