@@ -28,8 +28,16 @@ export default class NewPermissionTab extends React.Component<Props, State> {
     this.state = {
       open: false,
       modelSelected: true,
-      modelName: props.serviceInformation.models[0].name,
-      relationName: props.serviceInformation.relations[0].name,
+      modelName:
+        props.serviceInformation.models &&
+        props.serviceInformation.models.length > 0
+          ? props.serviceInformation.models[0].name
+          : '',
+      relationName:
+        props.serviceInformation.relations &&
+        props.serviceInformation.relations.length > 0
+          ? props.serviceInformation.relations[0].name
+          : '',
       modelOperation: 'create',
     }
   }

@@ -28,6 +28,7 @@ interface State {
   shareUrl?: string
   loading: boolean
   session?: any
+  platformToken?: string
 }
 
 export default class ElectronApp extends React.Component<{}, State> {
@@ -35,28 +36,29 @@ export default class ElectronApp extends React.Component<{}, State> {
 
   constructor() {
     super()
-    const endpoint = this.getEndpointFromArgs()
+    const { endpoint, platformToken } = this.getArgs()
     this.state = {
       openInitialView: !endpoint,
       openTooltipTheme: false,
       activeEndpoint: null,
       theme: 'dark',
       endpoint,
+      platformToken,
       loading: false,
     }
     ;(global as any).a = this
     ;(global as any).r = remote
   }
 
-  getEndpointFromArgs(): string | undefined {
+  getArgs(): any {
     const argv = remote.process.argv
-    const args = minimist(argv.slice(2))
+    const args = minimist(argv.slice(1))
 
-    if (argv.length === 3 && argv[1] === 'endpoint') {
-      return argv[2]
+    return {
+      endpoint: args.endpoint,
+      subscriptionsEndpoint: args['subscriptions-endpoint'],
+      platformToken: args['platform-token'],
     }
-
-    return args.endpoint
   }
 
   handleSelectEndpoint = (endpoint: string) => {
@@ -186,6 +188,7 @@ export default class ElectronApp extends React.Component<{}, State> {
       openInitialView,
       openTooltipTheme,
       activeEndpoint,
+      platformToken,
     } = this.state
 
     return (
@@ -308,6 +311,7 @@ export default class ElectronApp extends React.Component<{}, State> {
                   onChangeEndpoint={this.handleChangeEndpoint}
                   share={this.share}
                   shareUrl={this.state.shareUrl}
+                  adminAuthToken={platformToken}
                 />
               </div>
             </div>}
