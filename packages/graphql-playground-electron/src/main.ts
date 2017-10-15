@@ -1,18 +1,50 @@
 // TODO enable tslint
 /* tslint:disable */
-import { app, autoUpdater, Menu, BrowserWindow, globalShortcut, ipcMain } from 'electron'
+import {
+  app,
+  BrowserWindow,
+  dialog,
+  globalShortcut,
+  ipcMain,
+  Menu,
+} from 'electron'
 const dev = require('electron-is-dev')
 import * as electronLocalShortcut from 'electron-localshortcut'
+import { autoUpdater } from 'electron-updater'
 
 const path = require('path')
 
 const { newWindowConfig } = require('./utils')
 
-const server = 'https://hazel-wmigqegsed.now.sh'
-const feed = `${server}/update/${process.platform}/${app.getVersion()}`
-
 function focusedWindow() {
   return BrowserWindow.getFocusedWindow()
+}
+
+function manuallyCheckForUpdates() {
+  autoUpdater.on('update-available', () => {
+    dialog.showMessageBox(
+      {
+        type: 'info',
+        title: 'Found Updates',
+        message: 'Found updates, do you want update now?',
+        buttons: ['Sure', 'No'],
+      },
+      buttonIndex => {
+        if (buttonIndex === 0) {
+          autoUpdater.downloadUpdate()
+        }
+      },
+    )
+  })
+
+  autoUpdater.on('update-not-available', () => {
+    dialog.showMessageBox({
+      title: 'No Updates',
+      message: 'Current version is up-to-date.',
+    })
+  })
+
+  autoUpdater.checkForUpdates()
 }
 
 function prevTab() {
@@ -36,7 +68,34 @@ function initAutoUpdate() {
 
   if (process.platform === 'linux') return
 
-  autoUpdater.setFeedURL(feed)
+  autoUpdater.on('update-downloaded', showUpdateNotification)
+
+  autoUpdater.on('error', (event, error) => {
+    dialog.showErrorBox(
+      'Error: ',
+      error == null ? 'unknown' : (error.stack || error).toString(),
+    )
+  })
+
+  autoUpdater.checkForUpdates()
+}
+
+function showUpdateNotification(it) {
+  it = it || {}
+  const restartNowAction = 'Restart Now'
+
+  const versionLabel = it.label ? `Version ${it.version}` : 'The latest version'
+
+  dialog.showMessageBox(
+    {
+      type: 'info',
+      title: 'Install Updates',
+      message: `${versionLabel} has been downloaded and application will be quit for update...`,
+    },
+    () => {
+      setImmediate(() => autoUpdater.quitAndInstall())
+    },
+  )
 }
 
 ipcMain.on('async', (event, arg) => {
@@ -105,13 +164,15 @@ const template: any = [
         label: 'About GraphQL Playground',
         selector: 'orderFrontStandardAboutPanel:',
       },
+      {
+        label: 'Check For Updates',
+        click: () => manuallyCheckForUpdates(),
+      },
       { type: 'separator' },
       {
         label: 'Quit',
         accelerator: 'Command+Q',
-        click: () => {
-          app.quit()
-        },
+        click: () => app.quit(),
       },
     ],
   },

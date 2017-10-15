@@ -1218,9 +1218,19 @@ bluebird-lst@^1.0.2:
   dependencies:
     bluebird "^3.5.0"
 
+bluebird-lst@^1.0.4:
+  version "1.0.4"
+  resolved "https://registry.yarnpkg.com/bluebird-lst/-/bluebird-lst-1.0.4.tgz#7fa1e4daaaf9e4e52f6dd0ec5b32e7ed4ca8cd6d"
+  dependencies:
+    bluebird "^3.5.1"
+
 bluebird@^3.4.7, bluebird@^3.5.0:
   version "3.5.0"
   resolved "https://registry.yarnpkg.com/bluebird/-/bluebird-3.5.0.tgz#791420d7f551eea2897453a8a77653f96606d67c"
+
+bluebird@^3.5.1:
+  version "3.5.1"
+  resolved "https://registry.yarnpkg.com/bluebird/-/bluebird-3.5.1.tgz#d9551f9de98f1fcda1e683d17ee91a0602ee2eb9"
 
 bn.js@^4.0.0, bn.js@^4.1.0, bn.js@^4.1.1, bn.js@^4.4.0:
   version "4.11.8"
@@ -1371,6 +1381,15 @@ buffer@^4.3.0:
     base64-js "^1.0.2"
     ieee754 "^1.1.4"
     isarray "^1.0.0"
+
+builder-util-runtime@~2.1.0:
+  version "2.1.0"
+  resolved "https://registry.yarnpkg.com/builder-util-runtime/-/builder-util-runtime-2.1.0.tgz#82362a92e202ee8315334391bbb23b2ea9099765"
+  dependencies:
+    bluebird-lst "^1.0.4"
+    debug "^3.1.0"
+    fs-extra-p "^4.4.4"
+    sax "^1.2.4"
 
 builtin-modules@^1.0.0:
   version "1.1.1"
@@ -2074,6 +2093,12 @@ debug@2.6.8, debug@^2.1.1, debug@^2.1.3, debug@^2.2.0, debug@^2.3.3, debug@^2.6.
   dependencies:
     ms "2.0.0"
 
+debug@^3.1.0:
+  version "3.1.0"
+  resolved "https://registry.yarnpkg.com/debug/-/debug-3.1.0.tgz#5bb5a0672628b64149566ba16819e61518c67261"
+  dependencies:
+    ms "2.0.0"
+
 decamelize@^1.0.0, decamelize@^1.1.1, decamelize@^1.1.2:
   version "1.2.0"
   resolved "https://registry.yarnpkg.com/decamelize/-/decamelize-1.2.0.tgz#f6534d15148269b20352e7bee26f501f9a191290"
@@ -2420,6 +2445,20 @@ electron-publish@19.20.0:
 electron-to-chromium@^1.2.7:
   version "1.3.17"
   resolved "https://registry.yarnpkg.com/electron-to-chromium/-/electron-to-chromium-1.3.17.tgz#41c13457cc7166c5c15e767ae61d86a8cacdee5d"
+
+electron-updater@^2.13.0:
+  version "2.13.0"
+  resolved "https://registry.yarnpkg.com/electron-updater/-/electron-updater-2.13.0.tgz#b7c31ecaa80f2f845bb75c0593fce903d85dc480"
+  dependencies:
+    bluebird-lst "^1.0.4"
+    builder-util-runtime "~2.1.0"
+    electron-is-dev "^0.3.0"
+    fs-extra-p "^4.4.4"
+    js-yaml "^3.10.0"
+    lazy-val "^1.0.2"
+    lodash.isequal "^4.5.0"
+    semver "^5.4.1"
+    source-map-support "^0.5.0"
 
 electron@^1.6.11:
   version "1.7.5"
@@ -2988,6 +3027,13 @@ fs-extra-p@^4.4.0:
     bluebird-lst "^1.0.2"
     fs-extra "^4.0.0"
 
+fs-extra-p@^4.4.4:
+  version "4.4.4"
+  resolved "https://registry.yarnpkg.com/fs-extra-p/-/fs-extra-p-4.4.4.tgz#396ad6f914eb2954e1700fd0e18288301ed45f04"
+  dependencies:
+    bluebird-lst "^1.0.4"
+    fs-extra "^4.0.2"
+
 fs-extra@^0.30.0:
   version "0.30.0"
   resolved "https://registry.yarnpkg.com/fs-extra/-/fs-extra-0.30.0.tgz#f233ffcc08d4da7d432daa449776989db1df93f0"
@@ -3012,6 +3058,14 @@ fs-extra@^4.0.0:
   dependencies:
     graceful-fs "^4.1.2"
     jsonfile "^3.0.0"
+    universalify "^0.1.0"
+
+fs-extra@^4.0.2:
+  version "4.0.2"
+  resolved "https://registry.yarnpkg.com/fs-extra/-/fs-extra-4.0.2.tgz#f91704c53d1b461f893452b0c307d9997647ab6b"
+  dependencies:
+    graceful-fs "^4.1.2"
+    jsonfile "^4.0.0"
     universalify "^0.1.0"
 
 fs-readdir-recursive@^1.0.0:
@@ -3947,6 +4001,13 @@ js-tokens@^3.0.0:
   version "3.0.2"
   resolved "https://registry.yarnpkg.com/js-tokens/-/js-tokens-3.0.2.tgz#9866df395102130e38f7f996bceb65443209c25b"
 
+js-yaml@^3.10.0:
+  version "3.10.0"
+  resolved "https://registry.yarnpkg.com/js-yaml/-/js-yaml-3.10.0.tgz#2e78441646bd4682e963f22b6e92823c309c62dc"
+  dependencies:
+    argparse "^1.0.7"
+    esprima "^4.0.0"
+
 js-yaml@^3.4.3, js-yaml@^3.9.0, js-yaml@^3.9.1:
   version "3.9.1"
   resolved "https://registry.yarnpkg.com/js-yaml/-/js-yaml-3.9.1.tgz#08775cebdfdd359209f0d2acd383c8f86a6904a0"
@@ -4012,6 +4073,12 @@ jsonfile@^2.1.0:
 jsonfile@^3.0.0:
   version "3.0.1"
   resolved "https://registry.yarnpkg.com/jsonfile/-/jsonfile-3.0.1.tgz#a5ecc6f65f53f662c4415c7675a0331d0992ec66"
+  optionalDependencies:
+    graceful-fs "^4.1.6"
+
+jsonfile@^4.0.0:
+  version "4.0.0"
+  resolved "https://registry.yarnpkg.com/jsonfile/-/jsonfile-4.0.0.tgz#8771aae0799b64076b76640fca058f9c10e33ecb"
   optionalDependencies:
     graceful-fs "^4.1.6"
 
@@ -6056,7 +6123,7 @@ sanitize-filename@^1.6.1:
   dependencies:
     truncate-utf8-bytes "^1.0.0"
 
-sax@~1.2.1:
+sax@^1.2.4, sax@~1.2.1:
   version "1.2.4"
   resolved "https://registry.yarnpkg.com/sax/-/sax-1.2.4.tgz#2816234e2378bddc4e5354fab5caa895df7100d9"
 
@@ -6282,6 +6349,12 @@ source-map-support@^0.4.15, source-map-support@^0.4.2:
   dependencies:
     source-map "^0.5.6"
 
+source-map-support@^0.5.0:
+  version "0.5.0"
+  resolved "https://registry.yarnpkg.com/source-map-support/-/source-map-support-0.5.0.tgz#2018a7ad2bdf8faf2691e5fddab26bed5a2bacab"
+  dependencies:
+    source-map "^0.6.0"
+
 source-map-url@^0.4.0:
   version "0.4.0"
   resolved "https://registry.yarnpkg.com/source-map-url/-/source-map-url-0.4.0.tgz#3e935d7ddd73631b97659956d55128e87b5084a3"
@@ -6289,6 +6362,10 @@ source-map-url@^0.4.0:
 source-map@0.5.6, source-map@0.5.x, source-map@^0.5.0, source-map@^0.5.3, source-map@^0.5.6, source-map@~0.5.1, source-map@~0.5.3:
   version "0.5.6"
   resolved "https://registry.yarnpkg.com/source-map/-/source-map-0.5.6.tgz#75ce38f52bf0733c5a7f0c118d81334a2bb5f412"
+
+source-map@^0.6.0:
+  version "0.6.1"
+  resolved "https://registry.yarnpkg.com/source-map/-/source-map-0.6.1.tgz#74722af32e9614e9c287a8d0bbde48b5e2f1a263"
 
 source-map@~0.4.1:
   version "0.4.4"

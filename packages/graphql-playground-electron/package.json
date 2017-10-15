@@ -88,6 +88,7 @@
     "date-fns": "^1.28.5",
     "electron-is-dev": "^0.3.0",
     "electron-localshortcut": "^2.0.2",
+    "electron-updater": "^2.13.0",
     "graphcool-styles": "^0.1.31",
     "graphcool-tmp-ui": "^0.0.11",
     "graphcool-ui": "^0.0.13",
