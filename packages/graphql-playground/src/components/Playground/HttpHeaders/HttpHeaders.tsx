@@ -116,6 +116,9 @@ class HttpHeaders extends React.PureComponent<Props, State> {
 
   private handleChange = (index: number, header: Header) => {
     let { headers } = this.props
+    if (typeof (headers as any).asMutable === 'function') {
+      headers = (headers as any).asMutable()
+    }
     if (headers) {
       // If new item add it at the end of the array
       if (index === -1) {
