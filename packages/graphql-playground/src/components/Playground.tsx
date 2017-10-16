@@ -1363,12 +1363,12 @@ export class Playground extends React.PureComponent<Props & DocsState, State> {
         headers[header.name] = header.value
       })
     }
-
-    if (session.selectedViewer === 'ADMIN' && this.state.adminAuthToken) {
-      headers.Authorization = `Bearer ${this.state.adminAuthToken}`
-    } else if (session.selectedViewer === 'USER' && session.selectedUserToken) {
-      headers.Authorization = `Bearer ${session.selectedUserToken}`
-    }
+    //
+    // if (session.selectedViewer === 'ADMIN' && this.state.adminAuthToken) {
+    //   headers.Authorization = `Bearer ${this.state.adminAuthToken}`
+    // } else if (session.selectedViewer === 'USER' && session.selectedUserToken) {
+    //   headers.Authorization = `Bearer ${session.selectedUserToken}`
+    // }
 
     return fetch(endpoint, {
       // tslint:disable-line
