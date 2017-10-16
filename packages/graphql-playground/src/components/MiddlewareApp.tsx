@@ -96,7 +96,7 @@ class MiddlewareApp extends React.Component<{}, State> {
       `,
         variables: {
           session: JSON.stringify(session),
-          endpoint: this.state.endpoint,
+          endpoint: this.normalizeEndpoint(this.state.endpoint),
         },
       }),
     })
@@ -106,6 +106,14 @@ class MiddlewareApp extends React.Component<{}, State> {
         // const shareUrl = `${location.origin}/${res.data.addSession.id}`
         this.setState({ shareUrl })
       })
+  }
+
+  private normalizeEndpoint(endpoint) {
+    if (!endpoint.match(/https?:\/\/(.*?)\//)) {
+      return location.origin + endpoint
+    } else {
+      return endpoint
+    }
   }
 
   private handleChangeEndpoint = endpoint => {

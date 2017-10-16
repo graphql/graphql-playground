@@ -529,9 +529,18 @@ export class Playground extends React.PureComponent<Props & DocsState, State> {
         ...headers,
       },
       body: JSON.stringify({ query: introspectionQuery }),
-    }).then(response => {
-      return response.json()
     })
+      .then(response => {
+        return response.json()
+      })
+      .catch(e => {
+        this.setState({
+          response: {
+            date: `Error: Could not fetch schema from ${endpointUrl}. Make sure the url is correct.`,
+            time: new Date(),
+          },
+        })
+      })
   }
 
   render() {
@@ -1382,12 +1391,6 @@ query ${operationName} {
         headers[header.name] = header.value
       })
     }
-    //
-    // if (session.selectedViewer === 'ADMIN' && this.state.adminAuthToken) {
-    //   headers.Authorization = `Bearer ${this.state.adminAuthToken}`
-    // } else if (session.selectedViewer === 'USER' && session.selectedUserToken) {
-    //   headers.Authorization = `Bearer ${session.selectedUserToken}`
-    // }
 
     return fetch(endpoint, {
       // tslint:disable-line
