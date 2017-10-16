@@ -1059,9 +1059,8 @@ export class Playground extends React.PureComponent<Props & DocsState, State> {
 
   private createSession = (session?: Session) => {
     let newSession
-    const currentActiveSession = this.state.sessions[
-      this.state.selectedSessionIndex
-    ]
+    const currentActiveSession =
+      this.state && this.state.sessions[this.state.selectedSessionIndex]
     const headers = currentActiveSession ? currentActiveSession.headers : []
     if (session) {
       newSession = Immutable.set(session, 'id', cuid())
@@ -1225,13 +1224,14 @@ export class Playground extends React.PureComponent<Props & DocsState, State> {
   }
 
   private getWSEndpoint() {
+    if (this.props.subscriptionsEndpoint) {
+      return this.props.subscriptionsEndpoint
+    }
     const projectId =
       this.props.projectId ||
       (this.props.endpoint.includes('graph.cool') &&
         this.props.endpoint.split('/').slice(-1)[0])
-    return (
-      this.props.subscriptionsEndpoint || `${this.wsApiPrefix}/${projectId}`
-    )
+    return `${this.wsApiPrefix}/${projectId}`
   }
 
   private addToHistory(session: Session) {

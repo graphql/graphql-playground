@@ -33,14 +33,16 @@ class MiddlewareApp extends React.Component<{}, State> {
   constructor(props: Props) {
     super(props)
 
+    const endpoint =
+      props.endpoint || getParameterByName('endpoint') || location.href
+
     this.state = {
-      endpoint:
-        props.endpoint || getParameterByName('endpoint') || location.href,
+      endpoint,
       platformToken: localStorage.getItem('platform-token') || undefined,
       subscriptionEndpoint:
         props.subscriptionEndpoint ||
         getParameterByName('subscriptionEndpoint') ||
-        getSubscriptionsUrl(location.href),
+        getSubscriptionsUrl(endpoint),
     }
   }
 
@@ -107,15 +109,16 @@ class MiddlewareApp extends React.Component<{}, State> {
 
 export default MiddlewareApp
 
-function getSubscriptionsUrl(href) {
-  if (href.includes('graph.cool')) {
-    const projectId = href.split('/').slice(-1)[0]
+function getSubscriptionsUrl(endpoint) {
+  if (endpoint.includes('graph.cool')) {
+    const projectId = endpoint.split('/').slice(-1)[0]
     return `wss://subscriptions.graph.cool/v1/${projectId}`
   }
-  if (href.includes('localhost') && href.includes('/simple/')) {
+  if (endpoint.includes('localhost') && endpoint.includes('/simple/')) {
     // it's a graphcool local endpoint
-    const projectId = href.split('/').slice(-1)[0]
-    return `ws://${location.host}/subscriptions/v1/${projectId}`
+    const projectId = endpoint.split('/').slice(-1)[0]
+    const host = endpoint.match(/https?:\/\/(.*?)\//)
+    return `ws://${host![1]}/subscriptions/v1/${projectId}`
   }
-  return href
+  return endpoint
 }
