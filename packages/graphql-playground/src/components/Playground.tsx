@@ -1059,6 +1059,10 @@ export class Playground extends React.PureComponent<Props & DocsState, State> {
 
   private createSession = (session?: Session) => {
     let newSession
+    const currentActiveSession = this.state.sessions[
+      this.state.selectedSessionIndex
+    ]
+    const headers = currentActiveSession ? currentActiveSession.headers : []
     if (session) {
       newSession = Immutable.set(session, 'id', cuid())
     } else {
@@ -1080,6 +1084,7 @@ export class Playground extends React.PureComponent<Props & DocsState, State> {
         hasQuery: false,
         queryTypes: getQueryTypes(query),
         starred: false,
+        headers,
       })
     }
 
