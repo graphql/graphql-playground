@@ -554,7 +554,6 @@ export class Playground extends React.PureComponent<Props & DocsState, State> {
         'The "Select User" Popup is open, but no admin token is provided.',
       )
     }
-    const selectedSession = sessions[selectedSessionIndex]
     const selectedEndpointUrl = isEndpoint
       ? location.href
       : this.getSimpleEndpoint()
@@ -698,6 +697,7 @@ export class Playground extends React.PureComponent<Props & DocsState, State> {
               isGraphcool={isGraphcoolUrl}
             />}
           {this.props.adminAuthToken &&
+            this.state.selectUserOpen &&
             <SelectUserPopup
               isOpen={this.state.selectUserOpen}
               onRequestClose={this.handleCloseSelectUser}
@@ -707,14 +707,26 @@ export class Playground extends React.PureComponent<Props & DocsState, State> {
               endpointUrl={this.getSimpleEndpoint()}
             />}
           {this.state.codeGenerationPopupOpen &&
-            <CodeGenerationPopup
-              endpointUrl={selectedEndpointUrl}
-              isOpen={this.state.codeGenerationPopupOpen}
-              onRequestClose={this.handleCloseCodeGeneration}
-              query={selectedSession.query}
-            />}
+            this.renderCodeGenerationPopup()}
         </div>
       </ThemeProvider>
+    )
+  }
+
+  renderCodeGenerationPopup() {
+    const { sessions, selectedSessionIndex } = this.state
+    const { isEndpoint } = this.props
+    const selectedSession = sessions[selectedSessionIndex]
+    const selectedEndpointUrl = isEndpoint
+      ? location.href
+      : this.getSimpleEndpoint()
+    return (
+      <CodeGenerationPopup
+        endpointUrl={selectedEndpointUrl}
+        isOpen={this.state.codeGenerationPopupOpen}
+        onRequestClose={this.handleCloseCodeGeneration}
+        query={selectedSession.query}
+      />
     )
   }
 

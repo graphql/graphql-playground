@@ -24,8 +24,6 @@ export interface State {
   selectedEnv: Environment
 }
 
-Modal.setAppElement('#root')
-
 class CodeGenerationPopup extends React.Component<Props & Theme, State> {
   constructor(props) {
     super(props)
@@ -33,6 +31,10 @@ class CodeGenerationPopup extends React.Component<Props & Theme, State> {
       selectedEnv: 'Browser',
       selectedClient: 'graphql-request',
     }
+  }
+
+  componentWillMount() {
+    Modal.setAppElement('body')
   }
 
   render() {
