@@ -24,6 +24,8 @@ export interface State {
   selectedEnv: Environment
 }
 
+Modal.setAppElement('#root')
+
 class CodeGenerationPopup extends React.Component<Props & Theme, State> {
   constructor(props) {
     super(props)

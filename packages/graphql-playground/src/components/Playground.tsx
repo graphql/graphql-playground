@@ -54,8 +54,6 @@ export interface Props {
   subscriptionsEndpoint?: string
   projectId?: string
   adminAuthToken?: string
-  httpApiPrefix?: string
-  wsApiPrefix?: string
   onSuccess?: (graphQLParams: any, response: any) => void
   isEndpoint?: boolean
   onboardingStep?: string
@@ -78,8 +76,6 @@ export interface State {
   permissionSchema?: any
   historyOpen: boolean
   history: Session[]
-  httpApiPrefix: string
-  wsApiPrefix: string
   adminAuthToken?: string
   response?: Response
   selectUserOpen: boolean
@@ -102,9 +98,6 @@ export interface CursorPosition {
   line: number
   ch: number
 }
-
-const httpApiPrefix = 'https://api.graph.cool'
-const wsApiPrefix = 'wss://dev.subscriptions.graph.cool/v1'
 
 export { GraphQLEditor }
 
@@ -183,8 +176,6 @@ export class Playground extends React.PureComponent<Props & DocsState, State> {
           : 0,
       historyOpen: false,
       history: this.storage.getHistory(),
-      httpApiPrefix: props.httpApiPrefix || httpApiPrefix,
-      wsApiPrefix: props.wsApiPrefix || wsApiPrefix,
       adminAuthToken:
         (props.adminAuthToken &&
           props.adminAuthToken.length > 0 &&
@@ -504,14 +495,19 @@ export class Playground extends React.PureComponent<Props & DocsState, State> {
     })
       .then(res => res.json())
       .then(res => {
-        const { models, relations } = res.data.viewer.project
+        if (res.data.viewer.project) {
+          const { models, relations } = res.data.viewer.project
 
-        this.setState({
-          serviceInformation: {
-            relations: relations.edges.map(edge => edge.node),
-            models: models.edges.map(edge => edge.node),
-          },
-        })
+          this.setState({
+            serviceInformation: {
+              relations: relations.edges.map(edge => edge.node),
+              models: models.edges.map(edge => edge.node),
+            },
+          })
+        } else {
+          /* tslint:disable-next-line */
+          console.error('Error while fetching service information', res)
+        }
       })
   }
 
@@ -1201,7 +1197,26 @@ export class Playground extends React.PureComponent<Props & DocsState, State> {
   }
 
   private getSystemEndpoint() {
-    return `${this.state.httpApiPrefix}/system`
+    return `${this.httpApiPrefix}/system`
+  }
+
+  get httpApiPrefix() {
+    return this.props.endpoint.match(/(https?:\/\/.*?)\//)![1]
+  }
+
+  get wsApiPrefix() {
+    const { endpoint } = this.props
+    const isDev = endpoint.indexOf('dev.graph.cool') > -1
+    const isLocalhost = endpoint.indexOf('localhost') > -1
+
+    // tslint:disable-next-line
+    if (isLocalhost) {
+      return 'ws://localhost:8085/v1'
+    } else if (isDev) {
+      return 'wss://dev.subscriptions.graph.cool/v1'
+    } else {
+      return 'wss://subscriptions.graph.cool/v1'
+    }
   }
 
   private getWSEndpoint() {
@@ -1210,8 +1225,7 @@ export class Playground extends React.PureComponent<Props & DocsState, State> {
       (this.props.endpoint.includes('graph.cool') &&
         this.props.endpoint.split('/').slice(-1)[0])
     return (
-      this.props.subscriptionsEndpoint ||
-      `${this.state.wsApiPrefix}/${projectId}`
+      this.props.subscriptionsEndpoint || `${this.wsApiPrefix}/${projectId}`
     )
   }
 

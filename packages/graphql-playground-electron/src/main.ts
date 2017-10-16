@@ -1,6 +1,13 @@
 // TODO enable tslint
 /* tslint:disable */
-import { app, autoUpdater, Menu, BrowserWindow, globalShortcut, ipcMain } from 'electron'
+import {
+  app,
+  autoUpdater,
+  Menu,
+  BrowserWindow,
+  globalShortcut,
+  ipcMain,
+} from 'electron'
 const dev = require('electron-is-dev')
 import * as electronLocalShortcut from 'electron-localshortcut'
 
@@ -11,24 +18,36 @@ const { newWindowConfig } = require('./utils')
 const server = 'https://hazel-wmigqegsed.now.sh'
 const feed = `${server}/update/${process.platform}/${app.getVersion()}`
 
-function focusedWindow() {
+function getFocusedWindow(): any | null {
   return BrowserWindow.getFocusedWindow()
 }
 
 function prevTab() {
-  focusedWindow().webContents.send('Tab', 'Prev')
+  const focusedWindow = getFocusedWindow()
+  if (focusedWindow) {
+    focusedWindow.webContents.send('Tab', 'Prev')
+  }
 }
 
 function nextTab() {
-  focusedWindow().webContents.send('Tab', 'Next')
+  const focusedWindow = getFocusedWindow()
+  if (focusedWindow) {
+    focusedWindow.webContents.send('Tab', 'Next')
+  }
 }
 
 function newTab() {
-  focusedWindow().webContents.send('Tab', 'New')
+  const focusedWindow = getFocusedWindow()
+  if (focusedWindow) {
+    focusedWindow.webContents.send('Tab', 'New')
+  }
 }
 
 function closeTab() {
-  focusedWindow().webContents.send('Tab', 'Close')
+  const focusedWindow = getFocusedWindow()
+  if (focusedWindow) {
+    focusedWindow.webContents.send('Tab', 'Close')
+  }
 }
 
 function initAutoUpdate() {
@@ -40,7 +59,10 @@ function initAutoUpdate() {
 }
 
 ipcMain.on('async', (event, arg) => {
-  focusedWindow().close()
+  const focusedWindow = getFocusedWindow()
+  if (focusedWindow) {
+    focusedWindow.close()
+  }
 })
 
 const windows = new Set([])
@@ -171,7 +193,12 @@ const template: any = [
       {
         label: 'Minimize',
         accelerator: 'Cmd+M',
-        click: () => focusedWindow().minimize(),
+        click: () => {
+          const focusedWindow = getFocusedWindow()
+          if (focusedWindow) {
+            focusedWindow.minimize()
+          }
+        },
       },
       { type: 'separator' },
       { label: 'Toggle Developer Tools', role: 'toggledevtools' },

@@ -5,20 +5,19 @@ import Playground from './Playground'
 
 const store = createStore()
 
-function getParameterByName(name: string): string {
+function getParameterByName(name: string): string | null {
   const url = window.location.href
   name = name.replace(/[\[\]]/g, '\\$&')
   const regexa = new RegExp('[?&]' + name + '(=([^&#]*)|&|#|$)')
   const results = regexa.exec(url)
   if (!results || !results[2]) {
-    return ''
+    return null
   }
   return decodeURIComponent(results[2].replace(/\+/g, ' '))
 }
 
 export interface Props {
   endpoint?: string
-  subscriptionPrefix?: string
   subscriptionEndpoint?: string
 }
 
@@ -36,14 +35,11 @@ class MiddlewareApp extends React.Component<{}, State> {
 
     this.state = {
       endpoint:
-        localStorage.getItem('last-endpoint') ||
-        props.endpoint ||
-        location.href,
-      subscriptionPrefix: props.subscriptionPrefix,
+        props.endpoint || getParameterByName('endpoint') || location.href,
       platformToken: localStorage.getItem('platform-token') || undefined,
       subscriptionEndpoint:
-        localStorage.getItem('last-subscriptions-endpoint') ||
         props.subscriptionEndpoint ||
+        getParameterByName('subscriptionEndpoint') ||
         getSubscriptionsUrl(location.href),
     }
   }
@@ -57,38 +53,11 @@ class MiddlewareApp extends React.Component<{}, State> {
   }
 
   render() {
-    let { endpoint, subscriptionPrefix, subscriptionEndpoint } = this.state
-    // If no  endpoint passed tries to get one from url
-    if (!endpoint) {
-      endpoint = getParameterByName('endpoint')
-    }
-    if (!subscriptionEndpoint) {
-      subscriptionEndpoint = getParameterByName('subscription')
-    }
-    if (!subscriptionPrefix) {
-      const isDev = location.href.indexOf('dev.graph.cool') > -1
-      const isLocalhost = location.href.indexOf('localhost') > -1
-
-      // tslint:disable-next-line
-      if (isLocalhost) {
-        subscriptionPrefix = 'ws://localhost:8085/v1'
-      } else if (isDev) {
-        subscriptionPrefix = 'wss://dev.subscriptions.graph.cool/v1'
-      } else {
-        subscriptionPrefix = 'wss://subscriptions.graph.cool/v1'
-      }
-
-      // TODO remove before publishing app
-      subscriptionPrefix = 'wss://subscriptions.graph.cool/v1'
-    }
-
     return (
       <Provider store={store}>
         <Playground
           endpoint={this.state.endpoint}
           subscriptionsEndpoint={this.state.subscriptionEndpoint}
-          wsApiPrefix={subscriptionPrefix}
-          httpApiPrefix="https://api.graph.cool"
           share={this.share}
           shareUrl={this.state.shareUrl}
           onChangeEndpoint={this.handleChangeEndpoint}
@@ -129,12 +98,10 @@ class MiddlewareApp extends React.Component<{}, State> {
 
   private handleChangeEndpoint = endpoint => {
     this.setState({ endpoint })
-    localStorage.setItem('last-endpoint', endpoint)
   }
 
   private handleChangeSubscriptionsEndpoint = subscriptionEndpoint => {
     this.setState({ subscriptionEndpoint })
-    localStorage.setItem('last-subscriptions-endpoint', subscriptionEndpoint)
   }
 }
 

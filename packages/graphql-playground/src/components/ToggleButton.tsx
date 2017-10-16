@@ -43,7 +43,12 @@ const ToggleButton = ({ checked, onChange, className }: Props) => {
           }
         }
       `}</style>
-      <input className="toggle-input" type="checkbox" checked={checked} />
+      <input
+        className="toggle-input"
+        type="checkbox"
+        checked={checked}
+        readOnly={true}
+      />
       <div className="toggle-slider" />
     </div>
   )
