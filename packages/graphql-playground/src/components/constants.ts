@@ -36,6 +36,9 @@ export const serviceInformationQuery = `query ($id: ID!) {
           node {
             id
             name
+            leftModel {
+              name
+            }
             permissionQueryArguments {
               name
               typeName

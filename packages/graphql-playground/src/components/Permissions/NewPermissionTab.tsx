@@ -285,9 +285,13 @@ export default class NewPermissionTab extends React.Component<Props, State> {
   private newTab = () => {
     this.toggleTooltip()
     this.props.onNewPermissionTab({
-      relationName: this.state.relationName,
-      modelName: this.state.modelName,
-      modelOperation: this.state.modelOperation,
+      relationName: this.state.modelSelected
+        ? undefined
+        : this.state.relationName,
+      modelName: this.state.modelSelected ? this.state.modelName : undefined,
+      modelOperation: this.state.modelSelected
+        ? this.state.modelOperation
+        : undefined,
     })
   }
 

@@ -709,17 +709,31 @@ export class Playground extends React.PureComponent<Props & DocsState, State> {
     )
   }
 
+  getDefaultPermissionQuery(session: PermissionSession) {
+    const modelName = session.relationName
+      ? this.state.serviceInformation!.relations.find(
+          r => r.name === session.relationName,
+        )!.leftModel.name
+      : session.modelName
+    const operationName = session.modelOperation || session.relationName
+    return `\
+query ${operationName} {
+  Some${modelName}Exists
+}`
+  }
+
   handleNewPermissionTab = (permissionSession: PermissionSession) => {
+    const query = this.getDefaultPermissionQuery(permissionSession)
     const newSession = Immutable({
       id: cuid(),
       selectedViewer: 'ADMIN',
-      query: '',
+      query,
       variables: '',
       result: '',
       operationName: undefined,
       hasQuery: false,
       permission: permissionSession,
-      queryTypes: getQueryTypes(''),
+      queryTypes: getQueryTypes(query),
       starred: false,
     })
     this.setState(state => {
