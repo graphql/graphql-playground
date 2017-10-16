@@ -2,6 +2,7 @@ import * as React from 'react'
 import { Provider } from 'react-redux'
 import createStore from '../createStore'
 import Playground from './Playground'
+import { Helmet } from 'react-helmet'
 
 const store = createStore()
 
@@ -56,17 +57,26 @@ class MiddlewareApp extends React.Component<{}, State> {
 
   render() {
     return (
-      <Provider store={store}>
-        <Playground
-          endpoint={this.state.endpoint}
-          subscriptionsEndpoint={this.state.subscriptionEndpoint}
-          share={this.share}
-          shareUrl={this.state.shareUrl}
-          onChangeEndpoint={this.handleChangeEndpoint}
-          onChangeSubscriptionsEndpoint={this.handleChangeSubscriptionsEndpoint}
-          adminAuthToken={this.state.platformToken}
-        />
-      </Provider>
+      <div>
+        <Helmet>
+          <title>
+            {this.getTitle()}
+          </title>
+        </Helmet>
+        <Provider store={store}>
+          <Playground
+            endpoint={this.state.endpoint}
+            subscriptionsEndpoint={this.state.subscriptionEndpoint}
+            share={this.share}
+            shareUrl={this.state.shareUrl}
+            onChangeEndpoint={this.handleChangeEndpoint}
+            onChangeSubscriptionsEndpoint={
+              this.handleChangeSubscriptionsEndpoint
+            }
+            adminAuthToken={this.state.platformToken}
+          />
+        </Provider>
+      </div>
     )
   }
 
@@ -105,20 +115,37 @@ class MiddlewareApp extends React.Component<{}, State> {
   private handleChangeSubscriptionsEndpoint = subscriptionEndpoint => {
     this.setState({ subscriptionEndpoint })
   }
+
+  private getTitle() {
+    if (
+      this.state.platformToken ||
+      this.state.endpoint.includes('api.graph.cool')
+    ) {
+      const projectId = getProjectId(this.state.endpoint)
+      const cluster = this.state.endpoint.includes('api.graph.cool')
+        ? 'shared'
+        : 'local'
+      return `${cluster}/${projectId} - Playground`
+    }
+
+    return `Playground - ${this.state.endpoint}`
+  }
 }
 
 export default MiddlewareApp
 
 function getSubscriptionsUrl(endpoint) {
   if (endpoint.includes('graph.cool')) {
-    const projectId = endpoint.split('/').slice(-1)[0]
-    return `wss://subscriptions.graph.cool/v1/${projectId}`
+    return `wss://subscriptions.graph.cool/v1/${getProjectId(endpoint)}`
   }
   if (endpoint.includes('localhost') && endpoint.includes('/simple/')) {
     // it's a graphcool local endpoint
-    const projectId = endpoint.split('/').slice(-1)[0]
     const host = endpoint.match(/https?:\/\/(.*?)\//)
-    return `ws://${host![1]}/subscriptions/v1/${projectId}`
+    return `ws://${host![1]}/subscriptions/v1/${getProjectId(endpoint)}`
   }
   return endpoint
+}
+
+function getProjectId(endpoint) {
+  return endpoint.split('/').slice(-1)[0]
 }
