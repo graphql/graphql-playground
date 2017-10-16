@@ -12,7 +12,7 @@ curl -X POST \
   -d '{
 	"path": [
 		"/npm/graphql-playground/middleware-build/static/css/main.css",
-		"/npm/graphql-playground/middleware-build/static/css/main.js"
+		"/npm/graphql-playground/middleware-build/static/js/main.js"
 	]
 }'
 
