@@ -181,7 +181,6 @@ export class Playground extends React.PureComponent<Props & DocsState, State> {
           props.adminAuthToken.length > 0 &&
           props.adminAuthToken) ||
         localStorage.getItem('token'),
-      response: undefined,
       selectUserOpen: false,
       selectUserSessionId: undefined,
       codeGenerationPopupOpen: false,
@@ -193,6 +192,7 @@ export class Playground extends React.PureComponent<Props & DocsState, State> {
       shareHttpHeaders: true,
       shareHistory: true,
       changed: false,
+      response: undefined,
     }
 
     if (typeof window === 'object') {
@@ -698,18 +698,24 @@ export class Playground extends React.PureComponent<Props & DocsState, State> {
             />}
           {this.props.adminAuthToken &&
             this.state.selectUserOpen &&
-            <SelectUserPopup
-              isOpen={this.state.selectUserOpen}
-              onRequestClose={this.handleCloseSelectUser}
-              adminAuthToken={this.props.adminAuthToken}
-              userFields={this.state.userFields}
-              onSelectUser={this.handleUserSelection}
-              endpointUrl={this.getSimpleEndpoint()}
-            />}
+            this.renderUserPopup()}
           {this.state.codeGenerationPopupOpen &&
             this.renderCodeGenerationPopup()}
         </div>
       </ThemeProvider>
+    )
+  }
+
+  renderUserPopup() {
+    return (
+      <SelectUserPopup
+        isOpen={this.state.selectUserOpen}
+        onRequestClose={this.handleCloseSelectUser}
+        adminAuthToken={this.props.adminAuthToken!}
+        userFields={this.state.userFields}
+        onSelectUser={this.handleUserSelection}
+        endpointUrl={this.getSimpleEndpoint()}
+      />
     )
   }
 
