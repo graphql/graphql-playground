@@ -1,4 +1,4 @@
-type File {
+type File @model {
   contentType: String!
   createdAt: DateTime!
   id: ID! @isUnique
@@ -9,13 +9,13 @@ type File {
   url: String!
 }
 
-type User {
+type User @model {
   createdAt: DateTime!
   id: ID! @isUnique
   updatedAt: DateTime!
 }
 
-type Message {
+type Message @model {
   agent: Agent @relation(name: "MessagesFromAgents")
   conversation: Conversation @relation(name: "MessagesInConversation")
   createdAt: DateTime!
@@ -24,7 +24,7 @@ type Message {
   updatedAt: DateTime!
 }
 
-type Conversation {
+type Conversation @model {
   agent: Agent @relation(name: "ConversationsFromAgent")
   createdAt: DateTime!
   customer: Customer @relation(name: "ConversationsFromCustomer")
@@ -34,7 +34,7 @@ type Conversation {
   updatedAt: DateTime!
 }
 
-type Agent {
+type Agent @model {
   conversations: [Conversation!]! @relation(name: "ConversationsFromAgent")
   createdAt: DateTime!
   id: ID! @isUnique
@@ -45,7 +45,7 @@ type Agent {
   updatedAt: DateTime!
 }
 
-type Customer {
+type Customer @model {
   conversations: [Conversation!]! @relation(name: "ConversationsFromCustomer")
   createdAt: DateTime!
   id: ID! @isUnique

@@ -1,4 +1,4 @@
-type Conference {
+type Conference @model {
   id: ID! @isUnique
   createdAt: DateTime!
   updatedAt: DateTime!
@@ -8,7 +8,7 @@ type Conference {
   attendees: [Attendee] @relation(name: "Attendees")
 }
 
-type Attendee {
+type Attendee @model {
   id: ID! @isUnique
   createdAt: DateTime!
   updatedAt: DateTime!
