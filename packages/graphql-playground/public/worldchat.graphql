@@ -1,4 +1,4 @@
-type Traveller {
+type Traveller @model {
   id: ID! @isUnique
   createdAt: DateTime!
   updatedAt: DateTime!
@@ -7,7 +7,7 @@ type Traveller {
   messages: [Message!]! @relation(name: "MessagesFromTraveller")
 }
 
-type Message {
+type Message @model {
   id: ID! @isUnique
   createdAt: DateTime!
   updatedAt: DateTime!
@@ -15,7 +15,7 @@ type Message {
   sentBy: Traveller!  @relation(name: "MessagesFromTraveller")
 }
 
-type Location {
+type Location @model {
   id: ID! @isUnique
   createdAt: DateTime!
   updatedAt: DateTime!
