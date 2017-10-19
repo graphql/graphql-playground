@@ -4,14 +4,13 @@ import {
   app,
   BrowserWindow,
   dialog,
-  autoUpdater,
-  Menu,
   globalShortcut,
   ipcMain,
+  Menu,
 } from 'electron'
-const dev = require('electron-is-dev')
 import * as electronLocalShortcut from 'electron-localshortcut'
 import { autoUpdater } from 'electron-updater'
+const dev = require('electron-is-dev')
 
 const path = require('path')
 
