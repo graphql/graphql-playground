@@ -2,6 +2,7 @@ export type Viewer = 'ADMIN' | 'EVERYONE' | 'USER'
 
 export interface Session {
   id: string
+  name?: string
 
   query: string
   variables: string

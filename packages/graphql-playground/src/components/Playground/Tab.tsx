@@ -198,7 +198,8 @@ export default class Tab extends React.PureComponent<Props, {}> {
                 className={`operation-name ${index === selectedSessionIndex &&
                   'active'}`}
               >
-                {session.operationName ||
+                {session.name ||
+                  session.operationName ||
                   queryTypes.firstOperationName ||
                   (session.permission && 'Permission Editor') ||
                   'New Session'}
@@ -208,7 +209,8 @@ export default class Tab extends React.PureComponent<Props, {}> {
               className={`operation-name ${index === selectedSessionIndex &&
                 'active'}`}
             >
-              {session.operationName ||
+              {session.name ||
+                session.operationName ||
                 queryTypes.firstOperationName ||
                 (session.permission && 'Permission Editor') ||
                 'New Session'}

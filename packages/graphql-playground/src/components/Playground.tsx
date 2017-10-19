@@ -784,33 +784,16 @@ query ${operationName} {
     }))
   }
 
-  public handleNewSession = (newIndexZero: boolean = false) => {
+  public newSession = (name?: string) => {
     let session = this.createSession()
-    if (this.props.onboardingStep === 'STEP3_CREATE_MUTATION_TAB') {
-      session = Immutable.set(session, 'query', onboardingEmptyMutation)
-      setTimeout(() => {
-        this.setCursor({
-          line: 2,
-          ch: 15,
-        })
-      }, 5)
-      if (typeof this.props.nextStep === 'function') {
-        this.props.nextStep()
-      }
-    }
-    if (session.query === defaultQuery) {
-      setTimeout(() => {
-        this.setCursor({
-          line: 1,
-          ch: 0,
-        })
-      }, 5)
+    if (name) {
+      session = Immutable.set(session, 'name', name)
     }
     this.setState(state => {
       return {
         ...state,
         sessions: state.sessions.concat(session),
-        selectedSessionIndex: newIndexZero ? 0 : state.sessions.length,
+        selectedSessionIndex: state.sessions.length,
         changed: true,
       }
     })
@@ -857,6 +840,38 @@ query ${operationName} {
         }
       })
     }
+  }
+
+  public handleNewSession = (newIndexZero: boolean = false) => {
+    let session = this.createSession()
+    if (this.props.onboardingStep === 'STEP3_CREATE_MUTATION_TAB') {
+      session = Immutable.set(session, 'query', onboardingEmptyMutation)
+      setTimeout(() => {
+        this.setCursor({
+          line: 2,
+          ch: 15,
+        })
+      }, 5)
+      if (typeof this.props.nextStep === 'function') {
+        this.props.nextStep()
+      }
+    }
+    if (session.query === defaultQuery) {
+      setTimeout(() => {
+        this.setCursor({
+          line: 1,
+          ch: 0,
+        })
+      }, 5)
+    }
+    this.setState(state => {
+      return {
+        ...state,
+        sessions: state.sessions.concat(session),
+        selectedSessionIndex: newIndexZero ? 0 : state.sessions.length,
+        changed: true,
+      }
+    })
   }
 
   private autofillMutation = () => {
