@@ -2727,6 +2727,10 @@ exenv@1.2.0:
   version "1.2.0"
   resolved "https://registry.yarnpkg.com/exenv/-/exenv-1.2.0.tgz#3835f127abf075bfe082d0aed4484057c78e3c89"
 
+exenv@^1.2.1:
+  version "1.2.2"
+  resolved "https://registry.yarnpkg.com/exenv/-/exenv-1.2.2.tgz#2ae78e85d9894158670b03d47bec1f03bd91bb9d"
+
 exit-hook@^1.0.0:
   version "1.1.1"
   resolved "https://registry.yarnpkg.com/exit-hook/-/exit-hook-1.1.1.tgz#f05ca233b48c05d54fff07765df8507e95c02ff8"
@@ -3300,9 +3304,9 @@ graphql-language-service-utils@0.0.17:
     graphql "^0.10.1"
     graphql-language-service-types "0.0.21"
 
-graphql-playground@^1.0.12:
-  version "1.0.12"
-  resolved "https://registry.yarnpkg.com/graphql-playground/-/graphql-playground-1.0.12.tgz#43885bbdf846903c6a878c468ea47753442a32af"
+graphql-playground@^1.0.19:
+  version "1.0.19"
+  resolved "https://registry.yarnpkg.com/graphql-playground/-/graphql-playground-1.0.19.tgz#b524771fc175346c4fac2173cd4d4adf07c013e5"
   dependencies:
     calculate-size "^1.1.1"
     classnames "^2.2.5"
@@ -3323,6 +3327,7 @@ graphql-playground@^1.0.12:
     react-codemirror "^1.0.0"
     react-copy-to-clipboard "^5.0.0"
     react-dom "^15.4.2"
+    react-helmet "^5.2.0"
     react-modal "^1.6.5"
     react-redux "^5.0.5"
     react-router-dom "^4.2.2"
@@ -5679,6 +5684,15 @@ react-dom@^15.3.2, react-dom@^15.4.2, react-dom@^15.6.1:
     object-assign "^4.1.0"
     prop-types "^15.5.10"
 
+react-helmet@^5.2.0:
+  version "5.2.0"
+  resolved "https://registry.yarnpkg.com/react-helmet/-/react-helmet-5.2.0.tgz#a81811df21313a6d55c5f058c4aeba5d6f3d97a7"
+  dependencies:
+    deep-equal "^1.0.1"
+    object-assign "^4.1.1"
+    prop-types "^15.5.4"
+    react-side-effect "^1.1.0"
+
 react-modal@^1.6.5:
   version "1.9.7"
   resolved "https://registry.yarnpkg.com/react-modal/-/react-modal-1.9.7.tgz#07ef56790b953e3b98ef1e2989e347983c72871d"
@@ -5730,6 +5744,13 @@ react-router@^4.2.0:
     path-to-regexp "^1.7.0"
     prop-types "^15.5.4"
     warning "^3.0.0"
+
+react-side-effect@^1.1.0:
+  version "1.1.3"
+  resolved "https://registry.yarnpkg.com/react-side-effect/-/react-side-effect-1.1.3.tgz#512c25abe0dec172834c4001ec5c51e04d41bc5c"
+  dependencies:
+    exenv "^1.2.1"
+    shallowequal "^1.0.1"
 
 react-test-renderer@^15.3.2:
   version "15.6.1"
@@ -6236,6 +6257,10 @@ sha.js@^2.4.0, sha.js@^2.4.8:
   resolved "https://registry.yarnpkg.com/sha.js/-/sha.js-2.4.8.tgz#37068c2c476b6baf402d14a49c67f597921f634f"
   dependencies:
     inherits "^2.0.1"
+
+shallowequal@^1.0.1:
+  version "1.0.2"
+  resolved "https://registry.yarnpkg.com/shallowequal/-/shallowequal-1.0.2.tgz#1561dbdefb8c01408100319085764da3fcf83f8f"
 
 shebang-command@^1.2.0:
   version "1.2.0"

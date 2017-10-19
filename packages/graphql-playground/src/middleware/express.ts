@@ -12,7 +12,7 @@ export type ExpressPlaygroundMiddleware = (
   next: () => void,
 ) => void
 
-export type Register = (options) => ExpressPlaygroundMiddleware
+export type Register = (options: any) => ExpressPlaygroundMiddleware
 
 const express: Register = function voyagerExpress(options) {
   const middlewareOptions: MiddlewareOptions = {

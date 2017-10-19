@@ -22,7 +22,6 @@ function getParameterByName(name: string): string {
 
 export interface Props {
   endpoint?: string
-  subscriptionPrefix?: string
   subscriptionEndpoint?: string
   history?: any
   match?: any
@@ -30,7 +29,6 @@ export interface Props {
 
 export interface State {
   endpoint?: string
-  subscriptionPrefix?: string
   subscriptionEndpoint?: string
   shareUrl?: string
   loading: boolean
@@ -43,7 +41,6 @@ class App extends React.Component<Props, State> {
 
     this.state = {
       endpoint: props.endpoint,
-      subscriptionPrefix: props.subscriptionPrefix,
       subscriptionEndpoint: props.subscriptionEndpoint,
       loading: false,
     }
@@ -87,29 +84,13 @@ class App extends React.Component<Props, State> {
   }
 
   render() {
-    let { endpoint, subscriptionPrefix, subscriptionEndpoint } = this.state
+    let { endpoint, subscriptionEndpoint } = this.state
     // If no  endpoint passed tries to get one from url
     if (!endpoint) {
       endpoint = getParameterByName('endpoint')
     }
     if (!subscriptionEndpoint) {
       subscriptionEndpoint = getParameterByName('subscription')
-    }
-    if (!subscriptionPrefix) {
-      const isDev = location.href.indexOf('dev.graph.cool') > -1
-      const isLocalhost = location.href.indexOf('localhost') > -1
-
-      // tslint:disable-next-line
-      if (isLocalhost) {
-        subscriptionPrefix = 'ws://localhost:8085/v1'
-      } else if (isDev) {
-        subscriptionPrefix = 'wss://dev.subscriptions.graph.cool/v1'
-      } else {
-        subscriptionPrefix = 'wss://subscriptions.graph.cool/v1'
-      }
-
-      // TODO remove before publishing app
-      subscriptionPrefix = 'wss://subscriptions.graph.cool/v1'
     }
 
     return (
@@ -138,8 +119,6 @@ class App extends React.Component<Props, State> {
               : <Playground
                   endpoint={endpoint}
                   subscriptionsEndpoint={subscriptionEndpoint}
-                  wsApiPrefix={subscriptionPrefix}
-                  httpApiPrefix="https://api.graph.cool"
                   onChangeEndpoint={this.handleChangeEndpoint}
                   share={this.share}
                   shareUrl={this.state.shareUrl}

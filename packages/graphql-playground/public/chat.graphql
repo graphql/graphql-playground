@@ -1,4 +1,4 @@
-type Person {
+type Person @model {
   id: ID! @isUnique
   createdAt: DateTime!
   updatedAt: DateTime!
@@ -6,7 +6,7 @@ type Person {
   messages: [Message!]! @relation(name: "UserMessages")
 }
 
-type Message {
+type Message @model {
   id: ID! @isUnique
   createdAt: DateTime!
   updatedAt: DateTime!

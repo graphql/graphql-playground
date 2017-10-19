@@ -2,23 +2,23 @@ import * as React from 'react'
 import { Provider } from 'react-redux'
 import createStore from '../createStore'
 import Playground from './Playground'
+import { Helmet } from 'react-helmet'
 
 const store = createStore()
 
-function getParameterByName(name: string): string {
+function getParameterByName(name: string): string | null {
   const url = window.location.href
   name = name.replace(/[\[\]]/g, '\\$&')
   const regexa = new RegExp('[?&]' + name + '(=([^&#]*)|&|#|$)')
   const results = regexa.exec(url)
   if (!results || !results[2]) {
-    return ''
+    return null
   }
   return decodeURIComponent(results[2].replace(/\+/g, ' '))
 }
 
 export interface Props {
   endpoint?: string
-  subscriptionPrefix?: string
   subscriptionEndpoint?: string
 }
 
@@ -34,17 +34,16 @@ class MiddlewareApp extends React.Component<{}, State> {
   constructor(props: Props) {
     super(props)
 
+    const endpoint =
+      props.endpoint || getParameterByName('endpoint') || location.href
+
     this.state = {
-      endpoint:
-        localStorage.getItem('last-endpoint') ||
-        props.endpoint ||
-        location.href,
-      subscriptionPrefix: props.subscriptionPrefix,
+      endpoint,
       platformToken: localStorage.getItem('platform-token') || undefined,
       subscriptionEndpoint:
-        localStorage.getItem('last-subscriptions-endpoint') ||
         props.subscriptionEndpoint ||
-        getSubscriptionsUrl(location.href),
+        getParameterByName('subscriptionEndpoint') ||
+        getSubscriptionsUrl(endpoint),
     }
   }
 
@@ -57,45 +56,27 @@ class MiddlewareApp extends React.Component<{}, State> {
   }
 
   render() {
-    let { endpoint, subscriptionPrefix, subscriptionEndpoint } = this.state
-    // If no  endpoint passed tries to get one from url
-    if (!endpoint) {
-      endpoint = getParameterByName('endpoint')
-    }
-    if (!subscriptionEndpoint) {
-      subscriptionEndpoint = getParameterByName('subscription')
-    }
-    if (!subscriptionPrefix) {
-      const isDev = location.href.indexOf('dev.graph.cool') > -1
-      const isLocalhost = location.href.indexOf('localhost') > -1
-
-      // tslint:disable-next-line
-      if (isLocalhost) {
-        subscriptionPrefix = 'ws://localhost:8085/v1'
-      } else if (isDev) {
-        subscriptionPrefix = 'wss://dev.subscriptions.graph.cool/v1'
-      } else {
-        subscriptionPrefix = 'wss://subscriptions.graph.cool/v1'
-      }
-
-      // TODO remove before publishing app
-      subscriptionPrefix = 'wss://subscriptions.graph.cool/v1'
-    }
-
     return (
-      <Provider store={store}>
-        <Playground
-          endpoint={this.state.endpoint}
-          subscriptionsEndpoint={this.state.subscriptionEndpoint}
-          wsApiPrefix={subscriptionPrefix}
-          httpApiPrefix="https://api.graph.cool"
-          share={this.share}
-          shareUrl={this.state.shareUrl}
-          onChangeEndpoint={this.handleChangeEndpoint}
-          onChangeSubscriptionsEndpoint={this.handleChangeSubscriptionsEndpoint}
-          adminAuthToken={this.state.platformToken}
-        />
-      </Provider>
+      <div>
+        <Helmet>
+          <title>
+            {this.getTitle()}
+          </title>
+        </Helmet>
+        <Provider store={store}>
+          <Playground
+            endpoint={this.state.endpoint}
+            subscriptionsEndpoint={this.state.subscriptionEndpoint}
+            share={this.share}
+            shareUrl={this.state.shareUrl}
+            onChangeEndpoint={this.handleChangeEndpoint}
+            onChangeSubscriptionsEndpoint={
+              this.handleChangeSubscriptionsEndpoint
+            }
+            adminAuthToken={this.state.platformToken}
+          />
+        </Provider>
+      </div>
     )
   }
 
@@ -115,7 +96,7 @@ class MiddlewareApp extends React.Component<{}, State> {
       `,
         variables: {
           session: JSON.stringify(session),
-          endpoint: this.state.endpoint,
+          endpoint: this.normalizeEndpoint(this.state.endpoint),
         },
       }),
     })
@@ -127,28 +108,52 @@ class MiddlewareApp extends React.Component<{}, State> {
       })
   }
 
+  private normalizeEndpoint(endpoint) {
+    if (!endpoint.match(/https?:\/\/(.*?)\//)) {
+      return location.origin + endpoint
+    } else {
+      return endpoint
+    }
+  }
+
   private handleChangeEndpoint = endpoint => {
     this.setState({ endpoint })
-    localStorage.setItem('last-endpoint', endpoint)
   }
 
   private handleChangeSubscriptionsEndpoint = subscriptionEndpoint => {
     this.setState({ subscriptionEndpoint })
-    localStorage.setItem('last-subscriptions-endpoint', subscriptionEndpoint)
+  }
+
+  private getTitle() {
+    if (
+      this.state.platformToken ||
+      this.state.endpoint.includes('api.graph.cool')
+    ) {
+      const projectId = getProjectId(this.state.endpoint)
+      const cluster = this.state.endpoint.includes('api.graph.cool')
+        ? 'shared'
+        : 'local'
+      return `${cluster}/${projectId} - Playground`
+    }
+
+    return `Playground - ${this.state.endpoint}`
   }
 }
 
 export default MiddlewareApp
 
-function getSubscriptionsUrl(href) {
-  if (href.includes('graph.cool')) {
-    const projectId = href.split('/').slice(-1)[0]
-    return `wss://subscriptions.graph.cool/v1/${projectId}`
+function getSubscriptionsUrl(endpoint) {
+  if (endpoint.includes('graph.cool')) {
+    return `wss://subscriptions.graph.cool/v1/${getProjectId(endpoint)}`
   }
-  if (href.includes('localhost') && href.includes('/simple/')) {
+  if (endpoint.includes('localhost') && endpoint.includes('/simple/')) {
     // it's a graphcool local endpoint
-    const projectId = href.split('/').slice(-1)[0]
-    return `ws://${location.host}/subscriptions/v1/${projectId}`
+    const host = endpoint.match(/https?:\/\/(.*?)\//)
+    return `ws://${host![1]}/subscriptions/v1/${getProjectId(endpoint)}`
   }
-  return href
+  return endpoint
+}
+
+function getProjectId(endpoint) {
+  return endpoint.split('/').slice(-1)[0]
 }

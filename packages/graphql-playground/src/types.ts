@@ -64,6 +64,9 @@ export interface GraphcoolRelation {
   id: string
   name: string
   permissionQueryArguments: PermissionQueryArgument[]
+  leftModel: {
+    name: string
+  }
 }
 
 export interface GraphcoolModel {

@@ -1,4 +1,4 @@
-type Customer {
+type Customer @model {
   id: ID! @isUnique
   createdAt: DateTime!
   updatedAt: DateTime!

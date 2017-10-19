@@ -5,7 +5,7 @@
   "homepage": "https://github.com/graphcool/graphql-playground",
   "repository": "graphcool/graphql-playground",
   "description": "Playground app",
-  "version": "1.0.2",
+  "version": "1.0.2-rc.1",
   "author": {
     "name": "Graphcool",
     "email": "contact@graph.cool",
@@ -129,7 +129,7 @@
     "extract-text-webpack-plugin": "^2.0.0-beta.3",
     "file-loader": "^0.11.2",
     "fork-ts-checker-webpack-plugin": "^0.1.5",
-    "graphql-playground": "^1.0.12",
+    "graphql-playground": "^1.0.19",
     "happypack": "^3.1.0",
     "html-webpack-plugin": "^2.30.1",
     "identity-obj-proxy": "^3.0.0",

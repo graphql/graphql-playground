@@ -1,6 +1,6 @@
 {
   "name": "graphql-playground",
-  "version": "1.0.12",
+  "version": "1.0.19",
   "main": "./lib/lib.js",
   "typings": "./lib/lib.d.ts",
   "scripts": {
@@ -115,6 +115,7 @@
     "react-codemirror": "^1.0.0",
     "react-copy-to-clipboard": "^5.0.0",
     "react-dom": "^15.4.2",
+    "react-helmet": "^5.2.0",
     "react-modal": "^1.6.5",
     "react-redux": "^5.0.5",
     "react-router-dom": "^4.2.2",

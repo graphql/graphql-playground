@@ -33,6 +33,10 @@ class CodeGenerationPopup extends React.Component<Props & Theme, State> {
     }
   }
 
+  componentWillMount() {
+    Modal.setAppElement('body')
+  }
+
   render() {
     const { query, endpointUrl, theme } = this.props
     const { selectedEnv } = this.state

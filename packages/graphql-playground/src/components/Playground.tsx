@@ -54,8 +54,6 @@ export interface Props {
   subscriptionsEndpoint?: string
   projectId?: string
   adminAuthToken?: string
-  httpApiPrefix?: string
-  wsApiPrefix?: string
   onSuccess?: (graphQLParams: any, response: any) => void
   isEndpoint?: boolean
   onboardingStep?: string
@@ -78,8 +76,6 @@ export interface State {
   permissionSchema?: any
   historyOpen: boolean
   history: Session[]
-  httpApiPrefix: string
-  wsApiPrefix: string
   adminAuthToken?: string
   response?: Response
   selectUserOpen: boolean
@@ -102,9 +98,6 @@ export interface CursorPosition {
   line: number
   ch: number
 }
-
-const httpApiPrefix = 'https://api.graph.cool'
-const wsApiPrefix = 'wss://dev.subscriptions.graph.cool/v1'
 
 export { GraphQLEditor }
 
@@ -183,14 +176,11 @@ export class Playground extends React.PureComponent<Props & DocsState, State> {
           : 0,
       historyOpen: false,
       history: this.storage.getHistory(),
-      httpApiPrefix: props.httpApiPrefix || httpApiPrefix,
-      wsApiPrefix: props.wsApiPrefix || wsApiPrefix,
       adminAuthToken:
         (props.adminAuthToken &&
           props.adminAuthToken.length > 0 &&
           props.adminAuthToken) ||
         localStorage.getItem('token'),
-      response: undefined,
       selectUserOpen: false,
       selectUserSessionId: undefined,
       codeGenerationPopupOpen: false,
@@ -202,6 +192,7 @@ export class Playground extends React.PureComponent<Props & DocsState, State> {
       shareHttpHeaders: true,
       shareHistory: true,
       changed: false,
+      response: undefined,
     }
 
     if (typeof window === 'object') {
@@ -504,14 +495,19 @@ export class Playground extends React.PureComponent<Props & DocsState, State> {
     })
       .then(res => res.json())
       .then(res => {
-        const { models, relations } = res.data.viewer.project
+        if (res.data.viewer.project) {
+          const { models, relations } = res.data.viewer.project
 
-        this.setState({
-          serviceInformation: {
-            relations: relations.edges.map(edge => edge.node),
-            models: models.edges.map(edge => edge.node),
-          },
-        })
+          this.setState({
+            serviceInformation: {
+              relations: relations.edges.map(edge => edge.node),
+              models: models.edges.map(edge => edge.node),
+            },
+          })
+        } else {
+          /* tslint:disable-next-line */
+          console.error('Error while fetching service information', res)
+        }
       })
   }
 
@@ -533,9 +529,18 @@ export class Playground extends React.PureComponent<Props & DocsState, State> {
         ...headers,
       },
       body: JSON.stringify({ query: introspectionQuery }),
-    }).then(response => {
-      return response.json()
     })
+      .then(response => {
+        return response.json()
+      })
+      .catch(e => {
+        this.setState({
+          response: {
+            date: `Error: Could not fetch schema from ${endpointUrl}. Make sure the url is correct.`,
+            time: new Date(),
+          },
+        })
+      })
   }
 
   render() {
@@ -549,7 +554,6 @@ export class Playground extends React.PureComponent<Props & DocsState, State> {
         'The "Select User" Popup is open, but no admin token is provided.',
       )
     }
-    const selectedSession = sessions[selectedSessionIndex]
     const selectedEndpointUrl = isEndpoint
       ? location.href
       : this.getSimpleEndpoint()
@@ -693,37 +697,70 @@ export class Playground extends React.PureComponent<Props & DocsState, State> {
               isGraphcool={isGraphcoolUrl}
             />}
           {this.props.adminAuthToken &&
-            <SelectUserPopup
-              isOpen={this.state.selectUserOpen}
-              onRequestClose={this.handleCloseSelectUser}
-              adminAuthToken={this.props.adminAuthToken}
-              userFields={this.state.userFields}
-              onSelectUser={this.handleUserSelection}
-              endpointUrl={this.getSimpleEndpoint()}
-            />}
+            this.state.selectUserOpen &&
+            this.renderUserPopup()}
           {this.state.codeGenerationPopupOpen &&
-            <CodeGenerationPopup
-              endpointUrl={selectedEndpointUrl}
-              isOpen={this.state.codeGenerationPopupOpen}
-              onRequestClose={this.handleCloseCodeGeneration}
-              query={selectedSession.query}
-            />}
+            this.renderCodeGenerationPopup()}
         </div>
       </ThemeProvider>
     )
   }
 
+  renderUserPopup() {
+    return (
+      <SelectUserPopup
+        isOpen={this.state.selectUserOpen}
+        onRequestClose={this.handleCloseSelectUser}
+        adminAuthToken={this.props.adminAuthToken!}
+        userFields={this.state.userFields}
+        onSelectUser={this.handleUserSelection}
+        endpointUrl={this.getSimpleEndpoint()}
+      />
+    )
+  }
+
+  renderCodeGenerationPopup() {
+    const { sessions, selectedSessionIndex } = this.state
+    const { isEndpoint } = this.props
+    const selectedSession = sessions[selectedSessionIndex]
+    const selectedEndpointUrl = isEndpoint
+      ? location.href
+      : this.getSimpleEndpoint()
+    return (
+      <CodeGenerationPopup
+        endpointUrl={selectedEndpointUrl}
+        isOpen={this.state.codeGenerationPopupOpen}
+        onRequestClose={this.handleCloseCodeGeneration}
+        query={selectedSession.query}
+      />
+    )
+  }
+
+  getDefaultPermissionQuery(session: PermissionSession) {
+    const modelName = session.relationName
+      ? this.state.serviceInformation!.relations.find(
+          r => r.name === session.relationName,
+        )!.leftModel.name
+      : session.modelName
+    const operationName = session.modelOperation || session.relationName
+    return `\
+query ${operationName} {
+  Some${modelName}Exists
+}`
+  }
+
   handleNewPermissionTab = (permissionSession: PermissionSession) => {
+    const query = this.getDefaultPermissionQuery(permissionSession)
     const newSession = Immutable({
       id: cuid(),
       selectedViewer: 'ADMIN',
-      query: '',
+      query,
       variables: '',
       result: '',
       operationName: undefined,
       hasQuery: false,
       permission: permissionSession,
-      queryTypes: getQueryTypes(''),
+      queryTypes: getQueryTypes(query),
       starred: false,
     })
     this.setState(state => {
@@ -1063,6 +1100,9 @@ export class Playground extends React.PureComponent<Props & DocsState, State> {
 
   private createSession = (session?: Session) => {
     let newSession
+    const currentActiveSession =
+      this.state && this.state.sessions[this.state.selectedSessionIndex]
+    const headers = currentActiveSession ? currentActiveSession.headers : []
     if (session) {
       newSession = Immutable.set(session, 'id', cuid())
     } else {
@@ -1084,6 +1124,7 @@ export class Playground extends React.PureComponent<Props & DocsState, State> {
         hasQuery: false,
         queryTypes: getQueryTypes(query),
         starred: false,
+        headers,
       })
     }
 
@@ -1201,18 +1242,37 @@ export class Playground extends React.PureComponent<Props & DocsState, State> {
   }
 
   private getSystemEndpoint() {
-    return `${this.state.httpApiPrefix}/system`
+    return `${this.httpApiPrefix}/system`
+  }
+
+  get httpApiPrefix() {
+    return this.props.endpoint.match(/(https?:\/\/.*?)\//)![1]
+  }
+
+  get wsApiPrefix() {
+    const { endpoint } = this.props
+    const isDev = endpoint.indexOf('dev.graph.cool') > -1
+    const isLocalhost = endpoint.indexOf('localhost') > -1
+
+    // tslint:disable-next-line
+    if (isLocalhost) {
+      return 'ws://localhost:8085/v1'
+    } else if (isDev) {
+      return 'wss://dev.subscriptions.graph.cool/v1'
+    } else {
+      return 'wss://subscriptions.graph.cool/v1'
+    }
   }
 
   private getWSEndpoint() {
+    if (this.props.subscriptionsEndpoint) {
+      return this.props.subscriptionsEndpoint
+    }
     const projectId =
       this.props.projectId ||
       (this.props.endpoint.includes('graph.cool') &&
         this.props.endpoint.split('/').slice(-1)[0])
-    return (
-      this.props.subscriptionsEndpoint ||
-      `${this.state.wsApiPrefix}/${projectId}`
-    )
+    return `${this.wsApiPrefix}/${projectId}`
   }
 
   private addToHistory(session: Session) {
@@ -1348,12 +1408,6 @@ export class Playground extends React.PureComponent<Props & DocsState, State> {
       session.headers.forEach(header => {
         headers[header.name] = header.value
       })
-    }
-
-    if (session.selectedViewer === 'ADMIN' && this.state.adminAuthToken) {
-      headers.Authorization = `Bearer ${this.state.adminAuthToken}`
-    } else if (session.selectedViewer === 'USER' && session.selectedUserToken) {
-      headers.Authorization = `Bearer ${session.selectedUserToken}`
     }
 
     return fetch(endpoint, {
