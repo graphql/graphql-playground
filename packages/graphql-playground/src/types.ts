@@ -23,12 +23,13 @@ export interface Session {
   subscriptionId?: string
   headers?: any[]
   permission?: PermissionSession
+  hasChanged?: boolean
+  absolutePath?: string
 }
 
 export interface PermissionSession {
   relationName?: string
   modelName?: string
-  modelOperation?: string
 }
 
 export interface QueryTypes {

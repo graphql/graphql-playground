@@ -611,6 +611,7 @@ export class GraphQLEditor extends React.PureComponent<Props, State> {
                 {this.props.isGraphcoolUrl &&
                   this.props.showSelectUser &&
                   this.props.showViewAs &&
+                  !this.props.permission &&
                   <ResultHeader
                     showViewAs={this.props.showViewAs}
                     showSelectUser={this.props.showSelectUser}
@@ -1402,25 +1403,23 @@ export class GraphQLEditor extends React.PureComponent<Props, State> {
       const model = serviceInformation.models.find(
         m => m.name === permission.modelName,
       )!
-      return model[
-        permission.modelOperation as any
-      ] as PermissionQueryArgument[]
+      if (model) {
+        return model.update as PermissionQueryArgument[]
+      }
     }
     if (permission.relationName && permission.relationName.length > 0) {
-      return serviceInformation.relations.find(
+      const relation = serviceInformation.relations.find(
         r => r.name === permission.relationName,
       )!.permissionQueryArguments
+      if (relation) {
+        return relation
+      }
     }
     return []
   }
 
   private getVariables() {
-    const { permission } = this.props
-    let args = this.getPermissionQueryArguments()
-
-    if (permission!.modelOperation === 'CREATE') {
-      args = args.filter(arg => arg.name !== '$node_id')
-    }
+    const args = this.getPermissionQueryArguments()
 
     const variables = groupBy(args, arg => arg.group)
     return variables

@@ -1,7 +1,7 @@
-import { combineReducers } from 'redux'
+import { combineReducers, Reducer } from 'redux'
 import graphiqlDocs from './graphiql-docs'
 
-const combinedReducers = combineReducers({
+const combinedReducers: Reducer<any> = combineReducers({
   graphiqlDocs,
 })
 

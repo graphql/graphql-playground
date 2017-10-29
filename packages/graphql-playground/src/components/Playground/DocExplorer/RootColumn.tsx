@@ -4,7 +4,7 @@ import SearchResults from './SearchResults'
 import GraphDocsRoot from './GraphDocsRoot'
 import SearchBox from './SearchBox'
 
-interface Props {
+export interface Props {
   searchValue: string
   schema: any
   width: number

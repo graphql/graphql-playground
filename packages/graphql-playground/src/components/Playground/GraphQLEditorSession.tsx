@@ -4,7 +4,7 @@ import { GraphQLEditor } from './GraphQLEditor'
 import { Header } from './HttpHeaders/HttpHeaders'
 import { Viewer } from '../Playground'
 
-interface Props {
+export interface Props {
   session: Session
   index: number
   onRef: (index: number, ref: any) => void
@@ -47,7 +47,7 @@ export default class GraphQLEditorSession extends React.PureComponent<
       session,
       isGraphcoolUrl,
       schemaCache,
-      // adminAuthToken,
+      adminAuthToken,
       isEndpoint,
       storage,
       responses,
@@ -68,7 +68,7 @@ export default class GraphQLEditorSession extends React.PureComponent<
         fetcher={this.fetcher}
         showQueryTitle={false}
         showResponseTitle={false}
-        showViewAs={false /*!isEndpoint && Boolean(adminAuthToken)*/}
+        showViewAs={Boolean(adminAuthToken)}
         showSelectUser={Boolean(this.props.adminAuthToken)}
         showEndpoints={!isEndpoint}
         showDownloadJsonButton={true}

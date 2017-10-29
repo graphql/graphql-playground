@@ -1,7 +1,7 @@
 import * as React from 'react'
 import * as Modal from 'react-modal'
 
-interface Props {
+export interface Props {
   onRequestClose: () => void
   width?: number
   closeInside?: boolean

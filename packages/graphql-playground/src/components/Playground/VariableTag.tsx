@@ -2,7 +2,7 @@ import * as React from 'react' // tslint:disable-line
 import * as cx from 'classnames'
 import { PermissionQueryArgument } from '../../types'
 
-interface Props {
+export interface Props {
   variable: PermissionQueryArgument
   active: boolean
   onClick?: () => void
@@ -18,7 +18,7 @@ const VariableTag = ({ onClick, variable, active, className }: Props) => {
     >
       <style jsx={true}>{`
         .variable-tag {
-          @p: .br2, .white30, .flex, .itemsCenter, .pointer;
+          @p: .br2, .white30, .flex, .itemsCenter;
           padding: 6px 6px 6px 9px;
         }
         .variable-tag.active {

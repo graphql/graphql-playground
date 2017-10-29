@@ -79,7 +79,7 @@ export const TabBar = withTheme<
 
           .tabs {
             @p: .mt16, .ml16, .flex, .itemsCenter, .z0, .overflowAuto;
-            margin-right: 200px;
+            margin-right: 240px;
           }
 
           .tabs.isApp {

@@ -3,10 +3,16 @@ import { PermissionQueryArgument } from '../../types'
 import { Icon, $v } from 'graphcool-styles'
 import VariableTag from './VariableTag'
 
-interface Props {
+export interface Props {
   variables: any
   selectedVariableNames: string[]
   onToggleVariableSelection: (variable: PermissionQueryArgument) => void
+}
+
+const operations = {
+  'Current Node': ['read', 'update', 'delete'],
+  'Existing Scalar Values': ['read', 'update', 'delete'],
+  'Scalar Values': ['update', 'create'],
 }
 
 export default class PermissionVariables extends React.Component<Props, {}> {
@@ -39,6 +45,12 @@ export default class PermissionVariables extends React.Component<Props, {}> {
           h3 {
             @p: .white40, .fw6, .ttu, .mt0, .mb25;
           }
+          .operation {
+            @p: .white80, .fw6, .f12;
+          }
+          .operation + .operation {
+            @p: .ml6;
+          }
         `}</style>
         <h3>Permission Variables</h3>
         {this.sortVariables(Object.keys(variables)).map(group =>
@@ -46,6 +58,16 @@ export default class PermissionVariables extends React.Component<Props, {}> {
             <div className="variable-title">
               <span>
                 {group}
+                {operations[group] && [
+                  ' ( ',
+                  operations[group].map((operation, index) =>
+                    <span className="operation">
+                      {operation}
+                      {index < operations[group].length - 1 ? ',' : ''}
+                    </span>,
+                  ),
+                  ' )',
+                ]}
               </span>
               {group === 'Authenticated User' &&
                 <Icon
@@ -64,7 +86,6 @@ export default class PermissionVariables extends React.Component<Props, {}> {
                 active={this.props.selectedVariableNames.includes(
                   variable.name,
                 )}
-                onClick={this.toggleVariableSelection(variable)}
                 className="tag"
                 variable={variable}
               />,
@@ -74,10 +95,10 @@ export default class PermissionVariables extends React.Component<Props, {}> {
       </div>
     )
   }
-
-  private toggleVariableSelection = variable => () => {
-    this.props.onToggleVariableSelection(variable)
-  }
+  //
+  // private toggleVariableSelection = variable => () => {
+  //   this.props.onToggleVariableSelection(variable)
+  // }
 
   private sortVariables(categories) {
     const cats = categories.slice()

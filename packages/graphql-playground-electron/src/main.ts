@@ -7,6 +7,7 @@ import {
   globalShortcut,
   ipcMain,
   Menu,
+  protocol,
 } from 'electron'
 import * as electronLocalShortcut from 'electron-localshortcut'
 import { autoUpdater } from 'electron-updater'
@@ -23,58 +24,37 @@ function getFocusedWindow(): any | null {
   return BrowserWindow.getFocusedWindow()
 }
 
-function manuallyCheckForUpdates() {
-  autoUpdater.on('update-available', () => {
-    dialog.showMessageBox(
-      {
-        type: 'info',
-        title: 'Found Updates',
-        message: 'Found updates, do you want update now?',
-        buttons: ['Sure', 'No'],
-      },
-      buttonIndex => {
-        if (buttonIndex === 0) {
-          autoUpdater.downloadUpdate()
-        }
-      },
-    )
-  })
+// function manuallyCheckForUpdates() {
+//   autoUpdater.on('update-available', () => {
+//     dialog.showMessageBox(
+//       {
+//         type: 'info',
+//         title: 'Found Updates',
+//         message: 'Found updates, do you want update now?',
+//         buttons: ['Sure', 'No'],
+//       },
+//       buttonIndex => {
+//         if (buttonIndex === 0) {
+//           autoUpdater.downloadUpdate()
+//         }
+//       },
+//     )
+//   })
+//
+//   autoUpdater.on('update-not-available', () => {
+//     dialog.showMessageBox({
+//       title: 'No Updates',
+//       message: 'Current version is up-to-date.',
+//     })
+//   })
+//
+//   autoUpdater.checkForUpdates()
+// }
 
-  autoUpdater.on('update-not-available', () => {
-    dialog.showMessageBox({
-      title: 'No Updates',
-      message: 'Current version is up-to-date.',
-    })
-  })
-
-  autoUpdater.checkForUpdates()
-}
-
-function prevTab() {
+function send(channel: string, arg: string) {
   const focusedWindow = getFocusedWindow()
   if (focusedWindow) {
-    focusedWindow.webContents.send('Tab', 'Prev')
-  }
-}
-
-function nextTab() {
-  const focusedWindow = getFocusedWindow()
-  if (focusedWindow) {
-    focusedWindow.webContents.send('Tab', 'Next')
-  }
-}
-
-function newTab() {
-  const focusedWindow = getFocusedWindow()
-  if (focusedWindow) {
-    focusedWindow.webContents.send('Tab', 'New')
-  }
-}
-
-function closeTab() {
-  const focusedWindow = getFocusedWindow()
-  if (focusedWindow) {
-    focusedWindow.webContents.send('Tab', 'Close')
+    focusedWindow.webContents.send(channel, arg)
   }
 }
 
@@ -92,7 +72,7 @@ function initAutoUpdate() {
     )
   })
 
-  autoUpdater.checkForUpdates()
+  // autoUpdater.checkForUpdates()
 }
 
 function showUpdateNotification(it) {
@@ -162,11 +142,11 @@ function createWindow() {
   })
 
   electronLocalShortcut.register(newWindow, 'Cmd+Shift+]', () => {
-    nextTab()
+    send('Tab', 'Next')
   })
 
   electronLocalShortcut.register(newWindow, 'Cmd+Shift+[', () => {
-    prevTab()
+    send('Tab', 'Prev')
   })
 
   return newWindow
@@ -182,10 +162,10 @@ const template: any = [
         label: 'About GraphQL Playground',
         selector: 'orderFrontStandardAboutPanel:',
       },
-      {
-        label: 'Check For Updates',
-        click: () => manuallyCheckForUpdates(),
-      },
+      // {
+      //   label: 'Check For Updates',
+      //   click: () => manuallyCheckForUpdates(),
+      // },
       { type: 'separator' },
       {
         label: 'Quit',
@@ -207,14 +187,24 @@ const template: any = [
       {
         label: 'New Tab',
         accelerator: 'Cmd+T',
-        click: () => newTab(),
+        click: () => send('Tab', 'New'),
       },
       { type: 'separator' },
       { label: 'Close Window', accelerator: 'Cmd+Shift+W' },
       {
         label: 'Close Tab',
         accelerator: 'Cmd+W',
-        click: () => closeTab(),
+        click: () => send('Tab', 'Close'),
+      },
+      {
+        label: 'Open File',
+        accelerator: 'Cmd+O',
+        click: () => send('File', 'Open'),
+      },
+      {
+        label: 'Save File',
+        accelerator: 'Cmd+S',
+        click: () => send('File', 'Save'),
       },
     ],
   },
@@ -240,12 +230,12 @@ const template: any = [
       {
         label: 'Next Tab',
         accelerator: 'Cmd+Alt+Right',
-        click: () => nextTab(),
+        click: () => send('Tab', 'Next'),
       },
       {
         label: 'Previous Tab',
         accelerator: 'Cmd+Alt+Left',
-        click: () => prevTab(),
+        click: () => send('Tab', 'Next'),
       },
       {
         label: 'Minimize',
@@ -268,10 +258,23 @@ const template: any = [
 // Some APIs can only be used after this event occurs.
 app.on('ready', () => {
   createWindow()
-  initAutoUpdate()
+  // initAutoUpdate()
 
   const menu = Menu.buildFromTemplate(template)
   Menu.setApplicationMenu(menu)
+
+  ipcMain.on('get-file-data', event => {
+    console.log('get-file-data', event)
+    // this.fileAdded(event)
+  })
+
+  ipcMain.on('load-file-content', (event, filePath) => {
+    console.log('load-file-content', event, filePath)
+  })
+
+  protocol.registerFileProtocol('file:', (request, filePath) => {
+    console.log('file:', request, filePath)
+  })
 })
 
 // Quit when all windows are closed.

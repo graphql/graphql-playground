@@ -1,6 +1,6 @@
 import * as React from 'react'
 
-interface Props {
+export interface Props {
   operation: any
   onMouseOver: (operation: any) => void
   onMouseOut: () => void

@@ -1,7 +1,6 @@
 {
   "compilerOptions": {
     "outDir": "build/dist",
-    "module": "commonjs",
     "target": "es5",
     "lib": ["esnext", "dom"],
     "sourceMap": true,
@@ -13,7 +12,8 @@
     "noImplicitAny": false,
     "strictNullChecks": true,
     "suppressImplicitAnyIndexErrors": true,
-    "noUnusedLocals": true
+    "noUnusedLocals": true,
+    "declaration": true
   },
   "exclude": [
     "node_modules",

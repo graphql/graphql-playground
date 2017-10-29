@@ -2,7 +2,7 @@ import * as React from 'react'
 import * as cn from 'classnames'
 import { Icon, $v } from 'graphcool-styles'
 
-interface Props {
+export interface Props {
   hideArrow?: boolean
   primary?: boolean
   button?: boolean

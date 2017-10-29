@@ -4,12 +4,12 @@ import { throttle } from 'lodash'
 import * as cn from 'classnames'
 import { Button } from './Button'
 
-interface Props {
+export interface Props {
   onRequestClose: (endpoint: string) => void
   endpoint: string
 }
 
-interface State {
+export interface State {
   endpoint: string
   valid?: boolean
 }

@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { remote, ipcRenderer } from 'electron'
+import { remote, ipcRenderer, ipcMain, protocol } from 'electron'
 import { Provider } from 'react-redux'
 import { Icon, $v } from 'graphcool-styles'
 import * as cx from 'classnames'
@@ -11,9 +11,17 @@ import { createNewWindow } from './utils'
 import createStore from './createStore'
 import InitialView from './InitialView/InitialView'
 import * as minimist from 'minimist'
+import * as fs from 'fs'
+import * as path from 'path'
+import * as os from 'os'
+import * as yaml from 'js-yaml'
+import * as findUp from 'find-up'
+import { PermissionSession } from 'graphql-playground/lib/types'
+
+const { dialog } = remote
 
 const store = createStore()
-declare var p: IPlayground
+// declare var p: IPlayground
 
 interface State {
   endpoint?: string
@@ -50,6 +58,10 @@ export default class ElectronApp extends React.Component<{}, State> {
     ;(global as any).r = remote
   }
 
+  fileAdded = event => {
+    // console.log(event)
+  }
+
   getArgs(): any {
     const argv = remote.process.argv
     const args = minimist(argv.slice(1))
@@ -57,7 +69,7 @@ export default class ElectronApp extends React.Component<{}, State> {
     return {
       endpoint: args.endpoint,
       subscriptionsEndpoint: args['subscriptions-endpoint'],
-      platformToken: args['platform-token'],
+      platformToken: args['platform-token'] || localStorage.platformToken,
     }
   }
 
@@ -65,17 +77,17 @@ export default class ElectronApp extends React.Component<{}, State> {
     this.setState({ endpoint, openInitialView: false } as State)
   }
 
-  handleSelectFolder = (path: string) => {
+  handleSelectFolder = (folderPath: string) => {
     try {
-      // Get config from path
-      const config = getGraphQLConfig(path)
+      // Get config from folderPath
+      const config = getGraphQLConfig(folderPath)
       let projects = config.getProjects()
       // If no multi projects
       if (!projects) {
         projects = {}
         const project = config.getProjectConfig()
         // Take the folder name as a key
-        const pathSplit = path.split('/')
+        const pathSplit = folderPath.split('/')
         const folderName = pathSplit[pathSplit.length - 1]
         projects[folderName] = project
       }
@@ -130,40 +142,197 @@ export default class ElectronApp extends React.Component<{}, State> {
   }
 
   nextTab = () => {
-    if (p) {
-      p.nextTab()
+    if (this.playground) {
+      this.playground.nextTab()
     }
   }
 
   prevTab = () => {
-    if (p) {
-      p.prevTab()
+    if (this.playground) {
+      this.playground.prevTab()
     }
   }
 
   newTab = () => {
-    if (p) {
-      ;(p as any).handleNewSession()
+    if (this.playground) {
+      ;(this.playground as any).handleNewSession()
     }
   }
 
   closeTab = () => {
-    if (p) {
-      if (!p.closeTab()) {
+    if (this.playground) {
+      if (!this.playground.closeTab()) {
         ipcRenderer.send('async', 'close')
       }
     }
   }
 
   componentDidMount() {
-    ipcRenderer.on('Tab', this.readMessage)
+    ipcRenderer.on('Tab', this.readTabMessage)
+    ipcRenderer.on('File', this.readFileMessage)
   }
 
   componentWillUnmount() {
-    ipcRenderer.removeListener('Tab', this.readMessage)
+    ipcRenderer.removeListener('Tab', this.readTabMessage)
+    ipcRenderer.removeListener('File', this.readFileMessage)
   }
 
-  readMessage = (error, message) => {
+  readFileMessage = (error, message) => {
+    switch (message) {
+      case 'Open':
+        this.openFile()
+        break
+      case 'Save':
+        this.saveFile()
+        break
+    }
+  }
+
+  openFile() {
+    dialog.showOpenDialog(
+      {
+        title: 'Choose a .graphql file to edit',
+        properties: ['openFile'],
+        // filters: [{
+        //   name: '*',
+        //   extensions: ['graphql']
+        // }]
+      },
+      fileNames => {
+        if (fileNames && fileNames.length > 0) {
+          const query = fs.readFileSync(fileNames[0], 'utf-8')
+
+          const rc = this.getGraphcoolRc()
+          if (rc && rc.platformToken) {
+            this.setState({ platformToken: rc.platformToken }, () => {
+              this.playground.fetchPermissionSchema()
+              this.playground.fetchServiceInformation()
+            })
+            localStorage.setItem('platformToken', rc.platformToken)
+          }
+
+          const permissionSession = this.getPermissionSessionForPath(
+            fileNames[0],
+          )
+
+          this.playground.newPermissionTab(
+            permissionSession,
+            path.basename(fileNames[0]),
+            fileNames[0],
+            query,
+          )
+        }
+      },
+    )
+  }
+
+  getSaveFileName(): Promise<string> {
+    return new Promise((resolve, reject) => {
+      dialog.showSaveDialog(
+        {
+          title: 'Save Permission Query',
+          filters: [
+            {
+              name: 'Permission File',
+              extensions: ['graphql'],
+            },
+          ],
+        },
+        (fileName: any) => {
+          resolve(fileName)
+        },
+      )
+    })
+  }
+
+  async saveFile() {
+    const session = this.playground.state.sessions[
+      this.playground.state.selectedSessionIndex
+    ]
+    ;(this.playground as any).setValueInSession(session.id, 'hasChanged', false)
+    const fileName =
+      (session as any).absolutePath || (await this.getSaveFileName())
+    // if (!(session as any).absolutePath) {
+    ;(this.playground as any).setValueInSession(
+      session.id,
+      'name',
+      path.basename(fileName),
+    )
+    ;(this.playground as any).setValueInSession(
+      session.id,
+      'absolutePath',
+      fileName,
+    )
+    // }
+    const query = session.query
+    fs.writeFileSync(fileName, query)
+  }
+
+  getPermissionSessionForPath(fileName: string): PermissionSession | null {
+    const graphcoolYml = this.getGraphcoolYml(fileName)
+    if (graphcoolYml) {
+      const { yml, ymlPath } = graphcoolYml
+      const ymlDir = path.dirname(ymlPath)
+      const permissionDefinition = yml.permissions.find(permission => {
+        if (permission.query && permission.query.includes('graphql')) {
+          const normalizedQuery = permission.query.split(':')[0]
+          const resolvedPath = path.join(ymlDir, normalizedQuery)
+          return resolvedPath === fileName
+        }
+        return false
+      })
+
+      if (permissionDefinition) {
+        const { operation } = permissionDefinition
+
+        const splitted = operation.split('.')
+        if (['create', 'read', 'update', 'delete'].indexOf(splitted[1]) > -1) {
+          return {
+            modelName: splitted[0],
+          }
+        } else {
+          return {
+            relationName: splitted[0],
+          }
+        }
+      }
+    }
+
+    return null
+  }
+
+  getGraphcoolYml(from: string): { ymlPath: string; yml: any } | null {
+    const ymlPath = findUp.sync('graphcool.yml', { cwd: from })
+    if (ymlPath) {
+      const file = fs.readFileSync(ymlPath)
+      try {
+        return {
+          yml: yaml.safeLoad(file),
+          ymlPath,
+        }
+      } catch (e) {
+        // console.error(e)
+      }
+    }
+
+    return null
+  }
+
+  getGraphcoolRc(): any | null {
+    const graphcoolRc = path.join(os.homedir(), '.graphcoolrc')
+    if (fs.existsSync(graphcoolRc)) {
+      const file = fs.readFileSync(graphcoolRc)
+      try {
+        return yaml.safeLoad(file)
+      } catch (e) {
+        // console.error(e)
+      }
+    }
+
+    return null
+  }
+
+  readTabMessage = (error, message) => {
     switch (message) {
       case 'Next':
         this.nextTab()
@@ -304,7 +473,7 @@ export default class ElectronApp extends React.Component<{}, State> {
                 </div>}
               <div className="playground">
                 <Playground
-                  ref={this.setRef}
+                  getRef={this.setRef}
                   endpoint={endpoint}
                   isApp={!projects}
                   onChangeEndpoint={this.handleChangeEndpoint}

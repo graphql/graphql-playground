@@ -66,6 +66,7 @@ export interface Props {
   shareUrl?: string
   session?: any
   onChangeSubscriptionsEndpoint?: (endpoint: string) => void
+  getRef?: (ref: Playground) => void
 }
 
 export interface State {
@@ -86,6 +87,7 @@ export interface State {
   theme: Theme
   autoReloadSchema: boolean
   useVim: boolean
+  userModelName: string
 
   shareAllTabs: boolean
   shareHttpHeaders: boolean
@@ -122,6 +124,7 @@ export class Playground extends React.PureComponent<Props & DocsState, State> {
     300,
     (sessionId: string, query: string) => {
       this.setValueInSession(sessionId, 'query', query)
+      this.setValueInSession(sessionId, 'hasChanged', true)
       this.updateQueryTypes(sessionId, query)
       if (
         this.props.onboardingStep === 'STEP3_UNCOMMENT_DESCRIPTION' &&
@@ -193,6 +196,7 @@ export class Playground extends React.PureComponent<Props & DocsState, State> {
       shareHistory: true,
       changed: false,
       response: undefined,
+      userModelName: 'User',
     }
 
     if (typeof window === 'object') {
@@ -202,6 +206,10 @@ export class Playground extends React.PureComponent<Props & DocsState, State> {
     }
     ;(global as any).p = this
     this.fetcher = this.fetcher.bind(this)
+
+    if (typeof this.props.getRef === 'function') {
+      this.props.getRef(this)
+    }
   }
 
   componentWillMount() {
@@ -417,8 +425,9 @@ export class Playground extends React.PureComponent<Props & DocsState, State> {
       field: pointer,
     }
   }
-  extractUserField(simpleSchema) {
-    const userSchema = simpleSchema.getType('User')
+  extractUserField(simpleSchema, userModelName?: string) {
+    const modelName = userModelName || this.state.userModelName
+    const userSchema = simpleSchema.getType(modelName)
     if (userSchema) {
       const userSchemaFields = userSchema.getFields()
       const userFields = Object.keys(userSchemaFields)
@@ -471,12 +480,17 @@ export class Playground extends React.PureComponent<Props & DocsState, State> {
     const headers = {
       Authorization: `Bearer ${this.props.adminAuthToken}`,
     }
-    this.fetchSchema(this.getPermissionEndpoint(), headers).then(schema => {
-      const permissionSchema = buildClientSchema(schema.data)
-      this.setState({
-        permissionSchema,
+    this.fetchSchema(this.getPermissionEndpoint(), headers)
+      .then(schema => {
+        const permissionSchema = buildClientSchema(schema.data)
+        this.setState({
+          permissionSchema,
+        })
       })
-    })
+      .catch(error => {
+        /* tslint:disable-next-line */
+        console.error(error)
+      })
   }
 
   fetchServiceInformation() {
@@ -503,12 +517,21 @@ export class Playground extends React.PureComponent<Props & DocsState, State> {
               relations: relations.edges.map(edge => edge.node),
               models: models.edges.map(edge => edge.node),
             },
+            userModelName: models.edges[0]!.node.name!,
           })
         } else {
           /* tslint:disable-next-line */
           console.error('Error while fetching service information', res)
         }
       })
+  }
+
+  getModelNames(): string[] {
+    if (this.state.serviceInformation) {
+      return this.state.serviceInformation.models.map(m => m.name)
+    }
+
+    return []
   }
 
   extractServiceId() {
@@ -521,7 +544,6 @@ export class Playground extends React.PureComponent<Props & DocsState, State> {
 
   fetchSchema(endpointUrl: string, headers: any = {}) {
     return fetch(endpointUrl, {
-      // tslint:disable-line
       method: 'post',
       headers: {
         'Content-Type': 'application/json',
@@ -715,8 +737,23 @@ export class Playground extends React.PureComponent<Props & DocsState, State> {
         userFields={this.state.userFields}
         onSelectUser={this.handleUserSelection}
         endpointUrl={this.getSimpleEndpoint()}
+        modelNames={this.getModelNames()}
+        userModelName={this.state.userModelName}
+        onChangeUserModelName={this.handleUserModelChange}
       />
     )
+  }
+
+  handleUserModelChange = (userModelName: string) => {
+    const userFields = this.extractUserField(
+      this.state.schemaCache,
+      userModelName,
+    )
+
+    this.setState({
+      userModelName,
+      userFields,
+    })
   }
 
   renderCodeGenerationPopup() {
@@ -742,11 +779,42 @@ export class Playground extends React.PureComponent<Props & DocsState, State> {
           r => r.name === session.relationName,
         )!.leftModel.name
       : session.modelName
-    const operationName = session.modelOperation || session.relationName
+    const operationName = session.relationName || `permit${session.modelName}`
     return `\
 query ${operationName} {
   Some${modelName}Exists
 }`
+  }
+
+  newPermissionTab = (
+    permissionSession: PermissionSession,
+    name: string,
+    absolutePath: string,
+    query: string,
+  ) => {
+    const newSession = Immutable({
+      id: cuid(),
+      selectedViewer: 'ADMIN',
+      name,
+      query,
+      variables: '',
+      result: '',
+      operationName: undefined,
+      hasChanged: true,
+      hasQuery: false,
+      permission: permissionSession,
+      queryTypes: getQueryTypes(query),
+      starred: false,
+      absolutePath,
+    })
+    this.setState(state => {
+      return {
+        ...state,
+        sessions: state.sessions.concat(newSession),
+        selectedSessionIndex: state.sessions.length,
+        changed: true,
+      }
+    })
   }
 
   handleNewPermissionTab = (permissionSession: PermissionSession) => {
@@ -873,6 +941,29 @@ query ${operationName} {
       }
     })
   }
+  public setValueInSession(
+    sessionId: string,
+    key: string,
+    value: any,
+    cb?: () => void,
+  ) {
+    this.setState(
+      state => {
+        // TODO optimize the lookup with a lookup table
+        const i = state.sessions.findIndex(s => s.id === sessionId)
+        return {
+          ...state,
+          sessions: Immutable.setIn(state.sessions, [i, key], value),
+          changed: true,
+        }
+      },
+      () => {
+        if (typeof cb === 'function') {
+          cb()
+        }
+      },
+    )
+  }
 
   private autofillMutation = () => {
     const sessionId = this.state.sessions[this.state.selectedSessionIndex].id
@@ -911,13 +1002,15 @@ query ${operationName} {
 
     const query = `
       mutation {
-        signinClientUser(input: {
-          projectId: "${this.props.projectId}"
-          clientUserId: "${user.id}"
-          clientMutationId: "asd"
+        generateNodeToken(input: {
+          rootToken: "${this.props.adminAuthToken}"
+          serviceId: "${this.extractServiceId()}"
+          nodeId: "${user.id}"
+          modelName: "${this.state.userModelName}"
+          clientMutationId: ""
         }) {
-          token
           clientMutationId
+          token
         }
       }
     `
@@ -932,18 +1025,26 @@ query ${operationName} {
     })
       .then(res => res.json())
       .then(res => {
-        const { token } = res.data.signinClientUser
+        const { token } = res.data.generateNodeToken
 
         if (token && this.state.selectUserSessionId) {
+          const session = this.state.sessions[this.state.selectedSessionIndex]
+          let newHeaders = session.headers
+            ? session.headers.filter(h => h.name !== 'Authorization')
+            : []
+          newHeaders = newHeaders.concat({
+            name: 'Authorization',
+            value: `Bearer ${token}`,
+          })
           this.setValueInSession(
             this.state.selectUserSessionId,
-            'selectedUserToken',
-            token,
+            'headers',
+            newHeaders,
             () => {
-              const session = this.state.sessions[
+              const concreteSession = this.state.sessions[
                 this.state.selectedSessionIndex
               ]
-              this.resetSubscription(session)
+              this.resetSubscription(concreteSession)
             },
           )
         }
@@ -1168,7 +1269,8 @@ query ${operationName} {
   }
 
   private handleViewerChange = (sessionId: string, viewer: Viewer) => {
-    this.setValueInSession(sessionId, 'selectedViewer', viewer, () => {
+    const handleUser = () => {
+      const session = this.state.sessions.find(sess => sess.id === sessionId)!
       if (viewer === 'USER') {
         // give the user some time to realize whats going on
         setTimeout(() => {
@@ -1181,12 +1283,30 @@ query ${operationName} {
         }, 300)
       }
 
-      const session = this.state.sessions.find(sess => sess.id === sessionId)
-
       if (session) {
         this.resetSubscription(session)
       } else {
         throw new Error('session not found for viewer change')
+      }
+    }
+
+    this.setValueInSession(sessionId, 'selectedViewer', viewer, () => {
+      const session = this.state.sessions.find(sess => sess.id === sessionId)!
+      let headers: any = session.headers
+        ? session.headers.filter(h => h.name !== 'Authorization')
+        : []
+      if (viewer === 'ADMIN') {
+        headers = headers.concat({
+          name: 'Authorization',
+          value: `Bearer ${this.props.adminAuthToken}`,
+        })
+      }
+      if (viewer === 'ADMIN' || viewer === 'EVERYONE') {
+        this.setValueInSession(sessionId, 'headers', headers, () => {
+          handleUser()
+        })
+      } else {
+        handleUser()
       }
     })
   }
@@ -1221,32 +1341,8 @@ query ${operationName} {
     })
   }
 
-  private setValueInSession(
-    sessionId: string,
-    key: string,
-    value: any,
-    cb?: () => void,
-  ) {
-    this.setState(
-      state => {
-        // TODO optimize the lookup with a lookup table
-        const i = state.sessions.findIndex(s => s.id === sessionId)
-        return {
-          ...state,
-          sessions: Immutable.setIn(state.sessions, [i, key], value),
-          changed: true,
-        }
-      },
-      () => {
-        if (typeof cb === 'function') {
-          cb()
-        }
-      },
-    )
-  }
-
   private isGraphcoolUrl(endpoint) {
-    return endpoint.startsWith('https://api.graph.cool')
+    return endpoint.includes('api.graph.cool')
   }
 
   private getSimpleEndpoint() {

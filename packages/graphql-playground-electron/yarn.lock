@@ -2964,7 +2964,7 @@ find-up@^1.0.0, find-up@^1.1.2:
     path-exists "^2.0.0"
     pinkie-promise "^2.0.0"
 
-find-up@^2.0.0:
+find-up@^2.0.0, find-up@^2.1.0:
   version "2.1.0"
   resolved "https://registry.yarnpkg.com/find-up/-/find-up-2.1.0.tgz#45d1b7e506c717ddd482775a2b77920a3c0c57a7"
   dependencies:
@@ -3304,9 +3304,9 @@ graphql-language-service-utils@0.0.17:
     graphql "^0.10.1"
     graphql-language-service-types "0.0.21"
 
-graphql-playground@^1.0.19:
-  version "1.0.19"
-  resolved "https://registry.yarnpkg.com/graphql-playground/-/graphql-playground-1.0.19.tgz#b524771fc175346c4fac2173cd4d4adf07c013e5"
+graphql-playground@1.0.32:
+  version "1.0.32"
+  resolved "https://registry.yarnpkg.com/graphql-playground/-/graphql-playground-1.0.32.tgz#c9031f0daab617dc8ceef6ce0f377ecf235ca968"
   dependencies:
     calculate-size "^1.1.1"
     classnames "^2.2.5"

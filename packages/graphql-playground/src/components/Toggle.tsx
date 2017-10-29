@@ -1,7 +1,7 @@
 import * as React from 'react'
 import * as cn from 'classnames'
 
-interface ToggleProps {
+export interface ToggleProps {
   choices: string[]
   onChange: (choice: string, i: number) => void
   activeChoice: string

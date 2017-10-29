@@ -26,9 +26,10 @@ const ResultHeader = ({
           .justifyBetween,
           .itemsCenter,
           .relative,
-          .pt25,
-          .mh25,
+          .mr25,
           .pl16;
+        padding-top: 13px;
+        margin-left: 38px;
         height: 75px;
         &.subscription {
           &:after {

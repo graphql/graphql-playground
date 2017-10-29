@@ -1,4 +1,4 @@
-import { compose, createStore } from 'redux'
+import { compose, createStore, Store } from 'redux'
 import persistState, { mergePersistedState } from 'redux-localstorage'
 import filter from 'redux-localstorage-filter'
 import * as adapter from 'redux-localstorage/lib/adapters/localStorage'
@@ -31,4 +31,5 @@ const enhancer = compose(persistState(storage, 'graphiql'))
 
 const functions = [enhancer]
 
-export default () => createStore(reducer, compose.apply(null, functions))
+export default (): Store<any> =>
+  createStore(reducer, compose.apply(null, functions))

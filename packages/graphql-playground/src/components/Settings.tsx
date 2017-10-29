@@ -6,7 +6,7 @@ import Tooltip from './Tooltip'
 import { Theme } from './Playground'
 import * as cn from 'classnames'
 
-interface Props {
+export interface Props {
   theme: Theme
   onToggleTheme: () => void
   onToggleReload: () => void
@@ -20,7 +20,7 @@ interface Props {
   onChangeSubscriptionsEndpoint?: (endpoint: string) => void
 }
 
-interface State {
+export interface State {
   open: boolean
   endpointUrl: string
 }

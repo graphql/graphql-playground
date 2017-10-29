@@ -8,7 +8,7 @@ import * as cn from 'classnames'
 import { Button } from './Button'
 import Copy from './Copy'
 
-interface Props {
+export interface Props {
   theme: Theme
   allTabs: boolean
   httpHeaders: boolean
@@ -21,7 +21,7 @@ interface Props {
   reshare: boolean
 }
 
-interface State {
+export interface State {
   open: boolean
 }
 

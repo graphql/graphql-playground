@@ -8,18 +8,17 @@ import { PermissionSession, ServiceInformation } from '../../types'
 import TypeChooser from './TypeChooser'
 import { Button } from '../Button'
 
-interface Props {
+export interface Props {
   theme: Theme
   serviceInformation: ServiceInformation
   onNewPermissionTab: (permissionTab: PermissionSession) => void
 }
 
-interface State {
+export interface State {
   open: boolean
   modelSelected: boolean
   modelName: string
   relationName: string
-  modelOperation: string
 }
 
 export default class NewPermissionTab extends React.Component<Props, State> {
@@ -38,17 +37,10 @@ export default class NewPermissionTab extends React.Component<Props, State> {
         props.serviceInformation.relations.length > 0
           ? props.serviceInformation.relations[0].name
           : '',
-      modelOperation: 'create',
     }
   }
   render() {
-    const {
-      open,
-      modelSelected,
-      modelName,
-      relationName,
-      modelOperation,
-    } = this.state
+    const { open, modelSelected, modelName, relationName } = this.state
     const { theme, serviceInformation } = this.props
     return (
       <div className="settings">
@@ -221,24 +213,6 @@ export default class NewPermissionTab extends React.Component<Props, State> {
                           </select>
                           <div className="arrow">▾</div>
                         </div>
-                        <div className="select">
-                          <select
-                            value={modelOperation}
-                            onChange={this.handleModelOperationChange}
-                          >
-                            {[
-                              'create',
-                              'read',
-                              'update',
-                              'delete',
-                            ].map(operation =>
-                              <option value={operation} key={operation}>
-                                {operation}
-                              </option>,
-                            )}
-                          </select>
-                          <div className="arrow">▾</div>
-                        </div>
                       </div>
                     </div>
                   : <div className="row">
@@ -278,10 +252,6 @@ export default class NewPermissionTab extends React.Component<Props, State> {
     this.setState({ relationName: e.target.value })
   }
 
-  private handleModelOperationChange = e => {
-    this.setState({ modelOperation: e.target.value })
-  }
-
   private newTab = () => {
     this.toggleTooltip()
     this.props.onNewPermissionTab({
@@ -289,9 +259,6 @@ export default class NewPermissionTab extends React.Component<Props, State> {
         ? undefined
         : this.state.relationName,
       modelName: this.state.modelSelected ? this.state.modelName : undefined,
-      modelOperation: this.state.modelSelected
-        ? this.state.modelOperation
-        : undefined,
     })
   }
 

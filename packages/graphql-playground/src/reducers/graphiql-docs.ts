@@ -12,7 +12,7 @@ import {
 } from '../actions/graphiql-docs'
 import { columnWidth } from '../constants'
 
-type GraphiqlDocsAction =
+export type GraphiqlDocsAction =
   | AddStackAction
   | ToggleDocsAction
   | ChangeWidthDocsAction

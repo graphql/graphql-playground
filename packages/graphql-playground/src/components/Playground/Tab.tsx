@@ -3,7 +3,7 @@ import { Session } from '../../types'
 import Icon from 'graphcool-styles/dist/components/Icon/Icon'
 import { $v } from 'graphcool-styles'
 
-interface Props {
+export interface Props {
   session: Session
   index: number
   onSelectSession: (session: Session) => void
@@ -14,11 +14,17 @@ interface Props {
   theme?: string
 }
 
-export default class Tab extends React.PureComponent<Props, {}> {
+export interface State {
+  overCross: boolean
+}
+
+export default class Tab extends React.PureComponent<Props, State> {
   constructor(props) {
     super(props)
 
-    this.state = {}
+    this.state = {
+      overCross: false,
+    }
   }
 
   render() {
@@ -120,6 +126,8 @@ export default class Tab extends React.PureComponent<Props, {}> {
           .close {
             @p: .ml10, .o50, .relative;
             top: 1px;
+            height: 13px;
+            width: 13px;
             &.active {
               @p: .o100;
             }
@@ -145,6 +153,19 @@ export default class Tab extends React.PureComponent<Props, {}> {
             height: 8px;
             background-color: #eeeff0;
             width: 100%;
+          }
+
+          .circle {
+            @p: .white40, .relative;
+            font-size: 9px;
+            top: -2px;
+          }
+
+          .light .circle {
+            @p: .darkBlue40;
+          }
+          .query-types {
+            @p: .flex;
           }
         `}</style>
         <div className={`icons ${index === selectedSessionIndex && 'active'}`}>
@@ -218,18 +239,30 @@ export default class Tab extends React.PureComponent<Props, {}> {
         <div
           className={`close ${index === selectedSessionIndex && 'active'}`}
           onClick={this.handleCloseSession}
+          onMouseEnter={this.handleMouseOverCross}
+          onMouseLeave={this.handleMouseOutCross}
         >
-          <Icon
-            src={require('graphcool-styles/icons/stroke/cross.svg')}
-            stroke={true}
-            color={theme === 'dark' ? $v.white40 : $v.darkBlue40}
-            width={12}
-            height={11}
-            strokeWidth={7}
-          />
+          {session.permission && session.hasChanged && !this.state.overCross
+            ? <div className="circle">⬤</div>
+            : <Icon
+                src={require('graphcool-styles/icons/stroke/cross.svg')}
+                stroke={true}
+                color={theme === 'dark' ? $v.white40 : $v.darkBlue40}
+                width={12}
+                height={11}
+                strokeWidth={7}
+              />}
         </div>
       </div>
     )
+  }
+
+  private handleMouseOverCross = () => {
+    this.setState({ overCross: true })
+  }
+
+  private handleMouseOutCross = () => {
+    this.setState({ overCross: false })
   }
 
   private handleSelectSession = () => {

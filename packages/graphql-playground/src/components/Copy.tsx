@@ -2,12 +2,12 @@ import * as React from 'react'
 import { $v } from 'graphcool-styles'
 import * as CopyToClipboard from 'react-copy-to-clipboard'
 
-interface Props {
+export interface Props {
   text: string
   color?: string
 }
 
-interface State {
+export interface State {
   copied: boolean
 }
 

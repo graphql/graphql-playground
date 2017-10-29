@@ -139,8 +139,11 @@ class HttpHeaders extends React.PureComponent<Props, State> {
       this.setState({ newHeader: false })
       return
     }
-    const { headers } = this.props
+    let headers: any = this.props.headers as any
     if (headers) {
+      if (headers.asMutable) {
+        headers = headers.asMutable()
+      }
       headers.splice(index, 1)
       if (this.props.onChange) {
         this.props.onChange(headers)

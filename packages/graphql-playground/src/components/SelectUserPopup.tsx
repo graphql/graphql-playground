@@ -24,6 +24,9 @@ export interface Props {
   isOpen: boolean
   onRequestClose: () => void
   endpointUrl: string
+  userModelName: string
+  modelNames: string[]
+  onChangeUserModelName: (modelName: string) => void
 }
 
 export default class SelectUserPopup extends React.Component<Props, State> {
@@ -58,11 +61,18 @@ export default class SelectUserPopup extends React.Component<Props, State> {
     ;(global as any).s = this
   }
 
-  componentWillReceiveProps(nextProps) {
+  componentWillReceiveProps(nextProps: Props) {
     const { startIndex, stopIndex } = this.state
 
     if (nextProps.userFields.length !== this.props.userFields.length) {
       this.getUsers({ startIndex, stopIndex }, nextProps.userFields)
+    }
+  }
+
+  componentDidUpdate(props) {
+    const { startIndex, stopIndex } = this.state
+    if (props.userModelName !== this.props.userModelName) {
+      this.getUsers({ startIndex, stopIndex }, this.props.userFields)
     }
   }
 
@@ -102,6 +112,14 @@ export default class SelectUserPopup extends React.Component<Props, State> {
             font-family: 'Source Code Pro', 'Consolas', 'Inconsolata',
               'Droid Sans Mono', 'Monaco', monospace;
           }
+          select {
+            @p: .mt16, .f20;
+          }
+          .select-user {
+            @p: .absolute;
+            top: 25px;
+            left: 38px;
+          }
         `}</style>
         <style jsx={true} global={true}>{`
           .popup-x {
@@ -109,11 +127,28 @@ export default class SelectUserPopup extends React.Component<Props, State> {
           }
         `}</style>
         <div className="select-user-popup">
+          <div className="select-user">
+            <div>Select the User Model</div>
+            <select
+              value={this.props.userModelName}
+              onChange={this.changeUserModelName}
+            >
+              {this.props.modelNames.map(name =>
+                <option value={name}>
+                  {name}
+                </option>,
+              )}
+            </select>
+          </div>
           <div className="title-wrapper">
-            <div className="title">Select a User</div>
+            <div className="title">
+              Select a {this.props.userModelName}
+            </div>
             {this.state.selectedRowIndex > -1 &&
               <div className="selected-user">
-                <div>Selected User ID</div>
+                <div>
+                  Selected {this.props.userModelName} ID
+                </div>
                 <div className="selected-user-id">
                   {this.state.users[this.state.selectedRowIndex].id}
                 </div>
@@ -150,6 +185,10 @@ export default class SelectUserPopup extends React.Component<Props, State> {
         </div>
       </Modal>
     )
+  }
+
+  private changeUserModelName = e => {
+    this.props.onChangeUserModelName(e.target.value)
   }
 
   private handleRowSelection = ({ index, rowData }) => {
@@ -219,10 +258,11 @@ export default class SelectUserPopup extends React.Component<Props, State> {
     const count = stopIndex - startIndex
     const userQuery = `
       {
-        _allUsersMeta {
+        _all${this.props.userModelName}sMeta {
           count
         }
-        allUsers(skip: ${startIndex} first: ${count}${filter}){
+        all${this.props
+          .userModelName}s(skip: ${startIndex} first: ${count}${filter}){
           ${userFields.map(f => f.name).join('\n')}
         }
       }
@@ -243,7 +283,10 @@ export default class SelectUserPopup extends React.Component<Props, State> {
         if (!res.data) {
           return
         }
-        const { _allUsersMeta, allUsers } = res.data
+
+        const allUsers = res.data[`all${this.props.userModelName}s`]
+        /* tslint:disable */
+        const _allUsersMeta = res.data[`_all${this.props.userModelName}sMeta`]
 
         let { users } = this.state
 
