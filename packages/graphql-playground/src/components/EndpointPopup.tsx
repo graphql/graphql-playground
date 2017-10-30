@@ -1,8 +1,9 @@
 import * as React from 'react'
 import Popup from './Popup'
-import { throttle } from 'lodash'
+import { debounce } from 'lodash'
 import * as cn from 'classnames'
 import { Button } from './Button'
+import * as isURL from 'validator/lib/isURL'
 
 export interface Props {
   onRequestClose: (endpoint: string) => void
@@ -15,12 +16,8 @@ export interface State {
 }
 
 export default class EndpointPopup extends React.Component<Props, State> {
-  checkEndpoint = throttle(() => {
-    if (
-      this.state.endpoint.match(
-        /[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/,
-      )
-    ) {
+  checkEndpoint = debounce(() => {
+    if (isURL(this.state.endpoint, { require_tld: false })) {
       fetch(this.state.endpoint, {
         method: 'post',
         headers: {
