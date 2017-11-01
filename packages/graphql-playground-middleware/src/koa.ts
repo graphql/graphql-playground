@@ -3,15 +3,12 @@ import renderPlaygroundPage, {
   MiddlewareOptions,
 } from './render-playground-page'
 
+/* tslint:disable-next-line */
 const { version } = require('../package.json')
 
-export interface KoaPlaygroundMiddleware {
-  (ctx: Context, next: () => void): void
-}
+export type KoaPlaygroundMiddleware = (ctx: Context, next: () => void) => void
 
-export interface Register {
-  (options): KoaPlaygroundMiddleware
-}
+export type Register = (options) => KoaPlaygroundMiddleware
 
 const koa: Register = options => {
   const middlewareOptions: MiddlewareOptions = {

@@ -23,6 +23,10 @@
     "@types/keygrip" "*"
     "@types/node" "*"
 
+"@types/deasync@^0.1.0":
+  version "0.1.0"
+  resolved "https://registry.yarnpkg.com/@types/deasync/-/deasync-0.1.0.tgz#b2bd6c3fcde3cf67b8be4c2f70136ba8f157b45a"
+
 "@types/express-serve-static-core@*":
   version "4.0.49"
   resolved "https://registry.yarnpkg.com/@types/express-serve-static-core/-/express-serve-static-core-4.0.49.tgz#3438d68d26e39db934ba941f18e3862a1beeb722"
@@ -5440,6 +5444,10 @@ sane@~1.6.0:
 sax@^1.2.1, sax@~1.2.1:
   version "1.2.1"
   resolved "https://registry.yarnpkg.com/sax/-/sax-1.2.1.tgz#7b8e656190b228e81a66aea748480d828cd2d37a"
+
+scuid@^1.0.2:
+  version "1.0.2"
+  resolved "https://registry.yarnpkg.com/scuid/-/scuid-1.0.2.tgz#3e62465671a0b87435e3a377957a20e45aac5b40"
 
 seamless-immutable@^7.0.1:
   version "7.0.1"

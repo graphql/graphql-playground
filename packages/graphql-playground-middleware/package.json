@@ -1,0 +1,31 @@
+{
+  "name": "graphql-playground-middleware",
+  "version": "1.0.0",
+  "homepage": "https://github.com/graphcool/graphql-playground/tree/master/packages/graphql-playground-middleware",
+  "description": "GraphQL IDE for better development workflows (GraphQL Subscriptions, interactive docs & collaboration).",
+  "contributors": [
+    "Tim Suchanek <tim@graph.cool>",
+    "Johannes Schickling <johannes@graph.cool>"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "http://github.com/graphcool/graphql-playground.git"
+  },
+  "license": "SEE LICENSE IN LICENSE",
+  "main": "index.js",
+  "scripts": {
+    "build": "tsc"
+  },
+  "keywords": [],
+  "devDependencies": {
+    "@types/node": "^8.0.47",
+    "express": "^4.16.2",
+    "hapi": "^16.6.2",
+    "koa": "^2.3.0",
+    "typescript": "^2.6.1"
+  },
+  "typings": "dist/index.d.ts",
+  "typescript": {
+    "definition": "dist/index.d.ts"
+  }
+}

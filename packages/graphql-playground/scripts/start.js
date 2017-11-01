@@ -116,7 +116,7 @@ function setupCompiler(host, port, protocol) {
         console.log();
       });
       // Teach some TSLint tricks.
-      console.log('You may use special comments to disable some warnings.');      
+      console.log('You may use special comments to disable some warnings.');
       console.log('Use ' + chalk.yellow('tslint:disable-line') + ' to disable this line.');
       console.log('Use ' + chalk.yellow('tslint:disable-next-line') + ' to ignore the rules on next line.');
       console.log('Use ' + chalk.yellow('tslint:disable ') + ' to disable linting for rest of file.');
@@ -166,6 +166,10 @@ function addMiddleware(devServer) {
     // Modern browsers include text/html into `accept` header when navigating.
     // However API calls like `fetch()` won’t generally accept text/html.
     // If this heuristic doesn’t work well for you, don’t use `proxy`.
+    rewrites: [
+      { from: /^\/index\.html/, to: '/build/index.html' },
+      { from: /^\/middleware\.html/, to: '/build/middleware.html' },
+    ],
     htmlAcceptHeaders: proxy ?
       ['text/html'] :
       ['text/html', '*/*']

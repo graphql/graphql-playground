@@ -7,7 +7,7 @@ import renderPlaygroundPage, {
 const { version } = require('../package.json')
 
 export type ExpressPlaygroundMiddleware = (
-  _req: Request,
+  req: Request,
   res: Response,
   next: () => void,
 ) => void

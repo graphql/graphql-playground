@@ -58,6 +58,7 @@ class MiddlewareApp extends React.Component<{}, State> {
   render() {
     return (
       <div>
+        <h1>Hallo</h1>
         <Helmet>
           <title>
             {this.getTitle()}

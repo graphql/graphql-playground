@@ -35,7 +35,7 @@ module.exports = {
   appPublic: resolveApp('public'),
   appHtml: resolveApp('public/index.html'),
   appIndexJs: resolveApp('src/index.tsx'),
-  graphiql: resolveApp('src/GraphiQL/CustomGraphiQL.tsx'),
+  middlewareIndexJs: resolveApp('src/middlewareIndex.tsx'),
   appPackageJson: resolveApp('package.json'),
   appSrc: resolveApp('src'),
   yarnLockFile: resolveApp('yarn.lock'),

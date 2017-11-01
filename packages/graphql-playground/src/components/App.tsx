@@ -96,6 +96,7 @@ class App extends React.Component<Props, State> {
     return (
       <Provider store={store}>
         <div className={'wrapper'}>
+          <h1>Hi</h1>
           <style jsx={true}>{`
             .wrapper {
               @p: .w100, .h100, .bgDarkBlue;

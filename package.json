@@ -1,6 +1,6 @@
 {
-  "private": true,
   "_workspaces": [
     "packages/*"
-  ]
+  ],
+  "homepage": "https://github.com/graphcool/graphql-playground"
 }
