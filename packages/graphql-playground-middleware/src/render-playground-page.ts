@@ -11,10 +11,10 @@ export default function renderPlaygroundPage(options: MiddlewareOptions) {
 <head>
   <meta charset=utf-8 />
   <meta name="viewport" content="user-scalable=no, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, minimal-ui">
-  <title>Graphcool Playground</title>
-  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/graphql-playground@${options.version}/middleware-build/static/css/main.css" />
-  <link rel="shortcut icon" href="//cdn.jsdelivr.net/npm/graphql-playground@${options.version}/middleware-build/favicon.png" />
-  <script src="//cdn.jsdelivr.net/npm/graphql-playground@${options.version}/middleware-build/static/js/main.js"></script>
+  <title>GraphQL Playground</title>
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/graphql-playground@${options.version}/build/static/css/index.css" />
+  <link rel="shortcut icon" href="//cdn.jsdelivr.net/npm/graphql-playground@${options.version}/build/favicon.png" />
+  <script src="//cdn.jsdelivr.net/npm/graphql-playground@${options.version}/build/static/js/middleware.js"></script>
 </head>
 <body>
 <div id="root">
@@ -45,7 +45,7 @@ export default function renderPlaygroundPage(options: MiddlewareOptions) {
             font-weight: 400;
         }
     </style>
-    <img src='http://cdn.jsdelivr.net/npm/graphql-playground/middleware-build/logo.png' alt=''>
+    <img src='http://cdn.jsdelivr.net/npm/graphql-playground/build/logo.png' alt=''>
     <div class="loading">
         Loading <span class="title">GraphQL Playground</span>
     </div>
