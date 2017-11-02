@@ -126,7 +126,7 @@ app.listen(PORT)
 console.log(`Serving the GraphQL Playground on http://localhost:${PORT}/playground`)
 ```
 
-See [./packages/graphql-playground-middleware/examples/express](https://github.com/graphcool/graphql-playground/tree/master/packages/graphql-playground-middleware/examples/express) for a full example.
+See [packages/graphql-playground-middleware/examples/express](https://github.com/graphcool/graphql-playground/tree/master/packages/graphql-playground-middleware/examples/express) for a full example.
 
 ### As Hapi Middleware
 
@@ -197,7 +197,7 @@ server.start((err) => {
 });
 ```
 
-See [./packages/graphql-playground-middleware/examples/hapi](https://github.com/graphcool/graphql-playground/tree/master/packages/graphql-playground-middleware/examples/hapi) for a full example.
+See [packages/graphql-playground-middleware/examples/hapi](https://github.com/graphcool/graphql-playground/tree/master/packages/graphql-playground-middleware/examples/hapi) for a full example.
 
 ### As Koa Middleware
 
@@ -251,7 +251,7 @@ app.listen(PORT);
 console.log(`Serving the GraphQL Playground on http://localhost:${PORT}/playground`)
 ```
 
-See [./packages/graphql-playground-middleware/examples/koa](https://github.com/graphcool/graphql-playground/tree/master/packages/graphql-playground-middleware/examples/koa) for a full example.
+See [packages/graphql-playground-middleware/examples/koa](https://github.com/graphcool/graphql-playground/tree/master/packages/graphql-playground-middleware/examples/koa) for a full example.
 
 ### As serverless handler
 #### Install
