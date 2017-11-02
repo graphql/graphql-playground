@@ -44,19 +44,22 @@ You can easily share your Playgrounds with others by clicking on the "Share" but
 
 ## Usage
 
-[examples/latest.html](https://github.com/graphcool/graphql-playground/blob/master/packages/graphql-playground/examples/latest.html) contains a simple example on how to use the latest playground in your application.
+### Properties
+All interfaces, the React component `<Playground />` and all middlewares expose the same set of options:
 
-You also can use the latest playground based on the npm package.
-In order to do that, first you need to install `graphql-playground` via NPM. Then choose one of the following options to use the Playground in your own app/server.
-
-```
-yarn add graphql-playground
-```
++ `properties`
+  + `endpoint` [`string`] - the GraphQL endpoint url.
+  + `subscriptionEndpoint` [`string`] - the GraphQL subscriptions endpoint url.
+  + `setTitle` [`boolean`] - reflect the current endpoint in the page title
 
 ### As React Component
 
-#### Usage
-
+#### Install
+```sh
+yarn add graphql-playground
+```
+  
+#### Use
 GraphQL Playground provides a React component responsible for rendering the UI and Session management.
 There are **3 dependencies** needed in order to run the `graphql-playground` React component.
 1. _Open Sans_ and _Source Code Pro_ fonts
@@ -65,12 +68,12 @@ There are **3 dependencies** needed in order to run the `graphql-playground` Rea
 
 The GraphQL Playground requires **React 16**.
 
-Including Fonts (1.)
+Including Fonts (`1.`)
 ```html
 <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700|Source+Code+Pro:400,700" rel="stylesheet">
 ```
 
-Including stylesheet and the component (2., 3.)
+Including stylesheet and the component (`2., 3.`)
 ```js
 import React from 'react'
 import ReactDOM from 'react-dom'
@@ -80,27 +83,17 @@ import 'graphql-playground/playground.css'
 ReactDOM.render(<Playground endpoint="https://api.graph.cool/simple/v1/swapi" />, document.body)
 ```
 
-#### `<Playground />` Props
-```ts
-interface PlaygroundProps {
-  endpoint?: string // endpoint url (e.g. https://api.graph.cool/simple/v1/swapi)
-  subscriptionEndpoint?: string // subscriptions url (e.g. wss://subscriptions.graph.cool/v1/swapi)
-  setTitle?: boolean // reflect the current endpoint in the page title
-}
-```
-
 ### As Express Middleware
 
-#### Properties
-Express middleware supports the following properties:
+#### Install
+```sh
+yarn add graphql-playground-middleware
+```
 
-+ `options`
-  + `endpoint` [`string`] - the GraphQL endpoint url.
-
-#### Usage
+#### Use
 ```js
 import express from 'express'
-import { express as playground } from 'graphql-playground/middleware'
+import { express as playground } from 'graphql-playground-middleware'
 
 const app = express()
 
@@ -111,19 +104,15 @@ app.listen(3000)
 
 ### As Hapi Middleware
 
-#### Properties
-Hapi middleware supports the following properties:
+#### Install
+```sh
+yarn add graphql-playground-middleware
+```
 
-+ `options`
-  + `path` [`string`] - the Playground middleware url
-  + `playgroundOptions`
-      + `endpoint` [`string`] - the GraphQL endpoint url.
-      + `subscriptionEndpoint` [`string`] - the GraphQL subscription endpoint url.
-
-#### Usage
+#### Use
 ```js
 import hapi from 'hapi'
-import { hapi as playground } from 'graphql-playground/middleware'
+import { hapi as playground } from 'graphql-playground-middleware'
 
 const server = new Hapi.Server()
 
@@ -142,14 +131,12 @@ server.register({
 
 ### As Koa Middleware
 
-#### Properties
-Koa middleware supports the following properties:
+#### Install
+```sh
+yarn add graphql-playground-middleware
+```
 
-+ `options`
-  + `endpoint` [`string`] - the GraphQL endpoint url.
-  + `subscriptionEndpoint` [`string`] - the GraphQL subscription endpoint url.
-
-#### Usage
+#### Use
 ```js
 import Koa from 'koa'
 import KoaRouter from 'koa-router'
