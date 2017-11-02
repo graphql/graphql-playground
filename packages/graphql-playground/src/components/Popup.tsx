@@ -51,6 +51,7 @@ export default class Popup extends React.Component<Props, {}> {
         isOpen={true}
         onRequestClose={this.props.onRequestClose}
         style={modalStyle}
+        contentLabel="Popup"
       >
         <style jsx={true}>{`
           .modal {
