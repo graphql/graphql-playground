@@ -90,7 +90,7 @@ ReactDOM.render(<Playground endpoint="https://api.graph.cool/simple/v1/swapi" />
 yarn add graphql-playground-middleware
 ```
 
-#### Use
+#### Usage
 ```js
 const express = require('express')
 const bodyParser = require('body-parser')
@@ -135,7 +135,7 @@ See [packages/graphql-playground-middleware/examples/express](https://github.com
 yarn add graphql-playground-middleware
 ```
 
-#### Use
+#### Usage
 ```js
 const hapi = require('hapi')
 const {graphqlHapi} = require('apollo-server-hapi')
@@ -206,7 +206,7 @@ See [packages/graphql-playground-middleware/examples/hapi](https://github.com/gr
 yarn add graphql-playground-middleware
 ```
 
-#### Use
+#### Usage
 ```js
 const koa = require('koa')
 const koaRouter = require('koa-router')
@@ -255,8 +255,11 @@ See [packages/graphql-playground-middleware/examples/koa](https://github.com/gra
 
 ### As serverless handler
 #### Install
+```sh
+yarn add graphql-playground-middleware
+```
 
-#### Use
+#### Usage
 `handler.js`
 
 ```js
