@@ -92,15 +92,41 @@ yarn add graphql-playground-middleware
 
 #### Use
 ```js
-import express from 'express'
-import { express as playground } from 'graphql-playground-middleware'
+const express = require('express')
+const bodyParser = require('body-parser')
+const {graphqlExpress} = require('apollo-server-express')
+const {makeExecutableSchema} = require('graphql-tools')
+const {expressPlayground} = require('graphql-playground-middleware')
+
+const schema = makeExecutableSchema({
+  typeDefs: `
+    type Query {
+      hello: String!
+    }
+    schema {
+      query: Query
+    }
+  `,
+  resolvers: {
+    Query: {
+      hello: () => 'world',
+    },
+  },
+})
+const PORT = 4000
 
 const app = express()
 
-app.use('/playground', playground({ endpoint: '/graphql' }))
+// bodyParser is needed just for POST.
+app.use('/graphql', bodyParser.json(), graphqlExpress({ schema }))
+app.get('/playground', expressPlayground({ endpoint: '/graphql' })) // if you want GraphiQL enabled
 
-app.listen(3000)
+app.listen(PORT)
+
+console.log(`Serving the GraphQL Playground on http://localhost:${PORT}/playground`)
 ```
+
+See [./packages/graphql-playground-middleware/examples/express](https://github.com/graphcool/graphql-playground/tree/master/packages/graphql-playground-middleware/examples/express) for a full example.
 
 ### As Hapi Middleware
 
@@ -111,23 +137,67 @@ yarn add graphql-playground-middleware
 
 #### Use
 ```js
-import hapi from 'hapi'
-import { hapi as playground } from 'graphql-playground-middleware'
+const hapi = require('hapi')
+const {graphqlHapi} = require('apollo-server-hapi')
+const {hapiPlayground} = require('graphql-playground-middleware')
+const {makeExecutableSchema} = require('graphql-tools')
 
-const server = new Hapi.Server()
+const server = new hapi.Server({ debug: { request: "*" } });
 
-server.connection({
-  port: 3001
+const HOST = 'localhost';
+const PORT = 4000;
+
+const schema = makeExecutableSchema({
+  typeDefs: `
+    type Query {
+      hello: String!
+    }
+    schema {
+      query: Query
+    }
+  `,
+  resolvers: {
+    Query: {
+      hello: () => 'world',
+    },
+  },
 })
 
+server.connection({
+  host: HOST,
+  port: PORT,
+});
+
 server.register({
-  register: playground,
+  register: graphqlHapi,
+  options: {
+    path: '/graphql',
+    graphqlOptions: {
+      schema,
+    },
+    route: {
+      cors: true
+    }
+  },
+});
+
+server.register({
+  register: hapiPlayground,
   options: {
     path: '/playground',
     endpoint: '/graphql'
   }
-},() => server.start())
+})
+
+server.start((err) => {
+  if (err) {
+    throw err;
+  }
+  console.log(`Server running at: ${server.info.uri}`);
+});
 ```
+
+See [./packages/graphql-playground-middleware/examples/hapi](https://github.com/graphcool/graphql-playground/tree/master/packages/graphql-playground-middleware/examples/hapi) for a full example.
 
 ### As Koa Middleware
 
@@ -138,21 +208,95 @@ yarn add graphql-playground-middleware
 
 #### Use
 ```js
-import Koa from 'koa'
-import KoaRouter from 'koa-router'
-import { koa as playground } from 'graphql-playground/middleware'
+const koa = require('koa')
+const koaRouter = require('koa-router')
+const koaBody = require('koa-bodyparser')
+const { graphqlKoa } = require('apollo-server-koa')
+const {makeExecutableSchema} = require('graphql-tools')
+const {koaPlayground} = require('graphql-playground-middleware')
 
-const app = new Koa()
-const router = new KoaRouter()
+const schema = makeExecutableSchema({
+  typeDefs: `
+    type Query {
+      hello: String!
+    }
+    schema {
+      query: Query
+    }
+  `,
+  resolvers: {
+    Query: {
+      hello: () => 'world',
+    },
+  },
+})
 
-router.all('/playground', playground({
+const app = new koa();
+const router = new koaRouter();
+const PORT = 4000;
+
+// koaBody is needed just for POST.
+app.use(koaBody());
+
+router.post('/graphql', graphqlKoa({ schema }));
+
+router.all('/playground', koaPlayground({
   endpoint: '/graphql'
 }))
 
-app.use(router.routes())
-app.use(router.allowedMethods())
-app.listen(3001)
+app.use(router.routes());
+app.use(router.allowedMethods());
+app.listen(PORT);
+
+console.log(`Serving the GraphQL Playground on http://localhost:${PORT}/playground`)
 ```
+
+See [./packages/graphql-playground-middleware/examples/koa](https://github.com/graphcool/graphql-playground/tree/master/packages/graphql-playground-middleware/examples/koa) for a full example.
+
+### As serverless handler
+#### Install
+
+#### Use
+`handler.js`
+
+```js
+exports.graphqlHandler = function graphqlHandler(event, context, callback) {
+  function callbackFilter(error, output) {
+    // eslint-disable-next-line no-param-reassign
+    output.headers['Access-Control-Allow-Origin'] = '*';
+    callback(error, output);
+  }
+
+  const handler = graphqlLambda({ schema: myGraphQLSchema });
+  return handler(event, context, callbackFilter);
+};
+
+exports.playgroundHandler = lambdaPlayground({
+  endpoint: '/dev/graphql',
+});
+```
+
+`serverless.yml`
+
+```yaml
+functions:
+  graphql:
+    handler: handler.graphqlHandler
+    events:
+    - http:
+        path: graphql
+        method: post
+        cors: true
+  playground:
+    handler: handler.playgroundHandler
+    events:
+    - http:
+        path: playground
+        method: get
+        cors: true
+```
+
+See [serverless-graphql-apollo](https://github.com/serverless/serverless-graphql-apollo) for a full example.
 
 ## Development [![npm version](https://badge.fury.io/js/graphql-playground.svg)](https://badge.fury.io/js/graphql-playground)
 
