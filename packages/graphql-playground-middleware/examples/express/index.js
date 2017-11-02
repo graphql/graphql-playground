@@ -3,7 +3,6 @@ const bodyParser = require('body-parser')
 const {graphqlExpress} = require('apollo-server-express')
 const {makeExecutableSchema} = require('graphql-tools')
 const {expressPlayground} = require('graphql-playground-middleware')
-const cors = require('cors')
 
 const schema = makeExecutableSchema({
   typeDefs: `
@@ -23,8 +22,6 @@ const schema = makeExecutableSchema({
 const PORT = 4000
 
 const app = express()
-
-app.use(cors())
 
 // bodyParser is needed just for POST.
 app.use('/graphql', bodyParser.json(), graphqlExpress({ schema }))
