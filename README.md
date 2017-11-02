@@ -55,23 +55,38 @@ yarn add graphql-playground
 
 ### As React Component
 
-GraphQL Playground provides a React component responsible for rendering the UI, which should be provided with a function for fetching from GraphQL, we recommend using the [fetch](https://fetch.spec.whatwg.org/) standard API.
+#### Usage
 
+GraphQL Playground provides a React component responsible for rendering the UI and Session management.
+There are **3 dependencies** needed in order to run the `graphql-playground` React component.
+1. _Open Sans_ and _Source Code Pro_ fonts
+2. Including `graphql-playground/playground.css`
+3. Rendering the `<Playground />` component
+
+The GraphQL Playground requires **React 16**.
+
+Including Fonts (1.)
+```html
+<link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700|Source+Code+Pro:400,700" rel="stylesheet">
+```
+
+Including stylesheet and the component (2., 3.)
 ```js
 import React from 'react'
 import ReactDOM from 'react-dom'
 import Playground from 'graphql-playground'
-import fetch from 'isomorphic-fetch'
+import 'graphql-playground/playground.css'
 
-function graphQLFetcher(graphQLParams) {
-  return fetch(window.location.origin + '/graphql', {
-    method: 'post',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(graphQLParams),
-  }).then(response => response.json())
+ReactDOM.render(<Playground endpoint="https://api.graph.cool/simple/v1/swapi" />, document.body)
+```
+
+#### `<Playground />` Props
+```ts
+interface PlaygroundProps {
+  endpoint?: string // endpoint url (e.g. https://api.graph.cool/simple/v1/swapi)
+  subscriptionEndpoint?: string // subscriptions url (e.g. wss://subscriptions.graph.cool/v1/swapi)
+  setTitle?: boolean // reflect the current endpoint in the page title
 }
-
-ReactDOM.render(<Playground fetcher={graphQLFetcher} />, document.body)
 ```
 
 ### As Express Middleware
