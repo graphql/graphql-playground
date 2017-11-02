@@ -87,6 +87,7 @@
     "strip-ansi": "3.0.1",
     "style-loader": "0.13.1",
     "styled-jsx-postcss": "git+https://github.com/timsuchanek/styled-jsx-postcss#build3",
+    "svg-inline-loader": "^0.8.0",
     "sw-precache-webpack-plugin": "^0.11.4",
     "ts-loader": "^3.1.1",
     "tslint": "^5.5.0",
