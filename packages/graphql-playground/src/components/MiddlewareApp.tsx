@@ -20,17 +20,18 @@ function getParameterByName(name: string): string | null {
 export interface Props {
   endpoint?: string
   subscriptionEndpoint?: string
+  setTitle?: boolean
 }
 
 export interface State {
   endpoint: string
   subscriptionPrefix?: string
-  subscriptionEndpoint: string
+  subscriptionEndpoint?: string
   shareUrl?: string
   platformToken?: string
 }
 
-class MiddlewareApp extends React.Component<{}, State> {
+class MiddlewareApp extends React.Component<Props, State> {
   constructor(props: Props) {
     super(props)
 
@@ -56,13 +57,17 @@ class MiddlewareApp extends React.Component<{}, State> {
   }
 
   render() {
-    return (
-      <div>
-        <Helmet>
+    const title = this.props.setTitle
+      ? <Helmet>
           <title>
             {this.getTitle()}
           </title>
         </Helmet>
+      : null
+
+    return (
+      <div>
+        {title}
         <Provider store={store}>
           <Playground
             endpoint={this.state.endpoint}
@@ -142,7 +147,7 @@ class MiddlewareApp extends React.Component<{}, State> {
 
 export default MiddlewareApp
 
-function getSubscriptionsUrl(endpoint) {
+function getSubscriptionsUrl(endpoint): string | undefined {
   if (endpoint.includes('graph.cool')) {
     return `wss://subscriptions.graph.cool/v1/${getProjectId(endpoint)}`
   }
@@ -151,7 +156,7 @@ function getSubscriptionsUrl(endpoint) {
     const host = endpoint.match(/https?:\/\/(.*?)\//)
     return `ws://${host![1]}/subscriptions/v1/${getProjectId(endpoint)}`
   }
-  return endpoint
+  return undefined
 }
 
 function getProjectId(endpoint) {

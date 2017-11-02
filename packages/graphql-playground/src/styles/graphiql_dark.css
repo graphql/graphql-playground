@@ -1217,7 +1217,6 @@ span.CodeMirror-selectedtext { background: none; }
 .CodeMirror-hints {
     background: white;
     box-shadow: 0 1px 4px rgba(0, 0, 0, 0.15);
-    font-family: 'Open Sans', sans-serif;
     font-size: 14px;
     list-style: none;
     margin-left: -6px;
@@ -1234,6 +1233,7 @@ span.CodeMirror-selectedtext { background: none; }
 }
 
 .CodeMirror-hints-wrapper {
+    font-family: 'Open Sans', sans-serif;
     background: white;
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.45);
     margin-left: -6px;

@@ -35,7 +35,7 @@ interface State {
   collapsed: boolean
 }
 
-class TypeLink extends React.PureComponent<
+class TypeLink extends React.Component<
   Props & StateFromProps & DispatchFromProps,
   State
 > {

@@ -1,7 +1,7 @@
 import * as React from 'react'
 import * as cx from 'classnames'
 import { Session } from '../../types'
-import { Icon, $v } from 'graphcool-styles'
+import { Icon } from 'graphcool-styles'
 import withTheme from '../Theme/withTheme'
 import Tab from './Tab'
 
@@ -18,6 +18,9 @@ export interface Props {
   theme?: string
   isApp?: boolean
 }
+
+const white20 = '#4a555f'
+const darkBlue20 = '#c2c8cb'
 
 export const TabBar = withTheme<
   Props
@@ -205,7 +208,7 @@ export const TabBar = withTheme<
                 <div className="tab plus" onClick={onNewSession}>
                   <Icon
                     src={require('graphcool-styles/icons/stroke/add.svg')}
-                    color={theme === 'dark' ? $v.white20 : $v.darkBlue20}
+                    color={theme === 'dark' ? white20 : darkBlue20}
                     width={34}
                     height={34}
                     stroke={true}
@@ -216,7 +219,7 @@ export const TabBar = withTheme<
             : <div className="tab plus" onClick={onNewSession}>
                 <Icon
                   src={require('graphcool-styles/icons/stroke/add.svg')}
-                  color={theme === 'dark' ? $v.white20 : $v.darkBlue20}
+                  color={theme === 'dark' ? white20 : darkBlue20}
                   width={34}
                   height={34}
                   stroke={true}
@@ -231,7 +234,7 @@ export const TabBar = withTheme<
               strokeWidth={4}
               width={27}
               height={27}
-              color={theme === 'dark' ? $v.white20 : $v.gray20}
+              color={theme === 'dark' ? white20 : darkBlue20}
               onClick={onOpenHistory}
             />
           </div>

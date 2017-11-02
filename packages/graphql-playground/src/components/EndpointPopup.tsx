@@ -16,11 +16,7 @@ export interface State {
 
 export default class EndpointPopup extends React.Component<Props, State> {
   checkEndpoint = throttle(() => {
-    if (
-      this.state.endpoint.match(
-        /[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/,
-      )
-    ) {
+    if (this.state.endpoint.match(/^http:\/\/\w+(\.\w+)*(:[0-9]+)?\/?.*$/)) {
       fetch(this.state.endpoint, {
         method: 'post',
         headers: {

@@ -353,12 +353,13 @@ export class Playground extends React.PureComponent<Props & DocsState, State> {
       this.wsConnections[session.id].unsubscribeAll()
     }
 
-    this.wsConnections[
-      session.id
-    ] = new SubscriptionClient(this.getWSEndpoint(), {
-      timeout: 20000,
-      connectionParams,
-    })
+    const endpoint = this.getWSEndpoint()
+    if (endpoint) {
+      this.wsConnections[session.id] = new SubscriptionClient(endpoint, {
+        timeout: 20000,
+        connectionParams,
+      })
+    }
   }
   initWebsockets() {
     this.state.sessions.forEach(session => this.setWS(session))
@@ -547,7 +548,6 @@ export class Playground extends React.PureComponent<Props & DocsState, State> {
       method: 'post',
       headers: {
         'Content-Type': 'application/json',
-        'x-graphcool-source': 'console:playground',
         ...headers,
       },
       body: JSON.stringify({ query: introspectionQuery }),
@@ -586,7 +586,16 @@ export class Playground extends React.PureComponent<Props & DocsState, State> {
           <style jsx={true}>{`
             .playground {
               @p: .h100, .flex, .flexColumn;
+              margin: 0;
+              padding: 0;
+              overflow: hidden;
+              font-family: 'Open Sans', sans-serif;
+              -webkit-font-smoothing: antialiased;
+              -moz-osx-font-smoothing: grayscale;
+              color: rgba(0, 0, 0, .8);
+              line-height: 1.5;
               letter-spacing: 0.53px;
+              margin-right: -1px !important;
             }
 
             .blur {
@@ -600,6 +609,13 @@ export class Playground extends React.PureComponent<Props & DocsState, State> {
 
             .graphiql-wrapper {
               @p: .w100, .h100, .relative;
+            }
+
+            .playground :global(a:active),
+            .playground :global(a:focus),
+            .playground :global(button:focus),
+            .playground :global(input:focus) {
+              outline: none;
             }
           `}</style>
           <TabBar
@@ -1363,27 +1379,30 @@ query ${operationName} {
   get wsApiPrefix() {
     const { endpoint } = this.props
     const isDev = endpoint.indexOf('dev.graph.cool') > -1
-    const isLocalhost = endpoint.indexOf('localhost') > -1
 
     // tslint:disable-next-line
-    if (isLocalhost) {
-      return 'ws://localhost:8085/v1'
-    } else if (isDev) {
+    if (isDev) {
       return 'wss://dev.subscriptions.graph.cool/v1'
-    } else {
+    } else if (endpoint.includes('graph.cool')) {
       return 'wss://subscriptions.graph.cool/v1'
     }
+
+    return null
   }
 
   private getWSEndpoint() {
     if (this.props.subscriptionsEndpoint) {
       return this.props.subscriptionsEndpoint
     }
-    const projectId =
-      this.props.projectId ||
-      (this.props.endpoint.includes('graph.cool') &&
-        this.props.endpoint.split('/').slice(-1)[0])
-    return `${this.wsApiPrefix}/${projectId}`
+    if (this.wsApiPrefix) {
+      const projectId =
+        this.props.projectId ||
+        (this.props.endpoint.includes('graph.cool') &&
+          this.props.endpoint.split('/').slice(-1)[0])
+      return `${this.wsApiPrefix}/${projectId}`
+    } else {
+      return null
+    }
   }
 
   private addToHistory(session: Session) {
@@ -1437,7 +1456,6 @@ query ${operationName} {
 
     const headers: any = {
       'Content-Type': 'application/json',
-      'x-graphcool-source': 'console:playground',
       Authorization: `Bearer ${this.props.adminAuthToken}`,
     }
 
@@ -1512,7 +1530,6 @@ query ${operationName} {
 
     const headers: any = {
       'Content-Type': 'application/json',
-      'x-graphcool-source': 'console:playground',
     }
 
     if (session.headers) {

@@ -15,6 +15,6 @@ if (process.env.NODE_ENV !== 'production') {
 /* tslint:disable-next-line */
 ;(window as any)['GraphQLPlayground'] = {
   init(element: HTMLElement, options) {
-    ReactDOM.render(<MiddlewareApp {...options} />, element)
+    ReactDOM.render(<MiddlewareApp setTitle={true} {...options} />, element)
   },
 }
