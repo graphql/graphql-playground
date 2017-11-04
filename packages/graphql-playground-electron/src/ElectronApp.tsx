@@ -170,17 +170,19 @@ export default class ElectronApp extends React.Component<{}, State> {
   componentDidMount() {
     ipcRenderer.on('Tab', this.readTabMessage)
     ipcRenderer.on('File', this.readFileMessage)
+    ipcRenderer.on('OpenSelectedFile', this.readOpenSelectedFileMessage)
   }
 
   componentWillUnmount() {
     ipcRenderer.removeListener('Tab', this.readTabMessage)
     ipcRenderer.removeListener('File', this.readFileMessage)
+    ipcRenderer.removeListener('OpenSelectedFile', this.readOpenSelectedFileMessage)
   }
 
   readFileMessage = (error, message) => {
     switch (message) {
       case 'Open':
-        this.openFile()
+        this.showOpenDialog()
         break
       case 'Save':
         this.saveFile()
@@ -188,42 +190,50 @@ export default class ElectronApp extends React.Component<{}, State> {
     }
   }
 
-  openFile() {
-    dialog.showOpenDialog(
-      {
-        title: 'Choose a .graphql file to edit',
-        properties: ['openFile'],
-        // filters: [{
-        //   name: '*',
-        //   extensions: ['graphql']
-        // }]
-      },
-      fileNames => {
-        if (fileNames && fileNames.length > 0) {
-          const query = fs.readFileSync(fileNames[0], 'utf-8')
+  readOpenSelectedFileMessage(event, selectedFile) {
+    if (selectedFile) this.openFile(selectedFile)
+  }
 
-          const rc = this.getGraphcoolRc()
-          if (rc && rc.platformToken) {
-            this.setState({ platformToken: rc.platformToken }, () => {
-              this.playground.fetchPermissionSchema()
-              this.playground.fetchServiceInformation()
-            })
-            localStorage.setItem('platformToken', rc.platformToken)
-          }
+  showOpenDialog() {
+    dialog.showOpenDialog({
+      title: 'Choose a .graphql file to edit',
+      properties: ['openFile'],
+      // filters: [{
+      //   name: '*',
+      //   extensions: ['graphql']
+      // }]
+    }, fileNames => {
+      if (fileNames && fileNames.length > 0) {
+        let path = fileNames[0]
+        this.openFile(path)
+      }
+    })
+  }
 
-          const permissionSession = this.getPermissionSessionForPath(
-            fileNames[0],
-          )
+  openFile(file: string) {
+    if (file) {
+      const query = fs.readFileSync(file, 'utf-8')
 
-          this.playground.newPermissionTab(
-            permissionSession,
-            path.basename(fileNames[0]),
-            fileNames[0],
-            query,
-          )
-        }
-      },
-    )
+      const rc = this.getGraphcoolRc()
+      if (rc && rc.platformToken) {
+        this.setState({ platformToken: rc.platformToken }, () => {
+          this.playground.fetchPermissionSchema()
+          this.playground.fetchServiceInformation()
+        })
+        localStorage.setItem('platformToken', rc.platformToken)
+      }
+
+      const permissionSession = this.getPermissionSessionForPath(
+        file,
+      )
+
+      this.playground.newPermissionTab(
+        permissionSession,
+        path.basename(file),
+        file,
+        query,
+      )
+    }
   }
 
   getSaveFileName(): Promise<string> {

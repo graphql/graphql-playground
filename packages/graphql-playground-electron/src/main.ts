@@ -277,6 +277,11 @@ app.on('ready', () => {
   })
 })
 
+app.on('open-file', (event, path) => {
+  event.preventDefault()
+  send('OpenSelectedFile', path)
+})
+
 // Quit when all windows are closed.
 app.on('window-all-closed', () => {
   // On OS X it is common for applications and their menu bar
