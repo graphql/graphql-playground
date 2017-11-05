@@ -190,8 +190,32 @@ export default class ElectronApp extends React.Component<{}, State> {
     }
   }
 
-  readOpenSelectedFileMessage(event, selectedFile) {
+  readOpenSelectedFileMessage = (event, selectedFile) => {
     if (selectedFile) this.openFile(selectedFile)
+  }
+
+  openFile(fileToOpen: string) {
+    const query = fs.readFileSync(fileToOpen, 'utf-8')
+    const rc = this.getGraphcoolRc()
+
+    if (rc && rc.platformToken) {
+      this.setState({ platformToken: rc.platformToken }, () => {
+        this.playground.fetchPermissionSchema()
+        this.playground.fetchServiceInformation()
+      })
+      localStorage.setItem('platformToken', rc.platformToken)
+    }
+
+    const permissionSession = this.getPermissionSessionForPath(
+      fileToOpen,
+    )
+
+    this.playground.newPermissionTab(
+      permissionSession,
+      path.basename(fileToOpen),
+      fileToOpen,
+      query,
+    )
   }
 
   showOpenDialog() {
@@ -208,32 +232,6 @@ export default class ElectronApp extends React.Component<{}, State> {
         this.openFile(path)
       }
     })
-  }
-
-  openFile(file: string) {
-    if (file) {
-      const query = fs.readFileSync(file, 'utf-8')
-
-      const rc = this.getGraphcoolRc()
-      if (rc && rc.platformToken) {
-        this.setState({ platformToken: rc.platformToken }, () => {
-          this.playground.fetchPermissionSchema()
-          this.playground.fetchServiceInformation()
-        })
-        localStorage.setItem('platformToken', rc.platformToken)
-      }
-
-      const permissionSession = this.getPermissionSessionForPath(
-        file,
-      )
-
-      this.playground.newPermissionTab(
-        permissionSession,
-        path.basename(file),
-        file,
-        query,
-      )
-    }
   }
 
   getSaveFileName(): Promise<string> {
