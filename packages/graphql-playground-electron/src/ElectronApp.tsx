@@ -191,7 +191,9 @@ export default class ElectronApp extends React.Component<{}, State> {
   }
 
   readOpenSelectedFileMessage = (event, selectedFile) => {
-    if (selectedFile) this.openFile(selectedFile)
+    if (selectedFile) {
+      this.openFile(selectedFile)
+    }
   }
 
   openFile(fileToOpen: string) {
@@ -228,8 +230,8 @@ export default class ElectronApp extends React.Component<{}, State> {
       // }]
     }, fileNames => {
       if (fileNames && fileNames.length > 0) {
-        let path = fileNames[0]
-        this.openFile(path)
+        const file = fileNames[0]
+        this.openFile(file)
       }
     })
   }
