@@ -151,7 +151,7 @@ function getSubscriptionsUrl(endpoint): string | undefined {
   if (endpoint.includes('graph.cool')) {
     return `wss://subscriptions.graph.cool/v1/${getProjectId(endpoint)}`
   }
-  if (endpoint.includes('localhost') && endpoint.includes('/simple/')) {
+  if (endpoint.includes('/simple/v1/')) {
     // it's a graphcool local endpoint
     const host = endpoint.match(/https?:\/\/(.*?)\//)
     return `ws://${host![1]}/subscriptions/v1/${getProjectId(endpoint)}`
