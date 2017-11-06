@@ -20,3 +20,6 @@ lib
 /middleware
 playground.css
 /middleware-build
+
+# editors
+.vscode
