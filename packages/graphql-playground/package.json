@@ -80,7 +80,7 @@
     "postcss-loader": "1.0.0",
     "postcss-nested": "^1.0.0",
     "postcss-simple-vars": "^3.0.0",
-    "prettier": "^1.5.3",
+    "prettier": "^1.7.4",
     "promise": "7.1.1",
     "raw-loader": "^0.5.1",
     "react-dev-utils": "^4.2.1",

@@ -31,7 +31,9 @@ const Wrapper = styled.div.attrs({
   height: 21px;
 `
 
-const Input = styled.input`display: none;`
+const Input = styled.input`
+  display: none;
+`
 
 interface SliderProps {
   checked: boolean
@@ -56,21 +58,21 @@ const Slider = styled.div.attrs({
 
   &:before {
     position: absolute;
-    content: "";
+    content: '';
     height: 23px;
     width: 23px;
     left: -1px;
     bottom: -1px;
     background-color: white;
     border-radius: 50%;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, .25);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.25);
     transition: transform 70ms linear;
 
     ${(p: SliderProps) =>
       p.checked
         ? css`
-      transform: translateX(19px);
-    `
-        : ''}
+            transform: translateX(19px);
+          `
+        : ''};
   }
 `
