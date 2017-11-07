@@ -83,7 +83,7 @@ import 'graphql-playground/playground.css'
 ReactDOM.render(<Playground endpoint="https://api.graph.cool/simple/v1/swapi" />, document.body)
 ```
 
-### As a server Middleware
+### As Server Middleware
 
 #### Install
 ```sh
@@ -104,9 +104,9 @@ We have a full example for each of the frameworks below:
 
 - **Koa:** See [packages/graphql-playground-middleware/examples/koa](https://github.com/graphcool/graphql-playground/tree/master/packages/graphql-playground-middleware/examples/koa)
 
-- **Lambda (as a serverless handler):** See [serverless-graphql-apollo](https://github.com/serverless/serverless-graphql-apollo) or a quick example below.
+- **Lambda (as serverless handler):** See [serverless-graphql-apollo](https://github.com/serverless/serverless-graphql-apollo) or a quick example below.
 
-### As a serverless handler
+### As serverless handler
 #### Install
 ```sh
 yarn add graphql-playground-middleware-lambda
