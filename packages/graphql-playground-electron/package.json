@@ -11,6 +11,16 @@
     "url": "graph.cool"
   },
   "main": "lib/main.js",
+  "build": {
+    "fileAssociations": [
+      {
+        "ext": "graphql",
+        "name": "GraphQL",
+        "description": "GraphQL file",
+        "role": "Editor"
+      }
+    ]
+  },
   "scripts": {
     "build-ts": "rm -rf lib && tsc --target es5",
     "build-webpack": "rm -rf ./dist && NODE_ENV=production GRAPHQL_ENDPOINT=$BACKEND_ADDR/system webpack --config webpack.config.build.js && cp -r static/* dist",
