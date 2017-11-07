@@ -2,7 +2,7 @@ const express = require('express')
 const bodyParser = require('body-parser')
 const {graphqlExpress} = require('apollo-server-express')
 const {makeExecutableSchema} = require('graphql-tools')
-const expressPlayground = require('graphql-playground-middleware-express')
+const expressPlayground = require('graphql-playground-middleware-express').default
 
 const schema = makeExecutableSchema({
   typeDefs: `
