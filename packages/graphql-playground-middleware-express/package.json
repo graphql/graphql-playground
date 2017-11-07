@@ -5,7 +5,8 @@
   "description": "GraphQL IDE for better development workflows (GraphQL Subscriptions, interactive docs & collaboration).",
   "contributors": [
     "Tim Suchanek <tim@graph.cool>",
-    "Johannes Schickling <johannes@graph.cool>"
+    "Johannes Schickling <johannes@graph.cool>",
+    "Mohammad Rajabifard <mo.rajbi@gmail.com>"
   ],
   "repository": "http://github.com/graphcool/graphql-playground.git",
   "license": "SEE LICENSE IN LICENSE",
@@ -17,7 +18,12 @@
     "build": "tsc",
     "prepublishOnly": "npm run build"
   },
-  "keywords": [],
+  "keywords": [
+    "graphql",
+    "graphiql",
+    "playground",
+    "graphcool"
+  ],
   "peerDependencies": {
     "express": "^4.16.2"
   },
