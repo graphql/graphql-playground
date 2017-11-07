@@ -1,6 +1,6 @@
 {
-  "name": "graphql-playground-middleware-lambada",
-  "version": "1.0.0",
+  "name": "graphql-playground-middleware-lambda",
+  "version": "1.1.2",
   "homepage": "https://github.com/graphcool/graphql-playground/tree/master/packages/graphql-playground-middleware-lambada",
   "description": "GraphQL IDE for better development workflows (GraphQL Subscriptions, interactive docs & collaboration).",
   "contributors": [

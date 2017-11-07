@@ -2,5 +2,11 @@
   "_workspaces": [
     "packages/*"
   ],
-  "homepage": "https://github.com/graphcool/graphql-playground"
+  "homepage": "https://github.com/graphcool/graphql-playground",
+  "devDependencies": {
+    "aws-lambda": "^0.1.2",
+    "express": "^4.16.2",
+    "hapi": "^16.6.2",
+    "koa": "^2.4.1"
+  }
 }
