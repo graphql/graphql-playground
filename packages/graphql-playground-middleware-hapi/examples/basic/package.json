@@ -1,0 +1,19 @@
+{
+  "name": "hapi",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "apollo-server-hapi": "^1.2.0",
+    "graphql": "^0.11.7",
+    "graphql-playground-middleware-hapi": "^1.0.0",
+    "graphql-tools": "^2.7.1",
+    "hapi": "^16.6.2"
+  }
+}
