@@ -7,7 +7,7 @@ import { defaultQuery, introspectionQuery } from '../constants'
 import { PermissionSession, ServiceInformation, Session } from '../types'
 import * as cuid from 'cuid'
 import * as Immutable from 'seamless-immutable'
-import ThemeProvider from './Theme/ThemeProvider'
+import OldThemeProvider from './Theme/ThemeProvider'
 import PlaygroundStorage from './PlaygroundStorage'
 import getQueryTypes from './Playground/util/getQueryTypes'
 import debounce from 'graphiql/dist/utility/debounce'
@@ -219,11 +219,9 @@ export class Playground extends React.PureComponent<Props & DocsState, State> {
 
   componentDidMount() {
     if (this.initialIndex > -1) {
-      this.setState(
-        {
-          selectedSessionIndex: this.initialIndex,
-        } as State,
-      )
+      this.setState({
+        selectedSessionIndex: this.initialIndex,
+      } as State)
     }
     if (
       ['STEP3_UNCOMMENT_DESCRIPTION', 'STEP3_OPEN_PLAYGROUND'].indexOf(
@@ -289,14 +287,12 @@ export class Playground extends React.PureComponent<Props & DocsState, State> {
       additionalHeaders,
     ).then(simpleSchemaData => {
       if (!simpleSchemaData || simpleSchemaData.error) {
-        this.setState(
-          {
-            response: {
-              date: simpleSchemaData.error,
-              time: new Date(),
-            },
-          } as State,
-        )
+        this.setState({
+          response: {
+            date: simpleSchemaData.error,
+            time: new Date(),
+          },
+        } as State)
         return
       }
 
@@ -315,12 +311,10 @@ export class Playground extends React.PureComponent<Props & DocsState, State> {
 
       this.renewStack(simpleSchema)
 
-      this.setState(
-        {
-          schemaCache: simpleSchema,
-          userFields,
-        } as State,
-      )
+      this.setState({
+        schemaCache: simpleSchema,
+        userFields,
+      } as State)
     })
   }
 
@@ -581,7 +575,7 @@ export class Playground extends React.PureComponent<Props & DocsState, State> {
       : this.getSimpleEndpoint()
     const isGraphcoolUrl = this.isGraphcoolUrl(selectedEndpointUrl)
     return (
-      <ThemeProvider theme={this.state.theme}>
+      <OldThemeProvider theme={this.state.theme}>
         <div className={cx('playground')}>
           <style jsx={true}>{`
             .playground {
@@ -592,7 +586,7 @@ export class Playground extends React.PureComponent<Props & DocsState, State> {
               font-family: 'Open Sans', sans-serif;
               -webkit-font-smoothing: antialiased;
               -moz-osx-font-smoothing: grayscale;
-              color: rgba(0, 0, 0, .8);
+              color: rgba(0, 0, 0, 0.8);
               line-height: 1.5;
               letter-spacing: 0.53px;
               margin-right: -1px !important;
@@ -635,7 +629,7 @@ export class Playground extends React.PureComponent<Props & DocsState, State> {
               'docs-graphiql': theme === 'light',
             })}
           >
-            {sessions.map((session, index) =>
+            {sessions.map((session, index) => (
               <div
                 key={session.id}
                 className={cx('graphiql-wrapper', {
@@ -685,12 +679,12 @@ export class Playground extends React.PureComponent<Props & DocsState, State> {
                   permission={session.permission}
                   serviceInformation={this.state.serviceInformation}
                 />
-              </div>,
-            )}
+              </div>
+            ))}
           </div>
           <Settings
             onToggleTheme={this.toggleTheme}
-            theme={this.state.theme}
+            localTheme={this.state.theme}
             autoReload={this.state.autoReloadSchema}
             onToggleReload={this.toggleSchemaReload}
             onReload={this.fetchSchemas}
@@ -704,14 +698,15 @@ export class Playground extends React.PureComponent<Props & DocsState, State> {
             }
           />
           {this.props.adminAuthToken &&
-            this.state.serviceInformation &&
-            <NewPermissionTab
-              serviceInformation={this.state.serviceInformation}
-              theme={this.state.theme}
-              onNewPermissionTab={this.handleNewPermissionTab}
-            />}
+            this.state.serviceInformation && (
+              <NewPermissionTab
+                serviceInformation={this.state.serviceInformation}
+                localTheme={this.state.theme}
+                onNewPermissionTab={this.handleNewPermissionTab}
+              />
+            )}
           <Share
-            theme={this.state.theme}
+            localTheme={this.state.theme}
             onShare={this.share}
             onToggleHistory={this.toggleShareHistory}
             onToggleAllTabs={this.toggleShareAllTabs}
@@ -723,7 +718,7 @@ export class Playground extends React.PureComponent<Props & DocsState, State> {
             reshare={this.state.changed}
           />
           <GraphDocs schema={this.state.schemaCache} />
-          {this.state.historyOpen &&
+          {this.state.historyOpen && (
             <HistoryPopup
               isOpen={this.state.historyOpen}
               onRequestClose={this.handleCloseHistory}
@@ -733,14 +728,15 @@ export class Playground extends React.PureComponent<Props & DocsState, State> {
               schema={this.state.schemaCache}
               onCreateSession={this.handleCreateSession}
               isGraphcool={isGraphcoolUrl}
-            />}
+            />
+          )}
           {this.props.adminAuthToken &&
             this.state.selectUserOpen &&
             this.renderUserPopup()}
           {this.state.codeGenerationPopupOpen &&
             this.renderCodeGenerationPopup()}
         </div>
-      </ThemeProvider>
+      </OldThemeProvider>
     )
   }
 
@@ -1002,11 +998,9 @@ query ${operationName} {
   }
 
   private handleClickCodeGeneration = () => {
-    this.setState(
-      {
-        codeGenerationPopupOpen: true,
-      } as State,
-    )
+    this.setState({
+      codeGenerationPopupOpen: true,
+    } as State)
   }
 
   private handleCloseCodeGeneration = () => {
@@ -1290,12 +1284,10 @@ query ${operationName} {
       if (viewer === 'USER') {
         // give the user some time to realize whats going on
         setTimeout(() => {
-          this.setState(
-            {
-              selectUserOpen: true,
-              selectUserSessionId: sessionId,
-            } as State,
-          )
+          this.setState({
+            selectUserOpen: true,
+            selectUserSessionId: sessionId,
+          } as State)
         }, 300)
       }
 
@@ -1328,11 +1320,9 @@ query ${operationName} {
   }
 
   private handleCloseSelectUser = () => {
-    this.setState(
-      {
-        selectUserOpen: false,
-      } as State,
-    )
+    this.setState({
+      selectUserOpen: false,
+    } as State)
   }
 
   private handleVariableChange = (sessionId: string, variables: string) => {

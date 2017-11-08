@@ -35,7 +35,7 @@ export default class ThemeProvider extends React.PureComponent<
   {}
 > {
   static childContextTypes = {
-    theme: PropTypes.object,
+    localTheme: PropTypes.object,
   }
 
   private theme: Theme
@@ -53,14 +53,10 @@ export default class ThemeProvider extends React.PureComponent<
   }
 
   getChildContext() {
-    return { theme: this.theme }
+    return { localTheme: this.theme }
   }
 
   render() {
-    return (
-      <div>
-        {this.props.children}
-      </div>
-    )
+    return <div>{this.props.children}</div>
   }
 }

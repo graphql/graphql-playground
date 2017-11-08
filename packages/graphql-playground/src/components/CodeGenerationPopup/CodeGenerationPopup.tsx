@@ -6,7 +6,7 @@ import CodeGenerationPopupClientChooser from './CodeGenerationPopupClientChooser
 import { modalStyle } from '../../constants'
 import * as Modal from 'react-modal'
 import { Environment, GraphQLClient } from '../../types'
-import withTheme from '../Theme/withTheme'
+import { withTheme, ThemeInterface } from '../Theme'
 
 export interface Props {
   query: string
@@ -15,16 +15,15 @@ export interface Props {
   endpointUrl: string
 }
 
-interface Theme {
-  theme: string
-}
-
 export interface State {
   selectedClient: GraphQLClient
   selectedEnv: Environment
 }
 
-class CodeGenerationPopup extends React.Component<Props & Theme, State> {
+class CodeGenerationPopup extends React.Component<
+  Props & ThemeInterface,
+  State
+> {
   constructor(props) {
     super(props)
     this.state = {
@@ -38,7 +37,7 @@ class CodeGenerationPopup extends React.Component<Props & Theme, State> {
   }
 
   render() {
-    const { query, endpointUrl, theme } = this.props
+    const { query, endpointUrl, localTheme } = this.props
     const { selectedEnv } = this.state
     const queryActive =
       Boolean(query) && query.length > 0 && query.includes('query')
@@ -46,7 +45,7 @@ class CodeGenerationPopup extends React.Component<Props & Theme, State> {
       selectedEnv === 'Cli' ? ['curl'] : ['graphql-request', 'fetch']
 
     let customModalStyle = modalStyle
-    if (theme === 'light') {
+    if (localTheme === 'light') {
       customModalStyle = {
         ...modalStyle,
         overlay: {
@@ -111,12 +110,10 @@ class CodeGenerationPopup extends React.Component<Props & Theme, State> {
     if (env === 'Cli') {
       this.setState({ selectedEnv: env, selectedClient: 'curl' } as State)
     } else {
-      this.setState(
-        {
-          selectedEnv: env,
-          selectedClient: selectedClient === 'curl' ? 'fetch' : selectedClient,
-        } as State,
-      )
+      this.setState({
+        selectedEnv: env,
+        selectedClient: selectedClient === 'curl' ? 'fetch' : selectedClient,
+      } as State)
     }
   }
 }

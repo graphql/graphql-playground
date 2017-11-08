@@ -3,13 +3,12 @@ import Icon from 'graphcool-styles/dist/components/Icon/Icon'
 import { $v } from 'graphcool-styles'
 import ToggleButton from './ToggleButton'
 import Tooltip from './Tooltip'
-import { Theme } from './Playground'
+import { ThemeInterface } from './Theme'
 import * as cn from 'classnames'
 import { Button } from './Button'
 import Copy from './Copy'
 
-export interface Props {
-  theme: Theme
+export interface Props extends ThemeInterface {
   allTabs: boolean
   httpHeaders: boolean
   history: boolean
@@ -41,7 +40,7 @@ export default class Share extends React.Component<Props, State> {
       onToggleAllTabs,
       onToggleHistory,
       onToggleHttpHeaders,
-      theme,
+      localTheme,
       shareUrl,
       onShare,
       reshare,
@@ -113,12 +112,12 @@ export default class Share extends React.Component<Props, State> {
         `}</style>
         <div className="icon">
           <div
-            className={cn('button', this.props.theme, { open })}
+            className={cn('button', localTheme, { open })}
             onClick={this.toggleTooltip}
           >
             <Icon
               src={require('../assets/icons/share.svg')}
-              color={theme === 'light' ? $v.darkBlue40 : $v.white40}
+              color={localTheme === 'light' ? $v.darkBlue40 : $v.white40}
               stroke={true}
               width={13}
               height={13}
@@ -156,7 +155,7 @@ export default class Share extends React.Component<Props, State> {
                   </span>
                   <ToggleButton checked={history} onChange={onToggleHistory} />
                 </div>
-                {shareUrl &&
+                {shareUrl && (
                   <div className="row">
                     <input value={shareUrl} disabled={true} />
                     <div className="copy">
@@ -169,7 +168,8 @@ export default class Share extends React.Component<Props, State> {
                         />
                       </Copy>
                     </div>
-                  </div>}
+                  </div>
+                )}
                 <div className="row">
                   <div />
                   <Button hideArrow={true} onClick={onShare}>

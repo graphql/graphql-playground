@@ -2,7 +2,7 @@
 import * as React from 'react'
 import * as cx from 'classnames'
 import { $p } from 'graphcool-styles'
-import styled, { css } from 'styled-components'
+import styled, { css } from '../styled'
 
 export interface Props {
   checked: boolean
@@ -43,18 +43,19 @@ interface SliderProps {
 const Slider = styled.div.attrs({
   className: (p: SliderProps) =>
     cx(
-      $p.absolute,
-      $p.pointer,
-      $p.top0,
-      $p.left0,
-      $p.right0,
-      $p.bottom0,
       // Change color if it's checked
       p.checked ? $p.bgGreen : $p.bgBlack40,
     ),
 })`
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+
   transition: transform 70ms linear;
   border-radius: 23px;
+  cursor: pointer;
 
   &:before {
     position: absolute;

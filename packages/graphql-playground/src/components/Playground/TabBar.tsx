@@ -2,10 +2,10 @@ import * as React from 'react'
 import * as cx from 'classnames'
 import { Session } from '../../types'
 import { Icon } from 'graphcool-styles'
-import withTheme from '../Theme/withTheme'
+import { withTheme, OptionalThemeInterface } from '../Theme'
 import Tab from './Tab'
 
-export interface Props {
+export interface Props extends OptionalThemeInterface {
   sessions: Session[]
   selectedSessionIndex: number
   onNewSession: any
@@ -15,7 +15,6 @@ export interface Props {
   onboardingStep?: string
   tether?: any
   nextStep?: () => void
-  theme?: string
   isApp?: boolean
 }
 
@@ -34,14 +33,14 @@ export const TabBar = withTheme<
     onCloseSession,
     onboardingStep,
     tether,
-    theme,
+    localTheme,
     isApp,
     nextStep,
   }: Props) => {
     const Tether = tether
 
     return (
-      <div className={cx('tabbar', theme)}>
+      <div className={cx('tabbar', localTheme)}>
         <style jsx={true}>{`
           .tab {
             @p: .flex,
@@ -181,7 +180,7 @@ export const TabBar = withTheme<
           }
         `}</style>
         <div className={cx('tabs', { isApp })}>
-          {sessions.map((session, index) =>
+          {sessions.map((session, index) => (
             <Tab
               key={session.id}
               session={session}
@@ -190,43 +189,45 @@ export const TabBar = withTheme<
               selectedSessionIndex={selectedSessionIndex}
               onCloseSession={onCloseSession}
               tether={tether}
-              theme={theme}
+              localTheme={localTheme}
               onboardingStep={onboardingStep}
-            />,
-          )}
-          {tether && onboardingStep === 'STEP3_CREATE_MUTATION_TAB'
-            ? <Tether
-                offsetY={-7}
-                steps={[
-                  {
-                    step: 'STEP3_CREATE_MUTATION_TAB',
-                    title: 'Apparently, there is no data yet',
-                    description: 'Click here to create new data',
-                  },
-                ]}
-              >
-                <div className="tab plus" onClick={onNewSession}>
-                  <Icon
-                    src={require('graphcool-styles/icons/stroke/add.svg')}
-                    color={theme === 'dark' ? white20 : darkBlue20}
-                    width={34}
-                    height={34}
-                    stroke={true}
-                    strokeWidth={4}
-                  />
-                </div>
-              </Tether>
-            : <div className="tab plus" onClick={onNewSession}>
+            />
+          ))}
+          {tether && onboardingStep === 'STEP3_CREATE_MUTATION_TAB' ? (
+            <Tether
+              offsetY={-7}
+              steps={[
+                {
+                  step: 'STEP3_CREATE_MUTATION_TAB',
+                  title: 'Apparently, there is no data yet',
+                  description: 'Click here to create new data',
+                },
+              ]}
+            >
+              <div className="tab plus" onClick={onNewSession}>
                 <Icon
                   src={require('graphcool-styles/icons/stroke/add.svg')}
-                  color={theme === 'dark' ? white20 : darkBlue20}
+                  color={localTheme === 'dark' ? white20 : darkBlue20}
                   width={34}
                   height={34}
                   stroke={true}
                   strokeWidth={4}
                 />
-              </div>}
-          <div className={cx('history', theme)}>
+              </div>
+            </Tether>
+          ) : (
+            <div className="tab plus" onClick={onNewSession}>
+              <Icon
+                src={require('graphcool-styles/icons/stroke/add.svg')}
+                color={localTheme === 'dark' ? white20 : darkBlue20}
+                width={34}
+                height={34}
+                stroke={true}
+                strokeWidth={4}
+              />
+            </div>
+          )}
+          <div className={cx('history', localTheme)}>
             <Icon
               className="icon"
               src={require('graphcool-styles/icons/stroke/history.svg')}
@@ -234,12 +235,12 @@ export const TabBar = withTheme<
               strokeWidth={4}
               width={27}
               height={27}
-              color={theme === 'dark' ? white20 : darkBlue20}
+              color={localTheme === 'dark' ? white20 : darkBlue20}
               onClick={onOpenHistory}
             />
           </div>
         </div>
-        {theme === 'light' && <div className="border-bottom" />}
+        {localTheme === 'light' && <div className="border-bottom" />}
       </div>
     )
   },
