@@ -12,42 +12,6 @@
   },
   "main": "lib/main.js",
   "build": {
-    "fileAssociations": [
-      {
-        "ext": "graphql",
-        "name": "GraphQL",
-        "description": "GraphQL file",
-        "role": "Editor"
-      }
-    ]
-  },
-  "scripts": {
-    "build-ts": "rm -rf lib && tsc --target es5",
-    "build-webpack": "rm -rf ./dist && NODE_ENV=production GRAPHQL_ENDPOINT=$BACKEND_ADDR/system webpack --config webpack.config.build.js && cp -r static/* dist",
-    "build": "npm run build-ts && npm run build-webpack && cp -r dist lib && rm -rf ./build-electron",
-    "mac": "npm run build && electron-builder -m",
-    "release": "npm run build && electron-builder -lmw",
-    "library": "rm -rf .happypack && NODE_ENV=production webpack --config webpack.library.js -p",
-    "lint": "tslint \"src/**/*.ts{,x}\" && lint-staged",
-    "start": "yarn build-ts && concurrently \"yarn react-start\" \"wait-on http://localhost:4040/ && yarn electron-start\"",
-    "react-start": "webpack-dev-server --hot --profile --history-api-fallback --host 0.0.0.0 --port 4040",
-    "electron-start": "electron lib/main",
-    "stats": "NODE_ENV=production webpack --config webpack.library.js  --profile --json > stats.json",
-    "test": "npm run lint",
-    "precommit": "lint-staged",
-    "prettier": "prettier --single-quote --no-semi --trailing-comma all --write '*.{js,ts,tsx}' 'src/**/*.{js,ts,tsx}'"
-  },
-  "lint-staged": {
-    "*.{ts,tsx}": [
-      "prettier --single-quote --no-semi --trailing-comma all --write",
-      "tslint",
-      "git add"
-    ]
-  },
-  "pre-push": [
-    "test-quick"
-  ],
-  "build": {
     "appId": "cool.graph.playground",
     "mac": {
       "category": "public.app-category.developer-tools",
@@ -92,6 +56,32 @@
       "role": "Editor"
     }
   },
+  "scripts": {
+    "build-ts": "rimraf lib && tsc --target es5",
+    "build-webpack": "rimraf ./dist && NODE_ENV=production GRAPHQL_ENDPOINT=$BACKEND_ADDR/system webpack --config webpack.config.build.js && cp -r static/* dist",
+    "build": "npm run build-ts && npm run build-webpack && cp -r dist lib && rimraf ./build-electron",
+    "mac": "npm run build && electron-builder -m",
+    "release": "npm run build && electron-builder -lmw",
+    "library": "rimraf .happypack && NODE_ENV=production webpack --config webpack.library.js -p",
+    "lint": "tslint \"src/**/*.ts{,x}\" && lint-staged",
+    "start": "yarn build-ts && concurrently \"yarn react-start\" \"wait-on http://localhost:4040/ && yarn electron-start\"",
+    "react-start": "webpack-dev-server --hot --profile --history-api-fallback --host 0.0.0.0 --port 4040",
+    "electron-start": "electron lib/main",
+    "stats": "NODE_ENV=production webpack --config webpack.library.js  --profile --json > stats.json",
+    "test": "npm run lint",
+    "precommit": "lint-staged",
+    "prettier": "prettier --single-quote --no-semi --trailing-comma all --write '*.{js,ts,tsx}' 'src/**/*.{js,ts,tsx}'"
+  },
+  "lint-staged": {
+    "*.{ts,tsx}": [
+      "prettier --single-quote --no-semi --trailing-comma all --write",
+      "tslint",
+      "git add"
+    ]
+  },
+  "pre-push": [
+    "test-quick"
+  ],
   "dependencies": {
     "classnames": "^2.2.5",
     "date-fns": "^1.28.5",
@@ -155,6 +145,7 @@
     "react-addons-test-utils": "^15.3.2",
     "react-test-renderer": "^15.3.2",
     "redux-mock-store": "^1.2.1",
+    "rimraf": "^2.6.2",
     "style-loader": "^0.18.2",
     "svgo-loader": "^1.1.0",
     "ts-loader": "^2.3.2",
