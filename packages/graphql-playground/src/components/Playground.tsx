@@ -41,6 +41,7 @@ import { isEqual, mapValues } from 'lodash'
 import Share from './Share'
 import NewPermissionTab from './Permissions/NewPermissionTab'
 import { serviceInformationQuery } from './constants'
+import { ThemeProvider, theme as styledTheme } from '../styled'
 
 export type Theme = 'dark' | 'light'
 export type Viewer = 'ADMIN' | 'EVERYONE' | 'USER'
@@ -575,168 +576,170 @@ export class Playground extends React.PureComponent<Props & DocsState, State> {
       : this.getSimpleEndpoint()
     const isGraphcoolUrl = this.isGraphcoolUrl(selectedEndpointUrl)
     return (
-      <OldThemeProvider theme={this.state.theme}>
-        <div className={cx('playground')}>
-          <style jsx={true}>{`
-            .playground {
-              @p: .h100, .flex, .flexColumn;
-              margin: 0;
-              padding: 0;
-              overflow: hidden;
-              font-family: 'Open Sans', sans-serif;
-              -webkit-font-smoothing: antialiased;
-              -moz-osx-font-smoothing: grayscale;
-              color: rgba(0, 0, 0, 0.8);
-              line-height: 1.5;
-              letter-spacing: 0.53px;
-              margin-right: -1px !important;
-            }
+      <ThemeProvider theme={styledTheme}>
+        <OldThemeProvider theme={this.state.theme}>
+          <div className={cx('playground')}>
+            <style jsx={true}>{`
+              .playground {
+                @p: .h100, .flex, .flexColumn;
+                margin: 0;
+                padding: 0;
+                overflow: hidden;
+                font-family: 'Open Sans', sans-serif;
+                -webkit-font-smoothing: antialiased;
+                -moz-osx-font-smoothing: grayscale;
+                color: rgba(0, 0, 0, 0.8);
+                line-height: 1.5;
+                letter-spacing: 0.53px;
+                margin-right: -1px !important;
+              }
 
-            .blur {
-              filter: blur(5px);
-            }
+              .blur {
+                filter: blur(5px);
+              }
 
-            .graphiqls-container {
-              @p: .relative, .overflowHidden;
-              height: calc(100vh - 57px);
-            }
+              .graphiqls-container {
+                @p: .relative, .overflowHidden;
+                height: calc(100vh - 57px);
+              }
 
-            .graphiql-wrapper {
-              @p: .w100, .h100, .relative;
-            }
+              .graphiql-wrapper {
+                @p: .w100, .h100, .relative;
+              }
 
-            .playground :global(a:active),
-            .playground :global(a:focus),
-            .playground :global(button:focus),
-            .playground :global(input:focus) {
-              outline: none;
-            }
-          `}</style>
-          <TabBar
-            sessions={sessions}
-            selectedSessionIndex={selectedSessionIndex}
-            onNewSession={this.handleNewSessionWithoutNewIndexZero}
-            onCloseSession={this.handleCloseSession}
-            onOpenHistory={this.handleOpenHistory}
-            onSelectSession={this.handleSelectSession}
-            onboardingStep={this.props.onboardingStep}
-            nextStep={this.props.nextStep}
-            tether={this.props.tether}
-            isApp={this.props.isApp}
-          />
-          <div
-            className={cx('graphiqls-container', {
-              'docs-graphiql': theme === 'light',
-            })}
-          >
-            {sessions.map((session, index) => (
-              <div
-                key={session.id}
-                className={cx('graphiql-wrapper', {
-                  active: index === selectedSessionIndex,
-                })}
-                style={{
-                  top: `-${100 * selectedSessionIndex}%`,
-                }}
-              >
-                <GraphQLEditorSession
+              .playground :global(a:active),
+              .playground :global(a:focus),
+              .playground :global(button:focus),
+              .playground :global(input:focus) {
+                outline: none;
+              }
+            `}</style>
+            <TabBar
+              sessions={sessions}
+              selectedSessionIndex={selectedSessionIndex}
+              onNewSession={this.handleNewSessionWithoutNewIndexZero}
+              onCloseSession={this.handleCloseSession}
+              onOpenHistory={this.handleOpenHistory}
+              onSelectSession={this.handleSelectSession}
+              onboardingStep={this.props.onboardingStep}
+              nextStep={this.props.nextStep}
+              tether={this.props.tether}
+              isApp={this.props.isApp}
+            />
+            <div
+              className={cx('graphiqls-container', {
+                'docs-graphiql': theme === 'light',
+              })}
+            >
+              {sessions.map((session, index) => (
+                <div
                   key={session.id}
-                  session={session}
-                  index={index}
-                  schemaCache={
-                    session.permission
-                      ? this.state.permissionSchema
-                      : this.state.schemaCache
-                  }
-                  isGraphcoolUrl={isGraphcoolUrl}
-                  fetcher={
-                    session.permission ? this.permissionFetcher : this.fetcher
-                  }
-                  adminAuthToken={this.props.adminAuthToken}
-                  isEndpoint={Boolean(isEndpoint)}
-                  storage={this.storage.getSessionStorage(session.id)}
-                  onClickCodeGeneration={this.handleClickCodeGeneration}
-                  onChangeViewer={this.handleViewerChange}
-                  onEditOperationName={this.handleOperationNameChange}
-                  onEditVariables={this.handleVariableChange}
-                  onEditQuery={this.handleQueryChange}
-                  onChangeHeaders={this.handleChangeHeaders}
-                  responses={
-                    this.state.response ? [this.state.response] : undefined
-                  }
-                  disableQueryHeader={this.state.disableQueryHeader}
-                  onboardingStep={
-                    index === selectedSessionIndex
-                      ? this.props.onboardingStep
-                      : undefined
-                  }
-                  tether={this.props.tether}
-                  nextStep={this.props.nextStep}
-                  onRef={this.setRef}
-                  autofillMutation={this.autofillMutation}
-                  useVim={this.state.useVim && index === selectedSessionIndex}
-                  isActive={index === selectedSessionIndex}
-                  permission={session.permission}
+                  className={cx('graphiql-wrapper', {
+                    active: index === selectedSessionIndex,
+                  })}
+                  style={{
+                    top: `-${100 * selectedSessionIndex}%`,
+                  }}
+                >
+                  <GraphQLEditorSession
+                    key={session.id}
+                    session={session}
+                    index={index}
+                    schemaCache={
+                      session.permission
+                        ? this.state.permissionSchema
+                        : this.state.schemaCache
+                    }
+                    isGraphcoolUrl={isGraphcoolUrl}
+                    fetcher={
+                      session.permission ? this.permissionFetcher : this.fetcher
+                    }
+                    adminAuthToken={this.props.adminAuthToken}
+                    isEndpoint={Boolean(isEndpoint)}
+                    storage={this.storage.getSessionStorage(session.id)}
+                    onClickCodeGeneration={this.handleClickCodeGeneration}
+                    onChangeViewer={this.handleViewerChange}
+                    onEditOperationName={this.handleOperationNameChange}
+                    onEditVariables={this.handleVariableChange}
+                    onEditQuery={this.handleQueryChange}
+                    onChangeHeaders={this.handleChangeHeaders}
+                    responses={
+                      this.state.response ? [this.state.response] : undefined
+                    }
+                    disableQueryHeader={this.state.disableQueryHeader}
+                    onboardingStep={
+                      index === selectedSessionIndex
+                        ? this.props.onboardingStep
+                        : undefined
+                    }
+                    tether={this.props.tether}
+                    nextStep={this.props.nextStep}
+                    onRef={this.setRef}
+                    autofillMutation={this.autofillMutation}
+                    useVim={this.state.useVim && index === selectedSessionIndex}
+                    isActive={index === selectedSessionIndex}
+                    permission={session.permission}
+                    serviceInformation={this.state.serviceInformation}
+                  />
+                </div>
+              ))}
+            </div>
+            <Settings
+              onToggleTheme={this.toggleTheme}
+              localTheme={this.state.theme}
+              autoReload={this.state.autoReloadSchema}
+              onToggleReload={this.toggleSchemaReload}
+              onReload={this.fetchSchemas}
+              endpoint={this.props.endpoint}
+              onChangeEndpoint={this.props.onChangeEndpoint}
+              useVim={this.state.useVim}
+              onToggleUseVim={this.toggleUseVim}
+              subscriptionsEndpoint={this.props.subscriptionsEndpoint || ''}
+              onChangeSubscriptionsEndpoint={
+                this.props.onChangeSubscriptionsEndpoint
+              }
+            />
+            {this.props.adminAuthToken &&
+              this.state.serviceInformation && (
+                <NewPermissionTab
                   serviceInformation={this.state.serviceInformation}
+                  localTheme={this.state.theme}
+                  onNewPermissionTab={this.handleNewPermissionTab}
                 />
-              </div>
-            ))}
-          </div>
-          <Settings
-            onToggleTheme={this.toggleTheme}
-            localTheme={this.state.theme}
-            autoReload={this.state.autoReloadSchema}
-            onToggleReload={this.toggleSchemaReload}
-            onReload={this.fetchSchemas}
-            endpoint={this.props.endpoint}
-            onChangeEndpoint={this.props.onChangeEndpoint}
-            useVim={this.state.useVim}
-            onToggleUseVim={this.toggleUseVim}
-            subscriptionsEndpoint={this.props.subscriptionsEndpoint || ''}
-            onChangeSubscriptionsEndpoint={
-              this.props.onChangeSubscriptionsEndpoint
-            }
-          />
-          {this.props.adminAuthToken &&
-            this.state.serviceInformation && (
-              <NewPermissionTab
-                serviceInformation={this.state.serviceInformation}
-                localTheme={this.state.theme}
-                onNewPermissionTab={this.handleNewPermissionTab}
+              )}
+            <Share
+              localTheme={this.state.theme}
+              onShare={this.share}
+              onToggleHistory={this.toggleShareHistory}
+              onToggleAllTabs={this.toggleShareAllTabs}
+              onToggleHttpHeaders={this.toggleShareHTTPHeaders}
+              history={this.state.shareHistory}
+              allTabs={this.state.shareAllTabs}
+              httpHeaders={this.state.shareHttpHeaders}
+              shareUrl={this.props.shareUrl}
+              reshare={this.state.changed}
+            />
+            <GraphDocs schema={this.state.schemaCache} />
+            {this.state.historyOpen && (
+              <HistoryPopup
+                isOpen={this.state.historyOpen}
+                onRequestClose={this.handleCloseHistory}
+                historyItems={this.state.history}
+                onItemStarToggled={this.handleItemStarToggled}
+                fetcherCreater={this.fetcher}
+                schema={this.state.schemaCache}
+                onCreateSession={this.handleCreateSession}
+                isGraphcool={isGraphcoolUrl}
               />
             )}
-          <Share
-            localTheme={this.state.theme}
-            onShare={this.share}
-            onToggleHistory={this.toggleShareHistory}
-            onToggleAllTabs={this.toggleShareAllTabs}
-            onToggleHttpHeaders={this.toggleShareHTTPHeaders}
-            history={this.state.shareHistory}
-            allTabs={this.state.shareAllTabs}
-            httpHeaders={this.state.shareHttpHeaders}
-            shareUrl={this.props.shareUrl}
-            reshare={this.state.changed}
-          />
-          <GraphDocs schema={this.state.schemaCache} />
-          {this.state.historyOpen && (
-            <HistoryPopup
-              isOpen={this.state.historyOpen}
-              onRequestClose={this.handleCloseHistory}
-              historyItems={this.state.history}
-              onItemStarToggled={this.handleItemStarToggled}
-              fetcherCreater={this.fetcher}
-              schema={this.state.schemaCache}
-              onCreateSession={this.handleCreateSession}
-              isGraphcool={isGraphcoolUrl}
-            />
-          )}
-          {this.props.adminAuthToken &&
-            this.state.selectUserOpen &&
-            this.renderUserPopup()}
-          {this.state.codeGenerationPopupOpen &&
-            this.renderCodeGenerationPopup()}
-        </div>
-      </OldThemeProvider>
+            {this.props.adminAuthToken &&
+              this.state.selectUserOpen &&
+              this.renderUserPopup()}
+            {this.state.codeGenerationPopupOpen &&
+              this.renderCodeGenerationPopup()}
+          </div>
+        </OldThemeProvider>
+      </ThemeProvider>
     )
   }
 

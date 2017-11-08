@@ -1,7 +1,5 @@
 /* tslint:disable */
 import * as React from 'react'
-import * as cx from 'classnames'
-import { $p } from 'graphcool-styles'
 import styled, { css } from '../styled'
 
 export interface Props {
@@ -21,12 +19,10 @@ const ToggleButton = ({ checked, onChange, className }: Props) => {
 
 export default ToggleButton
 
-const Wrapper = styled.div.attrs({
-  // Here we're extending the particles and the passed down className
-  // from the own props
-  className: p => cx($p.relative, $p.dib, p.className),
-})`
-  /* Other custom styles */
+const Wrapper = styled.div`
+  position: relative;
+  display: inline-block;
+
   width: 39px;
   height: 21px;
 `
@@ -37,16 +33,9 @@ const Input = styled.input`
 
 interface SliderProps {
   checked: boolean
-  className?: string
 }
 
-const Slider = styled.div.attrs({
-  className: (p: SliderProps) =>
-    cx(
-      // Change color if it's checked
-      p.checked ? $p.bgGreen : $p.bgBlack40,
-    ),
-})`
+const Slider = styled.div`
   position: absolute;
   top: 0;
   left: 0;
@@ -56,6 +45,9 @@ const Slider = styled.div.attrs({
   transition: transform 70ms linear;
   border-radius: 23px;
   cursor: pointer;
+
+  background: ${p =>
+    p.checked ? p.theme.colours.green : p.theme.colours.black40};
 
   &:before {
     position: absolute;
