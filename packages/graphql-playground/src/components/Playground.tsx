@@ -718,6 +718,7 @@ export class Playground extends React.PureComponent<Props & DocsState, State> {
               httpHeaders={this.state.shareHttpHeaders}
               shareUrl={this.props.shareUrl}
               reshare={this.state.changed}
+              isSharingAuthorization={this.isSharingAuthorization()}
             />
             <GraphDocs schema={this.state.schemaCache} />
             {this.state.historyOpen && (
@@ -1553,6 +1554,32 @@ query ${operationName} {
     })
   }
 
+  private isSharingAuthorization = (): boolean => {
+    const {
+      sessions,
+      shareHttpHeaders,
+      shareAllTabs,
+      selectedSessionIndex,
+    } = this.state
+
+    // if we're not sharing *any* headers, then just return false
+    if (!shareHttpHeaders) {
+      return false
+    }
+
+    let sharableSessions: Session[]
+
+    if (!shareAllTabs) {
+      const currentSession: Session = sessions[selectedSessionIndex]
+      sharableSessions = [currentSession]
+    } else {
+      // all sessions
+      sharableSessions = sessions
+    }
+
+    return isSharingAuthorization(sharableSessions)
+  }
+
   private toggleUseVim = () => {
     this.setState(
       state => ({ ...state, useVim: !state.useVim }),
@@ -1620,3 +1647,23 @@ query ${operationName} {
 export default connect<any, any, Props>(state => state.graphiqlDocs, {
   setStacks,
 })(Playground)
+
+function isSharingAuthorization(sharableSessions: Session[]): boolean {
+  // If user's gonna share an Authorization header,
+  // let's warn her
+
+  // Check all sessions
+  for (const session of sharableSessions) {
+    // Check every header of each session
+    for (const header of session.headers || []) {
+      // If there's a Authorization header present,
+      // set the flag to `true` and stop the loop
+      if (header.name.toLowerCase() === 'authorization') {
+        // break
+        return true
+      }
+    }
+  }
+
+  return false
+}

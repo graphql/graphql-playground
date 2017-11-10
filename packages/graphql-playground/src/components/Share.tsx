@@ -7,6 +7,7 @@ import { ThemeInterface } from './Theme'
 import * as cn from 'classnames'
 import { Button } from './Button'
 import Copy from './Copy'
+import styled, { keyframes } from '../styled'
 
 export interface Props extends ThemeInterface {
   allTabs: boolean
@@ -18,6 +19,7 @@ export interface Props extends ThemeInterface {
   onShare: () => void
   shareUrl?: string
   reshare: boolean
+  isSharingAuthorization: boolean
 }
 
 export interface State {
@@ -132,6 +134,7 @@ export default class Share extends React.Component<Props, State> {
                 horizontal: 'right',
                 vertical: 'bottom',
               }}
+              renderAfterContent={this.renderAuthSharingWarning}
             >
               <div>
                 <div className="row">
@@ -184,7 +187,56 @@ export default class Share extends React.Component<Props, State> {
     )
   }
 
+  private renderAuthSharingWarning = () => {
+    if (!this.props.isSharingAuthorization) {
+      return null
+    }
+
+    return <AuthSharingWarning />
+  }
+
   private toggleTooltip = () => {
     this.setState(state => ({ open: !state.open }))
   }
 }
+
+const AuthSharingWarning = () => (
+  <Message>
+    <MessageTitle>Watch out!</MessageTitle>
+    You’re sharing your <code>Authorization</code> header with the world!
+  </Message>
+)
+
+// TODO: use theme
+
+const pulse = keyframes`
+  0% {
+    transform: scale(1.04);
+  }
+
+  100% {
+    transform: scale(1);
+  }
+`
+
+const Message = styled.div`
+  padding: 12px 16px;
+  margin-top: 10px;
+
+  font-size: 14px;
+  letter-spacing: normal;
+
+  cursor: default;
+  border-radius: 2px;
+  background: #f3f4f4;
+  box-shadow: 0 1px 6px 0 rgba(0, 0, 0, 0.15);
+
+  animation: ${pulse} 0.7s ease-in-out infinite alternate;
+`
+
+const MessageTitle = styled.div`
+  margin-right: 3px;
+  margin-bottom: 2px;
+  font-weight: bold;
+  color: #2a7ed2;
+`
