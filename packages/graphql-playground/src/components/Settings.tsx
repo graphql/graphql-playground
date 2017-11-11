@@ -3,11 +3,10 @@ import Icon from 'graphcool-styles/dist/components/Icon/Icon'
 import { $v } from 'graphcool-styles'
 import ToggleButton from './ToggleButton'
 import Tooltip from './Tooltip'
-import { Theme } from './Playground'
+import { ThemeInterface } from './Theme'
 import * as cn from 'classnames'
 
-export interface Props {
-  theme: Theme
+export interface Props extends ThemeInterface {
   onToggleTheme: () => void
   onToggleReload: () => void
   useVim: boolean
@@ -36,7 +35,7 @@ export default class Settings extends React.Component<Props, State> {
   render() {
     const { open } = this.state
     const {
-      theme,
+      localTheme,
       onToggleReload,
       autoReload,
       onReload,
@@ -96,10 +95,10 @@ export default class Settings extends React.Component<Props, State> {
             padding-right: 20px;
           }
         `}</style>
-        <div className={cn('icon', theme, { open })}>
+        <div className={cn('icon', localTheme, { open })}>
           <Icon
             src={require('graphcool-styles/icons/fill/settings.svg')}
-            color={theme === 'light' ? $v.darkBlue20 : $v.white20}
+            color={localTheme === 'light' ? $v.darkBlue20 : $v.white20}
             width={23}
             height={23}
             onClick={this.toggleTooltip}
@@ -123,7 +122,7 @@ export default class Settings extends React.Component<Props, State> {
                     LIGHT MODE{' '}
                   </span>
                   <ToggleButton
-                    checked={theme === 'light'}
+                    checked={localTheme === 'light'}
                     onChange={this.props.onToggleTheme}
                   />
                 </div>

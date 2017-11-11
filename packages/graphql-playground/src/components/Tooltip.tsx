@@ -9,6 +9,7 @@ export interface Props {
     vertical?: 'bottom' | 'top'
     horizontal?: 'left' | 'right' | 'center'
   }
+  renderAfterContent?: () => any
   onClick?: () => void
   onClose?: (e?: any) => void
 }
@@ -50,7 +51,7 @@ class Tooltip extends React.PureComponent<Props, {}> {
   }
 
   render() {
-    const { open, children, onClick } = this.props
+    const { open, children, renderAfterContent, onClick } = this.props
     const anchorOrigin = this.props.anchorOrigin!
     return (
       <div
@@ -129,10 +130,13 @@ class Tooltip extends React.PureComponent<Props, {}> {
             border-color: #f3f4f4 transparent transparent transparent;
           }
         `}</style>
+
         <div className="tooltip-content" onClick={onClick}>
           <div className="big-triangle" />
           {children}
         </div>
+
+        {renderAfterContent && renderAfterContent()}
       </div>
     )
   }

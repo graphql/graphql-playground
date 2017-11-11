@@ -3,7 +3,7 @@ import * as cx from 'classnames'
 import { $p } from 'graphcool-styles'
 import { CodeGenerator } from './codeGeneration'
 import { GraphQLClient, Environment } from '../../types'
-import withTheme from '../Theme/withTheme'
+import { withTheme, ThemeInterface } from '../Theme'
 // tslint:disable-next-line
 const Codemirror: any = require('react-codemirror')
 
@@ -14,11 +14,10 @@ export interface Props {
   environment: Environment
 }
 
-interface Theme {
-  theme: string
-}
-
-class CodeGenerationPopupCode extends React.Component<Props & Theme, {}> {
+class CodeGenerationPopupCode extends React.Component<
+  Props & ThemeInterface,
+  {}
+> {
   componentWillMount() {
     require('codemirror/lib/codemirror.css')
     require('codemirror/theme/dracula.css')
@@ -27,7 +26,7 @@ class CodeGenerationPopupCode extends React.Component<Props & Theme, {}> {
     require('codemirror/mode/shell/shell')
   }
   render() {
-    const { client, environment, endpointUrl, query, theme } = this.props
+    const { client, environment, endpointUrl, query, localTheme } = this.props
 
     const generator = new CodeGenerator(client, environment, endpointUrl)
     const projectSetup = generator.getSetup()
@@ -35,7 +34,7 @@ class CodeGenerationPopupCode extends React.Component<Props & Theme, {}> {
     const title = environment !== 'Cli' ? 'Code' : 'Command'
     const mode = environment !== 'Cli' ? 'javascript' : 'shell'
 
-    const codeTheme = theme === 'light' ? 'duotone-light' : 'dracula'
+    const codeTheme = localTheme === 'light' ? 'duotone-light' : 'dracula'
 
     return (
       <div className={cx($p.pa38, $p.pt16, 'code-generation-popup')}>
@@ -50,7 +49,7 @@ class CodeGenerationPopupCode extends React.Component<Props & Theme, {}> {
             height: auto;
           }
         `}</style>
-        {environment !== 'Cli' &&
+        {environment !== 'Cli' && (
           <div>
             <h3>Project Setup</h3>
             <Codemirror
@@ -63,10 +62,9 @@ class CodeGenerationPopupCode extends React.Component<Props & Theme, {}> {
                 theme: codeTheme,
               }}
             />
-          </div>}
-        <h3>
-          {title}
-        </h3>
+          </div>
+        )}
+        <h3>{title}</h3>
         <Codemirror
           key={code}
           value={code}

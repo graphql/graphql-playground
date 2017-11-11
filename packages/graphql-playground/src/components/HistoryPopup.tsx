@@ -6,7 +6,7 @@ import HistoryItems from './HistoryPopup/HistoryItems'
 import { GraphQLEditor } from './Playground/GraphQLEditor'
 import { $v, Icon } from 'graphcool-styles'
 import { modalStyle } from '../constants'
-import withTheme from './Theme/withTheme'
+import { withTheme, ThemeInterface } from './Theme'
 import * as cn from 'classnames'
 
 export interface Props {
@@ -20,17 +20,13 @@ export interface Props {
   isGraphcool: boolean
 }
 
-interface Theme {
-  theme: string
-}
-
 export interface State {
   selectedFilter: HistoryFilter
   selectedItemIndex: number
   searchTerm: string
 }
 
-class HistoryPopup extends React.Component<Props & Theme, State> {
+class HistoryPopup extends React.Component<Props & ThemeInterface, State> {
   constructor(props) {
     super(props)
     this.state = {
@@ -41,20 +37,20 @@ class HistoryPopup extends React.Component<Props & Theme, State> {
   }
   render() {
     const { searchTerm, selectedFilter } = this.state
-    const { theme } = this.props
+    const { localTheme } = this.props
     const items = this.props.historyItems.filter(item => {
       return selectedFilter === 'STARRED'
         ? item.starred
         : true &&
-          (searchTerm && searchTerm.length > 0
-            ? item.query.toLowerCase().includes(searchTerm.toLowerCase())
-            : true)
+            (searchTerm && searchTerm.length > 0
+              ? item.query.toLowerCase().includes(searchTerm.toLowerCase())
+              : true)
     })
 
     const selectedItem = items[this.state.selectedItemIndex]
     const schema = this.props.schema
     let customModalStyle = modalStyle
-    if (theme === 'light') {
+    if (localTheme === 'light') {
       customModalStyle = {
         ...modalStyle,
         overlay: {
@@ -117,7 +113,7 @@ class HistoryPopup extends React.Component<Props & Theme, State> {
             @p: .h100, .flex, .flexAuto;
           }
         `}</style>
-        <div className={cn('history-popup', theme)}>
+        <div className={cn('history-popup', localTheme)}>
           <div className="left">
             <HistoryHeader
               onSelectFilter={this.handleSelectFilter}
@@ -132,48 +128,52 @@ class HistoryPopup extends React.Component<Props & Theme, State> {
               onItemStarToggled={this.props.onItemStarToggled}
             />
           </div>
-          {Boolean(selectedItem)
-            ? <div className={cn('right', theme)}>
-                <div className={cn('right-header', theme)}>
-                  <div className="view" />
-                  <div className="use" onClick={this.handleClickUse}>
-                    <div className="use-text">Use</div>
-                    <Icon
-                      src={require('../assets/icons/arrowRight.svg')}
-                      color={$v.white}
-                      stroke={true}
-                      width={13}
-                      height={13}
-                    />
-                  </div>
-                </div>
-                <div
-                  className={cn('big', { 'docs-graphiql': theme === 'light' })}
-                >
-                  <div
-                    className={cn('big', {
-                      'graphiql-wrapper': theme === 'light',
-                    })}
-                  >
-                    <GraphQLEditor
-                      schema={schema}
-                      variables={selectedItem.variables}
-                      query={selectedItem.query}
-                      fetcher={this.fetcher}
-                      disableQueryHeader={true}
-                      queryOnly={true}
-                      rerenderQuery={true}
-                      isActive={true}
-                      readonly={true}
-                    />
-                  </div>
+          {Boolean(selectedItem) ? (
+            <div className={cn('right', localTheme)}>
+              <div className={cn('right-header', localTheme)}>
+                <div className="view" />
+                <div className="use" onClick={this.handleClickUse}>
+                  <div className="use-text">Use</div>
+                  <Icon
+                    src={require('../assets/icons/arrowRight.svg')}
+                    color={$v.white}
+                    stroke={true}
+                    width={13}
+                    height={13}
+                  />
                 </div>
               </div>
-            : <div className={cn('right', theme)}>
-                <div className={cn('right-empty', theme)}>
-                  <div className="right-empty-text">No History yet</div>
+              <div
+                className={cn('big', {
+                  'docs-graphiql': localTheme === 'light',
+                })}
+              >
+                <div
+                  className={cn('big', {
+                    'graphiql-wrapper': localTheme === 'light',
+                  })}
+                >
+                  <GraphQLEditor
+                    schema={schema}
+                    variables={selectedItem.variables}
+                    query={selectedItem.query}
+                    fetcher={this.fetcher}
+                    disableQueryHeader={true}
+                    queryOnly={true}
+                    rerenderQuery={true}
+                    isActive={true}
+                    readonly={true}
+                  />
                 </div>
-              </div>}
+              </div>
+            </div>
+          ) : (
+            <div className={cn('right', localTheme)}>
+              <div className={cn('right-empty', localTheme)}>
+                <div className="right-empty-text">No History yet</div>
+              </div>
+            </div>
+          )}
         </div>
       </Modal>
     )
@@ -186,9 +186,9 @@ class HistoryPopup extends React.Component<Props & Theme, State> {
       return selectedFilter === 'STARRED'
         ? item.starred
         : true &&
-          (searchTerm && searchTerm.length > 0
-            ? item.query.toLowerCase().includes(searchTerm.toLowerCase())
-            : true)
+            (searchTerm && searchTerm.length > 0
+              ? item.query.toLowerCase().includes(searchTerm.toLowerCase())
+              : true)
     })
     const selectedItem = items[this.state.selectedItemIndex]
     this.props.onCreateSession(selectedItem)
@@ -201,9 +201,9 @@ class HistoryPopup extends React.Component<Props & Theme, State> {
       return selectedFilter === 'STARRED'
         ? item.starred
         : true &&
-          (searchTerm && searchTerm.length > 0
-            ? item.query.toLowerCase().includes(searchTerm.toLowerCase())
-            : true)
+            (searchTerm && searchTerm.length > 0
+              ? item.query.toLowerCase().includes(searchTerm.toLowerCase())
+              : true)
     })
     const selectedItem = items[this.state.selectedItemIndex]
     return this.props.fetcherCreater(selectedItem, params)

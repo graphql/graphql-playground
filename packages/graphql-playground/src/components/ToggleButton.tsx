@@ -1,5 +1,6 @@
+/* tslint:disable */
 import * as React from 'react'
-import * as cx from 'classnames'
+import styled, { css } from '../styled'
 
 export interface Props {
   checked: boolean
@@ -9,49 +10,62 @@ export interface Props {
 
 const ToggleButton = ({ checked, onChange, className }: Props) => {
   return (
-    <div className={cx('toggle-button', className)} onClick={onChange}>
-      <style jsx={true}>{`
-        .toggle-button {
-          @p: .relative, .dib;
-          width: 39px;
-          height: 21px;
-        }
-        .toggle-slider {
-          @p: .absolute, .pointer, .top0, .left0, .right0, .bottom0, .bgBlack40;
-          transition: transform 70ms linear;
-          border-radius: 23px;
-          &:before {
-            position: absolute;
-            content: "";
-            height: 23px;
-            width: 23px;
-            left: -1px;
-            bottom: -1px;
-            background-color: white;
-            border-radius: 50%;
-            box-shadow: 0 1px 3px rgba(0, 0, 0, .25);
-            transition: transform 70ms linear;
-          }
-        }
-        .toggle-input {
-          display: none;
-          &:checked + div {
-            @p: .bgGreen;
-          }
-          &:checked + div:before {
-            transform: translateX(19px);
-          }
-        }
-      `}</style>
-      <input
-        className="toggle-input"
-        type="checkbox"
-        checked={checked}
-        readOnly={true}
-      />
-      <div className="toggle-slider" />
-    </div>
+    <Wrapper className={className} onClick={onChange}>
+      <Input type="checkbox" checked={checked} readOnly={true} />
+      <Slider checked={checked} />
+    </Wrapper>
   )
 }
 
 export default ToggleButton
+
+const Wrapper = styled.div`
+  position: relative;
+  display: inline-block;
+
+  width: 39px;
+  height: 21px;
+`
+
+const Input = styled.input`
+  display: none;
+`
+
+interface SliderProps {
+  checked: boolean
+}
+
+const Slider = styled.div`
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+
+  transition: transform 70ms linear;
+  border-radius: 23px;
+  cursor: pointer;
+
+  background: ${p =>
+    p.checked ? p.theme.colours.green : p.theme.colours.black40};
+
+  &:before {
+    position: absolute;
+    content: '';
+    height: 23px;
+    width: 23px;
+    left: -1px;
+    bottom: -1px;
+    background-color: white;
+    border-radius: 50%;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.25);
+    transition: transform 70ms linear;
+
+    ${(p: SliderProps) =>
+      p.checked
+        ? css`
+            transform: translateX(19px);
+          `
+        : ''};
+  }
+`

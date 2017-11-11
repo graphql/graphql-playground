@@ -3,13 +3,13 @@ import Icon from 'graphcool-styles/dist/components/Icon/Icon'
 import { $v } from 'graphcool-styles'
 import ToggleButton from './ToggleButton'
 import Tooltip from './Tooltip'
-import { Theme } from './Playground'
+import { ThemeInterface } from './Theme'
 import * as cn from 'classnames'
 import { Button } from './Button'
 import Copy from './Copy'
+import styled, { keyframes } from '../styled'
 
-export interface Props {
-  theme: Theme
+export interface Props extends ThemeInterface {
   allTabs: boolean
   httpHeaders: boolean
   history: boolean
@@ -19,6 +19,7 @@ export interface Props {
   onShare: () => void
   shareUrl?: string
   reshare: boolean
+  isSharingAuthorization: boolean
 }
 
 export interface State {
@@ -41,7 +42,7 @@ export default class Share extends React.Component<Props, State> {
       onToggleAllTabs,
       onToggleHistory,
       onToggleHttpHeaders,
-      theme,
+      localTheme,
       shareUrl,
       onShare,
       reshare,
@@ -113,12 +114,12 @@ export default class Share extends React.Component<Props, State> {
         `}</style>
         <div className="icon">
           <div
-            className={cn('button', this.props.theme, { open })}
+            className={cn('button', localTheme, { open })}
             onClick={this.toggleTooltip}
           >
             <Icon
               src={require('../assets/icons/share.svg')}
-              color={theme === 'light' ? $v.darkBlue40 : $v.white40}
+              color={localTheme === 'light' ? $v.darkBlue40 : $v.white40}
               stroke={true}
               width={13}
               height={13}
@@ -133,6 +134,7 @@ export default class Share extends React.Component<Props, State> {
                 horizontal: 'right',
                 vertical: 'bottom',
               }}
+              renderAfterContent={this.renderAuthSharingWarning}
             >
               <div>
                 <div className="row">
@@ -156,7 +158,7 @@ export default class Share extends React.Component<Props, State> {
                   </span>
                   <ToggleButton checked={history} onChange={onToggleHistory} />
                 </div>
-                {shareUrl &&
+                {shareUrl && (
                   <div className="row">
                     <input value={shareUrl} disabled={true} />
                     <div className="copy">
@@ -169,7 +171,8 @@ export default class Share extends React.Component<Props, State> {
                         />
                       </Copy>
                     </div>
-                  </div>}
+                  </div>
+                )}
                 <div className="row">
                   <div />
                   <Button hideArrow={true} onClick={onShare}>
@@ -184,7 +187,56 @@ export default class Share extends React.Component<Props, State> {
     )
   }
 
+  private renderAuthSharingWarning = () => {
+    if (!this.props.isSharingAuthorization) {
+      return null
+    }
+
+    return <AuthSharingWarning />
+  }
+
   private toggleTooltip = () => {
     this.setState(state => ({ open: !state.open }))
   }
 }
+
+const AuthSharingWarning = () => (
+  <Message>
+    <MessageTitle>Watch out!</MessageTitle>
+    You’re sharing your <code>Authorization</code> header with the world!
+  </Message>
+)
+
+// TODO: use theme
+
+const pulse = keyframes`
+  0% {
+    transform: scale(1.04);
+  }
+
+  100% {
+    transform: scale(1);
+  }
+`
+
+const Message = styled.div`
+  padding: 12px 16px;
+  margin-top: 10px;
+
+  font-size: 14px;
+  letter-spacing: normal;
+
+  cursor: default;
+  border-radius: 2px;
+  background: #f3f4f4;
+  box-shadow: 0 1px 6px 0 rgba(0, 0, 0, 0.15);
+
+  animation: ${pulse} 0.7s ease-in-out infinite alternate;
+`
+
+const MessageTitle = styled.div`
+  margin-right: 3px;
+  margin-bottom: 2px;
+  font-weight: bold;
+  color: #2a7ed2;
+`

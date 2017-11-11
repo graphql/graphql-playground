@@ -2,14 +2,13 @@ import * as React from 'react'
 import Icon from 'graphcool-styles/dist/components/Icon/Icon'
 import { $v } from 'graphcool-styles'
 import Tooltip from '../Tooltip'
-import { Theme } from '../Playground'
 import * as cn from 'classnames'
 import { PermissionSession, ServiceInformation } from '../../types'
 import TypeChooser from './TypeChooser'
 import { Button } from '../Button'
+import { ThemeInterface } from '../Theme'
 
-export interface Props {
-  theme: Theme
+export interface Props extends ThemeInterface {
   serviceInformation: ServiceInformation
   onNewPermissionTab: (permissionTab: PermissionSession) => void
 }
@@ -41,7 +40,7 @@ export default class NewPermissionTab extends React.Component<Props, State> {
   }
   render() {
     const { open, modelSelected, modelName, relationName } = this.state
-    const { theme, serviceInformation } = this.props
+    const { localTheme, serviceInformation } = this.props
     return (
       <div className="settings">
         <style jsx={true}>{`
@@ -140,7 +139,7 @@ export default class NewPermissionTab extends React.Component<Props, State> {
             width: 100%;
             margin: 0;
             outline: none;
-            padding: .5em .8em .6em .8em;
+            padding: 0.5em 0.8em 0.6em 0.8em;
 
             /* Prefixed box-sizing rules necessary for older browsers */
             -webkit-box-sizing: border-box;
@@ -160,17 +159,19 @@ export default class NewPermissionTab extends React.Component<Props, State> {
             @p: .flex;
           }
         `}</style>
-        <div className={cn('icon', theme, { open })}>
+        <div className={cn('icon', localTheme, { open })}>
           <div className="permission-icon" onClick={this.toggleTooltip}>
             <Icon
               src={require('graphcool-styles/icons/fill/permissions.svg')}
-              color={theme === 'light' ? $v.darkBlue20 : $v.white20}
+              color={localTheme === 'light' ? $v.darkBlue20 : $v.white20}
               width={23}
               height={23}
             />
             <Icon
               src={require('graphcool-styles/icons/stroke/addFull.svg')}
-              color={theme === 'light' ? 'rgb(179,187,191)' : 'rgb(58,67,74)'}
+              color={
+                localTheme === 'light' ? 'rgb(179,187,191)' : 'rgb(58,67,74)'
+              }
               stroke={true}
               strokeWidth={6}
               width={12}
@@ -197,40 +198,42 @@ export default class NewPermissionTab extends React.Component<Props, State> {
                     />
                   </div>
                 </div>
-                {modelSelected
-                  ? <div className="row">
-                      <div className="selects w100">
-                        <div className="select">
-                          <select
-                            value={modelName}
-                            onChange={this.handleModelNameChange}
-                          >
-                            {serviceInformation.models.map(model =>
-                              <option value={model.name} key={model.id}>
-                                {model.name}
-                              </option>,
-                            )}
-                          </select>
-                          <div className="arrow">▾</div>
-                        </div>
-                      </div>
-                    </div>
-                  : <div className="row">
-                      <div className="select w100">
+                {modelSelected ? (
+                  <div className="row">
+                    <div className="selects w100">
+                      <div className="select">
                         <select
-                          value={relationName}
-                          onChange={this.handleRelationNameChange}
-                          className="w100"
+                          value={modelName}
+                          onChange={this.handleModelNameChange}
                         >
-                          {serviceInformation.relations.map(relation =>
-                            <option value={relation.name} key={relation.name}>
-                              {relation.name}
-                            </option>,
-                          )}
+                          {serviceInformation.models.map(model => (
+                            <option value={model.name} key={model.id}>
+                              {model.name}
+                            </option>
+                          ))}
                         </select>
                         <div className="arrow">▾</div>
                       </div>
-                    </div>}
+                    </div>
+                  </div>
+                ) : (
+                  <div className="row">
+                    <div className="select w100">
+                      <select
+                        value={relationName}
+                        onChange={this.handleRelationNameChange}
+                        className="w100"
+                      >
+                        {serviceInformation.relations.map(relation => (
+                          <option value={relation.name} key={relation.name}>
+                            {relation.name}
+                          </option>
+                        ))}
+                      </select>
+                      <div className="arrow">▾</div>
+                    </div>
+                  </div>
+                )}
                 <div className="row">
                   <Button green={true} onClick={this.newTab}>
                     New Permission Tab

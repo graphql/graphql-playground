@@ -4,7 +4,7 @@ import * as PropTypes from 'prop-types'
 function withTheme<Props = {}>(Component): React.ComponentClass<Props> {
   return class WithTheme extends React.Component<Props, {}> {
     static contextTypes = {
-      theme: PropTypes.object,
+      localTheme: PropTypes.object,
     }
     mounted: boolean
 
@@ -17,16 +17,21 @@ function withTheme<Props = {}>(Component): React.ComponentClass<Props> {
     componentDidMount() {
       // subscribe to future theme changes
       this.mounted = true
-      this.context.theme.subscribe(this.rerender)
+      this.context.localTheme.subscribe(this.rerender)
     }
 
     componentWillUnmount() {
       this.mounted = false
-      this.context.theme.unsubscribe(this.rerender)
+      this.context.localTheme.unsubscribe(this.rerender)
     }
 
     render() {
-      return <Component theme={this.context.theme.theme} {...this.props} />
+      return (
+        <Component
+          localTheme={this.context.localTheme.localTheme}
+          {...this.props}
+        />
+      )
     }
   }
 }

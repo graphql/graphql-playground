@@ -8,7 +8,7 @@
 
 import * as React from 'react'
 import * as cx from 'classnames'
-import withTheme from '../Theme/withTheme'
+import { withTheme, ThemeInterface } from '../Theme'
 import * as cn from 'classnames'
 import ExecuteButtonOperation from './ExecuteButtonOperation'
 
@@ -32,7 +32,7 @@ let firstTime = true
  * What a nice round shiny button. Shows a drop-down when there are multiple
  * queries to run.
  */
-class ExecuteButton extends React.Component<Props & { theme: string }, State> {
+class ExecuteButton extends React.Component<Props & ThemeInterface, State> {
   constructor(props) {
     super(props)
 
@@ -52,7 +52,7 @@ class ExecuteButton extends React.Component<Props & { theme: string }, State> {
       const highlight = this.state.highlight
       options = (
         <ul className="execute-options">
-          {operations.map(operation =>
+          {operations.map(operation => (
             <ExecuteButtonOperation
               operation={operation}
               onMouseOver={this.handleMouseOver}
@@ -60,8 +60,8 @@ class ExecuteButton extends React.Component<Props & { theme: string }, State> {
               onMouseUp={this.handleMouseUp}
               highlight={highlight}
               key={operation.name ? operation.name.value : '*'}
-            />,
-          )}
+            />
+          ))}
         </ul>
       )
     }
@@ -80,12 +80,14 @@ class ExecuteButton extends React.Component<Props & { theme: string }, State> {
       onMouseDown = this.onOptionsOpen
     }
 
-    const pathJSX = this.props.isRunning
-      ? <rect fill="#FFFFFF" x="10" y="10" width="13" height="13" rx="1" />
-      : <path d="M 11 9 L 24 16 L 11 23 z" />
+    const pathJSX = this.props.isRunning ? (
+      <rect fill="#FFFFFF" x="10" y="10" width="13" height="13" rx="1" />
+    ) : (
+      <path d="M 11 9 L 24 16 L 11 23 z" />
+    )
 
     return (
-      <div className={cn('execute-button-wrap', this.props.theme)}>
+      <div className={cn('execute-button-wrap', this.props.localTheme)}>
         <style jsx={true}>{`
           .execute-button-wrap {
             position: absolute;
@@ -117,7 +119,7 @@ class ExecuteButton extends React.Component<Props & { theme: string }, State> {
           }
         `}</style>
         <div
-          className={cx('graphcool-execute-button', this.props.theme, {
+          className={cx('graphcool-execute-button', this.props.localTheme, {
             running: this.props.isRunning,
           })}
           onMouseDown={onMouseDown}
