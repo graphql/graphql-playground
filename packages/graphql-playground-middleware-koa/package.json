@@ -1,11 +1,12 @@
 {
-  "name": "graphql-playground-middleware",
+  "name": "graphql-playground-middleware-koa",
   "version": "1.1.2",
-  "homepage": "https://github.com/graphcool/graphql-playground/tree/master/packages/graphql-playground-middleware",
+  "homepage": "https://github.com/graphcool/graphql-playground/tree/master/packages/graphql-playground-middleware-koa",
   "description": "GraphQL IDE for better development workflows (GraphQL Subscriptions, interactive docs & collaboration).",
   "contributors": [
     "Tim Suchanek <tim@graph.cool>",
-    "Johannes Schickling <johannes@graph.cool>"
+    "Johannes Schickling <johannes@graph.cool>",
+    "Mohammad Rajabifard <mo.rajbi@gmail.com>"
   ],
   "repository": "http://github.com/graphcool/graphql-playground.git",
   "license": "SEE LICENSE IN LICENSE",
@@ -17,17 +18,25 @@
     "build": "tsc",
     "prepublishOnly": "npm run build"
   },
-  "keywords": [],
+  "keywords": [
+    "graphql",
+    "graphiql",
+    "playground",
+    "graphcool",
+    "koa"
+  ],
+  "peerDependencies": {
+    "koa": "^2.3.0"
+  },
   "devDependencies": {
     "@types/node": "^8.0.47",
-    "aws-lambda": "^0.1.2",
-    "express": "^4.16.2",
-    "hapi": "^16.6.2",
-    "koa": "^2.3.0",
     "typescript": "^2.6.1"
   },
   "typings": "dist/index.d.ts",
   "typescript": {
     "definition": "dist/index.d.ts"
+  },
+  "dependencies": {
+    "koa": "^2.4.1"
   }
 }

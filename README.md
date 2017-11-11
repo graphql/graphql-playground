@@ -58,7 +58,7 @@ All interfaces, the React component `<Playground />` and all middlewares expose 
 ```sh
 yarn add graphql-playground
 ```
-  
+
 #### Use
 GraphQL Playground provides a React component responsible for rendering the UI and Session management.
 There are **3 dependencies** needed in order to run the `graphql-playground` React component.
@@ -83,180 +83,33 @@ import 'graphql-playground/playground.css'
 ReactDOM.render(<Playground endpoint="https://api.graph.cool/simple/v1/swapi" />, document.body)
 ```
 
-### As Express Middleware
+### As Server Middleware
 
 #### Install
 ```sh
-yarn add graphql-playground-middleware
+# Pick the one that matches your server framework
+yarn add graphql-playground-middleware-express  # for Express or Connect
+yarn add graphql-playground-middleware-hapi
+yarn add graphql-playground-middleware-koa
+yarn add graphql-playground-middleware-lambda
 ```
 
-#### Usage
-```js
-const express = require('express')
-const bodyParser = require('body-parser')
-const {graphqlExpress} = require('apollo-server-express')
-const {makeExecutableSchema} = require('graphql-tools')
-const {expressPlayground} = require('graphql-playground-middleware')
+#### Usage with example
 
-const schema = makeExecutableSchema({
-  typeDefs: `
-    type Query {
-      hello: String!
-    }
-    schema {
-      query: Query
-    }
-  `,
-  resolvers: {
-    Query: {
-      hello: () => 'world',
-    },
-  },
-})
-const PORT = 4000
+We have a full example for each of the frameworks below:
 
-const app = express()
+- **Express:** See [packages/graphql-playground-middleware-express/examples/basic](https://github.com/graphcool/graphql-playground/tree/master/packages/graphql-playground-middleware-express/examples/basic)
 
-// bodyParser is needed just for POST.
-app.use('/graphql', bodyParser.json(), graphqlExpress({ schema }))
-app.get('/playground', expressPlayground({ endpoint: '/graphql' })) // if you want GraphiQL enabled
+- **Hapi:** See [packages/graphql-playground-middleware/examples/hapi](https://github.com/graphcool/graphql-playground/tree/master/packages/graphql-playground-middleware/examples/hapi)
 
-app.listen(PORT)
+- **Koa:** See [packages/graphql-playground-middleware/examples/koa](https://github.com/graphcool/graphql-playground/tree/master/packages/graphql-playground-middleware/examples/koa)
 
-console.log(`Serving the GraphQL Playground on http://localhost:${PORT}/playground`)
-```
-
-See [packages/graphql-playground-middleware/examples/express](https://github.com/graphcool/graphql-playground/tree/master/packages/graphql-playground-middleware/examples/express) for a full example.
-
-### As Hapi Middleware
-
-#### Install
-```sh
-yarn add graphql-playground-middleware
-```
-
-#### Usage
-```js
-const hapi = require('hapi')
-const {graphqlHapi} = require('apollo-server-hapi')
-const {hapiPlayground} = require('graphql-playground-middleware')
-const {makeExecutableSchema} = require('graphql-tools')
-
-const server = new hapi.Server({ debug: { request: "*" } });
-
-const HOST = 'localhost';
-const PORT = 4000;
-
-const schema = makeExecutableSchema({
-  typeDefs: `
-    type Query {
-      hello: String!
-    }
-    schema {
-      query: Query
-    }
-  `,
-  resolvers: {
-    Query: {
-      hello: () => 'world',
-    },
-  },
-})
-
-server.connection({
-  host: HOST,
-  port: PORT,
-});
-
-server.register({
-  register: graphqlHapi,
-  options: {
-    path: '/graphql',
-    graphqlOptions: {
-      schema,
-    },
-    route: {
-      cors: true
-    }
-  },
-});
-
-server.register({
-  register: hapiPlayground,
-  options: {
-    path: '/playground',
-    endpoint: '/graphql'
-  }
-})
-
-server.start((err) => {
-  if (err) {
-    throw err;
-  }
-  console.log(`Server running at: ${server.info.uri}`);
-});
-```
-
-See [packages/graphql-playground-middleware/examples/hapi](https://github.com/graphcool/graphql-playground/tree/master/packages/graphql-playground-middleware/examples/hapi) for a full example.
-
-### As Koa Middleware
-
-#### Install
-```sh
-yarn add graphql-playground-middleware
-```
-
-#### Usage
-```js
-const koa = require('koa')
-const koaRouter = require('koa-router')
-const koaBody = require('koa-bodyparser')
-const { graphqlKoa } = require('apollo-server-koa')
-const {makeExecutableSchema} = require('graphql-tools')
-const {koaPlayground} = require('graphql-playground-middleware')
-
-const schema = makeExecutableSchema({
-  typeDefs: `
-    type Query {
-      hello: String!
-    }
-    schema {
-      query: Query
-    }
-  `,
-  resolvers: {
-    Query: {
-      hello: () => 'world',
-    },
-  },
-})
-
-const app = new koa();
-const router = new koaRouter();
-const PORT = 4000;
-
-// koaBody is needed just for POST.
-app.use(koaBody());
-
-router.post('/graphql', graphqlKoa({ schema }));
-
-router.all('/playground', koaPlayground({
-  endpoint: '/graphql'
-}))
-
-app.use(router.routes());
-app.use(router.allowedMethods());
-app.listen(PORT);
-
-console.log(`Serving the GraphQL Playground on http://localhost:${PORT}/playground`)
-```
-
-See [packages/graphql-playground-middleware/examples/koa](https://github.com/graphcool/graphql-playground/tree/master/packages/graphql-playground-middleware/examples/koa) for a full example.
+- **Lambda (as serverless handler):** See [serverless-graphql-apollo](https://github.com/serverless/serverless-graphql-apollo) or a quick example below.
 
 ### As serverless handler
 #### Install
 ```sh
-yarn add graphql-playground-middleware
+yarn add graphql-playground-middleware-lambda
 ```
 
 #### Usage
@@ -299,8 +152,6 @@ functions:
         cors: true
 ```
 
-See [serverless-graphql-apollo](https://github.com/serverless/serverless-graphql-apollo) for a full example.
-
 ## Development [![npm version](https://badge.fury.io/js/graphql-playground.svg)](https://badge.fury.io/js/graphql-playground)
 
 This is a mono-repo setup containing packages for the `graphql-playground` and `graphql-playground-electron`.
@@ -311,7 +162,7 @@ $ yarn
 $ yarn start
 ```
 Open
-[localhost:3000/?endpoint=https://api.graph.cool/simple/v1/cj56h35ol3y93018144iab4wo](http://localhost:3000/?endpoint=https://api.graph.cool/simple/v1/cj56h35ol3y93018144iab4wo)
+[localhost:3000/middleware.html?endpoint=https://api.graph.cool/simple/v1/swapi](http://localhost:3000/middleware.html?endpoint=https://api.graph.cool/simple/v1/swapi) for local development!
 
 
 <a name="help-and-community" />
