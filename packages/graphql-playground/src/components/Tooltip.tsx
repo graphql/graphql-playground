@@ -1,6 +1,6 @@
 import * as React from 'react'
 import * as ReactDOM from 'react-dom'
-import * as cx from 'classnames'
+import styled, { css } from '../styled'
 
 export interface Props {
   open: boolean
@@ -23,7 +23,7 @@ class Tooltip extends React.PureComponent<Props, {}> {
   }
 
   componentDidMount() {
-    document.addEventListener('click', this.handleClickOutside.bind(this), true)
+    document.addEventListener('click', this.handleClickOutside, true)
   }
 
   componentWillUnmount() {
@@ -54,92 +54,129 @@ class Tooltip extends React.PureComponent<Props, {}> {
     const { open, children, renderAfterContent, onClick } = this.props
     const anchorOrigin = this.props.anchorOrigin!
     return (
-      <div
-        className={cx('tooltip-container', {
-          visible: open,
-          'anchor-top': anchorOrigin.vertical === 'top',
-          'anchor-bottom': anchorOrigin.vertical === 'bottom',
-          'anchor-left': anchorOrigin.horizontal === 'left',
-          'anchor-right': anchorOrigin.horizontal === 'right',
-          'anchor-center': anchorOrigin.horizontal === 'center',
-        })}
+      <Wrapper
+        visible={open}
+        anchorTop={anchorOrigin.vertical === 'top'}
+        anchorBottom={anchorOrigin.vertical === 'bottom'}
+        anchorLeft={anchorOrigin.horizontal === 'left'}
+        anchorRight={anchorOrigin.horizontal === 'right'}
+        anchorCenter={anchorOrigin.horizontal === 'center'}
       >
-        <style jsx={true}>{`
-          .tooltip-container {
-            @p: .absolute, .tl;
-            transform: translateX(-50%);
-            z-index: 9999;
-            transition: opacity ease-out 0.2s;
-            visibility: hidden;
-            opacity: 0;
-          }
-          .tooltip-container.anchor-top {
-            @p: .bottom100;
-            margin-bottom: 16px;
-            & .big-triangle {
-              bottom: -10px;
-            }
-          }
-          .tooltip-container.anchor-bottom {
-            @p: .top100;
-            margin-top: 16px;
-            & .big-triangle {
-              top: -10px;
-              border-width: 0 10px 10px 10px;
-              border-color: #f3f4f4 transparent #f3f4f4 transparent;
-            }
-          }
-          .tooltip-container.anchor-left {
-            @p: .left50;
-            left: 0;
-            transform: none;
-            & .big-triangle {
-              left: 25px;
-            }
-          }
-          .tooltip-container.anchor-right {
-            @p: .right50;
-            right: 0;
-            transform: none;
-            & .big-triangle {
-              right: 25px;
-            }
-          }
-          .tooltip-container.anchor-center {
-            @p: .left50;
-
-            & .big-triangle {
-              left: calc(50% - 10px);
-            }
-          }
-          .tooltip-container.visible {
-            visibility: visible;
-            opacity: 1;
-          }
-          .tooltip-container .tooltip-content {
-            @p: .nowrap, .br2, .black50, .ph16, .pv12, .flex, .itemsCenter;
-            background-color: #f3f4f4;
-            box-shadow: 0 1px 6px 0 rgba(0, 0, 0, 0.15);
-          }
-          .big-triangle {
-            @p: .absolute;
-            width: 0;
-            height: 0;
-            border-style: solid;
-            border-width: 10px 10px 0 10px;
-            border-color: #f3f4f4 transparent transparent transparent;
-          }
-        `}</style>
-
-        <div className="tooltip-content" onClick={onClick}>
-          <div className="big-triangle" />
+        <Content onClick={onClick}>
+          <BigTriangle />
           {children}
-        </div>
+        </Content>
 
         {renderAfterContent && renderAfterContent()}
-      </div>
+      </Wrapper>
     )
   }
 }
 
 export default Tooltip
+
+interface WrapperProps {
+  visible?: boolean
+  anchorTop?: boolean
+  anchorBottom?: boolean
+  anchorLeft?: boolean
+  anchorRight?: boolean
+  anchorCenter?: boolean
+}
+
+const Wrapper = styled.div`
+  position: absolute;
+  z-index: 9999;
+
+  text-align: left;
+  transform: translateX(-50%);
+
+  transition: opacity ease-out 0.2s;
+
+  ${(p: WrapperProps) =>
+    p.visible
+      ? css`
+          visibility: visible;
+          opacity: 1;
+        `
+      : css`
+          visibility: hidden;
+          opacity: 0;
+        `} ${(p: WrapperProps) =>
+      p.anchorTop
+        ? css`
+            bottom: 100%;
+            margin-bottom: 16px;
+
+            ${BigTriangle} {
+              bottom: -10px;
+            }
+          `
+        : ''} ${(p: WrapperProps) =>
+      p.anchorBottom
+        ? css`
+            top: 100%;
+            margin-top: 16px;
+
+            ${BigTriangle} {
+              top: -10px;
+              border-width: 0 10px 10px 10px;
+              border-color: ${k => k.theme.colours.paleGrey} transparent
+                ${k => k.theme.colours.paleGrey} transparent;
+            }
+          `
+        : ''} ${(p: WrapperProps) =>
+      p.anchorLeft
+        ? css`
+            left: 0;
+            transform: none;
+
+            ${BigTriangle} {
+              left: 25px;
+            }
+          `
+        : ''} ${(p: WrapperProps) =>
+      p.anchorRight
+        ? css`
+            right: 0;
+            transform: none;
+
+            ${BigTriangle} {
+              right: 25px;
+            }
+          `
+        : ''} ${(p: WrapperProps) =>
+      p.anchorCenter
+        ? css`
+            left: 50%;
+
+            ${BigTriangle} {
+              left: calc(50% - 10px);
+            }
+          `
+        : ''};
+`
+
+const Content = styled.div`
+  display: flex;
+  align-items: center;
+
+  padding: ${p => p.theme.sizes.small12} ${p => p.theme.sizes.small16};
+  white-space: nowrap;
+
+  box-shadow: 0 1px 6px 0 rgba(0, 0, 0, 0.15);
+  background-color: ${p => p.theme.colours.paleGrey};
+  border-radius: ${p => p.theme.sizes.smallRadius};
+  color: ${p => p.theme.colours.paleText};
+`
+
+const BigTriangle = styled.div`
+  position: absolute;
+  width: 0;
+  height: 0;
+
+  border-style: solid;
+  border-width: 10px 10px 0 10px;
+  border-color: ${p => p.theme.colours.paleGrey} transparent transparent
+    transparent;
+`
