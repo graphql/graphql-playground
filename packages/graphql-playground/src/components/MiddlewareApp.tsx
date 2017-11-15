@@ -39,14 +39,26 @@ class MiddlewareApp extends React.Component<Props, State> {
     const endpoint =
       props.endpoint || getParameterByName('endpoint') || location.href
 
+    const subscriptionEndpoint =
+      props.subscriptionEndpoint || getParameterByName('subscriptionEndpoint')
+
     this.state = {
       endpoint,
       platformToken: localStorage.getItem('platform-token') || undefined,
-      subscriptionEndpoint:
-        props.subscriptionEndpoint ||
-        getParameterByName('subscriptionEndpoint') ||
-        '',
+      subscriptionEndpoint: subscriptionEndpoint
+        ? this.normalizeSubscriptionUrl(endpoint, subscriptionEndpoint)
+        : '',
     }
+  }
+
+  normalizeSubscriptionUrl(endpoint, subscriptionEndpoint) {
+    if (subscriptionEndpoint.startsWith('/')) {
+      const secure =
+        endpoint.includes('https') || location.href.includes('https') ? 's' : ''
+      return `ws${secure}://${location.host}${subscriptionEndpoint}`
+    }
+
+    return subscriptionEndpoint
   }
 
   componentWillMount() {

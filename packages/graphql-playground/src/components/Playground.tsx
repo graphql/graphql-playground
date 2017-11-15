@@ -284,40 +284,39 @@ export class Playground extends React.PureComponent<Props & DocsState, State> {
       headers.forEach(header => (additionalHeaders[header.name] = header.value))
     }
 
-    return this.fetchSchema(
-      this.getSimpleEndpoint(),
-      additionalHeaders,
-    ).then(simpleSchemaData => {
-      if (!simpleSchemaData || simpleSchemaData.error) {
+    return this.fetchSchema(this.getSimpleEndpoint(), additionalHeaders).then(
+      simpleSchemaData => {
+        if (!simpleSchemaData || simpleSchemaData.error) {
+          this.setState({
+            response: {
+              date: simpleSchemaData.error,
+              time: new Date(),
+            },
+          } as State)
+          return
+        }
+
+        if (isEqual(this.rawSchemaCache, simpleSchemaData.data)) {
+          return
+        }
+
+        this.rawSchemaCache = simpleSchemaData.data
+
+        if (!simpleSchemaData.data) {
+          return
+        }
+
+        const simpleSchema = buildClientSchema(simpleSchemaData.data)
+        const userFields = this.extractUserField(simpleSchema)
+
+        this.renewStack(simpleSchema)
+
         this.setState({
-          response: {
-            date: simpleSchemaData.error,
-            time: new Date(),
-          },
+          schemaCache: simpleSchema,
+          userFields,
         } as State)
-        return
-      }
-
-      if (isEqual(this.rawSchemaCache, simpleSchemaData.data)) {
-        return
-      }
-
-      this.rawSchemaCache = simpleSchemaData.data
-
-      if (!simpleSchemaData.data) {
-        return
-      }
-
-      const simpleSchema = buildClientSchema(simpleSchemaData.data)
-      const userFields = this.extractUserField(simpleSchema)
-
-      this.renewStack(simpleSchema)
-
-      this.setState({
-        schemaCache: simpleSchema,
-        userFields,
-      } as State)
-    })
+      },
+    )
   }
 
   componentWillUnmount() {
@@ -351,10 +350,15 @@ export class Playground extends React.PureComponent<Props & DocsState, State> {
 
     const endpoint = this.getWSEndpoint()
     if (endpoint) {
-      this.wsConnections[session.id] = new SubscriptionClient(endpoint, {
-        timeout: 20000,
-        connectionParams,
-      })
+      try {
+        this.wsConnections[session.id] = new SubscriptionClient(endpoint, {
+          timeout: 20000,
+          connectionParams,
+        })
+      } catch (e) {
+        /* tslint:disable-next-line */
+        console.error(e)
+      }
     }
   }
   initWebsockets() {
@@ -554,7 +558,9 @@ export class Playground extends React.PureComponent<Props & DocsState, State> {
       .catch(e => {
         this.setState({
           response: {
-            date: `Error: Could not fetch schema from ${endpointUrl}. Make sure the url is correct.`,
+            date: `Error: Could not fetch schema from ${
+              endpointUrl
+            }. Make sure the url is correct.`,
             time: new Date(),
             resultID: cuid(),
           },
