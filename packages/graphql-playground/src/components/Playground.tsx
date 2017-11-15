@@ -46,6 +46,7 @@ import { ThemeProvider, theme as styledTheme } from '../styled'
 export type Theme = 'dark' | 'light'
 export type Viewer = 'ADMIN' | 'EVERYONE' | 'USER'
 export interface Response {
+  resultID: string
   date: string
   time: Date
 }
@@ -555,6 +556,7 @@ export class Playground extends React.PureComponent<Props & DocsState, State> {
           response: {
             date: `Error: Could not fetch schema from ${endpointUrl}. Make sure the url is correct.`,
             time: new Date(),
+            resultID: cuid(),
           },
         })
       })
