@@ -44,7 +44,7 @@ class MiddlewareApp extends React.Component<Props, State> {
       subscriptionEndpoint:
         props.subscriptionEndpoint ||
         getParameterByName('subscriptionEndpoint') ||
-        getSubscriptionsUrl(endpoint),
+        '',
     }
   }
 
@@ -56,14 +56,18 @@ class MiddlewareApp extends React.Component<Props, State> {
     }
   }
 
+  componentDidMount() {
+    if (this.state.subscriptionEndpoint === '') {
+      this.updateSubscriptionsUrl()
+    }
+  }
+
   render() {
-    const title = this.props.setTitle
-      ? <Helmet>
-          <title>
-            {this.getTitle()}
-          </title>
-        </Helmet>
-      : null
+    const title = this.props.setTitle ? (
+      <Helmet>
+        <title>{this.getTitle()}</title>
+      </Helmet>
+    ) : null
 
     return (
       <div>
@@ -134,7 +138,7 @@ class MiddlewareApp extends React.Component<Props, State> {
       this.state.platformToken ||
       this.state.endpoint.includes('api.graph.cool')
     ) {
-      const projectId = getProjectId(this.state.endpoint)
+      const projectId = this.getProjectId(this.state.endpoint)
       const cluster = this.state.endpoint.includes('api.graph.cool')
         ? 'shared'
         : 'local'
@@ -143,22 +147,76 @@ class MiddlewareApp extends React.Component<Props, State> {
 
     return `Playground - ${this.state.endpoint}`
   }
+
+  private async updateSubscriptionsUrl() {
+    const candidates = this.getSubscriptionsUrlCandidated(this.state.endpoint)
+    const validCandidate = await find(candidates, candidate =>
+      this.wsEndpointValid(candidate),
+    )
+    if (validCandidate) {
+      this.setState({ subscriptionEndpoint: validCandidate })
+    }
+  }
+
+  private getSubscriptionsUrlCandidated(endpoint): string[] {
+    const candidates: string[] = []
+    candidates.push(endpoint.replace('https', 'wss').replace('http', 'ws'))
+    if (endpoint.includes('graph.cool')) {
+      candidates.push(
+        `wss://subscriptions.graph.cool/v1/${this.getProjectId(endpoint)}`,
+      )
+    }
+    if (endpoint.includes('/simple/v1/')) {
+      // it's a graphcool local endpoint
+      const host = endpoint.match(/https?:\/\/(.*?)\//)
+      candidates.push(
+        `ws://${host![1]}/subscriptions/v1/${this.getProjectId(endpoint)}`,
+      )
+    }
+    return candidates
+  }
+
+  private wsEndpointValid(url): Promise<boolean> {
+    return new Promise(resolve => {
+      const socket = new WebSocket(
+        'wss://subscriptions.graph.cool/v1/cirs1ufsg02b101619ru0bx5r',
+        'graphql-ws',
+      )
+      socket.addEventListener('open', event => {
+        socket.send(JSON.stringify({ type: 'connection_init' }))
+      })
+      socket.addEventListener('message', event => {
+        const data = JSON.parse(event.data)
+        if (data.type === 'connection_ack') {
+          resolve(true)
+        }
+      })
+      socket.addEventListener('error', event => {
+        resolve(false)
+      })
+      setTimeout(() => {
+        resolve(false)
+      }, 1000)
+    })
+  }
+
+  private getProjectId(endpoint) {
+    return endpoint.split('/').slice(-1)[0]
+  }
+}
+
+async function find(
+  iterable: any[],
+  predicate: (item?: any, index?: number) => Promise<boolean>,
+): Promise<any | null> {
+  for (let i = 0; i < iterable.length; i++) {
+    const element = iterable[i]
+    const result = await predicate(element, i)
+    if (result) {
+      return element
+    }
+  }
+  return null
 }
 
 export default MiddlewareApp
-
-function getSubscriptionsUrl(endpoint): string | undefined {
-  if (endpoint.includes('graph.cool')) {
-    return `wss://subscriptions.graph.cool/v1/${getProjectId(endpoint)}`
-  }
-  if (endpoint.includes('/simple/v1/')) {
-    // it's a graphcool local endpoint
-    const host = endpoint.match(/https?:\/\/(.*?)\//)
-    return `ws://${host![1]}/subscriptions/v1/${getProjectId(endpoint)}`
-  }
-  return undefined
-}
-
-function getProjectId(endpoint) {
-  return endpoint.split('/').slice(-1)[0]
-}
