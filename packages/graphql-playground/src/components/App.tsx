@@ -1,4 +1,5 @@
 import * as React from 'react'
+import * as fetch from 'isomorphic-fetch'
 import { Provider } from 'react-redux'
 import createStore from '../createStore'
 import Playground from './Playground'
@@ -105,25 +106,27 @@ class App extends React.Component<Props, State> {
                 .justifyCenter;
             }
           `}</style>
-          {this.state.loading
-            ? <Loading />
-            : !this.state.endpoint || this.state.endpoint.length === 0
-              ? <EndpointPopup
-                  onRequestClose={this.handleChangeEndpoint}
-                  endpoint={
-                    this.state.endpoint ||
-                    localStorage.getItem('last-endpoint') ||
-                    ''
-                  }
-                />
-              : <Playground
-                  endpoint={endpoint}
-                  subscriptionsEndpoint={subscriptionEndpoint}
-                  onChangeEndpoint={this.handleChangeEndpoint}
-                  share={this.share}
-                  shareUrl={this.state.shareUrl}
-                  session={this.state.session}
-                />}
+          {this.state.loading ? (
+            <Loading />
+          ) : !this.state.endpoint || this.state.endpoint.length === 0 ? (
+            <EndpointPopup
+              onRequestClose={this.handleChangeEndpoint}
+              endpoint={
+                this.state.endpoint ||
+                localStorage.getItem('last-endpoint') ||
+                ''
+              }
+            />
+          ) : (
+            <Playground
+              endpoint={endpoint}
+              subscriptionsEndpoint={subscriptionEndpoint}
+              onChangeEndpoint={this.handleChangeEndpoint}
+              share={this.share}
+              shareUrl={this.state.shareUrl}
+              session={this.state.session}
+            />
+          )}
         </div>
       </Provider>
     )

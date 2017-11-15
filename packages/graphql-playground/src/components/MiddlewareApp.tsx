@@ -3,6 +3,7 @@ import { Provider } from 'react-redux'
 import createStore from '../createStore'
 import Playground from './Playground'
 import { Helmet } from 'react-helmet'
+import * as fetch from 'isomorphic-fetch'
 
 const store = createStore()
 
