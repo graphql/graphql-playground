@@ -27,10 +27,7 @@ function withTheme<Props = {}>(Component): React.ComponentClass<Props> {
 
     render() {
       return (
-        <Component
-          localTheme={this.context.localTheme.localTheme}
-          {...this.props}
-        />
+        <Component localTheme={this.context.localTheme.theme} {...this.props} />
       )
     }
   }
