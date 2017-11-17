@@ -14,12 +14,14 @@ export const colours: Colours = {
 }
 
 export interface Sizes {
+  small6: string
   small12: string
   small16: string
   smallRadius: string
 }
 
 export const sizes: Sizes = {
+  small6: '6px',
   small12: '12px',
   small16: '16px',
 
