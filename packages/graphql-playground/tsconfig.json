@@ -18,6 +18,7 @@
   "exclude": [
     "node_modules",
     "lib",
-    "examples"
+    "examples",
+    "build"
   ]
 }

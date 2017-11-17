@@ -89,9 +89,12 @@ export class ResultViewer extends React.Component<Props, {}> {
       <div className="result-codemirror" ref={this.setRef}>
         <style jsx={true}>{`
           .result-codemirror :global(.CodeMirror) {
-            @p: .bbox, .pt38, .pl38;
+            @p: .bbox, .pl38;
             background: none;
             position: relative !important;
+          }
+          .result-codemirror :global(.CodeMirror-scroll) {
+            overflow: auto !important;
           }
         `}</style>
       </div>

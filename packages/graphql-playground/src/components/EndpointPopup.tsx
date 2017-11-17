@@ -1,4 +1,5 @@
 import * as React from 'react'
+import * as fetch from 'isomorphic-fetch'
 import Popup from './Popup'
 import { throttle } from 'lodash'
 import * as cn from 'classnames'

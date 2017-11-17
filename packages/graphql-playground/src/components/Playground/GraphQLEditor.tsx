@@ -28,8 +28,6 @@ import {
 import { download } from './util/index'
 import QueryHeader from './QueryHeader'
 import ResultHeader from './ResultHeader'
-import { ResultViewer } from './ResultViewer'
-import ageOfDate from './util/ageOfDate'
 import { Response } from '../Playground'
 import HttpHeaders, { Header } from './HttpHeaders'
 
@@ -38,6 +36,7 @@ import Spinner from '../Spinner'
 import PermissionVariables from './PermissionVariables'
 import { getVariableNamesFromQuery, putVariablesToQuery } from './ast'
 import { flatMap, groupBy } from 'lodash'
+import Results from './Results'
 
 // tslint:disable-next-line
 const CSSTransitionGroup = require('react-transition-group/CSSTransitionGroup')
@@ -155,11 +154,9 @@ export class GraphQLEditor extends React.PureComponent<Props, State> {
       true,
       this.props.schema,
     )
-    this.setState(
-      {
-        selectedVariableNames: variables,
-      } as State,
-    )
+    this.setState({
+      selectedVariableNames: variables,
+    } as State)
   })
 
   private updateQueryFacts = debounce(150, query => {
@@ -308,15 +305,13 @@ export class GraphQLEditor extends React.PureComponent<Props, State> {
       }
     }
 
-    this.setState(
-      {
-        schema: nextSchema,
-        query: nextQuery,
-        variables: nextVariables,
-        operationName: nextOperationName,
-        responses: nextResponses,
-      } as State,
-    )
+    this.setState({
+      schema: nextSchema,
+      query: nextQuery,
+      variables: nextVariables,
+      operationName: nextOperationName,
+      responses: nextResponses,
+    } as State)
   }
 
   componentDidUpdate() {
@@ -356,8 +351,6 @@ export class GraphQLEditor extends React.PureComponent<Props, State> {
     const variableStyle = {
       height: variableOpen ? this.state.variableEditorHeight : null,
     }
-
-    const subscriptionResponse = this.state.responses.length > 1
 
     const Tether = this.props.tether
 
@@ -422,32 +415,6 @@ export class GraphQLEditor extends React.PureComponent<Props, State> {
             letter-spacing: 0.6px;
             width: 235px;
           }
-          .result-window {
-            @p: .bgDarkBlue, .nosb;
-          }
-
-          .result-window.disableResize :global(.CodeMirror-gutters) {
-            cursor: default !important;
-          }
-
-          .subscription-time {
-            @p: .relative;
-            height: 17px;
-            margin-top: 12px;
-            margin-bottom: 4px;
-            &:before {
-              @p: .absolute, .w100;
-              content: '';
-              top: 9px;
-              left: 95px;
-              border-top: 1px solid $white20;
-            }
-          }
-
-          .subscription-time-text {
-            @p: .bgDarkBlue, .white50, .f12;
-            padding-left: 15px;
-          }
 
           .listening {
             @p: .f16, .white40, .absolute, .bottom0;
@@ -496,24 +463,27 @@ export class GraphQLEditor extends React.PureComponent<Props, State> {
             onMouseDown={this.handleResizeStart}
           >
             <div className="queryWrap" style={queryWrapStyle}>
-              {this.props.disableAnimation
-                ? <QueryHeader
-                    onPrettify={this.handlePrettifyQuery}
-                    showEndpoints={this.props.showEndpoints}
-                    showQueryTitle={this.props.showQueryTitle}
-                  />
-                : <CSSTransitionGroup
-                    transitionName="query-header"
-                    transitionEnterTimeout={500}
-                    transitionLeaveTimeout={300}
-                  >
-                    {!this.props.disableQueryHeader &&
-                      <QueryHeader
-                        onPrettify={this.handlePrettifyQuery}
-                        showEndpoints={this.props.showEndpoints}
-                        showQueryTitle={this.props.showQueryTitle}
-                      />}
-                  </CSSTransitionGroup>}
+              {this.props.disableAnimation ? (
+                <QueryHeader
+                  onPrettify={this.handlePrettifyQuery}
+                  showEndpoints={this.props.showEndpoints}
+                  showQueryTitle={this.props.showQueryTitle}
+                />
+              ) : (
+                <CSSTransitionGroup
+                  transitionName="query-header"
+                  transitionEnterTimeout={500}
+                  transitionLeaveTimeout={300}
+                >
+                  {!this.props.disableQueryHeader && (
+                    <QueryHeader
+                      onPrettify={this.handlePrettifyQuery}
+                      showEndpoints={this.props.showEndpoints}
+                      showQueryTitle={this.props.showQueryTitle}
+                    />
+                  )}
+                </CSSTransitionGroup>
+              )}
               <QueryEditor
                 ref={this.setQueryEditorComponent}
                 schema={this.state.schema}
@@ -532,13 +502,14 @@ export class GraphQLEditor extends React.PureComponent<Props, State> {
                   headers={this.props.headers}
                   onChange={this.props.onChangeHeaders}
                 />
-                {this.props.showCodeGeneration &&
+                {this.props.showCodeGeneration && (
                   <div
                     className="graphiql-button generate-code"
                     onClick={this.props.onClickCodeGeneration}
                   >
                     Generate Code
-                  </div>}
+                  </div>
+                )}
                 <div
                   className="variable-editor-title"
                   style={{ cursor: variableOpen ? 'row-resize' : 'n-resize' }}
@@ -559,7 +530,7 @@ export class GraphQLEditor extends React.PureComponent<Props, State> {
                 'STEP3_UNCOMMENT_DESCRIPTION',
                 'STEP3_ENTER_MUTATION1_VALUES',
                 'STEP3_ENTER_MUTATION2_VALUE',
-              ].indexOf(this.props.onboardingStep || '') > -1 &&
+              ].indexOf(this.props.onboardingStep || '') > -1 && (
                 <Tether
                   steps={[
                     {
@@ -597,115 +568,105 @@ export class GraphQLEditor extends React.PureComponent<Props, State> {
                           'STEP3_ENTER_MUTATION2_VALUE',
                     })}
                   />
-                </Tether>}
+                </Tether>
+              )}
             </div>
             {this.props.permission &&
-              this.props.serviceInformation &&
-              <PermissionVariables
-                variables={this.getVariables()}
-                selectedVariableNames={this.state.selectedVariableNames}
-                onToggleVariableSelection={this.toggleVariableSelection}
-              />}
-            {!this.props.queryOnly &&
+              this.props.serviceInformation && (
+                <PermissionVariables
+                  variables={this.getVariables()}
+                  selectedVariableNames={this.state.selectedVariableNames}
+                  onToggleVariableSelection={this.toggleVariableSelection}
+                />
+              )}
+            {!this.props.queryOnly && (
               <div className="resultWrap">
                 {this.props.isGraphcoolUrl &&
                   this.props.showSelectUser &&
                   this.props.showViewAs &&
-                  !this.props.permission &&
-                  <ResultHeader
-                    showViewAs={this.props.showViewAs}
-                    showSelectUser={this.props.showSelectUser}
-                    selectedViewer={this.props.selectedViewer}
-                    onChangeViewer={this.props.onChangeViewer}
-                    showResponseTitle={this.props.showResponseTitle}
-                  />}
-                {this.props.tether
-                  ? <Tether
-                      offsetX={18}
-                      offsetY={25}
-                      steps={[
-                        {
-                          step: 'STEP3_RUN_QUERY1',
-                          title: 'Execute your first query',
-                          description:
-                            'You just wrote your first GraphQL Query! Click here to execute it.',
-                        },
-                        {
-                          step: 'STEP3_RUN_MUTATION1',
-                          title: 'Run your first mutation',
-                          description:
-                            'Awesome! You just wrote your first GraphQL Mutation. Click here to execute it',
-                        },
-                        {
-                          step: 'STEP3_RUN_MUTATION2',
-                          title: 'Lets add more data',
-                        },
-                        {
-                          step: 'STEP3_RUN_QUERY2',
-                          title: "Let's see how the data changed",
-                          description:
-                            'After adding data with the mutations, lets' +
-                            ' see how the result of the query changes',
-                        },
-                      ]}
-                    >
-                      <ExecuteButton
-                        isRunning={Boolean(this.state.subscription)}
-                        onRun={this.handleRunQuery}
-                        onStop={this.handleStopQuery}
-                        operations={this.state.operations}
-                      />
-                    </Tether>
-                  : <ExecuteButton
+                  !this.props.permission && (
+                    <ResultHeader
+                      showViewAs={this.props.showViewAs}
+                      showSelectUser={this.props.showSelectUser}
+                      selectedViewer={this.props.selectedViewer}
+                      onChangeViewer={this.props.onChangeViewer}
+                      showResponseTitle={this.props.showResponseTitle}
+                    />
+                  )}
+                {this.props.tether ? (
+                  <Tether
+                    offsetX={18}
+                    offsetY={25}
+                    steps={[
+                      {
+                        step: 'STEP3_RUN_QUERY1',
+                        title: 'Execute your first query',
+                        description:
+                          'You just wrote your first GraphQL Query! Click here to execute it.',
+                      },
+                      {
+                        step: 'STEP3_RUN_MUTATION1',
+                        title: 'Run your first mutation',
+                        description:
+                          'Awesome! You just wrote your first GraphQL Mutation. Click here to execute it',
+                      },
+                      {
+                        step: 'STEP3_RUN_MUTATION2',
+                        title: 'Lets add more data',
+                      },
+                      {
+                        step: 'STEP3_RUN_QUERY2',
+                        title: "Let's see how the data changed",
+                        description:
+                          'After adding data with the mutations, lets' +
+                          ' see how the result of the query changes',
+                      },
+                    ]}
+                  >
+                    <ExecuteButton
                       isRunning={Boolean(this.state.subscription)}
                       onRun={this.handleRunQuery}
                       onStop={this.handleStopQuery}
                       operations={this.state.operations}
-                    />}
+                    />
+                  </Tether>
+                ) : (
+                  <ExecuteButton
+                    isRunning={Boolean(this.state.subscription)}
+                    onRun={this.handleRunQuery}
+                    onStop={this.handleStopQuery}
+                    operations={this.state.operations}
+                  />
+                )}
                 {this.state.isWaitingForResponse && <Spinner />}
-                <div
-                  className={
-                    'result-window' +
-                    (this.props.disableResize ? ' disableResize' : '')
-                  }
-                  ref={this.setResultComponent}
-                >
-                  {this.state.responses
-                    .filter(res => res && res.date)
-                    .map(response =>
-                      <div key={response.resultID}>
-                        {subscriptionResponse &&
-                          response.time &&
-                          <div className="subscription-time">
-                            <div className="subscription-time-text">
-                              {ageOfDate(response.time)}
-                            </div>
-                          </div>}
-                        <ResultViewer
-                          value={response.date}
-                          hideGutters={this.props.hideGutters}
-                        />
-                      </div>,
-                    )}
-                </div>
+                <Results
+                  setRef={this.setResultComponent}
+                  disableResize={this.props.disableResize}
+                  responses={this.state.responses}
+                  hideGutters={this.props.hideGutters}
+                />
                 {footer}
                 {!this.state.responses ||
-                  (this.state.responses.length === 0 &&
+                  (this.state.responses.length === 0 && (
                     <div className="intro">
                       Hit the Play Button to get a response here
-                    </div>)}
-                {Boolean(this.state.subscription) &&
-                  <div className="listening">Listening &hellip;</div>}
+                    </div>
+                  ))}
+                {Boolean(this.state.subscription) && (
+                  <div className="listening">Listening &hellip;</div>
+                )}
                 {this.state.responses &&
                   this.state.responses.length > 0 &&
-                  this.props.showDownloadJsonButton &&
-                  <div
-                    className="download-button"
-                    onClick={this.handleDownloadJSON}
-                  >
-                    Download JSON
-                  </div>}
-              </div>}
+                  this.props.showDownloadJsonButton && (
+                    <div
+                      className="download-button"
+                      onClick={this.handleDownloadJSON}
+                    >
+                      Download JSON
+                    </div>
+                  )}
+              </div>
+            )}
           </div>
         </div>
       </div>
@@ -797,16 +758,14 @@ export class GraphQLEditor extends React.PureComponent<Props, State> {
 
     const fetch = observableToPromise(fetcher({ query: introspectionQuery }))
     if (!isPromise(fetch)) {
-      this.setState(
-        {
-          responses: [
-            {
-              date: 'Fetcher did not return a Promise for introspection.',
-              time: new Date(),
-            },
-          ],
-        } as State,
-      )
+      this.setState({
+        responses: [
+          {
+            date: 'Fetcher did not return a Promise for introspection.',
+            time: new Date(),
+          },
+        ],
+      } as State)
       return
     }
 
@@ -845,24 +804,20 @@ export class GraphQLEditor extends React.PureComponent<Props, State> {
             typeof result === 'string'
               ? result
               : JSON.stringify(result, null, 2)
-          this.setState(
-            {
-              // Set schema to `null` to explicitly indicate that no schema exists.
-              schema: null,
-              responses: [{ date: responseString, time: new Date() }],
-            } as State,
-          )
+          this.setState({
+            // Set schema to `null` to explicitly indicate that no schema exists.
+            schema: null,
+            responses: [{ date: responseString, time: new Date() }],
+          } as State)
         }
       })
       .catch(error => {
-        this.setState(
-          {
-            schema: null,
-            responses: [
-              { date: error && String(error.stack || error), time: new Date() },
-            ],
-          } as State,
-        )
+        this.setState({
+          schema: null,
+          responses: [
+            { date: error && String(error.stack || error), time: new Date() },
+          ],
+        } as State)
       })
   }
 
@@ -915,14 +870,12 @@ export class GraphQLEditor extends React.PureComponent<Props, State> {
       // If fetcher returned a Promise, then call the callback when the promise
       // resolves, otherwise handle the error.
       fetch.then(cb).catch(error => {
-        this.setState(
-          {
-            isWaitingForResponse: false,
-            responses: [
-              { date: error && String(error.stack || error), time: new Date() },
-            ],
-          } as State,
-        )
+        this.setState({
+          isWaitingForResponse: false,
+          responses: [
+            { date: error && String(error.stack || error), time: new Date() },
+          ],
+        } as State)
       })
     } else if (isObservable(fetch)) {
       // If the fetcher returned an Observable, then subscribe to it, calling
@@ -932,26 +885,22 @@ export class GraphQLEditor extends React.PureComponent<Props, State> {
         // next: cb,
         next: cb,
         error: error => {
-          this.setState(
-            {
-              isWaitingForResponse: false,
-              responses: [
-                {
-                  date: error && String(error.stack || error),
-                  time: new Date(),
-                },
-              ],
-              subscription: null,
-            } as State,
-          )
+          this.setState({
+            isWaitingForResponse: false,
+            responses: [
+              {
+                date: error && String(error.stack || error),
+                time: new Date(),
+              },
+            ],
+            subscription: null,
+          } as State)
         },
         complete: () => {
-          this.setState(
-            {
-              isWaitingForResponse: false,
-              subscription: null,
-            } as State,
-          )
+          this.setState({
+            isWaitingForResponse: false,
+            subscription: null,
+          } as State)
         },
       })
 
@@ -983,13 +932,11 @@ export class GraphQLEditor extends React.PureComponent<Props, State> {
     }
 
     try {
-      this.setState(
-        {
-          isWaitingForResponse: true,
-          responses: [{ date: null, time: new Date() }],
-          operationName,
-        } as State,
-      )
+      this.setState({
+        isWaitingForResponse: true,
+        responses: [{ date: null, time: new Date() }],
+        operationName,
+      } as State)
 
       // _fetchQuery may return a subscription.
       const subscription = this._fetchQuery(
@@ -1009,6 +956,7 @@ export class GraphQLEditor extends React.PureComponent<Props, State> {
             if (isSubscription) {
               responses = this.state.responses
                 .filter(res => res && res.date)
+                .slice(0, 100)
                 .concat({
                   date: response,
                   time: new Date(),
@@ -1019,35 +967,29 @@ export class GraphQLEditor extends React.PureComponent<Props, State> {
                 { date: response, time: new Date(), resultID: this.resultID++ },
               ]
             }
-            this.setState(
-              {
-                isWaitingForResponse: false,
-                responses,
-              } as State,
-            )
+            this.setState({
+              isWaitingForResponse: false,
+              responses,
+            } as State)
           }
         },
       )
 
       this.setState({ subscription } as State)
     } catch (error) {
-      this.setState(
-        {
-          isWaitingForResponse: false,
-          responses: [{ date: error.message, time: new Date() }],
-        } as State,
-      )
+      this.setState({
+        isWaitingForResponse: false,
+        responses: [{ date: error.message, time: new Date() }],
+      } as State)
     }
   }
 
   handleStopQuery = () => {
     const subscription = this.state.subscription
-    this.setState(
-      {
-        isWaitingForResponse: false,
-        subscription: null,
-      } as State,
-    )
+    this.setState({
+      isWaitingForResponse: false,
+      subscription: null,
+    } as State)
     if (subscription) {
       subscription.unsubscribe()
     }
@@ -1132,11 +1074,9 @@ export class GraphQLEditor extends React.PureComponent<Props, State> {
   }
 
   handleToggleSchema = () => {
-    this.setState(
-      {
-        schemaExplorerOpen: !this.state.schemaExplorerOpen,
-      } as State,
-    )
+    this.setState({
+      schemaExplorerOpen: !this.state.schemaExplorerOpen,
+    } as State)
   }
 
   handleResizeStart = downEvent => {
@@ -1215,12 +1155,10 @@ export class GraphQLEditor extends React.PureComponent<Props, State> {
       if (docsSize < 100) {
         this.setState({ docExplorerOpen: false } as State)
       } else {
-        this.setState(
-          {
-            docExplorerOpen: true,
-            docExplorerWidth: Math.min(docsSize, 850),
-          } as State,
-        )
+        this.setState({
+          docExplorerOpen: true,
+          docExplorerWidth: Math.min(docsSize, 850),
+        } as State)
       }
     }
 
@@ -1257,12 +1195,10 @@ export class GraphQLEditor extends React.PureComponent<Props, State> {
       if (schemaSize < 100) {
         this.setState({ schemaExplorerOpen: false } as State)
       } else {
-        this.setState(
-          {
-            schemaExplorerOpen: true,
-            schemaExplorerWidth: Math.min(schemaSize, 850),
-          } as State,
-        )
+        this.setState({
+          schemaExplorerOpen: true,
+          schemaExplorerWidth: Math.min(schemaSize, 850),
+        } as State)
       }
     }
 
@@ -1300,19 +1236,15 @@ export class GraphQLEditor extends React.PureComponent<Props, State> {
       const topSize = moveEvent.clientY - getTop(editorBar) - offset
       const bottomSize = editorBar.clientHeight - topSize
       if (bottomSize < 60) {
-        this.setState(
-          {
-            variableEditorOpen: false,
-            variableEditorHeight: hadHeight,
-          } as State,
-        )
+        this.setState({
+          variableEditorOpen: false,
+          variableEditorHeight: hadHeight,
+        } as State)
       } else {
-        this.setState(
-          {
-            variableEditorOpen: true,
-            variableEditorHeight: bottomSize,
-          } as State,
-        )
+        this.setState({
+          variableEditorOpen: true,
+          variableEditorHeight: bottomSize,
+        } as State)
       }
     }
 
@@ -1430,25 +1362,20 @@ export class GraphQLEditor extends React.PureComponent<Props, State> {
 GraphQLEditor.Logo = function GraphiQLLogo(props) {
   return (
     <div className="title">
-      {props.children ||
+      {props.children || (
         <span>
           {'Graph'}
-          <em>
-            {'i'}
-          </em>
+          <em>{'i'}</em>
           {'QL'}
-        </span>}
+        </span>
+      )}
     </div>
   )
 }
 
 // Configure the UI by providing this Component as a child of GraphQLEditor.
 GraphQLEditor.Toolbar = function GraphiQLToolbar(props) {
-  return (
-    <div className="toolbar">
-      {props.children}
-    </div>
-  )
+  return <div className="toolbar">{props.children}</div>
 }
 
 // Add a button to the Toolbar.
@@ -1456,11 +1383,7 @@ GraphQLEditor.ToolbarButton = ToolbarButton
 
 // Configure the UI by providing this Component as a child of GraphQLEditor.
 GraphQLEditor.Footer = function GraphiQLFooter(props) {
-  return (
-    <div className="footer">
-      {props.children}
-    </div>
-  )
+  return <div className="footer">{props.children}</div>
 }
 
 // Duck-type promise detection.
