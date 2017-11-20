@@ -45,7 +45,7 @@ export default function renderPlaygroundPage(options: MiddlewareOptions) {
             font-weight: 400;
         }
     </style>
-    <img src='http://cdn.jsdelivr.net/npm/graphql-playground/build/logo.png' alt=''>
+    <img src='//cdn.jsdelivr.net/npm/graphql-playground/build/logo.png' alt=''>
     <div class="loading">
         Loading <span class="title">GraphQL Playground</span>
     </div>
