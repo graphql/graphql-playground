@@ -33,9 +33,11 @@ export interface Sizes {
   small12: string
   small16: string
   smallRadius: string
+  fontLight: string
   fontSemiBold: string
   fontTiny: string
   fontSmall: string
+  fontMedium: string
 }
 
 export const sizes: Sizes = {
@@ -45,11 +47,13 @@ export const sizes: Sizes = {
   small16: '16px',
 
   // font weights
+  fontLight: '300',
   fontSemiBold: '600',
 
   // font sizes
   fontTiny: '12px',
   fontSmall: '14px',
+  fontMedium: '20px',
 
   // others
   smallRadius: '2px',
