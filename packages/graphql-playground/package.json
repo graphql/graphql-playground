@@ -142,6 +142,7 @@
     "seamless-immutable": "^7.0.1",
     "styled-components": "^2.2.3",
     "styled-jsx-postcss": "git+https://github.com/timsuchanek/styled-jsx-postcss#build3",
+    "styled-theming": "^2.2.0",
     "subscriptions-transport-ws": "^0.8.1"
   },
   "lint-staged": {

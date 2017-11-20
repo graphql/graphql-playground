@@ -584,7 +584,7 @@ export class Playground extends React.PureComponent<Props & DocsState, State> {
       : this.getSimpleEndpoint()
     const isGraphcoolUrl = this.isGraphcoolUrl(selectedEndpointUrl)
     return (
-      <ThemeProvider theme={styledTheme}>
+      <ThemeProvider theme={{ ...styledTheme, mode: theme }}>
         <OldThemeProvider theme={this.state.theme}>
           <div className={cx('playground')}>
             <style jsx={true}>{`

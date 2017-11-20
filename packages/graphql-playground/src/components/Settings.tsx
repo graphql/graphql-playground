@@ -1,10 +1,10 @@
 import * as React from 'react'
 import Icon from 'graphcool-styles/dist/components/Icon/Icon'
-import { $v } from 'graphcool-styles'
 import ToggleButton from './ToggleButton'
 import Tooltip from './Tooltip'
 import { ThemeInterface } from './Theme'
-import * as cn from 'classnames'
+import styled, { css } from '../styled'
+import * as theme from 'styled-theming'
 
 export interface Props extends ThemeInterface {
   onToggleTheme: () => void
@@ -43,68 +43,16 @@ export default class Settings extends React.Component<Props, State> {
       onToggleUseVim,
     } = this.props
     return (
-      <div className="settings">
-        <style jsx={true}>{`
-          .settings {
-            @p: .absolute;
-            z-index: 1005;
-            right: 20px;
-            top: 17px;
-          }
-          .tooltip-text {
-            @p: .mr10, .darkBlue50, .fw6, .ttu, .f14;
-            letter-spacing: 0.53px;
-          }
-          .icon {
-            @p: .pointer, .relative;
-          }
-          .icon:hover :global(.settings-icon) :global(svg),
-          .icon.open :global(.settings-icon) :global(svg) {
-            fill: $white60;
-          }
-          .icon.light:hover :global(.settings-icon) :global(svg),
-          .icon.light.open :global(.settings-icon) :global(svg) {
-            fill: $darkBlue60;
-          }
-          .tooltip {
-            @p: .absolute;
-            right: -21px;
-          }
-          .row {
-            @p: .flex, .itemsCenter, .justifyBetween;
-            min-width: 245px;
-          }
-          .row + .row {
-            @p: .mt16;
-          }
-          .button {
-            @p: .br2, .f14, .fw6, .ttu, .darkBlue40;
-            background: #e9eaeb;
-            padding: 5px 9px 6px 9px;
-          }
-          .button:hover {
-            @p: .darkBlue50;
-            background: #dbdcdc;
-          }
-          input {
-            @p: .bgDarkBlue10, .br2, .pv6, .ph10, .fw6, .darkBlue, .f12, .db,
-              .w100;
-          }
-          .inner-row {
-            @p: .w100;
-            padding-right: 20px;
-          }
-        `}</style>
-        <div className={cn('icon', localTheme, { open })}>
+      <Wrapper>
+        <IconWrapper open={open}>
           <Icon
             src={require('graphcool-styles/icons/fill/settings.svg')}
-            color={localTheme === 'light' ? $v.darkBlue20 : $v.white20}
             width={23}
             height={23}
             onClick={this.toggleTooltip}
             className={'settings-icon'}
           />
-          <div className="tooltip">
+          <TooltipWrapper>
             <Tooltip
               open={open}
               onClose={this.toggleTooltip}
@@ -114,63 +62,56 @@ export default class Settings extends React.Component<Props, State> {
               }}
             >
               <div>
-                <div className="row">
-                  <span
-                    className="tooltip-text"
-                    onClick={this.props.onToggleTheme}
-                  >
+                <Row>
+                  <TooltipText onClick={this.props.onToggleTheme}>
                     LIGHT MODE{' '}
-                  </span>
+                  </TooltipText>
                   <ToggleButton
                     checked={localTheme === 'light'}
                     onChange={this.props.onToggleTheme}
                   />
-                </div>
-                <div className="row">
-                  <span className="tooltip-text" onClick={onToggleUseVim}>
-                    VIM MODE{' '}
-                  </span>
+                </Row>
+                <Row>
+                  <TooltipText onClick={onToggleUseVim}>VIM MODE </TooltipText>
                   <ToggleButton checked={useVim} onChange={onToggleUseVim} />
-                </div>
-                <div className="row">
-                  <span className="tooltip-text" onClick={onToggleReload}>
+                </Row>
+                <Row>
+                  <TooltipText onClick={onToggleReload}>
                     AUTO-RELOAD SCHEMA{' '}
-                  </span>
+                  </TooltipText>
                   <ToggleButton
                     checked={autoReload}
                     onChange={onToggleReload}
                   />
-                </div>
-                <div className="row">
-                  <div className="button" onClick={onReload}>
-                    Reload Schema
-                  </div>
-                </div>
-                <div className="row">
-                  <div className="inner-row">
+                </Row>
+                <Row>
+                  <Button onClick={onReload}>Reload Schema</Button>
+                </Row>
+                <Row>
+                  <InnerRow>
                     <div>Endpoint</div>
-                    <input
+                    <Input
                       value={this.props.endpoint}
                       placeholder="Enter an endpoint..."
                       onChange={this.handleChangeEndpoint}
                     />
-                  </div>
-                </div>
-                <div className="row">
-                  <div className="inner-row">
+                  </InnerRow>
+                </Row>
+                <Row>
+                  <InnerRow>
                     <div>Subscriptions Endpoint</div>
-                    <input
+                    <Input
                       value={this.props.subscriptionsEndpoint}
                       placeholder="Enter a subscriptions endpoint..."
                       onChange={this.handleChangeSubscriptionsEndpoint}
                     />
-                  </div>
-                </div>
+                  </InnerRow>
+                </Row>
               </div>
             </Tooltip>
-          </div>
-        </div>
-      </div>
+          </TooltipWrapper>
+        </IconWrapper>
+      </Wrapper>
     )
   }
 
@@ -190,3 +131,109 @@ export default class Settings extends React.Component<Props, State> {
     this.setState(state => ({ open: !state.open }))
   }
 }
+
+const Wrapper = styled.div`
+  position: absolute;
+  z-index: 1005;
+  right: 20px;
+  top: 17px;
+`
+
+const TooltipText = styled.div`
+  margin-right: ${p => p.theme.sizes.small10};
+
+  font-size: ${p => p.theme.sizes.fontSmall};
+  font-weight: ${p => p.theme.sizes.fontSemiBold};
+  letter-spacing: 0.53px;
+  text-transform: uppercase;
+
+  color: ${p => p.theme.colours.darkBlue50};
+`
+
+const iconColor = theme('mode', {
+  light: p => p.theme.colours.darkBlue20,
+  dark: p => p.theme.colours.white20,
+})
+
+const iconColorActive = theme('mode', {
+  light: p => p.theme.colours.darkBlue60,
+  dark: p => p.theme.colours.white60,
+})
+
+// prettier-ignore
+const IconWrapper = styled.div`
+  position: relative;
+  cursor: pointer;
+
+  .settings-icon svg {
+    fill: ${iconColor};
+  }
+
+  &:hover {
+    .settings-icon svg {
+      fill: ${iconColorActive};
+    }
+  }
+
+  ${(p: { open: boolean }) => p.open ? css`
+    .settings-icon svg {
+      fill: ${iconColorActive};
+    }
+  ` : ''}
+`
+
+const TooltipWrapper = styled.div`
+  position: absolute;
+  right: -21px;
+`
+
+const Row = styled.div`
+  position: relative;
+  min-width: 245px;
+  margin-top: ${p => p.theme.sizes.small16};
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  &:first-child {
+    margin-top: 0;
+  }
+`
+
+const Input = styled.input`
+  display: block;
+  width: 100%;
+  padding: ${p => p.theme.sizes.small6} ${p => p.theme.sizes.small10};
+
+  font-weight: ${p => p.theme.sizes.fontSemiBold};
+  font-size: ${p => p.theme.sizes.fontTiny};
+
+  border-radius: ${p => p.theme.sizes.smallRadius};
+  background: ${p => p.theme.colours.darkBlue10};
+  color: ${p => p.theme.colours.darkBlue};
+`
+
+const InnerRow = styled.div`
+  width: 100%;
+  padding-right: 20px;
+`
+
+const Button = styled.button`
+  display: block;
+  padding: 5px 9px 6px 9px;
+
+  font-size: ${p => p.theme.sizes.fontSmall};
+  font-weight: ${p => p.theme.sizes.fontSemiBold};
+  text-transform: uppercase;
+
+  cursor: pointer;
+  border-radius: ${p => p.theme.sizes.smallRadius};
+  color: ${p => p.theme.colours.darkBlue50};
+  background: #e9eaeb;
+
+  &:hover {
+    color: ${p => p.theme.colours.darkBlue60};
+    background: #dbdcdc;
+  }
+`
