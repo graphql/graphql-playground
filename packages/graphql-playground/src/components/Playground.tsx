@@ -1252,7 +1252,7 @@ query ${operationName} {
 
       newSession = Immutable({
         id: cuid(),
-        selectedViewer: 'ADMIN',
+        selectedViewer: 'EVERYONE',
         query,
         variables: '',
         result: '',
