@@ -44,112 +44,116 @@ You can easily share your Playgrounds with others by clicking on the "Share" but
 
 ## Usage
 
-[examples/latest.html](https://github.com/graphcool/graphql-playground/blob/master/packages/graphql-playground/examples/latest.html) contains a simple example on how to use the latest playground in your application.
+### Properties
+All interfaces, the React component `<Playground />` and all middlewares expose the same set of options:
 
-You also can use the latest playground based on the npm package.
-In order to do that, first you need to install `graphql-playground` via NPM. Then choose one of the following options to use the Playground in your own app/server.
-
-```
-yarn add graphql-playground
-```
++ `properties`
+  + `endpoint` [`string`] - the GraphQL endpoint url.
+  + `subscriptionEndpoint` [`string`] - the GraphQL subscriptions endpoint url.
+  + `setTitle` [`boolean`] - reflect the current endpoint in the page title
 
 ### As React Component
 
-GraphQL Playground provides a React component responsible for rendering the UI, which should be provided with a function for fetching from GraphQL, we recommend using the [fetch](https://fetch.spec.whatwg.org/) standard API.
+#### Install
+```sh
+yarn add graphql-playground
+```
 
+#### Use
+GraphQL Playground provides a React component responsible for rendering the UI and Session management.
+There are **3 dependencies** needed in order to run the `graphql-playground` React component.
+1. _Open Sans_ and _Source Code Pro_ fonts
+2. Including `graphql-playground/playground.css`
+3. Rendering the `<Playground />` component
+
+The GraphQL Playground requires **React 16**.
+
+Including Fonts (`1.`)
+```html
+<link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700|Source+Code+Pro:400,700" rel="stylesheet">
+```
+
+Including stylesheet and the component (`2., 3.`)
 ```js
 import React from 'react'
 import ReactDOM from 'react-dom'
 import Playground from 'graphql-playground'
-import fetch from 'isomorphic-fetch'
+import 'graphql-playground/playground.css'
 
-function graphQLFetcher(graphQLParams) {
-  return fetch(window.location.origin + '/graphql', {
-    method: 'post',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(graphQLParams),
-  }).then(response => response.json())
-}
-
-ReactDOM.render(<Playground fetcher={graphQLFetcher} />, document.body)
+ReactDOM.render(<Playground endpoint="https://api.graph.cool/simple/v1/swapi" />, document.body)
 ```
 
-### As Express Middleware
+### As Server Middleware
 
-#### Properties
-Express middleware supports the following properties:
-
-+ `options`
-  + `endpoint` [`string`] - the GraphQL endpoint url.
-
-#### Usage
-```js
-import express from 'express'
-import { express as playground } from 'graphql-playground/middleware'
-
-const app = express()
-
-app.use('/playground', playground({ endpoint: '/graphql' }))
-
-app.listen(3000)
+#### Install
+```sh
+# Pick the one that matches your server framework
+yarn add graphql-playground-middleware-express  # for Express or Connect
+yarn add graphql-playground-middleware-hapi
+yarn add graphql-playground-middleware-koa
+yarn add graphql-playground-middleware-lambda
 ```
 
-### As Hapi Middleware
+#### Usage with example
 
-#### Properties
-Hapi middleware supports the following properties:
+We have a full example for each of the frameworks below:
 
-+ `options`
-  + `path` [`string`] - the Playground middleware url
-  + `playgroundOptions`
-      + `endpoint` [`string`] - the GraphQL endpoint url.
-      + `subscriptionEndpoint` [`string`] - the GraphQL subscription endpoint url.
+- **Express:** See [packages/graphql-playground-middleware-express/examples/basic](https://github.com/graphcool/graphql-playground/tree/master/packages/graphql-playground-middleware-express/examples/basic)
+
+- **Hapi:** See [packages/graphql-playground-middleware/examples/hapi](https://github.com/graphcool/graphql-playground/tree/master/packages/graphql-playground-middleware/examples/hapi)
+
+- **Koa:** See [packages/graphql-playground-middleware/examples/koa](https://github.com/graphcool/graphql-playground/tree/master/packages/graphql-playground-middleware/examples/koa)
+
+- **Lambda (as serverless handler):** See [serverless-graphql-apollo](https://github.com/serverless/serverless-graphql-apollo) or a quick example below.
+
+### As serverless handler
+#### Install
+```sh
+yarn add graphql-playground-middleware-lambda
+```
 
 #### Usage
+`handler.js`
+
 ```js
-import hapi from 'hapi'
-import { hapi as playground } from 'graphql-playground/middleware'
+import lambdaPlayground from 'graphql-playground-middleware-lambda'
+// or using require()
+// const lambdaPlayground = require('graphql-playground-middleware-lambda').default
 
-const server = new Hapi.Server()
-
-server.connection({
-  port: 3001
-})
-
-server.register({
-  register: playground,
-  options: {
-    path: '/playground',
-    endpoint: '/graphql'
+exports.graphqlHandler = function graphqlHandler(event, context, callback) {
+  function callbackFilter(error, output) {
+    // eslint-disable-next-line no-param-reassign
+    output.headers['Access-Control-Allow-Origin'] = '*';
+    callback(error, output);
   }
-},() => server.start())
+
+  const handler = graphqlLambda({ schema: myGraphQLSchema });
+  return handler(event, context, callbackFilter);
+};
+
+exports.playgroundHandler = lambdaPlayground({
+  endpoint: '/dev/graphql',
+});
 ```
 
-### As Koa Middleware
+`serverless.yml`
 
-#### Properties
-Koa middleware supports the following properties:
-
-+ `options`
-  + `endpoint` [`string`] - the GraphQL endpoint url.
-  + `subscriptionEndpoint` [`string`] - the GraphQL subscription endpoint url.
-
-#### Usage
-```js
-import Koa from 'koa'
-import KoaRouter from 'koa-router'
-import { koa as playground } from 'graphql-playground/middleware'
-
-const app = new Koa()
-const router = new KoaRouter()
-
-router.all('/playground', playground({
-  endpoint: '/graphql'
-}))
-
-app.use(router.routes())
-app.use(router.allowedMethods())
-app.listen(3001)
+```yaml
+functions:
+  graphql:
+    handler: handler.graphqlHandler
+    events:
+    - http:
+        path: graphql
+        method: post
+        cors: true
+  playground:
+    handler: handler.playgroundHandler
+    events:
+    - http:
+        path: playground
+        method: get
+        cors: true
 ```
 
 ## Development [![npm version](https://badge.fury.io/js/graphql-playground.svg)](https://badge.fury.io/js/graphql-playground)
@@ -162,7 +166,7 @@ $ yarn
 $ yarn start
 ```
 Open
-[localhost:3000](http://localhost:3000/?endpoint=https://api.graph.cool/simple/v1/cj56h35ol3y93018144iab4wo&subscription=wss://subscriptions.graph.cool/v1/cj56h35ol3y93018144iab4wo)
+[localhost:3000/middleware.html?endpoint=https://api.graph.cool/simple/v1/swapi](http://localhost:3000/middleware.html?endpoint=https://api.graph.cool/simple/v1/swapi) for local development!
 
 
 <a name="help-and-community" />
