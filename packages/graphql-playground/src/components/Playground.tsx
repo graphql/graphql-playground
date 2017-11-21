@@ -971,22 +971,21 @@ query ${operationName} {
     value: any,
     cb?: () => void,
   ) {
-    this.setState(
-      state => {
-        // TODO optimize the lookup with a lookup table
-        const i = state.sessions.findIndex(s => s.id === sessionId)
-        return {
-          ...state,
-          sessions: Immutable.setIn(state.sessions, [i, key], value),
-          changed: true,
-        }
-      },
-      () => {
-        if (typeof cb === 'function') {
-          cb()
-        }
-      },
-    )
+    this.setState(state => {
+      // TODO optimize the lookup with a lookup table
+      const i = state.sessions.findIndex(s => s.id === sessionId)
+      return {
+        ...state,
+        sessions: Immutable.setIn(state.sessions, [i, key], value),
+        changed: true,
+      }
+    })
+    // hack to support older react versions
+    setTimeout(() => {
+      if (typeof cb === 'function') {
+        cb()
+      }
+    }, 100)
   }
 
   private autofillMutation = () => {
@@ -1273,7 +1272,7 @@ query ${operationName} {
   private createSessionFromQuery = (query: string) => {
     return Immutable({
       id: cuid(),
-      selectedViewer: 'ADMIN',
+      selectedViewer: 'EVERYONE',
       query,
       variables: '',
       result: '',
