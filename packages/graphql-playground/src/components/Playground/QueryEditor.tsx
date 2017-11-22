@@ -102,7 +102,7 @@ export class QueryEditor extends React.Component<Props, {}> {
       },
       hintOptions: {
         schema: this.props.schema,
-        closeOnUnfocus: false,
+        closeOnUnfocus: true,
         completeSingle: false,
       },
       gutters,
