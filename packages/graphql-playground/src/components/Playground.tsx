@@ -96,6 +96,7 @@ export interface State {
   shareHistory: boolean
   changed: boolean
   serviceInformation?: ServiceInformation
+  tracingSupported: boolean
 }
 
 export interface CursorPosition {
@@ -199,6 +200,7 @@ export class Playground extends React.PureComponent<Props & DocsState, State> {
       changed: false,
       response: undefined,
       userModelName: 'User',
+      tracingSupported: false,
     }
 
     if (typeof window === 'object') {
@@ -311,9 +313,12 @@ export class Playground extends React.PureComponent<Props & DocsState, State> {
 
         this.renewStack(simpleSchema)
 
+        const tracingSupported =
+          simpleSchemaData.extensions && simpleSchemaData.extensions.tracing
         this.setState({
           schemaCache: simpleSchema,
           userFields,
+          tracingSupported,
         } as State)
       },
     )
@@ -548,6 +553,7 @@ export class Playground extends React.PureComponent<Props & DocsState, State> {
       method: 'post',
       headers: {
         'Content-Type': 'application/json',
+        'X-Apollo-Tracing': '1',
         ...headers,
       },
       body: JSON.stringify({ query: introspectionQuery }),
@@ -688,6 +694,7 @@ export class Playground extends React.PureComponent<Props & DocsState, State> {
                     isActive={index === selectedSessionIndex}
                     permission={session.permission}
                     serviceInformation={this.state.serviceInformation}
+                    tracingSupported={this.state.tracingSupported}
                   />
                 </div>
               ))}
@@ -1374,7 +1381,7 @@ query ${operationName} {
   }
 
   get httpApiPrefix() {
-    return this.props.endpoint.match(/(https?:\/\/.*?)\//)![1]
+    return this.props.endpoint.match(/(https?:\/\/.*?)\/?/)![1]
   }
 
   get wsApiPrefix() {
@@ -1470,7 +1477,7 @@ query ${operationName} {
     })
   }
 
-  private fetcher = (session: Session, graphQLParams) => {
+  private fetcher = (session: Session, graphQLParams, requestHeaders?: any) => {
     const { query, operationName } = graphQLParams
 
     if (!query.includes('IntrospectionQuery')) {
@@ -1529,7 +1536,7 @@ query ${operationName} {
 
     const endpoint = this.getSimpleEndpoint()
 
-    const headers: any = {
+    let headers: any = {
       'Content-Type': 'application/json',
     }
 
@@ -1537,6 +1544,10 @@ query ${operationName} {
       session.headers.forEach(header => {
         headers[header.name] = header.value
       })
+    }
+
+    if (requestHeaders) {
+      headers = { ...headers, ...requestHeaders }
     }
 
     return fetch(endpoint, {

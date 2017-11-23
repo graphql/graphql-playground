@@ -21,9 +21,7 @@ export interface Props extends OptionalThemeInterface {
 const white20 = '#4a555f'
 const darkBlue20 = '#c2c8cb'
 
-export const TabBar = withTheme<
-  Props
->(
+export const TabBar = withTheme<Props>(
   ({
     sessions,
     selectedSessionIndex,
@@ -80,7 +78,7 @@ export const TabBar = withTheme<
           }
 
           .tabs {
-            @p: .mt16, .ml16, .flex, .itemsCenter, .z0, .overflowAuto;
+            @p: .mt16, .ml0, .flex, .itemsCenter, .z0, .overflowAuto;
             margin-right: 240px;
           }
 

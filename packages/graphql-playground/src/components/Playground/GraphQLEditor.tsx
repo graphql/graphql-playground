@@ -4,7 +4,6 @@ import { buildClientSchema, parse, print } from 'graphql'
 import * as cn from 'classnames'
 import { GraphQLSchema } from 'graphql/type/schema'
 import ExecuteButton from './ExecuteButton'
-import { ToolbarButton } from 'graphiql/dist/components/ToolbarButton'
 import { QueryEditor } from './QueryEditor'
 import { VariableEditor } from 'graphiql/dist/components/VariableEditor'
 import CodeMirrorSizer from 'graphiql/dist/utility/CodeMirrorSizer'
@@ -37,6 +36,7 @@ import PermissionVariables from './PermissionVariables'
 import { getVariableNamesFromQuery, putVariablesToQuery } from './ast'
 import { flatMap, groupBy } from 'lodash'
 import Results from './Results'
+import ReponseTracing from './ResponseTracing'
 
 // tslint:disable-next-line
 const CSSTransitionGroup = require('react-transition-group/CSSTransitionGroup')
@@ -47,7 +47,7 @@ const CSSTransitionGroup = require('react-transition-group/CSSTransitionGroup')
  */
 
 export interface Props {
-  fetcher: (params: any) => Promise<any>
+  fetcher: (params: any, headers?: any) => Promise<any>
   isGraphcoolUrl?: boolean
   schema?: GraphQLSchema
   query?: string
@@ -97,6 +97,7 @@ export interface Props {
   useVim?: boolean
   permission?: PermissionSession
   serviceInformation?: ServiceInformation
+  tracingSupported?: boolean
 }
 
 export interface State {
@@ -108,6 +109,8 @@ export interface State {
   editorFlex: number
   variableEditorOpen: boolean
   variableEditorHeight: number
+  responseTracingOpen: boolean
+  responseTracingHeight: number
   docExploreOpen: boolean
   docExplorerWidth: number
   isWaitingForReponse: boolean
@@ -119,6 +122,7 @@ export interface State {
   schemaExplorerWidth: number
   isWaitingForResponse: boolean
   selectedVariableNames: string[]
+  responseExtensions: any
 }
 
 export interface SimpleProps {
@@ -238,6 +242,9 @@ export class GraphQLEditor extends React.PureComponent<Props, State> {
       variableEditorOpen: Boolean(variables),
       variableEditorHeight:
         Number(this._storageGet('variableEditorHeight')) || 200,
+      responseTracingOpen: false,
+      responseTracingHeight:
+        Number(this._storageGet('responseTracingHeight')) || 300,
       docExplorerOpen: false,
       docExplorerWidth: Number(this._storageGet('docExplorerWidth')) || 350,
       schemaExplorerOpen: false,
@@ -350,6 +357,11 @@ export class GraphQLEditor extends React.PureComponent<Props, State> {
     const variableOpen = this.state.variableEditorOpen
     const variableStyle = {
       height: variableOpen ? this.state.variableEditorHeight : null,
+    }
+
+    const tracingOpen = this.state.responseTracingOpen
+    const tracingStyle = {
+      height: tracingOpen ? this.state.responseTracingHeight : null,
     }
 
     const Tether = this.props.tether
@@ -655,16 +667,21 @@ export class GraphQLEditor extends React.PureComponent<Props, State> {
                 {Boolean(this.state.subscription) && (
                   <div className="listening">Listening &hellip;</div>
                 )}
-                {this.state.responses &&
-                  this.state.responses.length > 0 &&
-                  this.props.showDownloadJsonButton && (
-                    <div
-                      className="download-button"
-                      onClick={this.handleDownloadJSON}
-                    >
-                      Download JSON
-                    </div>
-                  )}
+                <div className="response-tracing" style={tracingStyle}>
+                  <div
+                    className="response-tracing-title"
+                    style={{ cursor: tracingOpen ? 'row-resize' : 'n-resize' }}
+                    onMouseDown={this.handleTracingResizeStart}
+                  >
+                    {'Response Tracing'}
+                  </div>
+                  <ReponseTracing
+                    tracing={
+                      this.state.responseExtensions &&
+                      this.state.responseExtensions.tracing
+                    }
+                  />
+                </div>
               </div>
             )}
           </div>
@@ -945,6 +962,11 @@ export class GraphQLEditor extends React.PureComponent<Props, State> {
         operationName,
         result => {
           if (queryID === this.editorQueryID) {
+            let extensions
+            if (result.extensions) {
+              extensions = result.extensions
+              delete result.extensions
+            }
             let isSubscription = false
             if (result.isSubscription) {
               isSubscription = true
@@ -970,6 +992,7 @@ export class GraphQLEditor extends React.PureComponent<Props, State> {
             this.setState({
               isWaitingForResponse: false,
               responses,
+              responseExtensions: extensions,
             } as State)
           }
         },
@@ -1217,6 +1240,52 @@ export class GraphQLEditor extends React.PureComponent<Props, State> {
     document.addEventListener('mouseup', onMouseUp)
   }
 
+  handleTracingResizeStart = downEvent => {
+    downEvent.preventDefault()
+
+    let didMove = false
+    const wasOpen = this.state.responseTracingOpen
+    const hadHeight = this.state.responseTracingHeight
+    const offset = downEvent.clientY - getTop(downEvent.target)
+
+    let onMouseMove: any = moveEvent => {
+      if (moveEvent.buttons === 0) {
+        return onMouseUp()
+      }
+
+      didMove = true
+
+      const editorBar = ReactDOM.findDOMNode(this.editorBarComponent)
+      const topSize = moveEvent.clientY - getTop(editorBar) - offset
+      const bottomSize = editorBar.clientHeight - topSize
+      if (bottomSize < 60) {
+        this.setState({
+          responseTracingOpen: false,
+          responseTracingHeight: hadHeight,
+        } as State)
+      } else {
+        this.setState({
+          responseTracingOpen: true,
+          responseTracingHeight: bottomSize,
+        } as State)
+      }
+    }
+
+    let onMouseUp: any = () => {
+      if (!didMove) {
+        this.setState({ responseTracingOpen: !wasOpen } as State)
+      }
+
+      document.removeEventListener('mousemove', onMouseMove)
+      document.removeEventListener('mouseup', onMouseUp)
+      onMouseMove = null
+      onMouseUp = null
+    }
+
+    document.addEventListener('mousemove', onMouseMove)
+    document.addEventListener('mouseup', onMouseUp)
+  }
+
   handleVariableResizeStart = downEvent => {
     downEvent.preventDefault()
 
@@ -1322,10 +1391,9 @@ export class GraphQLEditor extends React.PureComponent<Props, State> {
     const { selectedVariableNames } = this.state
     const variables = this.getVariables()
 
-    return flatMap(
-      Object.keys(variables),
-      group => variables[group],
-    ).filter(variable => selectedVariableNames.includes(variable.name))
+    return flatMap(Object.keys(variables), group => variables[group]).filter(
+      variable => selectedVariableNames.includes(variable.name),
+    )
   }
 
   private getPermissionQueryArguments(): PermissionQueryArgument[] {
@@ -1356,34 +1424,6 @@ export class GraphQLEditor extends React.PureComponent<Props, State> {
     const variables = groupBy(args, arg => arg.group)
     return variables
   }
-}
-
-// Configure the UI by providing this Component as a child of GraphQLEditor.
-GraphQLEditor.Logo = function GraphiQLLogo(props) {
-  return (
-    <div className="title">
-      {props.children || (
-        <span>
-          {'Graph'}
-          <em>{'i'}</em>
-          {'QL'}
-        </span>
-      )}
-    </div>
-  )
-}
-
-// Configure the UI by providing this Component as a child of GraphQLEditor.
-GraphQLEditor.Toolbar = function GraphiQLToolbar(props) {
-  return <div className="toolbar">{props.children}</div>
-}
-
-// Add a button to the Toolbar.
-GraphQLEditor.ToolbarButton = ToolbarButton
-
-// Configure the UI by providing this Component as a child of GraphQLEditor.
-GraphQLEditor.Footer = function GraphiQLFooter(props) {
-  return <div className="footer">{props.children}</div>
 }
 
 // Duck-type promise detection.

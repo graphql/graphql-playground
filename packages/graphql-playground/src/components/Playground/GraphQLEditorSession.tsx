@@ -9,7 +9,7 @@ export interface Props {
   index: number
   onRef: (index: number, ref: any) => void
   isGraphcoolUrl: boolean
-  fetcher: (session: Session, graphQLParams: any) => Promise<any>
+  fetcher: (session: Session, graphQLParams: any, headers?: any) => Promise<any>
   schemaCache: any
   isEndpoint: boolean
   adminAuthToken?: string
@@ -33,14 +33,15 @@ export interface Props {
   nextStep?: () => void
   permission?: PermissionSession
   serviceInformation?: ServiceInformation
+  tracingSupported: boolean
 }
 
 export default class GraphQLEditorSession extends React.PureComponent<
   Props,
   {}
 > {
-  fetcher = graphQLParams => {
-    return this.props.fetcher(this.props.session, graphQLParams)
+  fetcher = (graphQLParams, headers?: any) => {
+    return this.props.fetcher(this.props.session, graphQLParams, headers)
   }
   render() {
     const {
@@ -58,6 +59,7 @@ export default class GraphQLEditorSession extends React.PureComponent<
       isActive,
       permission,
       serviceInformation,
+      tracingSupported,
     } = this.props
     return (
       <GraphQLEditor
@@ -102,6 +104,7 @@ export default class GraphQLEditorSession extends React.PureComponent<
         disableAutofocus={!isActive}
         permission={permission}
         serviceInformation={serviceInformation}
+        tracingSupported={tracingSupported}
       />
     )
   }

@@ -156,7 +156,6 @@
     -ms-flex: 1;
     flex: 1;
     position: relative;
-    padding-bottom: 60px;
     background-color: rgb(23,42,58);
 }
 
@@ -202,7 +201,7 @@
     background-color: rgb(15,32,45);
 }
 
-.graphiql-container .variable-editor {
+.graphiql-container .variable-editor, .graphiql-container .response-tracing {
     display: -webkit-box;
     display: -ms-flexbox;
     display: flex;
@@ -227,18 +226,30 @@
 }
 
 
-.graphiql-container .variable-editor-title, .graphiql-container .editor-title {
+.graphiql-container .variable-editor-title,
+.graphiql-container .response-tracing-title,
+.graphiql-container .editor-title {
     background: #0B1924;
     color: rgba(255,255,255,.3);
     text-transform: uppercase;
     font-weight: bold;
     letter-spacing: 1px;
     line-height: 14px;
-    padding: 14px 0 5px 21px;
+    padding: 14px 14px 5px 21px;
     -webkit-user-select: none;
     -moz-user-select: none;
     -ms-user-select: none;
     user-select: none;
+}
+
+
+.graphiql-container .response-tracing {
+    background: #0f202e;
+}
+
+.graphiql-container .response-tracing-title {
+    text-align: right;
+    background: #0f202e;
 }
 
 .graphiql-container .codemirrorWrap {
