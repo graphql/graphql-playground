@@ -109,14 +109,12 @@ export default class ElectronApp extends React.Component<{}, State> {
       // Select first enpoind found
       const activeEndpoint = projectsState[0].endpoints[0]
 
-      this.setState(
-        {
-          openInitialView: false,
-          activeEndpoint,
-          endpoint: activeEndpoint.url,
-          projects: projectsState,
-        } as State,
-      )
+      this.setState({
+        openInitialView: false,
+        activeEndpoint,
+        endpoint: activeEndpoint.url,
+        projects: projectsState,
+      } as State)
     } catch (error) {
       alert(error)
     }
@@ -132,9 +130,9 @@ export default class ElectronApp extends React.Component<{}, State> {
   }
 
   handleChangeTheme = () => {
-    this.setState(
-      { theme: this.state.theme === 'dark' ? 'light' : 'dark' } as State,
-    )
+    this.setState({
+      theme: this.state.theme === 'dark' ? 'light' : 'dark',
+    } as State)
   }
 
   handleOpenNewWindow = () => {
@@ -176,7 +174,10 @@ export default class ElectronApp extends React.Component<{}, State> {
   componentWillUnmount() {
     ipcRenderer.removeListener('Tab', this.readTabMessage)
     ipcRenderer.removeListener('File', this.readFileMessage)
-    ipcRenderer.removeListener('OpenSelectedFile', this.readOpenSelectedFileMessage)
+    ipcRenderer.removeListener(
+      'OpenSelectedFile',
+      this.readOpenSelectedFileMessage,
+    )
   }
 
   readFileMessage = (error, message) => {
@@ -208,9 +209,7 @@ export default class ElectronApp extends React.Component<{}, State> {
       localStorage.setItem('platformToken', rc.platformToken)
     }
 
-    const permissionSession = this.getPermissionSessionForPath(
-      fileToOpen,
-    )
+    const permissionSession = this.getPermissionSessionForPath(fileToOpen)
 
     this.playground.newPermissionTab(
       permissionSession,
@@ -221,19 +220,22 @@ export default class ElectronApp extends React.Component<{}, State> {
   }
 
   showOpenDialog() {
-    dialog.showOpenDialog({
-      title: 'Choose a .graphql file to edit',
-      properties: ['openFile'],
-      // filters: [{
-      //   name: '*',
-      //   extensions: ['graphql']
-      // }]
-    }, fileNames => {
-      if (fileNames && fileNames.length > 0) {
-        const file = fileNames[0]
-        this.openFile(file)
-      }
-    })
+    dialog.showOpenDialog(
+      {
+        title: 'Choose a .graphql file to edit',
+        properties: ['openFile'],
+        // filters: [{
+        //   name: '*',
+        //   extensions: ['graphql']
+        // }]
+      },
+      fileNames => {
+        if (fileNames && fileNames.length > 0) {
+          const file = fileNames[0]
+          this.openFile(file)
+        }
+      },
+    )
   }
 
   getSaveFileName(): Promise<string> {
@@ -378,7 +380,7 @@ export default class ElectronApp extends React.Component<{}, State> {
               letter-spacing: 0.5px;
             }
             body .root .tabs.isApp {
-              padding-left: 58px;
+              padding-left: 74px;
             }
           `}</style>
           <style jsx={true}>{`
@@ -439,17 +441,15 @@ export default class ElectronApp extends React.Component<{}, State> {
             onSelectFolder={this.handleSelectFolder}
             onSelectEndpoint={this.handleSelectEndpoint}
           />
-          {endpoint &&
+          {endpoint && (
             <div className={cx('app-content', { 'app-endpoint': !projects })}>
-              {projects &&
+              {projects && (
                 <div className={cx('left-content', theme)}>
                   <div className="list">
-                    {projects.map(project =>
+                    {projects.map(project => (
                       <div key={project.name}>
-                        <div className={cx('list-item')}>
-                          {project.name}
-                        </div>
-                        {project.endpoints.map(ept =>
+                        <div className={cx('list-item')}>{project.name}</div>
+                        {project.endpoints.map(ept => (
                           <div
                             key={ept.name}
                             className={cx('list-item list-item-project', {
@@ -459,10 +459,10 @@ export default class ElectronApp extends React.Component<{}, State> {
                             onClick={() => this.handleChangeItem(ept)}
                           >
                             {ept.name}
-                          </div>,
-                        )}
-                      </div>,
-                    )}
+                          </div>
+                        ))}
+                      </div>
+                    ))}
                   </div>
                   <div className="sidenav-footer">
                     <button
@@ -480,7 +480,8 @@ export default class ElectronApp extends React.Component<{}, State> {
                       NEW WINDOW
                     </button>
                   </div>
-                </div>}
+                </div>
+              )}
               <div className="playground">
                 <Playground
                   getRef={this.setRef}
@@ -492,7 +493,8 @@ export default class ElectronApp extends React.Component<{}, State> {
                   adminAuthToken={platformToken}
                 />
               </div>
-            </div>}
+            </div>
+          )}
         </div>
       </Provider>
     )
