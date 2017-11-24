@@ -32,6 +32,11 @@ export default class Settings extends React.Component<Props, State> {
       endpointUrl: props.endpoint,
     }
   }
+  componentWillReceiveProps(nextProps: Props) {
+    if (this.props.endpoint !== nextProps.endpoint) {
+      this.setState({ endpointUrl: nextProps.endpoint })
+    }
+  }
   render() {
     const { open } = this.state
     const {
@@ -150,9 +155,11 @@ export default class Settings extends React.Component<Props, State> {
                   <div className="inner-row">
                     <div>Endpoint</div>
                     <input
-                      value={this.props.endpoint}
+                      value={this.state.endpointUrl}
                       placeholder="Enter an endpoint..."
                       onChange={this.handleChangeEndpoint}
+                      onBlur={this.submitEndpoint}
+                      onSubmit={this.submitEndpoint}
                     />
                   </div>
                 </div>
@@ -175,8 +182,12 @@ export default class Settings extends React.Component<Props, State> {
   }
 
   private handleChangeEndpoint = e => {
+    this.setState({ endpointUrl: e.target.value })
+  }
+
+  private submitEndpoint = () => {
     if (typeof this.props.onChangeEndpoint === 'function') {
-      this.props.onChangeEndpoint(e.target.value)
+      this.props.onChangeEndpoint(this.state.endpointUrl)
     }
   }
 
