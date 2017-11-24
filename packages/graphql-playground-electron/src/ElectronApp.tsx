@@ -477,7 +477,7 @@ export default class ElectronApp extends React.Component<{}, State> {
                         height={14}
                         strokeWidth={6}
                       />
-                      NEW WINDOW
+                      NEW WORKSPACE
                     </button>
                   </div>
                 </div>
