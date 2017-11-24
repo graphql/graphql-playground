@@ -42,6 +42,7 @@ const NotSupported = styled.div`
 
 const TracingRows = styled.div`
   margin-left: 100px;
+  padding-bottom: 100px;
 `
 
 export default class ResponseTracing extends React.Component<Props, {}> {
@@ -52,13 +53,12 @@ export default class ResponseTracing extends React.Component<Props, {}> {
         {tracing ? (
           <TracingRows>
             {tracing.execution.resolvers.map(res => (
-              <div key={res.path.join('.')}>
-                <TracingRow
-                  path={res.path}
-                  startOffset={res.startOffset}
-                  duration={res.duration}
-                />
-              </div>
+              <TracingRow
+                key={res.path.join('.')}
+                path={res.path}
+                startOffset={res.startOffset}
+                duration={res.duration}
+              />
             ))}
           </TracingRows>
         ) : tracingSupported ? (

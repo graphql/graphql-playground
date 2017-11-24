@@ -4,6 +4,7 @@ import styled from 'styled-components'
 const Row = styled.div`
   position: relative;
   font-size: 12px;
+  display: table;
 
   color: white;
 `
