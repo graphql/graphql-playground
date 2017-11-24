@@ -256,8 +256,8 @@ class InitialView extends React.Component<
             <div className="initial-view-workspace">
               <h1 className="title">New workspace</h1>
               <p className="description">
-                Either load a local repository with a .graphqlrc file, or just
-                display a remote endpoint
+                Either load a local repository with a .graphqlconfig file, or just
+                open a HTTP endpoint
               </p>
               <div className="toggle">
                 <Toggle
