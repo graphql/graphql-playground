@@ -877,11 +877,19 @@ export class GraphQLEditor extends React.PureComponent<Props, State> {
       throw new Error('Variables are not a JSON object.')
     }
 
-    const fetch = fetcher({
-      query,
-      variables: jsonVariables,
-      operationName,
-    })
+    const headers = {}
+    if (this.state.responseTracingOpen) {
+      headers['X-Apollo-Tracing'] = '1'
+    }
+
+    const fetch = fetcher(
+      {
+        query,
+        variables: jsonVariables,
+        operationName,
+      },
+      headers,
+    )
 
     if (isPromise(fetch)) {
       // If fetcher returned a Promise, then call the callback when the promise

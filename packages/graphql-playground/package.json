@@ -1,6 +1,6 @@
 {
   "name": "graphql-playground",
-  "version": "1.1.7-beta.2",
+  "version": "1.1.7-beta.3",
   "main": "./lib/lib.js",
   "typings": "./lib/lib.d.ts",
   "description": "GraphQL IDE for better development workflows (GraphQL Subscriptions, interactive docs & collaboration).",
