@@ -1,10 +1,13 @@
 export interface MiddlewareOptions {
   endpoint: string
   subscriptionEndpoint?: string
+}
+
+export interface RenderOptions extends MiddlewareOptions {
   version: string
 }
 
-export default function renderPlaygroundPage(options: MiddlewareOptions) {
+export default function renderPlaygroundPage(options: RenderOptions) {
   return `
 <!DOCTYPE html>
 <html>
@@ -12,9 +15,15 @@ export default function renderPlaygroundPage(options: MiddlewareOptions) {
   <meta charset=utf-8 />
   <meta name="viewport" content="user-scalable=no, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, minimal-ui">
   <title>GraphQL Playground</title>
-  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/graphql-playground@${options.version}/build/static/css/index.css" />
-  <link rel="shortcut icon" href="//cdn.jsdelivr.net/npm/graphql-playground@${options.version}/build/favicon.png" />
-  <script src="//cdn.jsdelivr.net/npm/graphql-playground@${options.version}/build/static/js/middleware.js"></script>
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/graphql-playground@${
+    options.version
+  }/build/static/css/index.css" />
+  <link rel="shortcut icon" href="//cdn.jsdelivr.net/npm/graphql-playground@${
+    options.version
+  }/build/favicon.png" />
+  <script src="//cdn.jsdelivr.net/npm/graphql-playground@${
+    options.version
+  }/build/static/js/middleware.js"></script>
 </head>
 <body>
 <div id="root">
