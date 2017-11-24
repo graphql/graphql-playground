@@ -2,11 +2,11 @@ import * as React from 'react'
 import Icon from 'graphcool-styles/dist/components/Icon/Icon'
 import ToggleButton from './ToggleButton'
 import Tooltip from './Tooltip'
-import { ThemeInterface } from './Theme'
+import { LocalThemeInterface } from './Theme'
 import styled, { css } from '../styled'
 import * as theme from 'styled-theming'
 
-export interface Props extends ThemeInterface {
+export interface Props extends LocalThemeInterface {
   onToggleTheme: () => void
   onToggleReload: () => void
   useVim: boolean

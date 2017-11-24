@@ -2,10 +2,10 @@ import * as React from 'react'
 import * as cx from 'classnames'
 import { Session } from '../../types'
 import { Icon } from 'graphcool-styles'
-import { withTheme, OptionalThemeInterface } from '../Theme'
+import { withTheme, OptionalLocalThemeInterface } from '../Theme'
 import Tab from './Tab'
 
-export interface Props extends OptionalThemeInterface {
+export interface Props extends OptionalLocalThemeInterface {
   sessions: Session[]
   selectedSessionIndex: number
   onNewSession: any
@@ -21,9 +21,7 @@ export interface Props extends OptionalThemeInterface {
 const white20 = '#4a555f'
 const darkBlue20 = '#c2c8cb'
 
-export const TabBar = withTheme<
-  Props
->(
+export const TabBar = withTheme<Props>(
   ({
     sessions,
     selectedSessionIndex,

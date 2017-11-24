@@ -6,7 +6,7 @@ import HistoryItems from './HistoryPopup/HistoryItems'
 import { GraphQLEditor } from './Playground/GraphQLEditor'
 import { $v, Icon } from 'graphcool-styles'
 import { modalStyle } from '../constants'
-import { withTheme, ThemeInterface } from './Theme'
+import { withTheme, LocalThemeInterface } from './Theme'
 import * as cn from 'classnames'
 
 export interface Props {
@@ -26,7 +26,7 @@ export interface State {
   searchTerm: string
 }
 
-class HistoryPopup extends React.Component<Props & ThemeInterface, State> {
+class HistoryPopup extends React.Component<Props & LocalThemeInterface, State> {
   constructor(props) {
     super(props)
     this.state = {

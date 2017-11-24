@@ -3,13 +3,13 @@ import Icon from 'graphcool-styles/dist/components/Icon/Icon'
 import { $v } from 'graphcool-styles'
 import ToggleButton from './ToggleButton'
 import Tooltip from './Tooltip'
-import { ThemeInterface } from './Theme'
+import { LocalThemeInterface } from './Theme'
 import * as cn from 'classnames'
 import { Button } from './Button'
 import Copy from './Copy'
 import styled, { keyframes } from '../styled'
 
-export interface Props extends ThemeInterface {
+export interface Props extends LocalThemeInterface {
   allTabs: boolean
   httpHeaders: boolean
   history: boolean
