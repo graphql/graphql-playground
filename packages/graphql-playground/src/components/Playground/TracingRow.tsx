@@ -1,12 +1,23 @@
 import * as React from 'react'
-import styled from 'styled-components'
+import * as theme from 'styled-theming'
+import styled from '../../styled/styled'
+
+const textColor = theme('mode', {
+  light: p => p.theme.colours.darkBlue60,
+  dark: p => p.theme.colours.white,
+})
+
+const durationColor = theme('mode', {
+  light: p => p.theme.colours.darkBlue50,
+  dark: p => p.theme.colours.white60,
+})
 
 const Row = styled.div`
   position: relative;
   font-size: 12px;
   display: table;
 
-  color: white;
+  color: ${textColor};
 `
 
 const Bar = styled.span`
@@ -16,12 +27,12 @@ const Bar = styled.span`
   height: 1.5px;
   bottom: 4px;
 
-  background: white;
+  background: ${textColor};
 `
 
 const Duration = styled.span`
   font-size: 10px;
-  color: rgba(255, 255, 255, 0.5);
+  color: ${durationColor};
 `
 
 const NameWrapper = styled.span`

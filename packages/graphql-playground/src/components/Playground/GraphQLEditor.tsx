@@ -38,7 +38,7 @@ import Results from './Results'
 import ReponseTracing from './ResponseTracing'
 import GenerateCodeButton from './GenerateCodeButton'
 import withTheme from '../Theme/withTheme'
-import { ThemeInterface } from '../Theme/index'
+import { LocalThemeInterface } from '../Theme/index'
 
 /**
  * The top-level React component for GraphQLEditor, intended to encompass the entire
@@ -137,7 +137,7 @@ export interface ToolbarButtonProps extends SimpleProps {
 }
 
 export class GraphQLEditor extends React.PureComponent<
-  Props & ThemeInterface,
+  Props & LocalThemeInterface,
   State
 > {
   static Logo: (props: SimpleProps) => JSX.Element

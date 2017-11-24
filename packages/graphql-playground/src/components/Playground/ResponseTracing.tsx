@@ -1,7 +1,8 @@
 import * as React from 'react'
-import styled from 'styled-components'
 import { $v } from 'graphcool-styles'
 import TracingRow from './TracingRow'
+import * as theme from 'styled-theming'
+import styled from '../../styled/styled'
 
 export interface TracingFormat {
   version: 1
@@ -27,10 +28,15 @@ export interface Props {
   endTime?: Date
 }
 
+const textColor = theme('mode', {
+  light: p => p.theme.colours.darkBlue60,
+  dark: p => p.theme.colours.white,
+})
+
 const TracingWrapper = styled.div`
   padding-top: 16px;
   padding-left: 25px;
-  color: white;
+  color: ${textColor};
   overflow: auto;
 `
 

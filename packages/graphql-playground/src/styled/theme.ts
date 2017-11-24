@@ -7,6 +7,7 @@ export interface Colours {
   darkBlue10: string
   white60: string
   white20: string
+  white: string
   black40: string
   paleText: string
   paleGrey: string
@@ -21,6 +22,7 @@ export const colours: Colours = {
   darkBlue10: 'rgba(23, 42, 58, 0.1)',
   white20: 'rgba(255, 255, 255, 0.2)',
   white60: 'rgba(255, 255, 255, 0.6)',
+  white: 'rgba(255, 255, 255, 1)',
   black40: 'rgba(0, 0, 0, 0.4)',
 
   paleText: 'rgba(0, 0, 0, 0.5)',
