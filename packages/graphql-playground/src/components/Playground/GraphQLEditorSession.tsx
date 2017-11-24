@@ -1,6 +1,6 @@
 import * as React from 'react'
 import { PermissionSession, ServiceInformation, Session } from '../../types'
-import { GraphQLEditor } from './GraphQLEditor'
+import GraphQLEditor from './GraphQLEditor'
 import { Header } from './HttpHeaders/HttpHeaders'
 import { Viewer } from '../Playground'
 

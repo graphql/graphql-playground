@@ -37,6 +37,8 @@ import { flatMap, groupBy } from 'lodash'
 import Results from './Results'
 import ReponseTracing from './ResponseTracing'
 import GenerateCodeButton from './GenerateCodeButton'
+import withTheme from '../Theme/withTheme'
+import { ThemeInterface } from '../Theme/index'
 
 /**
  * The top-level React component for GraphQLEditor, intended to encompass the entire
@@ -132,7 +134,10 @@ export interface ToolbarButtonProps extends SimpleProps {
   label: string
 }
 
-export class GraphQLEditor extends React.PureComponent<Props, State> {
+export class GraphQLEditor extends React.PureComponent<
+  Props & ThemeInterface,
+  State
+> {
   static Logo: (props: SimpleProps) => JSX.Element
   static Toolbar: (props: SimpleProps) => JSX.Element
   static Footer: (props: SimpleProps) => JSX.Element
@@ -392,6 +397,9 @@ export class GraphQLEditor extends React.PureComponent<Props, State> {
             @p: .relative;
             border-top: 8px solid $darkBlue;
           }
+          .queryWrap.light {
+            border-top: 8px solid #eeeff0;
+          }
 
           .graphiql-button {
             @p: .white50, .bgDarkBlue, .ttu, .f14, .fw6, .br2, .pointer;
@@ -470,7 +478,10 @@ export class GraphQLEditor extends React.PureComponent<Props, State> {
             className="editorBar"
             onMouseDown={this.handleResizeStart}
           >
-            <div className="queryWrap" style={queryWrapStyle}>
+            <div
+              className={cn('queryWrap', this.props.localTheme)}
+              style={queryWrapStyle}
+            >
               <QueryEditor
                 ref={this.setQueryEditorComponent}
                 schema={this.state.schema}
@@ -1409,6 +1420,8 @@ export class GraphQLEditor extends React.PureComponent<Props, State> {
     return variables
   }
 }
+
+export default withTheme<Props>(GraphQLEditor)
 
 // Duck-type promise detection.
 function isPromise(value) {

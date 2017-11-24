@@ -161,6 +161,8 @@ export const TabBar = withTheme<Props>(
             height: 8px;
             background-color: #eeeff0;
             width: 100%;
+            top: -2px;
+            position: relative;
           }
           .tab:hover {
             @p: .bgDarkBlue;
