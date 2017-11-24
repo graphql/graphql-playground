@@ -45,7 +45,6 @@ class Tooltip extends React.PureComponent<Props, {}> {
       (!domNode || !domNode.contains(event.target)) &&
       typeof this.props.onClose !== 'undefined'
     ) {
-      event.stopPropagation()
       this.props.onClose(event)
     }
   }
