@@ -25,7 +25,6 @@ import {
   Viewer,
 } from '../../types'
 import { download } from './util/index'
-import QueryHeader from './QueryHeader'
 import ResultHeader from './ResultHeader'
 import { Response } from '../Playground'
 import HttpHeaders, { Header } from './HttpHeaders'
@@ -37,9 +36,7 @@ import { getVariableNamesFromQuery, putVariablesToQuery } from './ast'
 import { flatMap, groupBy } from 'lodash'
 import Results from './Results'
 import ReponseTracing from './ResponseTracing'
-
-// tslint:disable-next-line
-const CSSTransitionGroup = require('react-transition-group/CSSTransitionGroup')
+import GenerateCodeButton from './GenerateCodeButton'
 
 /**
  * The top-level React component for GraphQLEditor, intended to encompass the entire
@@ -401,13 +398,12 @@ export class GraphQLEditor extends React.PureComponent<Props, State> {
             padding: 5px 9px 6px 9px;
             letter-spacing: 0.53px;
           }
-          .graphiql-button.generate-code {
+          .graphiql-button.prettify {
             @p: .absolute;
             top: -57px;
-            right: 25px;
+            right: 38px;
             z-index: 2;
           }
-
           .download-button {
             @p: .white50, .bgDarkBlue, .ttu, .f14, .fw6, .br2, .pointer,
               .absolute;
@@ -475,27 +471,6 @@ export class GraphQLEditor extends React.PureComponent<Props, State> {
             onMouseDown={this.handleResizeStart}
           >
             <div className="queryWrap" style={queryWrapStyle}>
-              {this.props.disableAnimation ? (
-                <QueryHeader
-                  onPrettify={this.handlePrettifyQuery}
-                  showEndpoints={this.props.showEndpoints}
-                  showQueryTitle={this.props.showQueryTitle}
-                />
-              ) : (
-                <CSSTransitionGroup
-                  transitionName="query-header"
-                  transitionEnterTimeout={500}
-                  transitionLeaveTimeout={300}
-                >
-                  {!this.props.disableQueryHeader && (
-                    <QueryHeader
-                      onPrettify={this.handlePrettifyQuery}
-                      showEndpoints={this.props.showEndpoints}
-                      showQueryTitle={this.props.showQueryTitle}
-                    />
-                  )}
-                </CSSTransitionGroup>
-              )}
               <QueryEditor
                 ref={this.setQueryEditorComponent}
                 schema={this.state.schema}
@@ -514,14 +489,15 @@ export class GraphQLEditor extends React.PureComponent<Props, State> {
                   headers={this.props.headers}
                   onChange={this.props.onChangeHeaders}
                 />
-                {this.props.showCodeGeneration && (
-                  <div
-                    className="graphiql-button generate-code"
-                    onClick={this.props.onClickCodeGeneration}
-                  >
-                    Generate Code
-                  </div>
-                )}
+                <div
+                  className="graphiql-button prettify"
+                  onClick={this.handlePrettifyQuery}
+                >
+                  Prettify
+                </div>
+                <GenerateCodeButton
+                  onOpenCodeGeneration={this.props.onClickCodeGeneration}
+                />
                 <div
                   className="variable-editor-title"
                   style={{ cursor: variableOpen ? 'row-resize' : 'n-resize' }}
