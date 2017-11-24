@@ -52,7 +52,7 @@ export default class ResponseTracing extends React.Component<Props, {}> {
         {tracing ? (
           <TracingRows>
             {tracing.execution.resolvers.map(res => (
-              <div>
+              <div key={res.path.join('.')}>
                 <TracingRow
                   path={res.path}
                   startOffset={res.startOffset}
