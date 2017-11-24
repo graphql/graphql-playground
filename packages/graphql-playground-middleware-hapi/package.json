@@ -1,6 +1,6 @@
 {
   "name": "graphql-playground-middleware-hapi",
-  "version": "1.1.4",
+  "version": "1.2.0",
   "homepage": "https://github.com/graphcool/graphql-playground/tree/master/packages/graphql-playground-middleware-hapi",
   "description": "GraphQL IDE for better development workflows (GraphQL Subscriptions, interactive docs & collaboration).",
   "contributors": [

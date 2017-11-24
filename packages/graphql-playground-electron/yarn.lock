@@ -3330,9 +3330,9 @@ graphql-language-service-utils@0.0.17:
     graphql "^0.10.1"
     graphql-language-service-types "0.0.21"
 
-graphql-playground@^1.1.6:
-  version "1.1.6"
-  resolved "https://registry.yarnpkg.com/graphql-playground/-/graphql-playground-1.1.6.tgz#0e5f07c94519310f560d05d1ad1184d83c11ceb6"
+graphql-playground@^1.2.0:
+  version "1.2.0"
+  resolved "https://registry.yarnpkg.com/graphql-playground/-/graphql-playground-1.2.0.tgz#3f3745c84ba69fc33fb20444308d6687f94e031b"
   dependencies:
     calculate-size "^1.1.1"
     classnames "^2.2.5"
@@ -3365,6 +3365,7 @@ graphql-playground@^1.1.6:
     seamless-immutable "^7.0.1"
     styled-components "^2.2.3"
     styled-jsx-postcss "git+https://github.com/timsuchanek/styled-jsx-postcss#build3"
+    styled-theming "^2.2.0"
     subscriptions-transport-ws "^0.8.1"
 
 graphql-request@^1.2.0:
@@ -6732,6 +6733,10 @@ styled-jsx@^0.5.7:
     object.entries "1.0.4"
     source-map "0.5.6"
     string-hash "1.1.1"
+
+styled-theming@^2.2.0:
+  version "2.2.0"
+  resolved "https://registry.yarnpkg.com/styled-theming/-/styled-theming-2.2.0.tgz#3084e43d40eaab4bc11ebafd3de04e3622fee37e"
 
 stylis@3.x:
   version "3.4.3"

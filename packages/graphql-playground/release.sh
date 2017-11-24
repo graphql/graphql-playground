@@ -2,7 +2,6 @@
 
 set -e
 
-npm version patch
 npm publish
 
 curl -X POST \
