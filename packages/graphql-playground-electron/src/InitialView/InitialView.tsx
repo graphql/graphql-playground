@@ -89,9 +89,10 @@ class InitialView extends React.Component<
       // Check if there is a .graphqlconfig file in the folder
       if (
         !existsSync(resolve(path, '.graphqlconfig')) &&
+        !existsSync(resolve(path, '.graphqlconfig.yml')) &&
         !existsSync(resolve(path, '.graphqlconfig.yaml'))
       ) {
-        alert('No .graphqlconfig (or .graphqlconfig.yaml) found in this folder')
+        alert('No .graphqlconfig found in this folder')
         return
       }
       this.props.selectHistory({
