@@ -60,6 +60,4 @@ export default class Popup extends React.Component<Props, {}> {
   }
 }
 
-const ContentWrapper = styled.div`
-  border-radius: ${p => p.theme.sizes.smallRadius};
-`
+const ContentWrapper = styled.div``
