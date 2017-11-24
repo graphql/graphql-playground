@@ -71,6 +71,7 @@ export default class Tab extends React.PureComponent<Props, State> {
             &.active {
               background-color: #eeeff0;
             }
+            border-bottom: 2px solid #eeeff0;
           }
           .tab:hover {
             @p: .bgDarkBlue;
