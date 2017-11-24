@@ -134,7 +134,6 @@
 }
 
 .docs-graphiql .graphiql-container .queryWrap {
-    border: none;
     display: -webkit-box;
     display: -ms-flexbox;
     display: flex;
@@ -209,7 +208,7 @@
 }
 
 .docs-graphiql .graphiql-container .variable-editor .CodeMirror {
-    background: rgba(0,0,0,.05) !important;
+    background: transparent !important;
 }
 
 .docs-graphiql .graphiql-container .variable-editor .CodeMirror-gutters {
@@ -233,13 +232,17 @@
 }
 
 .docs-graphiql .variable-editor {
+    background: rgba(0,0,0,.05);
     height: 44px;
 }
 
-.docs-graphiql .graphiql-container .variable-editor-title {
-    padding: 12px 15px 13px;
-    line-height: 19px;
+.docs-graphiql .graphiql-container .response-tracing {
     background: rgba(0,0,0,.05);
+}
+
+.docs-graphiql .graphiql-container .variable-editor-title,
+.docs-graphiql .graphiql-container .response-tracing-title {
+    background: none;
     color: rgba(0,0,0,.3);
 }
 
@@ -401,38 +404,10 @@
 
 .docs-graphiql .graphiql-container .CodeMirror {
     color: rgba(255,255,255,.3);
-    font-family:
-            'Source Code Pro',
-            'Consolas',
-            'Inconsolata',
-            'Droid Sans Mono',
-            'Monaco',
-            monospace;
-    font-size: 14px;
-    height: 100%;
-    left: 0;
-    position: absolute;
-    top: 0;
-    width: 100%;
-}
-
-.docs-graphiql .graphiql-container .CodeMirror-lines {
-    padding: 0;
 }
 
 .docs-graphiql .CodeMirror-hint-information .content {
-    box-orient: vertical;
     color: #141823;
-    display: -webkit-box;
-    display: -ms-flexbox;
-    display: flex;
-    font-family: system, -apple-system, 'San Francisco', '.SFNSDisplay-Regular', 'Segoe UI', Segoe, 'Segoe WP', 'Helvetica Neue', helvetica, 'Lucida Grande', arial, sans-serif;
-    font-size: 13px;
-    line-clamp: 3;
-    line-height: 16px;
-    max-height: 48px;
-    overflow: hidden;
-    text-overflow: -o-ellipsis-lastline;
 }
 
 .docs-graphiql .CodeMirror-hint-information .content p:first-child {
@@ -630,15 +605,6 @@
     color: black;
     font-family: monospace;
     height: auto;
-}
-
-/* PADDING */
-
-.docs-graphiql .CodeMirror-lines {
-    padding: 4px 0; /* Vertical padding around content */
-}
-.docs-graphiql .CodeMirror pre {
-    padding: 0 4px; /* Horizontal padding of content */
 }
 
 .docs-graphiql .CodeMirror-scrollbar-filler, .CodeMirror-gutter-filler {

@@ -78,7 +78,7 @@ export const TabBar = withTheme<Props>(
           }
 
           .tabs {
-            @p: .mt16, .ml16, .flex, .itemsCenter, .z0, .overflowAuto;
+            @p: .mt16, .ml0, .flex, .itemsCenter, .z0, .overflowAuto;
             margin-right: 240px;
           }
 
@@ -161,6 +161,8 @@ export const TabBar = withTheme<Props>(
             height: 8px;
             background-color: #eeeff0;
             width: 100%;
+            top: -2px;
+            position: relative;
           }
           .tab:hover {
             @p: .bgDarkBlue;

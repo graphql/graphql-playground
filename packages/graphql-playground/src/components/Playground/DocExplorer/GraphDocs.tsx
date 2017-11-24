@@ -104,9 +104,7 @@ class GraphDocs extends React.Component<
       // Schema is null when it explicitly does not exist, typically due to
       // an error during introspection.
       emptySchema = (
-        <div className="error-container">
-          {'No Schema Available'}
-        </div>
+        <div className="error-container">{'No Schema Available'}</div>
       )
     }
 
@@ -144,8 +142,8 @@ class GraphDocs extends React.Component<
             background: rgba(0, 0, 0, 0.06);
           }
           .graph-docs {
-            @p: .absolute, .right0, .h100;
-            margin-right: -1px;
+            @p: .absolute, .h100;
+            right: -2px;
           }
           .graph-docs.open {
             z-index: 2000;
@@ -214,19 +212,17 @@ class GraphDocs extends React.Component<
           ref={this.setDocExplorerRef}
         >
           <div className="doc-explorer-container">
-            {emptySchema &&
-              <ColumnDoc>
-                {emptySchema}
-              </ColumnDoc>}
-            {schema &&
+            {emptySchema && <ColumnDoc>{emptySchema}</ColumnDoc>}
+            {schema && (
               <RootColumn
                 schema={schema}
                 width={this.state.widthMap.root || columnWidth - 1}
                 searchValue={this.state.searchValue}
                 setWidth={this.setRootWidth}
                 handleSearch={this.handleSearch}
-              />}
-            {navStack.map((stack, index) =>
+              />
+            )}
+            {navStack.map((stack, index) => (
               <ColumnDoc
                 key={index}
                 width={this.state.widthMap[stack.field.path] || columnWidth}
@@ -237,8 +233,8 @@ class GraphDocs extends React.Component<
                   level={index + 1}
                   onSetWidth={this.setWidthMap(stack.field.path)}
                 />
-              </ColumnDoc>,
-            )}
+              </ColumnDoc>
+            ))}
           </div>
         </div>
       </div>

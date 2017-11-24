@@ -1,0 +1,24 @@
+jobs:
+
+  playground-build:
+    docker:
+      - image: circleci/node:8
+    steps:
+      - checkout
+      - run: cd packages/graphql-playground && yarn
+      - run: cd packages/graphql-playground && yarn build
+
+  electron-build:
+    docker:
+      - image: circleci/node:8
+    steps:
+      - checkout
+      - run: cd packages/graphql-playground-electron && yarn
+      - run: cd packages/graphql-playground-electron && yarn release
+
+workflows:
+  version: 2
+  build:
+    jobs:
+      - playground-build
+      - electron-build

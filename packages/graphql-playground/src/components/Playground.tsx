@@ -96,6 +96,7 @@ export interface State {
   shareHistory: boolean
   changed: boolean
   serviceInformation?: ServiceInformation
+  tracingSupported: boolean
 }
 
 export interface CursorPosition {
@@ -199,6 +200,7 @@ export class Playground extends React.PureComponent<Props & DocsState, State> {
       changed: false,
       response: undefined,
       userModelName: 'User',
+      tracingSupported: false,
     }
 
     if (typeof window === 'object') {
@@ -311,9 +313,12 @@ export class Playground extends React.PureComponent<Props & DocsState, State> {
 
         this.renewStack(simpleSchema)
 
+        const tracingSupported =
+          simpleSchemaData.extensions && simpleSchemaData.extensions.tracing
         this.setState({
           schemaCache: simpleSchema,
           userFields,
+          tracingSupported,
         } as State)
       },
     )
@@ -548,6 +553,7 @@ export class Playground extends React.PureComponent<Props & DocsState, State> {
       method: 'post',
       headers: {
         'Content-Type': 'application/json',
+        'X-Apollo-Tracing': '1',
         ...headers,
       },
       body: JSON.stringify({ query: introspectionQuery }),
@@ -653,6 +659,7 @@ export class Playground extends React.PureComponent<Props & DocsState, State> {
                     isActive={index === selectedSessionIndex}
                     permission={session.permission}
                     serviceInformation={this.state.serviceInformation}
+                    tracingSupported={this.state.tracingSupported}
                   />
                 </GraphiqlWrapper>
               ))}
@@ -936,22 +943,21 @@ query ${operationName} {
     value: any,
     cb?: () => void,
   ) {
-    this.setState(
-      state => {
-        // TODO optimize the lookup with a lookup table
-        const i = state.sessions.findIndex(s => s.id === sessionId)
-        return {
-          ...state,
-          sessions: Immutable.setIn(state.sessions, [i, key], value),
-          changed: true,
-        }
-      },
-      () => {
-        if (typeof cb === 'function') {
-          cb()
-        }
-      },
-    )
+    this.setState(state => {
+      // TODO optimize the lookup with a lookup table
+      const i = state.sessions.findIndex(s => s.id === sessionId)
+      return {
+        ...state,
+        sessions: Immutable.setIn(state.sessions, [i, key], value),
+        changed: true,
+      }
+    })
+    // hack to support older react versions
+    setTimeout(() => {
+      if (typeof cb === 'function') {
+        cb()
+      }
+    }, 100)
   }
 
   private autofillMutation = () => {
@@ -1217,7 +1223,7 @@ query ${operationName} {
 
       newSession = Immutable({
         id: cuid(),
-        selectedViewer: 'ADMIN',
+        selectedViewer: 'EVERYONE',
         query,
         variables: '',
         result: '',
@@ -1238,7 +1244,7 @@ query ${operationName} {
   private createSessionFromQuery = (query: string) => {
     return Immutable({
       id: cuid(),
-      selectedViewer: 'ADMIN',
+      selectedViewer: 'EVERYONE',
       query,
       variables: '',
       result: '',
@@ -1340,7 +1346,7 @@ query ${operationName} {
   }
 
   get httpApiPrefix() {
-    return this.props.endpoint.match(/(https?:\/\/.*?)\//)![1]
+    return this.props.endpoint.match(/(https?:\/\/.*?)\/?/)![1]
   }
 
   get wsApiPrefix() {
@@ -1436,7 +1442,7 @@ query ${operationName} {
     })
   }
 
-  private fetcher = (session: Session, graphQLParams) => {
+  private fetcher = (session: Session, graphQLParams, requestHeaders?: any) => {
     const { query, operationName } = graphQLParams
 
     if (!query.includes('IntrospectionQuery')) {
@@ -1495,7 +1501,7 @@ query ${operationName} {
 
     const endpoint = this.getSimpleEndpoint()
 
-    const headers: any = {
+    let headers: any = {
       'Content-Type': 'application/json',
     }
 
@@ -1503,6 +1509,10 @@ query ${operationName} {
       session.headers.forEach(header => {
         headers[header.name] = header.value
       })
+    }
+
+    if (requestHeaders) {
+      headers = { ...headers, ...requestHeaders }
     }
 
     return fetch(endpoint, {

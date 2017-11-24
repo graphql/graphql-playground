@@ -78,8 +78,8 @@ export default class Share extends React.Component<Props, State> {
             @p: .mt16;
           }
           .button {
-            @p: .ba, .br2, .f14, .fw6, .ttu, .bWhite20, .flex, .itemsCenter,
-              .white40;
+            @p: .br2, .f14, .fw6, .ttu, .flex, .itemsCenter, .white40;
+            border: 1.5px solid rgba(255, 255, 255, 0.2);
             padding: 5px 9px 6px 9px;
           }
           .button:hover,
