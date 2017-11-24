@@ -122,6 +122,8 @@ export interface State {
   isWaitingForResponse: boolean
   selectedVariableNames: string[]
   responseExtensions: any
+  currentQueryStartTime?: Date
+  currentQueryEndTime?: Date
 }
 
 export interface SimpleProps {
@@ -667,6 +669,9 @@ export class GraphQLEditor extends React.PureComponent<
                       this.state.responseExtensions &&
                       this.state.responseExtensions.tracing
                     }
+                    startTime={this.state.currentQueryStartTime}
+                    endTime={this.state.currentQueryEndTime}
+                    tracingSupported={this.props.tracingSupported}
                   />
                 </div>
               </div>
@@ -948,6 +953,7 @@ export class GraphQLEditor extends React.PureComponent<
         isWaitingForResponse: true,
         responses: [{ date: null, time: new Date() }],
         operationName,
+        currentQueryStartTime: new Date(),
       } as State)
 
       // _fetchQuery may return a subscription.
@@ -988,6 +994,7 @@ export class GraphQLEditor extends React.PureComponent<
               isWaitingForResponse: false,
               responses,
               responseExtensions: extensions,
+              currentQueryEndTime: new Date(),
             } as State)
           }
         },

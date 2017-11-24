@@ -694,7 +694,7 @@ export class Playground extends React.PureComponent<Props & DocsState, State> {
                     isActive={index === selectedSessionIndex}
                     permission={session.permission}
                     serviceInformation={this.state.serviceInformation}
-                    tracingSupported={this.state.tracingSupported}
+                    tracingSupported={Boolean(this.state.tracingSupported)}
                   />
                 </div>
               ))}

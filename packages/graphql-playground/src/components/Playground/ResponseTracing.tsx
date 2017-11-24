@@ -23,6 +23,8 @@ export interface TracingFormat {
 export interface Props {
   tracing?: TracingFormat
   tracingSupported?: boolean
+  startTime?: Date
+  endTime?: Date
 }
 
 const TracingWrapper = styled.div`
@@ -47,19 +49,47 @@ const TracingRows = styled.div`
 
 export default class ResponseTracing extends React.Component<Props, {}> {
   render() {
-    const { tracing, tracingSupported } = this.props
+    const { tracing, tracingSupported, startTime, endTime } = this.props
+    // console.log(this.props)
+    const requestMs =
+      tracing && startTime
+        ? Math.abs(new Date(tracing.startTime).getTime() - startTime.getTime())
+        : 0
+    const responseMs =
+      tracing && endTime
+        ? Math.abs(endTime.getTime() - new Date(tracing.endTime).getTime())
+        : 0
+    const requestDuration = 1000 * 1000 * requestMs
+    const maxLeft = tracing
+      ? tracing.execution.resolvers.reduce((max, curr) => {
+          if (curr.startOffset > max) {
+            return curr.startOffset
+          }
+          return max
+        }, 0)
+      : 0
     return (
       <TracingWrapper>
         {tracing ? (
           <TracingRows>
+            <TracingRow
+              path={['Request']}
+              startOffset={0}
+              duration={requestDuration}
+            />
             {tracing.execution.resolvers.map(res => (
               <TracingRow
                 key={res.path.join('.')}
                 path={res.path}
-                startOffset={res.startOffset}
+                startOffset={res.startOffset + requestDuration}
                 duration={res.duration}
               />
             ))}
+            <TracingRow
+              path={['Response']}
+              startOffset={maxLeft + requestDuration}
+              duration={1000 * 1000 * responseMs}
+            />
           </TracingRows>
         ) : tracingSupported ? (
           <NotSupported>
