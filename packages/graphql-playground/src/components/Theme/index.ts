@@ -3,11 +3,11 @@ import ThemeProvider from './ThemeProvider'
 
 type ThemeType = 'dark' | 'light'
 
-interface ThemeInterface {
+interface LocalThemeInterface {
   localTheme: ThemeType
 }
 
-interface OptionalThemeInterface {
+interface OptionalLocalThemeInterface {
   localTheme?: ThemeType
 }
 
@@ -15,6 +15,6 @@ export {
   withTheme,
   ThemeProvider,
   ThemeType,
-  ThemeInterface,
-  OptionalThemeInterface,
+  LocalThemeInterface,
+  OptionalLocalThemeInterface,
 }

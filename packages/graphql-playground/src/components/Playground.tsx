@@ -41,7 +41,7 @@ import { isEqual, mapValues } from 'lodash'
 import Share from './Share'
 import NewPermissionTab from './Permissions/NewPermissionTab'
 import { serviceInformationQuery } from './constants'
-import { ThemeProvider, theme as styledTheme } from '../styled'
+import styled, { ThemeProvider, theme as styledTheme } from '../styled'
 
 export type Theme = 'dark' | 'light'
 export type Viewer = 'ADMIN' | 'EVERYONE' | 'USER'
@@ -590,44 +590,9 @@ export class Playground extends React.PureComponent<Props & DocsState, State> {
       : this.getSimpleEndpoint()
     const isGraphcoolUrl = this.isGraphcoolUrl(selectedEndpointUrl)
     return (
-      <ThemeProvider theme={styledTheme}>
+      <ThemeProvider theme={{ ...styledTheme, mode: theme }}>
         <OldThemeProvider theme={this.state.theme}>
-          <div className={cx('playground')}>
-            <style jsx={true}>{`
-              .playground {
-                @p: .h100, .flex, .flexColumn;
-                margin: 0;
-                padding: 0;
-                overflow: hidden;
-                font-family: 'Open Sans', sans-serif;
-                -webkit-font-smoothing: antialiased;
-                -moz-osx-font-smoothing: grayscale;
-                color: rgba(0, 0, 0, 0.8);
-                line-height: 1.5;
-                letter-spacing: 0.53px;
-                margin-right: -1px !important;
-              }
-
-              .blur {
-                filter: blur(5px);
-              }
-
-              .graphiqls-container {
-                @p: .relative, .overflowHidden;
-                height: calc(100vh - 57px);
-              }
-
-              .graphiql-wrapper {
-                @p: .w100, .h100, .relative;
-              }
-
-              .playground :global(a:active),
-              .playground :global(a:focus),
-              .playground :global(button:focus),
-              .playground :global(input:focus) {
-                outline: none;
-              }
-            `}</style>
+          <PlaygroundWrapper className="playground">
             <TabBar
               sessions={sessions}
               selectedSessionIndex={selectedSessionIndex}
@@ -640,13 +605,13 @@ export class Playground extends React.PureComponent<Props & DocsState, State> {
               tether={this.props.tether}
               isApp={this.props.isApp}
             />
-            <div
+            <GraphiqlsContainer
               className={cx('graphiqls-container', {
                 'docs-graphiql': theme === 'light',
               })}
             >
               {sessions.map((session, index) => (
-                <div
+                <GraphiqlWrapper
                   key={session.id}
                   className={cx('graphiql-wrapper', {
                     active: index === selectedSessionIndex,
@@ -696,9 +661,9 @@ export class Playground extends React.PureComponent<Props & DocsState, State> {
                     serviceInformation={this.state.serviceInformation}
                     tracingSupported={Boolean(this.state.tracingSupported)}
                   />
-                </div>
+                </GraphiqlWrapper>
               ))}
-            </div>
+            </GraphiqlsContainer>
             <Settings
               onToggleTheme={this.toggleTheme}
               localTheme={this.state.theme}
@@ -753,7 +718,7 @@ export class Playground extends React.PureComponent<Props & DocsState, State> {
               this.renderUserPopup()}
             {this.state.codeGenerationPopupOpen &&
               this.renderCodeGenerationPopup()}
-          </div>
+          </PlaygroundWrapper>
         </OldThemeProvider>
       </ThemeProvider>
     )
@@ -1685,3 +1650,40 @@ function isSharingAuthorization(sharableSessions: Session[]): boolean {
 
   return false
 }
+
+const PlaygroundWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  margin-right: -1px !important;
+
+  line-height: 1.5;
+  font-family: 'Open Sans', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  letter-spacing: 0.53px;
+  color: rgba(0, 0, 0, 0.8);
+
+  a:active,
+  a:focus,
+  button:focus,
+  input:focus {
+    outline: none;
+  }
+`
+
+const GraphiqlsContainer = styled.div`
+  height: calc(100vh - 57px);
+  position: relative;
+  overflow: hidden;
+`
+
+const GraphiqlWrapper = styled.div`
+  width: 100%;
+  height: 100%;
+  position: relative;
+`

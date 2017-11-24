@@ -6,6 +6,7 @@ import { Icon, $v } from 'graphcool-styles'
 import Table from './SelectUserPopup/Table'
 import SearchBox from './Playground/DocExplorer/SearchBox'
 import * as Immutable from 'seamless-immutable'
+import styled, { injectGlobal } from '../styled'
 
 export interface State {
   startIndex: number
@@ -85,75 +86,29 @@ export default class SelectUserPopup extends React.Component<Props, State> {
         contentLabel="Select a User"
         style={this.style}
       >
-        <style jsx={true}>{`
-          .select-user-popup {
-            @inherit: .bgWhite, .relative, .mh25;
-          }
-          .title-wrapper {
-            @inherit: .flex, .w100, .itemsCenter, .justifyCenter, .bb, .bBlack10;
-            padding: 45px;
-          }
-          .title {
-            @inherit: .fw3, .f38;
-            letter-spacing: 0.54px;
-          }
-          .search {
-            @inherit: .absolute, .w100, .bbox, .ph38, .z2, .flex, .justifyCenter;
-            margin-top: -24px;
-          }
-          .search-box {
-            flex: 0 1 400px;
-          }
-          .selected-user {
-            @inherit: .ml25, .flex, .flexColumn, .justifyCenter, .itemsCenter;
-          }
-          .selected-user-id {
-            @inherit: .bgBlack04, .pa6, .br2, .black60, .f14, .fw3, .mt10;
-            font-family: 'Source Code Pro', 'Consolas', 'Inconsolata',
-              'Droid Sans Mono', 'Monaco', monospace;
-          }
-          select {
-            @p: .mt16, .f20;
-          }
-          .select-user {
-            @p: .absolute;
-            top: 25px;
-            left: 38px;
-          }
-        `}</style>
-        <style jsx={true} global={true}>{`
-          .popup-x {
-            @inherit: .absolute, .right0, .top0, .pointer, .pt25, .pr25;
-          }
-        `}</style>
-        <div className="select-user-popup">
-          <div className="select-user">
+        <Wrapper>
+          <SelectUser>
             <div>Select the User Model</div>
             <select
               value={this.props.userModelName}
               onChange={this.changeUserModelName}
             >
-              {this.props.modelNames.map(name =>
-                <option value={name}>
-                  {name}
-                </option>,
-              )}
+              {this.props.modelNames.map(name => (
+                <option value={name}>{name}</option>
+              ))}
             </select>
-          </div>
-          <div className="title-wrapper">
-            <div className="title">
-              Select a {this.props.userModelName}
-            </div>
-            {this.state.selectedRowIndex > -1 &&
-              <div className="selected-user">
-                <div>
-                  Selected {this.props.userModelName} ID
-                </div>
-                <div className="selected-user-id">
+          </SelectUser>
+          <TitleWrapper>
+            <Title>Select a {this.props.userModelName}</Title>
+            {this.state.selectedRowIndex > -1 && (
+              <SelectedUser>
+                <div>Selected {this.props.userModelName} ID</div>
+                <SelectedUserId>
                   {this.state.users[this.state.selectedRowIndex].id}
-                </div>
-              </div>}
-          </div>
+                </SelectedUserId>
+              </SelectedUser>
+            )}
+          </TitleWrapper>
           <Icon
             src={require('graphcool-styles/icons/stroke/cross.svg')}
             stroke={true}
@@ -164,16 +119,16 @@ export default class SelectUserPopup extends React.Component<Props, State> {
             color={$v.gray50}
             onClick={this.props.onRequestClose}
           />
-          <div className="search">
-            <div className="search-box">
+          <Search>
+            <SearchBoxWrapper>
               <SearchBox
                 placeholder="Search for a user ..."
                 onSearch={this.handleSearch}
                 isShown={true}
                 clean={true}
               />
-            </div>
-          </div>
+            </SearchBoxWrapper>
+          </Search>
           <Table
             fields={this.props.userFields}
             rows={this.state.users}
@@ -182,7 +137,7 @@ export default class SelectUserPopup extends React.Component<Props, State> {
             onRowSelection={this.handleRowSelection}
             scrollToIndex={this.state.scrollToIndex}
           />
-        </div>
+        </Wrapper>
       </Modal>
     )
   }
@@ -261,8 +216,9 @@ export default class SelectUserPopup extends React.Component<Props, State> {
         _all${this.props.userModelName}sMeta {
           count
         }
-        all${this.props
-          .userModelName}s(skip: ${startIndex} first: ${count}${filter}){
+        all${this.props.userModelName}s(skip: ${startIndex} first: ${count}${
+      filter
+    }){
           ${userFields.map(f => f.name).join('\n')}
         }
       }
@@ -308,11 +264,9 @@ export default class SelectUserPopup extends React.Component<Props, State> {
           newState.scrollToIndex = 0
 
           setTimeout(() => {
-            this.setState(
-              {
-                scrollToIndex: undefined,
-              } as State,
-            )
+            this.setState({
+              scrollToIndex: undefined,
+            } as State)
           }, 150)
         }
 
@@ -324,3 +278,89 @@ export default class SelectUserPopup extends React.Component<Props, State> {
       .catch(e => console.error(e))
   }
 }
+
+injectGlobal`
+  .popup-x.popup-x {
+    position: absolute;
+    right: 0;
+    top: 0;
+    cursor: pointer;
+    padding-top: 25px;
+    padding-right: 25px;
+  }
+`
+
+const Wrapper = styled.div`
+  margin-right: 25px;
+  margin-left: 25px;
+  position: relative;
+  background: white;
+`
+
+const TitleWrapper = styled.div`
+  width: 100%;
+  padding: 45px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-bottom-style: solid;
+  border-bottom-width: 1px;
+
+  background: rgba(0, 0, 0, 0.1);
+`
+
+const Title = styled.div`
+  font-size: 38px;
+  font-weight: ${p => p.theme.sizes.fontLight};
+  letter-spacing: 0.54px;
+`
+
+const Search = styled.div`
+  position: absolute;
+  box-sizing: border-box;
+  z-index: 2;
+
+  width: 100%;
+  padding-top: 38px;
+  padding-bottom: 38px;
+`
+
+const SearchBoxWrapper = styled.div`
+  flex: 0 1 400px;
+`
+
+const SelectedUser = styled.div`
+  margin-left: 25px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+`
+
+const SelectedUserId = styled.div`
+  padding: ${p => p.theme.sizes.small6};
+  margin-top: ${p => p.theme.sizes.small10};
+
+  font-size: ${p => p.theme.sizes.fontSmall};
+  font-weight: ${p => p.theme.sizes.fontLight};
+  font-family: 'Source Code Pro', 'Consolas', 'Inconsolata', 'Droid Sans Mono',
+    'Monaco', monospace;
+
+  border-radius: ${p => p.theme.sizes.smallRadius};
+  background: ${p => p.theme.colours.black40};
+  color: rgba(0, 0, 0, 0.6);
+`
+
+const SelectUser = styled.div`
+  position: absolute;
+  top: 25px;
+  left: 38px;
+
+  select {
+    font-size: ${p => p.theme.sizes.fontMedium};
+    margin-top: ${p => p.theme.sizes.small16};
+  }
+`

@@ -8,7 +8,7 @@
 
 import * as React from 'react'
 import * as cx from 'classnames'
-import { withTheme, ThemeInterface } from '../Theme'
+import { withTheme, LocalThemeInterface } from '../Theme'
 import * as cn from 'classnames'
 import ExecuteButtonOperation from './ExecuteButtonOperation'
 
@@ -32,7 +32,10 @@ let firstTime = true
  * What a nice round shiny button. Shows a drop-down when there are multiple
  * queries to run.
  */
-class ExecuteButton extends React.Component<Props & ThemeInterface, State> {
+class ExecuteButton extends React.Component<
+  Props & LocalThemeInterface,
+  State
+> {
   constructor(props) {
     super(props)
 

@@ -1,5 +1,6 @@
 import * as React from 'react'
 import * as Modal from 'react-modal'
+import styled from '../styled'
 
 export interface Props {
   onRequestClose: () => void
@@ -53,25 +54,10 @@ export default class Popup extends React.Component<Props, {}> {
         style={modalStyle}
         contentLabel="Popup"
       >
-        <style jsx={true}>{`
-          .modal {
-            @p: .br2;
-          }
-          .close {
-            @p: .absolute, .pointer, .pa10;
-            top: -25px;
-            right: -25px;
-            transform: translate(100%, -100%);
-          }
-          .close.inside {
-            @p: .top0, .right0, .pa25;
-            transform: none;
-          }
-        `}</style>
-        <div className="modal">
-          {this.props.children}
-        </div>
+        <ContentWrapper>{this.props.children}</ContentWrapper>
       </Modal>
     )
   }
 }
+
+const ContentWrapper = styled.div``

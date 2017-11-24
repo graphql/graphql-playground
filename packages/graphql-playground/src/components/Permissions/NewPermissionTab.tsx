@@ -6,9 +6,9 @@ import * as cn from 'classnames'
 import { PermissionSession, ServiceInformation } from '../../types'
 import TypeChooser from './TypeChooser'
 import { Button } from '../Button'
-import { ThemeInterface } from '../Theme'
+import { LocalThemeInterface } from '../Theme'
 
-export interface Props extends ThemeInterface {
+export interface Props extends LocalThemeInterface {
   serviceInformation: ServiceInformation
   onNewPermissionTab: (permissionTab: PermissionSession) => void
 }

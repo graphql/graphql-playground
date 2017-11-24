@@ -6,7 +6,7 @@ import CodeGenerationPopupClientChooser from './CodeGenerationPopupClientChooser
 import { modalStyle } from '../../constants'
 import * as Modal from 'react-modal'
 import { Environment, GraphQLClient } from '../../types'
-import { withTheme, ThemeInterface } from '../Theme'
+import { withTheme, LocalThemeInterface } from '../Theme'
 
 export interface Props {
   query: string
@@ -21,7 +21,7 @@ export interface State {
 }
 
 class CodeGenerationPopup extends React.Component<
-  Props & ThemeInterface,
+  Props & LocalThemeInterface,
   State
 > {
   constructor(props) {

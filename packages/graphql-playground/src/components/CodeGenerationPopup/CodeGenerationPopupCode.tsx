@@ -3,7 +3,7 @@ import * as cx from 'classnames'
 import { $p } from 'graphcool-styles'
 import { CodeGenerator } from './codeGeneration'
 import { GraphQLClient, Environment } from '../../types'
-import { withTheme, ThemeInterface } from '../Theme'
+import { withTheme, LocalThemeInterface } from '../Theme'
 // tslint:disable-next-line
 const Codemirror: any = require('react-codemirror')
 
@@ -15,7 +15,7 @@ export interface Props {
 }
 
 class CodeGenerationPopupCode extends React.Component<
-  Props & ThemeInterface,
+  Props & LocalThemeInterface,
   {}
 > {
   componentWillMount() {

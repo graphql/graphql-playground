@@ -3,13 +3,13 @@ import Icon from 'graphcool-styles/dist/components/Icon/Icon'
 import { $v } from 'graphcool-styles'
 import ToggleButton from './ToggleButton'
 import Tooltip from './Tooltip'
-import { ThemeInterface } from './Theme'
+import { LocalThemeInterface } from './Theme'
 import * as cn from 'classnames'
 import { Button } from './Button'
 import Copy from './Copy'
 import styled, { keyframes } from '../styled'
 
-export interface Props extends ThemeInterface {
+export interface Props extends LocalThemeInterface {
   allTabs: boolean
   httpHeaders: boolean
   history: boolean
@@ -48,7 +48,7 @@ export default class Share extends React.Component<Props, State> {
       reshare,
     } = this.props
     return (
-      <div className="settings">
+      <Wrapper>
         <style jsx={true}>{`
           .settings {
             @p: .absolute;
@@ -112,7 +112,7 @@ export default class Share extends React.Component<Props, State> {
             fill: $darkBlue60;
           }
         `}</style>
-        <div className="icon">
+        <IconWrapper>
           <div
             className={cn('button', localTheme, { open })}
             onClick={this.toggleTooltip}
@@ -126,7 +126,7 @@ export default class Share extends React.Component<Props, State> {
             />
             <span>Share</span>
           </div>
-          <div className="tooltip">
+          <TooltipWrapper>
             <Tooltip
               open={open}
               onClose={this.toggleTooltip}
@@ -137,31 +137,29 @@ export default class Share extends React.Component<Props, State> {
               renderAfterContent={this.renderAuthSharingWarning}
             >
               <div>
-                <div className="row">
-                  <span className="tooltip-text" onClick={onToggleAllTabs}>
+                <Row>
+                  <TooltipText onClick={onToggleAllTabs}>
                     Share all tabs{' '}
-                  </span>
+                  </TooltipText>
                   <ToggleButton checked={allTabs} onChange={onToggleAllTabs} />
-                </div>
-                <div className="row">
-                  <span className="tooltip-text" onClick={onToggleHttpHeaders}>
+                </Row>
+                <Row>
+                  <TooltipText onClick={onToggleHttpHeaders}>
                     HTTP headers{' '}
-                  </span>
+                  </TooltipText>
                   <ToggleButton
                     checked={httpHeaders}
                     onChange={onToggleHttpHeaders}
                   />
-                </div>
-                <div className="row">
-                  <span className="tooltip-text" onClick={onToggleHistory}>
-                    History{' '}
-                  </span>
+                </Row>
+                <Row>
+                  <TooltipText onClick={onToggleHistory}>History </TooltipText>
                   <ToggleButton checked={history} onChange={onToggleHistory} />
-                </div>
+                </Row>
                 {shareUrl && (
-                  <div className="row">
-                    <input value={shareUrl} disabled={true} />
-                    <div className="copy">
+                  <Row>
+                    <Input value={shareUrl} disabled={true} />
+                    <CopyWrapper>
                       <Copy text={shareUrl}>
                         <Icon
                           src={require('graphcool-styles/icons/fill/copy.svg')}
@@ -170,20 +168,20 @@ export default class Share extends React.Component<Props, State> {
                           height={25}
                         />
                       </Copy>
-                    </div>
-                  </div>
+                    </CopyWrapper>
+                  </Row>
                 )}
-                <div className="row">
+                <Row>
                   <div />
                   <Button hideArrow={true} onClick={onShare}>
                     {reshare && shareUrl ? 'Reshare' : 'Share'}
                   </Button>
-                </div>
+                </Row>
               </div>
             </Tooltip>
-          </div>
-        </div>
-      </div>
+          </TooltipWrapper>
+        </IconWrapper>
+      </Wrapper>
     )
   }
 
@@ -239,4 +237,71 @@ const MessageTitle = styled.div`
   margin-bottom: 2px;
   font-weight: bold;
   color: #2a7ed2;
+`
+
+// Main styled components
+const Wrapper = styled.div`
+  position: absolute;
+  right: 96px;
+  top: 13px;
+  z-index: 1005;
+`
+
+const TooltipText = styled.div`
+  margin-right: 10px;
+
+  font-size: ${p => p.theme.sizes.fontSmall};
+  font-weight: ${p => p.theme.sizes.fontSemiBold};
+  text-transform: uppercase;
+  letter-spacing: 0.53px;
+
+  color: ${p => p.theme.colours.darkBlue50};
+`
+
+const IconWrapper = styled.div`
+  position: relative;
+  cursor: pointer;
+`
+
+const TooltipWrapper = styled.div`
+  position: absolute;
+  right: -21px;
+`
+
+const Row = styled.div`
+  position: relative;
+  min-width: 245px;
+  margin-top: ${p => p.theme.sizes.small16};
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  &:first-child {
+    margin-top: 0;
+  }
+`
+
+const CopyWrapper = styled.div`
+  position: absolute;
+  right: 0;
+
+  &:hover {
+    svg {
+      fill: ${p => p.theme.colours.darkBlue60};
+    }
+  }
+`
+
+const Input = styled.input`
+  display: block;
+  width: 100%;
+  padding: ${p => p.theme.sizes.small6} ${p => p.theme.sizes.small10};
+
+  font-weight: ${p => p.theme.sizes.fontSemiBold};
+  font-size: ${p => p.theme.sizes.fontTiny};
+
+  border-radius: ${p => p.theme.sizes.smallRadius};
+  background: ${p => p.theme.colours.darkBlue10};
+  color: ${p => p.theme.colours.darkBlue};
 `

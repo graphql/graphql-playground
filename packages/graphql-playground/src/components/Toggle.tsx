@@ -1,5 +1,5 @@
 import * as React from 'react'
-import * as cn from 'classnames'
+import styled, { css } from '../styled'
 
 export interface ToggleProps {
   choices: string[]
@@ -13,34 +13,49 @@ export default function Toggle({
   activeChoice,
 }: ToggleProps) {
   return (
-    <div className="toggle">
-      <style jsx={true}>{`
-        .toggle {
-          @p: .flex;
-        }
-        .choice {
-          @p: .f12, .ttu, .br2, .mr6, .fw6, .black40, .pointer;
-          letter-spacing: 0.2px;
-          padding: 4px 8px;
-        }
-        .choice.active {
-          @p: .black70;
-          background: #b8bfc4;
-        }
-        .choice:not(.active):hover {
-          @p: .black70;
-        }
-      `}</style>
-      {choices.map((choice, i) =>
-        <div
-          className={cn('choice', { active: choice === activeChoice })}
+    <Wrapper>
+      {choices.map((choice, i) => (
+        <Choice
+          active={choice === activeChoice}
           key={choice}
           // tslint:disable-next-line
           onClick={() => onChange(choice, i)}
         >
           {choice}
-        </div>,
-      )}
-    </div>
+        </Choice>
+      ))}
+    </Wrapper>
   )
 }
+
+const Wrapper = styled.div`
+  display: flex;
+`
+
+interface ChoiceProps {
+  active: boolean
+}
+
+// prettier-ignore
+const Choice = styled.div`
+  padding: 4px 8px;
+  margin-right: ${p => p.theme.sizes.small6};
+
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.2px;
+
+  cursor: pointer;
+  border-radius: ${p => p.theme.sizes.smallRadius};
+  color: ${p => p.theme.colours.black40};
+
+  ${(p: ChoiceProps) => p.active ? css`
+    color: rgba(0, 0, 0, 0.7);
+    background: #b8bfc4;
+  ` : css`
+    /* hover state when it's not active */
+    &:hover {
+      color: rgba(0, 0, 0, 0.7);
+    }
+  `}
+`
