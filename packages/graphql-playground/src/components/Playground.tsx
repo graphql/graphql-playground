@@ -1,10 +1,10 @@
 import * as React from 'react'
 import { GraphQLEditor } from './Playground/GraphQLEditor'
 import * as fetch from 'isomorphic-fetch'
-import { buildClientSchema, GraphQLList, GraphQLObjectType } from 'graphql'
+import { buildClientSchema } from 'graphql'
 import { TabBar } from './Playground/TabBar'
 import { defaultQuery, introspectionQuery } from '../constants'
-import { PermissionSession, ServiceInformation, Session } from '../types'
+import { Session } from '../types'
 import * as cuid from 'cuid'
 import * as Immutable from 'seamless-immutable'
 import OldThemeProvider from './Theme/ThemeProvider'
@@ -16,7 +16,6 @@ import { SubscriptionClient } from 'subscriptions-transport-ws'
 import isQuerySubscription from './Playground/util/isQuerySubscription'
 import HistoryPopup from './HistoryPopup'
 import * as cx from 'classnames'
-import calc from 'calculate-size'
 import CodeGenerationPopup from './CodeGenerationPopup/CodeGenerationPopup'
 import GraphDocs from './Playground/DocExplorer/GraphDocs'
 import Settings from './Settings'
@@ -26,8 +25,6 @@ import GraphQLEditorSession from './Playground/GraphQLEditorSession'
 import { setStacks } from '../actions/graphiql-docs'
 import { isEqual, mapValues } from 'lodash'
 import Share from './Share'
-import NewPermissionTab from './Permissions/NewPermissionTab'
-import { serviceInformationQuery } from './constants'
 import styled, { ThemeProvider, theme as styledTheme } from '../styled'
 import { getNewStack, getRootMap } from './Playground/util/stack'
 
@@ -63,12 +60,10 @@ export interface State {
   sessions: Session[]
   selectedSessionIndex: number
   schemaCache: any
-  permissionSchema?: any
   historyOpen: boolean
   history: Session[]
   adminAuthToken?: string
   response?: Response
-  userFields: string[]
   selectUserSessionId?: string
   codeGenerationPopupOpen: boolean
   disableQueryHeader: boolean
@@ -81,7 +76,6 @@ export interface State {
   shareHttpHeaders: boolean
   shareHistory: boolean
   changed: boolean
-  serviceInformation?: ServiceInformation
   tracingSupported: boolean
 }
 
@@ -133,7 +127,6 @@ export class Playground extends React.PureComponent<Props & DocsState, State> {
     this.state = {
       schema: null,
       schemaCache: null,
-      userFields: [],
       sessions,
       selectedSessionIndex:
         selectedSessionIndex < sessions.length && selectedSessionIndex > -1
@@ -193,10 +186,6 @@ export class Playground extends React.PureComponent<Props & DocsState, State> {
       this.setCursor({ line: 3, ch: 6 })
     }
     this.initWebsockets()
-    if (this.props.adminAuthToken) {
-      this.fetchPermissionSchema()
-      this.fetchServiceInformation()
-    }
   }
 
   componentDidUpdate(prevProps: Props) {
@@ -271,7 +260,6 @@ export class Playground extends React.PureComponent<Props & DocsState, State> {
         }
 
         const simpleSchema = buildClientSchema(simpleSchemaData.data)
-        const userFields = this.extractUserField(simpleSchema)
 
         this.renewStack(simpleSchema)
 
@@ -280,7 +268,6 @@ export class Playground extends React.PureComponent<Props & DocsState, State> {
           Boolean(simpleSchemaData.extensions.tracing)
         this.setState({
           schemaCache: simpleSchema,
-          userFields,
           tracingSupported,
         } as State)
       },
@@ -340,121 +327,9 @@ export class Playground extends React.PureComponent<Props & DocsState, State> {
       .filter(s => s)
     this.props.setStacks!(stacks)
   }
-  extractUserField(simpleSchema, userModelName?: string) {
-    const modelName = userModelName || this.state.userModelName
-    const userSchema = simpleSchema.getType(modelName)
-    if (userSchema) {
-      const userSchemaFields = userSchema.getFields()
-      const userFields = Object.keys(userSchemaFields)
-        .map(fieldName => userSchemaFields[fieldName])
-        .filter(field => {
-          // filter password, meta fields and relation fields
-          return (
-            field.name[0] !== '_' &&
-            field.name !== 'password' &&
-            !(
-              field.type instanceof GraphQLList ||
-              field.type instanceof GraphQLObjectType
-            )
-          )
-        })
-
-      // put id to beginning
-      userFields.sort((a, b) => {
-        if (a.name === 'id') {
-          return -1
-        }
-        if (b.name === 'id') {
-          return 1
-        }
-
-        return a.name > b.name ? 1 : -1
-      })
-
-      return userFields.map(field => {
-        const size = calc(field.name, {
-          font: 'Open Sans',
-          fontWeight: '600',
-          fontSize: '16px',
-        })
-        let width = size.width
-        if (field.name === 'id') {
-          width = 220
-        }
-        // TODO create type to field width map
-        field.width = Math.max(width, 185) + 50
-
-        return field
-      })
-    } else {
-      return []
-    }
-  }
-
-  fetchPermissionSchema() {
-    const headers = {
-      Authorization: `Bearer ${this.props.adminAuthToken}`,
-    }
-    this.fetchSchema(this.getPermissionEndpoint(), headers)
-      .then(schema => {
-        const permissionSchema = buildClientSchema(schema.data)
-        this.setState({
-          permissionSchema,
-        })
-      })
-      .catch(error => {
-        /* tslint:disable-next-line */
-        console.error(error)
-      })
-  }
-
-  fetchServiceInformation() {
-    const systemApi = this.getSystemEndpoint()
-    const id = this.extractServiceId()
-    fetch(systemApi, {
-      method: 'post',
-      body: JSON.stringify({
-        query: serviceInformationQuery,
-        variables: { id },
-      }),
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${this.state.adminAuthToken}`,
-      },
-    })
-      .then(res => res.json())
-      .then(res => {
-        if (res.data.viewer.project) {
-          const { models, relations } = res.data.viewer.project
-
-          this.setState({
-            serviceInformation: {
-              relations: relations.edges.map(edge => edge.node),
-              models: models.edges.map(edge => edge.node),
-            },
-            userModelName: models.edges[0]!.node.name!,
-          })
-        } else {
-          /* tslint:disable-next-line */
-          console.error('Error while fetching service information', res)
-        }
-      })
-  }
-
-  getModelNames(): string[] {
-    if (this.state.serviceInformation) {
-      return this.state.serviceInformation.models.map(m => m.name)
-    }
-
-    return []
-  }
 
   extractServiceId() {
     return this.props.endpoint.split('/').slice(-1)[0]
-  }
-
-  getPermissionEndpoint() {
-    return this.props.endpoint + '/permissions'
   }
 
   fetchSchema(endpointUrl: string, headers: any = {}) {
@@ -523,16 +398,9 @@ export class Playground extends React.PureComponent<Props & DocsState, State> {
                     key={session.id}
                     session={session}
                     index={index}
-                    schemaCache={
-                      session.permission
-                        ? this.state.permissionSchema
-                        : this.state.schemaCache
-                    }
+                    schemaCache={this.state.schemaCache}
                     isGraphcoolUrl={isGraphcoolUrl}
-                    fetcher={
-                      session.permission ? this.permissionFetcher : this.fetcher
-                    }
-                    adminAuthToken={this.props.adminAuthToken}
+                    fetcher={this.fetcher}
                     isEndpoint={Boolean(isEndpoint)}
                     storage={this.storage.getSessionStorage(session.id)}
                     onClickCodeGeneration={this.handleClickCodeGeneration}
@@ -547,7 +415,6 @@ export class Playground extends React.PureComponent<Props & DocsState, State> {
                     onRef={this.setRef}
                     useVim={this.state.useVim && index === selectedSessionIndex}
                     isActive={index === selectedSessionIndex}
-                    serviceInformation={this.state.serviceInformation}
                     tracingSupported={this.state.tracingSupported}
                   />
                 </GraphiqlWrapper>
@@ -568,14 +435,6 @@ export class Playground extends React.PureComponent<Props & DocsState, State> {
                 this.props.onChangeSubscriptionsEndpoint
               }
             />
-            {this.props.adminAuthToken &&
-              this.state.serviceInformation && (
-                <NewPermissionTab
-                  serviceInformation={this.state.serviceInformation}
-                  localTheme={this.state.theme}
-                  onNewPermissionTab={this.handleNewPermissionTab}
-                />
-              )}
             <Share
               localTheme={this.state.theme}
               onShare={this.share}
@@ -625,74 +484,6 @@ export class Playground extends React.PureComponent<Props & DocsState, State> {
         query={selectedSession.query}
       />
     )
-  }
-
-  getDefaultPermissionQuery(session: PermissionSession) {
-    const modelName = session.relationName
-      ? this.state.serviceInformation!.relations.find(
-          r => r.name === session.relationName,
-        )!.leftModel.name
-      : session.modelName
-    const operationName = session.relationName || `permit${session.modelName}`
-    return `\
-query ${operationName} {
-  Some${modelName}Exists
-}`
-  }
-
-  newPermissionTab = (
-    permissionSession: PermissionSession,
-    name: string,
-    absolutePath: string,
-    query: string,
-  ) => {
-    const newSession = Immutable({
-      id: cuid(),
-      selectedViewer: 'ADMIN',
-      name,
-      query,
-      variables: '',
-      result: '',
-      operationName: undefined,
-      hasChanged: true,
-      hasQuery: false,
-      permission: permissionSession,
-      queryTypes: getQueryTypes(query),
-      starred: false,
-      absolutePath,
-    })
-    this.setState(state => {
-      return {
-        ...state,
-        sessions: state.sessions.concat(newSession),
-        selectedSessionIndex: state.sessions.length,
-        changed: true,
-      }
-    })
-  }
-
-  handleNewPermissionTab = (permissionSession: PermissionSession) => {
-    const query = this.getDefaultPermissionQuery(permissionSession)
-    const newSession = Immutable({
-      id: cuid(),
-      selectedViewer: 'ADMIN',
-      query,
-      variables: '',
-      result: '',
-      operationName: undefined,
-      hasQuery: false,
-      permission: permissionSession,
-      queryTypes: getQueryTypes(query),
-      starred: false,
-    })
-    this.setState(state => {
-      return {
-        ...state,
-        sessions: state.sessions.concat(newSession),
-        selectedSessionIndex: state.sessions.length,
-        changed: true,
-      }
-    })
   }
 
   setRef = (index: number, ref: any) => {
@@ -1056,10 +847,6 @@ query ${operationName} {
     return this.props.endpoint
   }
 
-  private getSystemEndpoint() {
-    return `${this.httpApiPrefix}/system`
-  }
-
   get httpApiPrefix() {
     return this.props.endpoint.match(/(https?:\/\/.*?)\/?/)![1]
   }
@@ -1126,34 +913,6 @@ query ${operationName} {
       }
       this.setValueInSession(session.id, 'subscriptionId', null)
     }
-  }
-
-  private permissionFetcher = (session: Session, graphQLParams) => {
-    const { query } = graphQLParams
-
-    if (!query.includes('IntrospectionQuery')) {
-      if (!this.historyIncludes(session)) {
-        setImmediate(() => {
-          this.addToHistory(session)
-        })
-      }
-    }
-
-    const endpoint = this.getPermissionEndpoint()
-
-    const headers: any = {
-      'Content-Type': 'application/json',
-      Authorization: `Bearer ${this.props.adminAuthToken}`,
-    }
-
-    return fetch(endpoint, {
-      method: 'post',
-      headers,
-      body: JSON.stringify(graphQLParams),
-    }).then(response => {
-      this.storage.executedQuery()
-      return response.json()
-    })
   }
 
   private fetcher = (session: Session, graphQLParams, requestHeaders?: any) => {

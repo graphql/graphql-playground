@@ -188,7 +188,7 @@ export default class Tab extends React.PureComponent<Props, State> {
           onMouseEnter={this.handleMouseOverCross}
           onMouseLeave={this.handleMouseOutCross}
         >
-          {session.permission && session.hasChanged && !this.state.overCross ? (
+          {session.isFile && session.hasChanged && !this.state.overCross ? (
             <div className="circle">⬤</div>
           ) : (
             <Icon

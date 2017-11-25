@@ -10,6 +10,7 @@ export interface Session {
   subscriptionActive: boolean
 
   // additional props that are interactive in graphiql, these are not represented in graphiqls state
+  isFile?: boolean
   queryTypes: QueryTypes
   starred?: boolean
   date: Date
@@ -19,14 +20,8 @@ export interface Session {
   selectedUserToken?: string
   subscriptionId?: string
   headers?: any[]
-  permission?: PermissionSession
   hasChanged?: boolean
   absolutePath?: string
-}
-
-export interface PermissionSession {
-  relationName?: string
-  modelName?: string
 }
 
 export interface QueryTypes {
@@ -53,32 +48,3 @@ export type GraphQLClient =
   | 'apollo'
   | 'graphql-request'
   | 'curl'
-
-export interface ServiceInformation {
-  relations: GraphcoolRelation[]
-  models: GraphcoolModel[]
-}
-
-export interface GraphcoolRelation {
-  id: string
-  name: string
-  permissionQueryArguments: PermissionQueryArgument[]
-  leftModel: {
-    name: string
-  }
-}
-
-export interface GraphcoolModel {
-  id: string
-  name: string
-  create: PermissionQueryArgument[]
-  read: PermissionQueryArgument[]
-  update: PermissionQueryArgument[]
-  delete: PermissionQueryArgument[]
-}
-
-export interface PermissionQueryArgument {
-  name: string
-  typeName: string
-  group: string
-}

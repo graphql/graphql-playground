@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { ServiceInformation, Session } from '../../types'
+import { Session } from '../../types'
 import GraphQLEditor from './GraphQLEditor'
 import { Header } from './HttpHeaders/HttpHeaders'
 
@@ -11,7 +11,6 @@ export interface Props {
   fetcher: (session: Session, graphQLParams: any, headers?: any) => Promise<any>
   schemaCache: any
   isEndpoint: boolean
-  adminAuthToken?: string
   storage?: any
   onEditQuery: (sessionId: string, data: any) => void
   onEditVariables: (sessionId: string, variables: any) => any
@@ -25,7 +24,6 @@ export interface Props {
   useVim: boolean
   isActive: boolean
 
-  serviceInformation?: ServiceInformation
   tracingSupported: boolean
 }
 
@@ -41,13 +39,11 @@ export default class GraphQLEditorSession extends React.PureComponent<
       session,
       isGraphcoolUrl,
       schemaCache,
-      adminAuthToken,
       isEndpoint,
       storage,
       responses,
       disableQueryHeader,
       isActive,
-      serviceInformation,
       tracingSupported,
     } = this.props
     return (
@@ -59,8 +55,6 @@ export default class GraphQLEditorSession extends React.PureComponent<
         fetcher={this.fetcher}
         showQueryTitle={false}
         showResponseTitle={false}
-        showViewAs={Boolean(adminAuthToken)}
-        showSelectUser={Boolean(this.props.adminAuthToken)}
         showEndpoints={!isEndpoint}
         showDownloadJsonButton={true}
         showCodeGeneration={true}
@@ -82,7 +76,6 @@ export default class GraphQLEditorSession extends React.PureComponent<
         rerenderQuery={false}
         disableAnimation={true}
         disableAutofocus={!isActive}
-        serviceInformation={serviceInformation}
         tracingSupported={tracingSupported}
       />
     )
