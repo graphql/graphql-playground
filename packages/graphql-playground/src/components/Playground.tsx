@@ -31,6 +31,7 @@ import { isEqual, mapValues } from 'lodash'
 import Share from './Share'
 import styled, { ThemeProvider, theme as styledTheme } from '../styled'
 import { getNewStack, getRootMap } from './Playground/util/stack'
+import { isSharingAuthorization } from './Playground/util/session'
 
 export type Theme = 'dark' | 'light'
 export interface Response {
@@ -1060,26 +1061,6 @@ export class Playground extends React.PureComponent<Props & DocsState, State> {
 export default connect<any, any, Props>(state => state.graphiqlDocs, {
   setStacks,
 })(Playground)
-
-function isSharingAuthorization(sharableSessions: Session[]): boolean {
-  // If user's gonna share an Authorization header,
-  // let's warn her
-
-  // Check all sessions
-  for (const session of sharableSessions) {
-    // Check every header of each session
-    for (const header of session.headers || []) {
-      // If there's a Authorization header present,
-      // set the flag to `true` and stop the loop
-      if (header.name.toLowerCase() === 'authorization') {
-        // break
-        return true
-      }
-    }
-  }
-
-  return false
-}
 
 const PlaygroundWrapper = styled.div`
   display: flex;
