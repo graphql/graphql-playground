@@ -31,7 +31,6 @@ export default class Tab extends React.PureComponent<Props, State> {
 
     return (
       <div
-        key={session.id}
         className={`tab ${index === selectedSessionIndex && 'active'} ${
           localTheme
         }`}

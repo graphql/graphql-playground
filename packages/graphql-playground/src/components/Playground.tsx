@@ -284,7 +284,8 @@ export class Playground extends React.PureComponent<Props & DocsState, State> {
         this.renewStack(simpleSchema)
 
         const tracingSupported =
-          simpleSchemaData.extensions && simpleSchemaData.extensions.tracing
+          simpleSchemaData.extensions &&
+          Boolean(simpleSchemaData.extensions.tracing)
         this.setState({
           schemaCache: simpleSchema,
           userFields,
@@ -617,7 +618,7 @@ export class Playground extends React.PureComponent<Props & DocsState, State> {
                     useVim={this.state.useVim && index === selectedSessionIndex}
                     isActive={index === selectedSessionIndex}
                     serviceInformation={this.state.serviceInformation}
-                    tracingSupported={Boolean(this.state.tracingSupported)}
+                    tracingSupported={this.state.tracingSupported}
                   />
                 </GraphiqlWrapper>
               ))}

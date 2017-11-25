@@ -46,7 +46,7 @@ const ReRun = styled.div`
 `
 const NotSupported = styled.div`
   font-size: 14px;
-  color: ${$v.red};
+  color: ${$v.lightOrange};
 `
 
 const TracingRows = styled.div`
@@ -90,13 +90,13 @@ export default class ResponseTracing extends React.Component<Props, {}> {
             />
           </TracingRows>
         ) : tracingSupported ? (
+          <ReRun>Please re-run the query to show tracing results.</ReRun>
+        ) : (
           <NotSupported>
             This GraphQL server doesn’t support tracing. See the following page
             for instructions:<br />
             https://github.com/apollographql/apollo-tracing
           </NotSupported>
-        ) : (
-          <ReRun>Please re-run the query to show tracing results.</ReRun>
         )}
       </TracingWrapper>
     )
