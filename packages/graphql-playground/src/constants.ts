@@ -1,3 +1,7 @@
+import * as cuid from 'cuid'
+import { getQueryTypes } from './components/Playground/util/getQueryTypes'
+import { Session } from './types'
+
 export const columnWidth = 300
 
 export const introspectionQuery = `
@@ -118,4 +122,21 @@ export const modalStyle = {
     background: 'none',
     boxShadow: '0 1px 7px rgba(0,0,0,.2)',
   },
+}
+
+export function getDefaultSession(): Session {
+  return {
+    id: cuid(),
+    query: defaultQuery,
+    variables: '',
+    result: '',
+    operationName: undefined,
+    hasMutation: false,
+    hasSubscription: false,
+    hasQuery: false,
+    queryTypes: getQueryTypes(defaultQuery),
+    subscriptionActive: false,
+    date: new Date(),
+    starred: false,
+  }
 }

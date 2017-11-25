@@ -3,13 +3,17 @@ import { GraphQLEditor } from './Playground/GraphQLEditor'
 import * as fetch from 'isomorphic-fetch'
 import { buildClientSchema } from 'graphql'
 import { TabBar } from './Playground/TabBar'
-import { defaultQuery, introspectionQuery } from '../constants'
+import {
+  defaultQuery,
+  introspectionQuery,
+  getDefaultSession,
+} from '../constants'
 import { Session } from '../types'
 import * as cuid from 'cuid'
 import * as Immutable from 'seamless-immutable'
 import OldThemeProvider from './Theme/ThemeProvider'
 import PlaygroundStorage from './PlaygroundStorage'
-import getQueryTypes from './Playground/util/getQueryTypes'
+import { getQueryTypes } from './Playground/util/getQueryTypes'
 import debounce from 'graphiql/dist/utility/debounce'
 import { Observable } from 'rxjs/Observable'
 import { SubscriptionClient } from 'subscriptions-transport-ws'
@@ -770,17 +774,8 @@ export class Playground extends React.PureComponent<Props & DocsState, State> {
           : defaultQuery
 
       newSession = Immutable({
-        id: cuid(),
-        selectedViewer: 'EVERYONE',
+        ...getDefaultSession(),
         query,
-        variables: '',
-        result: '',
-        operationName: undefined,
-        hasMutation: false,
-        hasSubscription: false,
-        hasQuery: false,
-        queryTypes: getQueryTypes(query),
-        starred: false,
         headers,
       })
     }
@@ -790,19 +785,7 @@ export class Playground extends React.PureComponent<Props & DocsState, State> {
   }
 
   private createSessionFromQuery = (query: string) => {
-    return Immutable({
-      id: cuid(),
-      selectedViewer: 'EVERYONE',
-      query,
-      variables: '',
-      result: '',
-      operationName: undefined,
-      hasMutation: false,
-      hasSubscription: false,
-      hasQuery: false,
-      queryTypes: getQueryTypes(query),
-      starred: false,
-    })
+    return Immutable(getDefaultSession())
   }
 
   private handleChangeHeaders = (sessionId: string, headers: any[]) => {
