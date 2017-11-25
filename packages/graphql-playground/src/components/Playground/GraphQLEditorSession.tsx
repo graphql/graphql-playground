@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { PermissionSession, ServiceInformation, Session } from '../../types'
+import { ServiceInformation, Session } from '../../types'
 import GraphQLEditor from './GraphQLEditor'
 import { Header } from './HttpHeaders/HttpHeaders'
 import { Viewer } from '../Playground'
@@ -19,7 +19,6 @@ export interface Props {
   onEditOperationName: (sessionId: string, name: any) => any
   onClickCodeGeneration: any
   onChangeHeaders: (sessionId: string, headers: Header[]) => any
-  autofillMutation?: () => void
   onChangeViewer: (sessionId: string, data: any) => void
   headers?: any[]
   disableQueryHeader?: boolean
@@ -28,10 +27,6 @@ export interface Props {
   useVim: boolean
   isActive: boolean
 
-  onboardingStep?: any
-  tether?: any
-  nextStep?: () => void
-  permission?: PermissionSession
   serviceInformation?: ServiceInformation
   tracingSupported: boolean
 }
@@ -53,11 +48,7 @@ export default class GraphQLEditorSession extends React.PureComponent<
       storage,
       responses,
       disableQueryHeader,
-      onboardingStep,
-      tether,
-      nextStep,
       isActive,
-      permission,
       serviceInformation,
       tracingSupported,
     } = this.props
@@ -90,19 +81,11 @@ export default class GraphQLEditorSession extends React.PureComponent<
         responses={responses}
         disableQueryHeader={disableQueryHeader}
         disableResize={true}
-        onboardingStep={onboardingStep}
-        tether={tether}
-        nextStep={nextStep}
         ref={this.setRef}
-        autofillMutation={this.props.autofillMutation}
         useVim={this.props.useVim}
-        rerenderQuery={
-          this.props.onboardingStep === 'STEP3_ENTER_MUTATION1_VALUES' ||
-          this.props.onboardingStep === 'STEP3_ENTER_MUTATION2_VALUE'
-        }
+        rerenderQuery={false}
         disableAnimation={true}
         disableAutofocus={!isActive}
-        permission={permission}
         serviceInformation={serviceInformation}
         tracingSupported={tracingSupported}
       />

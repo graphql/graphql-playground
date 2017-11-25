@@ -12,9 +12,6 @@ export interface Props extends OptionalLocalThemeInterface {
   onCloseSession: (session: Session) => void
   onOpenHistory: () => void
   onSelectSession: (session: Session) => void
-  onboardingStep?: string
-  tether?: any
-  nextStep?: () => void
   isApp?: boolean
 }
 
@@ -29,14 +26,9 @@ export const TabBar = withTheme<Props>(
     onSelectSession,
     onOpenHistory,
     onCloseSession,
-    onboardingStep,
-    tether,
     localTheme,
     isApp,
-    nextStep,
   }: Props) => {
-    const Tether = tether
-
     return (
       <div className={cx('tabbar', localTheme)}>
         <style jsx={true}>{`
@@ -188,45 +180,19 @@ export const TabBar = withTheme<Props>(
               onSelectSession={onSelectSession}
               selectedSessionIndex={selectedSessionIndex}
               onCloseSession={onCloseSession}
-              tether={tether}
               localTheme={localTheme}
-              onboardingStep={onboardingStep}
             />
           ))}
-          {tether && onboardingStep === 'STEP3_CREATE_MUTATION_TAB' ? (
-            <Tether
-              offsetY={-7}
-              steps={[
-                {
-                  step: 'STEP3_CREATE_MUTATION_TAB',
-                  title: 'Apparently, there is no data yet',
-                  description: 'Click here to create new data',
-                },
-              ]}
-            >
-              <div className="tab plus" onClick={onNewSession}>
-                <Icon
-                  src={require('graphcool-styles/icons/stroke/add.svg')}
-                  color={localTheme === 'dark' ? white20 : darkBlue20}
-                  width={34}
-                  height={34}
-                  stroke={true}
-                  strokeWidth={4}
-                />
-              </div>
-            </Tether>
-          ) : (
-            <div className="tab plus" onClick={onNewSession}>
-              <Icon
-                src={require('graphcool-styles/icons/stroke/add.svg')}
-                color={localTheme === 'dark' ? white20 : darkBlue20}
-                width={34}
-                height={34}
-                stroke={true}
-                strokeWidth={4}
-              />
-            </div>
-          )}
+          <div className="tab plus" onClick={onNewSession}>
+            <Icon
+              src={require('graphcool-styles/icons/stroke/add.svg')}
+              color={localTheme === 'dark' ? white20 : darkBlue20}
+              width={34}
+              height={34}
+              stroke={true}
+              strokeWidth={4}
+            />
+          </div>
           <div className={cx('history', localTheme)}>
             <Icon
               className="icon"

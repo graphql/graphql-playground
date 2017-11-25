@@ -9,8 +9,6 @@ export interface Props {
   onSelectSession: (session: Session) => void
   onCloseSession: (session: Session) => void
   selectedSessionIndex: number
-  tether: any
-  onboardingStep?: string
   localTheme?: string
 }
 
@@ -28,16 +26,8 @@ export default class Tab extends React.PureComponent<Props, State> {
   }
 
   render() {
-    const {
-      session,
-      index,
-      selectedSessionIndex,
-      onboardingStep,
-      localTheme,
-      tether,
-    } = this.props
+    const { session, index, selectedSessionIndex, localTheme } = this.props
     const { queryTypes } = session
-    const Tether = tether
 
     return (
       <div
@@ -183,73 +173,16 @@ export default class Tab extends React.PureComponent<Props, State> {
               <div className="query-type subscription">S</div>
             )}
           </div>
-          {session.permission && (
-            <div className="viewer">
-              <Icon
-                src={require('graphcool-styles/icons/fill/permissions.svg')}
-                width={16}
-                height={16}
-                color={localTheme === 'dark' ? $v.white40 : $v.gray40}
-              />
-            </div>
-          )}
-          {session.selectedViewer !== 'ADMIN' && (
-            <div className="viewer">
-              {session.selectedViewer === 'EVERYONE' && (
-                <Icon
-                  src={require('graphcool-styles/icons/fill/world.svg')}
-                  color={localTheme === 'dark' ? $v.white40 : $v.gray40}
-                  width={14}
-                  height={14}
-                />
-              )}
-              {session.selectedViewer === 'USER' && (
-                <Icon
-                  src={require('graphcool-styles/icons/fill/user.svg')}
-                  color={localTheme === 'dark' ? $v.white40 : $v.gray40}
-                  width={14}
-                  height={14}
-                />
-              )}
-            </div>
-          )}
         </div>
-        {tether &&
-        onboardingStep === 'STEP3_SELECT_QUERY_TAB' &&
-        index === 0 ? (
-          <Tether
-            steps={[
-              {
-                step: 'STEP3_SELECT_QUERY_TAB',
-                title: 'Back to the query',
-                description:
-                  "After creating the data with our mutations, let's see what we got",
-              },
-            ]}
-          >
-            <div
-              className={`operation-name ${index === selectedSessionIndex &&
-                'active'}`}
-            >
-              {session.name ||
-                session.operationName ||
-                queryTypes.firstOperationName ||
-                (session.permission && 'Permission Editor') ||
-                'New Session'}
-            </div>
-          </Tether>
-        ) : (
-          <div
-            className={`operation-name ${index === selectedSessionIndex &&
-              'active'}`}
-          >
-            {session.name ||
-              session.operationName ||
-              queryTypes.firstOperationName ||
-              (session.permission && 'Permission Editor') ||
-              'New Session'}
-          </div>
-        )}
+        <div
+          className={`operation-name ${index === selectedSessionIndex &&
+            'active'}`}
+        >
+          {session.name ||
+            session.operationName ||
+            queryTypes.firstOperationName ||
+            'New Tab'}
+        </div>
         <div
           className={`close ${index === selectedSessionIndex && 'active'}`}
           onClick={this.handleCloseSession}

@@ -64,7 +64,6 @@ export interface Props {
   onClickCodeGeneration?: any
   onChangeHeaders?: (headers: Header[]) => any
   getDefaultFieldNames?: () => any
-  autofillMutation?: () => void
   onChangeViewer?: (data: any) => void
   headers?: any[]
   showViewAs?: boolean
@@ -86,9 +85,6 @@ export interface Props {
   disableAutofocus?: boolean
   disableResize?: boolean
 
-  onboardingStep?: any
-  tether?: any
-  nextStep?: () => void
   disableAnimation?: boolean
   hideLineNumbers?: boolean
   hideGutters?: boolean
@@ -368,8 +364,6 @@ export class GraphQLEditor extends React.PureComponent<
       height: tracingOpen ? this.state.responseTracingHeight : null,
     }
 
-    const Tether = this.props.tether
-
     return (
       <div
         className={cn('graphiql-container', { isActive: this.props.isActive })}
@@ -527,50 +521,6 @@ export class GraphQLEditor extends React.PureComponent<
                   onRunQuery={this.handleEditorRunQuery}
                 />
               </div>
-              {[
-                'STEP3_UNCOMMENT_DESCRIPTION',
-                'STEP3_ENTER_MUTATION1_VALUES',
-                'STEP3_ENTER_MUTATION2_VALUE',
-              ].indexOf(this.props.onboardingStep || '') > -1 && (
-                <Tether
-                  steps={[
-                    {
-                      step: 'STEP3_UNCOMMENT_DESCRIPTION',
-                      title: 'Uncomment the description',
-                      description:
-                        'To add the description to the query, just remove the #',
-                    },
-                    {
-                      step: 'STEP3_ENTER_MUTATION1_VALUES',
-                      title: 'This is a mutation',
-                      description:
-                        'Enter data for the imageUrl and the description',
-                      buttonText: 'Autofill Data',
-                    },
-                    {
-                      step: 'STEP3_ENTER_MUTATION2_VALUE',
-                      title: 'Lets add some more data',
-                      description:
-                        'Enter data for the imageUrl and the description',
-                      buttonText: 'Autofill Data',
-                    },
-                  ]}
-                  onClick={this.tetherClick}
-                >
-                  <div
-                    className={cn('onboarding-hint', {
-                      step1:
-                        this.props.onboardingStep ===
-                        'STEP3_UNCOMMENT_DESCRIPTION',
-                      step2:
-                        this.props.onboardingStep ===
-                          'STEP3_ENTER_MUTATION1_VALUES' ||
-                        this.props.onboardingStep ===
-                          'STEP3_ENTER_MUTATION2_VALUE',
-                    })}
-                  />
-                </Tether>
-              )}
             </div>
             {this.props.permission &&
               this.props.serviceInformation && (
@@ -594,50 +544,19 @@ export class GraphQLEditor extends React.PureComponent<
                       showResponseTitle={this.props.showResponseTitle}
                     />
                   )}
-                {this.props.tether ? (
-                  <Tether
-                    offsetX={18}
-                    offsetY={25}
-                    steps={[
-                      {
-                        step: 'STEP3_RUN_QUERY1',
-                        title: 'Execute your first query',
-                        description:
-                          'You just wrote your first GraphQL Query! Click here to execute it.',
-                      },
-                      {
-                        step: 'STEP3_RUN_MUTATION1',
-                        title: 'Run your first mutation',
-                        description:
-                          'Awesome! You just wrote your first GraphQL Mutation. Click here to execute it',
-                      },
-                      {
-                        step: 'STEP3_RUN_MUTATION2',
-                        title: 'Lets add more data',
-                      },
-                      {
-                        step: 'STEP3_RUN_QUERY2',
-                        title: "Let's see how the data changed",
-                        description:
-                          'After adding data with the mutations, lets' +
-                          ' see how the result of the query changes',
-                      },
-                    ]}
-                  >
-                    <ExecuteButton
-                      isRunning={Boolean(this.state.subscription)}
-                      onRun={this.handleRunQuery}
-                      onStop={this.handleStopQuery}
-                      operations={this.state.operations}
-                    />
-                  </Tether>
+                <ExecuteButton
+                  isRunning={Boolean(this.state.subscription)}
+                  onRun={this.handleRunQuery}
+                  onStop={this.handleStopQuery}
+                  operations={this.state.operations}
+                />
                 ) : (
-                  <ExecuteButton
-                    isRunning={Boolean(this.state.subscription)}
-                    onRun={this.handleRunQuery}
-                    onStop={this.handleStopQuery}
-                    operations={this.state.operations}
-                  />
+                <ExecuteButton
+                  isRunning={Boolean(this.state.subscription)}
+                  onRun={this.handleRunQuery}
+                  onStop={this.handleStopQuery}
+                  operations={this.state.operations}
+                />
                 )}
                 {this.state.isWaitingForResponse && <Spinner />}
                 <Results
@@ -680,15 +599,6 @@ export class GraphQLEditor extends React.PureComponent<
         </div>
       </div>
     )
-  }
-
-  tetherClick = () => {
-    if (
-      this.props.onboardingStep.startsWith('STEP3_ENTER_MUTATION') &&
-      typeof this.props.autofillMutation === 'function'
-    ) {
-      this.props.autofillMutation()
-    }
   }
 
   setEditorBarComponent = ref => {

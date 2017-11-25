@@ -20,13 +20,6 @@ import SelectUserPopup from './SelectUserPopup'
 import calc from 'calculate-size'
 import CodeGenerationPopup from './CodeGenerationPopup/CodeGenerationPopup'
 import GraphDocs from './Playground/DocExplorer/GraphDocs'
-import {
-  onboardingEmptyMutation,
-  onboardingFilledMutation1,
-  onboardingFilledMutation2,
-  onboardingQuery1,
-  onboardingQuery1Check,
-} from '../data'
 import Settings from './Settings'
 import { connect } from 'react-redux'
 import { DocsState } from '../reducers/graphiql-docs'
@@ -129,33 +122,6 @@ export class Playground extends React.PureComponent<Props & DocsState, State> {
       this.setValueInSession(sessionId, 'query', query)
       this.setValueInSession(sessionId, 'hasChanged', true)
       this.updateQueryTypes(sessionId, query)
-      if (
-        this.props.onboardingStep === 'STEP3_UNCOMMENT_DESCRIPTION' &&
-        this.state.selectedSessionIndex === 0
-      ) {
-        const trimmedQuery = query.replace(/\s/g, '').replace(',', '')
-        if (
-          trimmedQuery === onboardingQuery1Check &&
-          typeof this.props.nextStep === 'function'
-        ) {
-          this.props.nextStep()
-        }
-      }
-
-      if (
-        (this.props.onboardingStep === 'STEP3_ENTER_MUTATION1_VALUES' ||
-          this.props.onboardingStep === 'STEP3_ENTER_MUTATION2_VALUE') &&
-        this.state.selectedSessionIndex === 1
-      ) {
-        const trimmedTemplate = onboardingEmptyMutation.replace(/\s/g, '')
-        const trimmedQuery = query.replace(/\s/g, '').replace(',', '')
-        if (
-          trimmedQuery !== trimmedTemplate &&
-          typeof this.props.nextStep === 'function'
-        ) {
-          this.props.nextStep()
-        }
-      }
     },
   )
 
@@ -604,9 +570,6 @@ export class Playground extends React.PureComponent<Props & DocsState, State> {
               onCloseSession={this.handleCloseSession}
               onOpenHistory={this.handleOpenHistory}
               onSelectSession={this.handleSelectSession}
-              onboardingStep={this.props.onboardingStep}
-              nextStep={this.props.nextStep}
-              tether={this.props.tether}
               isApp={this.props.isApp}
             />
             <GraphiqlsContainer
@@ -650,18 +613,9 @@ export class Playground extends React.PureComponent<Props & DocsState, State> {
                       this.state.response ? [this.state.response] : undefined
                     }
                     disableQueryHeader={this.state.disableQueryHeader}
-                    onboardingStep={
-                      index === selectedSessionIndex
-                        ? this.props.onboardingStep
-                        : undefined
-                    }
-                    tether={this.props.tether}
-                    nextStep={this.props.nextStep}
                     onRef={this.setRef}
-                    autofillMutation={this.autofillMutation}
                     useVim={this.state.useVim && index === selectedSessionIndex}
                     isActive={index === selectedSessionIndex}
-                    permission={session.permission}
                     serviceInformation={this.state.serviceInformation}
                     tracingSupported={Boolean(this.state.tracingSupported)}
                   />
@@ -911,19 +865,7 @@ query ${operationName} {
   }
 
   public handleNewSession = (newIndexZero: boolean = false) => {
-    let session = this.createSession()
-    if (this.props.onboardingStep === 'STEP3_CREATE_MUTATION_TAB') {
-      session = Immutable.set(session, 'query', onboardingEmptyMutation)
-      setTimeout(() => {
-        this.setCursor({
-          line: 2,
-          ch: 15,
-        })
-      }, 5)
-      if (typeof this.props.nextStep === 'function') {
-        this.props.nextStep()
-      }
-    }
+    const session = this.createSession()
     if (session.query === defaultQuery) {
       setTimeout(() => {
         this.setCursor({
@@ -962,18 +904,6 @@ query ${operationName} {
         cb()
       }
     }, 100)
-  }
-
-  private autofillMutation = () => {
-    const sessionId = this.state.sessions[this.state.selectedSessionIndex].id
-    if (this.props.onboardingStep === 'STEP3_ENTER_MUTATION1_VALUES') {
-      this.setValueInSession(sessionId, 'query', onboardingFilledMutation1)
-    } else if (this.props.onboardingStep === 'STEP3_ENTER_MUTATION2_VALUE') {
-      this.setValueInSession(sessionId, 'query', onboardingFilledMutation2)
-    }
-    if (typeof this.props.nextStep === 'function') {
-      this.props.nextStep()
-    }
   }
 
   private toggleTheme = () => {
@@ -1149,13 +1079,6 @@ query ${operationName} {
   }
 
   private initSessions = () => {
-    if (
-      ['STEP3_UNCOMMENT_DESCRIPTION', 'STEP3_OPEN_PLAYGROUND'].indexOf(
-        this.props.onboardingStep || '',
-      ) > -1
-    ) {
-      return this.initOnboardingSessions()
-    }
     // defaulting to admin for deserialized sessions
     const sessions = this.storage.getSessions() // .map(session => Immutable.set(session, 'selectedViewer', 'ADMIN'))
 
@@ -1181,17 +1104,6 @@ query ${operationName} {
     }
 
     return [this.createSession()]
-  }
-
-  private initOnboardingSessions() {
-    const session = this.createSession()
-
-    return [
-      {
-        ...session,
-        query: onboardingQuery1,
-      },
-    ]
   }
 
   private saveSessions = () => {
