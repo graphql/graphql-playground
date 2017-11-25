@@ -235,7 +235,7 @@ export default class Tab extends React.PureComponent<Props, State> {
                 session.operationName ||
                 queryTypes.firstOperationName ||
                 (session.permission && 'Permission Editor') ||
-                'New Session'}
+                'New Tab'}
             </div>
           </Tether>
         ) : (
@@ -247,7 +247,7 @@ export default class Tab extends React.PureComponent<Props, State> {
               session.operationName ||
               queryTypes.firstOperationName ||
               (session.permission && 'Permission Editor') ||
-              'New Session'}
+              'New Tab'}
           </div>
         )}
         <div
