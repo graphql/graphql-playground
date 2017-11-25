@@ -289,9 +289,13 @@ export class Playground extends React.PureComponent<Props & DocsState, State> {
     return this.fetchSchema(this.getSimpleEndpoint(), additionalHeaders).then(
       simpleSchemaData => {
         if (!simpleSchemaData || simpleSchemaData.error) {
+          const errorMessage = `Schema could not be fetched.\nPlease check if the endpoint '${this.getSimpleEndpoint()}' is a valid GraphQL Endpoint.`
           this.setState({
             response: {
-              date: simpleSchemaData.error,
+              date:
+                simpleSchemaData && simpleSchemaData.error
+                  ? simpleSchemaData.error
+                  : errorMessage,
               time: new Date(),
             },
           } as State)
