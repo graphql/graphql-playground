@@ -48,3 +48,10 @@ export type GraphQLClient =
   | 'apollo'
   | 'graphql-request'
   | 'curl'
+
+export type Theme = 'dark' | 'light'
+export interface Response {
+  resultID: string
+  date: string
+  time: Date
+}

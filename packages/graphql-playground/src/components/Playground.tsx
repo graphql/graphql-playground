@@ -830,33 +830,11 @@ export class Playground extends React.PureComponent<Props & DocsState, State> {
     return this.props.endpoint.match(/(https?:\/\/.*?)\/?/)![1]
   }
 
-  get wsApiPrefix() {
-    const { endpoint } = this.props
-    const isDev = endpoint.indexOf('dev.graph.cool') > -1
-
-    // tslint:disable-next-line
-    if (isDev) {
-      return 'wss://dev.subscriptions.graph.cool/v1'
-    } else if (endpoint.includes('graph.cool')) {
-      return 'wss://subscriptions.graph.cool/v1'
-    }
-
-    return null
-  }
-
   private getWSEndpoint() {
     if (this.props.subscriptionsEndpoint) {
       return this.props.subscriptionsEndpoint
     }
-    if (this.wsApiPrefix) {
-      const projectId =
-        this.props.projectId ||
-        (this.props.endpoint.includes('graph.cool') &&
-          this.props.endpoint.split('/').slice(-1)[0])
-      return `${this.wsApiPrefix}/${projectId}`
-    } else {
-      return null
-    }
+    return null
   }
 
   private addToHistory(session: Session) {
