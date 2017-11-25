@@ -47,12 +47,14 @@ export const TabBar = withTheme<Props>(
             &.active {
               @p: .bgDarkBlue;
             }
+            border-bottom: 2px solid #172a3a;
           }
           .light .tab {
             background-color: #e7eaec;
             &.active {
               background-color: #eeeff0;
             }
+            border-bottom: 2px solid #eeeff0;
           }
           .tabbar {
             @p: .white, .z4;

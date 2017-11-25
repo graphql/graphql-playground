@@ -550,14 +550,6 @@ export class GraphQLEditor extends React.PureComponent<
                   onStop={this.handleStopQuery}
                   operations={this.state.operations}
                 />
-                ) : (
-                <ExecuteButton
-                  isRunning={Boolean(this.state.subscription)}
-                  onRun={this.handleRunQuery}
-                  onStop={this.handleStopQuery}
-                  operations={this.state.operations}
-                />
-                )}
                 {this.state.isWaitingForResponse && <Spinner />}
                 <Results
                   setRef={this.setResultComponent}

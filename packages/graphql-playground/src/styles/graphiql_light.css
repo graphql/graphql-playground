@@ -259,7 +259,6 @@
   border-bottom-right-radius: 2px;
   background: none !important;
   padding-top: 0;
-  max-height: calc(100vh - 138px);
 }
 
 .docs-graphiql .result-window > div,
