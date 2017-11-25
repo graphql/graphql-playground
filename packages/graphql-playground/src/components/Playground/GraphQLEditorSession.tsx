@@ -2,7 +2,6 @@ import * as React from 'react'
 import { ServiceInformation, Session } from '../../types'
 import GraphQLEditor from './GraphQLEditor'
 import { Header } from './HttpHeaders/HttpHeaders'
-import { Viewer } from '../Playground'
 
 export interface Props {
   session: Session
@@ -19,7 +18,6 @@ export interface Props {
   onEditOperationName: (sessionId: string, name: any) => any
   onClickCodeGeneration: any
   onChangeHeaders: (sessionId: string, headers: Header[]) => any
-  onChangeViewer: (sessionId: string, data: any) => void
   headers?: any[]
   disableQueryHeader?: boolean
   disableResize?: boolean
@@ -66,14 +64,12 @@ export default class GraphQLEditorSession extends React.PureComponent<
         showEndpoints={!isEndpoint}
         showDownloadJsonButton={true}
         showCodeGeneration={true}
-        selectedViewer={session.selectedViewer}
         storage={storage}
         query={session.query}
         variables={session.variables}
         operationName={session.operationName}
         headers={session.headers}
         onClickCodeGeneration={this.props.onClickCodeGeneration}
-        onChangeViewer={this.handleViewerChange}
         onEditOperationName={this.handleOperationNameChange}
         onEditVariables={this.handleVariableChange}
         onEditQuery={this.handleQueryChange}
@@ -94,10 +90,6 @@ export default class GraphQLEditorSession extends React.PureComponent<
 
   private setRef = (ref: any) => {
     this.props.onRef(this.props.index, ref)
-  }
-
-  private handleViewerChange = (viewer: Viewer) => {
-    this.props.onChangeViewer(this.props.session.id, viewer)
   }
 
   private handleOperationNameChange = (name: string) => {

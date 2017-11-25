@@ -8,7 +8,7 @@ import DocTypeSchema from './DocTypeSchema'
 import ScalarTypeSchema from './DocsTypes/ScalarType'
 import EnumTypeSchema from './DocsTypes/EnumTypeSchema'
 import UnionTypeSchema from './DocsTypes/UnionTypeSchema'
-import { serialize, getDeeperType } from './utils'
+import { getDeeperType, serialize } from '../util/stack'
 
 export interface Props {
   schema: any
@@ -94,35 +94,36 @@ export default class FieldDoc extends React.Component<Props, State> {
           markdown={field.description || ''}
         />
 
-        <div className="doc-category-title">
-          {'type details'}
-        </div>
+        <div className="doc-category-title">{'type details'}</div>
         {type.description &&
-          type.description.length > 0 &&
-          <div className="markdown-content">
-            <MarkdownContent
-              className="doc-description"
-              markdown={type.description || ''}
-            />
-          </div>}
+          type.description.length > 0 && (
+            <div className="markdown-content">
+              <MarkdownContent
+                className="doc-description"
+                markdown={type.description || ''}
+              />
+            </div>
+          )}
         {type instanceof GraphQLScalarType && <ScalarTypeSchema type={type} />}
         {type instanceof GraphQLEnumType && <EnumTypeSchema type={type} />}
-        {type instanceof GraphQLUnionType &&
-          <UnionTypeSchema type={type} schema={schema} />}
+        {type instanceof GraphQLUnionType && (
+          <UnionTypeSchema type={type} schema={schema} />
+        )}
 
-        {obj.fields.length > 0 &&
+        {obj.fields.length > 0 && (
           <DocTypeSchema
             type={type}
             fields={obj.fields}
             interfaces={obj.interfaces}
             level={level}
             onSetWidth={this.props.onSetWidth}
-          />}
+          />
+        )}
 
-        {obj.args.length > 0 &&
+        {obj.args.length > 0 && (
           <div>
             <div className="doc-category-title">arguments</div>
-            {obj.args.map((arg, index) =>
+            {obj.args.map((arg, index) => (
               <div key={arg.name}>
                 <div>
                   <Argument
@@ -132,14 +133,15 @@ export default class FieldDoc extends React.Component<Props, State> {
                     onSetWidth={this.props.onSetWidth}
                   />
                 </div>
-              </div>,
-            )}
-          </div>}
+              </div>
+            ))}
+          </div>
+        )}
 
-        {obj.implementations.length > 0 &&
+        {obj.implementations.length > 0 && (
           <div>
             <div className="doc-category-title">implementations</div>
-            {obj.implementations.map((data, index) =>
+            {obj.implementations.map((data, index) => (
               <TypeLink
                 key={data.name}
                 type={data}
@@ -147,9 +149,10 @@ export default class FieldDoc extends React.Component<Props, State> {
                 y={index + implementationsOffset}
                 onSetWidth={this.props.onSetWidth}
                 collapsable={true}
-              />,
-            )}
-          </div>}
+              />
+            ))}
+          </div>
+        )}
       </div>
     )
   }

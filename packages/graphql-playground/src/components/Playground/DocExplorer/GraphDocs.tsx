@@ -12,11 +12,16 @@ import {
   changeWidthDocs,
   changeKeyMove,
 } from '../../../actions/graphiql-docs'
-import { serialize, serializeRoot, getElement, getElementRoot } from './utils'
 import Spinner from '../../Spinner'
 import { columnWidth } from '../../../constants'
 import RootColumn from './RootColumn'
 import * as cn from 'classnames'
+import {
+  serialize,
+  getElementRoot,
+  serializeRoot,
+  getElement,
+} from '../util/stack'
 
 interface StateFromProps {
   navStack: any[]

@@ -1,5 +1,3 @@
-export type Viewer = 'ADMIN' | 'EVERYONE' | 'USER'
-
 export interface Session {
   id: string
   name?: string
@@ -12,7 +10,6 @@ export interface Session {
   subscriptionActive: boolean
 
   // additional props that are interactive in graphiql, these are not represented in graphiqls state
-  selectedViewer: Viewer
   queryTypes: QueryTypes
   starred?: boolean
   date: Date

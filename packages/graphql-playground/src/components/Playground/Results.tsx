@@ -21,7 +21,7 @@ export default class Results extends React.Component<Props, {}> {
       >
         <style jsx={true}>{`
           .result-window {
-            @p: .bgDarkBlue, .nosb, .pt38;
+            @p: .bgDarkBlue, .nosb;
           }
 
           .result-window.disableResize :global(.CodeMirror-gutters) {

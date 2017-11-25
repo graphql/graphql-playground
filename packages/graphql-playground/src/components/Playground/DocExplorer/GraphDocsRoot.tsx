@@ -1,6 +1,6 @@
 import * as React from 'react'
 import TypeLink from './TypeLink'
-import { serializeRoot } from './utils'
+import { serializeRoot } from '../util/stack'
 
 export interface Props {
   schema: any
@@ -29,20 +29,22 @@ export default class GraphDocsRoot extends React.PureComponent<Props, {}> {
           offset={0}
           onSetWidth={onSetWidth}
         />
-        {obj.mutations.length > 0 &&
+        {obj.mutations.length > 0 && (
           <ShowRootType
             name="Mutations"
             fields={obj.mutations}
             offset={obj.queries.length}
             onSetWidth={onSetWidth}
-          />}
-        {obj.subscriptions.length > 0 &&
+          />
+        )}
+        {obj.subscriptions.length > 0 && (
           <ShowRootType
             name="Subscriptions"
             fields={obj.subscriptions}
             offset={obj.queries.length + obj.mutations.length}
             onSetWidth={onSetWidth}
-          />}
+          />
+        )}
       </div>
     )
   }
@@ -58,12 +60,10 @@ interface ShowRootTypeProps {
 function ShowRootType({ name, fields, offset, onSetWidth }: ShowRootTypeProps) {
   return (
     <div>
-      <div className="doc-category-title">
-        {name}
-      </div>
+      <div className="doc-category-title">{name}</div>
       {fields
         .filter(field => !field.isDeprecated)
-        .map((field, index) =>
+        .map((field, index) => (
           <TypeLink
             key={field.name}
             type={field}
@@ -71,8 +71,8 @@ function ShowRootType({ name, fields, offset, onSetWidth }: ShowRootTypeProps) {
             y={offset + index}
             onSetWidth={onSetWidth}
             collapsable={true}
-          />,
-        )}
+          />
+        ))}
     </div>
   )
 }

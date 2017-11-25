@@ -16,7 +16,6 @@ import { SubscriptionClient } from 'subscriptions-transport-ws'
 import isQuerySubscription from './Playground/util/isQuerySubscription'
 import HistoryPopup from './HistoryPopup'
 import * as cx from 'classnames'
-import SelectUserPopup from './SelectUserPopup'
 import calc from 'calculate-size'
 import CodeGenerationPopup from './CodeGenerationPopup/CodeGenerationPopup'
 import GraphDocs from './Playground/DocExplorer/GraphDocs'
@@ -24,20 +23,15 @@ import Settings from './Settings'
 import { connect } from 'react-redux'
 import { DocsState } from '../reducers/graphiql-docs'
 import GraphQLEditorSession from './Playground/GraphQLEditorSession'
-import {
-  getElementIndex,
-  getRootMap,
-  getDeeperType,
-} from './Playground/DocExplorer/utils'
 import { setStacks } from '../actions/graphiql-docs'
 import { isEqual, mapValues } from 'lodash'
 import Share from './Share'
 import NewPermissionTab from './Permissions/NewPermissionTab'
 import { serviceInformationQuery } from './constants'
 import styled, { ThemeProvider, theme as styledTheme } from '../styled'
+import { getNewStack, getRootMap } from './Playground/util/stack'
 
 export type Theme = 'dark' | 'light'
-export type Viewer = 'ADMIN' | 'EVERYONE' | 'USER'
 export interface Response {
   resultID: string
   date: string
@@ -74,7 +68,6 @@ export interface State {
   history: Session[]
   adminAuthToken?: string
   response?: Response
-  selectUserOpen: boolean
   userFields: string[]
   selectUserSessionId?: string
   codeGenerationPopupOpen: boolean
@@ -153,7 +146,6 @@ export class Playground extends React.PureComponent<Props & DocsState, State> {
           props.adminAuthToken.length > 0 &&
           props.adminAuthToken) ||
         localStorage.getItem('token'),
-      selectUserOpen: false,
       selectUserSessionId: undefined,
       codeGenerationPopupOpen: false,
       disableQueryHeader: false,
@@ -314,12 +306,6 @@ export class Playground extends React.PureComponent<Props & DocsState, State> {
       })
     }
 
-    if (session.selectedViewer === 'ADMIN' && this.state.adminAuthToken) {
-      connectionParams.Authorization = `Bearer ${this.state.adminAuthToken}`
-    } else if (session.selectedViewer === 'USER' && session.selectedUserToken) {
-      connectionParams.Authorization = `Bearer ${session.selectedUserToken}`
-    }
-
     if (this.wsConnections[session.id]) {
       this.wsConnections[session.id].unsubscribeAll()
     }
@@ -349,58 +335,10 @@ export class Playground extends React.PureComponent<Props & DocsState, State> {
     const rootMap = getRootMap(schema)
     const stacks = this.props.navStack
       .map(stack => {
-        return this.getNewStack(rootMap, schema, stack)
+        return getNewStack(rootMap, schema, stack)
       })
       .filter(s => s)
     this.props.setStacks!(stacks)
-  }
-  getNewStack(root, schema, stack) {
-    const path = stack.field.path
-    const splittedPath = path.split('/')
-    let pointer: any = null
-    let count = 0
-    let lastPointer: any = null
-    let y = -1
-    while (splittedPath.length > 0) {
-      const currentPath: string = splittedPath.shift()!
-      if (count === 0) {
-        pointer = root[currentPath]
-        y = Object.keys(root).indexOf(currentPath)
-      } else {
-        const argFound = pointer.args.find(arg => arg.name === currentPath)
-        lastPointer = pointer
-        if (argFound) {
-          pointer = argFound
-        } else {
-          if (pointer.type.ofType) {
-            pointer = getDeeperType(pointer.type.ofType)
-          }
-          if (pointer.type) {
-            pointer = pointer.type
-          }
-          pointer =
-            pointer.getFields()[currentPath] ||
-            pointer.getInterfaces().find(i => i.name === currentPath)
-        }
-      }
-      if (lastPointer) {
-        y = getElementIndex(schema, lastPointer, pointer)
-      }
-      count++
-    }
-
-    if (!pointer) {
-      return null
-    }
-
-    pointer.path = path
-    pointer.parent = lastPointer
-
-    return {
-      ...stack,
-      y,
-      field: pointer,
-    }
   }
   extractUserField(simpleSchema, userModelName?: string) {
     const modelName = userModelName || this.state.userModelName
@@ -548,18 +486,11 @@ export class Playground extends React.PureComponent<Props & DocsState, State> {
   render() {
     const { sessions, selectedSessionIndex, theme } = this.state
     const { isEndpoint } = this.props
-    // {
-    //   'blur': this.state.historyOpen,
-    // },
-    if (this.state.selectUserOpen && !this.props.adminAuthToken) {
-      throw new Error(
-        'The "Select User" Popup is open, but no admin token is provided.',
-      )
-    }
     const selectedEndpointUrl = isEndpoint
       ? location.href
       : this.getSimpleEndpoint()
     const isGraphcoolUrl = this.isGraphcoolUrl(selectedEndpointUrl)
+
     return (
       <ThemeProvider theme={{ ...styledTheme, mode: theme }}>
         <OldThemeProvider theme={this.state.theme}>
@@ -605,7 +536,6 @@ export class Playground extends React.PureComponent<Props & DocsState, State> {
                     isEndpoint={Boolean(isEndpoint)}
                     storage={this.storage.getSessionStorage(session.id)}
                     onClickCodeGeneration={this.handleClickCodeGeneration}
-                    onChangeViewer={this.handleViewerChange}
                     onEditOperationName={this.handleOperationNameChange}
                     onEditVariables={this.handleVariableChange}
                     onEditQuery={this.handleQueryChange}
@@ -672,43 +602,12 @@ export class Playground extends React.PureComponent<Props & DocsState, State> {
                 isGraphcool={isGraphcoolUrl}
               />
             )}
-            {this.props.adminAuthToken &&
-              this.state.selectUserOpen &&
-              this.renderUserPopup()}
             {this.state.codeGenerationPopupOpen &&
               this.renderCodeGenerationPopup()}
           </PlaygroundWrapper>
         </OldThemeProvider>
       </ThemeProvider>
     )
-  }
-
-  renderUserPopup() {
-    return (
-      <SelectUserPopup
-        isOpen={this.state.selectUserOpen}
-        onRequestClose={this.handleCloseSelectUser}
-        adminAuthToken={this.props.adminAuthToken!}
-        userFields={this.state.userFields}
-        onSelectUser={this.handleUserSelection}
-        endpointUrl={this.getSimpleEndpoint()}
-        modelNames={this.getModelNames()}
-        userModelName={this.state.userModelName}
-        onChangeUserModelName={this.handleUserModelChange}
-      />
-    )
-  }
-
-  handleUserModelChange = (userModelName: string) => {
-    const userFields = this.extractUserField(
-      this.state.schemaCache,
-      userModelName,
-    )
-
-    this.setState({
-      userModelName,
-      userFields,
-    })
   }
 
   renderCodeGenerationPopup() {
@@ -925,60 +824,6 @@ query ${operationName} {
     this.setState({ codeGenerationPopupOpen: false } as State)
   }
 
-  private handleUserSelection = user => {
-    const systemApi = this.getSystemEndpoint()
-
-    const query = `
-      mutation {
-        generateNodeToken(input: {
-          rootToken: "${this.props.adminAuthToken}"
-          serviceId: "${this.extractServiceId()}"
-          nodeId: "${user.id}"
-          modelName: "${this.state.userModelName}"
-          clientMutationId: ""
-        }) {
-          clientMutationId
-          token
-        }
-      }
-    `
-
-    fetch(systemApi, {
-      method: 'post',
-      body: JSON.stringify({ query }),
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${this.state.adminAuthToken}`,
-      },
-    })
-      .then(res => res.json())
-      .then(res => {
-        const { token } = res.data.generateNodeToken
-
-        if (token && this.state.selectUserSessionId) {
-          const session = this.state.sessions[this.state.selectedSessionIndex]
-          let newHeaders = session.headers
-            ? session.headers.filter(h => h.name !== 'Authorization')
-            : []
-          newHeaders = newHeaders.concat({
-            name: 'Authorization',
-            value: `Bearer ${token}`,
-          })
-          this.setValueInSession(
-            this.state.selectUserSessionId,
-            'headers',
-            newHeaders,
-            () => {
-              const concreteSession = this.state.sessions[
-                this.state.selectedSessionIndex
-              ]
-              this.resetSubscription(concreteSession)
-            },
-          )
-        }
-      })
-  }
-
   private resetSubscriptions() {
     this.state.sessions.forEach(session => this.resetSubscription(session))
   }
@@ -1178,53 +1023,6 @@ query ${operationName} {
     this.setValueInSession(sessionId, 'headers', headers)
   }
 
-  private handleViewerChange = (sessionId: string, viewer: Viewer) => {
-    const handleUser = () => {
-      const session = this.state.sessions.find(sess => sess.id === sessionId)!
-      if (viewer === 'USER') {
-        // give the user some time to realize whats going on
-        setTimeout(() => {
-          this.setState({
-            selectUserOpen: true,
-            selectUserSessionId: sessionId,
-          } as State)
-        }, 300)
-      }
-
-      if (session) {
-        this.resetSubscription(session)
-      } else {
-        throw new Error('session not found for viewer change')
-      }
-    }
-
-    this.setValueInSession(sessionId, 'selectedViewer', viewer, () => {
-      const session = this.state.sessions.find(sess => sess.id === sessionId)!
-      let headers: any = session.headers
-        ? session.headers.filter(h => h.name !== 'Authorization')
-        : []
-      if (viewer === 'ADMIN') {
-        headers = headers.concat({
-          name: 'Authorization',
-          value: `Bearer ${this.props.adminAuthToken}`,
-        })
-      }
-      if (viewer === 'ADMIN' || viewer === 'EVERYONE') {
-        this.setValueInSession(sessionId, 'headers', headers, () => {
-          handleUser()
-        })
-      } else {
-        handleUser()
-      }
-    })
-  }
-
-  private handleCloseSelectUser = () => {
-    this.setState({
-      selectUserOpen: false,
-    } as State)
-  }
-
   private handleVariableChange = (sessionId: string, variables: string) => {
     this.setValueInSession(sessionId, 'variables', variables)
   }
@@ -1315,8 +1113,7 @@ query ${operationName} {
       item =>
         session.query === item.query &&
         session.variables === item.variables &&
-        session.operationName === item.operationName &&
-        session.selectedViewer === item.selectedViewer,
+        session.operationName === item.operationName,
     )
     return Boolean(duplicate)
   }
@@ -1363,27 +1160,6 @@ query ${operationName} {
     const { query, operationName } = graphQLParams
 
     if (!query.includes('IntrospectionQuery')) {
-      if (
-        [
-          'STEP3_RUN_QUERY1',
-          'STEP3_RUN_MUTATION1',
-          'STEP3_RUN_MUTATION2',
-          'STEP3_RUN_QUERY2',
-        ].indexOf(this.props.onboardingStep || '') > -1 &&
-        typeof this.props.nextStep === 'function'
-      ) {
-        if (this.props.onboardingStep === 'STEP3_RUN_QUERY2') {
-          setTimeout(() => {
-            // typescript wants to be happy...
-            if (typeof this.props.nextStep === 'function') {
-              this.props.nextStep()
-            }
-          }, 2000)
-        } else {
-          this.props.nextStep()
-        }
-      }
-
       if (!this.historyIncludes(session)) {
         setImmediate(() => {
           this.addToHistory(session)

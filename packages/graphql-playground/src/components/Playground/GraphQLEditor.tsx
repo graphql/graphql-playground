@@ -22,7 +22,6 @@ import {
   PermissionQueryArgument,
   PermissionSession,
   ServiceInformation,
-  Viewer,
 } from '../../types'
 import { download } from './util/index'
 import ResultHeader from './ResultHeader'
@@ -64,7 +63,6 @@ export interface Props {
   onClickCodeGeneration?: any
   onChangeHeaders?: (headers: Header[]) => any
   getDefaultFieldNames?: () => any
-  onChangeViewer?: (data: any) => void
   headers?: any[]
   showViewAs?: boolean
   showSelectUser?: boolean
@@ -74,7 +72,6 @@ export interface Props {
   showResponseTitle?: boolean
   showDownloadJsonButton?: boolean
   disableQueryHeader?: boolean
-  selectedViewer?: Viewer
   queryOnly?: boolean
   showDocs?: boolean
   rerenderQuery?: boolean
@@ -537,10 +534,6 @@ export class GraphQLEditor extends React.PureComponent<
                   this.props.showViewAs &&
                   !this.props.permission && (
                     <ResultHeader
-                      showViewAs={this.props.showViewAs}
-                      showSelectUser={this.props.showSelectUser}
-                      selectedViewer={this.props.selectedViewer}
-                      onChangeViewer={this.props.onChangeViewer}
                       showResponseTitle={this.props.showResponseTitle}
                     />
                   )}

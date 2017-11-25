@@ -17,7 +17,7 @@ const HistoryItems = ({
   onItemSelect,
   selectedItemIndex,
   onItemStarToggled,
-}: Props) =>
+}: Props) => (
   <div className="history-items">
     <style jsx={true}>{`
       .history-items {
@@ -71,7 +71,7 @@ const HistoryItems = ({
         @inherit: .ml6;
       }
     `}</style>
-    {items.map((item, index) =>
+    {items.map((item, index) => (
       <div
         key={item.id}
         className={cx('item', {
@@ -96,41 +96,34 @@ const HistoryItems = ({
                 item.queryTypes.firstOperationName ||
                 'New Session'}
             </div>
-            {item.queryTypes.query &&
-              <div className="operation-icon query">Q</div>}
-            {item.queryTypes.mutation &&
-              <div className="operation-icon mutation">M</div>}
-            {item.queryTypes.subscription &&
-              <div className="operation-icon subscription">S</div>}
-            <div className="viewer">
-              {item.selectedViewer === 'EVERYONE' &&
-                <Icon
-                  src={require('graphcool-styles/icons/fill/world.svg')}
-                  color={$v.gray30}
-                  width={18}
-                  height={18}
-                />}
-              {item.selectedViewer === 'USER' &&
-                <Icon
-                  src={require('graphcool-styles/icons/fill/user.svg')}
-                  color={$v.gray30}
-                  width={18}
-                  height={18}
-                />}
-            </div>
+            {item.queryTypes.query && (
+              <div className="operation-icon query">Q</div>
+            )}
+            {item.queryTypes.mutation && (
+              <div className="operation-icon mutation">M</div>
+            )}
+            {item.queryTypes.subscription && (
+              <div className="operation-icon subscription">S</div>
+            )}
           </div>
         </div>
         <div className="right">
-          {item.date &&
+          {item.date && (
             <div className="date">
-              {typeof item.date.getMonth === 'function' &&
+              {typeof item.date.getMonth === 'function' && (
                 <span>
-                  {item.date.getMonth() + 1}/{item.date.getDate()}/{item.date.getFullYear().toString().slice(2, 4)}
-                </span>}
-            </div>}
+                  {item.date.getMonth() + 1}/{item.date.getDate()}/{item.date
+                    .getFullYear()
+                    .toString()
+                    .slice(2, 4)}
+                </span>
+              )}
+            </div>
+          )}
         </div>
-      </div>,
-    )}
+      </div>
+    ))}
   </div>
+)
 
 export default HistoryItems

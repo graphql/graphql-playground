@@ -1,23 +1,11 @@
 import * as React from 'react'
-import ViewerChooser from './ResultHeader/ViewerChooser'
-import { Viewer } from '../../types'
 import * as cx from 'classnames'
 
 export interface Props {
-  selectedViewer?: Viewer
-  onChangeViewer?: (data: any) => void
-  showViewAs?: boolean
   showResponseTitle?: boolean
-  showSelectUser?: boolean
 }
 
-const ResultHeader = ({
-  selectedViewer,
-  onChangeViewer,
-  showViewAs,
-  showResponseTitle,
-  showSelectUser,
-}: Props) =>
+const ResultHeader = ({ showResponseTitle }: Props) => (
   <div className={cx('result-header subscription')}>
     <style jsx={true}>{`
       .result-header {
@@ -33,7 +21,7 @@ const ResultHeader = ({
         height: 75px;
         &.subscription {
           &:after {
-            content: "";
+            content: '';
             position: absolute;
             bottom: -25px;
             left: 0;
@@ -56,15 +44,8 @@ const ResultHeader = ({
       <div>
         {showResponseTitle && <div className="editor-title">Response</div>}
       </div>
-      {showViewAs &&
-        selectedViewer &&
-        onChangeViewer &&
-        <ViewerChooser
-          showSelectUser={showSelectUser}
-          selectedViewer={selectedViewer}
-          onChangeViewer={onChangeViewer}
-        />}
     </div>
   </div>
+)
 
 export default ResultHeader
