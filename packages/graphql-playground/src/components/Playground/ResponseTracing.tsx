@@ -36,6 +36,7 @@ const textColor = theme('mode', {
 const TracingWrapper = styled.div`
   padding-top: 16px;
   padding-left: 25px;
+  padding-right: 25px;
   color: ${textColor};
   overflow: auto;
 `
@@ -56,7 +57,6 @@ const TracingRows = styled.div`
 export default class ResponseTracing extends React.Component<Props, {}> {
   render() {
     const { tracing, tracingSupported, startTime, endTime } = this.props
-    // console.log(this.props)
     const requestMs =
       tracing && startTime
         ? Math.abs(new Date(tracing.startTime).getTime() - startTime.getTime())
@@ -66,14 +66,6 @@ export default class ResponseTracing extends React.Component<Props, {}> {
         ? Math.abs(endTime.getTime() - new Date(tracing.endTime).getTime())
         : 0
     const requestDuration = 1000 * 1000 * requestMs
-    const maxLeft = tracing
-      ? tracing.execution.resolvers.reduce((max, curr) => {
-          if (curr.startOffset > max) {
-            return curr.startOffset
-          }
-          return max
-        }, 0)
-      : 0
     return (
       <TracingWrapper>
         {tracing ? (
@@ -93,7 +85,7 @@ export default class ResponseTracing extends React.Component<Props, {}> {
             ))}
             <TracingRow
               path={['Response']}
-              startOffset={maxLeft + requestDuration}
+              startOffset={tracing.duration + requestDuration}
               duration={1000 * 1000 * responseMs}
             />
           </TracingRows>
