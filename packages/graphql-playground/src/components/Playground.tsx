@@ -233,15 +233,15 @@ export class Playground extends React.PureComponent<Props & DocsState, State> {
       headers.forEach(header => (additionalHeaders[header.name] = header.value))
     }
 
-    return this.fetchSchema(this.getSimpleEndpoint(), additionalHeaders).then(
-      simpleSchemaData => {
-        if (!simpleSchemaData || simpleSchemaData.error) {
-          const errorMessage = `Schema could not be fetched.\nPlease check if the endpoint '${this.getSimpleEndpoint()}' is a valid GraphQL Endpoint.`
+    return this.fetchSchema(this.getEndpoint(), additionalHeaders).then(
+      schemaData => {
+        if (!schemaData || schemaData.error) {
+          const errorMessage = `Schema could not be fetched.\nPlease check if the endpoint '${this.getEndpoint()}' is a valid GraphQL Endpoint.`
           this.setState({
             response: {
               date:
-                simpleSchemaData && simpleSchemaData.error
-                  ? simpleSchemaData.error
+                schemaData && schemaData.error
+                  ? schemaData.error
                   : errorMessage,
               time: new Date(),
             },
@@ -249,25 +249,24 @@ export class Playground extends React.PureComponent<Props & DocsState, State> {
           return
         }
 
-        if (isEqual(this.rawSchemaCache, simpleSchemaData.data)) {
+        if (isEqual(this.rawSchemaCache, schemaData.data)) {
           return
         }
 
-        this.rawSchemaCache = simpleSchemaData.data
+        this.rawSchemaCache = schemaData.data
 
-        if (!simpleSchemaData.data) {
+        if (!schemaData.data) {
           return
         }
 
-        const simpleSchema = buildClientSchema(simpleSchemaData.data)
+        const schema = buildClientSchema(schemaData.data)
 
-        this.renewStack(simpleSchema)
+        this.renewStack(schema)
 
         const tracingSupported =
-          simpleSchemaData.extensions &&
-          Boolean(simpleSchemaData.extensions.tracing)
+          schemaData.extensions && Boolean(schemaData.extensions.tracing)
         this.setState({
-          schemaCache: simpleSchema,
+          schemaCache: schema,
           tracingSupported,
         } as State)
       },
@@ -361,9 +360,7 @@ export class Playground extends React.PureComponent<Props & DocsState, State> {
   render() {
     const { sessions, selectedSessionIndex, theme } = this.state
     const { isEndpoint } = this.props
-    const selectedEndpointUrl = isEndpoint
-      ? location.href
-      : this.getSimpleEndpoint()
+    const selectedEndpointUrl = isEndpoint ? location.href : this.getEndpoint()
     const isGraphcoolUrl = this.isGraphcoolUrl(selectedEndpointUrl)
 
     return (
@@ -473,9 +470,7 @@ export class Playground extends React.PureComponent<Props & DocsState, State> {
     const { sessions, selectedSessionIndex } = this.state
     const { isEndpoint } = this.props
     const selectedSession = sessions[selectedSessionIndex]
-    const selectedEndpointUrl = isEndpoint
-      ? location.href
-      : this.getSimpleEndpoint()
+    const selectedEndpointUrl = isEndpoint ? location.href : this.getEndpoint()
     return (
       <CodeGenerationPopup
         endpointUrl={selectedEndpointUrl}
@@ -840,7 +835,7 @@ export class Playground extends React.PureComponent<Props & DocsState, State> {
     return endpoint.includes('api.graph.cool')
   }
 
-  private getSimpleEndpoint() {
+  private getEndpoint() {
     if (this.props.isEndpoint) {
       return location.pathname
     }
@@ -951,7 +946,7 @@ export class Playground extends React.PureComponent<Props & DocsState, State> {
       }
     }
 
-    const endpoint = this.getSimpleEndpoint()
+    const endpoint = this.getEndpoint()
 
     let headers: any = {
       'Content-Type': 'application/json',
