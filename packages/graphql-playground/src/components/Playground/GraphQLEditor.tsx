@@ -662,7 +662,7 @@ export class GraphQLEditor extends React.PureComponent<
                     style={{ cursor: tracingOpen ? 'row-resize' : 'n-resize' }}
                     onMouseDown={this.handleTracingResizeStart}
                   >
-                    {'Response Tracing'}
+                    Tracing
                   </div>
                   <ReponseTracing
                     tracing={
