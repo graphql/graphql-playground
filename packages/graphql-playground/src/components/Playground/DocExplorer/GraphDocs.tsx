@@ -147,8 +147,10 @@ class GraphDocs extends React.Component<
             background: rgba(0, 0, 0, 0.06);
           }
           .graph-docs {
-            @p: .absolute, .h100;
+            @p: .absolute;
             right: -2px;
+            top: 57px;
+            height: calc(100% - 57px);
           }
           .graph-docs.open {
             z-index: 2000;
