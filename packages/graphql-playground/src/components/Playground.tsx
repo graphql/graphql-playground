@@ -335,6 +335,7 @@ export class Playground extends React.PureComponent<Props & DocsState, State> {
   fetchSchema(endpointUrl: string, headers: any = {}) {
     return fetch(endpointUrl, {
       method: 'post',
+      credentials: 'include',
       headers: {
         'Content-Type': 'application/json',
         'X-Apollo-Tracing': '1',
