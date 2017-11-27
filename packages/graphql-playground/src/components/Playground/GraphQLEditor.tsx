@@ -30,6 +30,7 @@ import { setStacks } from '../../actions/graphiql-docs'
 import { getRootMap, getNewStack } from './util/stack'
 import { getSessionDocs } from '../../selectors/sessionDocs'
 import { styled } from '../../styled/index'
+import TopBar from './TopBar/TopBar'
 
 /**
  * The top-level React component for GraphQLEditor, intended to encompass the entire
@@ -55,6 +56,9 @@ export interface Props {
   onToggleDocs?: (value: boolean) => any
   onClickCodeGeneration?: any
   onChangeHeaders?: (headers: Header[]) => any
+  onClickHistory?: () => void
+  onChangeEndpoint?: (value: string) => void
+  onClickShare?: () => void
   getDefaultFieldNames?: () => any
   showCodeGeneration?: boolean
   showEndpoints?: boolean
@@ -109,6 +113,7 @@ export interface State {
   responseExtensions: any
   currentQueryStartTime?: Date
   currentQueryEndTime?: Date
+  nextQueryStartTime?: Date
   tracingSupported?: boolean
 }
 
@@ -440,6 +445,15 @@ export class GraphQLEditor extends React.PureComponent<
           }
         `}</style>
         <div className="editorWrap">
+          <TopBar
+            endpoint={this.props.session.endpoint}
+            endpointDisabled={false}
+            onChangeEndpoint={this.props.onChangeEndpoint}
+            onClickHistory={this.props.onClickHistory}
+            curl={this.getCurl()}
+            onClickPrettify={this.handlePrettifyQuery}
+            onClickShare={this.props.onClickShare}
+          />
           <div
             ref={this.setEditorBarComponent}
             className="editorBar"
@@ -548,6 +562,21 @@ export class GraphQLEditor extends React.PureComponent<
         />
       </div>
     )
+  }
+
+  getCurl = () => {
+    const data = JSON.stringify({
+      query: this.state.query,
+      variables: this.state.variables,
+      operationName: this.state.operationName,
+    })
+    return `curl '${
+      this.props.session.endpoint
+    }' -H 'Origin: ${location.origin ||
+      this.props.session
+        .endpoint}' -H 'Accept-Encoding: gzip, deflate, br' -H 'Content-Type: application/json' -H 'Accept: */*' -H 'Connection: keep-alive' -H 'DNT: 1' --data-binary '${
+      data
+    }' --compressed`
   }
 
   setQueryResizer = ref => {
@@ -771,7 +800,7 @@ export class GraphQLEditor extends React.PureComponent<
         isWaitingForResponse: true,
         responses: [{ date: null, time: new Date() }],
         operationName,
-        currentQueryStartTime: new Date(),
+        nextQueryStartTime: new Date(),
       } as State)
 
       // _fetchQuery may return a subscription.
@@ -808,12 +837,16 @@ export class GraphQLEditor extends React.PureComponent<
                 { date: response, time: new Date(), resultID: this.resultID++ },
               ]
             }
-            this.setState({
-              isWaitingForResponse: false,
-              responses,
-              responseExtensions: extensions,
-              currentQueryEndTime: new Date(),
-            } as State)
+            this.setState(state => {
+              return {
+                isWaitingForResponse: false,
+                responses,
+                responseExtensions: extensions,
+                currentQueryStartTime: state.nextQueryStartTime,
+                nextQueryStartTime: undefined,
+                currentQueryEndTime: new Date(),
+              } as State
+            })
           }
         },
       )

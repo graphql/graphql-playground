@@ -39,6 +39,8 @@ const TracingWrapper = styled.div`
   padding-right: 25px;
   color: ${textColor};
   overflow: auto;
+  position: relative;
+  height: 100%;
 `
 
 const ReRun = styled.div`
@@ -50,8 +52,14 @@ const NotSupported = styled.div`
 `
 
 const TracingRows = styled.div`
-  margin-left: 100px;
+  padding-left: 100px;
   padding-bottom: 100px;
+  position: absolute;
+  overflow: auto;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
 `
 
 export default class ResponseTracing extends React.Component<Props, {}> {

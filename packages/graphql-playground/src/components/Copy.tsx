@@ -1,10 +1,12 @@
 import * as React from 'react'
 import { $v } from 'graphcool-styles'
 import * as CopyToClipboard from 'react-copy-to-clipboard'
+import * as cn from 'classnames'
 
 export interface Props {
   text: string
   color?: string
+  className?: string
 }
 
 export interface State {
@@ -27,14 +29,14 @@ export default class Copy extends React.Component<Props, State> {
   }
 
   render() {
-    const { text } = this.props
+    const { text, className } = this.props
     let { color } = this.props
 
     color = color || $v.blue
 
     return (
       <CopyToClipboard text={text} onCopy={this.onCopy}>
-        <div className="copy">
+        <div className={cn('copy', className)}>
           <style jsx={true}>{`
             .copy {
               @p: .relative;
@@ -62,10 +64,11 @@ export default class Copy extends React.Component<Props, State> {
               animation: copying 700ms linear;
             }
           `}</style>
-          {this.state.copied &&
+          {this.state.copied && (
             <div className="indicator" style={{ color }}>
               Copied
-            </div>}
+            </div>
+          )}
           {this.props.children}
         </div>
       </CopyToClipboard>

@@ -19,6 +19,9 @@ export interface Props {
   onEditOperationName: (sessionId: string, name: any) => any
   onClickCodeGeneration: any
   onChangeHeaders: (sessionId: string, headers: Header[]) => any
+  onClickHistory: () => void
+  onChangeEndpoint: (sessionId: string, value: string) => void
+  onClickShare: (sessionId: string) => void
   headers?: any[]
   disableQueryHeader?: boolean
   disableResize?: boolean
@@ -75,6 +78,9 @@ export default class GraphQLEditorSession extends React.PureComponent<
         disableAutofocus={!isActive}
         session={session}
         schemaFetcher={schemaFetcher}
+        onClickHistory={this.handleClickHistory}
+        onChangeEndpoint={this.handleChangeEndpoint}
+        onClickShare={this.handleClickShare}
       />
     )
   }
@@ -97,5 +103,17 @@ export default class GraphQLEditorSession extends React.PureComponent<
 
   private handleChangeHeaders = (headers: any[]) => {
     this.props.onChangeHeaders(this.props.session.id, headers)
+  }
+
+  private handleClickHistory = () => {
+    this.props.onClickHistory()
+  }
+
+  private handleChangeEndpoint = (endpoint: string) => {
+    this.props.onChangeEndpoint(this.props.session.id, endpoint)
+  }
+
+  private handleClickShare = () => {
+    this.props.onClickShare(this.props.session.id)
   }
 }

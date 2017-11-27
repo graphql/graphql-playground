@@ -60,7 +60,7 @@ export interface State {
   schemaCache: any
   historyOpen: boolean
   history: Session[]
-  adminAuthToken?: string
+  adminAuthToken: string | null
   response?: Response
   selectUserSessionId?: string
   codeGenerationPopupOpen: boolean
@@ -109,9 +109,9 @@ export class Playground extends React.PureComponent<Props & DocsState, State> {
     },
   )
 
-  constructor(props) {
+  constructor(props: Props & DocsState) {
     super(props)
-    this.storage = new PlaygroundStorage(props.endpoint)
+    this.storage = new PlaygroundStorage(this.getStorageKey(props))
     if (props.session) {
       this.storage.setState(props.session)
     }
@@ -165,6 +165,11 @@ export class Playground extends React.PureComponent<Props & DocsState, State> {
     }
   }
 
+  getStorageKey(props: Props = this.props) {
+    const multi = !props.graphqlConfig
+    return multi ? 'multi' : props.endpoint
+  }
+
   componentWillMount() {
     // look, if there is a session. if not, initiate one.
     this.initSessions()
@@ -195,7 +200,7 @@ export class Playground extends React.PureComponent<Props & DocsState, State> {
       this.saveSessions()
       this.saveHistory()
       this.storage.saveProject()
-      this.storage = new PlaygroundStorage(this.props.endpoint)
+      this.storage = new PlaygroundStorage(this.getStorageKey())
       const sessions = this.initSessions()
       this.setState(
         {
@@ -299,6 +304,9 @@ export class Playground extends React.PureComponent<Props & DocsState, State> {
                     onEditVariables={this.handleVariableChange}
                     onEditQuery={this.handleQueryChange}
                     onChangeHeaders={this.handleChangeHeaders}
+                    onClickHistory={this.handleOpenHistory}
+                    onChangeEndpoint={this.handleChangeEndpoint}
+                    onClickShare={this.share}
                     responses={
                       this.state.response ? [this.state.response] : undefined
                     }
@@ -341,23 +349,32 @@ export class Playground extends React.PureComponent<Props & DocsState, State> {
               reshare={this.state.changed}
               isSharingAuthorization={this.isSharingAuthorization()}
             />
-            {this.state.historyOpen && (
-              <HistoryPopup
-                isOpen={this.state.historyOpen}
-                onRequestClose={this.handleCloseHistory}
-                historyItems={this.state.history}
-                onItemStarToggled={this.handleItemStarToggled}
-                fetcherCreater={this.fetcher}
-                onCreateSession={this.handleCreateSession}
-                isGraphcool={isGraphcoolUrl}
-                schemaFetcher={this.schemaFetcher}
-              />
-            )}
+            {this.state.historyOpen && this.renderHistoryPopup()}
             {this.state.codeGenerationPopupOpen &&
               this.renderCodeGenerationPopup()}
           </PlaygroundWrapper>
         </OldThemeProvider>
       </ThemeProvider>
+    )
+  }
+
+  renderHistoryPopup() {
+    const { sessions, selectedSessionIndex } = this.state
+    const selectedSession = sessions[selectedSessionIndex]
+    const historyItems = this.state.history.filter(
+      s => s.endpoint === selectedSession.endpoint,
+    )
+
+    return (
+      <HistoryPopup
+        isOpen={this.state.historyOpen}
+        onRequestClose={this.handleCloseHistory}
+        historyItems={historyItems}
+        onItemStarToggled={this.handleItemStarToggled}
+        fetcherCreater={this.fetcher}
+        onCreateSession={this.handleCreateSession}
+        schemaFetcher={this.schemaFetcher}
+      />
     )
   }
 
@@ -605,6 +622,10 @@ export class Playground extends React.PureComponent<Props & DocsState, State> {
     })
   }
 
+  private handleChangeEndpoint = (sessionId: string, endpoint: string) => {
+    this.setValueInSession(sessionId, 'endpoint', endpoint)
+  }
+
   private initSessions = () => {
     // defaulting to admin for deserialized sessions
     const sessions = this.storage.getSessions() // .map(session => Immutable.set(session, 'selectedViewer', 'ADMIN'))
@@ -816,7 +837,7 @@ export class Playground extends React.PureComponent<Props & DocsState, State> {
       // tslint:disable-line
       method: 'post',
       headers,
-      credentials: 'include',
+      // credentials: 'include',
       body: JSON.stringify(graphQLParams),
     }).then(response => {
       if (typeof this.props.onSuccess === 'function') {

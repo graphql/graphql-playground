@@ -3,12 +3,12 @@ import * as Modal from 'react-modal'
 import HistoryHeader from './HistoryPopup/HistoryHeader'
 import { HistoryFilter, Session } from '../types'
 import HistoryItems from './HistoryPopup/HistoryItems'
-import GraphQLEditor from './Playground/GraphQLEditor'
 import { $v, Icon } from 'graphcool-styles'
 import { modalStyle } from '../constants'
 import { withTheme, LocalThemeInterface } from './Theme'
 import * as cn from 'classnames'
 import { SchemaFetcher } from './Playground/SchemaFetcher'
+import { QueryEditor } from './Playground/QueryEditor'
 
 export interface Props {
   isOpen: boolean
@@ -17,7 +17,6 @@ export interface Props {
   onItemStarToggled: (item: Session) => void
   fetcherCreater: (item: any, params: any) => Promise<any>
   onCreateSession: (session: Session) => void
-  isGraphcool: boolean
   schemaFetcher: SchemaFetcher
 }
 
@@ -153,18 +152,11 @@ class HistoryPopup extends React.Component<Props & LocalThemeInterface, State> {
                     'graphiql-wrapper': localTheme === 'light',
                   })}
                 >
-                  <GraphQLEditor
-                    variables={selectedItem.variables}
-                    query={selectedItem.query}
-                    fetcher={this.fetcher}
-                    disableQueryHeader={true}
-                    queryOnly={true}
-                    rerenderQuery={true}
-                    isActive={true}
-                    readonly={true}
-                    session={selectedItem}
-                    schemaFetcher={this.props.schemaFetcher}
-                  />
+                  <div className="graphiql-container">
+                    <div className="queryWrap">
+                      <QueryEditor value={selectedItem.query} />
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
@@ -194,20 +186,6 @@ class HistoryPopup extends React.Component<Props & LocalThemeInterface, State> {
     const selectedItem = items[this.state.selectedItemIndex]
     this.props.onCreateSession(selectedItem)
     this.props.onRequestClose()
-  }
-
-  private fetcher = params => {
-    const { searchTerm, selectedFilter } = this.state
-    const items = this.props.historyItems.filter(item => {
-      return selectedFilter === 'STARRED'
-        ? item.starred
-        : true &&
-            (searchTerm && searchTerm.length > 0
-              ? item.query.toLowerCase().includes(searchTerm.toLowerCase())
-              : true)
-    })
-    const selectedItem = items[this.state.selectedItemIndex]
-    return this.props.fetcherCreater(selectedItem, params)
   }
 
   private handleItemSelect = (index: number) => {

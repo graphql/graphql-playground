@@ -91,8 +91,16 @@ export default class PlaygroundStorage {
     this.project.history = this.project.history.slice(0, 1000)
   }
 
-  public getHistory() {
-    return this.project.history || []
+  public getHistory(endpoint?: string) {
+    if (!this.project.history) {
+      return []
+    }
+    if (endpoint) {
+      return this.project.history.filter(
+        session => session.endpoint === endpoint,
+      )
+    }
+    return this.project.history
   }
 
   public setItem(key: string, value: string) {
