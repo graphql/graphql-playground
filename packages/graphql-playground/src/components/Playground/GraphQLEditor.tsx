@@ -76,7 +76,6 @@ export interface Props {
   hideGutters?: boolean
   readonly?: boolean
   useVim?: boolean
-  tracingSupported?: boolean
 }
 
 export interface ReduxProps {
@@ -109,6 +108,7 @@ export interface State {
   responseExtensions: any
   currentQueryStartTime?: Date
   currentQueryEndTime?: Date
+  tracingSupported?: boolean
 }
 
 export interface SimpleProps {
@@ -530,7 +530,7 @@ export class GraphQLEditor extends React.PureComponent<
                     }
                     startTime={this.state.currentQueryStartTime}
                     endTime={this.state.currentQueryEndTime}
-                    tracingSupported={this.props.tracingSupported}
+                    tracingSupported={this.state.tracingSupported}
                   />
                 </div>
               </div>
@@ -619,11 +619,15 @@ export class GraphQLEditor extends React.PureComponent<
 
     this.props.schemaFetcher
       .fetch(this.props.session.endpoint, this.props.session.headers)
-      .then(schema => {
-        this.renewStacks(schema)
-        this.setState({
-          schema,
-        })
+      .then(result => {
+        if (result) {
+          const { schema, tracingSupported } = result
+          this.renewStacks(schema)
+          this.setState({
+            schema,
+            tracingSupported,
+          })
+        }
       })
       .catch(error => {
         this.setState({

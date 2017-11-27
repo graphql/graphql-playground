@@ -25,8 +25,6 @@ export interface Props {
   responses?: any
   useVim: boolean
   isActive: boolean
-
-  tracingSupported: boolean
 }
 
 export default class GraphQLEditorSession extends React.PureComponent<
@@ -45,7 +43,6 @@ export default class GraphQLEditorSession extends React.PureComponent<
       responses,
       disableQueryHeader,
       isActive,
-      tracingSupported,
       schemaFetcher,
     } = this.props
     return (
@@ -76,7 +73,6 @@ export default class GraphQLEditorSession extends React.PureComponent<
         rerenderQuery={false}
         disableAnimation={true}
         disableAutofocus={!isActive}
-        tracingSupported={tracingSupported}
         session={session}
         schemaFetcher={schemaFetcher}
       />

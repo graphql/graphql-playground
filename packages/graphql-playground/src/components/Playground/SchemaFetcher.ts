@@ -2,8 +2,13 @@ import { GraphQLSchema, introspectionQuery, buildClientSchema } from 'graphql'
 import * as stringify from 'json-stable-stringify'
 import { NoSchemaError } from './util/NoSchemaError'
 
+export interface TracingSchemaTuple {
+  schema: GraphQLSchema
+  tracingSupported: boolean
+}
+
 export class SchemaFetcher {
-  cache: Map<string, GraphQLSchema>
+  cache: Map<string, TracingSchemaTuple>
   constructor() {
     this.cache = new Map()
   }
@@ -20,7 +25,7 @@ export class SchemaFetcher {
   private async fetchSchema(
     endpoint: string,
     headers: any = {},
-  ): Promise<GraphQLSchema | null> {
+  ): Promise<{ schema: GraphQLSchema; tracingSupported: boolean } | null> {
     const response = await fetch(endpoint, {
       method: 'post',
       headers: {
@@ -38,7 +43,14 @@ export class SchemaFetcher {
     }
 
     const schema = buildClientSchema(schemaData.data)
-    this.cache.set(this.hash(endpoint, headers), schema)
-    return schema
+    const tracingSupported =
+      schemaData.extensions && Boolean(schemaData.extensions.tracing)
+    const result = {
+      schema,
+      tracingSupported,
+    }
+    this.cache.set(this.hash(endpoint, headers), result)
+
+    return result
   }
 }

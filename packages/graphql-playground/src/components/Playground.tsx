@@ -1,13 +1,8 @@
 import * as React from 'react'
 import { GraphQLEditor } from './Playground/GraphQLEditor'
 import * as fetch from 'isomorphic-fetch'
-import { buildClientSchema } from 'graphql'
 import { TabBar } from './Playground/TabBar'
-import {
-  defaultQuery,
-  introspectionQuery,
-  getDefaultSession,
-} from '../constants'
+import { defaultQuery, getDefaultSession } from '../constants'
 import { Session } from '../types'
 import * as cuid from 'cuid'
 import * as Immutable from 'seamless-immutable'
@@ -21,12 +16,11 @@ import isQuerySubscription from './Playground/util/isQuerySubscription'
 import HistoryPopup from './HistoryPopup'
 import * as cx from 'classnames'
 import CodeGenerationPopup from './CodeGenerationPopup/CodeGenerationPopup'
-import Settings from './Settings'
 import { connect } from 'react-redux'
 import { DocsState } from '../reducers/graphiql-docs'
 import GraphQLEditorSession from './Playground/GraphQLEditorSession'
 import { setStacks } from '../actions/graphiql-docs'
-import { isEqual, mapValues } from 'lodash'
+import { mapValues } from 'lodash'
 import Share from './Share'
 import styled, { ThemeProvider, theme as styledTheme } from '../styled'
 import { isSharingAuthorization } from './Playground/util/session'
@@ -96,8 +90,6 @@ export class Playground extends React.PureComponent<Props & DocsState, State> {
   observers: { [sessionId: string]: any } = {}
   graphiqlComponents: any[] = []
   private initialIndex: number = -1
-  private schemaReloadInterval: any
-  private rawSchemaCache: any = null
   private schemaFetcher: SchemaFetcher
 
   private updateQueryTypes = debounce(
@@ -175,7 +167,7 @@ export class Playground extends React.PureComponent<Props & DocsState, State> {
 
   componentWillMount() {
     // look, if there is a session. if not, initiate one.
-    this.fetchSchemas().then(this.initSessions)
+    this.initSessions()
   }
 
   componentDidMount() {
@@ -212,69 +204,9 @@ export class Playground extends React.PureComponent<Props & DocsState, State> {
         },
         () => {
           this.resetSubscriptions()
-          this.fetchSchemas().then(this.initSessions)
         },
       )
     }
-
-    if (this.state.autoReloadSchema && !this.schemaReloadInterval) {
-      this.fetchSchemas()
-      this.schemaReloadInterval = window.setInterval(() => {
-        this.fetchSchemas()
-      }, 4000)
-    }
-
-    if (!this.state.autoReloadSchema && this.schemaReloadInterval) {
-      window.clearInterval(this.schemaReloadInterval)
-      this.schemaReloadInterval = null
-    }
-  }
-
-  fetchSchemas = () => {
-    let additionalHeaders = {}
-
-    const headers = this.state.sessions[this.state.selectedSessionIndex].headers
-
-    if (headers) {
-      additionalHeaders = { ...headers }
-    }
-
-    return this.fetchSchema(this.getEndpoint(), additionalHeaders).then(
-      schemaData => {
-        if (!schemaData || schemaData.error) {
-          const errorMessage = `Schema could not be fetched.\nPlease check if the endpoint '${this.getEndpoint()}' is a valid GraphQL Endpoint.`
-          this.setState({
-            response: {
-              date:
-                schemaData && schemaData.error
-                  ? schemaData.error
-                  : errorMessage,
-              time: new Date(),
-            },
-          } as State)
-          return
-        }
-
-        if (isEqual(this.rawSchemaCache, schemaData.data)) {
-          return
-        }
-
-        this.rawSchemaCache = schemaData.data
-
-        if (!schemaData.data) {
-          return
-        }
-
-        const schema = buildClientSchema(schemaData.data)
-
-        const tracingSupported =
-          schemaData.extensions && Boolean(schemaData.extensions.tracing)
-        this.setState({
-          schemaCache: schema,
-          tracingSupported,
-        } as State)
-      },
-    )
   }
 
   componentWillUnmount() {
@@ -319,38 +251,6 @@ export class Playground extends React.PureComponent<Props & DocsState, State> {
       .queryEditorComponent.editor
     editor.setCursor(position)
   }
-
-  extractServiceId() {
-    return this.props.endpoint.split('/').slice(-1)[0]
-  }
-
-  fetchSchema(endpointUrl: string, headers: any = {}) {
-    return fetch(endpointUrl, {
-      method: 'post',
-      credentials: 'include',
-      headers: {
-        'Content-Type': 'application/json',
-        'X-Apollo-Tracing': '1',
-        ...headers,
-      },
-      body: JSON.stringify({ query: introspectionQuery }),
-    })
-      .then(response => {
-        return response.json()
-      })
-      .catch(e => {
-        this.setState({
-          response: {
-            date: `Error: Could not fetch schema from ${
-              endpointUrl
-            }. Make sure the url is correct.`,
-            time: new Date(),
-            resultID: cuid(),
-          },
-        })
-      })
-  }
-
   render() {
     const { sessions, selectedSessionIndex, theme } = this.state
     const { isEndpoint } = this.props
@@ -406,12 +306,12 @@ export class Playground extends React.PureComponent<Props & DocsState, State> {
                     onRef={this.setRef}
                     useVim={this.state.useVim && index === selectedSessionIndex}
                     isActive={index === selectedSessionIndex}
-                    tracingSupported={this.state.tracingSupported}
                     schemaFetcher={this.schemaFetcher}
                   />
                 </GraphiqlWrapper>
               ))}
             </GraphiqlsContainer>
+            {/*
             <Settings
               onToggleTheme={this.toggleTheme}
               localTheme={this.state.theme}
@@ -427,6 +327,7 @@ export class Playground extends React.PureComponent<Props & DocsState, State> {
                 this.props.onChangeSubscriptionsEndpoint
               }
             />
+            */}
             <Share
               localTheme={this.state.theme}
               onShare={this.share}
@@ -586,13 +487,13 @@ export class Playground extends React.PureComponent<Props & DocsState, State> {
     }, 100)
   }
 
-  private toggleTheme = () => {
-    this.setState(state => {
-      const theme = state.theme === 'dark' ? 'light' : 'dark'
-      localStorage.setItem('theme', theme)
-      return { ...state, theme }
-    })
-  }
+  // private toggleTheme = () => {
+  //   this.setState(state => {
+  //     const theme = state.theme === 'dark' ? 'light' : 'dark'
+  //     localStorage.setItem('theme', theme)
+  //     return { ...state, theme }
+  //   })
+  // }
 
   private handleClickCodeGeneration = () => {
     this.setState({
@@ -959,14 +860,14 @@ export class Playground extends React.PureComponent<Props & DocsState, State> {
     return isSharingAuthorization(sharableSessions)
   }
 
-  private toggleUseVim = () => {
-    this.setState(
-      state => ({ ...state, useVim: !state.useVim }),
-      () => {
-        localStorage.setItem('useVim', String(this.state.useVim))
-      },
-    )
-  }
+  // private toggleUseVim = () => {
+  //   this.setState(
+  //     state => ({ ...state, useVim: !state.useVim }),
+  //     () => {
+  //       localStorage.setItem('useVim', String(this.state.useVim))
+  //     },
+  //   )
+  // }
 
   private toggleShareAllTabs = () => {
     this.setState(state => ({ ...state, shareAllTabs: !state.shareAllTabs }))
