@@ -50,19 +50,19 @@ export default function graphiqlDocsReducer(
   state: DocsState = defaultState,
   action: GraphiqlDocsAction,
 ) {
+  const oldSessionState = state[action.sessionId] || defaultSessionState
   switch (action.type) {
     case SET_STACKS:
       return {
         ...state,
         [action.sessionId]: {
-          ...(state[action.sessionId] || defaultSessionState),
+          ...oldSessionState,
           navStack: action.stacks,
         },
       }
     case ADD_STACK:
       const { field, x, y } = action
-      let newNavStack = (state[action.sessionId] || defaultSessionState)
-        .navStack
+      let newNavStack = oldSessionState.navStack
       if (!field.path) {
         field.path = field.name
       }
@@ -73,7 +73,7 @@ export default function graphiqlDocsReducer(
       return {
         ...state,
         [action.sessionId]: {
-          ...(state[action.sessionId] || defaultSessionState),
+          ...oldSessionState,
           navStack: [
             ...newNavStack,
             {
@@ -90,23 +90,29 @@ export default function graphiqlDocsReducer(
       if (open !== undefined) {
         return {
           ...state,
-          docsOpen: open,
+          [action.sessionId]: {
+            ...oldSessionState,
+            docsOpen: open,
+          },
         }
       }
-      return {
+
+      const newState = {
         ...state,
         [action.sessionId]: {
-          ...(state[action.sessionId] || defaultSessionState),
-          docsOpen: !state.docsOpen,
+          ...oldSessionState,
+          docsOpen: !oldSessionState.docsOpen,
         },
       }
+
+      return newState
 
     case CHANGE_WIDTH_DOCS:
       const { width } = action
       return {
         ...state,
         [action.sessionId]: {
-          ...(state[action.sessionId] || defaultSessionState),
+          ...oldSessionState,
           docsWidth: width,
         },
       }
@@ -116,7 +122,7 @@ export default function graphiqlDocsReducer(
       return {
         ...state,
         [action.sessionId]: {
-          ...(state[action.sessionId] || defaultSessionState),
+          ...oldSessionState,
           keyMove: move,
         },
       }

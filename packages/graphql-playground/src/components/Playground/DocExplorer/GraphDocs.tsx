@@ -94,7 +94,7 @@ class GraphDocs extends React.Component<
       stack => this.state.widthMap[stack.field.path] || columnWidth,
     )
 
-    return [rootWidth].concat(stackWidths).reduce((acc, curr) => acc + curr, 2)
+    return [rootWidth].concat(stackWidths).reduce((acc, curr) => acc + curr, 0)
   }
 
   componentDidMount() {
@@ -158,8 +158,8 @@ class GraphDocs extends React.Component<
             z-index: 2000;
           }
           .docs-button {
-            @p: .absolute, .white, .bgGreen, .pv6, .br2, .z2, .ttu, .fw6, .f12,
-              .ph10, .pointer;
+            @p: .absolute, .white, .bgGreen, .pv6, .z2, .ttu, .fw6, .f12, .ph10,
+              .pointer;
             box-shadow: -1px 1px 6px 0 rgba(0, 0, 0, 0.3);
             line-height: 17px;
             letter-spacing: 0.45px;
@@ -167,6 +167,8 @@ class GraphDocs extends React.Component<
             transform: rotate(-90deg);
             left: -50px;
             top: 129px;
+            border-top-left-radius: 2px;
+            border-top-right-radius: 2px;
           }
           .doc-explorer {
             @p: .flex, .relative, .h100;

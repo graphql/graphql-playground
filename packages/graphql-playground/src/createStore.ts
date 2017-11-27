@@ -18,7 +18,7 @@ if (typeof window !== 'undefined') {
 }
 
 const storage = compose(
-  filter(['graphiqlDocs.docsOpen', 'graphiqlDocs.docsWidth']),
+  filter(['graphiqlDocs.*.docsOpen', 'graphiqlDocs.*.docsWidth']),
 )(adapter(localStorage))
 
 const reducer = compose(
@@ -31,5 +31,8 @@ const enhancer = compose(persistState(storage, 'graphiql'))
 
 const functions = [enhancer]
 
+const composeEnhancers =
+  (window as any).__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose
+
 export default (): Store<any> =>
-  createStore(reducer, compose.apply(null, functions))
+  createStore(reducer, composeEnhancers.apply(null, functions))
