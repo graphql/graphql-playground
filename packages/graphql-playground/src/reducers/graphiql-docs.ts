@@ -11,6 +11,7 @@ import {
   TOOGLE_DOCS,
 } from '../actions/graphiql-docs'
 import { columnWidth } from '../constants'
+import { GraphQLField } from 'graphql'
 
 export type GraphiqlDocsAction =
   | AddStackAction
@@ -20,18 +21,30 @@ export type GraphiqlDocsAction =
   | SetStacksAction
 
 export interface DocsState {
-  readonly navStack: any[]
+  [sessionId: string]: SessionState
+}
+
+export interface NavItem {
+  x: number
+  y: number
+  field: GraphQLField<any, any>
+}
+
+export interface SessionState {
+  readonly navStack: NavItem[]
   readonly docsOpen: boolean
   readonly docsWidth: number
   readonly keyMove: boolean
 }
 
-const defaultState: DocsState = {
+export const defaultSessionState: SessionState = {
   navStack: [],
   docsOpen: false,
   docsWidth: columnWidth,
   keyMove: false,
 }
+
+const defaultState: DocsState = {}
 
 export default function graphiqlDocsReducer(
   state: DocsState = defaultState,
@@ -41,11 +54,15 @@ export default function graphiqlDocsReducer(
     case SET_STACKS:
       return {
         ...state,
-        navStack: action.stacks,
+        [action.sessionId]: {
+          ...(state[action.sessionId] || defaultSessionState),
+          navStack: action.stacks,
+        },
       }
     case ADD_STACK:
       const { field, x, y } = action
-      let newNavStack = state.navStack
+      let newNavStack = (state[action.sessionId] || defaultSessionState)
+        .navStack
       if (!field.path) {
         field.path = field.name
       }
@@ -55,14 +72,17 @@ export default function graphiqlDocsReducer(
       }
       return {
         ...state,
-        navStack: [
-          ...newNavStack,
-          {
-            x,
-            y,
-            field,
-          },
-        ],
+        [action.sessionId]: {
+          ...(state[action.sessionId] || defaultSessionState),
+          navStack: [
+            ...newNavStack,
+            {
+              x,
+              y,
+              field,
+            },
+          ],
+        },
       }
 
     case TOOGLE_DOCS:
@@ -75,21 +95,30 @@ export default function graphiqlDocsReducer(
       }
       return {
         ...state,
-        docsOpen: !state.docsOpen,
+        [action.sessionId]: {
+          ...(state[action.sessionId] || defaultSessionState),
+          docsOpen: !state.docsOpen,
+        },
       }
 
     case CHANGE_WIDTH_DOCS:
       const { width } = action
       return {
         ...state,
-        docsWidth: width,
+        [action.sessionId]: {
+          ...(state[action.sessionId] || defaultSessionState),
+          docsWidth: width,
+        },
       }
 
     case CHANGE_KEY_MOVE:
       const { move } = action
       return {
         ...state,
-        keyMove: move,
+        [action.sessionId]: {
+          ...(state[action.sessionId] || defaultSessionState),
+          keyMove: move,
+        },
       }
   }
   return state

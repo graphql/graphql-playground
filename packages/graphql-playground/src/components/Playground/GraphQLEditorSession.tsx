@@ -2,6 +2,7 @@ import * as React from 'react'
 import { Session } from '../../types'
 import GraphQLEditor from './GraphQLEditor'
 import { Header } from './HttpHeaders/HttpHeaders'
+import { SchemaFetcher } from './SchemaFetcher'
 
 export interface Props {
   session: Session
@@ -9,6 +10,7 @@ export interface Props {
   onRef: (index: number, ref: any) => void
   isGraphcoolUrl: boolean
   fetcher: (session: Session, graphQLParams: any, headers?: any) => Promise<any>
+  schemaFetcher: SchemaFetcher
   schemaCache: any
   isEndpoint: boolean
   storage?: any
@@ -38,20 +40,19 @@ export default class GraphQLEditorSession extends React.PureComponent<
     const {
       session,
       isGraphcoolUrl,
-      schemaCache,
       isEndpoint,
       storage,
       responses,
       disableQueryHeader,
       isActive,
       tracingSupported,
+      schemaFetcher,
     } = this.props
     return (
       <GraphQLEditor
         isActive={isActive}
         key={session.id}
         isGraphcoolUrl={isGraphcoolUrl}
-        schema={schemaCache}
         fetcher={this.fetcher}
         showQueryTitle={false}
         showResponseTitle={false}
@@ -62,7 +63,6 @@ export default class GraphQLEditorSession extends React.PureComponent<
         query={session.query}
         variables={session.variables}
         operationName={session.operationName}
-        headers={session.headers}
         onClickCodeGeneration={this.props.onClickCodeGeneration}
         onEditOperationName={this.handleOperationNameChange}
         onEditVariables={this.handleVariableChange}
@@ -77,6 +77,8 @@ export default class GraphQLEditorSession extends React.PureComponent<
         disableAnimation={true}
         disableAutofocus={!isActive}
         tracingSupported={tracingSupported}
+        session={session}
+        schemaFetcher={schemaFetcher}
       />
     )
   }

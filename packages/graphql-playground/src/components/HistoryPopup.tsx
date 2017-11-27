@@ -8,6 +8,7 @@ import { $v, Icon } from 'graphcool-styles'
 import { modalStyle } from '../constants'
 import { withTheme, LocalThemeInterface } from './Theme'
 import * as cn from 'classnames'
+import { SchemaFetcher } from './Playground/SchemaFetcher'
 
 export interface Props {
   isOpen: boolean
@@ -15,9 +16,9 @@ export interface Props {
   historyItems: Session[]
   onItemStarToggled: (item: Session) => void
   fetcherCreater: (item: any, params: any) => Promise<any>
-  schema: any
   onCreateSession: (session: Session) => void
   isGraphcool: boolean
+  schemaFetcher: SchemaFetcher
 }
 
 export interface State {
@@ -48,7 +49,6 @@ class HistoryPopup extends React.Component<Props & LocalThemeInterface, State> {
     })
 
     const selectedItem = items[this.state.selectedItemIndex]
-    const schema = this.props.schema
     let customModalStyle = modalStyle
     if (localTheme === 'light') {
       customModalStyle = {
@@ -154,7 +154,6 @@ class HistoryPopup extends React.Component<Props & LocalThemeInterface, State> {
                   })}
                 >
                   <GraphQLEditor
-                    schema={schema}
                     variables={selectedItem.variables}
                     query={selectedItem.query}
                     fetcher={this.fetcher}
@@ -163,6 +162,8 @@ class HistoryPopup extends React.Component<Props & LocalThemeInterface, State> {
                     rerenderQuery={true}
                     isActive={true}
                     readonly={true}
+                    session={selectedItem}
+                    schemaFetcher={this.props.schemaFetcher}
                   />
                 </div>
               </div>

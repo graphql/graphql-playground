@@ -21,7 +21,6 @@ import isQuerySubscription from './Playground/util/isQuerySubscription'
 import HistoryPopup from './HistoryPopup'
 import * as cx from 'classnames'
 import CodeGenerationPopup from './CodeGenerationPopup/CodeGenerationPopup'
-import GraphDocs from './Playground/DocExplorer/GraphDocs'
 import Settings from './Settings'
 import { connect } from 'react-redux'
 import { DocsState } from '../reducers/graphiql-docs'
@@ -30,8 +29,8 @@ import { setStacks } from '../actions/graphiql-docs'
 import { isEqual, mapValues } from 'lodash'
 import Share from './Share'
 import styled, { ThemeProvider, theme as styledTheme } from '../styled'
-import { getNewStack, getRootMap } from './Playground/util/stack'
 import { isSharingAuthorization } from './Playground/util/session'
+import { SchemaFetcher } from './Playground/SchemaFetcher'
 
 export type Theme = 'dark' | 'light'
 export interface Response {
@@ -51,13 +50,13 @@ export interface Props {
   tether?: any
   nextStep?: () => void
   isApp?: boolean
-  setStacks?: (stack: any[]) => void
   onChangeEndpoint?: (endpoint: string) => void
   share: (state: any) => void
   shareUrl?: string
   session?: any
   onChangeSubscriptionsEndpoint?: (endpoint: string) => void
   getRef?: (ref: Playground) => void
+  graphqlConfig?: any
 }
 
 export interface State {
@@ -99,6 +98,7 @@ export class Playground extends React.PureComponent<Props & DocsState, State> {
   private initialIndex: number = -1
   private schemaReloadInterval: any
   private rawSchemaCache: any = null
+  private schemaFetcher: SchemaFetcher
 
   private updateQueryTypes = debounce(
     150,
@@ -125,6 +125,7 @@ export class Playground extends React.PureComponent<Props & DocsState, State> {
     }
 
     const sessions = this.initSessions()
+    this.schemaFetcher = new SchemaFetcher()
 
     const selectedSessionIndex =
       parseInt(this.storage.getItem('selectedSessionIndex'), 10) || 0
@@ -230,12 +231,12 @@ export class Playground extends React.PureComponent<Props & DocsState, State> {
   }
 
   fetchSchemas = () => {
-    const additionalHeaders = {}
+    let additionalHeaders = {}
 
     const headers = this.state.sessions[this.state.selectedSessionIndex].headers
 
     if (headers) {
-      headers.forEach(header => (additionalHeaders[header.name] = header.value))
+      additionalHeaders = { ...headers }
     }
 
     return this.fetchSchema(this.getEndpoint(), additionalHeaders).then(
@@ -266,8 +267,6 @@ export class Playground extends React.PureComponent<Props & DocsState, State> {
 
         const schema = buildClientSchema(schemaData.data)
 
-        this.renewStack(schema)
-
         const tracingSupported =
           schemaData.extensions && Boolean(schemaData.extensions.tracing)
         this.setState({
@@ -289,12 +288,10 @@ export class Playground extends React.PureComponent<Props & DocsState, State> {
   }
 
   setWS = (session: Session) => {
-    const connectionParams: any = {}
+    let connectionParams: any = {}
 
     if (session.headers) {
-      session.headers.forEach(header => {
-        connectionParams[header.name] = header.value
-      })
+      connectionParams = { ...session.headers }
     }
 
     if (this.wsConnections[session.id]) {
@@ -321,15 +318,6 @@ export class Playground extends React.PureComponent<Props & DocsState, State> {
     const editor = this.graphiqlComponents[this.state.selectedSessionIndex]
       .queryEditorComponent.editor
     editor.setCursor(position)
-  }
-  renewStack(schema) {
-    const rootMap = getRootMap(schema)
-    const stacks = this.props.navStack
-      .map(stack => {
-        return getNewStack(rootMap, schema, stack)
-      })
-      .filter(s => s)
-    this.props.setStacks!(stacks)
   }
 
   extractServiceId() {
@@ -418,6 +406,7 @@ export class Playground extends React.PureComponent<Props & DocsState, State> {
                     useVim={this.state.useVim && index === selectedSessionIndex}
                     isActive={index === selectedSessionIndex}
                     tracingSupported={this.state.tracingSupported}
+                    schemaFetcher={this.schemaFetcher}
                   />
                 </GraphiqlWrapper>
               ))}
@@ -450,7 +439,6 @@ export class Playground extends React.PureComponent<Props & DocsState, State> {
               reshare={this.state.changed}
               isSharingAuthorization={this.isSharingAuthorization()}
             />
-            <GraphDocs schema={this.state.schemaCache} />
             {this.state.historyOpen && (
               <HistoryPopup
                 isOpen={this.state.historyOpen}
@@ -458,9 +446,9 @@ export class Playground extends React.PureComponent<Props & DocsState, State> {
                 historyItems={this.state.history}
                 onItemStarToggled={this.handleItemStarToggled}
                 fetcherCreater={this.fetcher}
-                schema={this.state.schemaCache}
                 onCreateSession={this.handleCreateSession}
                 isGraphcool={isGraphcoolUrl}
+                schemaFetcher={this.schemaFetcher}
               />
             )}
             {this.state.codeGenerationPopupOpen &&
@@ -775,7 +763,7 @@ export class Playground extends React.PureComponent<Props & DocsState, State> {
           : defaultQuery
 
       newSession = Immutable({
-        ...getDefaultSession(),
+        ...getDefaultSession(this.props.endpoint),
         query,
         headers,
       })
@@ -786,7 +774,7 @@ export class Playground extends React.PureComponent<Props & DocsState, State> {
   }
 
   private createSessionFromQuery = (query: string) => {
-    return Immutable(getDefaultSession())
+    return Immutable(getDefaultSession(this.props.endpoint))
   }
 
   private handleChangeHeaders = (sessionId: string, headers: any[]) => {
@@ -915,9 +903,7 @@ export class Playground extends React.PureComponent<Props & DocsState, State> {
     }
 
     if (session.headers) {
-      session.headers.forEach(header => {
-        headers[header.name] = header.value
-      })
+      headers = { ...headers, ...session.headers }
     }
 
     if (requestHeaders) {
@@ -1006,7 +992,7 @@ export class Playground extends React.PureComponent<Props & DocsState, State> {
       sharingProject = {
         ...sharingProject,
         sessions: mapValues(sharingProject.sessions, (session: Session) => {
-          session.headers = []
+          session.headers = {}
           return session
         }),
       }

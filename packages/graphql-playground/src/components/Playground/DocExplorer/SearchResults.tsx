@@ -7,7 +7,7 @@ export interface Props {
   withinType?: any
   searchValue: string
   level: number
-  onSetWidth: (width: number) => void
+  sessionId: string
 }
 
 export default class SearchResults extends React.Component<Props, {}> {
@@ -19,7 +19,7 @@ export default class SearchResults extends React.Component<Props, {}> {
   }
 
   render() {
-    const { level, onSetWidth } = this.props
+    const { level, sessionId } = this.props
     const searchValue = this.props.searchValue
     const withinType = this.props.withinType
     const schema = this.props.schema
@@ -50,12 +50,7 @@ export default class SearchResults extends React.Component<Props, {}> {
       if (withinType !== type && isMatch(typeName, searchValue)) {
         matchedTypes.push(
           <div className="doc-category-item" key={typeName}>
-            <TypeLink
-              type={type}
-              x={level}
-              y={count++}
-              onSetWidth={onSetWidth}
-            />
+            <TypeLink type={type} x={level} y={count++} sessionId={sessionId} />
           </div>,
         )
       }
@@ -87,8 +82,8 @@ export default class SearchResults extends React.Component<Props, {}> {
                 type={field}
                 x={level}
                 y={count++}
-                onSetWidth={onSetWidth}
                 showParentName={true}
+                sessionId={sessionId}
               />
             </div>
           )
@@ -123,9 +118,7 @@ export default class SearchResults extends React.Component<Props, {}> {
         <div>
           {matchedWithin}
           <div className="doc-category">
-            <div className="doc-category-title">
-              {'other results'}
-            </div>
+            <div className="doc-category-title">{'other results'}</div>
             {matchedTypes}
             {matchedFields}
           </div>

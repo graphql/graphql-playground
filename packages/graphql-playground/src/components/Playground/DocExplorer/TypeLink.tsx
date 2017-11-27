@@ -7,13 +7,13 @@ import { Icon } from 'graphcool-styles'
 import ArgumentInline from './ArgumentInline'
 import { addStack } from '../../../actions/graphiql-docs'
 
-interface StateFromProps {
-  navStack: any[]
+interface ReduxProps {
   keyMove: boolean
+  isActive: boolean
 }
 
 interface DispatchFromProps {
-  addStack: (field: any, x: number, y: number) => any
+  addStack: (sessionId: string, field: any, x: number, y: number) => any
 }
 
 export interface Props {
@@ -29,6 +29,7 @@ export interface Props {
   onSetWidth: (width: number) => void
   showParentName?: boolean
   collapsable?: boolean
+  sessionId: string
 }
 
 interface State {
@@ -36,7 +37,7 @@ interface State {
 }
 
 class TypeLink extends React.Component<
-  Props & StateFromProps & DispatchFromProps,
+  Props & ReduxProps & DispatchFromProps,
   State
 > {
   static defaultProps: Partial<Props> = {
@@ -52,24 +53,24 @@ class TypeLink extends React.Component<
     }
   }
 
-  shouldComponentUpdate(nextProps: Props & StateFromProps, nextState: State) {
+  shouldComponentUpdate(nextProps: Props & ReduxProps, nextState: State) {
     return (
       this.props.type !== nextProps.type ||
-      this.props.navStack[this.props.x] !== nextProps.navStack[this.props.x] ||
-      this.props.navStack.length !== nextProps.navStack.length ||
       this.props.keyMove !== nextProps.keyMove ||
+      this.props.isActive !== nextProps.isActive ||
       this.state.collapsed !== nextState.collapsed
     )
   }
 
   onClick = () => {
     if (this.props.clickable) {
-      this.props.addStack(this.props.type, this.props.x, this.props.y)
+      this.props.addStack(
+        this.props.sessionId,
+        this.props.type,
+        this.props.x,
+        this.props.y,
+      )
     }
-  }
-
-  isActive(navStack: any[], x: number, y: number) {
-    return navStack[x] && navStack[x].x === x && navStack[x].y === y
   }
 
   componentDidMount() {
@@ -106,32 +107,30 @@ class TypeLink extends React.Component<
     const {
       type,
       clickable,
-      navStack,
       className,
       beforeNode,
       afterNode,
-      x,
-      y,
       keyMove,
       showParentName,
+      isActive,
     } = this.props
-    const isActive = clickable && this.isActive(navStack, x, y)
-    const isLastActive = isActive && x === navStack.length - 1
     const isGraphqlType = isType(type)
 
     const fieldName =
-      showParentName && type.parent
-        ? <span>
-            {type.parent.name}.<b>{type.name}</b>
-          </span>
-        : type.name
+      showParentName && type.parent ? (
+        <span>
+          {type.parent.name}.<b>{type.name}</b>
+        </span>
+      ) : (
+        type.name
+      )
 
     return (
       <div
         className={cx('doc-category-item', className, {
           clickable,
           active: isActive,
-          'last-active': isLastActive,
+          // 'last-active': isLastActive,
           'no-hover': keyMove,
         })}
         onClick={this.onClick}
@@ -158,7 +157,7 @@ class TypeLink extends React.Component<
           }
         `}</style>
         <style jsx={true} global={true}>{`
-          .doc-category-item.last-active,
+          /*.doc-category-item.last-active,*/
           .doc-category-item.clickable:hover:not(.no-hover) {
             background-color: #2a7ed3 !important;
             color: #fff !important;
@@ -170,9 +169,11 @@ class TypeLink extends React.Component<
               color: #fff !important;
             }
           }
+          /*
           .doc-category-item.active:not(.last-active) svg {
             fill: #2a7ed3 !important;
           }
+          */
           .doc-category-item b {
             @p: .fw6;
           }
@@ -182,29 +183,28 @@ class TypeLink extends React.Component<
         `}</style>
         {beforeNode}
         {beforeNode && ' '}
-        {!isGraphqlType &&
+        {!isGraphqlType && (
           <span>
-            <span className="field-name">
-              {fieldName}
-            </span>
+            <span className="field-name">{fieldName}</span>
             {type.args &&
-            type.args.length > 0 && [
-              '(',
-              <span key="args">
-                {this.state.collapsed
-                  ? <span className="dots">...</span>
-                  : type.args.map(arg =>
-                      <ArgumentInline key={arg.name} arg={arg} />,
-                    )}
-              </span>,
-              ')',
-            ]}
+              type.args.length > 0 && [
+                '(',
+                <span key="args">
+                  {this.state.collapsed ? (
+                    <span className="dots">...</span>
+                  ) : (
+                    type.args.map(arg => (
+                      <ArgumentInline key={arg.name} arg={arg} />
+                    ))
+                  )}
+                </span>,
+                ')',
+              ]}
             {': '}
-          </span>}
-        <span className="type-name">
-          {renderType(type.type || type)}
-        </span>
-        {clickable &&
+          </span>
+        )}
+        <span className="type-name">{renderType(type.type || type)}</span>
+        {clickable && (
           <span className="doc-category-icon">
             <Icon
               src={require('graphcool-styles/icons/fill/triangle.svg')}
@@ -212,7 +212,8 @@ class TypeLink extends React.Component<
               width={6}
               height={7}
             />
-          </span>}
+          </span>
+        )}
         {afterNode && ' '}
         {afterNode}
       </div>
@@ -238,17 +239,26 @@ function renderType(type) {
       </span>
     )
   }
-  return (
-    <span>
-      {type.name}
-    </span>
-  )
+  return <span>{type.name}</span>
 }
 
-const mapStateToProps = state => ({
-  navStack: state.graphiqlDocs.navStack,
-  keyMove: state.graphiqlDocs.keyMove,
-})
+const mapStateToProps = (state, { x, y, sessionId }) => {
+  const docs = state.graphiqlDocs[sessionId]
+  if (docs) {
+    const nav = docs.navStack[x]
+    if (nav) {
+      const isActive = nav.x === x && nav.y === y
+      return {
+        isActive,
+        keyMove: docs.keyMove,
+      }
+    }
+  }
+  return {
+    isActive: false,
+    keyMove: false,
+  }
+}
 
 const mapDispatchToProps = dispatch =>
   bindActionCreators(
@@ -258,7 +268,7 @@ const mapDispatchToProps = dispatch =>
     dispatch,
   )
 
-export default connect<StateFromProps, DispatchFromProps, Props>(
+export default connect<ReduxProps, DispatchFromProps, Props>(
   mapStateToProps,
   mapDispatchToProps,
 )(TypeLink)

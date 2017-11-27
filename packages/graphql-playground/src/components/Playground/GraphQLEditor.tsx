@@ -1,8 +1,7 @@
 import * as React from 'react'
 import * as ReactDOM from 'react-dom'
-import { buildClientSchema, parse, print } from 'graphql'
+import { parse, print, GraphQLSchema } from 'graphql'
 import * as cn from 'classnames'
-import { GraphQLSchema } from 'graphql/type/schema'
 import ExecuteButton from './ExecuteButton'
 import { QueryEditor } from './QueryEditor'
 import { VariableEditor } from 'graphiql/dist/components/VariableEditor'
@@ -13,14 +12,10 @@ import debounce from 'graphiql/dist/utility/debounce'
 import find from 'graphiql/dist/utility/find'
 import { fillLeafs } from 'graphiql/dist/utility/fillLeafs'
 import { getLeft, getTop } from 'graphiql/dist/utility/elementPosition'
-import {
-  introspectionQuery,
-  introspectionQuerySansSubscriptions,
-} from 'graphiql/dist/utility/introspectionQueries'
-import { OperationDefinition } from '../../types'
-import { download } from './util/index'
+import { OperationDefinition, Session } from '../../types'
 import { Response } from '../Playground'
-import HttpHeaders, { Header } from './HttpHeaders'
+import { Header } from './HttpHeaders'
+import { connect } from 'react-redux'
 
 import { defaultQuery } from '../../constants'
 import Spinner from '../Spinner'
@@ -29,6 +24,11 @@ import ReponseTracing from './ResponseTracing'
 import GenerateCodeButton from './GenerateCodeButton'
 import withTheme from '../Theme/withTheme'
 import { LocalThemeInterface } from '../Theme/index'
+import GraphDocs from './DocExplorer/GraphDocs'
+import { SchemaFetcher } from './SchemaFetcher'
+import { setStacks } from '../../actions/graphiql-docs'
+import { getRootMap, getNewStack } from './util/stack'
+import { getSessionDocs } from '../../selectors/sessionDocs'
 
 /**
  * The top-level React component for GraphQLEditor, intended to encompass the entire
@@ -37,13 +37,14 @@ import { LocalThemeInterface } from '../Theme/index'
 
 export interface Props {
   fetcher: (params: any, headers?: any) => Promise<any>
+  schemaFetcher: SchemaFetcher
   isGraphcoolUrl?: boolean
-  schema?: GraphQLSchema
   query?: string
   variables?: string
   operationName?: string
   responses?: Response[]
   isActive: boolean
+  session: Session
 
   storage?: any
   defaultQuery?: string
@@ -54,7 +55,6 @@ export interface Props {
   onClickCodeGeneration?: any
   onChangeHeaders?: (headers: Header[]) => any
   getDefaultFieldNames?: () => any
-  headers?: any[]
   showCodeGeneration?: boolean
   showEndpoints?: boolean
   showQueryTitle?: boolean
@@ -79,11 +79,16 @@ export interface Props {
   tracingSupported?: boolean
 }
 
+export interface ReduxProps {
+  setStacks: (stack: any[]) => void
+  navStack: any[]
+}
+
 export interface State {
-  schema: any
-  query: any
-  variables: any
-  operationName: string
+  schema?: GraphQLSchema | null
+  query: string
+  variables?: any
+  operationName?: string
   responses: any[]
   editorFlex: number
   variableEditorOpen: boolean
@@ -117,7 +122,7 @@ export interface ToolbarButtonProps extends SimpleProps {
 }
 
 export class GraphQLEditor extends React.PureComponent<
-  Props & LocalThemeInterface,
+  Props & LocalThemeInterface & ReduxProps,
   State
 > {
   static Logo: (props: SimpleProps) => JSX.Element
@@ -159,13 +164,8 @@ export class GraphQLEditor extends React.PureComponent<
     }
   })
 
-  constructor(props) {
+  constructor(props: Props & LocalThemeInterface & ReduxProps) {
     super(props)
-
-    // Ensure props are correct
-    if (typeof props.fetcher !== 'function') {
-      throw new TypeError('GraphQLEditor requires a fetcher function.')
-    }
 
     // Cache the storage instance
     this.storage =
@@ -181,18 +181,18 @@ export class GraphQLEditor extends React.PureComponent<
     const query =
       props.query !== undefined
         ? props.query
-        : this._storageGet('query') !== null
-          ? this._storageGet('query')
+        : this.storageGet('query') !== null
+          ? this.storageGet('query')
           : props.defaultQuery !== undefined ? props.defaultQuery : defaultQuery
 
     // Get the initial query facts.
-    const queryFacts = getQueryFacts(props.schema, query)
+    const queryFacts = getQueryFacts(null, query)
 
     // Determine the initial variables to display.
     const variables =
       props.variables !== undefined
         ? props.variables
-        : this._storageGet('variables')
+        : this.storageGet('variables')
 
     // Determine the initial operationName to use.
     const operationName =
@@ -200,29 +200,28 @@ export class GraphQLEditor extends React.PureComponent<
         ? props.operationName
         : getSelectedOperationName(
             null,
-            this._storageGet('operationName'),
+            this.storageGet('operationName'),
             queryFacts && queryFacts.operations,
           )
 
     // Initialize state
     this.state = {
-      schema: props.schema,
       query,
       variables,
       operationName,
       responses: props.responses || [],
-      editorFlex: Number(this._storageGet('editorFlex')) || 1,
+      editorFlex: Number(this.storageGet('editorFlex')) || 1,
       variableEditorOpen: Boolean(variables),
       variableEditorHeight:
-        Number(this._storageGet('variableEditorHeight')) || 200,
+        Number(this.storageGet('variableEditorHeight')) || 200,
       responseTracingOpen: false,
       responseTracingHeight:
-        Number(this._storageGet('responseTracingHeight')) || 300,
+        Number(this.storageGet('responseTracingHeight')) || 300,
       docExplorerOpen: false,
-      docExplorerWidth: Number(this._storageGet('docExplorerWidth')) || 350,
+      docExplorerWidth: Number(this.storageGet('docExplorerWidth')) || 350,
       schemaExplorerOpen: false,
       schemaExplorerWidth:
-        Number(this._storageGet('schemaExplorerWidth')) || 350,
+        Number(this.storageGet('schemaExplorerWidth')) || 350,
       isWaitingForResponse: false,
       subscription: null,
       selectedVariableNames: [],
@@ -241,7 +240,7 @@ export class GraphQLEditor extends React.PureComponent<
   componentDidMount() {
     // Ensure a form of a schema exists (including `null`) and
     // if not, fetch one using an introspection query.
-    this._ensureOfSchema()
+    this.ensureOfSchema()
 
     // Utility for keeping CodeMirror correctly sized.
     this.codeMirrorSizer = new CodeMirrorSizer()
@@ -307,11 +306,11 @@ export class GraphQLEditor extends React.PureComponent<
   // When the component is about to unmount, store any persistable state, such
   // that when the component is remounted, it will use the last used values.
   componentWillUnmount() {
-    this._storageSet('query', this.state.query)
-    this._storageSet('variables', this.state.variables)
-    this._storageSet('operationName', this.state.operationName)
-    this._storageSet('editorFlex', this.state.editorFlex)
-    this._storageSet('variableEditorHeight', this.state.variableEditorHeight)
+    this.storageSet('query', this.state.query)
+    this.storageSet('variables', this.state.variables)
+    this.storageSet('operationName', this.state.operationName)
+    this.storageSet('editorFlex', this.state.editorFlex)
+    this.storageSet('variableEditorHeight', this.state.variableEditorHeight)
   }
 
   render() {
@@ -461,10 +460,10 @@ export class GraphQLEditor extends React.PureComponent<
                 useVim={this.props.useVim}
               />
               <div className="variable-editor" style={variableStyle}>
-                <HttpHeaders
+                {/* <HttpHeaders
                   headers={this.props.headers}
                   onChange={this.props.onChangeHeaders}
-                />
+                /> */}
                 <div
                   className="graphiql-button prettify"
                   onClick={this.handlePrettifyQuery}
@@ -538,6 +537,10 @@ export class GraphQLEditor extends React.PureComponent<
             )}
           </div>
         </div>
+        <GraphDocs
+          schema={this.state.schema}
+          sessionId={this.props.session.id}
+        />
       </div>
     )
   }
@@ -608,81 +611,29 @@ export class GraphQLEditor extends React.PureComponent<
 
   // Private methods
 
-  _ensureOfSchema() {
+  private ensureOfSchema() {
     // Only perform introspection if a schema is not provided (undefined)
     if (this.state.schema !== undefined) {
       return
     }
 
-    const fetcher = this.props.fetcher
-
-    const fetch = observableToPromise(fetcher({ query: introspectionQuery }))
-    if (!isPromise(fetch)) {
-      this.setState({
-        responses: [
-          {
-            date: 'Fetcher did not return a Promise for introspection.',
-            time: new Date(),
-          },
-        ],
-      } as State)
-      return
-    }
-
-    fetch
-      .then(result => {
-        if (result.data) {
-          return result
-        }
-
-        // Try the stock introspection query first, falling back on the
-        // sans-subscriptions query for services which do not yet support it.
-        const fetch2 = observableToPromise(
-          fetcher({
-            query: introspectionQuerySansSubscriptions,
-          }),
-        )
-        if (!isPromise(fetch)) {
-          throw new Error('Fetcher did not return a Promise for introspection.')
-        }
-        return fetch2
-      })
-      .then(result => {
-        // If a schema was provided while this fetch was underway, then
-        // satisfy the race condition by respecting the already
-        // provided schema.
-        if (this.state.schema !== undefined) {
-          return
-        }
-
-        if (result && result.data) {
-          const schema = buildClientSchema(result.data)
-          const queryFacts = getQueryFacts(schema, this.state.query)
-          this.setState({ schema, ...queryFacts })
-        } else {
-          const responseString =
-            typeof result === 'string'
-              ? result
-              : JSON.stringify(result, null, 2)
-          this.setState({
-            // Set schema to `null` to explicitly indicate that no schema exists.
-            schema: null,
-            responses: [{ date: responseString, time: new Date() }],
-          } as State)
-        }
+    this.props.schemaFetcher
+      .fetch(this.props.session.endpoint, this.props.session.headers)
+      .then(schema => {
+        this.renewStacks(schema)
+        this.setState({
+          schema,
+        })
       })
       .catch(error => {
         this.setState({
           schema: null,
-          responses: [
-            { date: error && String(error.stack || error), time: new Date() },
-          ],
-        } as State)
+          responses: [{ date: error.message, time: new Date() }],
+        })
       })
   }
 
-  // tslint:disable-next-line
-  _storageGet = (name: string): any => {
+  private storageGet = (name: string): any => {
     if (this.storage) {
       const value = this.storage.getItem('graphiql:' + name)
       // Clean up any inadvertently saved null/undefined values.
@@ -694,8 +645,7 @@ export class GraphQLEditor extends React.PureComponent<
     }
   }
 
-  // tslint:disable-next-line
-  _storageSet = (name: string, value: any): void => {
+  private storageSet = (name: string, value: any): void => {
     if (this.storage) {
       if (value !== undefined) {
         this.storage.setItem('graphiql:' + name, value)
@@ -705,7 +655,7 @@ export class GraphQLEditor extends React.PureComponent<
     }
   }
 
-  _fetchQuery(query, variables, operationName, cb) {
+  private fetchQuery(query, variables, operationName, cb) {
     const fetcher: any = this.props.fetcher
     let jsonVariables = null
 
@@ -778,7 +728,7 @@ export class GraphQLEditor extends React.PureComponent<
     }
   }
 
-  handleRunQuery = selectedOperationName => {
+  private handleRunQuery = selectedOperationName => {
     this.editorQueryID++
     const queryID = this.editorQueryID
 
@@ -808,7 +758,7 @@ export class GraphQLEditor extends React.PureComponent<
       } as State)
 
       // _fetchQuery may return a subscription.
-      const subscription = this._fetchQuery(
+      const subscription = this.fetchQuery(
         editedQuery,
         variables,
         operationName,
@@ -860,7 +810,7 @@ export class GraphQLEditor extends React.PureComponent<
     }
   }
 
-  handleStopQuery = () => {
+  private handleStopQuery = () => {
     const subscription = this.state.subscription
     this.setState({
       isWaitingForResponse: false,
@@ -871,7 +821,7 @@ export class GraphQLEditor extends React.PureComponent<
     }
   }
 
-  _runQueryAtCursor() {
+  private runQueryAtCursor() {
     if (this.state.subscription) {
       this.handleStopQuery()
       return
@@ -901,13 +851,13 @@ export class GraphQLEditor extends React.PureComponent<
     this.handleRunQuery(operationName)
   }
 
-  handlePrettifyQuery = () => {
+  private handlePrettifyQuery = () => {
     const query = print(parse(this.state.query))
     const editor = this.queryEditorComponent.getCodeMirror()
     editor.setValue(query)
   }
 
-  handleEditQuery = value => {
+  private handleEditQuery = value => {
     if (this.state.schema) {
       this.updateQueryFacts(value)
     }
@@ -918,14 +868,14 @@ export class GraphQLEditor extends React.PureComponent<
     return null
   }
 
-  handleEditVariables = value => {
+  private handleEditVariables = value => {
     this.setState({ variables: value } as State)
     if (this.props.onEditVariables) {
       this.props.onEditVariables(value)
     }
   }
 
-  handleHintInformationRender = elem => {
+  private handleHintInformationRender = elem => {
     elem.addEventListener('click', this.onClickHintInformation)
 
     let onRemoveFn
@@ -938,28 +888,15 @@ export class GraphQLEditor extends React.PureComponent<
     )
   }
 
-  handleEditorRunQuery = () => {
-    this._runQueryAtCursor()
+  private handleEditorRunQuery = () => {
+    this.runQueryAtCursor()
   }
 
-  handleToggleDocs = () => {
-    if (typeof this.props.onToggleDocs === 'function') {
-      this.props.onToggleDocs(!this.state.docExplorerOpen)
-    }
-    this.setState({ docExplorerOpen: !this.state.docExplorerOpen } as State)
-  }
-
-  handleToggleSchema = () => {
-    this.setState({
-      schemaExplorerOpen: !this.state.schemaExplorerOpen,
-    } as State)
-  }
-
-  handleResizeStart = downEvent => {
+  private handleResizeStart = downEvent => {
     if (this.props.disableResize) {
       return
     }
-    if (!this._didClickDragBar(downEvent)) {
+    if (!this.didClickDragBar(downEvent)) {
       return
     }
 
@@ -989,7 +926,7 @@ export class GraphQLEditor extends React.PureComponent<
     document.addEventListener('mouseup', onMouseUp)
   }
 
-  _didClickDragBar(event) {
+  private didClickDragBar(event) {
     // Only for primary unmodified clicks
     if (event.button !== 0 || event.ctrlKey) {
       return false
@@ -1013,87 +950,7 @@ export class GraphQLEditor extends React.PureComponent<
     return false
   }
 
-  handleDocsResizeStart = downEvent => {
-    downEvent.preventDefault()
-
-    const hadWidth = this.state.docExplorerWidth
-    const offset = downEvent.clientX - getLeft(downEvent.target)
-
-    let onMouseMove: any = moveEvent => {
-      if (moveEvent.buttons === 0) {
-        return onMouseUp()
-      }
-
-      const app = ReactDOM.findDOMNode(this)
-      const cursorPos = moveEvent.clientX - getLeft(app) - offset
-      const docsSize = app.clientWidth - cursorPos
-
-      if (docsSize < 100) {
-        this.setState({ docExplorerOpen: false } as State)
-      } else {
-        this.setState({
-          docExplorerOpen: true,
-          docExplorerWidth: Math.min(docsSize, 850),
-        } as State)
-      }
-    }
-
-    let onMouseUp: any = () => {
-      if (!this.state.docExplorerOpen) {
-        this.setState({ docExplorerWidth: hadWidth } as State)
-      }
-
-      document.removeEventListener('mousemove', onMouseMove)
-      document.removeEventListener('mouseup', onMouseUp)
-      onMouseMove = null
-      onMouseUp = null
-    }
-
-    document.addEventListener('mousemove', onMouseMove)
-    document.addEventListener('mouseup', onMouseUp)
-  }
-
-  handleSchemaResizeStart = downEvent => {
-    downEvent.preventDefault()
-
-    const hadWidth = this.state.schemaExplorerWidth
-    const offset = downEvent.clientX - getLeft(downEvent.target)
-
-    let onMouseMove: any = moveEvent => {
-      if (moveEvent.buttons === 0) {
-        return onMouseUp()
-      }
-
-      const app = ReactDOM.findDOMNode(this)
-      const cursorPos = moveEvent.clientX - getLeft(app) - offset
-      const schemaSize = app.clientWidth - cursorPos
-
-      if (schemaSize < 100) {
-        this.setState({ schemaExplorerOpen: false } as State)
-      } else {
-        this.setState({
-          schemaExplorerOpen: true,
-          schemaExplorerWidth: Math.min(schemaSize, 850),
-        } as State)
-      }
-    }
-
-    let onMouseUp: any = () => {
-      if (!this.state.schemaExplorerOpen) {
-        this.setState({ schemaExplorerWidth: hadWidth } as State)
-      }
-
-      document.removeEventListener('mousemove', onMouseMove)
-      document.removeEventListener('mouseup', onMouseUp)
-      onMouseMove = null
-      onMouseUp = null
-    }
-
-    document.addEventListener('mousemove', onMouseMove)
-    document.addEventListener('mouseup', onMouseUp)
-  }
-
-  handleTracingResizeStart = downEvent => {
+  private handleTracingResizeStart = downEvent => {
     downEvent.preventDefault()
 
     let didMove = false
@@ -1139,7 +996,7 @@ export class GraphQLEditor extends React.PureComponent<
     document.addEventListener('mouseup', onMouseUp)
   }
 
-  handleVariableResizeStart = downEvent => {
+  private handleVariableResizeStart = downEvent => {
     downEvent.preventDefault()
 
     let didMove = false
@@ -1185,10 +1042,6 @@ export class GraphQLEditor extends React.PureComponent<
     document.addEventListener('mouseup', onMouseUp)
   }
 
-  handleDownloadJSON = () => {
-    download(this.state.responses[0].date, 'result.json', 'application/json')
-  }
-
   private onClickHintInformation = event => {
     if (event.target.className === 'typeName') {
       const typeName = event.target.innerHTML
@@ -1203,33 +1056,25 @@ export class GraphQLEditor extends React.PureComponent<
       }
     }
   }
+
+  private renewStacks(schema) {
+    const rootMap = getRootMap(schema)
+    const stacks = this.props.navStack
+      .map(stack => {
+        return getNewStack(rootMap, schema, stack)
+      })
+      .filter(s => s)
+    this.props.setStacks(stacks)
+  }
 }
 
-export default withTheme<Props>(GraphQLEditor)
+export default withTheme<Props>(
+  connect<any, any, Props>(getSessionDocs, { setStacks })(GraphQLEditor),
+)
 
 // Duck-type promise detection.
 function isPromise(value) {
   return typeof value === 'object' && typeof value.then === 'function'
-}
-
-// Duck-type Observable.take(1).toPromise()
-function observableToPromise(observable) {
-  if (!isObservable(observable)) {
-    return observable
-  }
-
-  return new Promise((resolve, reject) => {
-    const subscription = observable.subscribe(
-      v => {
-        resolve(v)
-        subscription.unsubscribe()
-      },
-      reject,
-      () => {
-        reject(new Error('no value resolved'))
-      },
-    )
-  })
 }
 
 // Duck-type observable detection.

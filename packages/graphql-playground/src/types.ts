@@ -19,9 +19,14 @@ export interface Session {
   hasQuery: boolean
   selectedUserToken?: string
   subscriptionId?: string
-  headers?: any[]
+  headers?: Headers
   hasChanged?: boolean
   absolutePath?: string
+  endpoint: string
+}
+
+export interface Headers {
+  [key: string]: string | number | null
 }
 
 export interface QueryTypes {

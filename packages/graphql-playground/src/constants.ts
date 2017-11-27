@@ -124,12 +124,13 @@ export const modalStyle = {
   },
 }
 
-export function getDefaultSession(): Session {
+export function getDefaultSession(endpoint: string): Session {
   return {
     id: cuid(),
     query: defaultQuery,
     variables: '',
     result: '',
+    endpoint,
     operationName: undefined,
     hasMutation: false,
     hasSubscription: false,

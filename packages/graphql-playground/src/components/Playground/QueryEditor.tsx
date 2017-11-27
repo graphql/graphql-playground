@@ -23,7 +23,7 @@ import onHasCompletion from './onHasCompletion'
  *
  */
 export interface Props {
-  schema: GraphQLSchema | null
+  schema?: GraphQLSchema | null
   value: string
   onEdit?: (value: string) => void
   onHintInformationRender?: (elem: any) => void

@@ -7,10 +7,10 @@ export function isSharingAuthorization(sharableSessions: Session[]): boolean {
   // Check all sessions
   for (const session of sharableSessions) {
     // Check every header of each session
-    for (const header of session.headers || []) {
+    for (const header of Object.keys(session.headers || {})) {
       // If there's a Authorization header present,
       // set the flag to `true` and stop the loop
-      if (header.name.toLowerCase() === 'authorization') {
+      if (header.toLowerCase() === 'authorization') {
         // break
         return true
       }
