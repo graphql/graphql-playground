@@ -29,6 +29,7 @@ import { SchemaFetcher } from './SchemaFetcher'
 import { setStacks } from '../../actions/graphiql-docs'
 import { getRootMap, getNewStack } from './util/stack'
 import { getSessionDocs } from '../../selectors/sessionDocs'
+import { styled } from '../../styled/index'
 
 /**
  * The top-level React component for GraphQLEditor, intended to encompass the entire
@@ -140,6 +141,8 @@ export class GraphQLEditor extends React.PureComponent<
   private storage: any
   private editorQueryID: number
   private resultID: number = 0
+  private queryResizer: any
+  private responseResizer: any
 
   private updateQueryFacts = debounce(150, query => {
     const queryFacts = getQueryFacts(this.state.schema, query)
@@ -489,9 +492,11 @@ export class GraphQLEditor extends React.PureComponent<
                   onRunQuery={this.handleEditorRunQuery}
                 />
               </div>
+              <QueryDragBar ref={this.setQueryResizer} />
             </div>
             {!this.props.queryOnly && (
               <div className="resultWrap">
+                <ResultDragBar ref={this.setResponseResizer} />
                 <ExecuteButton
                   isRunning={Boolean(this.state.subscription)}
                   onRun={this.handleRunQuery}
@@ -543,6 +548,14 @@ export class GraphQLEditor extends React.PureComponent<
         />
       </div>
     )
+  }
+
+  setQueryResizer = ref => {
+    this.queryResizer = ReactDOM.findDOMNode(ref)
+  }
+
+  setResponseResizer = ref => {
+    this.responseResizer = ReactDOM.findDOMNode(ref)
   }
 
   setEditorBarComponent = ref => {
@@ -932,26 +945,30 @@ export class GraphQLEditor extends React.PureComponent<
 
   private didClickDragBar(event) {
     // Only for primary unmodified clicks
-    if (event.button !== 0 || event.ctrlKey) {
-      return false
-    }
-    let target = event.target
-    // We use codemirror's gutter as the drag bar.
-    if (
-      target.className.indexOf &&
-      target.className.indexOf('CodeMirror-gutter') !== 0
-    ) {
-      return false
-    }
-    // Specifically the result window's drag bar.
-    const resultWindow = ReactDOM.findDOMNode(this.resultComponent)
-    while (target) {
-      if (target === resultWindow) {
-        return true
-      }
-      target = target.parentNode
-    }
-    return false
+    return (
+      event.target === this.queryResizer ||
+      event.target === this.responseResizer
+    )
+    // if (event.button !== 0 || event.ctrlKey) {
+    //   return false
+    // }
+    // let target = event.target
+    // // We use codemirror's gutter as the drag bar.
+    // if (
+    //   target.className.indexOf &&
+    //   target.className.indexOf('CodeMirror-gutter') !== 0
+    // ) {
+    //   return false
+    // }
+    // // Specifically the result window's drag bar.
+    // const resultWindow = ReactDOM.findDOMNode(this.resultComponent)
+    // while (target) {
+    //   if (target === resultWindow) {
+    //     return true
+    //   }
+    //   target = target.parentNode
+    // }
+    // return true
   }
 
   private handleTracingResizeStart = downEvent => {
@@ -1085,3 +1102,20 @@ function isPromise(value) {
 function isObservable(value) {
   return typeof value === 'object' && typeof value.subscribe === 'function'
 }
+
+const DragBar = styled.div`
+  width: 15px;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  cursor: col-resize;
+`
+
+const QueryDragBar = styled(DragBar)`
+  right: 0px;
+`
+
+const ResultDragBar = styled(DragBar)`
+  left: 0px;
+  z-index: 1;
+`

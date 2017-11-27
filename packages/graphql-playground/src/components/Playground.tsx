@@ -22,7 +22,7 @@ import GraphQLEditorSession from './Playground/GraphQLEditorSession'
 import { setStacks } from '../actions/graphiql-docs'
 import { mapValues } from 'lodash'
 import Share from './Share'
-import styled, { ThemeProvider, theme as styledTheme } from '../styled'
+import { styled, ThemeProvider, theme as styledTheme } from '../styled'
 import { isSharingAuthorization } from './Playground/util/session'
 import { SchemaFetcher } from './Playground/SchemaFetcher'
 

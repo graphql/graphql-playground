@@ -1,6 +1,6 @@
 import * as React from 'react'
 import * as ReactDOM from 'react-dom'
-import styled, { css } from '../styled'
+import { css, styled } from '../styled'
 
 export interface Props {
   open: boolean

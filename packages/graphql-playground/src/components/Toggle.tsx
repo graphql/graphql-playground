@@ -1,5 +1,5 @@
 import * as React from 'react'
-import styled, { css } from '../styled'
+import { css, styled } from '../styled'
 
 export interface ToggleProps {
   choices: string[]

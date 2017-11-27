@@ -3,7 +3,7 @@ import Icon from 'graphcool-styles/dist/components/Icon/Icon'
 import ToggleButton from './ToggleButton'
 import Tooltip from './Tooltip'
 import { LocalThemeInterface } from './Theme'
-import styled, { css } from '../styled'
+import { styled, css } from '../styled'
 import * as theme from 'styled-theming'
 
 export interface Props extends LocalThemeInterface {

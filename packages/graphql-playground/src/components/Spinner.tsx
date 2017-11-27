@@ -1,5 +1,5 @@
 import * as React from 'react'
-import styled, { keyframes } from '../styled'
+import { keyframes, styled } from '../styled'
 
 const Spinner = () => {
   return (

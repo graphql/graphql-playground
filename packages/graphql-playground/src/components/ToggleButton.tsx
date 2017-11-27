@@ -1,6 +1,6 @@
 /* tslint:disable */
 import * as React from 'react'
-import styled, { css } from '../styled'
+import { css, styled } from '../styled'
 
 export interface Props {
   checked: boolean

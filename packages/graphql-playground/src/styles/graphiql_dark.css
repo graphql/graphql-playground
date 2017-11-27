@@ -147,7 +147,6 @@
   flex: 1;
   position: relative;
   background-color: rgb(23, 42, 58);
-  max-width: 50vw;
 }
 
 .graphiql-container .docExplorerWrap {

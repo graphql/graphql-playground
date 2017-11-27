@@ -7,7 +7,7 @@ import { LocalThemeInterface } from './Theme'
 import * as cn from 'classnames'
 import { Button } from './Button'
 import Copy from './Copy'
-import styled, { keyframes } from '../styled'
+import { keyframes, styled } from '../styled'
 
 export interface Props extends LocalThemeInterface {
   allTabs: boolean
