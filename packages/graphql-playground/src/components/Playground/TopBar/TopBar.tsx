@@ -3,6 +3,7 @@ import { styled } from '../../../styled/index'
 import * as theme from 'styled-theming'
 import { darken, lighten } from 'polished'
 import * as CopyToClipboard from 'react-copy-to-clipboard'
+import Share, { SharingProps } from '../../Share'
 
 export interface Props {
   endpoint: string
@@ -12,6 +13,7 @@ export interface Props {
   onClickHistory?: () => void
   curl: string
   onClickShare?: () => void
+  sharing?: SharingProps
 }
 
 export default class TopBar extends React.Component<Props, {}> {
@@ -24,7 +26,11 @@ export default class TopBar extends React.Component<Props, {}> {
         <CopyToClipboard text={this.props.curl}>
           <Button>Copy CURL</Button>
         </CopyToClipboard>
-        <Button onClick={this.props.onClickShare}>Share Playground</Button>
+        {this.props.sharing && (
+          <Share {...this.props.sharing}>
+            <Button onClick={this.props.onClickShare}>Share Playground</Button>
+          </Share>
+        )}
       </TopBarWrapper>
     )
   }
@@ -64,7 +70,7 @@ const Button = styled.button`
   flex: 0 0 auto;
   letter-spacing: 0.53px;
   font-size: 14px;
-  padding: 5px 9px 6px 10px;
+  padding: 6px 9px 7px 10px;
   * + & {
     margin-left: 6px;
   }
@@ -80,6 +86,7 @@ const TopBarWrapper = styled.div`
   background: ${p => p.theme.colours.darkBlue};
   padding: 10px;
   padding-bottom: 4px;
+  align-items: center;
 `
 
 const UrlBar = styled.input`

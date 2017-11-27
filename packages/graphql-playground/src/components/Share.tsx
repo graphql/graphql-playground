@@ -4,12 +4,11 @@ import { $v } from 'graphcool-styles'
 import ToggleButton from './ToggleButton'
 import Tooltip from './Tooltip'
 import { LocalThemeInterface } from './Theme'
-import * as cn from 'classnames'
 import { Button } from './Button'
 import Copy from './Copy'
 import { keyframes, styled } from '../styled'
 
-export interface Props extends LocalThemeInterface {
+export interface SharingProps extends LocalThemeInterface {
   allTabs: boolean
   httpHeaders: boolean
   history: boolean
@@ -20,13 +19,14 @@ export interface Props extends LocalThemeInterface {
   shareUrl?: string
   reshare: boolean
   isSharingAuthorization: boolean
+  children?: any
 }
 
 export interface State {
   open: boolean
 }
 
-export default class Share extends React.Component<Props, State> {
+export default class Share extends React.Component<SharingProps, State> {
   constructor(props) {
     super(props)
     this.state = {
@@ -42,7 +42,6 @@ export default class Share extends React.Component<Props, State> {
       onToggleAllTabs,
       onToggleHistory,
       onToggleHttpHeaders,
-      localTheme,
       shareUrl,
       onShare,
       reshare,
@@ -50,11 +49,8 @@ export default class Share extends React.Component<Props, State> {
     return (
       <Wrapper>
         <style jsx={true}>{`
-          .settings {
-            @p: .absolute;
+          .share {
             z-index: 1005;
-            right: 96px;
-            top: 13px;
           }
           .tooltip-text {
             @p: .mr10, .darkBlue50, .fw6, .ttu, .f14;
@@ -113,19 +109,7 @@ export default class Share extends React.Component<Props, State> {
           }
         `}</style>
         <IconWrapper>
-          <div
-            className={cn('button', localTheme, { open })}
-            onClick={this.toggleTooltip}
-          >
-            <Icon
-              src={require('../assets/icons/share.svg')}
-              color={localTheme === 'light' ? $v.darkBlue40 : $v.white40}
-              stroke={true}
-              width={13}
-              height={13}
-            />
-            <span>Share</span>
-          </div>
+          <div onClick={this.toggleTooltip}>{this.props.children}</div>
           <TooltipWrapper>
             <Tooltip
               open={open}
@@ -241,10 +225,9 @@ const MessageTitle = styled.div`
 
 // Main styled components
 const Wrapper = styled.div`
-  position: absolute;
-  right: 96px;
-  top: 13px;
   z-index: 1005;
+  height: 100%;
+  margin-left: 6px;
 `
 
 const TooltipText = styled.div`
@@ -265,7 +248,7 @@ const IconWrapper = styled.div`
 
 const TooltipWrapper = styled.div`
   position: absolute;
-  right: -21px;
+  right: 0px;
 `
 
 const Row = styled.div`

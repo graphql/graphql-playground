@@ -3,6 +3,7 @@ import { Session } from '../../types'
 import GraphQLEditor from './GraphQLEditor'
 import { Header } from './HttpHeaders/HttpHeaders'
 import { SchemaFetcher } from './SchemaFetcher'
+import { SharingProps } from '../Share'
 
 export interface Props {
   session: Session
@@ -28,6 +29,7 @@ export interface Props {
   responses?: any
   useVim: boolean
   isActive: boolean
+  sharing?: SharingProps
 }
 
 export default class GraphQLEditorSession extends React.PureComponent<
@@ -47,6 +49,7 @@ export default class GraphQLEditorSession extends React.PureComponent<
       disableQueryHeader,
       isActive,
       schemaFetcher,
+      sharing,
     } = this.props
     return (
       <GraphQLEditor
@@ -81,6 +84,7 @@ export default class GraphQLEditorSession extends React.PureComponent<
         onClickHistory={this.handleClickHistory}
         onChangeEndpoint={this.handleChangeEndpoint}
         onClickShare={this.handleClickShare}
+        sharing={sharing}
       />
     )
   }

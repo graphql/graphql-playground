@@ -31,6 +31,7 @@ import { getRootMap, getNewStack } from './util/stack'
 import { getSessionDocs } from '../../selectors/sessionDocs'
 import { styled } from '../../styled/index'
 import TopBar from './TopBar/TopBar'
+import { SharingProps } from '../Share'
 
 /**
  * The top-level React component for GraphQLEditor, intended to encompass the entire
@@ -81,6 +82,9 @@ export interface Props {
   hideGutters?: boolean
   readonly?: boolean
   useVim?: boolean
+
+  // sharing
+  sharing?: SharingProps
 }
 
 export interface ReduxProps {
@@ -453,6 +457,7 @@ export class GraphQLEditor extends React.PureComponent<
             curl={this.getCurl()}
             onClickPrettify={this.handlePrettifyQuery}
             onClickShare={this.props.onClickShare}
+            sharing={this.props.sharing}
           />
           <div
             ref={this.setEditorBarComponent}
@@ -982,26 +987,6 @@ export class GraphQLEditor extends React.PureComponent<
       event.target === this.queryResizer ||
       event.target === this.responseResizer
     )
-    // if (event.button !== 0 || event.ctrlKey) {
-    //   return false
-    // }
-    // let target = event.target
-    // // We use codemirror's gutter as the drag bar.
-    // if (
-    //   target.className.indexOf &&
-    //   target.className.indexOf('CodeMirror-gutter') !== 0
-    // ) {
-    //   return false
-    // }
-    // // Specifically the result window's drag bar.
-    // const resultWindow = ReactDOM.findDOMNode(this.resultComponent)
-    // while (target) {
-    //   if (target === resultWindow) {
-    //     return true
-    //   }
-    //   target = target.parentNode
-    // }
-    // return true
   }
 
   private handleTracingResizeStart = downEvent => {

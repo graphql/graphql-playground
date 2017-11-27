@@ -10,7 +10,6 @@ export interface Props extends OptionalLocalThemeInterface {
   selectedSessionIndex: number
   onNewSession: any
   onCloseSession: (session: Session) => void
-  onOpenHistory: () => void
   onSelectSession: (session: Session) => void
   isApp?: boolean
 }
@@ -24,7 +23,6 @@ export const TabBar = withTheme<Props>(
     selectedSessionIndex,
     onNewSession,
     onSelectSession,
-    onOpenHistory,
     onCloseSession,
     localTheme,
     isApp,
@@ -193,18 +191,6 @@ export const TabBar = withTheme<Props>(
               height={34}
               stroke={true}
               strokeWidth={4}
-            />
-          </div>
-          <div className={cx('history', localTheme)}>
-            <Icon
-              className="icon"
-              src={require('graphcool-styles/icons/stroke/history.svg')}
-              stroke={true}
-              strokeWidth={4}
-              width={27}
-              height={27}
-              color={localTheme === 'dark' ? white20 : darkBlue20}
-              onClick={onOpenHistory}
             />
           </div>
         </div>

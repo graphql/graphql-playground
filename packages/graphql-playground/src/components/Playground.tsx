@@ -21,7 +21,6 @@ import { DocsState } from '../reducers/graphiql-docs'
 import GraphQLEditorSession from './Playground/GraphQLEditorSession'
 import { setStacks } from '../actions/graphiql-docs'
 import { mapValues } from 'lodash'
-import Share from './Share'
 import { styled, ThemeProvider, theme as styledTheme } from '../styled'
 import { isSharingAuthorization } from './Playground/util/session'
 import { SchemaFetcher } from './Playground/SchemaFetcher'
@@ -271,7 +270,6 @@ export class Playground extends React.PureComponent<Props & DocsState, State> {
               selectedSessionIndex={selectedSessionIndex}
               onNewSession={this.handleNewSessionWithoutNewIndexZero}
               onCloseSession={this.handleCloseSession}
-              onOpenHistory={this.handleOpenHistory}
               onSelectSession={this.handleSelectSession}
               isApp={this.props.isApp}
             />
@@ -315,6 +313,19 @@ export class Playground extends React.PureComponent<Props & DocsState, State> {
                     useVim={this.state.useVim && index === selectedSessionIndex}
                     isActive={index === selectedSessionIndex}
                     schemaFetcher={this.schemaFetcher}
+                    sharing={{
+                      localTheme: this.state.theme,
+                      onShare: this.share,
+                      onToggleHistory: this.toggleShareHistory,
+                      onToggleAllTabs: this.toggleShareAllTabs,
+                      onToggleHttpHeaders: this.toggleShareHTTPHeaders,
+                      history: this.state.shareHistory,
+                      allTabs: this.state.shareAllTabs,
+                      httpHeaders: this.state.shareHttpHeaders,
+                      shareUrl: this.props.shareUrl,
+                      reshare: this.state.changed,
+                      isSharingAuthorization: this.isSharingAuthorization(),
+                    }}
                   />
                 </GraphiqlWrapper>
               ))}
@@ -336,19 +347,6 @@ export class Playground extends React.PureComponent<Props & DocsState, State> {
               }
             />
             */}
-            <Share
-              localTheme={this.state.theme}
-              onShare={this.share}
-              onToggleHistory={this.toggleShareHistory}
-              onToggleAllTabs={this.toggleShareAllTabs}
-              onToggleHttpHeaders={this.toggleShareHTTPHeaders}
-              history={this.state.shareHistory}
-              allTabs={this.state.shareAllTabs}
-              httpHeaders={this.state.shareHttpHeaders}
-              shareUrl={this.props.shareUrl}
-              reshare={this.state.changed}
-              isSharingAuthorization={this.isSharingAuthorization()}
-            />
             {this.state.historyOpen && this.renderHistoryPopup()}
             {this.state.codeGenerationPopupOpen &&
               this.renderCodeGenerationPopup()}
@@ -837,6 +835,7 @@ export class Playground extends React.PureComponent<Props & DocsState, State> {
       // tslint:disable-line
       method: 'post',
       headers,
+      // TODO enable
       // credentials: 'include',
       body: JSON.stringify(graphQLParams),
     }).then(response => {
