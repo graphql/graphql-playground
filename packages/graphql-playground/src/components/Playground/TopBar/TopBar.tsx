@@ -5,6 +5,7 @@ import { darken, lighten } from 'polished'
 import * as CopyToClipboard from 'react-copy-to-clipboard'
 import Share, { SharingProps } from '../../Share'
 import { StyledComponentClass } from 'styled-components'
+import { Icon } from 'graphcool-styles'
 
 export interface Props {
   endpoint: string
@@ -14,6 +15,7 @@ export interface Props {
   onClickHistory?: () => void
   curl: string
   onClickShare?: () => void
+  onReloadSchema?: () => void
   sharing?: SharingProps
 }
 
@@ -23,7 +25,15 @@ export default class TopBar extends React.Component<Props, {}> {
       <TopBarWrapper>
         <Button onClick={this.props.onClickPrettify}>Prettify</Button>
         <Button onClick={this.props.onClickHistory}>History</Button>
-        <UrlBar value={this.props.endpoint} onChange={this.onChange} />
+        <UrlBarWrapper>
+          <UrlBar value={this.props.endpoint} onChange={this.onChange} />
+          <ReloadIcon
+            src={require('graphcool-styles/icons/fill/reload.svg')}
+            width={20}
+            height={20}
+            onClick={this.props.onReloadSchema}
+          />
+        </UrlBarWrapper>
         <CopyToClipboard text={this.props.curl}>
           <Button>Copy CURL</Button>
         </CopyToClipboard>
@@ -58,6 +68,16 @@ const backgroundColor = theme('mode', {
 })
 
 const fontColor = theme('mode', {
+  light: p => p.theme.colours.darkBlue60,
+  dark: p => p.theme.colours.white60,
+})
+
+const iconColor = theme('mode', {
+  light: p => p.theme.colours.darkBlue20,
+  dark: p => p.theme.colours.white20,
+})
+
+const iconColorHover = theme('mode', {
   light: p => p.theme.colours.darkBlue60,
   dark: p => p.theme.colours.white60,
 })
@@ -99,9 +119,29 @@ const UrlBar = styled.input`
   background: ${buttonColor};
   border-radius: 4px;
   color: ${fontColor};
-  flex: 1;
-  margin-left: 6px;
   border: 1px solid ${barBorder};
   padding: 6px 12px;
   font-size: 13px;
+  flex: 1;
+`
+
+const UrlBarWrapper = styled.div`
+  flex: 1;
+  margin-left: 6px;
+  position: relative;
+  display: flex;
+  align-items: center;
+`
+
+const ReloadIcon = styled(Icon)`
+  position: absolute;
+  right: 5px;
+  cursor: pointer;
+  svg {
+    fill: ${iconColor};
+    transition: 0.1s linear all;
+    &:hover {
+      fill: ${iconColorHover};
+    }
+  }
 `

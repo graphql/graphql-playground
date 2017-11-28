@@ -86,7 +86,7 @@ export interface Props {
 }
 
 export interface ReduxProps {
-  setStacks: (stack: any[]) => void
+  setStacks: (sessionId: string, stack: any[]) => void
   navStack: any[]
 }
 
@@ -468,6 +468,7 @@ export class GraphQLEditor extends React.PureComponent<
             onClickPrettify={this.handlePrettifyQuery}
             onClickShare={this.props.onClickShare}
             sharing={this.props.sharing}
+            onReloadSchema={this.reloadSchema}
           />
           <div
             ref={this.setEditorBarComponent}
@@ -688,6 +689,28 @@ export class GraphQLEditor extends React.PureComponent<
   }
 
   // Private methods
+
+  private reloadSchema = async () => {
+    const result = await this.props.schemaFetcher.refetch(
+      this.props.session.endpoint,
+      this.props.session.headers,
+    )
+    if (result) {
+      const { schema } = result
+      this.setState({ schema })
+      this.renewStacks(schema)
+    }
+  }
+
+  private renewStacks(schema) {
+    const rootMap = getRootMap(schema)
+    const stacks = this.props.navStack
+      .map(stack => {
+        return getNewStack(rootMap, schema, stack)
+      })
+      .filter(s => s)
+    this.props.setStacks(this.props.session.id, stacks)
+  }
 
   private ensureOfSchema() {
     // Only perform introspection if a schema is not provided (undefined)
@@ -1143,16 +1166,6 @@ export class GraphQLEditor extends React.PureComponent<
         }
       }
     }
-  }
-
-  private renewStacks(schema) {
-    const rootMap = getRootMap(schema)
-    const stacks = this.props.navStack
-      .map(stack => {
-        return getNewStack(rootMap, schema, stack)
-      })
-      .filter(s => s)
-    this.props.setStacks(stacks)
   }
 }
 

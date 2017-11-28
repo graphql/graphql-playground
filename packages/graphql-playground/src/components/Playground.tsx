@@ -856,8 +856,6 @@ export class Playground extends React.PureComponent<Props & DocsState, State> {
       }
     }
 
-    const endpoint = this.getEndpoint()
-
     let headers: any = {
       'Content-Type': 'application/json',
     }
@@ -870,8 +868,8 @@ export class Playground extends React.PureComponent<Props & DocsState, State> {
       headers = { ...headers, ...requestHeaders }
     }
 
-    return fetch(endpoint, {
-      // tslint:disable-line
+    return fetch(session.endpoint || this.getEndpoint(), {
+      // tslint:disable-lin
       method: 'post',
       headers,
       // TODO enable

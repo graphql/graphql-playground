@@ -204,7 +204,7 @@ export default class Tab extends React.PureComponent<Props, State> {
             <Icon
               src={require('graphcool-styles/icons/stroke/cross.svg')}
               stroke={true}
-              color={localTheme === 'dark' ? $v.white40 : $v.darkBlue40}
+              color={localTheme === 'dark' ? 'rgb(74, 85, 95)' : $v.darkBlue40}
               width={12}
               height={11}
               strokeWidth={7}

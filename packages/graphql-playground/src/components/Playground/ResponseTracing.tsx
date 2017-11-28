@@ -58,7 +58,7 @@ const TracingRows = styled.div`
   overflow: auto;
   top: 0;
   left: 0;
-  width: 100%;
+  width: calc(100% + 100px);
   height: 100%;
 `
 
