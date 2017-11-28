@@ -113,7 +113,7 @@ class MiddlewareApp extends React.Component<Props, State> {
               this.handleChangeSubscriptionsEndpoint
             }
             adminAuthToken={this.state.platformToken}
-            settings={this.getSettings()}
+            settings={this.normalizeSettings(this.state.settings)}
             settingsString={this.state.settingsString}
             onSaveSettings={this.handleSaveSettings}
             onChangeSettings={this.handleChangeSettings}
@@ -123,18 +123,23 @@ class MiddlewareApp extends React.Component<Props, State> {
     )
   }
 
-  getSettings(settingsString = this.state.settingsString) {
+  getSettings(settingsString = this.state.settingsString): EditorSettings {
     try {
       const settings = JSON.parse(settingsString)
-      if (settings.theme !== 'dark' && settings.theme !== 'light') {
-        settings.theme = 'dark'
-      }
-      return settings
+      return this.normalizeSettings(settings)
     } catch (e) {
       // ignore
     }
 
-    return defaultSettings
+    return JSON.parse(defaultSettings)
+  }
+
+  normalizeSettings(settings: EditorSettings) {
+    if (settings.theme !== 'dark' && settings.theme !== 'light') {
+      settings.theme = 'dark'
+    }
+
+    return settings
   }
 
   handleChangeSettings = (settingsString: string) => {

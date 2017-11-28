@@ -43,13 +43,18 @@ export default class TopBar extends React.Component<Props, {}> {
 }
 
 const buttonColor = theme('mode', {
-  light: p => p.theme.colours.darkBlue20,
+  light: p => p.theme.colours.darkBlue10,
   dark: p => p.theme.colours.darkerBlue,
 })
 
 const buttonHoverColor = theme('mode', {
   light: p => darken(0.02, p.theme.colours.darkBlue20),
   dark: p => lighten(0.02, p.theme.colours.darkerBlue),
+})
+
+const backgroundColor = theme('mode', {
+  light: p => '#eeeff0',
+  dark: p => p.theme.colours.darkBlue,
 })
 
 const fontColor = theme('mode', {
@@ -84,7 +89,7 @@ export const Button: StyledComponentClass<any, any, any> = styled.button`
 
 const TopBarWrapper = styled.div`
   display: flex;
-  background: ${p => p.theme.colours.darkBlue};
+  background: ${backgroundColor};
   padding: 10px;
   padding-bottom: 4px;
   align-items: center;

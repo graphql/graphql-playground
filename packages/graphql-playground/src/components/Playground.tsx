@@ -420,18 +420,25 @@ export class Playground extends React.PureComponent<Props & DocsState, State> {
   }
 
   public openSettingsTab = () => {
-    let session = this.createSession()
-    session = Immutable.set(session, 'isSettingsTab', true)
-    session = Immutable.set(session, 'isFile', true)
-    session = Immutable.set(session, 'name', 'Settings')
-    this.setState(state => {
-      return {
-        ...state,
-        sessions: state.sessions.concat(session),
-        selectedSessionIndex: state.sessions.length,
-        changed: false,
-      }
-    })
+    const sessionIndex = this.state.sessions.findIndex(s =>
+      Boolean(s.isSettingsTab),
+    )
+    if (sessionIndex === -1) {
+      let session = this.createSession()
+      session = Immutable.set(session, 'isSettingsTab', true)
+      session = Immutable.set(session, 'isFile', true)
+      session = Immutable.set(session, 'name', 'Settings')
+      this.setState(state => {
+        return {
+          ...state,
+          sessions: state.sessions.concat(session),
+          selectedSessionIndex: state.sessions.length,
+          changed: false,
+        }
+      })
+    } else {
+      this.setState({ selectedSessionIndex: sessionIndex })
+    }
   }
 
   public newSession = (name?: string) => {

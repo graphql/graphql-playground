@@ -20,7 +20,6 @@ import { defaultQuery } from '../../constants'
 import Spinner from '../Spinner'
 import Results from './Results'
 import ReponseTracing from './ResponseTracing'
-import GenerateCodeButton from './GenerateCodeButton'
 import withTheme from '../Theme/withTheme'
 import { LocalThemeInterface } from '../Theme/index'
 import GraphDocs from './DocExplorer/GraphDocs'
@@ -493,19 +492,6 @@ export class GraphQLEditor extends React.PureComponent<
                 useVim={this.props.useVim}
               />
               <div className="variable-editor" style={variableStyle}>
-                {/* <HttpHeaders
-                  headers={this.props.headers}
-                  onChange={this.props.onChangeHeaders}
-                /> */}
-                <div
-                  className="graphiql-button prettify"
-                  onClick={this.handlePrettifyQuery}
-                >
-                  Prettify
-                </div>
-                <GenerateCodeButton
-                  onOpenCodeGeneration={this.props.onClickCodeGeneration}
-                />
                 <div
                   className="variable-editor-title"
                   style={{ cursor: variableOpen ? 'row-resize' : 'n-resize' }}

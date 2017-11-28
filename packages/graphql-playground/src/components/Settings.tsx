@@ -48,6 +48,7 @@ const IconWrapper = styled.div`
 
   .settings-icon svg {
     fill: ${iconColor};
+    transition: 0.1s linear fill;
   }
 
   &:hover {

@@ -194,7 +194,6 @@ export const TabBar = withTheme<Props>(
             />
           </div>
         </div>
-        {localTheme === 'light' && <div className="border-bottom" />}
       </div>
     )
   },
