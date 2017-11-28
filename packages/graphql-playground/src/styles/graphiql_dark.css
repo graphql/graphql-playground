@@ -243,12 +243,12 @@
 }
 
 .graphiql-container .response-tracing {
-  background: #0f202e;
+  background: #0b1924;
 }
 
 .graphiql-container .response-tracing-title {
   text-align: right;
-  background: #0f202e;
+  background: #0b1924;
 }
 
 .graphiql-container .codemirrorWrap {
