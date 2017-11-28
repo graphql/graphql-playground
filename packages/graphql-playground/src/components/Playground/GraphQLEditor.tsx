@@ -14,7 +14,6 @@ import { fillLeafs } from 'graphiql/dist/utility/fillLeafs'
 import { getLeft, getTop } from 'graphiql/dist/utility/elementPosition'
 import { OperationDefinition, Session } from '../../types'
 import { Response } from '../Playground'
-import { Header } from './HttpHeaders'
 import { connect } from 'react-redux'
 
 import { defaultQuery } from '../../constants'
@@ -56,7 +55,7 @@ export interface Props {
   onEditOperationName?: (name: any) => any
   onToggleDocs?: (value: boolean) => any
   onClickCodeGeneration?: any
-  onChangeHeaders?: (headers: Header[]) => any
+  onChangeHeaders?: (headers: string) => any
   onClickHistory?: () => void
   onChangeEndpoint?: (value: string) => void
   onClickShare?: () => void
@@ -119,6 +118,7 @@ export interface State {
   currentQueryEndTime?: Date
   nextQueryStartTime?: Date
   tracingSupported?: boolean
+  queryVariablesActive: boolean
 }
 
 export interface SimpleProps {
@@ -152,6 +152,8 @@ export class GraphQLEditor extends React.PureComponent<
   private resultID: number = 0
   private queryResizer: any
   private responseResizer: any
+  private queryVariablesRef
+  private httpHeadersRef
 
   private updateQueryFacts = debounce(150, query => {
     const queryFacts = getQueryFacts(this.state.schema, query)
@@ -216,6 +218,12 @@ export class GraphQLEditor extends React.PureComponent<
             queryFacts && queryFacts.operations,
           )
 
+    let queryVariablesActive = this.storageGet('queryVariablesActive')
+    queryVariablesActive =
+      queryVariablesActive === 'true'
+        ? true
+        : queryVariablesActive === 'false' ? false : true
+
     // Initialize state
     this.state = {
       query,
@@ -223,7 +231,9 @@ export class GraphQLEditor extends React.PureComponent<
       operationName,
       responses: props.responses || [],
       editorFlex: Number(this.storageGet('editorFlex')) || 1,
-      variableEditorOpen: Boolean(variables),
+      variableEditorOpen: queryVariablesActive
+        ? Boolean(variables)
+        : props.session.headers && props.session.headers.length > 0,
       variableEditorHeight:
         Number(this.storageGet('variableEditorHeight')) || 200,
       responseTracingOpen: false,
@@ -237,6 +247,7 @@ export class GraphQLEditor extends React.PureComponent<
       isWaitingForResponse: false,
       subscription: null,
       selectedVariableNames: [],
+      queryVariablesActive,
       ...queryFacts,
     }
 
@@ -500,16 +511,42 @@ export class GraphQLEditor extends React.PureComponent<
                   style={{ cursor: variableOpen ? 'row-resize' : 'n-resize' }}
                   onMouseDown={this.handleVariableResizeStart}
                 >
-                  {'Query Variables'}
+                  <span
+                    className={cn('subtitle', {
+                      active: this.state.queryVariablesActive,
+                    })}
+                    ref={this.setQueryVariablesRef}
+                    onClick={this.selectQueryVariables}
+                  >
+                    {'Query Variables'}
+                  </span>
+                  <span
+                    className={cn('subtitle', {
+                      active: !this.state.queryVariablesActive,
+                    })}
+                    ref={this.setHttpHeadersRef}
+                    onClick={this.selectHttpHeaders}
+                  >
+                    {'HTTP Headers'}
+                  </span>
                 </div>
-                <VariableEditor
-                  ref={this.setVariableEditorComponent}
-                  value={this.state.variables}
-                  variableToType={this.state.variableToType}
-                  onEdit={this.handleEditVariables}
-                  onHintInformationRender={this.handleHintInformationRender}
-                  onRunQuery={this.handleEditorRunQuery}
-                />
+                {this.state.queryVariablesActive ? (
+                  <VariableEditor
+                    ref={this.setVariableEditorComponent}
+                    value={this.state.variables}
+                    variableToType={this.state.variableToType}
+                    onEdit={this.handleEditVariables}
+                    onHintInformationRender={this.handleHintInformationRender}
+                    onRunQuery={this.handleEditorRunQuery}
+                  />
+                ) : (
+                  <VariableEditor
+                    ref={this.setVariableEditorComponent}
+                    value={this.props.session.headers}
+                    onEdit={this.props.onChangeHeaders}
+                    onRunQuery={this.handleEditorRunQuery}
+                  />
+                )}
               </div>
               <QueryDragBar ref={this.setQueryResizer} />
             </div>
@@ -582,6 +619,14 @@ export class GraphQLEditor extends React.PureComponent<
         .endpoint}' -H 'Accept-Encoding: gzip, deflate, br' -H 'Content-Type: application/json' -H 'Accept: */*' -H 'Connection: keep-alive' -H 'DNT: 1' --data-binary '${
       data
     }' --compressed`
+  }
+
+  setQueryVariablesRef = ref => {
+    this.queryVariablesRef = ref
+  }
+
+  setHttpHeadersRef = ref => {
+    this.httpHeadersRef = ref
   }
 
   setQueryResizer = ref => {
@@ -1035,6 +1080,16 @@ export class GraphQLEditor extends React.PureComponent<
     document.addEventListener('mouseup', onMouseUp)
   }
 
+  private selectQueryVariables = () => {
+    this.setState({ queryVariablesActive: true })
+    this.storageSet('queryVariablesActive', 'true')
+  }
+
+  private selectHttpHeaders = () => {
+    this.setState({ queryVariablesActive: false })
+    this.storageSet('queryVariablesActive', 'false')
+  }
+
   private handleVariableResizeStart = downEvent => {
     downEvent.preventDefault()
 
@@ -1042,6 +1097,14 @@ export class GraphQLEditor extends React.PureComponent<
     const wasOpen = this.state.variableEditorOpen
     const hadHeight = this.state.variableEditorHeight
     const offset = downEvent.clientY - getTop(downEvent.target)
+
+    if (
+      wasOpen &&
+      (downEvent.target === this.queryVariablesRef ||
+        downEvent.target === this.httpHeadersRef)
+    ) {
+      return
+    }
 
     let onMouseMove: any = moveEvent => {
       if (moveEvent.buttons === 0) {

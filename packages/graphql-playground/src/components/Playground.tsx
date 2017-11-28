@@ -227,7 +227,7 @@ export class Playground extends React.PureComponent<Props & DocsState, State> {
     let connectionParams: any = {}
 
     if (session.headers) {
-      connectionParams = { ...session.headers }
+      connectionParams = { ...this.parseHeaders(session.headers) }
     }
 
     if (this.wsConnections[session.id]) {
@@ -698,7 +698,7 @@ export class Playground extends React.PureComponent<Props & DocsState, State> {
     return Immutable(getDefaultSession(this.props.endpoint))
   }
 
-  private handleChangeHeaders = (sessionId: string, headers: any[]) => {
+  private handleChangeHeaders = (sessionId: string, headers: string) => {
     this.setValueInSession(sessionId, 'headers', headers)
   }
 
@@ -824,7 +824,7 @@ export class Playground extends React.PureComponent<Props & DocsState, State> {
     }
 
     if (session.headers) {
-      headers = { ...headers, ...session.headers }
+      headers = { ...headers, ...this.parseHeaders(session.headers) }
     }
 
     if (requestHeaders) {
@@ -852,6 +852,33 @@ export class Playground extends React.PureComponent<Props & DocsState, State> {
       this.storage.executedQuery()
       return response.json()
     })
+  }
+
+  private parseHeaders(headers: string) {
+    if (Array.isArray(headers)) {
+      return headers.reduce((acc, header) => {
+        return {
+          ...acc,
+          [header.name]: header.value,
+        }
+      }, {})
+    } else if (typeof headers === 'object') {
+      return headers
+    }
+    let jsonVariables
+
+    try {
+      jsonVariables =
+        headers && headers.trim() !== '' ? JSON.parse(headers) : undefined
+    } catch (error) {
+      throw new Error(`Headers are invalid JSON: ${error.message}.`)
+    }
+
+    if (typeof jsonVariables !== 'object') {
+      throw new Error('Headers are not a JSON object.')
+    }
+
+    return jsonVariables
   }
 
   private isSharingAuthorization = (): boolean => {
@@ -914,7 +941,7 @@ export class Playground extends React.PureComponent<Props & DocsState, State> {
       sharingProject = {
         ...sharingProject,
         sessions: mapValues(sharingProject.sessions, (session: Session) => {
-          session.headers = {}
+          session.headers = ''
           return session
         }),
       }

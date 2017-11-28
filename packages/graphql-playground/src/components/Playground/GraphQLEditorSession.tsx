@@ -1,7 +1,6 @@
 import * as React from 'react'
 import { Session } from '../../types'
 import GraphQLEditor from './GraphQLEditor'
-import { Header } from './HttpHeaders/HttpHeaders'
 import { SchemaFetcher } from './SchemaFetcher'
 import { SharingProps } from '../Share'
 
@@ -19,7 +18,7 @@ export interface Props {
   onEditVariables: (sessionId: string, variables: any) => any
   onEditOperationName: (sessionId: string, name: any) => any
   onClickCodeGeneration: any
-  onChangeHeaders: (sessionId: string, headers: Header[]) => any
+  onChangeHeaders: (sessionId: string, headers: string) => any
   onClickHistory: () => void
   onChangeEndpoint: (sessionId: string, value: string) => void
   onClickShare: (sessionId: string) => void
@@ -105,7 +104,7 @@ export default class GraphQLEditorSession extends React.PureComponent<
     this.props.onEditQuery(this.props.session.id, query)
   }
 
-  private handleChangeHeaders = (headers: any[]) => {
+  private handleChangeHeaders = (headers: string) => {
     this.props.onChangeHeaders(this.props.session.id, headers)
   }
 

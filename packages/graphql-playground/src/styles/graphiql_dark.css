@@ -222,14 +222,24 @@
   background: #0b1924;
   color: rgba(255, 255, 255, 0.3);
   text-transform: uppercase;
-  font-weight: bold;
-  letter-spacing: 1px;
+  font-weight: 600;
+  letter-spacing: 0.53px;
   line-height: 14px;
+  font-size: 14px;
   padding: 14px 14px 5px 21px;
   -webkit-user-select: none;
   -moz-user-select: none;
   -ms-user-select: none;
   user-select: none;
+}
+
+.graphiql-container .variable-editor-title .subtitle {
+  margin-right: 10px;
+  cursor: pointer;
+}
+
+.graphiql-container .variable-editor-title .subtitle.active {
+  color: rgba(255, 255, 255, 0.6);
 }
 
 .graphiql-container .response-tracing {

@@ -1,4 +1,5 @@
 import { Session } from '../types'
+import { mapValues } from 'lodash'
 
 export default class PlaygroundStorage {
   project: any
@@ -133,7 +134,35 @@ export default class PlaygroundStorage {
         date: new Date(item.date),
       }))
     }
-    return result
+    return this.runMigration(result)
+  }
+
+  // migrate headers to new format
+  private runMigration(project) {
+    function mapHeaders(session) {
+      return {
+        ...session,
+        headers: Array.isArray(session.headers)
+          ? session.headers.reduce((acc, header) => {
+              return {
+                ...acc,
+                [header.name]: header.value,
+              }
+            }, {})
+          : session.headers,
+      }
+    }
+
+    const history = project.history
+      ? project.history.map(s => mapHeaders(s))
+      : []
+    const sessions = mapValues(project.sessions, mapHeaders)
+
+    return {
+      ...project,
+      sessions,
+      history,
+    }
   }
 
   private getExecutedQueryCount() {
