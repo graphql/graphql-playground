@@ -94,7 +94,7 @@ class ExecuteButton extends React.Component<
         <style jsx={true}>{`
           .execute-button-wrap {
             position: absolute;
-            left: -62px;
+            left: -63px;
             z-index: 5;
             top: 15px;
             margin: 0 14px 0 28px;
