@@ -54,12 +54,13 @@ const NotSupported = styled.div`
 const TracingRows = styled.div`
   padding-left: 100px;
   padding-bottom: 100px;
+  padding-top: 16px;
   position: absolute;
   overflow: auto;
   top: 0;
   left: 0;
   width: calc(100% + 100px);
-  height: 100%;
+  height: calc(100% + 116px);
 `
 
 export default class ResponseTracing extends React.Component<Props, {}> {
