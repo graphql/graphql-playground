@@ -64,7 +64,7 @@ class MiddlewareApp extends React.Component<Props, State> {
         ? this.normalizeSubscriptionUrl(endpoint, subscriptionEndpoint)
         : '',
       settingsString: settings,
-      settings: this.getSettingsJson(settings),
+      settings: this.getSettings(settings),
     }
   }
 
@@ -113,7 +113,7 @@ class MiddlewareApp extends React.Component<Props, State> {
               this.handleChangeSubscriptionsEndpoint
             }
             adminAuthToken={this.state.platformToken}
-            settings={this.state.settings}
+            settings={this.getSettings()}
             settingsString={this.state.settingsString}
             onSaveSettings={this.handleSaveSettings}
             onChangeSettings={this.handleChangeSettings}
@@ -123,8 +123,18 @@ class MiddlewareApp extends React.Component<Props, State> {
     )
   }
 
-  getSettingsJson(settingsString = this.state.settingsString) {
-    return JSON.parse(settingsString)
+  getSettings(settingsString = this.state.settingsString) {
+    try {
+      const settings = JSON.parse(settingsString)
+      if (settings.theme !== 'dark' && settings.theme !== 'light') {
+        settings.theme = 'dark'
+      }
+      return settings
+    } catch (e) {
+      // ignore
+    }
+
+    return defaultSettings
   }
 
   handleChangeSettings = (settingsString: string) => {
@@ -133,7 +143,7 @@ class MiddlewareApp extends React.Component<Props, State> {
 
   handleSaveSettings = () => {
     try {
-      const settings = this.getSettingsJson()
+      const settings = JSON.parse(this.state.settingsString)
       this.setState({ settings })
       localStorage.setItem('settings', this.state.settingsString)
     } catch (e) {
