@@ -15,6 +15,45 @@ if (process.env.NODE_ENV !== 'production') {
 /* tslint:disable-next-line */
 ;(window as any)['GraphQLPlayground'] = {
   init(element: HTMLElement, options) {
-    ReactDOM.render(<MiddlewareApp setTitle={true} {...options} />, element)
+    ReactDOM.render(
+      <MiddlewareApp
+        config={exampleJsonConfig}
+        folderName={folderName}
+        setTitle={true}
+        {...options}
+      />,
+      element,
+    )
   },
 }
+
+const exampleJsonConfig = `\
+{
+  "schemaPath": "schema.graphql",
+  "extensions": {
+    "endpoints": {
+      "prod": {
+        "url": "https://airbnb.now.sh",
+        "subscription": "wss://airbnb.now.sh"
+      },
+      "local": {
+        "url": "http://localhost:4000",
+        "subscription": "ws://localhost:4000"
+      }
+    }
+  }
+}`
+
+const folderName = `airbnb`
+
+// const exampleYmlConfig = `\
+// schemaPath: schema.graphql
+// extensions:
+//   endpoints:
+//     default:
+//       url: 'https://airbnb.now.sh'
+//       subscription: 'wss://airbnb.now.sh'
+//     local:
+//       url: 'http://localhost:4000'
+//       subscription: 'ws://localhost:4000'
+// `

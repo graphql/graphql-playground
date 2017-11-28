@@ -22,6 +22,8 @@ export interface Props {
   endpoint?: string
   subscriptionEndpoint?: string
   setTitle?: boolean
+  settings?: EditorSettings
+  folderName?: string
 }
 
 export interface State {
