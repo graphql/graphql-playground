@@ -139,6 +139,9 @@ export default class PlaygroundStorage {
 
   // migrate headers to new format
   private runMigration(project) {
+    if (!project) {
+      return project
+    }
     function mapHeaders(session) {
       return {
         ...session,

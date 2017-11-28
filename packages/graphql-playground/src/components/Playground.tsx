@@ -712,7 +712,10 @@ export class Playground extends React.PureComponent<Props & DocsState, State> {
     let newSession
     const currentActiveSession =
       this.state && this.state.sessions[this.state.selectedSessionIndex]
-    const headers = currentActiveSession ? currentActiveSession.headers : []
+    const headers =
+      this.props.settings.reuseHeaders && currentActiveSession
+        ? currentActiveSession.headers
+        : ''
     if (session) {
       newSession = Immutable.set(session, 'id', cuid())
     } else {

@@ -23,9 +23,8 @@ const PORT = 4000
 
 const app = express()
 
-// bodyParser is needed just for POST.
 app.use('/graphql', bodyParser.json(), graphqlExpress({ schema }))
-app.get('/playground', expressPlayground({ endpoint: '/graphql' })) // if you want GraphiQL enabled
+app.get('/playground', expressPlayground({ endpoint: '/graphql' }))
 
 app.listen(PORT)
 

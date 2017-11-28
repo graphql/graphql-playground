@@ -26,7 +26,12 @@ export default class TopBar extends React.Component<Props, {}> {
         <Button onClick={this.props.onClickPrettify}>Prettify</Button>
         <Button onClick={this.props.onClickHistory}>History</Button>
         <UrlBarWrapper>
-          <UrlBar value={this.props.endpoint} onChange={this.onChange} />
+          <UrlBar
+            value={this.props.endpoint}
+            onChange={this.onChange}
+            onKeyDown={this.onKeyDown}
+            onBlur={this.props.onReloadSchema}
+          />
           <ReloadIcon
             src={require('graphcool-styles/icons/fill/reload.svg')}
             width={20}
@@ -48,6 +53,11 @@ export default class TopBar extends React.Component<Props, {}> {
   onChange = e => {
     if (typeof this.props.onChangeEndpoint === 'function') {
       this.props.onChangeEndpoint(e.target.value)
+    }
+  }
+  onKeyDown = e => {
+    if (e.keyCode === 13 && typeof this.props.onReloadSchema === 'function') {
+      this.props.onReloadSchema()
     }
   }
 }

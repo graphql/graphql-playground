@@ -55,6 +55,9 @@ export default class Tab extends React.PureComponent<Props, State> {
             }
             border-bottom: 2px solid #172a3a;
           }
+          .tab:first-of-type {
+            margin-left: 0;
+          }
           .light.tab {
             background-color: #e7eaec;
             &.active {

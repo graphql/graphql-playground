@@ -58,7 +58,7 @@ class MiddlewareApp extends React.Component<Props, State> {
     const settings = localStorage.getItem('settings') || defaultSettings
 
     this.state = {
-      endpoint,
+      endpoint: this.absolutizeUrl(endpoint),
       platformToken: localStorage.getItem('platform-token') || undefined,
       subscriptionEndpoint: subscriptionEndpoint
         ? this.normalizeSubscriptionUrl(endpoint, subscriptionEndpoint)
@@ -66,6 +66,14 @@ class MiddlewareApp extends React.Component<Props, State> {
       settingsString: settings,
       settings: this.getSettings(settings),
     }
+  }
+
+  absolutizeUrl(url) {
+    if (url.startsWith('/')) {
+      return location.origin + url
+    }
+
+    return url
   }
 
   normalizeSubscriptionUrl(endpoint, subscriptionEndpoint) {
