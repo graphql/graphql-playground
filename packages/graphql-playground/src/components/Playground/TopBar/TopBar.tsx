@@ -4,6 +4,7 @@ import * as theme from 'styled-theming'
 import { darken, lighten } from 'polished'
 import * as CopyToClipboard from 'react-copy-to-clipboard'
 import Share, { SharingProps } from '../../Share'
+import { StyledComponentClass } from 'styled-components'
 
 export interface Props {
   endpoint: string
@@ -61,7 +62,7 @@ const barBorder = theme('mode', {
   dark: p => '#09141c',
 })
 
-const Button = styled.button`
+export const Button: StyledComponentClass<any, any, any> = styled.button`
   text-transform: uppercase;
   font-weight: 600;
   color: ${fontColor};

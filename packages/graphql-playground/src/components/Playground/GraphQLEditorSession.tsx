@@ -11,7 +11,6 @@ export interface Props {
   isGraphcoolUrl: boolean
   fetcher: (session: Session, graphQLParams: any, headers?: any) => Promise<any>
   schemaFetcher: SchemaFetcher
-  schemaCache: any
   isEndpoint: boolean
   storage?: any
   onEditQuery: (sessionId: string, data: any) => void

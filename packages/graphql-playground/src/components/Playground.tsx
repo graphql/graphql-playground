@@ -24,8 +24,10 @@ import { mapValues } from 'lodash'
 import { styled, ThemeProvider, theme as styledTheme } from '../styled'
 import { isSharingAuthorization } from './Playground/util/session'
 import { SchemaFetcher } from './Playground/SchemaFetcher'
+import Settings from './Settings'
+import SettingsEditor from './SettingsEditor'
+import { EditorSettings } from './MiddlewareApp'
 
-export type Theme = 'dark' | 'light'
 export interface Response {
   resultID: string
   date: string
@@ -50,6 +52,10 @@ export interface Props {
   onChangeSubscriptionsEndpoint?: (endpoint: string) => void
   getRef?: (ref: Playground) => void
   graphqlConfig?: any
+  onSaveSettings: () => void
+  onChangeSettings: (settingsString: string) => void
+  settings: EditorSettings
+  settingsString: string
 }
 
 export interface State {
@@ -64,7 +70,6 @@ export interface State {
   selectUserSessionId?: string
   codeGenerationPopupOpen: boolean
   disableQueryHeader: boolean
-  theme: Theme
   autoReloadSchema: boolean
   useVim: boolean
   userModelName: string
@@ -139,7 +144,6 @@ export class Playground extends React.PureComponent<Props & DocsState, State> {
       selectUserSessionId: undefined,
       codeGenerationPopupOpen: false,
       disableQueryHeader: false,
-      theme: (localStorage.getItem('theme') as Theme) || 'dark',
       autoReloadSchema: false,
       useVim: localStorage.getItem('useVim') === 'true' || false,
       shareAllTabs: true,
@@ -256,14 +260,14 @@ export class Playground extends React.PureComponent<Props & DocsState, State> {
     editor.setCursor(position)
   }
   render() {
-    const { sessions, selectedSessionIndex, theme } = this.state
-    const { isEndpoint } = this.props
+    const { sessions, selectedSessionIndex } = this.state
+    const { isEndpoint, settings: { theme } } = this.props
     const selectedEndpointUrl = isEndpoint ? location.href : this.getEndpoint()
     const isGraphcoolUrl = this.isGraphcoolUrl(selectedEndpointUrl)
 
     return (
       <ThemeProvider theme={{ ...styledTheme, mode: theme }}>
-        <OldThemeProvider theme={this.state.theme}>
+        <OldThemeProvider theme={theme}>
           <PlaygroundWrapper className="playground">
             <TabBar
               sessions={sessions}
@@ -288,65 +292,58 @@ export class Playground extends React.PureComponent<Props & DocsState, State> {
                     top: `-${100 * selectedSessionIndex}%`,
                   }}
                 >
-                  <GraphQLEditorSession
-                    key={session.id}
-                    session={session}
-                    index={index}
-                    schemaCache={this.state.schemaCache}
-                    isGraphcoolUrl={isGraphcoolUrl}
-                    fetcher={this.fetcher}
-                    isEndpoint={Boolean(isEndpoint)}
-                    storage={this.storage.getSessionStorage(session.id)}
-                    onClickCodeGeneration={this.handleClickCodeGeneration}
-                    onEditOperationName={this.handleOperationNameChange}
-                    onEditVariables={this.handleVariableChange}
-                    onEditQuery={this.handleQueryChange}
-                    onChangeHeaders={this.handleChangeHeaders}
-                    onClickHistory={this.handleOpenHistory}
-                    onChangeEndpoint={this.handleChangeEndpoint}
-                    onClickShare={this.share}
-                    responses={
-                      this.state.response ? [this.state.response] : undefined
-                    }
-                    disableQueryHeader={this.state.disableQueryHeader}
-                    onRef={this.setRef}
-                    useVim={this.state.useVim && index === selectedSessionIndex}
-                    isActive={index === selectedSessionIndex}
-                    schemaFetcher={this.schemaFetcher}
-                    sharing={{
-                      localTheme: this.state.theme,
-                      onShare: this.share,
-                      onToggleHistory: this.toggleShareHistory,
-                      onToggleAllTabs: this.toggleShareAllTabs,
-                      onToggleHttpHeaders: this.toggleShareHTTPHeaders,
-                      history: this.state.shareHistory,
-                      allTabs: this.state.shareAllTabs,
-                      httpHeaders: this.state.shareHttpHeaders,
-                      shareUrl: this.props.shareUrl,
-                      reshare: this.state.changed,
-                      isSharingAuthorization: this.isSharingAuthorization(),
-                    }}
-                  />
+                  {session.isSettingsTab ? (
+                    <SettingsEditor
+                      value={this.props.settingsString}
+                      onChange={this.handleChangeSettings}
+                      onSave={this.handleSaveSettings}
+                    />
+                  ) : (
+                    <GraphQLEditorSession
+                      key={session.id}
+                      session={session}
+                      index={index}
+                      isGraphcoolUrl={isGraphcoolUrl}
+                      fetcher={this.fetcher}
+                      isEndpoint={Boolean(isEndpoint)}
+                      storage={this.storage.getSessionStorage(session.id)}
+                      onClickCodeGeneration={this.handleClickCodeGeneration}
+                      onEditOperationName={this.handleOperationNameChange}
+                      onEditVariables={this.handleVariableChange}
+                      onEditQuery={this.handleQueryChange}
+                      onChangeHeaders={this.handleChangeHeaders}
+                      onClickHistory={this.handleOpenHistory}
+                      onChangeEndpoint={this.handleChangeEndpoint}
+                      onClickShare={this.share}
+                      responses={
+                        this.state.response ? [this.state.response] : undefined
+                      }
+                      disableQueryHeader={this.state.disableQueryHeader}
+                      onRef={this.setRef}
+                      useVim={
+                        this.state.useVim && index === selectedSessionIndex
+                      }
+                      isActive={index === selectedSessionIndex}
+                      schemaFetcher={this.schemaFetcher}
+                      sharing={{
+                        localTheme: this.props.settings.theme,
+                        onShare: this.share,
+                        onToggleHistory: this.toggleShareHistory,
+                        onToggleAllTabs: this.toggleShareAllTabs,
+                        onToggleHttpHeaders: this.toggleShareHTTPHeaders,
+                        history: this.state.shareHistory,
+                        allTabs: this.state.shareAllTabs,
+                        httpHeaders: this.state.shareHttpHeaders,
+                        shareUrl: this.props.shareUrl,
+                        reshare: this.state.changed,
+                        isSharingAuthorization: this.isSharingAuthorization(),
+                      }}
+                    />
+                  )}
                 </GraphiqlWrapper>
               ))}
             </GraphiqlsContainer>
-            {/*
-            <Settings
-              onToggleTheme={this.toggleTheme}
-              localTheme={this.state.theme}
-              autoReload={this.state.autoReloadSchema}
-              onToggleReload={this.toggleSchemaReload}
-              onReload={this.fetchSchemas}
-              endpoint={this.props.endpoint}
-              onChangeEndpoint={this.props.onChangeEndpoint}
-              useVim={this.state.useVim}
-              onToggleUseVim={this.toggleUseVim}
-              subscriptionsEndpoint={this.props.subscriptionsEndpoint || ''}
-              onChangeSubscriptionsEndpoint={
-                this.props.onChangeSubscriptionsEndpoint
-              }
-            />
-            */}
+            <Settings onClick={this.openSettingsTab} />
             {this.state.historyOpen && this.renderHistoryPopup()}
             {this.state.codeGenerationPopupOpen &&
               this.renderCodeGenerationPopup()}
@@ -400,6 +397,41 @@ export class Playground extends React.PureComponent<Props & DocsState, State> {
       ...state,
       autoReloadSchema: !state.autoReloadSchema,
     }))
+  }
+
+  handleChangeSettings = (settings: string) => {
+    const settingsSession = this.state.sessions.find(session =>
+      Boolean(session.isSettingsTab),
+    )
+    if (settingsSession) {
+      this.setValueInSession(settingsSession.id, 'hasChanged', true)
+    }
+    this.props.onChangeSettings(settings)
+  }
+
+  handleSaveSettings = () => {
+    const settingsSession = this.state.sessions.find(session =>
+      Boolean(session.isSettingsTab),
+    )
+    if (settingsSession) {
+      this.setValueInSession(settingsSession.id, 'hasChanged', false)
+    }
+    this.props.onSaveSettings()
+  }
+
+  public openSettingsTab = () => {
+    let session = this.createSession()
+    session = Immutable.set(session, 'isSettingsTab', true)
+    session = Immutable.set(session, 'isFile', true)
+    session = Immutable.set(session, 'name', 'Settings')
+    this.setState(state => {
+      return {
+        ...state,
+        sessions: state.sessions.concat(session),
+        selectedSessionIndex: state.sessions.length,
+        changed: false,
+      }
+    })
   }
 
   public newSession = (name?: string) => {

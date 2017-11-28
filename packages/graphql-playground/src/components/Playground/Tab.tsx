@@ -165,6 +165,16 @@ export default class Tab extends React.PureComponent<Props, State> {
           {session.subscriptionActive && <div className="red-dot" />}
           <div className="query-types">
             {queryTypes.query && <div className="query-type query">Q</div>}
+            {session.isSettingsTab && (
+              <div className="query-type query">
+                <Icon
+                  src={require('graphcool-styles/icons/fill/settings.svg')}
+                  width={12}
+                  height={12}
+                  color="white"
+                />
+              </div>
+            )}
             {queryTypes.mutation && (
               <div className="query-type mutation">M</div>
             )}

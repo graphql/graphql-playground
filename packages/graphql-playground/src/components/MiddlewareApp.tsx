@@ -30,7 +30,20 @@ export interface State {
   subscriptionEndpoint?: string
   shareUrl?: string
   platformToken?: string
+  settingsString: string
+  settings: EditorSettings
 }
+
+export type Theme = 'dark' | 'light'
+export interface EditorSettings {
+  theme: Theme
+  reuseHeaders: boolean
+}
+
+const defaultSettings = `{
+  "theme": "dark",
+  "reuseHeaders": true
+}`
 
 class MiddlewareApp extends React.Component<Props, State> {
   constructor(props: Props) {
@@ -42,12 +55,16 @@ class MiddlewareApp extends React.Component<Props, State> {
     const subscriptionEndpoint =
       props.subscriptionEndpoint || getParameterByName('subscriptionEndpoint')
 
+    const settings = localStorage.getItem('settings') || defaultSettings
+
     this.state = {
       endpoint,
       platformToken: localStorage.getItem('platform-token') || undefined,
       subscriptionEndpoint: subscriptionEndpoint
         ? this.normalizeSubscriptionUrl(endpoint, subscriptionEndpoint)
         : '',
+      settingsString: settings,
+      settings: this.getSettingsJson(settings),
     }
   }
 
@@ -96,10 +113,33 @@ class MiddlewareApp extends React.Component<Props, State> {
               this.handleChangeSubscriptionsEndpoint
             }
             adminAuthToken={this.state.platformToken}
+            settings={this.state.settings}
+            settingsString={this.state.settingsString}
+            onSaveSettings={this.handleSaveSettings}
+            onChangeSettings={this.handleChangeSettings}
           />
         </Provider>
       </div>
     )
+  }
+
+  getSettingsJson(settingsString = this.state.settingsString) {
+    return JSON.parse(settingsString)
+  }
+
+  handleChangeSettings = (settingsString: string) => {
+    this.setState({ settingsString })
+  }
+
+  handleSaveSettings = () => {
+    try {
+      const settings = this.getSettingsJson()
+      this.setState({ settings })
+      localStorage.setItem('settings', this.state.settingsString)
+    } catch (e) {
+      /* tslint:disable-next-line */
+      console.error(e)
+    }
   }
 
   private share = (session: any) => {
