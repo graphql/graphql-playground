@@ -80,7 +80,7 @@ class MiddlewareApp extends React.Component<Props, State> {
       configIsYaml = result.configIsYaml
     }
 
-    const activeEnv = this.getInitialActiveEnv(config)
+    const { activeEnv, projectName } = this.getInitialActiveEnv(config)
 
     let endpoint =
       props.endpoint || getParameterByName('endpoint') || location.href
@@ -89,7 +89,7 @@ class MiddlewareApp extends React.Component<Props, State> {
       props.subscriptionEndpoint || getParameterByName('subscriptionEndpoint')
 
     if (props.configString && config && activeEnv) {
-      const endpoints = getActiveEndpoints(config, activeEnv)
+      const endpoints = getActiveEndpoints(config, activeEnv, projectName)
       endpoint = endpoints.endpoint
       subscriptionEndpoint = endpoints.subscriptionEndpoint
     }
@@ -109,12 +109,28 @@ class MiddlewareApp extends React.Component<Props, State> {
     }
   }
 
-  getInitialActiveEnv(config?: GraphQLConfig) {
-    if (config && config.extensions && config.extensions.endpoints) {
-      return Object.keys(config.extensions.endpoints)[0]
+  getInitialActiveEnv(
+    config?: GraphQLConfig,
+  ): { projectName?: string; activeEnv?: string } {
+    if (config) {
+      if (config.extensions && config.extensions.endpoints) {
+        return {
+          activeEnv: Object.keys(config.extensions.endpoints)[0],
+        }
+      }
+      if (config.projects) {
+        const projectName = Object.keys(config.projects)[0]
+        const project = config.projects[projectName]
+        if (project.extensions && project.extensions.endpoints) {
+          return {
+            activeEnv: Object.keys(project.extensions.endpoints)[0],
+            projectName,
+          }
+        }
+      }
     }
 
-    return undefined
+    return {}
   }
 
   parseGraphQLConfig(
@@ -191,11 +207,9 @@ class MiddlewareApp extends React.Component<Props, State> {
             <OldThemeProvider theme={theme}>
               <App>
                 {this.state.config &&
-                  this.state.config.extensions &&
-                  this.state.config.extensions.endpoints &&
                   this.state.activeEnv && (
                     <ProjectsSideNav
-                      endpoints={this.state.config.extensions.endpoints}
+                      config={this.state.config}
                       folderName={this.props.folderName || 'GraphQL App'}
                       theme={this.state.settings.theme}
                       activeEnv={this.state.activeEnv}
@@ -273,10 +287,11 @@ class MiddlewareApp extends React.Component<Props, State> {
     }
   }
 
-  handleSelectEnv = (env: string) => {
+  handleSelectEnv = (env: string, projectName?: string) => {
     const { endpoint, subscriptionEndpoint } = getActiveEndpoints(
       this.state.config!,
       env,
+      projectName,
     )!
     this.setState({ activeEnv: env, endpoint, subscriptionEndpoint })
   }

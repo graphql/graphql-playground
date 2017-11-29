@@ -49,12 +49,19 @@ const folderName = `airbnb`
 
 const exampleYmlConfig = `\
 schemaPath: schema.graphql
-extensions:
-  endpoints:
-    default:
-      url: 'https://airbnb.now.sh'
-      subscription: 'wss://airbnb.now.sh'
-    local:
-      url: 'http://localhost:4000'
-      subscription: 'ws://localhost:4000'
+projects:
+  gateway:
+    extensions:
+      endpoints:
+        default:
+          url: 'https://airbnb.now.sh'
+          subscription: 'wss://airbnb.now.sh'
+        local:
+          url: 'http://localhost:4000'
+          subscription: 'ws://localhost:4000'
+  database:
+    extensions:
+      endpoints:
+        dev:
+          url: 'https://api.graph.cool/simple/v1/asdf'
 `

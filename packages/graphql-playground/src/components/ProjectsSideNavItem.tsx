@@ -4,17 +4,19 @@ import { styled } from '../styled/index'
 
 export interface Props {
   env: string
-  onSelectEnv: (env: string) => void
+  onSelectEnv: (env: string, projectName?: string) => void
   activeEnv: string
   count: number
+  deep: boolean
+  projectName?: string
 }
 
 export default class ProjectsSideNavItem extends React.Component<Props, {}> {
   render() {
-    const { env, activeEnv, count } = this.props
+    const { env, activeEnv, count, deep } = this.props
     const active = activeEnv === env
     return (
-      <ListItem className={cx({ active })} onClick={this.selectEndpoint}>
+      <ListItem className={cx({ active, deep })} onClick={this.selectEndpoint}>
         <span>{env}</span>
         <Count className={cx('count', { active })}>{count}</Count>
       </ListItem>
@@ -22,12 +24,12 @@ export default class ProjectsSideNavItem extends React.Component<Props, {}> {
   }
 
   private selectEndpoint = () => {
-    this.props.onSelectEnv(this.props.env)
+    this.props.onSelectEnv(this.props.env, this.props.projectName)
   }
 }
 
 const ListItem = styled.div`
-  padding: 10px 25px;
+  padding: 10px 10px;
   font-weight: 600;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -38,11 +40,14 @@ const ListItem = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
+  &.deep {
+    padding-top: 10px;
+    padding-bottom: 10px;
+    padding-left: 43px;
+    padding-right: 10px;
+  }
   &.active {
     background: ${p => p.theme.colours.darkBlue};
-    border-left-style: solid;
-    border-left-width: 4px;
-    padding-left: 34px;
     position: relative;
     &:before {
       content: '';
@@ -51,7 +56,7 @@ const ListItem = styled.div`
       position: absolute;
       top: -2px;
       bottom: -2px;
-      left: -6px;
+      left: -2px;
       width: 6px;
     }
   }

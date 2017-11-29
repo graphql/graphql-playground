@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { GraphQLConfigEnpointsMapData } from '../graphqlConfig'
+import { GraphQLConfig, GraphQLConfigEnpointsMapData } from '../graphqlConfig'
 import ProjectsSideNavItem from './ProjectsSideNavItem'
 import { Icon, $v } from 'graphcool-styles'
 import { styled } from '../styled/index'
@@ -8,11 +8,11 @@ import { darken } from 'polished'
 import { getEndpointFromEndpointConfig } from './util'
 
 export interface Props {
-  endpoints: GraphQLConfigEnpointsMapData
+  config: GraphQLConfig
   folderName: string
   theme: string
   activeEnv: string
-  onSelectEnv: (endpoint: string) => void
+  onSelectEnv: (endpoint: string, projectName?: string) => void
   onNewWorkspace?: () => void
   showNewWorkspace: boolean
   isElectron: boolean
@@ -22,14 +22,9 @@ export interface Props {
 
 export default class ProjectsSideNav extends React.Component<Props, {}> {
   render() {
-    const {
-      endpoints,
-      activeEnv,
-      folderName,
-      onSelectEnv,
-      onNewWorkspace,
-      isElectron,
-    } = this.props
+    const { config, folderName, onNewWorkspace, isElectron } = this.props
+    const endpoints = config.extensions && config.extensions.endpoints
+    const projects = config.projects
     return (
       <SideNav>
         <List isElectron={isElectron}>
@@ -44,19 +39,23 @@ export default class ProjectsSideNav extends React.Component<Props, {}> {
                 className={'settings-icon'}
               />
             </TitleRow>
-            {Object.keys(endpoints).map(env => {
-              const { endpoint } = getEndpointFromEndpointConfig(endpoints[env])
-              const count = this.props.getSessionCount(endpoint)
-              return (
-                <ProjectsSideNavItem
-                  key={env}
-                  env={env}
-                  onSelectEnv={onSelectEnv}
-                  activeEnv={activeEnv}
-                  count={count}
-                />
-              )
-            })}
+            {endpoints && this.renderEndpoints(endpoints)}
+            {projects &&
+              Object.keys(projects).map(projectName => {
+                const project = projects[projectName]
+                const projectEndpoints =
+                  project.extensions && project.extensions.endpoints
+                if (!projectEndpoints) {
+                  return null
+                }
+
+                return (
+                  <Project key={projectName}>
+                    <ProjectName>{projectName}</ProjectName>
+                    {this.renderEndpoints(projectEndpoints, projectName)}
+                  </Project>
+                )
+              })}
           </div>
         </List>
         {this.props.showNewWorkspace && (
@@ -76,6 +75,27 @@ export default class ProjectsSideNav extends React.Component<Props, {}> {
         )}
       </SideNav>
     )
+  }
+
+  private renderEndpoints(
+    endpoints: GraphQLConfigEnpointsMapData,
+    projectName?: string,
+  ) {
+    return Object.keys(endpoints).map(env => {
+      const { endpoint } = getEndpointFromEndpointConfig(endpoints[env])
+      const count = this.props.getSessionCount(endpoint)
+      return (
+        <ProjectsSideNavItem
+          key={env}
+          env={env}
+          onSelectEnv={this.props.onSelectEnv}
+          activeEnv={this.props.activeEnv}
+          count={count}
+          deep={Boolean(projectName)}
+          projectName={projectName}
+        />
+      )
+    })
   }
 }
 
@@ -129,6 +149,10 @@ const iconColorActive = theme('mode', {
   dark: p => p.theme.colours.white60,
 })
 
+const Project = styled.div`
+  margin-bottom: 12px;
+`
+
 const SideNav = styled.div`
   position: relative;
   background: ${backgroundColor};
@@ -163,7 +187,7 @@ const TitleRow = styled.div`
   align-items: center;
   padding-left: 20px;
   padding-right: 10px;
-  padding-bottom: 22px;
+  padding-bottom: 20px;
   justify-content: space-between;
 
   .settings-icon {
@@ -180,6 +204,15 @@ const TitleRow = styled.div`
       fill: ${iconColorActive};
     }
   }
+`
+
+const ProjectName = styled.div`
+  font-size: 14px;
+  color: white;
+  font-weight: 600;
+  letter-spacing: 0.53px;
+  margin-left: 30px;
+  margin-bottom: 6px;
 `
 
 const Footer = styled.div`
