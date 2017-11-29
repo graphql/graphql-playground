@@ -18,7 +18,7 @@ const folderName = configPath
   ? path.basename(path.dirname(configPath))
   : undefined
 
-export default function renderPlaygroundPage(options: MiddlewareOptions) {
+export function renderPlaygroundPage(options: MiddlewareOptions) {
   const extendedOptions = {
     ...options,
     configString,

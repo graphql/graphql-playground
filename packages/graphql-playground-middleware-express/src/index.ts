@@ -1,7 +1,8 @@
 import { Request, Response } from 'express'
-import renderPlaygroundPage, {
+import {
   MiddlewareOptions,
-} from './render-playground-page'
+  renderPlaygroundPage,
+} from 'graphql-playground-middleware'
 
 /* tslint:disable */
 const { version } = require('../package.json')
