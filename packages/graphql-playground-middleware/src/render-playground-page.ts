@@ -3,11 +3,14 @@ import * as fs from 'fs'
 import * as findUp from 'find-up'
 
 export interface MiddlewareOptions {
-  version: string
   endpoint: string
   subscriptionEndpoint?: string
   setTitle?: string
   folderName?: string
+}
+
+export interface RenderPageOptions extends MiddlewareOptions {
+  version: string
 }
 
 const configPath = findUp.sync(['.graphqlconfig', '.graphqlconfig.yml'])
@@ -18,7 +21,7 @@ const folderName = configPath
   ? path.basename(path.dirname(configPath))
   : undefined
 
-export function renderPlaygroundPage(options: MiddlewareOptions) {
+export function renderPlaygroundPage(options: RenderPageOptions) {
   const extendedOptions = {
     ...options,
     configString,

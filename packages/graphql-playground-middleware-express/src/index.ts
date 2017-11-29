@@ -1,6 +1,7 @@
 import { Request, Response } from 'express'
 import {
   MiddlewareOptions,
+  RenderPageOptions,
   renderPlaygroundPage,
 } from 'graphql-playground-middleware'
 
@@ -13,10 +14,12 @@ export type ExpressPlaygroundMiddleware = (
   next: () => void,
 ) => void
 
-export type Register = (options: any) => ExpressPlaygroundMiddleware
+export type Register = (
+  options: RenderPageOptions,
+) => ExpressPlaygroundMiddleware
 
-const express: Register = function voyagerExpress(options) {
-  const middlewareOptions: MiddlewareOptions = {
+const express: Register = function voyagerExpress(options: MiddlewareOptions) {
+  const middlewareOptions: RenderPageOptions = {
     ...options,
     version,
   }

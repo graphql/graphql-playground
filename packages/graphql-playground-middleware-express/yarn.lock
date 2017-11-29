@@ -12,9 +12,9 @@ find-up@^2.1.0:
   dependencies:
     locate-path "^2.0.0"
 
-graphql-playground-middleware@^1.2.1-beta.4:
-  version "1.2.1-beta.4"
-  resolved "https://registry.yarnpkg.com/graphql-playground-middleware/-/graphql-playground-middleware-1.2.1-beta.4.tgz#3cc8c7cc532dcc9abceb4cab60f70641d6359c0d"
+graphql-playground-middleware@^1.2.1-beta.5:
+  version "1.2.1-beta.5"
+  resolved "https://registry.yarnpkg.com/graphql-playground-middleware/-/graphql-playground-middleware-1.2.1-beta.5.tgz#8f78c2e355cb8b149ceae2730501233fb147a623"
   dependencies:
     find-up "^2.1.0"
 

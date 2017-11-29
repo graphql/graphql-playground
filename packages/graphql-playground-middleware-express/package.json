@@ -36,6 +36,6 @@
     "definition": "dist/index.d.ts"
   },
   "dependencies": {
-    "graphql-playground-middleware": "^1.2.1-beta.4"
+    "graphql-playground-middleware": "^1.2.1-beta.5"
   }
 }
