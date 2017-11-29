@@ -100,52 +100,52 @@ export default class ProjectsSideNav extends React.Component<Props, {}> {
 }
 
 const textColor = theme('mode', {
-  light: p => p.theme.colours.darkBlue,
+  light: p => p.theme.colours.white,
   dark: p => p.theme.colours.white,
 })
 
 const backgroundColor = theme('mode', {
-  light: p => p.theme.colours.white70,
+  light: p => p.theme.colours.darkBlue,
   dark: p => p.theme.colours.darkBlue,
 })
 
 const darkerBackgroundColor = theme('mode', {
-  light: p => p.theme.colours.white20,
+  light: p => p.theme.colours.darkerBlue,
   dark: p => p.theme.colours.darkerBlue,
 })
 
 const borderColor = theme('mode', {
-  light: p => p.theme.colours.white20,
+  light: p => p.theme.colours.darkestBlue,
   dark: p => p.theme.colours.darkestBlue,
 })
 
 const footerBackgroundColor = theme('mode', {
-  light: p => '#eeeff0',
+  light: p => p.theme.colours.darkBlue,
   dark: p => p.theme.colours.darkBlue,
 })
 
 const buttonFontColor = theme('mode', {
-  light: p => '#eeeff0',
+  light: p => p.theme.colours.darkBlue,
   dark: p => p.theme.colours.darkBlue,
 })
 
 const buttonBackgroundColor = theme('mode', {
-  light: p => p.theme.colours.darkBlue60,
+  light: p => '#B9BFC4',
   dark: p => '#B9BFC4',
 })
 
 const buttonHoverBackgroundColor = theme('mode', {
-  light: p => darken(0.1, p.theme.colours.darkBlue60),
+  light: p => darken(0.1, '#B9BFC4'),
   dark: p => darken(0.1, '#B9BFC4'),
 })
 
 const iconColor = theme('mode', {
-  light: p => p.theme.colours.darkBlue20,
+  light: p => p.theme.colours.white20,
   dark: p => p.theme.colours.white20,
 })
 
 const iconColorActive = theme('mode', {
-  light: p => p.theme.colours.darkBlue60,
+  light: p => p.theme.colours.white60,
   dark: p => p.theme.colours.white60,
 })
 
