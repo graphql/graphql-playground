@@ -125,7 +125,7 @@ export class Playground extends React.PureComponent<Props & DocsState, State> {
     super(props)
     this.storage = new PlaygroundStorage(this.getStorageKey(props))
     if (props.session) {
-      this.storage.setState(props.session)
+      this.storage.setState(props.session, props.endpoint)
     }
 
     const sessions = this.initSessions()

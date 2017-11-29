@@ -22,6 +22,47 @@ export default class PlaygroundStorage {
 
     return 1
   }
+
+  // migrate headers to new format
+  private static runMigration(project, migrationEndpoint?: string) {
+    if (!project) {
+      return project
+    }
+    function mapHeaders(session) {
+      let headers = session.headers
+      if (Array.isArray(headers)) {
+        headers = convertArray(headers)
+      }
+      if (typeof headers === 'object') {
+        headers = JSON.stringify(headers, null, 2)
+      }
+      return {
+        ...session,
+        headers,
+        endpoint: session.endpoint || migrationEndpoint,
+      }
+    }
+
+    function convertArray(headers) {
+      return headers.reduce((acc, header) => {
+        return {
+          ...acc,
+          [header.name]: header.value,
+        }
+      }, {})
+    }
+
+    const history = project.history
+      ? project.history.map(s => mapHeaders(s))
+      : []
+    const sessions = mapValues(project.sessions, mapHeaders)
+
+    return {
+      ...project,
+      sessions,
+      history,
+    }
+  }
   project: any
   private endpoint: string
   private storages: any = {}
@@ -84,8 +125,8 @@ export default class PlaygroundStorage {
     return store
   }
 
-  public setState(project) {
-    this.project = project
+  public setState(project: any, endpoint: string) {
+    this.project = PlaygroundStorage.runMigration(project, endpoint)
   }
 
   public getSessions() {
@@ -160,47 +201,7 @@ export default class PlaygroundStorage {
         date: new Date(item.date),
       }))
     }
-    return this.runMigration(result)
-  }
-
-  // migrate headers to new format
-  private runMigration(project) {
-    if (!project) {
-      return project
-    }
-    function mapHeaders(session) {
-      let headers = session.headers
-      if (Array.isArray(headers)) {
-        headers = convertArray(headers)
-      }
-      if (typeof headers === 'object') {
-        headers = JSON.stringify(headers, null, 2)
-      }
-      return {
-        ...session,
-        headers,
-      }
-    }
-
-    function convertArray(headers) {
-      return headers.reduce((acc, header) => {
-        return {
-          ...acc,
-          [header.name]: header.value,
-        }
-      }, {})
-    }
-
-    const history = project.history
-      ? project.history.map(s => mapHeaders(s))
-      : []
-    const sessions = mapValues(project.sessions, mapHeaders)
-
-    return {
-      ...project,
-      sessions,
-      history,
-    }
+    return PlaygroundStorage.runMigration(result)
   }
 
   private getExecutedQueryCount() {

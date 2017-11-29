@@ -39,6 +39,7 @@ export interface Props {
   onNewWorkspace?: () => void
   getRef?: (ref: any) => void
   platformToken?: string
+  session?: any
 }
 
 export interface State {
@@ -261,6 +262,7 @@ class MiddlewareApp extends React.Component<Props, State> {
                   onSaveConfig={this.handleSaveConfig}
                   onUpdateSessionCount={this.handleUpdateSessionCount}
                   fixedEndpoints={Boolean(this.state.configString)}
+                  session={this.props.session}
                 />
               </App>
             </OldThemeProvider>
