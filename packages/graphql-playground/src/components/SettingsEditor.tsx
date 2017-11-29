@@ -50,6 +50,12 @@ const Wrapper = styled.div`
   }
   .CodeMirror {
     background: none !important;
+    .CodeMirror-code {
+      color: rgba(255, 255, 255, 0.7);
+    }
+    .cm-atom {
+      color: rgba(42, 126, 210, 1);
+    }
   }
   .CodeMirror-gutters {
     background: none !important;

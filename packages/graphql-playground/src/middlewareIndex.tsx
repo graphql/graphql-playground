@@ -17,7 +17,7 @@ if (process.env.NODE_ENV !== 'production') {
   init(element: HTMLElement, options) {
     ReactDOM.render(
       <MiddlewareApp
-        configString={exampleJsonConfig}
+        configString={exampleYmlConfig}
         folderName={folderName}
         setTitle={true}
         showNewWorkspace={true}
@@ -28,33 +28,33 @@ if (process.env.NODE_ENV !== 'production') {
   },
 }
 
-const exampleJsonConfig = `\
-{
-  "schemaPath": "schema.graphql",
-  "extensions": {
-    "endpoints": {
-      "prod": {
-        "url": "https://airbnb.now.sh",
-        "subscription": "wss://airbnb.now.sh"
-      },
-      "local": {
-        "url": "http://localhost:4000",
-        "subscription": "ws://localhost:4000"
-      }
-    }
-  }
-}`
+// const exampleJsonConfig = `\
+// {
+//   "schemaPath": "schema.graphql",
+//   "extensions": {
+//     "endpoints": {
+//       "prod": {
+//         "url": "https://airbnb.now.sh",
+//         "subscription": "wss://airbnb.now.sh"
+//       },
+//       "local": {
+//         "url": "http://localhost:4000",
+//         "subscription": "ws://localhost:4000"
+//       }
+//     }
+//   }
+// }`
 
 const folderName = `airbnb`
 
-// const exampleYmlConfig = `\
-// schemaPath: schema.graphql
-// extensions:
-//   endpoints:
-//     default:
-//       url: 'https://airbnb.now.sh'
-//       subscription: 'wss://airbnb.now.sh'
-//     local:
-//       url: 'http://localhost:4000'
-//       subscription: 'ws://localhost:4000'
-// `
+const exampleYmlConfig = `\
+schemaPath: schema.graphql
+extensions:
+  endpoints:
+    default:
+      url: 'https://airbnb.now.sh'
+      subscription: 'wss://airbnb.now.sh'
+    local:
+      url: 'http://localhost:4000'
+      subscription: 'ws://localhost:4000'
+`
