@@ -28,6 +28,7 @@ export interface Props {
   useVim: boolean
   isActive: boolean
   sharing?: SharingProps
+  fixedEndpoint?: boolean
 }
 
 export default class GraphQLEditorSession extends React.PureComponent<
@@ -48,6 +49,7 @@ export default class GraphQLEditorSession extends React.PureComponent<
       isActive,
       schemaFetcher,
       sharing,
+      fixedEndpoint,
     } = this.props
     return (
       <GraphQLEditor
@@ -83,6 +85,7 @@ export default class GraphQLEditorSession extends React.PureComponent<
         onChangeEndpoint={this.handleChangeEndpoint}
         onClickShare={this.handleClickShare}
         sharing={sharing}
+        fixedEndpoint={fixedEndpoint}
       />
     )
   }

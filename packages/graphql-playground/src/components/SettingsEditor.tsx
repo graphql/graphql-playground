@@ -10,6 +10,7 @@ export interface Props {
   onSave: () => void
   isYaml?: boolean
   isConfig?: boolean
+  readOnly?: boolean
 }
 
 export default class SettingsEditor extends React.Component<Props, {}> {
@@ -24,14 +25,17 @@ export default class SettingsEditor extends React.Component<Props, {}> {
               onEdit={this.props.onChange}
               onRunQuery={this.props.onSave}
               isYaml={this.props.isYaml}
+              readOnly={this.props.readOnly}
             />
           </div>
         </div>
-        <ButtonWrapper>
-          <Button onClick={this.props.onSave}>
-            Save {isConfig ? `Config` : `Settings`}
-          </Button>
-        </ButtonWrapper>
+        {!this.props.readOnly && (
+          <ButtonWrapper>
+            <Button onClick={this.props.onSave}>
+              Save {isConfig ? `Config` : `Settings`}
+            </Button>
+          </ButtonWrapper>
+        )}
       </Wrapper>
     )
   }

@@ -2,6 +2,26 @@ import { Session } from '../types'
 import { mapValues } from 'lodash'
 
 export default class PlaygroundStorage {
+  static countCache: { [endpoint: string]: number } = {}
+
+  static getSessionCount(endpoint: string) {
+    const cachedCount = this.countCache[endpoint]
+    if (cachedCount) {
+      return cachedCount
+    }
+
+    try {
+      const projectString = localStorage.getItem(endpoint)
+      if (projectString) {
+        const project = JSON.parse(projectString)
+        return Object.keys(project.sessions).length
+      }
+    } catch (e) {
+      //
+    }
+
+    return 1
+  }
   project: any
   private endpoint: string
   private storages: any = {}
@@ -21,6 +41,9 @@ export default class PlaygroundStorage {
       }
       this.saveProject()
     }
+    PlaygroundStorage.countCache[endpoint] = Object.keys(
+      this.project.sessions,
+    ).length
     ;(global as any).s = this
   }
 
@@ -119,6 +142,9 @@ export default class PlaygroundStorage {
       'executedQueryCount',
       this.executedQueryCount.toString(),
     )
+    PlaygroundStorage.countCache[this.endpoint] = Object.keys(
+      this.project.sessions,
+    ).length
   }
 
   private getProject() {
@@ -143,17 +169,26 @@ export default class PlaygroundStorage {
       return project
     }
     function mapHeaders(session) {
+      let headers = session.headers
+      if (Array.isArray(headers)) {
+        headers = convertArray(headers)
+      }
+      if (typeof headers === 'object') {
+        headers = JSON.stringify(headers, null, 2)
+      }
       return {
         ...session,
-        headers: Array.isArray(session.headers)
-          ? session.headers.reduce((acc, header) => {
-              return {
-                ...acc,
-                [header.name]: header.value,
-              }
-            }, {})
-          : session.headers,
+        headers,
       }
+    }
+
+    function convertArray(headers) {
+      return headers.reduce((acc, header) => {
+        return {
+          ...acc,
+          [header.name]: header.value,
+        }
+      }, {})
     }
 
     const history = project.history

@@ -5,6 +5,7 @@ import { Icon, $v } from 'graphcool-styles'
 import { styled } from '../styled/index'
 import * as theme from 'styled-theming'
 import { darken } from 'polished'
+import { getEndpointFromEndpointConfig } from './util'
 
 export interface Props {
   endpoints: GraphQLConfigEnpointsMapData
@@ -16,6 +17,7 @@ export interface Props {
   showNewWorkspace: boolean
   isElectron: boolean
   onEditConfig: () => void
+  getSessionCount: (endpoint: string) => number
 }
 
 export default class ProjectsSideNav extends React.Component<Props, {}> {
@@ -42,15 +44,19 @@ export default class ProjectsSideNav extends React.Component<Props, {}> {
                 className={'settings-icon'}
               />
             </TitleRow>
-            {Object.keys(endpoints).map(env => (
-              <ProjectsSideNavItem
-                key={env}
-                env={env}
-                onSelectEnv={onSelectEnv}
-                activeEnv={activeEnv}
-                count={4}
-              />
-            ))}
+            {Object.keys(endpoints).map(env => {
+              const { endpoint } = getEndpointFromEndpointConfig(endpoints[env])
+              const count = this.props.getSessionCount(endpoint)
+              return (
+                <ProjectsSideNavItem
+                  key={env}
+                  env={env}
+                  onSelectEnv={onSelectEnv}
+                  activeEnv={activeEnv}
+                  count={count}
+                />
+              )
+            })}
           </div>
         </List>
         {this.props.showNewWorkspace && (

@@ -9,6 +9,8 @@ import * as yaml from 'js-yaml'
 import ProjectsSideNav from './ProjectsSideNav'
 import { styled, ThemeProvider, theme as styledTheme } from '../styled'
 import OldThemeProvider from './Theme/ThemeProvider'
+import { getActiveEndpoints } from './util'
+import PlaygroundStorage from './PlaygroundStorage'
 
 const store = createStore()
 
@@ -67,12 +69,6 @@ class MiddlewareApp extends React.Component<Props, State> {
   constructor(props: Props) {
     super(props)
 
-    const endpoint =
-      props.endpoint || getParameterByName('endpoint') || location.href
-
-    const subscriptionEndpoint =
-      props.subscriptionEndpoint || getParameterByName('subscriptionEndpoint')
-
     const settings = localStorage.getItem('settings') || defaultSettings
 
     let config
@@ -82,6 +78,20 @@ class MiddlewareApp extends React.Component<Props, State> {
       const result = this.parseGraphQLConfig(props.configString)
       config = result.config
       configIsYaml = result.configIsYaml
+    }
+
+    const activeEnv = this.getInitialActiveEnv(config)
+
+    let endpoint =
+      props.endpoint || getParameterByName('endpoint') || location.href
+
+    let subscriptionEndpoint: string | undefined | null =
+      props.subscriptionEndpoint || getParameterByName('subscriptionEndpoint')
+
+    if (props.configString && config && activeEnv) {
+      const endpoints = getActiveEndpoints(config, activeEnv)
+      endpoint = endpoints.endpoint
+      subscriptionEndpoint = endpoints.subscriptionEndpoint
     }
 
     this.state = {
@@ -95,7 +105,7 @@ class MiddlewareApp extends React.Component<Props, State> {
       config,
       configIsYaml,
       configString: props.configString,
-      activeEnv: this.getInitialActiveEnv(config),
+      activeEnv,
     }
   }
 
@@ -194,6 +204,7 @@ class MiddlewareApp extends React.Component<Props, State> {
                       showNewWorkspace={Boolean(this.props.showNewWorkspace)}
                       isElectron={Boolean(this.props.isElectron)}
                       onEditConfig={this.handleStartEditConfig}
+                      getSessionCount={this.getSessionCount}
                     />
                   )}
                 <Playground
@@ -217,6 +228,8 @@ class MiddlewareApp extends React.Component<Props, State> {
                   canSaveConfig={Boolean(this.props.canSaveConfig)}
                   onChangeConfig={this.handleChangeConfig}
                   onSaveConfig={this.handleSaveConfig}
+                  onUpdateSessionCount={this.handleUpdateSessionCount}
+                  fixedEndpoints={Boolean(this.state.configString)}
                 />
               </App>
             </OldThemeProvider>
@@ -224,6 +237,18 @@ class MiddlewareApp extends React.Component<Props, State> {
         </Provider>
       </div>
     )
+  }
+
+  handleUpdateSessionCount = () => {
+    this.forceUpdate()
+  }
+
+  getSessionCount = (endpoint: string): number => {
+    if (this.state.endpoint === endpoint && this.playground) {
+      return this.playground.state.sessions.length
+    }
+
+    return PlaygroundStorage.getSessionCount(endpoint)
   }
 
   getPlaygroundRef = ref => {
@@ -249,7 +274,11 @@ class MiddlewareApp extends React.Component<Props, State> {
   }
 
   handleSelectEnv = (env: string) => {
-    this.setState({ activeEnv: env })
+    const { endpoint, subscriptionEndpoint } = getActiveEndpoints(
+      this.state.config!,
+      env,
+    )!
+    this.setState({ activeEnv: env, endpoint, subscriptionEndpoint })
   }
 
   getSettings(settingsString = this.state.settingsString): EditorSettings {

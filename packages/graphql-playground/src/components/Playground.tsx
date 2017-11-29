@@ -56,12 +56,14 @@ export interface Props {
   onChangeSettings: (settingsString: string) => void
   onSaveConfig: () => void
   onChangeConfig: (configString: string) => void
+  onUpdateSessionCount?: () => void
   settings: EditorSettings
   settingsString: string
   config: GraphQLConfig
   configString: string
   configIsYaml: boolean
   canSaveConfig: boolean
+  fixedEndpoints: boolean
 }
 
 export interface State {
@@ -175,7 +177,7 @@ export class Playground extends React.PureComponent<Props & DocsState, State> {
   }
 
   getStorageKey(props: Props = this.props) {
-    const multi = !props.graphqlConfig
+    const multi = !props.fixedEndpoints
     return multi ? 'multi' : props.endpoint
   }
 
@@ -200,7 +202,7 @@ export class Playground extends React.PureComponent<Props & DocsState, State> {
     this.initWebsockets()
   }
 
-  componentDidUpdate(prevProps: Props) {
+  componentDidUpdate(prevProps: Props, prevState: State) {
     if (
       prevProps.endpoint !== this.props.endpoint ||
       prevProps.adminAuthToken !== this.props.adminAuthToken ||
@@ -220,6 +222,13 @@ export class Playground extends React.PureComponent<Props & DocsState, State> {
           this.resetSubscriptions()
         },
       )
+    }
+
+    if (
+      prevState.sessions.length !== this.state.sessions.length &&
+      typeof this.props.onUpdateSessionCount === 'function'
+    ) {
+      this.props.onUpdateSessionCount()
     }
   }
 
@@ -303,6 +312,7 @@ export class Playground extends React.PureComponent<Props & DocsState, State> {
                   onSave={this.handleSaveConfig}
                   isYaml={this.props.configIsYaml}
                   isConfig={true}
+                  readOnly={!this.props.canSaveConfig}
                 />
               ) : session.isSettingsTab ? (
                 <SettingsEditor
@@ -335,6 +345,7 @@ export class Playground extends React.PureComponent<Props & DocsState, State> {
                   useVim={this.state.useVim && index === selectedSessionIndex}
                   isActive={index === selectedSessionIndex}
                   schemaFetcher={this.schemaFetcher}
+                  fixedEndpoint={this.props.fixedEndpoints}
                   sharing={{
                     localTheme: this.props.settings.theme,
                     onShare: this.share,

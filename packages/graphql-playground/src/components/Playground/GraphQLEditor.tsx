@@ -74,6 +74,7 @@ export interface Props {
   schemaModelName?: string
   disableAutofocus?: boolean
   disableResize?: boolean
+  fixedEndpoint?: boolean
 
   disableAnimation?: boolean
   hideLineNumbers?: boolean
@@ -469,6 +470,7 @@ export class GraphQLEditor extends React.PureComponent<
             onClickShare={this.props.onClickShare}
             sharing={this.props.sharing}
             onReloadSchema={this.reloadSchema}
+            fixedEndpoint={this.props.fixedEndpoint}
           />
           <div
             ref={this.setEditorBarComponent}

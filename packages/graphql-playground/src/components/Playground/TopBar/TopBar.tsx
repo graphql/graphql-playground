@@ -6,6 +6,7 @@ import * as CopyToClipboard from 'react-copy-to-clipboard'
 import Share, { SharingProps } from '../../Share'
 import { StyledComponentClass } from 'styled-components'
 import { Icon } from 'graphcool-styles'
+import * as cx from 'classnames'
 
 export interface Props {
   endpoint: string
@@ -17,6 +18,7 @@ export interface Props {
   onClickShare?: () => void
   onReloadSchema?: () => void
   sharing?: SharingProps
+  fixedEndpoint?: boolean
 }
 
 export default class TopBar extends React.Component<Props, {}> {
@@ -31,6 +33,8 @@ export default class TopBar extends React.Component<Props, {}> {
             onChange={this.onChange}
             onKeyDown={this.onKeyDown}
             onBlur={this.props.onReloadSchema}
+            disabled={this.props.fixedEndpoint}
+            className={cx({ active: !this.props.fixedEndpoint })}
           />
           <ReloadIcon
             src={require('graphcool-styles/icons/fill/reload.svg')}
@@ -75,6 +79,11 @@ const buttonHoverColor = theme('mode', {
 const backgroundColor = theme('mode', {
   light: p => '#eeeff0',
   dark: p => p.theme.colours.darkBlue,
+})
+
+const inactiveFontColor = theme('mode', {
+  light: p => p.theme.colours.darkBlue30,
+  dark: p => p.theme.colours.white30,
 })
 
 const fontColor = theme('mode', {
@@ -128,11 +137,14 @@ const TopBarWrapper = styled.div`
 const UrlBar = styled.input`
   background: ${buttonColor};
   border-radius: 4px;
-  color: ${fontColor};
+  color: ${inactiveFontColor};
   border: 1px solid ${barBorder};
   padding: 6px 12px;
   font-size: 13px;
   flex: 1;
+  &.active {
+    color: ${fontColor};
+  }
 `
 
 const UrlBarWrapper = styled.div`
