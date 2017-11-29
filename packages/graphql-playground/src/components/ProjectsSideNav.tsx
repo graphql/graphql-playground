@@ -12,7 +12,7 @@ export interface Props {
   theme: string
   activeEnv: string
   onSelectEnv: (endpoint: string) => void
-  onNewWorkspace: () => void
+  onNewWorkspace?: () => void
   showNewWorkspace: boolean
   isElectron: boolean
   onEditConfig: () => void

@@ -1,30 +1,36 @@
 import * as React from 'react'
 import { styled } from '../styled'
 import * as theme from 'styled-theming'
-import { VariableEditor } from 'graphiql/dist/components/VariableEditor'
 import { Button } from './Playground/TopBar/TopBar'
+import { ConfigEditor } from './Playground/ConfigEditor'
 
 export interface Props {
   value: string
   onChange: (value: string) => void
   onSave: () => void
+  isYaml?: boolean
+  isConfig?: boolean
 }
 
 export default class SettingsEditor extends React.Component<Props, {}> {
   render() {
+    const { isConfig } = this.props
     return (
       <Wrapper className="graphiql-container">
         <div className="editorWrap">
           <div className="variable-editor">
-            <VariableEditor
+            <ConfigEditor
               value={this.props.value}
               onEdit={this.props.onChange}
               onRunQuery={this.props.onSave}
+              isYaml={this.props.isYaml}
             />
           </div>
         </div>
         <ButtonWrapper>
-          <Button onClick={this.props.onSave}>Save Config</Button>
+          <Button onClick={this.props.onSave}>
+            Save {isConfig ? `Config` : `Settings`}
+          </Button>
         </ButtonWrapper>
       </Wrapper>
     )

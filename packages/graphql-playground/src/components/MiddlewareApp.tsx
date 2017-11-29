@@ -1,7 +1,7 @@
 import * as React from 'react'
 import { Provider } from 'react-redux'
 import createStore from '../createStore'
-import Playground from './Playground'
+import Playground, { Playground as IPlayground } from './Playground'
 import { Helmet } from 'react-helmet'
 import * as fetch from 'isomorphic-fetch'
 import { GraphQLConfig } from '../graphqlConfig'
@@ -32,6 +32,9 @@ export interface Props {
   configString?: string
   showNewWorkspace?: boolean
   isElectron?: boolean
+  canSaveConfig?: boolean
+  onSaveConfig?: (configString: string) => void
+  onNewWorkspace?: () => void
 }
 
 export interface State {
@@ -44,6 +47,7 @@ export interface State {
   settings: EditorSettings
   config?: GraphQLConfig
   configIsYaml?: boolean
+  configString?: string
   activeEnv?: string
 }
 
@@ -59,6 +63,7 @@ const defaultSettings = `{
 }`
 
 class MiddlewareApp extends React.Component<Props, State> {
+  playground: IPlayground
   constructor(props: Props) {
     super(props)
 
@@ -89,6 +94,7 @@ class MiddlewareApp extends React.Component<Props, State> {
       settings: this.getSettings(settings),
       config,
       configIsYaml,
+      configString: props.configString,
       activeEnv: this.getInitialActiveEnv(config),
     }
   }
@@ -184,10 +190,10 @@ class MiddlewareApp extends React.Component<Props, State> {
                       theme={this.state.settings.theme}
                       activeEnv={this.state.activeEnv}
                       onSelectEnv={this.handleSelectEnv}
-                      onNewWorkspace={this.handleNewWorkspace}
+                      onNewWorkspace={this.props.onNewWorkspace}
                       showNewWorkspace={Boolean(this.props.showNewWorkspace)}
                       isElectron={Boolean(this.props.isElectron)}
-                      onEditConfig={this.handleEditConfig}
+                      onEditConfig={this.handleStartEditConfig}
                     />
                   )}
                 <Playground
@@ -204,6 +210,13 @@ class MiddlewareApp extends React.Component<Props, State> {
                   settingsString={this.state.settingsString}
                   onSaveSettings={this.handleSaveSettings}
                   onChangeSettings={this.handleChangeSettings}
+                  getRef={this.getPlaygroundRef}
+                  config={this.state.config}
+                  configString={this.state.configString}
+                  configIsYaml={this.state.configIsYaml}
+                  canSaveConfig={Boolean(this.props.canSaveConfig)}
+                  onChangeConfig={this.handleChangeConfig}
+                  onSaveConfig={this.handleSaveConfig}
                 />
               </App>
             </OldThemeProvider>
@@ -213,16 +226,30 @@ class MiddlewareApp extends React.Component<Props, State> {
     )
   }
 
-  handleEditConfig = () => {
-    // TODO
+  getPlaygroundRef = ref => {
+    this.playground = ref
+  }
+
+  handleStartEditConfig = () => {
+    this.playground.openConfigTab()
+  }
+
+  handleChangeConfig = (configString: string) => {
+    this.setState({ configString })
+  }
+
+  handleSaveConfig = () => {
+    /* tslint:disable-next-line */
+    console.log('handleSaveConfig called')
+    if (typeof this.props.onSaveConfig === 'function') {
+      /* tslint:disable-next-line */
+      console.log('calling this.props.onSaveConfig', this.state.configString)
+      this.props.onSaveConfig(this.state.configString!)
+    }
   }
 
   handleSelectEnv = (env: string) => {
     this.setState({ activeEnv: env })
-  }
-
-  handleNewWorkspace = () => {
-    //
   }
 
   getSettings(settingsString = this.state.settingsString): EditorSettings {

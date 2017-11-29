@@ -24,6 +24,7 @@ export interface Session {
   absolutePath?: string
   endpoint: string
   isSettingsTab?: boolean
+  isConfigTab?: boolean
 }
 
 export interface QueryTypes {

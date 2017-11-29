@@ -26,6 +26,7 @@ import { SchemaFetcher } from './Playground/SchemaFetcher'
 import Settings from './Settings'
 import SettingsEditor from './SettingsEditor'
 import { EditorSettings } from './MiddlewareApp'
+import { GraphQLConfig } from '../graphqlConfig'
 
 export interface Response {
   resultID: string
@@ -53,8 +54,14 @@ export interface Props {
   graphqlConfig?: any
   onSaveSettings: () => void
   onChangeSettings: (settingsString: string) => void
+  onSaveConfig: () => void
+  onChangeConfig: (configString: string) => void
   settings: EditorSettings
   settingsString: string
+  config: GraphQLConfig
+  configString: string
+  configIsYaml: boolean
+  canSaveConfig: boolean
 }
 
 export interface State {
@@ -289,7 +296,15 @@ export class Playground extends React.PureComponent<Props & DocsState, State> {
                 top: `-${100 * selectedSessionIndex}%`,
               }}
             >
-              {session.isSettingsTab ? (
+              {session.isConfigTab ? (
+                <SettingsEditor
+                  value={this.props.configString}
+                  onChange={this.handleChangeConfig}
+                  onSave={this.handleSaveConfig}
+                  isYaml={this.props.configIsYaml}
+                  isConfig={true}
+                />
+              ) : session.isSettingsTab ? (
                 <SettingsEditor
                   value={this.props.settingsString}
                   onChange={this.handleChangeSettings}
@@ -411,6 +426,26 @@ export class Playground extends React.PureComponent<Props & DocsState, State> {
     this.props.onSaveSettings()
   }
 
+  handleChangeConfig = (config: string) => {
+    const configSession = this.state.sessions.find(session =>
+      Boolean(session.isConfigTab),
+    )
+    if (configSession) {
+      this.setValueInSession(configSession.id, 'hasChanged', true)
+    }
+    this.props.onChangeConfig(config)
+  }
+
+  handleSaveConfig = () => {
+    const configSession = this.state.sessions.find(session =>
+      Boolean(session.isConfigTab),
+    )
+    if (configSession) {
+      this.setValueInSession(configSession.id, 'hasChanged', false)
+    }
+    this.props.onSaveConfig()
+  }
+
   public openSettingsTab = () => {
     const sessionIndex = this.state.sessions.findIndex(s =>
       Boolean(s.isSettingsTab),
@@ -420,6 +455,28 @@ export class Playground extends React.PureComponent<Props & DocsState, State> {
       session = Immutable.set(session, 'isSettingsTab', true)
       session = Immutable.set(session, 'isFile', true)
       session = Immutable.set(session, 'name', 'Settings')
+      this.setState(state => {
+        return {
+          ...state,
+          sessions: state.sessions.concat(session),
+          selectedSessionIndex: state.sessions.length,
+          changed: false,
+        }
+      })
+    } else {
+      this.setState({ selectedSessionIndex: sessionIndex })
+    }
+  }
+
+  public openConfigTab = () => {
+    const sessionIndex = this.state.sessions.findIndex(s =>
+      Boolean(s.isConfigTab),
+    )
+    if (sessionIndex === -1) {
+      let session = this.createSession()
+      session = Immutable.set(session, 'isConfigTab', true)
+      session = Immutable.set(session, 'isFile', true)
+      session = Immutable.set(session, 'name', 'GraphQL Config')
       this.setState(state => {
         return {
           ...state,
