@@ -20,7 +20,7 @@ if (process.env.NODE_ENV !== 'production') {
         configString={exampleYmlConfig}
         folderName={folderName}
         setTitle={true}
-        showNewWorkspace={true}
+        showNewWorkspace={false}
         {...options}
       />,
       element,

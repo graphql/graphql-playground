@@ -169,7 +169,7 @@ const SideNav = styled.div`
 
 // TODO fix typing
 const List = styled.div`
-  padding-top: ${(p: any) => (p.isEelectron ? 48 : 20)}px;
+  padding-top: ${(p: any) => (p.isElectron ? 48 : 20)}px;
   padding-bottom: 32px;
   max-width: 222px;
   overflow: hidden;

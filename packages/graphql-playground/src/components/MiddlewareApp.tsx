@@ -37,6 +37,8 @@ export interface Props {
   canSaveConfig?: boolean
   onSaveConfig?: (configString: string) => void
   onNewWorkspace?: () => void
+  getRef?: (ref: any) => void
+  platformToken?: string
 }
 
 export interface State {
@@ -96,7 +98,10 @@ class MiddlewareApp extends React.Component<Props, State> {
 
     this.state = {
       endpoint: this.absolutizeUrl(endpoint),
-      platformToken: localStorage.getItem('platform-token') || undefined,
+      platformToken:
+        props.platformToken ||
+        localStorage.getItem('platform-token') ||
+        undefined,
       subscriptionEndpoint: subscriptionEndpoint
         ? this.normalizeSubscriptionUrl(endpoint, subscriptionEndpoint)
         : '',
@@ -279,6 +284,9 @@ class MiddlewareApp extends React.Component<Props, State> {
 
   getPlaygroundRef = ref => {
     this.playground = ref
+    if (typeof this.props.getRef === 'function') {
+      this.props.getRef(ref)
+    }
   }
 
   handleStartEditConfig = () => {

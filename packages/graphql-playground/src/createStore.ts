@@ -18,7 +18,11 @@ if (typeof window !== 'undefined') {
 }
 
 const storage = compose(
-  filter(['graphiqlDocs.*.docsOpen', 'graphiqlDocs.*.docsWidth']),
+  filter([
+    'graphiqlDocs.*.docsOpen',
+    'graphiqlDocs.*.docsWidth',
+    'history.history',
+  ]),
 )(adapter(localStorage))
 
 const reducer = compose(
