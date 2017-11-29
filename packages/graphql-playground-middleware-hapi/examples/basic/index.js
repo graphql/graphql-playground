@@ -1,12 +1,12 @@
 const hapi = require('hapi')
-const {graphqlHapi} = require('apollo-server-hapi')
-const hapiPlayground = require('graphql-playground-middleware-hapi')
-const {makeExecutableSchema} = require('graphql-tools')
+const { graphqlHapi } = require('apollo-server-hapi')
+const hapiPlayground = require('graphql-playground-middleware-hapi').default
+const { makeExecutableSchema } = require('graphql-tools')
 
-const server = new hapi.Server({ debug: { request: "*" } });
+const server = new hapi.Server({ debug: { request: '*' } })
 
-const HOST = 'localhost';
-const PORT = 4000;
+const HOST = 'localhost'
+const PORT = 4000
 
 const schema = makeExecutableSchema({
   typeDefs: `
@@ -27,7 +27,7 @@ const schema = makeExecutableSchema({
 server.connection({
   host: HOST,
   port: PORT,
-});
+})
 
 server.register({
   register: graphqlHapi,
@@ -37,22 +37,22 @@ server.register({
       schema,
     },
     route: {
-      cors: true
-    }
+      cors: true,
+    },
   },
-});
+})
 
 server.register({
   register: hapiPlayground,
   options: {
     path: '/playground',
-    endpoint: '/graphql'
-  }
+    endpoint: '/graphql',
+  },
 })
 
-server.start((err) => {
+server.start(err => {
   if (err) {
-    throw err;
+    throw err
   }
-  console.log(`Server running at: ${server.info.uri}`);
-});
+  console.log(`Server running at: ${server.info.uri}`)
+})
