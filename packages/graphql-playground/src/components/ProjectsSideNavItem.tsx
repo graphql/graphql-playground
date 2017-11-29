@@ -1,41 +1,23 @@
 import * as React from 'react'
 import * as cx from 'classnames'
+import { styled } from '../styled/index'
 
 export interface Props {
   env: string
   onSelectEnv: (env: string) => void
   activeEnv: string
+  count: number
 }
 
 export default class ProjectsSideNavItem extends React.Component<Props, {}> {
   render() {
-    const { env, activeEnv } = this.props
+    const { env, activeEnv, count } = this.props
+    const active = activeEnv === env
     return (
-      <div
-        className={cx('list-item list-item-project', {
-          active: activeEnv === env,
-        })}
-        onClick={this.selectEndpoint}
-      >
-        <style jsx={true}>{`
-          .left-content .list-item {
-            @p: .pv10, .ph25, .fw6, .toe, .overflowHidden, .nowrap;
-          }
-          .left-content .list-item.list-item-project {
-            @p: .pointer, .pl38, .f12;
-          }
-          .left-content .list-item.list-item-project.active {
-            @p: .bgDarkBlue, .bGreen;
-            border-left-style: solid;
-            border-left-width: 4px;
-            padding-left: 34px;
-          }
-          .left-content.light .list-item.list-item-project.active {
-            background-color: #e7e8ea;
-          }
-        `}</style>
-        {env}
-      </div>
+      <ListItem className={cx({ active })} onClick={this.selectEndpoint}>
+        <span>{env}</span>
+        <Count className={cx('count', { active })}>{count}</Count>
+      </ListItem>
     )
   }
 
@@ -43,3 +25,58 @@ export default class ProjectsSideNavItem extends React.Component<Props, {}> {
     this.props.onSelectEnv(this.props.env)
   }
 }
+
+const ListItem = styled.div`
+  padding: 10px 25px;
+  font-weight: 600;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  cursor: pointer;
+  padding-left: 38px;
+  padding-right: 10px;
+  font-size: 12px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  &.active {
+    background: ${p => p.theme.colours.darkBlue};
+    border-left-style: solid;
+    border-left-width: 4px;
+    padding-left: 34px;
+    position: relative;
+    &:before {
+      content: '';
+      border-radius: 2px;
+      background: ${p => p.theme.colours.green};
+      position: absolute;
+      top: -2px;
+      bottom: -2px;
+      left: -6px;
+      width: 6px;
+    }
+  }
+  &:hover {
+    background: ${p => p.theme.colours.darkBlue};
+    .count {
+      color: white;
+    }
+  }
+`
+
+const Count = styled.div`
+  border-radius: 6px;
+  width: 18px;
+  height: 18px;
+  line-height: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+  font-weight: bold;
+  background: rgba(255, 255, 255, 0.05);
+  color: rgba(255, 255, 255, 0.3);
+  transition: 0.1s linear all;
+  &.active {
+    color: white;
+  }
+`

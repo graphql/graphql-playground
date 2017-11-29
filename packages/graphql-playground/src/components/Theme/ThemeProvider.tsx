@@ -57,6 +57,6 @@ export default class ThemeProvider extends React.PureComponent<
   }
 
   render() {
-    return <div>{this.props.children}</div>
+    return this.props.children as any
   }
 }

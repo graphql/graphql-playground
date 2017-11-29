@@ -1,8 +1,10 @@
 import * as React from 'react'
 import { GraphQLConfigEnpointsMapData } from '../graphqlConfig'
-import * as cx from 'classnames'
 import ProjectsSideNavItem from './ProjectsSideNavItem'
-import { Icon } from 'graphcool-styles'
+import { Icon, $v } from 'graphcool-styles'
+import { styled } from '../styled/index'
+import * as theme from 'styled-theming'
+import { darken } from 'polished'
 
 export interface Props {
   endpoints: GraphQLConfigEnpointsMapData
@@ -11,90 +13,200 @@ export interface Props {
   activeEnv: string
   onSelectEnv: (endpoint: string) => void
   onNewWorkspace: () => void
+  showNewWorkspace: boolean
+  isElectron: boolean
+  onEditConfig: () => void
 }
 
 export default class ProjectsSideNav extends React.Component<Props, {}> {
   render() {
     const {
-      theme,
       endpoints,
       activeEnv,
       folderName,
       onSelectEnv,
       onNewWorkspace,
+      isElectron,
     } = this.props
     return (
-      <div className={cx('left-content', theme)}>
-        <style jsx={true}>{`
-          .left-content {
-            @p: .white, .relative, .mr6, .bgDarkBlue40, .bgDarkestBlue;
-            flex: 0 222px;
-            padding-top: 57px;
-          }
-          .left-content.light {
-            @p: .bgWhite70, .black60;
-          }
-          .list {
-            @p: .overflowHidden;
-            max-width: 222px;
-          }
-          .left-content .list-item {
-            @p: .pv10, .ph25, .fw6, .toe, .overflowHidden, .nowrap;
-          }
-          .left-content .list-item.list-item-project {
-            @p: .pointer, .pl38, .f12;
-          }
-          .left-content .list-item.list-item-project.active {
-            @p: .bgDarkBlue, .bGreen;
-            border-left-style: solid;
-            border-left-width: 4px;
-            padding-left: 34px;
-          }
-          .left-content.light .list-item.list-item-project.active {
-            background-color: #e7e8ea;
-          }
-          .playground {
-            @p: .flex1;
-          }
-          .sidenav-footer {
-            @p: .absolute, .bottom0, .w100, .flex, .itemsCenter, .justifyBetween,
-              .pv20, .bgDarkBlue;
-          }
-          .light .sidenav-footer {
-            background-color: #eeeff0;
-          }
-          .sidenav-footer .button {
-            @p: .br2, .black90, .pointer, .pa10, .fw6, .flex, .itemsCenter,
-              .ml20;
-          }
-        `}</style>
-        <div className="list">
+      <SideNav>
+        <List isElectron={isElectron}>
           <div>
-            <div className={cx('list-item')}>{folderName}</div>
+            <TitleRow>
+              <Title>{folderName}</Title>
+              <Icon
+                src={require('graphcool-styles/icons/fill/settings.svg')}
+                width={23}
+                height={23}
+                onClick={this.props.onEditConfig}
+                className={'settings-icon'}
+              />
+            </TitleRow>
             {Object.keys(endpoints).map(env => (
               <ProjectsSideNavItem
                 key={env}
                 env={env}
                 onSelectEnv={onSelectEnv}
                 activeEnv={activeEnv}
+                count={4}
               />
             ))}
           </div>
-        </div>
-        <div className="sidenav-footer">
-          <button className="button" onClick={onNewWorkspace}>
-            <Icon
-              src={require('graphcool-styles/icons/stroke/add.svg')}
-              stroke={true}
-              color={$v.gray90}
-              width={14}
-              height={14}
-              strokeWidth={6}
-            />
-            NEW WORKSPACE
-          </button>
-        </div>
-      </div>
+        </List>
+        {this.props.showNewWorkspace && (
+          <Footer>
+            <WorkspaceButton onClick={onNewWorkspace}>
+              <Icon
+                src={require('graphcool-styles/icons/stroke/addFull.svg')}
+                stroke={true}
+                color={$v.darkBlue}
+                width={14}
+                height={14}
+                strokeWidth={6}
+              />
+              NEW WORKSPACE
+            </WorkspaceButton>
+          </Footer>
+        )}
+      </SideNav>
     )
   }
 }
+
+const textColor = theme('mode', {
+  light: p => p.theme.colours.darkBlue,
+  dark: p => p.theme.colours.white,
+})
+
+const backgroundColor = theme('mode', {
+  light: p => p.theme.colours.white70,
+  dark: p => p.theme.colours.darkBlue,
+})
+
+const darkerBackgroundColor = theme('mode', {
+  light: p => p.theme.colours.white20,
+  dark: p => p.theme.colours.darkerBlue,
+})
+
+const borderColor = theme('mode', {
+  light: p => p.theme.colours.white20,
+  dark: p => p.theme.colours.darkestBlue,
+})
+
+const footerBackgroundColor = theme('mode', {
+  light: p => '#eeeff0',
+  dark: p => p.theme.colours.darkBlue,
+})
+
+const buttonFontColor = theme('mode', {
+  light: p => '#eeeff0',
+  dark: p => p.theme.colours.darkBlue,
+})
+
+const buttonBackgroundColor = theme('mode', {
+  light: p => p.theme.colours.darkBlue60,
+  dark: p => '#B9BFC4',
+})
+
+const buttonHoverBackgroundColor = theme('mode', {
+  light: p => darken(0.1, p.theme.colours.darkBlue60),
+  dark: p => darken(0.1, '#B9BFC4'),
+})
+
+const iconColor = theme('mode', {
+  light: p => p.theme.colours.darkBlue20,
+  dark: p => p.theme.colours.white20,
+})
+
+const iconColorActive = theme('mode', {
+  light: p => p.theme.colours.darkBlue60,
+  dark: p => p.theme.colours.white60,
+})
+
+const SideNav = styled.div`
+  position: relative;
+  background: ${backgroundColor};
+  flex: 0 222px;
+  color: ${textColor};
+
+    @p: .white, .relative, .bgDarkBlue;
+    border-right: 6px solid ${borderColor};
+  }
+  .left-content.light {
+    @p: .bgWhite70, .black60;
+  }
+`
+
+// TODO fix typing
+const List = styled.div`
+  padding-top: ${(p: any) => (p.isEelectron ? 48 : 20)}px;
+  padding-bottom: 32px;
+  max-width: 222px;
+  overflow: hidden;
+  background: ${darkerBackgroundColor};
+` as any
+
+const Title = styled.div`
+  font-size: 16px;
+  font-weight: 600;
+  color: white;
+`
+
+const TitleRow = styled.div`
+  display: flex;
+  align-items: center;
+  padding-left: 20px;
+  padding-right: 10px;
+  padding-bottom: 22px;
+  justify-content: space-between;
+
+  .settings-icon {
+    cursor: pointer;
+  }
+
+  .settings-icon svg {
+    fill: ${iconColor};
+    transition: 0.1s linear fill;
+  }
+
+  &:hover {
+    .settings-icon svg {
+      fill: ${iconColorActive};
+    }
+  }
+`
+
+const Footer = styled.div`
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px;
+  background: ${footerBackgroundColor};
+`
+
+const WorkspaceButton = styled.button`
+  padding: 10px;
+  display: flex;
+  align-items: center;
+  border-radius: 2px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 0.53px;
+  color: ${buttonFontColor};
+  background-color: ${buttonBackgroundColor};
+  transition: 0.1s linear all;
+  &:hover {
+    background-color: ${buttonHoverBackgroundColor};
+  }
+  i {
+    margin-right: 6px;
+  }
+  svg {
+    stroke: ${buttonFontColor};
+  }
+`

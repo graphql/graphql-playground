@@ -17,9 +17,10 @@ if (process.env.NODE_ENV !== 'production') {
   init(element: HTMLElement, options) {
     ReactDOM.render(
       <MiddlewareApp
-        config={exampleJsonConfig}
+        configString={exampleJsonConfig}
         folderName={folderName}
         setTitle={true}
+        showNewWorkspace={true}
         {...options}
       />,
       element,

@@ -3,11 +3,15 @@ export interface Colours {
   darkBlue: string
   darkBlue50: string
   darkBlue60: string
+  darkBlue80: string
   darkBlue20: string
   darkBlue10: string
   darkerBlue: string
+  darkestBlue: string
+  white70: string
   white60: string
   white20: string
+  white10: string
   white: string
   black40: string
   paleText: string
@@ -18,12 +22,16 @@ export const colours: Colours = {
   green: '#27ae60',
   darkBlue: 'rgb(23, 42, 58)',
   darkBlue50: 'rgba(23, 42, 58, 0.5)',
+  darkBlue80: 'rgba(23, 42, 58, 0.8)',
   darkBlue60: 'rgba(23, 42, 58, 0.6)',
   darkBlue20: 'rgba(23, 42, 58, 0.2)',
   darkBlue10: 'rgba(23, 42, 58, 0.1)',
   darkerBlue: '#0F202D',
+  darkestBlue: 'rgb(11,20,28)',
+  white10: 'rgba(255, 255, 255, 0.1)',
   white20: 'rgba(255, 255, 255, 0.2)',
   white60: 'rgba(255, 255, 255, 0.6)',
+  white70: 'rgba(255, 255, 255, 0.7)',
   white: 'rgba(255, 255, 255, 1)',
   black40: 'rgba(0, 0, 0, 0.4)',
 

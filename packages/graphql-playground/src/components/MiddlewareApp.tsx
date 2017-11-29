@@ -4,6 +4,11 @@ import createStore from '../createStore'
 import Playground from './Playground'
 import { Helmet } from 'react-helmet'
 import * as fetch from 'isomorphic-fetch'
+import { GraphQLConfig } from '../graphqlConfig'
+import * as yaml from 'js-yaml'
+import ProjectsSideNav from './ProjectsSideNav'
+import { styled, ThemeProvider, theme as styledTheme } from '../styled'
+import OldThemeProvider from './Theme/ThemeProvider'
 
 const store = createStore()
 
@@ -24,6 +29,9 @@ export interface Props {
   setTitle?: boolean
   settings?: EditorSettings
   folderName?: string
+  configString?: string
+  showNewWorkspace?: boolean
+  isElectron?: boolean
 }
 
 export interface State {
@@ -34,6 +42,9 @@ export interface State {
   platformToken?: string
   settingsString: string
   settings: EditorSettings
+  config?: GraphQLConfig
+  configIsYaml?: boolean
+  activeEnv?: string
 }
 
 export type Theme = 'dark' | 'light'
@@ -59,6 +70,15 @@ class MiddlewareApp extends React.Component<Props, State> {
 
     const settings = localStorage.getItem('settings') || defaultSettings
 
+    let config
+    let configIsYaml
+
+    if (props.configString) {
+      const result = this.parseGraphQLConfig(props.configString)
+      config = result.config
+      configIsYaml = result.configIsYaml
+    }
+
     this.state = {
       endpoint: this.absolutizeUrl(endpoint),
       platformToken: localStorage.getItem('platform-token') || undefined,
@@ -67,6 +87,43 @@ class MiddlewareApp extends React.Component<Props, State> {
         : '',
       settingsString: settings,
       settings: this.getSettings(settings),
+      config,
+      configIsYaml,
+      activeEnv: this.getInitialActiveEnv(config),
+    }
+  }
+
+  getInitialActiveEnv(config?: GraphQLConfig) {
+    if (config && config.extensions && config.extensions.endpoints) {
+      return Object.keys(config.extensions.endpoints)[0]
+    }
+
+    return undefined
+  }
+
+  parseGraphQLConfig(
+    configString: string,
+  ): { config: GraphQLConfig; configIsYaml: boolean } {
+    let config
+    let isYaml = false
+    try {
+      config = JSON.parse(configString)
+    } catch (e) {
+      //
+    }
+
+    if (!config) {
+      try {
+        config = yaml.safeLoad(configString)
+        isYaml = true
+      } catch (e) {
+        //
+      }
+    }
+
+    return {
+      config,
+      configIsYaml: isYaml,
     }
   }
 
@@ -108,29 +165,64 @@ class MiddlewareApp extends React.Component<Props, State> {
         <title>{this.getTitle()}</title>
       </Helmet>
     ) : null
+    const { theme } = this.state.settings
 
     return (
       <div>
         {title}
         <Provider store={store}>
-          <Playground
-            endpoint={this.state.endpoint}
-            subscriptionsEndpoint={this.state.subscriptionEndpoint}
-            share={this.share}
-            shareUrl={this.state.shareUrl}
-            onChangeEndpoint={this.handleChangeEndpoint}
-            onChangeSubscriptionsEndpoint={
-              this.handleChangeSubscriptionsEndpoint
-            }
-            adminAuthToken={this.state.platformToken}
-            settings={this.normalizeSettings(this.state.settings)}
-            settingsString={this.state.settingsString}
-            onSaveSettings={this.handleSaveSettings}
-            onChangeSettings={this.handleChangeSettings}
-          />
+          <ThemeProvider theme={{ ...styledTheme, mode: theme }}>
+            <OldThemeProvider theme={theme}>
+              <App>
+                {this.state.config &&
+                  this.state.config.extensions &&
+                  this.state.config.extensions.endpoints &&
+                  this.state.activeEnv && (
+                    <ProjectsSideNav
+                      endpoints={this.state.config.extensions.endpoints}
+                      folderName={this.props.folderName || 'GraphQL App'}
+                      theme={this.state.settings.theme}
+                      activeEnv={this.state.activeEnv}
+                      onSelectEnv={this.handleSelectEnv}
+                      onNewWorkspace={this.handleNewWorkspace}
+                      showNewWorkspace={Boolean(this.props.showNewWorkspace)}
+                      isElectron={Boolean(this.props.isElectron)}
+                      onEditConfig={this.handleEditConfig}
+                    />
+                  )}
+                <Playground
+                  endpoint={this.state.endpoint}
+                  subscriptionsEndpoint={this.state.subscriptionEndpoint}
+                  share={this.share}
+                  shareUrl={this.state.shareUrl}
+                  onChangeEndpoint={this.handleChangeEndpoint}
+                  onChangeSubscriptionsEndpoint={
+                    this.handleChangeSubscriptionsEndpoint
+                  }
+                  adminAuthToken={this.state.platformToken}
+                  settings={this.normalizeSettings(this.state.settings)}
+                  settingsString={this.state.settingsString}
+                  onSaveSettings={this.handleSaveSettings}
+                  onChangeSettings={this.handleChangeSettings}
+                />
+              </App>
+            </OldThemeProvider>
+          </ThemeProvider>
         </Provider>
       </div>
     )
+  }
+
+  handleEditConfig = () => {
+    // TODO
+  }
+
+  handleSelectEnv = (env: string) => {
+    this.setState({ activeEnv: env })
+  }
+
+  handleNewWorkspace = () => {
+    //
   }
 
   getSettings(settingsString = this.state.settingsString): EditorSettings {
@@ -298,3 +390,8 @@ async function find(
 }
 
 export default MiddlewareApp
+
+const App = styled.div`
+  display: flex;
+  width: 100%;
+`

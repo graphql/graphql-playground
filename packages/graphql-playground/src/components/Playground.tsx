@@ -6,7 +6,6 @@ import { defaultQuery, getDefaultSession } from '../constants'
 import { Session } from '../types'
 import * as cuid from 'cuid'
 import * as Immutable from 'seamless-immutable'
-import OldThemeProvider from './Theme/ThemeProvider'
 import PlaygroundStorage from './PlaygroundStorage'
 import { getQueryTypes } from './Playground/util/getQueryTypes'
 import debounce from 'graphiql/dist/utility/debounce'
@@ -21,7 +20,7 @@ import { DocsState } from '../reducers/graphiql-docs'
 import GraphQLEditorSession from './Playground/GraphQLEditorSession'
 import { setStacks } from '../actions/graphiql-docs'
 import { mapValues } from 'lodash'
-import { styled, ThemeProvider, theme as styledTheme } from '../styled'
+import { styled } from '../styled'
 import { isSharingAuthorization } from './Playground/util/session'
 import { SchemaFetcher } from './Playground/SchemaFetcher'
 import Settings from './Settings'
@@ -266,90 +265,83 @@ export class Playground extends React.PureComponent<Props & DocsState, State> {
     const isGraphcoolUrl = this.isGraphcoolUrl(selectedEndpointUrl)
 
     return (
-      <ThemeProvider theme={{ ...styledTheme, mode: theme }}>
-        <OldThemeProvider theme={theme}>
-          <PlaygroundWrapper className="playground">
-            <TabBar
-              sessions={sessions}
-              selectedSessionIndex={selectedSessionIndex}
-              onNewSession={this.handleNewSessionWithoutNewIndexZero}
-              onCloseSession={this.handleCloseSession}
-              onSelectSession={this.handleSelectSession}
-              isApp={this.props.isApp}
-            />
-            <GraphiqlsContainer
-              className={cx('graphiqls-container', {
-                'docs-graphiql': theme === 'light',
+      <PlaygroundWrapper className="playground">
+        <TabBar
+          sessions={sessions}
+          selectedSessionIndex={selectedSessionIndex}
+          onNewSession={this.handleNewSessionWithoutNewIndexZero}
+          onCloseSession={this.handleCloseSession}
+          onSelectSession={this.handleSelectSession}
+          isApp={this.props.isApp}
+        />
+        <GraphiqlsContainer
+          className={cx('graphiqls-container', {
+            'docs-graphiql': theme === 'light',
+          })}
+        >
+          {sessions.map((session, index) => (
+            <GraphiqlWrapper
+              key={session.id}
+              className={cx('graphiql-wrapper', {
+                active: index === selectedSessionIndex,
               })}
+              style={{
+                top: `-${100 * selectedSessionIndex}%`,
+              }}
             >
-              {sessions.map((session, index) => (
-                <GraphiqlWrapper
+              {session.isSettingsTab ? (
+                <SettingsEditor
+                  value={this.props.settingsString}
+                  onChange={this.handleChangeSettings}
+                  onSave={this.handleSaveSettings}
+                />
+              ) : (
+                <GraphQLEditorSession
                   key={session.id}
-                  className={cx('graphiql-wrapper', {
-                    active: index === selectedSessionIndex,
-                  })}
-                  style={{
-                    top: `-${100 * selectedSessionIndex}%`,
+                  session={session}
+                  index={index}
+                  isGraphcoolUrl={isGraphcoolUrl}
+                  fetcher={this.fetcher}
+                  isEndpoint={Boolean(isEndpoint)}
+                  storage={this.storage.getSessionStorage(session.id)}
+                  onClickCodeGeneration={this.handleClickCodeGeneration}
+                  onEditOperationName={this.handleOperationNameChange}
+                  onEditVariables={this.handleVariableChange}
+                  onEditQuery={this.handleQueryChange}
+                  onChangeHeaders={this.handleChangeHeaders}
+                  onClickHistory={this.handleOpenHistory}
+                  onChangeEndpoint={this.handleChangeEndpoint}
+                  onClickShare={this.share}
+                  responses={
+                    this.state.response ? [this.state.response] : undefined
+                  }
+                  disableQueryHeader={this.state.disableQueryHeader}
+                  onRef={this.setRef}
+                  useVim={this.state.useVim && index === selectedSessionIndex}
+                  isActive={index === selectedSessionIndex}
+                  schemaFetcher={this.schemaFetcher}
+                  sharing={{
+                    localTheme: this.props.settings.theme,
+                    onShare: this.share,
+                    onToggleHistory: this.toggleShareHistory,
+                    onToggleAllTabs: this.toggleShareAllTabs,
+                    onToggleHttpHeaders: this.toggleShareHTTPHeaders,
+                    history: this.state.shareHistory,
+                    allTabs: this.state.shareAllTabs,
+                    httpHeaders: this.state.shareHttpHeaders,
+                    shareUrl: this.props.shareUrl,
+                    reshare: this.state.changed,
+                    isSharingAuthorization: this.isSharingAuthorization(),
                   }}
-                >
-                  {session.isSettingsTab ? (
-                    <SettingsEditor
-                      value={this.props.settingsString}
-                      onChange={this.handleChangeSettings}
-                      onSave={this.handleSaveSettings}
-                    />
-                  ) : (
-                    <GraphQLEditorSession
-                      key={session.id}
-                      session={session}
-                      index={index}
-                      isGraphcoolUrl={isGraphcoolUrl}
-                      fetcher={this.fetcher}
-                      isEndpoint={Boolean(isEndpoint)}
-                      storage={this.storage.getSessionStorage(session.id)}
-                      onClickCodeGeneration={this.handleClickCodeGeneration}
-                      onEditOperationName={this.handleOperationNameChange}
-                      onEditVariables={this.handleVariableChange}
-                      onEditQuery={this.handleQueryChange}
-                      onChangeHeaders={this.handleChangeHeaders}
-                      onClickHistory={this.handleOpenHistory}
-                      onChangeEndpoint={this.handleChangeEndpoint}
-                      onClickShare={this.share}
-                      responses={
-                        this.state.response ? [this.state.response] : undefined
-                      }
-                      disableQueryHeader={this.state.disableQueryHeader}
-                      onRef={this.setRef}
-                      useVim={
-                        this.state.useVim && index === selectedSessionIndex
-                      }
-                      isActive={index === selectedSessionIndex}
-                      schemaFetcher={this.schemaFetcher}
-                      sharing={{
-                        localTheme: this.props.settings.theme,
-                        onShare: this.share,
-                        onToggleHistory: this.toggleShareHistory,
-                        onToggleAllTabs: this.toggleShareAllTabs,
-                        onToggleHttpHeaders: this.toggleShareHTTPHeaders,
-                        history: this.state.shareHistory,
-                        allTabs: this.state.shareAllTabs,
-                        httpHeaders: this.state.shareHttpHeaders,
-                        shareUrl: this.props.shareUrl,
-                        reshare: this.state.changed,
-                        isSharingAuthorization: this.isSharingAuthorization(),
-                      }}
-                    />
-                  )}
-                </GraphiqlWrapper>
-              ))}
-            </GraphiqlsContainer>
-            <Settings onClick={this.openSettingsTab} />
-            {this.state.historyOpen && this.renderHistoryPopup()}
-            {this.state.codeGenerationPopupOpen &&
-              this.renderCodeGenerationPopup()}
-          </PlaygroundWrapper>
-        </OldThemeProvider>
-      </ThemeProvider>
+                />
+              )}
+            </GraphiqlWrapper>
+          ))}
+        </GraphiqlsContainer>
+        <Settings onClick={this.openSettingsTab} />
+        {this.state.historyOpen && this.renderHistoryPopup()}
+        {this.state.codeGenerationPopupOpen && this.renderCodeGenerationPopup()}
+      </PlaygroundWrapper>
     )
   }
 
@@ -1016,6 +1008,7 @@ export default connect<any, any, Props>(state => state.graphiqlDocs, {
 })(Playground)
 
 const PlaygroundWrapper = styled.div`
+  flex: 1;
   display: flex;
   flex-direction: column;
 
