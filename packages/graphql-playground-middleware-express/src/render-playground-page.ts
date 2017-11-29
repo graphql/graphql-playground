@@ -1,10 +1,30 @@
+import * as path from 'path'
+import * as fs from 'fs'
+import * as findUp from 'find-up'
+
 export interface MiddlewareOptions {
+  version: string
   endpoint: string
   subscriptionEndpoint?: string
-  version: string
+  setTitle?: string
+  folderName?: string
 }
 
+const configPath = findUp.sync(['.graphqlconfig', '.graphqlconfig.yml'])
+const configString = configPath
+  ? fs.readFileSync(configPath, 'utf-8')
+  : undefined
+const folderName = configPath
+  ? path.basename(path.dirname(configPath))
+  : undefined
+
 export default function renderPlaygroundPage(options: MiddlewareOptions) {
+  const extendedOptions = {
+    ...options,
+    configString,
+    folderName,
+    canSaveConfig: false,
+  }
   return `
 <!DOCTYPE html>
 <html>
@@ -12,9 +32,15 @@ export default function renderPlaygroundPage(options: MiddlewareOptions) {
   <meta charset=utf-8 />
   <meta name="viewport" content="user-scalable=no, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, minimal-ui">
   <title>GraphQL Playground</title>
-  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/graphql-playground@${options.version}/build/static/css/index.css" />
-  <link rel="shortcut icon" href="//cdn.jsdelivr.net/npm/graphql-playground@${options.version}/build/favicon.png" />
-  <script src="//cdn.jsdelivr.net/npm/graphql-playground@${options.version}/build/static/js/middleware.js"></script>
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/graphql-playground@${
+    options.version
+  }/build/static/css/index.css" />
+  <link rel="shortcut icon" href="//cdn.jsdelivr.net/npm/graphql-playground@${
+    options.version
+  }/build/favicon.png" />
+  <script src="//cdn.jsdelivr.net/npm/graphql-playground@${
+    options.version
+  }/build/static/js/middleware.js"></script>
 </head>
 <body>
 <div id="root">
@@ -53,7 +79,7 @@ export default function renderPlaygroundPage(options: MiddlewareOptions) {
   <script>
     window.addEventListener('load', function(event) {
       GraphQLPlayground.init(document.getElementById('root'), ${JSON.stringify(
-        options,
+        extendedOptions,
         null,
         2,
       )})

@@ -109,6 +109,18 @@ class MiddlewareApp extends React.Component<Props, State> {
     }
   }
 
+  componentWillReceiveProps(nextProps: Props) {
+    if (
+      nextProps.configString !== this.props.configString &&
+      nextProps.configString
+    ) {
+      const { config, configIsYaml } = this.parseGraphQLConfig(
+        nextProps.configString,
+      )
+      this.setState({ config, configIsYaml })
+    }
+  }
+
   getInitialActiveEnv(
     config?: GraphQLConfig,
   ): { projectName?: string; activeEnv?: string } {

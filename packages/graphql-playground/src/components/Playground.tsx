@@ -217,6 +217,7 @@ export class Playground extends React.PureComponent<Props & DocsState, State> {
         {
           sessions,
           history: this.storage.getHistory(),
+          selectedSessionIndex: 0,
         },
         () => {
           this.resetSubscriptions()
