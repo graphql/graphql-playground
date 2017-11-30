@@ -291,7 +291,6 @@ app.on('ready', () => {
 app.setAsDefaultProtocolClient('graphql-playground')
 
 app.on('open-url', (event, url) => {
-  console.log('event open', event, url)
   forceSend('OpenUrl', url)
 })
 
@@ -312,8 +311,7 @@ app.on('window-all-closed', () => {
 app.on('activate', () => {
   // On OS X it's common to re-create a window in the app when the
   // dock icon is clicked and there are no other windows open.
-  console.log('activate called')
-  if (!windows.size) {
+  if (BrowserWindow.getAllWindows().length === 0) {
     createWindow()
   }
 })
