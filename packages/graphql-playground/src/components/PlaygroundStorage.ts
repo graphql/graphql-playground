@@ -30,6 +30,9 @@ export default class PlaygroundStorage {
     }
     function mapHeaders(session) {
       let headers = session.headers
+      if (!headers) {
+        headers = ''
+      }
       if (Array.isArray(headers)) {
         headers = convertArray(headers)
       }

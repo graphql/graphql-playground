@@ -48,7 +48,7 @@ export default class TopBar extends React.Component<Props, {}> {
         </CopyToClipboard>
         {this.props.sharing && (
           <Share {...this.props.sharing}>
-            <Button onClick={this.props.onClickShare}>Share Playground</Button>
+            <Button>Share Playground</Button>
           </Share>
         )}
       </TopBarWrapper>
