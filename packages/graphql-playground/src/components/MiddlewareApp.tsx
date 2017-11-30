@@ -11,6 +11,7 @@ import { styled, ThemeProvider, theme as styledTheme } from '../styled'
 import OldThemeProvider from './Theme/ThemeProvider'
 import { getActiveEndpoints } from './util'
 import PlaygroundStorage from './PlaygroundStorage'
+import { resolveEnvsInValues } from './resolveRefStrings'
 
 const store = createStore()
 
@@ -40,6 +41,7 @@ export interface Props {
   getRef?: (ref: any) => void
   platformToken?: string
   session?: any
+  env?: any
 }
 
 export interface State {
@@ -169,6 +171,10 @@ class MiddlewareApp extends React.Component<Props, State> {
       } catch (e) {
         //
       }
+    }
+
+    if (this.props.env) {
+      config = resolveEnvsInValues(config, this.props.env)
     }
 
     return {

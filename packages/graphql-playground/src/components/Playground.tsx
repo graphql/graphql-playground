@@ -128,7 +128,7 @@ export class Playground extends React.PureComponent<Props & DocsState, State> {
       this.storage.setState(props.session, props.endpoint)
     }
 
-    const sessions = this.initSessions()
+    const sessions = this.initSessions(props)
     this.schemaFetcher = new SchemaFetcher()
 
     const selectedSessionIndex =
@@ -724,7 +724,7 @@ export class Playground extends React.PureComponent<Props & DocsState, State> {
     this.setValueInSession(sessionId, 'endpoint', endpoint)
   }
 
-  private initSessions = () => {
+  private initSessions = (props = this.props) => {
     // defaulting to admin for deserialized sessions
     const sessions = this.storage.getSessions() // .map(session => Immutable.set(session, 'selectedViewer', 'ADMIN'))
 
@@ -749,7 +749,7 @@ export class Playground extends React.PureComponent<Props & DocsState, State> {
       return sessions
     }
 
-    return [this.createSession()]
+    return [this.createSession(undefined, props)]
   }
 
   private saveSessions = () => {
@@ -769,7 +769,7 @@ export class Playground extends React.PureComponent<Props & DocsState, State> {
     return this.handleNewSession(false)
   }
 
-  private createSession = (session?: Session) => {
+  private createSession = (session?: Session, props = this.props) => {
     let newSession
     const currentActiveSession =
       this.state && this.state.sessions[this.state.selectedSessionIndex]
@@ -787,7 +787,7 @@ export class Playground extends React.PureComponent<Props & DocsState, State> {
           : defaultQuery
 
       newSession = Immutable({
-        ...getDefaultSession(this.props.endpoint),
+        ...getDefaultSession(props.endpoint),
         query,
         headers,
       })
