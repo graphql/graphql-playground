@@ -3334,9 +3334,9 @@ graphql-language-service-utils@0.0.17:
     graphql "^0.10.1"
     graphql-language-service-types "0.0.21"
 
-graphql-playground@^1.2.1-beta.8:
-  version "1.2.1-beta.8"
-  resolved "https://registry.yarnpkg.com/graphql-playground/-/graphql-playground-1.2.1-beta.8.tgz#fa1eccac99c9527518aa20202d82b3edcb82f3dd"
+graphql-playground@^1.2.1-beta.11:
+  version "1.2.1-beta.11"
+  resolved "https://registry.yarnpkg.com/graphql-playground/-/graphql-playground-1.2.1-beta.11.tgz#853260416806e931688f033fcc96e9c42f7940d4"
   dependencies:
     calculate-size "^1.1.1"
     classnames "^2.2.5"
@@ -6707,6 +6707,18 @@ styled-components@^2.2.3:
 "styled-jsx-postcss@git+https://github.com/timsuchanek/styled-jsx-postcss#build3":
   version "0.2.0"
   resolved "git+https://github.com/timsuchanek/styled-jsx-postcss#677ee0fb7f9138047a00e03c8c3e44adbb33cf2a"
+  dependencies:
+    babel-traverse "^6.21.0"
+    babylon "^6.14.1"
+    deasync "^0.1.9"
+    postcss "^5.2.8"
+    postcss-load-plugins "^2.2.0"
+    styled-jsx "^0.5.7"
+
+"styled-jsx-postcss@git+https://github.com/timsuchanek/styled-jsx-postcss.git#build3":
+  version "0.2.0"
+  uid "677ee0fb7f9138047a00e03c8c3e44adbb33cf2a"
+  resolved "git+https://github.com/timsuchanek/styled-jsx-postcss.git#677ee0fb7f9138047a00e03c8c3e44adbb33cf2a"
   dependencies:
     babel-traverse "^6.21.0"
     babylon "^6.14.1"

@@ -202,7 +202,7 @@ cd ${folderPath}; graphql playground`)
         this.showOpenDialog()
         break
       case 'Save':
-        this.saveFile()
+        this.getSaveFileName()
         break
     }
   }
@@ -213,9 +213,16 @@ cd ${folderPath}; graphql playground`)
     }
   }
 
-  openFile(fileToOpen: string) {
-    const query = fs.readFileSync(fileToOpen, 'utf-8')
-    const rc = this.getGraphcoolRc()
+  async openFile(fileName: string) {
+    const file = fs.readFileSync(fileName, 'utf-8')
+    if (!this.playground) {
+      this.handleSelectFolder(path.dirname(fileName))
+    }
+    while (!this.playground) {
+      await new Promise(r => setTimeout(r, 200))
+    }
+    await new Promise(r => setTimeout(r, 200))
+    this.playground.newFileTab(path.basename(fileName), fileName, file)
   }
 
   showOpenDialog() {
@@ -253,7 +260,7 @@ cd ${folderPath}; graphql playground`)
           this.playground.handleSaveSettings()
         }
 
-        if (session.isFile) {
+        if (session.isFile && session.filePath) {
           // TODO
           // dialog.showSaveDialog(
           //   {
@@ -269,6 +276,8 @@ cd ${folderPath}; graphql playground`)
           //     resolve(fileName)
           //   },
           // )
+          this.playground.handleSaveFile(session.file)
+          fs.writeFileSync(session.filePath, session.file)
         }
 
         this.playground.handleSaveConfig()
@@ -281,28 +290,28 @@ cd ${folderPath}; graphql playground`)
     this.setState({ configString })
   }
 
-  async saveFile() {
-    const session = this.playground.state.sessions[
-      this.playground.state.selectedSessionIndex
-    ]
-    ;(this.playground as any).setValueInSession(session.id, 'hasChanged', false)
-    const fileName =
-      (session as any).absolutePath || (await this.getSaveFileName())
-    // if (!(session as any).absolutePath) {
-    ;(this.playground as any).setValueInSession(
-      session.id,
-      'name',
-      path.basename(fileName),
-    )
-    ;(this.playground as any).setValueInSession(
-      session.id,
-      'absolutePath',
-      fileName,
-    )
-    // }
-    const query = session.query
-    fs.writeFileSync(fileName, query)
-  }
+  // async saveFile() {
+  //   const session = this.playground.state.sessions[
+  //     this.playground.state.selectedSessionIndex
+  //   ]
+  //   ;(this.playground as any).setValueInSession(session.id, 'hasChanged', false)
+  //   const fileName =
+  //     (session as any).absolutePath || (await this.getSaveFileName())
+  //   // if (!(session as any).absolutePath) {
+  //   ;(this.playground as any).setValueInSession(
+  //     session.id,
+  //     'name',
+  //     path.basename(fileName),
+  //   )
+  //   ;(this.playground as any).setValueInSession(
+  //     session.id,
+  //     'absolutePath',
+  //     fileName,
+  //   )
+  //   // }
+  //   const query = session.query
+  //   fs.writeFileSync(fileName, query)
+  // }
 
   getGraphcoolYml(from: string): { ymlPath: string; yml: any } | null {
     const ymlPath = findUp.sync('graphcool.yml', { cwd: from })

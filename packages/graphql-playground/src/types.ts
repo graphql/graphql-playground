@@ -1,8 +1,10 @@
 export interface Session {
   id: string
   name?: string
+  filePath?: string
 
   query: string
+  file?: string
   variables: string
   result?: string
   // result: string

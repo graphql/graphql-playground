@@ -27,6 +27,7 @@ import Settings from './Settings'
 import SettingsEditor from './SettingsEditor'
 import { EditorSettings } from './MiddlewareApp'
 import { GraphQLConfig } from '../graphqlConfig'
+import FileEditor from './FileEditor'
 
 export interface Response {
   resultID: string
@@ -322,6 +323,11 @@ export class Playground extends React.PureComponent<Props & DocsState, State> {
                   onChange={this.handleChangeSettings}
                   onSave={this.handleSaveSettings}
                 />
+              ) : session.isFile && session.file ? (
+                <FileEditor
+                  value={session.file!}
+                  onChange={this.handleFileChange}
+                />
               ) : (
                 <GraphQLEditorSession
                   key={session.id}
@@ -459,6 +465,17 @@ export class Playground extends React.PureComponent<Props & DocsState, State> {
     this.props.onSaveConfig()
   }
 
+  handleFileChange = file => {
+    const session = this.state.sessions[this.state.selectedSessionIndex]
+    this.setValueInSession(session.id, 'file', file)
+    this.setValueInSession(session.id, 'hasChanged', true)
+  }
+
+  handleSaveFile = file => {
+    const session = this.state.sessions[this.state.selectedSessionIndex]
+    this.setValueInSession(session.id, 'hasChanged', false)
+  }
+
   public openSettingsTab = () => {
     const sessionIndex = this.state.sessions.findIndex(s =>
       Boolean(s.isSettingsTab),
@@ -516,6 +533,27 @@ export class Playground extends React.PureComponent<Props & DocsState, State> {
         changed: true,
       }
     })
+  }
+
+  public newFileTab = (fileName: string, filePath: string, file: string) => {
+    const sessionIndex = this.state.sessions.findIndex(s => s.name === fileName)
+    if (sessionIndex === -1) {
+      let session = this.createSession()
+      session = Immutable.set(session, 'isFile', true)
+      session = Immutable.set(session, 'name', fileName)
+      session = Immutable.set(session, 'filePath', filePath)
+      session = Immutable.set(session, 'file', file)
+      this.setState(state => {
+        return {
+          ...state,
+          sessions: state.sessions.concat(session),
+          selectedSessionIndex: state.sessions.length,
+          changed: false,
+        }
+      })
+    } else {
+      this.setState({ selectedSessionIndex: sessionIndex })
+    }
   }
 
   public closeTab = () => {
