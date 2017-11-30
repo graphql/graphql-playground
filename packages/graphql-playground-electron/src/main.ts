@@ -58,6 +58,15 @@ function send(channel: string, arg: string) {
   }
 }
 
+function forceSend(channel: string, arg: string) {
+  const currentWindows = BrowserWindow.getAllWindows()
+  const window = currentWindows[0] || createWindow()
+  console.log('window')
+  console.log(window)
+  console.log('force sending', channel, arg)
+  window.webContents.send(channel, arg)
+}
+
 function initAutoUpdate() {
   if (dev) return
 
@@ -85,7 +94,9 @@ function showUpdateNotification(it) {
     {
       type: 'info',
       title: 'Install Updates',
-      message: `${versionLabel} has been downloaded and application will be quit for update...`,
+      message: `${
+        versionLabel
+      } has been downloaded and application will be quit for update...`,
     },
     () => {
       setImmediate(() => autoUpdater.quitAndInstall())
@@ -141,13 +152,13 @@ function createWindow() {
     }
   })
 
-  electronLocalShortcut.register(newWindow, 'Cmd+Shift+]', () => {
-    send('Tab', 'Next')
-  })
+  // electronLocalShortcut.register(newWindow, 'Cmd+Shift+]', () => {
+  //   send('Tab', 'Next')
+  // })
 
-  electronLocalShortcut.register(newWindow, 'Cmd+Shift+[', () => {
-    send('Tab', 'Prev')
-  })
+  // electronLocalShortcut.register(newWindow, 'Cmd+Shift+[', () => {
+  //   send('Tab', 'Prev')
+  // })
 
   return newWindow
 }
@@ -277,9 +288,16 @@ app.on('ready', () => {
   })
 })
 
+app.setAsDefaultProtocolClient('graphql-playground')
+
+app.on('open-url', (event, url) => {
+  console.log('event open', event, url)
+  forceSend('OpenUrl', url)
+})
+
 app.on('open-file', (event, path) => {
   event.preventDefault()
-  send('OpenSelectedFile', path)
+  forceSend('OpenSelectedFile', path)
 })
 
 // Quit when all windows are closed.
@@ -294,6 +312,7 @@ app.on('window-all-closed', () => {
 app.on('activate', () => {
   // On OS X it's common to re-create a window in the app when the
   // dock icon is clicked and there are no other windows open.
+  console.log('activate called')
   if (!windows.size) {
     createWindow()
   }

@@ -191,11 +191,14 @@ class InitialView extends React.Component<
           style={modalStyle}
         >
           <div className="initial-view-content">
-            {history.length > 0
-              ? <div className="initial-view-recent">
-                  <div className="initial-view-recent-header">RECENT</div>
-                  <div className="initial-view-recent-list">
-                    {history.map(data =>
+            {history.length > 0 ? (
+              <div className="initial-view-recent">
+                <div className="initial-view-recent-header">RECENT</div>
+                <div className="initial-view-recent-list">
+                  {[]
+                    .concat(history)
+                    .reverse()
+                    .map(data => (
                       <div
                         className="list-item"
                         // tslint:disable-next-line
@@ -219,46 +222,44 @@ class InitialView extends React.Component<
                             Last opened {format(data.lastOpened, 'DD.MM.YYYY')}
                           </span>
                         </div>
-                      </div>,
-                    )}
-                  </div>
+                      </div>
+                    ))}
                 </div>
-              : <div className="initial-view-recent">
-                  <div className="initial-view-recent-header">EXAMPLES</div>
-                  <div className="initial-view-recent-list">
-                    {examples.map(example =>
-                      <div
-                        className="list-item"
-                        // tslint:disable-next-line
-                        onClick={() =>
-                          this.props.onSelectEndpoint(example.endpoint)}
-                      >
-                        <div
-                          className="list-item-name"
-                          title={example.endpoint}
-                        >
-                          {example.name}
-                        </div>
-                        <div className="list-item-date">
-                          <Icon
-                            src={require('graphcool-styles/icons/fill/world.svg')}
-                            color={$v.gray40}
-                            width={14}
-                            height={14}
-                          />
-                          <span>
-                            {example.endpoint}
-                          </span>
-                        </div>
-                      </div>,
-                    )}
-                  </div>
-                </div>}
+              </div>
+            ) : (
+              <div className="initial-view-recent">
+                <div className="initial-view-recent-header">EXAMPLES</div>
+                <div className="initial-view-recent-list">
+                  {examples.map(example => (
+                    <div
+                      className="list-item"
+                      // tslint:disable-next-line
+                      onClick={() =>
+                        this.props.onSelectEndpoint(example.endpoint)
+                      }
+                    >
+                      <div className="list-item-name" title={example.endpoint}>
+                        {example.name}
+                      </div>
+                      <div className="list-item-date">
+                        <Icon
+                          src={require('graphcool-styles/icons/fill/world.svg')}
+                          color={$v.gray40}
+                          width={14}
+                          height={14}
+                        />
+                        <span>{example.endpoint}</span>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
             <div className="initial-view-workspace">
               <h1 className="title">New workspace</h1>
               <p className="description">
-                Either load a local repository with a .graphqlconfig file, or just
-                open a HTTP endpoint
+                Either load a local repository with a .graphqlconfig file, or
+                just open a HTTP endpoint
               </p>
               <div className="toggle">
                 <Toggle
@@ -267,7 +268,7 @@ class InitialView extends React.Component<
                   onChange={this.handleChangeMode}
                 />
               </div>
-              {selectedMode === 'url endpoint' &&
+              {selectedMode === 'url endpoint' && (
                 <form className="container-input" onSubmit={this.handleSubmit}>
                   <input
                     className="input"
@@ -276,8 +277,9 @@ class InitialView extends React.Component<
                     onChange={this.handleChangeEndpoint}
                   />
                   <button>OPEN</button>
-                </form>}
-              {selectedMode === 'local' &&
+                </form>
+              )}
+              {selectedMode === 'local' && (
                 <div
                   className="container-input"
                   onClick={this.handleClickLocal}
@@ -289,7 +291,8 @@ class InitialView extends React.Component<
                     onChange={this.handleChangeEndpoint}
                   />
                   <button>OPEN</button>
-                </div>}
+                </div>
+              )}
             </div>
           </div>
         </Modal>

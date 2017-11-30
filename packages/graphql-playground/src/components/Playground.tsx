@@ -177,8 +177,9 @@ export class Playground extends React.PureComponent<Props & DocsState, State> {
   }
 
   getStorageKey(props: Props = this.props) {
-    const multi = !props.fixedEndpoints
-    return multi ? 'multi' : props.endpoint
+    return props.endpoint
+    // const multi = !props.fixedEndpoints
+    // return multi ? 'multi' : props.endpoint
   }
 
   componentWillMount() {

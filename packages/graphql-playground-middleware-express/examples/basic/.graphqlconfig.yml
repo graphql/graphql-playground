@@ -5,6 +5,6 @@ extensions:
       url: 'https://airbnb.now.sh'
       subscription: 'wss://airbnb.now.sh'
     local:
-      url: 'http://localhost:4000/graphql'
-      subscription: 'ws://localhost:4000'
+      url: 'http://localhost:${env:PORT}/graphql'
+      subscription: 'ws://localhost:${env:PORT}'
 

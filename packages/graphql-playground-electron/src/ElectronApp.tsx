@@ -15,6 +15,7 @@ import * as path from 'path'
 import * as os from 'os'
 import * as yaml from 'js-yaml'
 import * as findUp from 'find-up'
+import * as queryString from 'query-string'
 // import { PermissionSession } from 'graphql-playground/lib/types'
 
 const { dialog } = remote
@@ -24,7 +25,6 @@ const store = createStore()
 
 interface State {
   endpoint?: string
-  openInitialView: boolean
   openTooltipTheme: boolean
   theme: string
   shareUrl?: string
@@ -33,6 +33,8 @@ interface State {
   platformToken?: string
   configString?: string
   configPath?: string
+  folderName?: string
+  env?: any
 }
 
 export default class ElectronApp extends React.Component<{}, State> {
@@ -42,7 +44,6 @@ export default class ElectronApp extends React.Component<{}, State> {
     super()
     const { endpoint, platformToken } = this.getArgs()
     this.state = {
-      openInitialView: !endpoint,
       openTooltipTheme: false,
       theme: 'dark',
       endpoint,
@@ -65,11 +66,12 @@ export default class ElectronApp extends React.Component<{}, State> {
       endpoint: args.endpoint,
       subscriptionsEndpoint: args['subscriptions-endpoint'],
       platformToken: args['platform-token'] || localStorage.platformToken,
+      env: args.env,
     }
   }
 
   handleSelectEndpoint = (endpoint: string) => {
-    this.setState({ endpoint, openInitialView: false } as State)
+    this.setState({ endpoint } as State)
   }
 
   handleSelectFolder = (folderPath: string) => {
@@ -79,7 +81,6 @@ export default class ElectronApp extends React.Component<{}, State> {
       const configString = fs.readFileSync(configPath, 'utf-8')
 
       this.setState({
-        openInitialView: false,
         configString,
         configPath,
       } as State)
@@ -122,6 +123,8 @@ export default class ElectronApp extends React.Component<{}, State> {
     ipcRenderer.on('Tab', this.readTabMessage)
     ipcRenderer.on('File', this.readFileMessage)
     ipcRenderer.on('OpenSelectedFile', this.readOpenSelectedFileMessage)
+    ipcRenderer.on('OpenUrl', this.handleUrl)
+    window.addEventListener('keydown', this.handleKeyDown)
   }
 
   componentWillUnmount() {
@@ -131,9 +134,59 @@ export default class ElectronApp extends React.Component<{}, State> {
       'OpenSelectedFile',
       this.readOpenSelectedFileMessage,
     )
+    ipcRenderer.removeListener('OpenUrl', this.handleUrl)
+    window.removeEventListener('keydown', this.handleKeyDown)
   }
 
-  readFileMessage = (error, message) => {
+  handleKeyDown = e => {
+    if (e.key === '{' && e.metaKey) {
+      this.prevTab()
+    }
+    if (e.key === '}' && e.metaKey) {
+      this.nextTab()
+    }
+  }
+
+  handleUrl = (event, url) => {
+    const cutIndex = url.indexOf('//')
+    const query = url.slice(cutIndex + 2)
+    const input = queryString.parse(query)
+    if (input.env) {
+      try {
+        input.env = JSON.parse(input.env)
+      } catch (e) {
+        //
+      }
+    }
+
+    const endpoint = input.endpoint
+    let configString
+    let folderName
+    let configPath
+    const platformToken = input.platformToken
+
+    if (input.cwd) {
+      configPath = findUp.sync(['.graphqlconfig', '.graphqlconfig.yml'], {
+        cwd: input.cwd,
+      })
+      configString = configPath
+        ? fs.readFileSync(configPath, 'utf-8')
+        : undefined
+      folderName = configPath
+        ? path.basename(path.dirname(configPath))
+        : undefined
+    }
+
+    this.setState({
+      configString,
+      folderName,
+      env: input.env,
+      endpoint,
+      platformToken,
+    })
+  }
+
+  readFileMessage = (event, message) => {
     switch (message) {
       case 'Open':
         this.showOpenDialog()
@@ -273,20 +326,20 @@ export default class ElectronApp extends React.Component<{}, State> {
     const {
       theme,
       endpoint,
-      openInitialView,
       openTooltipTheme,
       platformToken,
+      configString,
     } = this.state
 
     return (
       <Provider store={store}>
-        <div className={cx('root', theme)}>
+        <div className={cx('root', theme, { noConfig: !configString })}>
           <style jsx={true} global={true}>{`
             .app-content .left-content {
               letter-spacing: 0.5px;
             }
-            body .root .tabs.isApp {
-              padding-left: 74px;
+            body .root.noConfig .tabs {
+              padding-left: 80px;
             }
           `}</style>
           <style jsx={true}>{`
@@ -308,20 +361,22 @@ export default class ElectronApp extends React.Component<{}, State> {
             }
           `}</style>
           <InitialView
-            isOpen={openInitialView}
+            isOpen={!endpoint && !configString}
             onSelectFolder={this.handleSelectFolder}
             onSelectEndpoint={this.handleSelectEndpoint}
           />
-          {(endpoint || this.state.configString) && (
+          {(endpoint || configString) && (
             <div className="playground">
               <Playground
                 getRef={this.setRef}
                 endpoint={endpoint}
                 isElectron={true}
                 platformToken={platformToken}
-                configString={this.state.configString}
+                configString={configString}
                 onSaveConfig={this.saveConfig}
                 canSaveConfig={true}
+                env={this.state.env}
+                folderName={this.state.folderName}
               />
             </div>
           )}

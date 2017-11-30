@@ -54,6 +54,12 @@
       "ext": "graphql",
       "name": "GraphQL",
       "role": "Editor"
+    },
+    "protocols": {
+      "name": "graphql-playground-protocol",
+      "schemes": [
+        "graphql-playground"
+      ]
     }
   },
   "scripts": {
@@ -96,6 +102,7 @@
     "js-yaml": "^3.10.0",
     "lodash.merge": "^4.6.0",
     "minimist": "^1.2.0",
+    "query-string": "^5.0.1",
     "react": "^16.0.0",
     "react-dom": "^16.0.0",
     "react-redux": "^5.0.5",
@@ -130,7 +137,7 @@
     "extract-text-webpack-plugin": "^2.0.0-beta.3",
     "file-loader": "^0.11.2",
     "fork-ts-checker-webpack-plugin": "^0.1.5",
-    "graphql-playground": "^1.2.1-beta.7",
+    "graphql-playground": "^1.2.1-beta.8",
     "happypack": "^3.1.0",
     "html-webpack-plugin": "^2.30.1",
     "identity-obj-proxy": "^3.0.0",

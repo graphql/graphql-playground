@@ -11,6 +11,7 @@ export interface MiddlewareOptions {
 
 export interface RenderPageOptions extends MiddlewareOptions {
   version: string
+  env?: any
 }
 
 const configPath = findUp.sync(['.graphqlconfig', '.graphqlconfig.yml'])
@@ -27,6 +28,7 @@ export function renderPlaygroundPage(options: RenderPageOptions) {
     configString,
     folderName,
     canSaveConfig: false,
+    env: process.env,
   }
   return `
 <!DOCTYPE html>
