@@ -239,20 +239,40 @@ cd ${folderPath}; graphql playground`)
 
   getSaveFileName(): Promise<string> {
     return new Promise((resolve, reject) => {
-      dialog.showSaveDialog(
-        {
-          title: 'Save Permission Query',
-          filters: [
-            {
-              name: 'Permission File',
-              extensions: ['graphql'],
-            },
-          ],
-        },
-        (fileName: any) => {
-          resolve(fileName)
-        },
-      )
+      // save current tab
+
+      if (this.playground) {
+        const session = this.playground.state.sessions[
+          this.playground.state.selectedSessionIndex
+        ]
+        if (session.isConfigTab) {
+          this.playground.handleSaveConfig()
+        }
+
+        if (session.isSettingsTab) {
+          this.playground.handleSaveSettings()
+        }
+
+        if (session.isFile) {
+          // TODO
+          // dialog.showSaveDialog(
+          //   {
+          //     title: 'Save Permission Query',
+          //     filters: [
+          //       {
+          //         name: 'Permission File',
+          //         extensions: ['graphql'],
+          //       },
+          //     ],
+          //   },
+          //   (fileName: any) => {
+          //     resolve(fileName)
+          //   },
+          // )
+        }
+
+        this.playground.handleSaveConfig()
+      }
     })
   }
 

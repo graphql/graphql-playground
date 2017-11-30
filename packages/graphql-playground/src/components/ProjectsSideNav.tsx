@@ -33,8 +33,8 @@ export default class ProjectsSideNav extends React.Component<Props, {}> {
               <Title>{folderName}</Title>
               <Icon
                 src={require('graphcool-styles/icons/fill/settings.svg')}
-                width={23}
-                height={23}
+                width={18}
+                height={18}
                 onClick={this.props.onEditConfig}
                 className={'settings-icon'}
               />
