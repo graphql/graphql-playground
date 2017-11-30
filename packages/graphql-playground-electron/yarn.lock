@@ -3334,9 +3334,9 @@ graphql-language-service-utils@0.0.17:
     graphql "^0.10.1"
     graphql-language-service-types "0.0.21"
 
-graphql-playground@^1.2.1-beta.11:
-  version "1.2.1-beta.11"
-  resolved "https://registry.yarnpkg.com/graphql-playground/-/graphql-playground-1.2.1-beta.11.tgz#853260416806e931688f033fcc96e9c42f7940d4"
+graphql-playground@^1.3.0-beta.2:
+  version "1.3.0-beta.2"
+  resolved "https://registry.yarnpkg.com/graphql-playground/-/graphql-playground-1.3.0-beta.2.tgz#a6fb3f95ccf0d33d7a8cf8618626432d147d4e13"
   dependencies:
     calculate-size "^1.1.1"
     classnames "^2.2.5"

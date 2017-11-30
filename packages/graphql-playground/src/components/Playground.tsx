@@ -273,9 +273,12 @@ export class Playground extends React.PureComponent<Props & DocsState, State> {
     this.state.sessions.forEach(session => this.setWS(session))
   }
   setCursor(position: CursorPosition) {
-    const editor = this.graphiqlComponents[this.state.selectedSessionIndex]
-      .queryEditorComponent.editor
-    editor.setCursor(position)
+    if (this.graphiqlComponents) {
+      const editor = this.graphiqlComponents[this.state.selectedSessionIndex]
+      if (editor && editor.queryEditorComponent) {
+        editor.queryEditorComponent.editor.setCursor(position)
+      }
+    }
   }
   render() {
     const { sessions, selectedSessionIndex } = this.state
