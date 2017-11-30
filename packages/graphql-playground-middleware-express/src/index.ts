@@ -15,7 +15,7 @@ export type ExpressPlaygroundMiddleware = (
 ) => void
 
 export type Register = (
-  options: RenderPageOptions,
+  options: MiddlewareOptions,
 ) => ExpressPlaygroundMiddleware
 
 const express: Register = function voyagerExpress(options: MiddlewareOptions) {

@@ -92,6 +92,7 @@ cd ${folderPath}; graphql playground`)
       this.setState({
         configString,
         configPath,
+        folderName: path.basename(folderPath),
       } as State)
     } catch (error) {
       alert(error)
