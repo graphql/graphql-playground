@@ -54,22 +54,28 @@ function getFocusedWindow(): any | null {
 function send(channel: string, arg: string) {
   const focusedWindow = getFocusedWindow()
   if (focusedWindow) {
+    console.log('sending to focused window', channel, arg)
     focusedWindow.webContents.send(channel, arg)
+  } else {
+    console.log('no focused window')
   }
 }
 
-async function forceSend(
-  channel: string,
-  arg: string,
-  newWindow: boolean = false,
-) {
+async function forceSend(channel: string, arg: string) {
   await appPromise
   const currentWindows = BrowserWindow.getAllWindows()
-  const window = newWindow
-    ? createWindow()
-    : currentWindows[0] || createWindow()
-  console.log('window')
-  console.log(window)
+  let window = currentWindows[0]
+  if (!window) {
+    window = createWindow()
+    console.log('created window')
+    await new Promise(r => {
+      console.log('waiting for dom to be ready')
+      window.once('ready-to-show', r)
+      setTimeout(r, 3000)
+    })
+  }
+  // send(channel, arg)
+  // console.log('window')
   console.log('force sending', channel, arg)
   window.webContents.send(channel, arg)
 }
@@ -147,7 +153,7 @@ function createWindow() {
       .then(name => console.log(`Added Extension:  ${name}`))
       .catch(err => console.log('An error occurred: ', err))
 
-    newWindow.webContents.openDevTools()
+    // newWindow.webContents.openDevTools()
   }
 
   windows.add(newWindow)
@@ -157,6 +163,7 @@ function createWindow() {
     if (process.platform !== 'darwin' && windows.size === 0) {
       app.quit()
     }
+    windows.delete(newWindow)
   })
 
   // electronLocalShortcut.register(newWindow, 'Cmd+Shift+]', () => {
@@ -304,7 +311,7 @@ app.on('ready', () => {
 app.setAsDefaultProtocolClient('graphql-playground')
 
 app.on('open-url', (event, url) => {
-  forceSend('OpenUrl', url, true)
+  forceSend('OpenUrl', url)
 })
 
 app.on('open-file', (event, path) => {
