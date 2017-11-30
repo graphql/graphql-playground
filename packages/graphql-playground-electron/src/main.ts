@@ -58,9 +58,16 @@ function send(channel: string, arg: string) {
   }
 }
 
-function forceSend(channel: string, arg: string) {
+async function forceSend(
+  channel: string,
+  arg: string,
+  newWindow: boolean = false,
+) {
+  await appPromise
   const currentWindows = BrowserWindow.getAllWindows()
-  const window = currentWindows[0] || createWindow()
+  const window = newWindow
+    ? createWindow()
+    : currentWindows[0] || createWindow()
   console.log('window')
   console.log(window)
   console.log('force sending', channel, arg)
@@ -267,6 +274,8 @@ const template: any = [
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
+let appResolve
+const appPromise = new Promise(resolve => (appResolve = resolve))
 app.on('ready', () => {
   createWindow()
   // initAutoUpdate()
@@ -286,12 +295,16 @@ app.on('ready', () => {
   protocol.registerFileProtocol('file:', (request, filePath) => {
     console.log('file:', request, filePath)
   })
+
+  if (appResolve) {
+    appResolve()
+  }
 })
 
 app.setAsDefaultProtocolClient('graphql-playground')
 
 app.on('open-url', (event, url) => {
-  forceSend('OpenUrl', url)
+  forceSend('OpenUrl', url, true)
 })
 
 app.on('open-file', (event, path) => {
