@@ -61,13 +61,13 @@ export interface State {
 
 export type Theme = 'dark' | 'light'
 export interface EditorSettings {
-  theme: Theme
-  reuseHeaders: boolean
+  ['editor.theme']: Theme
+  ['editor.reuseHeaders']: boolean
 }
 
 const defaultSettings = `{
-  "theme": "dark",
-  "reuseHeaders": true
+  "editor.theme": "dark",
+  "editor.reuseHeaders": true
 }`
 
 class MiddlewareApp extends React.Component<Props, State> {
@@ -223,7 +223,7 @@ class MiddlewareApp extends React.Component<Props, State> {
         <title>{this.getTitle()}</title>
       </Helmet>
     ) : null
-    const { theme } = this.state.settings
+    const theme = this.state.settings['editor.theme']
 
     return (
       <div>
@@ -237,7 +237,7 @@ class MiddlewareApp extends React.Component<Props, State> {
                     <ProjectsSideNav
                       config={this.state.config}
                       folderName={this.props.folderName || 'GraphQL App'}
-                      theme={this.state.settings.theme}
+                      theme={theme}
                       activeEnv={this.state.activeEnv}
                       onSelectEnv={this.handleSelectEnv}
                       onNewWorkspace={this.props.onNewWorkspace}
@@ -344,8 +344,9 @@ class MiddlewareApp extends React.Component<Props, State> {
   }
 
   normalizeSettings(settings: EditorSettings) {
-    if (settings.theme !== 'dark' && settings.theme !== 'light') {
-      settings.theme = 'dark'
+    const theme = settings['editor.theme']
+    if (theme !== 'dark' && theme !== 'light') {
+      settings['editor.theme'] = 'dark'
     }
 
     return settings

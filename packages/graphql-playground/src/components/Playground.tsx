@@ -282,7 +282,8 @@ export class Playground extends React.PureComponent<Props & DocsState, State> {
   }
   render() {
     const { sessions, selectedSessionIndex } = this.state
-    const { isEndpoint, settings: { theme } } = this.props
+    const { isEndpoint } = this.props
+    const theme = this.props.settings['editor.theme']
     const selectedEndpointUrl = isEndpoint ? location.href : this.getEndpoint()
     const isGraphcoolUrl = this.isGraphcoolUrl(selectedEndpointUrl)
 
@@ -358,7 +359,7 @@ export class Playground extends React.PureComponent<Props & DocsState, State> {
                   schemaFetcher={this.schemaFetcher}
                   fixedEndpoint={this.props.fixedEndpoints}
                   sharing={{
-                    localTheme: this.props.settings.theme,
+                    localTheme: this.props.settings['editor.theme'],
                     onShare: this.share,
                     onToggleHistory: this.toggleShareHistory,
                     onToggleAllTabs: this.toggleShareAllTabs,
@@ -816,7 +817,7 @@ export class Playground extends React.PureComponent<Props & DocsState, State> {
     const currentActiveSession =
       this.state && this.state.sessions[this.state.selectedSessionIndex]
     const headers =
-      this.props.settings.reuseHeaders && currentActiveSession
+      this.props.settings['editor.reuseHeaders'] && currentActiveSession
         ? currentActiveSession.headers
         : ''
     if (session) {
@@ -1014,11 +1015,13 @@ export class Playground extends React.PureComponent<Props & DocsState, State> {
       jsonVariables =
         headers && headers.trim() !== '' ? JSON.parse(headers) : undefined
     } catch (error) {
-      throw new Error(`Headers are invalid JSON: ${error.message}.`)
+      /* tslint:disable-next-line */
+      console.error(`Headers are invalid JSON: ${error.message}.`)
     }
 
     if (typeof jsonVariables !== 'object') {
-      throw new Error('Headers are not a JSON object.')
+      /* tslint:disable-next-line */
+      console.error('Headers are not a JSON object.')
     }
 
     return jsonVariables
