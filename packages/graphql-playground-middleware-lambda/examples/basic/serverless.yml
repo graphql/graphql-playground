@@ -1,0 +1,23 @@
+service: playground-test
+
+provider:
+  name: aws
+  runtime: nodejs6.10
+
+
+functions:
+  graphql:
+    handler: handler.graphqlHandler
+    events:
+    - http:
+        path: graphql
+        method: post
+        cors: true
+  playground:
+    handler: handler.playgroundHandler
+    events:
+    - http:
+        path: playground
+        method: get
+        cors: true
+
