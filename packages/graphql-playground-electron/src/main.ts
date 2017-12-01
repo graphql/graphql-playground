@@ -70,9 +70,10 @@ async function forceSend(channel: string, arg: string) {
     console.log('created window')
     await new Promise(r => {
       console.log('waiting for dom to be ready')
-      window.once('ready-to-show', r)
-      setTimeout(r, 3000)
+      window.webContents.addListener('dom-ready', r)
     })
+    await new Promise(r => setTimeout(r, 200))
+    console.log('did finish load')
   }
   // send(channel, arg)
   // console.log('window')
@@ -311,6 +312,7 @@ app.on('ready', () => {
 app.setAsDefaultProtocolClient('graphql-playground')
 
 app.on('open-url', (event, url) => {
+  event.preventDefault()
   forceSend('OpenUrl', url)
 })
 
