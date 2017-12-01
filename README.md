@@ -12,6 +12,7 @@ GraphQL IDE for better development workflows (GraphQL Subscriptions, interactive
 * 📚 Interactive, multi-column docs (keyboard support)
 * ⚡️ Supports real-time GraphQL Subscriptions
 * ⚙  GraphQL Config support with multiple Projects & Endpoints
+* 🚥 Apollo Tracing support
 
 ## FAQ
 
