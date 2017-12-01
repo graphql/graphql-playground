@@ -3248,23 +3248,23 @@ graceful-fs@^4.1.11, graceful-fs@^4.1.2, graceful-fs@^4.1.4, graceful-fs@^4.1.6,
   version "4.1.11"
   resolved "https://registry.yarnpkg.com/graceful-fs/-/graceful-fs-4.1.11.tgz#0e8bdfe4d1ddb8854d64e04ea7c00e2a026e5658"
 
+graphcool-styles@0.2.4:
+  version "0.2.4"
+  resolved "https://registry.yarnpkg.com/graphcool-styles/-/graphcool-styles-0.2.4.tgz#c04aa8a440280e910e4c9cfa1ef97052d1060198"
+  dependencies:
+    html-webpack-plugin "^2.24.1"
+    interactive "^0.1.9"
+    isomorphic-fetch "^2.2.1"
+    object-assign "^4.1.0"
+    react-dom "^15.3.2"
+    webpack-dev-server "^1.16.2"
+
 graphcool-styles@^0.1.31:
   version "0.1.31"
   resolved "https://registry.yarnpkg.com/graphcool-styles/-/graphcool-styles-0.1.31.tgz#efb04329a0e5d2788023e45e43925a85664e83dd"
   dependencies:
     html-webpack-plugin "^2.24.1"
     interactive "^0.1.9"
-    object-assign "^4.1.0"
-    react-dom "^15.3.2"
-    webpack-dev-server "^1.16.2"
-
-graphcool-styles@^0.2.5:
-  version "0.2.5"
-  resolved "https://registry.yarnpkg.com/graphcool-styles/-/graphcool-styles-0.2.5.tgz#4cc151afb39e29b46f31f44a9b531d970d9d4cf8"
-  dependencies:
-    html-webpack-plugin "^2.24.1"
-    interactive "^0.1.9"
-    isomorphic-fetch "^2.2.1"
     object-assign "^4.1.0"
     react-dom "^15.3.2"
     webpack-dev-server "^1.16.2"
@@ -3338,15 +3338,15 @@ graphql-language-service-utils@0.0.17:
     graphql "^0.10.1"
     graphql-language-service-types "0.0.21"
 
-graphql-playground@^1.3.0-beta.4:
-  version "1.3.0-beta.4"
-  resolved "https://registry.yarnpkg.com/graphql-playground/-/graphql-playground-1.3.0-beta.4.tgz#1deff93286d39aaf7fe98947949b53b71364c7df"
+graphql-playground@^1.3.0:
+  version "1.3.0"
+  resolved "https://registry.yarnpkg.com/graphql-playground/-/graphql-playground-1.3.0.tgz#373f6e74ca399739c913dfc69d0a0c3c0bd660bd"
   dependencies:
     calculate-size "^1.1.1"
     classnames "^2.2.5"
     codemirror "^5.27.4"
     cuid "^1.3.8"
-    graphcool-styles "^0.2.5"
+    graphcool-styles "0.2.4"
     graphcool-tmp-ui "^0.0.11"
     graphiql "^0.11.2"
     graphql "^0.10.5"
@@ -6711,6 +6711,18 @@ styled-components@^2.2.3:
 "styled-jsx-postcss@git+https://github.com/timsuchanek/styled-jsx-postcss#build3":
   version "0.2.0"
   resolved "git+https://github.com/timsuchanek/styled-jsx-postcss#677ee0fb7f9138047a00e03c8c3e44adbb33cf2a"
+  dependencies:
+    babel-traverse "^6.21.0"
+    babylon "^6.14.1"
+    deasync "^0.1.9"
+    postcss "^5.2.8"
+    postcss-load-plugins "^2.2.0"
+    styled-jsx "^0.5.7"
+
+"styled-jsx-postcss@git+https://github.com/timsuchanek/styled-jsx-postcss.git#build3":
+  version "0.2.0"
+  uid "677ee0fb7f9138047a00e03c8c3e44adbb33cf2a"
+  resolved "git+https://github.com/timsuchanek/styled-jsx-postcss.git#677ee0fb7f9138047a00e03c8c3e44adbb33cf2a"
   dependencies:
     babel-traverse "^6.21.0"
     babylon "^6.14.1"
