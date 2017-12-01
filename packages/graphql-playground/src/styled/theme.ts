@@ -11,6 +11,7 @@ export interface Colours {
   black40: string
   paleText: string
   paleGrey: string
+  red: string
 }
 
 export const colours: Colours = {
@@ -24,6 +25,7 @@ export const colours: Colours = {
   white60: 'rgba(255, 255, 255, 0.6)',
   white: 'rgba(255, 255, 255, 1)',
   black40: 'rgba(0, 0, 0, 0.4)',
+  red: '#f25c54',
 
   paleText: 'rgba(0, 0, 0, 0.5)',
   paleGrey: '#f3f4f4', // use for bgs, borders, etc
