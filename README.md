@@ -3,7 +3,8 @@
 GraphQL IDE for better development workflows (GraphQL Subscriptions, interactive docs & collaboration). <br />
 **You can download the [desktop app](https://github.com/graphcool/graphql-playground/releases) or use the web version at graphqlbin.com: [Demo](https://www.graphqlbin.com/RVIn)**
 
-[![](https://imgur.com/6IC6Huj.png)](https://www.graphqlbin.com/RVIn)
+
+[![](https://i.imgur.com/AE5W6OW.png)](https://www.graphqlbin.com/RVIn)
 
 ## Features
 
