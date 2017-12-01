@@ -30,6 +30,7 @@ export interface Props {
   showParentName?: boolean
   collapsable?: boolean
   sessionId: string
+  lastActive: boolean
 }
 
 interface State {
@@ -113,6 +114,7 @@ class TypeLink extends React.Component<
       keyMove,
       showParentName,
       isActive,
+      lastActive,
     } = this.props
     const isGraphqlType = isType(type)
 
@@ -130,7 +132,7 @@ class TypeLink extends React.Component<
         className={cx('doc-category-item', className, {
           clickable,
           active: isActive,
-          // 'last-active': isLastActive,
+          'last-active': lastActive,
           'no-hover': keyMove,
         })}
         onClick={this.onClick}
@@ -157,7 +159,7 @@ class TypeLink extends React.Component<
           }
         `}</style>
         <style jsx={true} global={true}>{`
-          /*.doc-category-item.last-active,*/
+          .doc-category-item.last-active,
           .doc-category-item.clickable:hover:not(.no-hover) {
             background-color: #2a7ed3 !important;
             color: #fff !important;
@@ -251,12 +253,14 @@ const mapStateToProps = (state, { x, y, sessionId }) => {
       return {
         isActive,
         keyMove: docs.keyMove,
+        lastActive: isActive && x === docs.navStack.length - 1,
       }
     }
   }
   return {
     isActive: false,
     keyMove: false,
+    lastActive: false,
   }
 }
 

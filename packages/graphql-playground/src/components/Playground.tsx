@@ -1155,4 +1155,8 @@ const GraphiqlWrapper = styled.div`
   height: 100%;
   position: relative;
   overflow: hidden;
+  visibility: hidden;
+  &.active {
+    visibility: visible;
+  }
 `
