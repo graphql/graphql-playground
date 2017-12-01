@@ -16,74 +16,8 @@ if (process.env.NODE_ENV !== 'production') {
 ;(window as any)['GraphQLPlayground'] = {
   init(element: HTMLElement, options) {
     ReactDOM.render(
-      <MiddlewareApp
-        // configString={exampleYmlConfig}
-        // folderName={folderName}
-        setTitle={true}
-        showNewWorkspace={false}
-        env={env}
-        {...options}
-      />,
+      <MiddlewareApp setTitle={true} showNewWorkspace={false} {...options} />,
       element,
     )
   },
-}
-
-// const exampleJsonConfig = `\
-// {
-//   "schemaPath": "schema.graphql",
-//   "extensions": {
-//     "endpoints": {
-//       "prod": {
-//         "url": "https://airbnb.now.sh",
-//         "subscription": "wss://airbnb.now.sh"
-//       },
-//       "local": {
-//         "url": "http://localhost:4000",
-//         "subscription": "ws://localhost:4000"
-//       }
-//     }
-//   }
-// }`
-
-// const folderName = `airbnb`
-
-// const exampleYmlConfig = `\
-// schemaPath: schema.graphql
-// projects:
-//   privateCluster:
-//     extensions:
-//       endpoints:
-//         default:
-//           url: 'https://tim.graph.cool/system'
-//   gateway:
-//     extensions:
-//       endpoints:
-//         default:
-//           url: 'https://airbnb.now.sh'
-//           subscription: 'wss://airbnb.now.sh'
-//         dev:
-//           url: 'http://localhost:4000'
-//           subscription: 'ws://localhost:4000'
-//   database:
-//     extensions:
-//       endpoints:
-//         dev:
-//           url: 'https://api.graph.cool/simple/v1/\${env:SERVICE_ID}'
-// `
-
-// const exampleYmlConfig = `\
-// schemaPath: schema.graphql
-// extensions:
-//   endpoints:
-//     default:
-//       url: 'https://airbnb.now.sh'
-//       subscription: 'wss://airbnb.now.sh'
-//     local:
-//       url: 'http://localhost:4000'
-//       subscription: 'ws://localhost:4000'
-// `
-
-const env = {
-  SERVICE_ID: 'asdf',
 }

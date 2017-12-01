@@ -27,22 +27,8 @@ app.setAsDefaultProtocolClient('graphql-playground')
 const log = {
   info: (...args) => {
     console.log(...args)
-    // fs.appendFileSync(
-    //   os.homedir() + '/pg-logs.log',
-    //   JSON.stringify(args) + '\n',
-    // )
   },
 }
-
-log.info(protocol)
-// log.info(protocol.registerStringProtocol)
-
-// protocol.registerBufferProtocol('graphql-playground', (request, callback) => {
-//   setTimeout(() => {
-//     forceSend('OpenUrl', request.url)
-//   }, 5000)
-//   callback()
-// })
 
 app.on('open-url', (event, url) => {
   event.preventDefault()
@@ -57,33 +43,6 @@ app.on('open-file', (event, path) => {
 function getFocusedWindow(): any | null {
   return BrowserWindow.getFocusedWindow()
 }
-
-// function manuallyCheckForUpdates() {
-//   autoUpdater.on('update-available', () => {
-//     dialog.showMessageBox(
-//       {
-//         type: 'info',
-//         title: 'Found Updates',
-//         message: 'Found updates, do you want update now?',
-//         buttons: ['Sure', 'No'],
-//       },
-//       buttonIndex => {
-//         if (buttonIndex === 0) {
-//           autoUpdater.downloadUpdate()
-//         }
-//       },
-//     )
-//   })
-//
-//   autoUpdater.on('update-not-available', () => {
-//     dialog.showMessageBox({
-//       title: 'No Updates',
-//       message: 'Current version is up-to-date.',
-//     })
-//   })
-//
-//   autoUpdater.checkForUpdates()
-// }
 
 function send(channel: string, arg: string) {
   const focusedWindow = getFocusedWindow()
