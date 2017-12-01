@@ -51,6 +51,11 @@ const folderName = `airbnb`
 const exampleYmlConfig = `\
 schemaPath: schema.graphql
 projects:
+  privateCluster:
+    extensions:
+      endpoints:
+        default:
+          url: 'https://tim.graph.cool/system'
   gateway:
     extensions:
       endpoints:

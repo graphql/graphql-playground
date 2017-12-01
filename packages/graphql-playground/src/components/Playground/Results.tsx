@@ -21,8 +21,7 @@ export default class Results extends React.Component<Props, {}> {
       >
         <style jsx={true}>{`
           .result-window {
-            @p: .bgDarkBlue, .nosb;
-            overflow: auto;
+            @p: .bgDarkBlue, .nosb, .relative;
           }
 
           .result-window.disableResize :global(.CodeMirror-gutters) {
@@ -47,6 +46,15 @@ export default class Results extends React.Component<Props, {}> {
             @p: .bgDarkBlue, .white50, .f12;
             padding-left: 15px;
           }
+
+          .result-viewer-wrapper {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            overflow: auto;
+          }
         `}</style>
         {this.props.responses.map(response => (
           <div key={response.resultID || String(response.time)}>
@@ -58,10 +66,12 @@ export default class Results extends React.Component<Props, {}> {
                   </div>
                 </div>
               )}
-            <ResultViewer
-              value={response.date}
-              hideGutters={this.props.hideGutters}
-            />
+            <div className="result-viewer-wrapper">
+              <ResultViewer
+                value={response.date}
+                hideGutters={this.props.hideGutters}
+              />
+            </div>
           </div>
         ))}
       </div>

@@ -3030,23 +3030,23 @@ graceful-fs@^4.1.11, graceful-fs@^4.1.2, graceful-fs@^4.1.4, graceful-fs@^4.1.6,
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/graceful-readlink/-/graceful-readlink-1.0.1.tgz#4cafad76bc62f02fa039b2f94e9a3dd3a391a725"
 
+graphcool-styles@0.2.4:
+  version "0.2.4"
+  resolved "https://registry.yarnpkg.com/graphcool-styles/-/graphcool-styles-0.2.4.tgz#c04aa8a440280e910e4c9cfa1ef97052d1060198"
+  dependencies:
+    html-webpack-plugin "^2.24.1"
+    interactive "^0.1.9"
+    isomorphic-fetch "^2.2.1"
+    object-assign "^4.1.0"
+    react-dom "^15.3.2"
+    webpack-dev-server "^1.16.2"
+
 graphcool-styles@^0.1.31:
   version "0.1.31"
   resolved "https://registry.yarnpkg.com/graphcool-styles/-/graphcool-styles-0.1.31.tgz#efb04329a0e5d2788023e45e43925a85664e83dd"
   dependencies:
     html-webpack-plugin "^2.24.1"
     interactive "^0.1.9"
-    object-assign "^4.1.0"
-    react-dom "^15.3.2"
-    webpack-dev-server "^1.16.2"
-
-graphcool-styles@^0.2.5:
-  version "0.2.5"
-  resolved "https://registry.yarnpkg.com/graphcool-styles/-/graphcool-styles-0.2.5.tgz#4cc151afb39e29b46f31f44a9b531d970d9d4cf8"
-  dependencies:
-    html-webpack-plugin "^2.24.1"
-    interactive "^0.1.9"
-    isomorphic-fetch "^2.2.1"
     object-assign "^4.1.0"
     react-dom "^15.3.2"
     webpack-dev-server "^1.16.2"
