@@ -10,6 +10,8 @@ import {
   protocol,
 } from 'electron'
 import * as electronLocalShortcut from 'electron-localshortcut'
+import * as fs from 'fs'
+import * as os from 'os'
 import { autoUpdater } from 'electron-updater'
 const dev = require('electron-is-dev')
 
@@ -19,6 +21,38 @@ const { newWindowConfig } = require('./utils')
 
 const server = 'https://hazel-wmigqegsed.now.sh'
 const feed = `${server}/update/${process.platform}/${app.getVersion()}`
+
+app.setAsDefaultProtocolClient('graphql-playground')
+
+const log = {
+  info: (...args) => {
+    console.log(...args)
+    // fs.appendFileSync(
+    //   os.homedir() + '/pg-logs.log',
+    //   JSON.stringify(args) + '\n',
+    // )
+  },
+}
+
+log.info(protocol)
+// log.info(protocol.registerStringProtocol)
+
+// protocol.registerBufferProtocol('graphql-playground', (request, callback) => {
+//   setTimeout(() => {
+//     forceSend('OpenUrl', request.url)
+//   }, 5000)
+//   callback()
+// })
+
+app.on('open-url', (event, url) => {
+  event.preventDefault()
+  forceSend('OpenUrl', url)
+})
+
+app.on('open-file', (event, path) => {
+  event.preventDefault()
+  forceSend('OpenSelectedFile', path)
+})
 
 function getFocusedWindow(): any | null {
   return BrowserWindow.getFocusedWindow()
@@ -54,12 +88,14 @@ function getFocusedWindow(): any | null {
 function send(channel: string, arg: string) {
   const focusedWindow = getFocusedWindow()
   if (focusedWindow) {
-    console.log('sending to focused window', channel, arg)
+    log.info('sending to focused window', channel, arg)
     focusedWindow.webContents.send(channel, arg)
   } else {
-    console.log('no focused window')
+    log.info('no focused window')
   }
 }
+
+const readyWindowsPromises = {}
 
 async function forceSend(channel: string, arg: string) {
   await appPromise
@@ -67,17 +103,9 @@ async function forceSend(channel: string, arg: string) {
   let window = currentWindows[0]
   if (!window) {
     window = createWindow()
-    console.log('created window')
-    await new Promise(r => {
-      console.log('waiting for dom to be ready')
-      window.webContents.addListener('dom-ready', r)
-    })
-    await new Promise(r => setTimeout(r, 200))
-    console.log('did finish load')
   }
-  // send(channel, arg)
-  // console.log('window')
-  console.log('force sending', channel, arg)
+  await readyWindowsPromises[window.id]
+  log.info('force sending', channel, arg)
   window.webContents.send(channel, arg)
 }
 
@@ -147,12 +175,12 @@ function createWindow() {
     } = require('electron-devtools-installer')
 
     installExtension(REACT_DEVELOPER_TOOLS)
-      .then(name => console.log(`Added Extension:  ${name}`))
-      .catch(err => console.log('An error occurred: ', err))
+      .then(name => log.info(`Added Extension:  ${name}`))
+      .catch(err => log.info('An error occurred: ', err))
 
     installExtension(REDUX_DEVTOOLS)
-      .then(name => console.log(`Added Extension:  ${name}`))
-      .catch(err => console.log('An error occurred: ', err))
+      .then(name => log.info(`Added Extension:  ${name}`))
+      .catch(err => log.info('An error occurred: ', err))
 
     // newWindow.webContents.openDevTools()
   }
@@ -174,6 +202,11 @@ function createWindow() {
   // electronLocalShortcut.register(newWindow, 'Cmd+Shift+[', () => {
   //   send('Tab', 'Prev')
   // })
+  readyWindowsPromises[newWindow.id] = new Promise(r => {
+    ipcMain.once('ready', () => {
+      r()
+    })
+  })
 
   return newWindow
 }
@@ -292,33 +325,21 @@ app.on('ready', () => {
   Menu.setApplicationMenu(menu)
 
   ipcMain.on('get-file-data', event => {
-    console.log('get-file-data', event)
+    log.info('get-file-data', event)
     // this.fileAdded(event)
   })
 
   ipcMain.on('load-file-content', (event, filePath) => {
-    console.log('load-file-content', event, filePath)
+    log.info('load-file-content', event, filePath)
   })
 
   protocol.registerFileProtocol('file:', (request, filePath) => {
-    console.log('file:', request, filePath)
+    log.info('file:', request, filePath)
   })
 
   if (appResolve) {
     appResolve()
   }
-})
-
-app.setAsDefaultProtocolClient('graphql-playground')
-
-app.on('open-url', (event, url) => {
-  event.preventDefault()
-  forceSend('OpenUrl', url)
-})
-
-app.on('open-file', (event, path) => {
-  event.preventDefault()
-  forceSend('OpenSelectedFile', path)
 })
 
 // Quit when all windows are closed.

@@ -2450,6 +2450,10 @@ electron-localshortcut@^2.0.2:
     debug "^2.6.8"
     electron-is-accelerator "^0.1.0"
 
+electron-log@^2.2.11:
+  version "2.2.11"
+  resolved "https://registry.yarnpkg.com/electron-log/-/electron-log-2.2.11.tgz#dc99118cda054aa866e47d081d1431c76baacd68"
+
 electron-osx-sign@0.4.7:
   version "0.4.7"
   resolved "https://registry.yarnpkg.com/electron-osx-sign/-/electron-osx-sign-0.4.7.tgz#1d75647a82748eacd48bea70616ec83ffade3ee5"
@@ -6707,18 +6711,6 @@ styled-components@^2.2.3:
 "styled-jsx-postcss@git+https://github.com/timsuchanek/styled-jsx-postcss#build3":
   version "0.2.0"
   resolved "git+https://github.com/timsuchanek/styled-jsx-postcss#677ee0fb7f9138047a00e03c8c3e44adbb33cf2a"
-  dependencies:
-    babel-traverse "^6.21.0"
-    babylon "^6.14.1"
-    deasync "^0.1.9"
-    postcss "^5.2.8"
-    postcss-load-plugins "^2.2.0"
-    styled-jsx "^0.5.7"
-
-"styled-jsx-postcss@git+https://github.com/timsuchanek/styled-jsx-postcss.git#build3":
-  version "0.2.0"
-  uid "677ee0fb7f9138047a00e03c8c3e44adbb33cf2a"
-  resolved "git+https://github.com/timsuchanek/styled-jsx-postcss.git#677ee0fb7f9138047a00e03c8c3e44adbb33cf2a"
   dependencies:
     babel-traverse "^6.21.0"
     babylon "^6.14.1"

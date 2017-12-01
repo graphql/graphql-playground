@@ -37,6 +37,25 @@ interface State {
   env?: any
 }
 
+const events: any[] = []
+
+ipcRenderer.on('OpenSelectedFile', pushSelectedFile)
+ipcRenderer.on('OpenUrl', pushOpenUrl)
+
+function pushSelectedFile() {
+  events.push({
+    type: 'OpenSelectedFile',
+    args: arguments,
+  })
+}
+
+function pushOpenUrl() {
+  events.push({
+    type: 'OpenUrl',
+    args: arguments,
+  })
+}
+
 export default class ElectronApp extends React.Component<{}, State> {
   private playground: IPlayground
 
@@ -130,11 +149,27 @@ cd ${folderPath}; graphql playground`)
   }
 
   componentDidMount() {
+    ipcRenderer.removeListener('OpenUrl', pushOpenUrl)
+    ipcRenderer.removeListener('OpenSelectedFile', pushSelectedFile)
     ipcRenderer.on('Tab', this.readTabMessage)
     ipcRenderer.on('File', this.readFileMessage)
     ipcRenderer.on('OpenSelectedFile', this.readOpenSelectedFileMessage)
     ipcRenderer.on('OpenUrl', this.handleUrl)
     window.addEventListener('keydown', this.handleKeyDown)
+    this.consumeEvents()
+    ipcRenderer.send('ready', '')
+  }
+
+  consumeEvents() {
+    while (events.length > 0) {
+      const event = events.shift()
+      switch (event.type) {
+        case 'OpenSelectedFile':
+          return this.readOpenSelectedFileMessage.call(this, ...event.args)
+        case 'OpenUrl':
+          return this.handleUrl.call(this, ...event.args)
+      }
+    }
   }
 
   componentWillUnmount() {
@@ -416,6 +451,8 @@ cd ${folderPath}; graphql playground`)
                 canSaveConfig={true}
                 env={this.state.env}
                 folderName={this.state.folderName}
+                showNewWorkspace={true}
+                onNewWorkspace={this.handleOpenNewWindow}
               />
             </div>
           )}
