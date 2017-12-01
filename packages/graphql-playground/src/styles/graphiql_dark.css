@@ -206,8 +206,7 @@
 
 .graphiql-container .variable-editor .CodeMirror {
   padding-left: 12px;
-  /*width: calc(100% - 12px);*/
-  width: calc(100%);
+  width: calc(100% - 12px);
   background: #0b1924;
 }
 
