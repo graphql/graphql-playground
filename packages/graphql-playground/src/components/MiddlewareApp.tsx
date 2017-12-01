@@ -12,6 +12,7 @@ import OldThemeProvider from './Theme/ThemeProvider'
 import { getActiveEndpoints } from './util'
 import PlaygroundStorage from './PlaygroundStorage'
 import { resolveEnvsInValues } from './resolveRefStrings'
+import { mapKeys } from 'lodash'
 
 const store = createStore()
 
@@ -75,7 +76,8 @@ class MiddlewareApp extends React.Component<Props, State> {
   constructor(props: Props) {
     super(props)
 
-    const settings = localStorage.getItem('settings') || defaultSettings
+    let settings = localStorage.getItem('settings') || defaultSettings
+    settings = this.migrateSettingsString(settings)
 
     let config
     let configIsYaml
@@ -117,6 +119,27 @@ class MiddlewareApp extends React.Component<Props, State> {
       activeEnv,
       activeProjectName: projectName,
     }
+  }
+
+  migrateSettingsString(settingsString) {
+    const replacementMap = {
+      theme: 'editor.theme',
+      reuseHeaders: 'editor.reuseHeaders',
+    }
+    try {
+      const settings = JSON.parse(settingsString)
+      return JSON.stringify(
+        mapKeys(settings, (value, key) => {
+          return replacementMap[key] || key
+        }),
+        null,
+        2,
+      )
+    } catch (e) {
+      //
+    }
+
+    return settingsString
   }
 
   componentWillReceiveProps(nextProps: Props) {
