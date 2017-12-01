@@ -18,6 +18,7 @@ export interface Props {
   isElectron: boolean
   onEditConfig: () => void
   getSessionCount: (endpoint: string) => number
+  activeProjectName?: string
 }
 
 export default class ProjectsSideNav extends React.Component<Props, {}> {
@@ -93,6 +94,7 @@ export default class ProjectsSideNav extends React.Component<Props, {}> {
           count={count}
           deep={Boolean(projectName)}
           projectName={projectName}
+          activeProjectName={this.props.activeProjectName}
         />
       )
     })

@@ -9,12 +9,20 @@ export interface Props {
   count: number
   deep: boolean
   projectName?: string
+  activeProjectName?: string
 }
 
 export default class ProjectsSideNavItem extends React.Component<Props, {}> {
   render() {
-    const { env, activeEnv, count, deep } = this.props
-    const active = activeEnv === env
+    const {
+      env,
+      activeEnv,
+      count,
+      deep,
+      activeProjectName,
+      projectName,
+    } = this.props
+    const active = activeEnv === env && activeProjectName === projectName
     return (
       <ListItem className={cx({ active, deep })} onClick={this.selectEndpoint}>
         <span>{env}</span>

@@ -57,7 +57,7 @@ projects:
         default:
           url: 'https://airbnb.now.sh'
           subscription: 'wss://airbnb.now.sh'
-        local:
+        dev:
           url: 'http://localhost:4000'
           subscription: 'ws://localhost:4000'
   database:

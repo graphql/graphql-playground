@@ -55,6 +55,7 @@ export interface State {
   config?: GraphQLConfig
   configIsYaml?: boolean
   configString?: string
+  activeProjectName?: string
   activeEnv?: string
 }
 
@@ -114,6 +115,7 @@ class MiddlewareApp extends React.Component<Props, State> {
       configIsYaml,
       configString: props.configString,
       activeEnv,
+      activeProjectName: projectName,
     }
   }
 
@@ -243,6 +245,7 @@ class MiddlewareApp extends React.Component<Props, State> {
                       isElectron={Boolean(this.props.isElectron)}
                       onEditConfig={this.handleStartEditConfig}
                       getSessionCount={this.getSessionCount}
+                      activeProjectName={this.state.activeProjectName}
                     />
                   )}
                 <Playground
@@ -321,7 +324,12 @@ class MiddlewareApp extends React.Component<Props, State> {
       env,
       projectName,
     )!
-    this.setState({ activeEnv: env, endpoint, subscriptionEndpoint })
+    this.setState({
+      activeEnv: env,
+      endpoint,
+      subscriptionEndpoint,
+      activeProjectName: projectName,
+    })
   }
 
   getSettings(settingsString = this.state.settingsString): EditorSettings {
