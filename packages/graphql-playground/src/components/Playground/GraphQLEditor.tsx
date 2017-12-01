@@ -336,6 +336,17 @@ export class GraphQLEditor extends React.PureComponent<
     this.storageSet('variableEditorHeight', this.state.variableEditorHeight)
   }
 
+  getHeaderCount() {
+    try {
+      const headers = JSON.parse(this.props.session.headers!)
+      return `(${Object.keys(headers).length})`
+    } catch (e) {
+      //
+    }
+
+    return ''
+  }
+
   render() {
     const children = React.Children.toArray(this.props.children)
     const footer = find(children, child => child.type === GraphQLEditor.Footer)
@@ -516,7 +527,7 @@ export class GraphQLEditor extends React.PureComponent<
                     ref={this.setHttpHeadersRef}
                     onClick={this.selectHttpHeaders}
                   >
-                    {'HTTP Headers'}
+                    {'HTTP Headers ' + this.getHeaderCount()}
                   </span>
                 </div>
                 {this.state.queryVariablesActive ? (
