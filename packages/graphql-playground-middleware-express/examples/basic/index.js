@@ -1,8 +1,8 @@
 const express = require('express')
 const bodyParser = require('body-parser')
-const {graphqlExpress} = require('apollo-server-express')
-const {makeExecutableSchema} = require('graphql-tools')
-const expressPlayground = require('graphql-playground-middleware-express').default
+const { graphqlExpress } = require('apollo-server-express')
+const { makeExecutableSchema } = require('graphql-tools')
+const expressPlayground = require('../../src/index').default
 
 const schema = makeExecutableSchema({
   typeDefs: `
@@ -23,10 +23,11 @@ const PORT = 4000
 
 const app = express()
 
-// bodyParser is needed just for POST.
 app.use('/graphql', bodyParser.json(), graphqlExpress({ schema }))
-app.get('/playground', expressPlayground({ endpoint: '/graphql' })) // if you want GraphiQL enabled
+app.get('/playground', expressPlayground({ endpoint: '/graphql' }))
 
 app.listen(PORT)
 
-console.log(`Serving the GraphQL Playground on http://localhost:${PORT}/playground`)
+console.log(
+  `Serving the GraphQL Playground on http://localhost:${PORT}/playground`,
+)

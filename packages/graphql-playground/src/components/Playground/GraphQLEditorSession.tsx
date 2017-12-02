@@ -1,7 +1,8 @@
 import * as React from 'react'
 import { Session } from '../../types'
 import GraphQLEditor from './GraphQLEditor'
-import { Header } from './HttpHeaders/HttpHeaders'
+import { SchemaFetcher } from './SchemaFetcher'
+import { SharingProps } from '../Share'
 
 export interface Props {
   session: Session
@@ -9,22 +10,25 @@ export interface Props {
   onRef: (index: number, ref: any) => void
   isGraphcoolUrl: boolean
   fetcher: (session: Session, graphQLParams: any, headers?: any) => Promise<any>
-  schemaCache: any
+  schemaFetcher: SchemaFetcher
   isEndpoint: boolean
   storage?: any
   onEditQuery: (sessionId: string, data: any) => void
   onEditVariables: (sessionId: string, variables: any) => any
   onEditOperationName: (sessionId: string, name: any) => any
   onClickCodeGeneration: any
-  onChangeHeaders: (sessionId: string, headers: Header[]) => any
+  onChangeHeaders: (sessionId: string, headers: string) => any
+  onClickHistory: () => void
+  onChangeEndpoint: (sessionId: string, value: string) => void
+  onClickShare: (sessionId: string) => void
   headers?: any[]
   disableQueryHeader?: boolean
   disableResize?: boolean
   responses?: any
   useVim: boolean
   isActive: boolean
-
-  tracingSupported: boolean
+  sharing?: SharingProps
+  fixedEndpoint?: boolean
 }
 
 export default class GraphQLEditorSession extends React.PureComponent<
@@ -38,20 +42,20 @@ export default class GraphQLEditorSession extends React.PureComponent<
     const {
       session,
       isGraphcoolUrl,
-      schemaCache,
       isEndpoint,
       storage,
       responses,
       disableQueryHeader,
       isActive,
-      tracingSupported,
+      schemaFetcher,
+      sharing,
+      fixedEndpoint,
     } = this.props
     return (
       <GraphQLEditor
         isActive={isActive}
         key={session.id}
         isGraphcoolUrl={isGraphcoolUrl}
-        schema={schemaCache}
         fetcher={this.fetcher}
         showQueryTitle={false}
         showResponseTitle={false}
@@ -62,7 +66,6 @@ export default class GraphQLEditorSession extends React.PureComponent<
         query={session.query}
         variables={session.variables}
         operationName={session.operationName}
-        headers={session.headers}
         onClickCodeGeneration={this.props.onClickCodeGeneration}
         onEditOperationName={this.handleOperationNameChange}
         onEditVariables={this.handleVariableChange}
@@ -70,13 +73,19 @@ export default class GraphQLEditorSession extends React.PureComponent<
         onChangeHeaders={this.handleChangeHeaders}
         responses={responses}
         disableQueryHeader={disableQueryHeader}
-        disableResize={true}
+        disableResize={false}
         ref={this.setRef}
         useVim={this.props.useVim}
         rerenderQuery={false}
         disableAnimation={true}
         disableAutofocus={!isActive}
-        tracingSupported={tracingSupported}
+        session={session}
+        schemaFetcher={schemaFetcher}
+        onClickHistory={this.handleClickHistory}
+        onChangeEndpoint={this.handleChangeEndpoint}
+        onClickShare={this.handleClickShare}
+        sharing={sharing}
+        fixedEndpoint={fixedEndpoint}
       />
     )
   }
@@ -97,7 +106,19 @@ export default class GraphQLEditorSession extends React.PureComponent<
     this.props.onEditQuery(this.props.session.id, query)
   }
 
-  private handleChangeHeaders = (headers: any[]) => {
+  private handleChangeHeaders = (headers: string) => {
     this.props.onChangeHeaders(this.props.session.id, headers)
+  }
+
+  private handleClickHistory = () => {
+    this.props.onClickHistory()
+  }
+
+  private handleChangeEndpoint = (endpoint: string) => {
+    this.props.onChangeEndpoint(this.props.session.id, endpoint)
+  }
+
+  private handleClickShare = () => {
+    this.props.onClickShare(this.props.session.id)
   }
 }

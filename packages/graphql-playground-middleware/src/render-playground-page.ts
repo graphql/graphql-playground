@@ -1,13 +1,35 @@
+import * as path from 'path'
+import * as fs from 'fs'
+import * as findUp from 'find-up'
+
 export interface MiddlewareOptions {
   endpoint: string
   subscriptionEndpoint?: string
+  setTitle?: string
+  folderName?: string
 }
 
-export interface RenderOptions extends MiddlewareOptions {
+export interface RenderPageOptions extends MiddlewareOptions {
   version: string
+  env?: any
 }
 
-export default function renderPlaygroundPage(options: RenderOptions) {
+const configPath = findUp.sync(['.graphqlconfig', '.graphqlconfig.yml'])
+const configString = configPath
+  ? fs.readFileSync(configPath, 'utf-8')
+  : undefined
+const folderName = configPath
+  ? path.basename(path.dirname(configPath))
+  : undefined
+
+export function renderPlaygroundPage(options: RenderPageOptions) {
+  const extendedOptions = {
+    ...options,
+    configString,
+    folderName,
+    canSaveConfig: false,
+    env: process.env,
+  }
   return `
 <!DOCTYPE html>
 <html>
@@ -62,7 +84,7 @@ export default function renderPlaygroundPage(options: RenderOptions) {
   <script>
     window.addEventListener('load', function(event) {
       GraphQLPlayground.init(document.getElementById('root'), ${JSON.stringify(
-        options,
+        extendedOptions,
         null,
         2,
       )})

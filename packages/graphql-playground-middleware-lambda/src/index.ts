@@ -1,15 +1,16 @@
 import * as lambda from 'aws-lambda'
-import renderPlaygroundPage, {
+import {
   MiddlewareOptions,
-  RenderOptions,
-} from './render-playground-page'
+  RenderPageOptions,
+  renderPlaygroundPage,
+} from 'graphql-playground-middleware'
 
 /* tslint:disable-next-line */
 const { version } = require('../package.json')
 
 export default function lambdaPlayground(options: MiddlewareOptions) {
   return (event, lambdaContext: lambda.Context, callback: lambda.Callback) => {
-    const middlewareOptions: RenderOptions = {
+    const middlewareOptions: RenderPageOptions = {
       ...options,
       version,
     }

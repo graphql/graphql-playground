@@ -103,6 +103,12 @@ deprecated-decorator@^0.1.6:
   version "0.1.6"
   resolved "https://registry.yarnpkg.com/deprecated-decorator/-/deprecated-decorator-0.1.6.tgz#00966317b7a12fe92f3cc831f7583af329b86c37"
 
+find-up@^2.1.0:
+  version "2.1.0"
+  resolved "https://registry.yarnpkg.com/find-up/-/find-up-2.1.0.tgz#45d1b7e506c717ddd482775a2b77920a3c0c57a7"
+  dependencies:
+    locate-path "^2.0.0"
+
 graphql-extensions@^0.0.x:
   version "0.0.5"
   resolved "https://registry.yarnpkg.com/graphql-extensions/-/graphql-extensions-0.0.5.tgz#63bc4a3fd31aab12bfadf783cbc038a9a6937cf0"
@@ -110,9 +116,17 @@ graphql-extensions@^0.0.x:
     core-js "^2.5.1"
     source-map-support "^0.5.0"
 
-graphql-playground-middleware@^1.0.36-alpha.10:
-  version "1.0.36-alpha.10"
-  resolved "https://registry.yarnpkg.com/graphql-playground-middleware/-/graphql-playground-middleware-1.0.36-alpha.10.tgz#54362d4717dd816c3c781dbe54a259bef4596819"
+graphql-playground-middleware-hapi@^1.2.1-beta.4:
+  version "1.2.1-beta.4"
+  resolved "https://registry.yarnpkg.com/graphql-playground-middleware-hapi/-/graphql-playground-middleware-hapi-1.2.1-beta.4.tgz#27380c12251d098389aeb3589bcdeb3714cc8b45"
+  dependencies:
+    graphql-playground-middleware "^1.2.1-beta.5"
+
+graphql-playground-middleware@^1.2.1-beta.5:
+  version "1.2.1-beta.5"
+  resolved "https://registry.yarnpkg.com/graphql-playground-middleware/-/graphql-playground-middleware-1.2.1-beta.5.tgz#8f78c2e355cb8b149ceae2730501233fb147a623"
+  dependencies:
+    find-up "^2.1.0"
 
 graphql-tools@^2.7.1:
   version "2.7.1"
@@ -206,6 +220,13 @@ joi@^11.1.0:
     isemail "3.x.x"
     topo "2.x.x"
 
+locate-path@^2.0.0:
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/locate-path/-/locate-path-2.0.0.tgz#2b568b265eec944c6d9c0de9c3dbbbca0354cd8e"
+  dependencies:
+    p-locate "^2.0.0"
+    path-exists "^3.0.0"
+
 mime-db@1.x.x:
   version "1.31.0"
   resolved "https://registry.yarnpkg.com/mime-db/-/mime-db-1.31.0.tgz#a49cd8f3ebf3ed1a482b60561d9105ad40ca74cb"
@@ -223,6 +244,20 @@ nigel@2.x.x:
   dependencies:
     hoek "4.x.x"
     vise "2.x.x"
+
+p-limit@^1.1.0:
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/p-limit/-/p-limit-1.1.0.tgz#b07ff2d9a5d88bec806035895a2bab66a27988bc"
+
+p-locate@^2.0.0:
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/p-locate/-/p-locate-2.0.0.tgz#20a0103b222a70c8fd39cc2e580680f3dde5ec43"
+  dependencies:
+    p-limit "^1.1.0"
+
+path-exists@^3.0.0:
+  version "3.0.0"
+  resolved "https://registry.yarnpkg.com/path-exists/-/path-exists-3.0.0.tgz#ce0ebeaa5f78cb18925ea7d810d7b59b010fd515"
 
 pez@2.x.x:
   version "2.1.5"

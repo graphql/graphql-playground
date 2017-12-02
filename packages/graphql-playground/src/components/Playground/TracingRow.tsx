@@ -16,6 +16,7 @@ const Row = styled.div`
   position: relative;
   font-size: 12px;
   display: table;
+  padding-right: 25px;
 
   color: ${textColor};
 `

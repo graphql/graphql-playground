@@ -1,9 +1,18 @@
 import * as React from 'react'
 import { Provider } from 'react-redux'
 import createStore from '../createStore'
-import Playground from './Playground'
+import Playground, { Playground as IPlayground } from './Playground'
 import { Helmet } from 'react-helmet'
 import * as fetch from 'isomorphic-fetch'
+import { GraphQLConfig } from '../graphqlConfig'
+import * as yaml from 'js-yaml'
+import ProjectsSideNav from './ProjectsSideNav'
+import { styled, ThemeProvider, theme as styledTheme } from '../styled'
+import OldThemeProvider from './Theme/ThemeProvider'
+import { getActiveEndpoints } from './util'
+import PlaygroundStorage from './PlaygroundStorage'
+import { resolveEnvsInValues } from './resolveRefStrings'
+import { mapKeys } from 'lodash'
 
 const store = createStore()
 
@@ -22,6 +31,18 @@ export interface Props {
   endpoint?: string
   subscriptionEndpoint?: string
   setTitle?: boolean
+  settings?: EditorSettings
+  folderName?: string
+  configString?: string
+  showNewWorkspace?: boolean
+  isElectron?: boolean
+  canSaveConfig?: boolean
+  onSaveConfig?: (configString: string) => void
+  onNewWorkspace?: () => void
+  getRef?: (ref: any) => void
+  platformToken?: string
+  session?: any
+  env?: any
 }
 
 export interface State {
@@ -30,25 +51,169 @@ export interface State {
   subscriptionEndpoint?: string
   shareUrl?: string
   platformToken?: string
+  settingsString: string
+  settings: EditorSettings
+  config?: GraphQLConfig
+  configIsYaml?: boolean
+  configString?: string
+  activeProjectName?: string
+  activeEnv?: string
 }
 
+export type Theme = 'dark' | 'light'
+export interface EditorSettings {
+  ['editor.theme']: Theme
+  ['editor.reuseHeaders']: boolean
+}
+
+const defaultSettings = `{
+  "editor.theme": "dark",
+  "editor.reuseHeaders": true
+}`
+
 class MiddlewareApp extends React.Component<Props, State> {
+  playground: IPlayground
   constructor(props: Props) {
     super(props)
 
-    const endpoint =
+    let settings = localStorage.getItem('settings') || defaultSettings
+    settings = this.migrateSettingsString(settings)
+
+    let config
+    let configIsYaml
+
+    if (props.configString) {
+      const result = this.parseGraphQLConfig(props.configString)
+      config = result.config
+      configIsYaml = result.configIsYaml
+    }
+
+    const { activeEnv, projectName } = this.getInitialActiveEnv(config)
+
+    let endpoint =
       props.endpoint || getParameterByName('endpoint') || location.href
 
-    const subscriptionEndpoint =
+    let subscriptionEndpoint: string | undefined | null =
       props.subscriptionEndpoint || getParameterByName('subscriptionEndpoint')
 
+    if (props.configString && config && activeEnv) {
+      const endpoints = getActiveEndpoints(config, activeEnv, projectName)
+      endpoint = endpoints.endpoint
+      subscriptionEndpoint = endpoints.subscriptionEndpoint
+    }
+
     this.state = {
-      endpoint,
-      platformToken: localStorage.getItem('platform-token') || undefined,
+      endpoint: this.absolutizeUrl(endpoint),
+      platformToken:
+        props.platformToken ||
+        localStorage.getItem('platform-token') ||
+        undefined,
       subscriptionEndpoint: subscriptionEndpoint
         ? this.normalizeSubscriptionUrl(endpoint, subscriptionEndpoint)
         : '',
+      settingsString: settings,
+      settings: this.getSettings(settings),
+      config,
+      configIsYaml,
+      configString: props.configString,
+      activeEnv,
+      activeProjectName: projectName,
     }
+  }
+
+  migrateSettingsString(settingsString) {
+    const replacementMap = {
+      theme: 'editor.theme',
+      reuseHeaders: 'editor.reuseHeaders',
+    }
+    try {
+      const settings = JSON.parse(settingsString)
+      return JSON.stringify(
+        mapKeys(settings, (value, key) => {
+          return replacementMap[key] || key
+        }),
+        null,
+        2,
+      )
+    } catch (e) {
+      //
+    }
+
+    return settingsString
+  }
+
+  componentWillReceiveProps(nextProps: Props) {
+    if (
+      nextProps.configString !== this.props.configString &&
+      nextProps.configString
+    ) {
+      const { config, configIsYaml } = this.parseGraphQLConfig(
+        nextProps.configString,
+      )
+      this.setState({ config, configIsYaml })
+    }
+  }
+
+  getInitialActiveEnv(
+    config?: GraphQLConfig,
+  ): { projectName?: string; activeEnv?: string } {
+    if (config) {
+      if (config.extensions && config.extensions.endpoints) {
+        return {
+          activeEnv: Object.keys(config.extensions.endpoints)[0],
+        }
+      }
+      if (config.projects) {
+        const projectName = Object.keys(config.projects)[0]
+        const project = config.projects[projectName]
+        if (project.extensions && project.extensions.endpoints) {
+          return {
+            activeEnv: Object.keys(project.extensions.endpoints)[0],
+            projectName,
+          }
+        }
+      }
+    }
+
+    return {}
+  }
+
+  parseGraphQLConfig(
+    configString: string,
+  ): { config: GraphQLConfig; configIsYaml: boolean } {
+    let config
+    let isYaml = false
+    try {
+      config = JSON.parse(configString)
+    } catch (e) {
+      //
+    }
+
+    if (!config) {
+      try {
+        config = yaml.safeLoad(configString)
+        isYaml = true
+      } catch (e) {
+        //
+      }
+    }
+
+    if (this.props.env) {
+      config = resolveEnvsInValues(config, this.props.env)
+    }
+
+    return {
+      config,
+      configIsYaml: isYaml,
+    }
+  }
+
+  absolutizeUrl(url) {
+    if (url.startsWith('/')) {
+      return location.origin + url
+    }
+
+    return url
   }
 
   normalizeSubscriptionUrl(endpoint, subscriptionEndpoint) {
@@ -81,25 +246,148 @@ class MiddlewareApp extends React.Component<Props, State> {
         <title>{this.getTitle()}</title>
       </Helmet>
     ) : null
+    const theme = this.state.settings['editor.theme']
 
     return (
       <div>
         {title}
         <Provider store={store}>
-          <Playground
-            endpoint={this.state.endpoint}
-            subscriptionsEndpoint={this.state.subscriptionEndpoint}
-            share={this.share}
-            shareUrl={this.state.shareUrl}
-            onChangeEndpoint={this.handleChangeEndpoint}
-            onChangeSubscriptionsEndpoint={
-              this.handleChangeSubscriptionsEndpoint
-            }
-            adminAuthToken={this.state.platformToken}
-          />
+          <ThemeProvider theme={{ ...styledTheme, mode: theme }}>
+            <OldThemeProvider theme={theme}>
+              <App>
+                {this.state.config &&
+                  this.state.activeEnv && (
+                    <ProjectsSideNav
+                      config={this.state.config}
+                      folderName={this.props.folderName || 'GraphQL App'}
+                      theme={theme}
+                      activeEnv={this.state.activeEnv}
+                      onSelectEnv={this.handleSelectEnv}
+                      onNewWorkspace={this.props.onNewWorkspace}
+                      showNewWorkspace={Boolean(this.props.showNewWorkspace)}
+                      isElectron={Boolean(this.props.isElectron)}
+                      onEditConfig={this.handleStartEditConfig}
+                      getSessionCount={this.getSessionCount}
+                      activeProjectName={this.state.activeProjectName}
+                    />
+                  )}
+                <Playground
+                  endpoint={this.state.endpoint}
+                  subscriptionsEndpoint={this.state.subscriptionEndpoint}
+                  share={this.share}
+                  shareUrl={this.state.shareUrl}
+                  onChangeEndpoint={this.handleChangeEndpoint}
+                  onChangeSubscriptionsEndpoint={
+                    this.handleChangeSubscriptionsEndpoint
+                  }
+                  adminAuthToken={this.state.platformToken}
+                  settings={this.normalizeSettings(this.state.settings)}
+                  settingsString={this.state.settingsString}
+                  onSaveSettings={this.handleSaveSettings}
+                  onChangeSettings={this.handleChangeSettings}
+                  getRef={this.getPlaygroundRef}
+                  config={this.state.config}
+                  configString={this.state.configString}
+                  configIsYaml={this.state.configIsYaml}
+                  canSaveConfig={Boolean(this.props.canSaveConfig)}
+                  onChangeConfig={this.handleChangeConfig}
+                  onSaveConfig={this.handleSaveConfig}
+                  onUpdateSessionCount={this.handleUpdateSessionCount}
+                  fixedEndpoints={Boolean(this.state.configString)}
+                  session={this.props.session}
+                />
+              </App>
+            </OldThemeProvider>
+          </ThemeProvider>
         </Provider>
       </div>
     )
+  }
+
+  handleUpdateSessionCount = () => {
+    this.forceUpdate()
+  }
+
+  getSessionCount = (endpoint: string): number => {
+    if (this.state.endpoint === endpoint && this.playground) {
+      return this.playground.state.sessions.length
+    }
+
+    return PlaygroundStorage.getSessionCount(endpoint)
+  }
+
+  getPlaygroundRef = ref => {
+    this.playground = ref
+    if (typeof this.props.getRef === 'function') {
+      this.props.getRef(ref)
+    }
+  }
+
+  handleStartEditConfig = () => {
+    this.playground.openConfigTab()
+  }
+
+  handleChangeConfig = (configString: string) => {
+    this.setState({ configString })
+  }
+
+  handleSaveConfig = () => {
+    /* tslint:disable-next-line */
+    console.log('handleSaveConfig called')
+    if (typeof this.props.onSaveConfig === 'function') {
+      /* tslint:disable-next-line */
+      console.log('calling this.props.onSaveConfig', this.state.configString)
+      this.props.onSaveConfig(this.state.configString!)
+    }
+  }
+
+  handleSelectEnv = (env: string, projectName?: string) => {
+    const { endpoint, subscriptionEndpoint } = getActiveEndpoints(
+      this.state.config!,
+      env,
+      projectName,
+    )!
+    this.setState({
+      activeEnv: env,
+      endpoint,
+      subscriptionEndpoint,
+      activeProjectName: projectName,
+    })
+  }
+
+  getSettings(settingsString = this.state.settingsString): EditorSettings {
+    try {
+      const settings = JSON.parse(settingsString)
+      return this.normalizeSettings(settings)
+    } catch (e) {
+      // ignore
+    }
+
+    return JSON.parse(defaultSettings)
+  }
+
+  normalizeSettings(settings: EditorSettings) {
+    const theme = settings['editor.theme']
+    if (theme !== 'dark' && theme !== 'light') {
+      settings['editor.theme'] = 'dark'
+    }
+
+    return settings
+  }
+
+  handleChangeSettings = (settingsString: string) => {
+    this.setState({ settingsString })
+  }
+
+  handleSaveSettings = () => {
+    try {
+      const settings = JSON.parse(this.state.settingsString)
+      this.setState({ settings })
+      localStorage.setItem('settings', this.state.settingsString)
+    } catch (e) {
+      /* tslint:disable-next-line */
+      console.error(e)
+    }
   }
 
   private share = (session: any) => {
@@ -233,3 +521,8 @@ async function find(
 }
 
 export default MiddlewareApp
+
+const App = styled.div`
+  display: flex;
+  width: 100%;
+`

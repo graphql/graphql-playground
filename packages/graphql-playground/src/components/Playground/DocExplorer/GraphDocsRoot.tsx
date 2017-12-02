@@ -4,12 +4,12 @@ import { serializeRoot } from '../util/stack'
 
 export interface Props {
   schema: any
-  onSetWidth: (width: number) => void
+  sessionId: string
 }
 
 export default class GraphDocsRoot extends React.PureComponent<Props, {}> {
   render() {
-    const { schema, onSetWidth } = this.props
+    const { schema, sessionId } = this.props
     const obj = serializeRoot(schema)
     return (
       <div className="doc-root">
@@ -27,14 +27,14 @@ export default class GraphDocsRoot extends React.PureComponent<Props, {}> {
           name="Queries"
           fields={obj.queries}
           offset={0}
-          onSetWidth={onSetWidth}
+          sessionId={sessionId}
         />
         {obj.mutations.length > 0 && (
           <ShowRootType
             name="Mutations"
             fields={obj.mutations}
             offset={obj.queries.length}
-            onSetWidth={onSetWidth}
+            sessionId={sessionId}
           />
         )}
         {obj.subscriptions.length > 0 && (
@@ -42,7 +42,7 @@ export default class GraphDocsRoot extends React.PureComponent<Props, {}> {
             name="Subscriptions"
             fields={obj.subscriptions}
             offset={obj.queries.length + obj.mutations.length}
-            onSetWidth={onSetWidth}
+            sessionId={sessionId}
           />
         )}
       </div>
@@ -54,10 +54,10 @@ interface ShowRootTypeProps {
   name: string
   fields: any[]
   offset: number
-  onSetWidth: (width: number) => void
+  sessionId: string
 }
 
-function ShowRootType({ name, fields, offset, onSetWidth }: ShowRootTypeProps) {
+function ShowRootType({ name, fields, offset, sessionId }: ShowRootTypeProps) {
   return (
     <div>
       <div className="doc-category-title">{name}</div>
@@ -69,7 +69,7 @@ function ShowRootType({ name, fields, offset, onSetWidth }: ShowRootTypeProps) {
             type={field}
             x={0}
             y={offset + index}
-            onSetWidth={onSetWidth}
+            sessionId={sessionId}
             collapsable={true}
           />
         ))}

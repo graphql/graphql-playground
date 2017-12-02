@@ -235,6 +235,10 @@
   color: rgba(0, 0, 0, 0.3);
 }
 
+.docs-graphiql .graphiql-container .variable-editor-title .subtitle.active {
+  color: rgba(0, 0, 0, 0.7);
+}
+
 .docs-graphiql .variable-editor .cm-variable,
 .docs-graphiql .variable-editor .cm-punctuation,
 .docs-graphiql .variable-editor .cm-string {

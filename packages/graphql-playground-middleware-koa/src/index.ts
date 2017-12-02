@@ -1,17 +1,19 @@
 import { Context } from 'koa'
-import renderPlaygroundPage, {
+import {
   MiddlewareOptions,
-} from './render-playground-page'
+  renderPlaygroundPage,
+  RenderPageOptions,
+} from 'graphql-playground-middleware'
 
 /* tslint:disable-next-line */
 const { version } = require('../package.json')
 
 export type KoaPlaygroundMiddleware = (ctx: Context, next: () => void) => void
 
-export type Register = (options) => KoaPlaygroundMiddleware
+export type Register = (options: MiddlewareOptions) => KoaPlaygroundMiddleware
 
 const koa: Register = options => {
-  const middlewareOptions: MiddlewareOptions = {
+  const middlewareOptions: RenderPageOptions = {
     ...options,
     version,
   }

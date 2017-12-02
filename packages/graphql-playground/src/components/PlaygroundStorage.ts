@@ -1,6 +1,71 @@
 import { Session } from '../types'
+import { mapValues } from 'lodash'
 
 export default class PlaygroundStorage {
+  static countCache: { [endpoint: string]: number } = {}
+
+  static getSessionCount(endpoint: string) {
+    const cachedCount = this.countCache[endpoint]
+    if (cachedCount) {
+      return cachedCount
+    }
+
+    try {
+      const projectString = localStorage.getItem(endpoint)
+      if (projectString) {
+        const project = JSON.parse(projectString)
+        return Object.keys(project.sessions).length
+      }
+    } catch (e) {
+      //
+    }
+
+    return 1
+  }
+
+  // migrate headers to new format
+  private static runMigration(project, migrationEndpoint?: string) {
+    if (!project) {
+      return project
+    }
+    function mapHeaders(session) {
+      let headers = session.headers
+      if (!headers) {
+        headers = ''
+      }
+      if (Array.isArray(headers)) {
+        headers = convertArray(headers)
+      }
+      if (typeof headers === 'object') {
+        headers = JSON.stringify(headers, null, 2)
+      }
+      return {
+        ...session,
+        headers,
+        endpoint: session.endpoint || migrationEndpoint,
+      }
+    }
+
+    function convertArray(headers) {
+      return headers.reduce((acc, header) => {
+        return {
+          ...acc,
+          [header.name]: header.value,
+        }
+      }, {})
+    }
+
+    const history = project.history
+      ? project.history.map(s => mapHeaders(s))
+      : []
+    const sessions = mapValues(project.sessions, mapHeaders)
+
+    return {
+      ...project,
+      sessions,
+      history,
+    }
+  }
   project: any
   private endpoint: string
   private storages: any = {}
@@ -20,6 +85,9 @@ export default class PlaygroundStorage {
       }
       this.saveProject()
     }
+    PlaygroundStorage.countCache[endpoint] = Object.keys(
+      this.project.sessions,
+    ).length
     ;(global as any).s = this
   }
 
@@ -60,8 +128,8 @@ export default class PlaygroundStorage {
     return store
   }
 
-  public setState(project) {
-    this.project = project
+  public setState(project: any, endpoint: string) {
+    this.project = PlaygroundStorage.runMigration(project, endpoint)
   }
 
   public getSessions() {
@@ -91,8 +159,16 @@ export default class PlaygroundStorage {
     this.project.history = this.project.history.slice(0, 1000)
   }
 
-  public getHistory() {
-    return this.project.history || []
+  public getHistory(endpoint?: string) {
+    if (!this.project.history) {
+      return []
+    }
+    if (endpoint) {
+      return this.project.history.filter(
+        session => session.endpoint === endpoint,
+      )
+    }
+    return this.project.history
   }
 
   public setItem(key: string, value: string) {
@@ -110,6 +186,9 @@ export default class PlaygroundStorage {
       'executedQueryCount',
       this.executedQueryCount.toString(),
     )
+    PlaygroundStorage.countCache[this.endpoint] = Object.keys(
+      this.project.sessions,
+    ).length
   }
 
   private getProject() {
@@ -125,7 +204,7 @@ export default class PlaygroundStorage {
         date: new Date(item.date),
       }))
     }
-    return result
+    return PlaygroundStorage.runMigration(result)
   }
 
   private getExecutedQueryCount() {

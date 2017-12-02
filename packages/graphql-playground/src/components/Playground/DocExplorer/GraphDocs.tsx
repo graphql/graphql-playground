@@ -22,6 +22,8 @@ import {
   serializeRoot,
   getElement,
 } from '../util/stack'
+import { GraphQLSchema } from 'graphql'
+import { getSessionDocs } from '../../../selectors/sessionDocs'
 
 interface StateFromProps {
   navStack: any[]
@@ -31,14 +33,15 @@ interface StateFromProps {
 }
 
 interface DispatchFromProps {
-  addStack: (field: any, x: number, y: number) => any
-  toggleDocs: (open?: boolean) => any
-  changeWidthDocs: (width: number) => any
-  changeKeyMove: (move: boolean) => any
+  addStack: (sessionId: string, field: any, x: number, y: number) => any
+  toggleDocs: (sessionId: string, open?: boolean) => any
+  changeWidthDocs: (sessionId: string, width: number) => any
+  changeKeyMove: (sessionId: string, move: boolean) => any
 }
 
 export interface Props {
-  schema: any
+  schema: GraphQLSchema
+  sessionId: string
 }
 
 export interface State {
@@ -53,7 +56,6 @@ class GraphDocs extends React.Component<
   private refDocExplorer: any
   private clientX: number = 0
   private clientY: number = 0
-  private setRootWidth: any
 
   constructor(props) {
     super(props)
@@ -62,7 +64,6 @@ class GraphDocs extends React.Component<
       widthMap: {},
     }
     ;(window as any).d = this
-    this.setRootWidth = this.setWidthMap('root')
   }
 
   componentWillReceiveProps(nextProps: Props & StateFromProps) {
@@ -80,7 +81,10 @@ class GraphDocs extends React.Component<
   setWidth(props: any = this.props) {
     requestAnimationFrame(() => {
       const width = this.getWidth(props)
-      this.props.changeWidthDocs(Math.min(width, window.innerWidth - 86))
+      this.props.changeWidthDocs(
+        props.sessionId,
+        Math.min(width, window.innerWidth - 86),
+      )
     })
   }
 
@@ -90,7 +94,7 @@ class GraphDocs extends React.Component<
       stack => this.state.widthMap[stack.field.path] || columnWidth,
     )
 
-    return [rootWidth].concat(stackWidths).reduce((acc, curr) => acc + curr, 2)
+    return [rootWidth].concat(stackWidths).reduce((acc, curr) => acc + curr, 0)
   }
 
   componentDidMount() {
@@ -154,8 +158,8 @@ class GraphDocs extends React.Component<
             z-index: 2000;
           }
           .docs-button {
-            @p: .absolute, .white, .bgGreen, .pv6, .br2, .z2, .ttu, .fw6, .f12,
-              .ph10, .pointer;
+            @p: .absolute, .white, .bgGreen, .pv6, .z2, .ttu, .fw6, .f12, .ph10,
+              .pointer;
             box-shadow: -1px 1px 6px 0 rgba(0, 0, 0, 0.3);
             line-height: 17px;
             letter-spacing: 0.45px;
@@ -163,6 +167,8 @@ class GraphDocs extends React.Component<
             transform: rotate(-90deg);
             left: -50px;
             top: 129px;
+            border-top-left-radius: 2px;
+            border-top-right-radius: 2px;
           }
           .doc-explorer {
             @p: .flex, .relative, .h100;
@@ -223,8 +229,8 @@ class GraphDocs extends React.Component<
                 schema={schema}
                 width={this.state.widthMap.root || columnWidth - 1}
                 searchValue={this.state.searchValue}
-                setWidth={this.setRootWidth}
                 handleSearch={this.handleSearch}
+                sessionId={this.props.sessionId}
               />
             )}
             {navStack.map((stack, index) => (
@@ -236,7 +242,7 @@ class GraphDocs extends React.Component<
                   schema={schema}
                   field={stack.field}
                   level={index + 1}
-                  onSetWidth={this.setWidthMap(stack.field.path)}
+                  sessionId={this.props.sessionId}
                 />
               </ColumnDoc>
             ))}
@@ -258,21 +264,8 @@ class GraphDocs extends React.Component<
     if (!this.props.docsOpen) {
       this.refDocExplorer.focus()
     }
-    this.props.toggleDocs()
+    this.props.toggleDocs(this.props.sessionId)
     this.setWidth()
-  }
-
-  private setWidthMap = (path: string) => width => {
-    // this.setState(state => {
-    //   const widthMap = {
-    //     ...state.widthMap,
-    //     [path]: Math.min(Math.max(state.widthMap[path] || 0, width), 450),
-    //   }
-    //   return {
-    //     ...state,
-    //     widthMap,
-    //   }
-    // })
   }
 
   private handleKeyDown = e => {
@@ -287,7 +280,7 @@ class GraphDocs extends React.Component<
       return
     }
     e.preventDefault()
-    this.props.changeKeyMove(true)
+    this.props.changeKeyMove(this.props.sessionId, true)
     const lastNavStack =
       this.props.navStack.length > 0 &&
       this.props.navStack[this.props.navStack.length - 1]
@@ -297,11 +290,12 @@ class GraphDocs extends React.Component<
     const keyPressed = keycode(e)
     switch (keyPressed) {
       case 'esc':
-        this.props.toggleDocs(false)
+        this.props.toggleDocs(this.props.sessionId, false)
         break
       case 'left':
         if (beforeLastNavStack) {
           this.props.addStack(
+            this.props.sessionId,
             beforeLastNavStack.field,
             beforeLastNavStack.x,
             beforeLastNavStack.y,
@@ -313,13 +307,18 @@ class GraphDocs extends React.Component<
           const obj = serialize(this.props.schema, lastNavStack.field)
           const firstElement = getElement(obj, 0)
           if (firstElement) {
-            this.props.addStack(firstElement, lastNavStack.x + 1, 0)
+            this.props.addStack(
+              this.props.sessionId,
+              firstElement,
+              lastNavStack.x + 1,
+              0,
+            )
           }
         } else {
           const obj = serializeRoot(this.props.schema)
           const element = getElementRoot(obj, 0)
           if (element) {
-            this.props.addStack(element, 0, 0)
+            this.props.addStack(this.props.sessionId, element, 0, 0)
           }
         }
         break
@@ -333,6 +332,7 @@ class GraphDocs extends React.Component<
           )
           if (element) {
             this.props.addStack(
+              this.props.sessionId,
               element,
               lastNavStack.x,
               keyPressed === 'up' ? lastNavStack.y - 1 : lastNavStack.y + 1,
@@ -346,6 +346,7 @@ class GraphDocs extends React.Component<
           )
           if (element) {
             this.props.addStack(
+              this.props.sessionId,
               element,
               0,
               keyPressed === 'up' ? lastNavStack.y - 1 : lastNavStack.y + 1,
@@ -374,16 +375,16 @@ class GraphDocs extends React.Component<
       const docsSize = maxSize < newSize ? maxSize : newSize
 
       if (docsSize < 100) {
-        this.props.toggleDocs(false)
+        this.props.toggleDocs(this.props.sessionId, false)
       } else {
-        this.props.toggleDocs(true)
-        this.props.changeWidthDocs(docsSize)
+        this.props.toggleDocs(this.props.sessionId, true)
+        this.props.changeWidthDocs(this.props.sessionId, docsSize)
       }
     }
 
     let onMouseUp: any = () => {
       if (!this.props.docsOpen) {
-        this.props.changeWidthDocs(hadWidth)
+        this.props.changeWidthDocs(this.props.sessionId, hadWidth)
       }
 
       document.removeEventListener('mousemove', onMouseMove)
@@ -404,17 +405,10 @@ class GraphDocs extends React.Component<
       this.clientX !== e.clientX &&
       this.clientY !== e.clientY
     ) {
-      this.props.changeKeyMove(false)
+      this.props.changeKeyMove(this.props.sessionId, false)
     }
   }
 }
-
-const mapStateToProps = ({ graphiqlDocs }) => ({
-  navStack: graphiqlDocs.navStack,
-  docsOpen: graphiqlDocs.docsOpen,
-  docsWidth: graphiqlDocs.docsWidth,
-  keyMove: graphiqlDocs.keyMove,
-})
 
 const mapDispatchToProps = dispatch =>
   bindActionCreators(
@@ -428,6 +422,6 @@ const mapDispatchToProps = dispatch =>
   )
 
 export default connect<StateFromProps, DispatchFromProps, Props>(
-  mapStateToProps,
+  getSessionDocs,
   mapDispatchToProps,
 )(GraphDocs)

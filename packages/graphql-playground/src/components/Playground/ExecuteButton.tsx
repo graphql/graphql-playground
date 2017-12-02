@@ -10,7 +10,7 @@ import * as React from 'react'
 import * as cx from 'classnames'
 import { withTheme, LocalThemeInterface } from '../Theme'
 import ExecuteButtonOperation from './ExecuteButtonOperation'
-import styled, { withProps } from '../../styled'
+import { styled, withProps } from '../../styled'
 import * as theme from 'styled-theming'
 import { mix, lighten } from 'polished'
 

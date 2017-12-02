@@ -1,7 +1,7 @@
 import { parse } from 'graphql'
 import { QueryTypes } from '../../../types'
 
-const getQueryTypes = (query: string): QueryTypes => {
+export const getQueryTypes = (query: string): QueryTypes => {
   let ast: any = null
   // takes around 0.02ms -  1ms
   try {
@@ -52,5 +52,3 @@ const getQueryTypes = (query: string): QueryTypes => {
     // operations,
   }
 }
-
-export default getQueryTypes

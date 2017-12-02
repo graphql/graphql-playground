@@ -2,7 +2,7 @@ import * as React from 'react'
 import * as fetch from 'isomorphic-fetch'
 import { Provider } from 'react-redux'
 import createStore from '../createStore'
-import Playground from './Playground'
+import Playground from './MiddlewareApp'
 import 'isomorphic-fetch'
 import EndpointPopup from './EndpointPopup'
 import Loading from './Loading'
@@ -120,10 +120,7 @@ class App extends React.Component<Props, State> {
           ) : (
             <Playground
               endpoint={endpoint}
-              subscriptionsEndpoint={subscriptionEndpoint}
-              onChangeEndpoint={this.handleChangeEndpoint}
-              share={this.share}
-              shareUrl={this.state.shareUrl}
+              subscriptionEndpoint={subscriptionEndpoint}
               session={this.state.session}
             />
           )}
@@ -135,35 +132,6 @@ class App extends React.Component<Props, State> {
   private handleChangeEndpoint = endpoint => {
     this.setState({ endpoint })
     localStorage.setItem('last-endpoint', endpoint)
-  }
-
-  private share = (session: any) => {
-    fetch('https://api.graph.cool/simple/v1/cj81hi46q03c30196uxaswrz2', {
-      method: 'post',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        query: `
-        mutation ($session: String! $endpoint: String!) {
-          addSession(session: $session endpoint: $endpoint) {
-            id
-          }
-        }
-      `,
-        variables: {
-          session: JSON.stringify(session),
-          endpoint: this.state.endpoint,
-        },
-      }),
-    })
-      .then(res => res.json())
-      .then(res => {
-        const shareUrl = `https://graphqlbin.com/${res.data.addSession.id}`
-        // const shareUrl = `${location.origin}/${res.data.addSession.id}`
-        this.setState({ shareUrl })
-        this.props.history.push(`/${res.data.addSession.id}`)
-      })
   }
 }
 

@@ -3,10 +3,9 @@ import { remote, ipcRenderer, ipcMain, protocol } from 'electron'
 import { Provider } from 'react-redux'
 import { Icon, $v } from 'graphcool-styles'
 import * as cx from 'classnames'
-import Playground, {
-  Playground as IPlayground,
-} from 'graphql-playground/lib/components/Playground'
-import { getGraphQLConfig } from 'graphql-config'
+import { Playground as IPlayground } from 'graphql-playground/lib/components/Playground'
+import Playground from 'graphql-playground'
+import { getGraphQLConfig, findGraphQLConfigFile } from 'graphql-config'
 import { createNewWindow } from './utils'
 import createStore from './createStore'
 import InitialView from './InitialView/InitialView'
@@ -16,7 +15,8 @@ import * as path from 'path'
 import * as os from 'os'
 import * as yaml from 'js-yaml'
 import * as findUp from 'find-up'
-import { PermissionSession } from 'graphql-playground/lib/types'
+import * as queryString from 'query-string'
+// import { PermissionSession } from 'graphql-playground/lib/types'
 
 const { dialog } = remote
 
@@ -25,18 +25,35 @@ const store = createStore()
 
 interface State {
   endpoint?: string
-  openInitialView: boolean
   openTooltipTheme: boolean
-  activeEndpoint?: {
-    name: string
-    url: string
-  }
   theme: string
-  projects?: any[]
   shareUrl?: string
   loading: boolean
   session?: any
   platformToken?: string
+  configString?: string
+  configPath?: string
+  folderName?: string
+  env?: any
+}
+
+const events: any[] = []
+
+ipcRenderer.on('OpenSelectedFile', pushSelectedFile)
+ipcRenderer.on('OpenUrl', pushOpenUrl)
+
+function pushSelectedFile() {
+  events.push({
+    type: 'OpenSelectedFile',
+    args: arguments,
+  })
+}
+
+function pushOpenUrl() {
+  events.push({
+    type: 'OpenUrl',
+    args: arguments,
+  })
 }
 
 export default class ElectronApp extends React.Component<{}, State> {
@@ -46,9 +63,7 @@ export default class ElectronApp extends React.Component<{}, State> {
     super()
     const { endpoint, platformToken } = this.getArgs()
     this.state = {
-      openInitialView: !endpoint,
       openTooltipTheme: false,
-      activeEndpoint: null,
       theme: 'dark',
       endpoint,
       platformToken,
@@ -70,69 +85,37 @@ export default class ElectronApp extends React.Component<{}, State> {
       endpoint: args.endpoint,
       subscriptionsEndpoint: args['subscriptions-endpoint'],
       platformToken: args['platform-token'] || localStorage.platformToken,
+      env: args.env,
     }
   }
 
   handleSelectEndpoint = (endpoint: string) => {
-    this.setState({ endpoint, openInitialView: false } as State)
+    this.setState({ endpoint } as State)
   }
 
   handleSelectFolder = (folderPath: string) => {
     try {
       // Get config from folderPath
-      const config = getGraphQLConfig(folderPath)
-      let projects = config.getProjects()
-      // If no multi projects
-      if (!projects) {
-        projects = {}
-        const project = config.getProjectConfig()
-        // Take the folder name as a key
-        const pathSplit = folderPath.split('/')
-        const folderName = pathSplit[pathSplit.length - 1]
-        projects[folderName] = project
-      }
-      // Get all enpoints for the project
-      const projectsState = Object.keys(projects).map(key => {
-        const project = projects[key]
-        const endpoints = project.endpointsExtension.getRawEndpointsMap()
-        const endpointsState = Object.keys(endpoints).map(a => {
-          const endpoint: any = endpoints[a]
-          endpoint.name = a
-          return endpoint
-        })
-        return {
-          name: key,
-          endpoints: endpointsState,
-        }
-      })
+      const configPath = findGraphQLConfigFile(folderPath)
+      const configString = fs.readFileSync(configPath, 'utf-8')
 
-      // Select first enpoind found
-      const activeEndpoint = projectsState[0].endpoints[0]
+      /* tslint:disable-next-line */
+      if (configString.includes('${env:')) {
+        alert(`You opened a .graphqlconfig file that includes environment variables.
+In order to use environment variables in the Playground, please start it from the graphql cli. Install with
+npm install -g graphql
+Then open the graphql config with:
+cd ${folderPath}; graphql playground`)
+      }
 
       this.setState({
-        openInitialView: false,
-        activeEndpoint,
-        endpoint: activeEndpoint.url,
-        projects: projectsState,
+        configString,
+        configPath,
+        folderName: path.basename(folderPath),
       } as State)
     } catch (error) {
       alert(error)
     }
-  }
-
-  handleChangeItem = activeEndpoint => {
-    const endpoint = activeEndpoint.url
-    this.setState({ activeEndpoint, endpoint } as State)
-  }
-
-  handleToggleTooltipTheme = e => {
-    this.setState({ openTooltipTheme: !this.state.openTooltipTheme } as State)
-  }
-
-  handleChangeTheme = () => {
-    this.setState({
-      theme: this.state.theme === 'dark' ? 'light' : 'dark',
-    } as State)
   }
 
   handleOpenNewWindow = () => {
@@ -166,9 +149,27 @@ export default class ElectronApp extends React.Component<{}, State> {
   }
 
   componentDidMount() {
+    ipcRenderer.removeListener('OpenUrl', pushOpenUrl)
+    ipcRenderer.removeListener('OpenSelectedFile', pushSelectedFile)
     ipcRenderer.on('Tab', this.readTabMessage)
     ipcRenderer.on('File', this.readFileMessage)
     ipcRenderer.on('OpenSelectedFile', this.readOpenSelectedFileMessage)
+    ipcRenderer.on('OpenUrl', this.handleUrl)
+    window.addEventListener('keydown', this.handleKeyDown)
+    this.consumeEvents()
+    ipcRenderer.send('ready', '')
+  }
+
+  consumeEvents() {
+    while (events.length > 0) {
+      const event = events.shift()
+      switch (event.type) {
+        case 'OpenSelectedFile':
+          return this.readOpenSelectedFileMessage.call(this, ...event.args)
+        case 'OpenUrl':
+          return this.handleUrl.call(this, ...event.args)
+      }
+    }
   }
 
   componentWillUnmount() {
@@ -178,15 +179,65 @@ export default class ElectronApp extends React.Component<{}, State> {
       'OpenSelectedFile',
       this.readOpenSelectedFileMessage,
     )
+    ipcRenderer.removeListener('OpenUrl', this.handleUrl)
+    window.removeEventListener('keydown', this.handleKeyDown)
   }
 
-  readFileMessage = (error, message) => {
+  handleKeyDown = e => {
+    if (e.key === '{' && e.metaKey) {
+      this.prevTab()
+    }
+    if (e.key === '}' && e.metaKey) {
+      this.nextTab()
+    }
+  }
+
+  handleUrl = (event, url) => {
+    const cutIndex = url.indexOf('//')
+    const query = url.slice(cutIndex + 2)
+    const input = queryString.parse(query)
+    if (input.env) {
+      try {
+        input.env = JSON.parse(input.env)
+      } catch (e) {
+        //
+      }
+    }
+
+    const endpoint = input.endpoint
+    let configString
+    let folderName
+    let configPath
+    const platformToken = input.platformToken
+
+    if (input.cwd) {
+      configPath = findUp.sync(['.graphqlconfig', '.graphqlconfig.yml'], {
+        cwd: input.cwd,
+      })
+      configString = configPath
+        ? fs.readFileSync(configPath, 'utf-8')
+        : undefined
+      folderName = configPath
+        ? path.basename(path.dirname(configPath))
+        : undefined
+    }
+
+    this.setState({
+      configString,
+      folderName,
+      env: input.env,
+      endpoint,
+      platformToken,
+    })
+  }
+
+  readFileMessage = (event, message) => {
     switch (message) {
       case 'Open':
         this.showOpenDialog()
         break
       case 'Save':
-        this.saveFile()
+        this.getSaveFileName()
         break
     }
   }
@@ -197,26 +248,16 @@ export default class ElectronApp extends React.Component<{}, State> {
     }
   }
 
-  openFile(fileToOpen: string) {
-    const query = fs.readFileSync(fileToOpen, 'utf-8')
-    const rc = this.getGraphcoolRc()
-
-    if (rc && rc.platformToken) {
-      this.setState({ platformToken: rc.platformToken }, () => {
-        this.playground.fetchPermissionSchema()
-        this.playground.fetchServiceInformation()
-      })
-      localStorage.setItem('platformToken', rc.platformToken)
+  async openFile(fileName: string) {
+    const file = fs.readFileSync(fileName, 'utf-8')
+    if (!this.playground) {
+      this.handleSelectFolder(path.dirname(fileName))
     }
-
-    const permissionSession = this.getPermissionSessionForPath(fileToOpen)
-
-    this.playground.newPermissionTab(
-      permissionSession,
-      path.basename(fileToOpen),
-      fileToOpen,
-      query,
-    )
+    while (!this.playground) {
+      await new Promise(r => setTimeout(r, 200))
+    }
+    await new Promise(r => setTimeout(r, 200))
+    this.playground.newFileTab(path.basename(fileName), fileName, file)
   }
 
   showOpenDialog() {
@@ -240,78 +281,72 @@ export default class ElectronApp extends React.Component<{}, State> {
 
   getSaveFileName(): Promise<string> {
     return new Promise((resolve, reject) => {
-      dialog.showSaveDialog(
-        {
-          title: 'Save Permission Query',
-          filters: [
-            {
-              name: 'Permission File',
-              extensions: ['graphql'],
-            },
-          ],
-        },
-        (fileName: any) => {
-          resolve(fileName)
-        },
-      )
+      // save current tab
+
+      if (this.playground) {
+        const session = this.playground.state.sessions[
+          this.playground.state.selectedSessionIndex
+        ]
+        if (session.isConfigTab) {
+          this.playground.handleSaveConfig()
+        }
+
+        if (session.isSettingsTab) {
+          this.playground.handleSaveSettings()
+        }
+
+        if (session.isFile && session.filePath) {
+          // TODO
+          // dialog.showSaveDialog(
+          //   {
+          //     title: 'Save Permission Query',
+          //     filters: [
+          //       {
+          //         name: 'Permission File',
+          //         extensions: ['graphql'],
+          //       },
+          //     ],
+          //   },
+          //   (fileName: any) => {
+          //     resolve(fileName)
+          //   },
+          // )
+          this.playground.handleSaveFile(session.file)
+          fs.writeFileSync(session.filePath, session.file)
+        }
+
+        this.playground.handleSaveConfig()
+      }
     })
   }
 
-  async saveFile() {
-    const session = this.playground.state.sessions[
-      this.playground.state.selectedSessionIndex
-    ]
-    ;(this.playground as any).setValueInSession(session.id, 'hasChanged', false)
-    const fileName =
-      (session as any).absolutePath || (await this.getSaveFileName())
-    // if (!(session as any).absolutePath) {
-    ;(this.playground as any).setValueInSession(
-      session.id,
-      'name',
-      path.basename(fileName),
-    )
-    ;(this.playground as any).setValueInSession(
-      session.id,
-      'absolutePath',
-      fileName,
-    )
-    // }
-    const query = session.query
-    fs.writeFileSync(fileName, query)
+  saveConfig = (configString: string) => {
+    fs.writeFileSync(this.state.configPath, configString)
+    this.setState({ configString })
   }
 
-  getPermissionSessionForPath(fileName: string): PermissionSession | null {
-    const graphcoolYml = this.getGraphcoolYml(fileName)
-    if (graphcoolYml) {
-      const { yml, ymlPath } = graphcoolYml
-      const ymlDir = path.dirname(ymlPath)
-      const permissionDefinition = yml.permissions.find(permission => {
-        if (permission.query && permission.query.includes('graphql')) {
-          const normalizedQuery = permission.query.split(':')[0]
-          const resolvedPath = path.join(ymlDir, normalizedQuery)
-          return resolvedPath === fileName
-        }
-        return false
-      })
-
-      if (permissionDefinition) {
-        const { operation } = permissionDefinition
-
-        const splitted = operation.split('.')
-        if (['create', 'read', 'update', 'delete'].indexOf(splitted[1]) > -1) {
-          return {
-            modelName: splitted[0],
-          }
-        } else {
-          return {
-            relationName: splitted[0],
-          }
-        }
-      }
-    }
-
-    return null
-  }
+  // async saveFile() {
+  //   const session = this.playground.state.sessions[
+  //     this.playground.state.selectedSessionIndex
+  //   ]
+  //   ;(this.playground as any).setValueInSession(session.id, 'hasChanged', false)
+  //   const fileName =
+  //     (session as any).absolutePath || (await this.getSaveFileName())
+  //   // if (!(session as any).absolutePath) {
+  //   ;(this.playground as any).setValueInSession(
+  //     session.id,
+  //     'name',
+  //     path.basename(fileName),
+  //   )
+  //   ;(this.playground as any).setValueInSession(
+  //     session.id,
+  //     'absolutePath',
+  //     fileName,
+  //   )
+  //   // }
+  //   const query = session.query
+  //   fs.writeFileSync(fileName, query)
+  // }
 
   getGraphcoolYml(from: string): { ymlPath: string; yml: any } | null {
     const ymlPath = findUp.sync('graphcool.yml', { cwd: from })
@@ -364,23 +399,21 @@ export default class ElectronApp extends React.Component<{}, State> {
   render() {
     const {
       theme,
-      projects,
       endpoint,
-      openInitialView,
       openTooltipTheme,
-      activeEndpoint,
       platformToken,
+      configString,
     } = this.state
 
     return (
       <Provider store={store}>
-        <div className={cx('root', theme)}>
+        <div className={cx('root', theme, { noConfig: !configString })}>
           <style jsx={true} global={true}>{`
             .app-content .left-content {
               letter-spacing: 0.5px;
             }
-            body .root .tabs.isApp {
-              padding-left: 74px;
+            body .root.noConfig .tabs {
+              padding-left: 80px;
             }
           `}</style>
           <style jsx={true}>{`
@@ -390,43 +423,8 @@ export default class ElectronApp extends React.Component<{}, State> {
             .root.light {
               background-color: #dbdee0;
             }
-            .app-content {
-              @p: .flex, .flexRow;
-            }
-
-            .app-content .left-content {
-              @p: .white, .relative, .mr6, .bgDarkBlue40;
-              flex: 0 222px;
-              padding-top: 57px;
-            }
-            .app-content .left-content.light {
-              @p: .bgWhite70, .black60;
-            }
-            .app-content .list {
-              @p: .overflowHidden;
-              max-width: 222px;
-            }
-            .left-content .list-item {
-              @p: .pv10, .ph25, .fw6, .toe, .overflowHidden, .nowrap;
-            }
-            .left-content .list-item.list-item-project {
-              @p: .pointer, .pl38, .f12;
-            }
-            .left-content .list-item.list-item-project.active {
-              @p: .bgDarkBlue, .bGreen;
-              border-left-style: solid;
-              border-left-width: 4px;
-              padding-left: 34px;
-            }
-            .left-content.light .list-item.list-item-project.active {
-              background-color: #e7e8ea;
-            }
             .app-content .playground {
               @p: .flex1;
-            }
-            .sidenav-footer {
-              @p: .absolute, .bottom0, .w100, .flex, .itemsCenter,
-                .justifyBetween, .pv20, .bgDarkBlue;
             }
             .light .sidenav-footer {
               background-color: #eeeff0;
@@ -437,95 +435,30 @@ export default class ElectronApp extends React.Component<{}, State> {
             }
           `}</style>
           <InitialView
-            isOpen={openInitialView}
+            isOpen={!endpoint && !configString}
             onSelectFolder={this.handleSelectFolder}
             onSelectEndpoint={this.handleSelectEndpoint}
           />
-          {endpoint && (
-            <div className={cx('app-content', { 'app-endpoint': !projects })}>
-              {projects && (
-                <div className={cx('left-content', theme)}>
-                  <div className="list">
-                    {projects.map(project => (
-                      <div key={project.name}>
-                        <div className={cx('list-item')}>{project.name}</div>
-                        {project.endpoints.map(ept => (
-                          <div
-                            key={ept.name}
-                            className={cx('list-item list-item-project', {
-                              active: activeEndpoint === ept,
-                            })}
-                            // tslint:disable-next-line
-                            onClick={() => this.handleChangeItem(ept)}
-                          >
-                            {ept.name}
-                          </div>
-                        ))}
-                      </div>
-                    ))}
-                  </div>
-                  <div className="sidenav-footer">
-                    <button
-                      className="button"
-                      onClick={this.handleOpenNewWindow}
-                    >
-                      <Icon
-                        src={require('graphcool-styles/icons/stroke/add.svg')}
-                        stroke={true}
-                        color={$v.gray90}
-                        width={14}
-                        height={14}
-                        strokeWidth={6}
-                      />
-                      NEW WORKSPACE
-                    </button>
-                  </div>
-                </div>
-              )}
-              <div className="playground">
-                <Playground
-                  getRef={this.setRef}
-                  endpoint={endpoint}
-                  isApp={!projects}
-                  onChangeEndpoint={this.handleChangeEndpoint}
-                  share={this.share}
-                  shareUrl={this.state.shareUrl}
-                  adminAuthToken={platformToken}
-                />
-              </div>
+          {(endpoint || configString) && (
+            <div className="playground">
+              <Playground
+                getRef={this.setRef}
+                endpoint={endpoint}
+                isElectron={true}
+                platformToken={platformToken}
+                configString={configString}
+                onSaveConfig={this.saveConfig}
+                canSaveConfig={true}
+                env={this.state.env}
+                folderName={this.state.folderName}
+                showNewWorkspace={true}
+                onNewWorkspace={this.handleOpenNewWindow}
+              />
             </div>
           )}
         </div>
       </Provider>
     )
-  }
-
-  private share = (session: any) => {
-    fetch('https://api.graph.cool/simple/v1/cj81hi46q03c30196uxaswrz2', {
-      method: 'post',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        query: `
-        mutation ($session: String! $endpoint: String!) {
-          addSession(session: $session endpoint: $endpoint) {
-            id
-          }
-        }
-      `,
-        variables: {
-          session: JSON.stringify(session),
-          endpoint: this.state.endpoint,
-        },
-      }),
-    })
-      .then(res => res.json())
-      .then(res => {
-        const shareUrl = `https://graphqlbin.com/${res.data.addSession.id}`
-        // const shareUrl = `${location.origin}/${res.data.addSession.id}`
-        this.setState({ shareUrl })
-      })
   }
 
   private setRef = ref => {

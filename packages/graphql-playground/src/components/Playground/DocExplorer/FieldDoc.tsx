@@ -14,7 +14,7 @@ export interface Props {
   schema: any
   field: any
   level: number
-  onSetWidth: (width: number) => void
+  sessionId: string
 }
 
 export interface State {
@@ -84,9 +84,9 @@ export default class FieldDoc extends React.Component<Props, State> {
           <TypeLink
             type={field}
             x={level}
-            y={0}
+            y={-1}
             clickable={false}
-            onSetWidth={this.props.onSetWidth}
+            sessionId={this.props.sessionId}
           />
         </div>
         <MarkdownContent
@@ -116,7 +116,7 @@ export default class FieldDoc extends React.Component<Props, State> {
             fields={obj.fields}
             interfaces={obj.interfaces}
             level={level}
-            onSetWidth={this.props.onSetWidth}
+            sessionId={this.props.sessionId}
           />
         )}
 
@@ -130,7 +130,7 @@ export default class FieldDoc extends React.Component<Props, State> {
                     arg={arg}
                     x={level}
                     y={index + argsOffset}
-                    onSetWidth={this.props.onSetWidth}
+                    sessionId={this.props.sessionId}
                   />
                 </div>
               </div>
@@ -147,8 +147,8 @@ export default class FieldDoc extends React.Component<Props, State> {
                 type={data}
                 x={level}
                 y={index + implementationsOffset}
-                onSetWidth={this.props.onSetWidth}
                 collapsable={true}
+                sessionId={this.props.sessionId}
               />
             ))}
           </div>

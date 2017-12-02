@@ -2129,6 +2129,10 @@ decamelize@^1.0.0, decamelize@^1.1.1, decamelize@^1.1.2:
   version "1.2.0"
   resolved "https://registry.yarnpkg.com/decamelize/-/decamelize-1.2.0.tgz#f6534d15148269b20352e7bee26f501f9a191290"
 
+decode-uri-component@^0.2.0:
+  version "0.2.0"
+  resolved "https://registry.yarnpkg.com/decode-uri-component/-/decode-uri-component-0.2.0.tgz#eb3913333458775cb84cd1a1fae062106bb87545"
+
 deep-equal@^1.0.1:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/deep-equal/-/deep-equal-1.0.1.tgz#f5d260292b660e084eff4cdbc9f08ad3247448b5"
@@ -2445,6 +2449,10 @@ electron-localshortcut@^2.0.2:
   dependencies:
     debug "^2.6.8"
     electron-is-accelerator "^0.1.0"
+
+electron-log@^2.2.11:
+  version "2.2.11"
+  resolved "https://registry.yarnpkg.com/electron-log/-/electron-log-2.2.11.tgz#dc99118cda054aa866e47d081d1431c76baacd68"
 
 electron-osx-sign@0.4.7:
   version "0.4.7"
@@ -3330,9 +3338,9 @@ graphql-language-service-utils@0.0.17:
     graphql "^0.10.1"
     graphql-language-service-types "0.0.21"
 
-graphql-playground@^1.2.0:
-  version "1.2.0"
-  resolved "https://registry.yarnpkg.com/graphql-playground/-/graphql-playground-1.2.0.tgz#3f3745c84ba69fc33fb20444308d6687f94e031b"
+graphql-playground@^1.3.0:
+  version "1.3.0"
+  resolved "https://registry.yarnpkg.com/graphql-playground/-/graphql-playground-1.3.0.tgz#373f6e74ca399739c913dfc69d0a0c3c0bd660bd"
   dependencies:
     calculate-size "^1.1.1"
     classnames "^2.2.5"
@@ -3343,6 +3351,8 @@ graphql-playground@^1.2.0:
     graphiql "^0.11.2"
     graphql "^0.10.5"
     isomorphic-fetch "^2.2.1"
+    js-yaml "^3.10.0"
+    json-stable-stringify "^1.0.1"
     keycode "^2.1.9"
     lodash "^4.17.4"
     lodash.debounce "^4.0.8"
@@ -5182,6 +5192,10 @@ plist@^2.1.0:
     xmlbuilder "8.2.2"
     xmldom "0.1.x"
 
+polished@^1.9.0:
+  version "1.9.0"
+  resolved "https://registry.yarnpkg.com/polished/-/polished-1.9.0.tgz#76d277d6610dbcb85477dbba1bd1aa8e642741b6"
+
 portfinder@^1.0.9:
   version "1.0.13"
   resolved "https://registry.yarnpkg.com/portfinder/-/portfinder-1.0.13.tgz#bb32ecd87c27104ae6ee44b5a3ccbf0ebb1aede9"
@@ -5624,6 +5638,14 @@ query-string@^4.1.0:
   version "4.3.4"
   resolved "https://registry.yarnpkg.com/query-string/-/query-string-4.3.4.tgz#bbb693b9ca915c232515b228b1a02b609043dbeb"
   dependencies:
+    object-assign "^4.1.0"
+    strict-uri-encode "^1.0.0"
+
+query-string@^5.0.1:
+  version "5.0.1"
+  resolved "https://registry.yarnpkg.com/query-string/-/query-string-5.0.1.tgz#6e2b86fe0e08aef682ecbe86e85834765402bd88"
+  dependencies:
+    decode-uri-component "^0.2.0"
     object-assign "^4.1.0"
     strict-uri-encode "^1.0.0"
 

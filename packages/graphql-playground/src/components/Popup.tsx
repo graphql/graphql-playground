@@ -1,6 +1,6 @@
 import * as React from 'react'
 import * as Modal from 'react-modal'
-import styled from '../styled'
+import { styled } from '../styled'
 
 export interface Props {
   onRequestClose: () => void

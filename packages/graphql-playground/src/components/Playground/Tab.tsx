@@ -55,6 +55,9 @@ export default class Tab extends React.PureComponent<Props, State> {
             }
             border-bottom: 2px solid #172a3a;
           }
+          .tab:first-of-type {
+            margin-left: 0;
+          }
           .light.tab {
             background-color: #e7eaec;
             &.active {
@@ -165,6 +168,16 @@ export default class Tab extends React.PureComponent<Props, State> {
           {session.subscriptionActive && <div className="red-dot" />}
           <div className="query-types">
             {queryTypes.query && <div className="query-type query">Q</div>}
+            {(session.isSettingsTab || session.isConfigTab) && (
+              <div className="query-type query">
+                <Icon
+                  src={require('graphcool-styles/icons/fill/settings.svg')}
+                  width={12}
+                  height={12}
+                  color="white"
+                />
+              </div>
+            )}
             {queryTypes.mutation && (
               <div className="query-type mutation">M</div>
             )}
@@ -194,7 +207,7 @@ export default class Tab extends React.PureComponent<Props, State> {
             <Icon
               src={require('graphcool-styles/icons/stroke/cross.svg')}
               stroke={true}
-              color={localTheme === 'dark' ? $v.white40 : $v.darkBlue40}
+              color={localTheme === 'dark' ? 'rgb(74, 85, 95)' : $v.darkBlue40}
               width={12}
               height={11}
               strokeWidth={7}

@@ -10,6 +10,8 @@ import {
   protocol,
 } from 'electron'
 import * as electronLocalShortcut from 'electron-localshortcut'
+import * as fs from 'fs'
+import * as os from 'os'
 import { autoUpdater } from 'electron-updater'
 const dev = require('electron-is-dev')
 
@@ -20,42 +22,50 @@ const { newWindowConfig } = require('./utils')
 const server = 'https://hazel-wmigqegsed.now.sh'
 const feed = `${server}/update/${process.platform}/${app.getVersion()}`
 
+app.setAsDefaultProtocolClient('graphql-playground')
+
+const log = {
+  info: (...args) => {
+    console.log(...args)
+  },
+}
+
+app.on('open-url', (event, url) => {
+  event.preventDefault()
+  forceSend('OpenUrl', url)
+})
+
+app.on('open-file', (event, path) => {
+  event.preventDefault()
+  forceSend('OpenSelectedFile', path)
+})
+
 function getFocusedWindow(): any | null {
   return BrowserWindow.getFocusedWindow()
 }
 
-// function manuallyCheckForUpdates() {
-//   autoUpdater.on('update-available', () => {
-//     dialog.showMessageBox(
-//       {
-//         type: 'info',
-//         title: 'Found Updates',
-//         message: 'Found updates, do you want update now?',
-//         buttons: ['Sure', 'No'],
-//       },
-//       buttonIndex => {
-//         if (buttonIndex === 0) {
-//           autoUpdater.downloadUpdate()
-//         }
-//       },
-//     )
-//   })
-//
-//   autoUpdater.on('update-not-available', () => {
-//     dialog.showMessageBox({
-//       title: 'No Updates',
-//       message: 'Current version is up-to-date.',
-//     })
-//   })
-//
-//   autoUpdater.checkForUpdates()
-// }
-
 function send(channel: string, arg: string) {
   const focusedWindow = getFocusedWindow()
   if (focusedWindow) {
+    log.info('sending to focused window', channel, arg)
     focusedWindow.webContents.send(channel, arg)
+  } else {
+    log.info('no focused window')
   }
+}
+
+const readyWindowsPromises = {}
+
+async function forceSend(channel: string, arg: string) {
+  await appPromise
+  const currentWindows = BrowserWindow.getAllWindows()
+  let window = currentWindows[0]
+  if (!window) {
+    window = createWindow()
+  }
+  await readyWindowsPromises[window.id]
+  log.info('force sending', channel, arg)
+  window.webContents.send(channel, arg)
 }
 
 function initAutoUpdate() {
@@ -85,7 +95,9 @@ function showUpdateNotification(it) {
     {
       type: 'info',
       title: 'Install Updates',
-      message: `${versionLabel} has been downloaded and application will be quit for update...`,
+      message: `${
+        versionLabel
+      } has been downloaded and application will be quit for update...`,
     },
     () => {
       setImmediate(() => autoUpdater.quitAndInstall())
@@ -122,14 +134,14 @@ function createWindow() {
     } = require('electron-devtools-installer')
 
     installExtension(REACT_DEVELOPER_TOOLS)
-      .then(name => console.log(`Added Extension:  ${name}`))
-      .catch(err => console.log('An error occurred: ', err))
+      .then(name => log.info(`Added Extension:  ${name}`))
+      .catch(err => log.info('An error occurred: ', err))
 
     installExtension(REDUX_DEVTOOLS)
-      .then(name => console.log(`Added Extension:  ${name}`))
-      .catch(err => console.log('An error occurred: ', err))
+      .then(name => log.info(`Added Extension:  ${name}`))
+      .catch(err => log.info('An error occurred: ', err))
 
-    newWindow.webContents.openDevTools()
+    // newWindow.webContents.openDevTools()
   }
 
   windows.add(newWindow)
@@ -139,14 +151,20 @@ function createWindow() {
     if (process.platform !== 'darwin' && windows.size === 0) {
       app.quit()
     }
+    windows.delete(newWindow)
   })
 
-  electronLocalShortcut.register(newWindow, 'Cmd+Shift+]', () => {
-    send('Tab', 'Next')
-  })
+  // electronLocalShortcut.register(newWindow, 'Cmd+Shift+]', () => {
+  //   send('Tab', 'Next')
+  // })
 
-  electronLocalShortcut.register(newWindow, 'Cmd+Shift+[', () => {
-    send('Tab', 'Prev')
+  // electronLocalShortcut.register(newWindow, 'Cmd+Shift+[', () => {
+  //   send('Tab', 'Prev')
+  // })
+  readyWindowsPromises[newWindow.id] = new Promise(r => {
+    ipcMain.once('ready', () => {
+      r()
+    })
   })
 
   return newWindow
@@ -256,6 +274,8 @@ const template: any = [
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
+let appResolve
+const appPromise = new Promise(resolve => (appResolve = resolve))
 app.on('ready', () => {
   createWindow()
   // initAutoUpdate()
@@ -264,22 +284,21 @@ app.on('ready', () => {
   Menu.setApplicationMenu(menu)
 
   ipcMain.on('get-file-data', event => {
-    console.log('get-file-data', event)
+    log.info('get-file-data', event)
     // this.fileAdded(event)
   })
 
   ipcMain.on('load-file-content', (event, filePath) => {
-    console.log('load-file-content', event, filePath)
+    log.info('load-file-content', event, filePath)
   })
 
   protocol.registerFileProtocol('file:', (request, filePath) => {
-    console.log('file:', request, filePath)
+    log.info('file:', request, filePath)
   })
-})
 
-app.on('open-file', (event, path) => {
-  event.preventDefault()
-  send('OpenSelectedFile', path)
+  if (appResolve) {
+    appResolve()
+  }
 })
 
 // Quit when all windows are closed.
@@ -294,7 +313,7 @@ app.on('window-all-closed', () => {
 app.on('activate', () => {
   // On OS X it's common to re-create a window in the app when the
   // dock icon is clicked and there are no other windows open.
-  if (!windows.size) {
+  if (BrowserWindow.getAllWindows().length === 0) {
     createWindow()
   }
 })

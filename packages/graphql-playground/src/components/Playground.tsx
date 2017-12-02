@@ -1,15 +1,13 @@
 import * as React from 'react'
 import { GraphQLEditor } from './Playground/GraphQLEditor'
 import * as fetch from 'isomorphic-fetch'
-import { buildClientSchema } from 'graphql'
 import { TabBar } from './Playground/TabBar'
-import { defaultQuery, introspectionQuery } from '../constants'
+import { defaultQuery, getDefaultSession } from '../constants'
 import { Session } from '../types'
 import * as cuid from 'cuid'
 import * as Immutable from 'seamless-immutable'
-import OldThemeProvider from './Theme/ThemeProvider'
 import PlaygroundStorage from './PlaygroundStorage'
-import getQueryTypes from './Playground/util/getQueryTypes'
+import { getQueryTypes } from './Playground/util/getQueryTypes'
 import debounce from 'graphiql/dist/utility/debounce'
 import { Observable } from 'rxjs/Observable'
 import { SubscriptionClient } from 'subscriptions-transport-ws'
@@ -17,18 +15,20 @@ import isQuerySubscription from './Playground/util/isQuerySubscription'
 import HistoryPopup from './HistoryPopup'
 import * as cx from 'classnames'
 import CodeGenerationPopup from './CodeGenerationPopup/CodeGenerationPopup'
-import GraphDocs from './Playground/DocExplorer/GraphDocs'
-import Settings from './Settings'
 import { connect } from 'react-redux'
 import { DocsState } from '../reducers/graphiql-docs'
 import GraphQLEditorSession from './Playground/GraphQLEditorSession'
 import { setStacks } from '../actions/graphiql-docs'
-import { isEqual, mapValues } from 'lodash'
-import Share from './Share'
-import styled, { ThemeProvider, theme as styledTheme } from '../styled'
-import { getNewStack, getRootMap } from './Playground/util/stack'
+import { mapValues } from 'lodash'
+import { styled } from '../styled'
+import { isSharingAuthorization } from './Playground/util/session'
+import { SchemaFetcher } from './Playground/SchemaFetcher'
+import Settings from './Settings'
+import SettingsEditor from './SettingsEditor'
+import { EditorSettings } from './MiddlewareApp'
+import { GraphQLConfig } from '../graphqlConfig'
+import FileEditor from './FileEditor'
 
-export type Theme = 'dark' | 'light'
 export interface Response {
   resultID: string
   date: string
@@ -46,13 +46,25 @@ export interface Props {
   tether?: any
   nextStep?: () => void
   isApp?: boolean
-  setStacks?: (stack: any[]) => void
   onChangeEndpoint?: (endpoint: string) => void
   share: (state: any) => void
   shareUrl?: string
   session?: any
   onChangeSubscriptionsEndpoint?: (endpoint: string) => void
   getRef?: (ref: Playground) => void
+  graphqlConfig?: any
+  onSaveSettings: () => void
+  onChangeSettings: (settingsString: string) => void
+  onSaveConfig: () => void
+  onChangeConfig: (configString: string) => void
+  onUpdateSessionCount?: () => void
+  settings: EditorSettings
+  settingsString: string
+  config: GraphQLConfig
+  configString: string
+  configIsYaml: boolean
+  canSaveConfig: boolean
+  fixedEndpoints: boolean
 }
 
 export interface State {
@@ -62,12 +74,11 @@ export interface State {
   schemaCache: any
   historyOpen: boolean
   history: Session[]
-  adminAuthToken?: string
+  adminAuthToken: string | null
   response?: Response
   selectUserSessionId?: string
   codeGenerationPopupOpen: boolean
   disableQueryHeader: boolean
-  theme: Theme
   autoReloadSchema: boolean
   useVim: boolean
   userModelName: string
@@ -92,8 +103,7 @@ export class Playground extends React.PureComponent<Props & DocsState, State> {
   observers: { [sessionId: string]: any } = {}
   graphiqlComponents: any[] = []
   private initialIndex: number = -1
-  private schemaReloadInterval: any
-  private rawSchemaCache: any = null
+  private schemaFetcher: SchemaFetcher
 
   private updateQueryTypes = debounce(
     150,
@@ -112,14 +122,15 @@ export class Playground extends React.PureComponent<Props & DocsState, State> {
     },
   )
 
-  constructor(props) {
+  constructor(props: Props & DocsState) {
     super(props)
-    this.storage = new PlaygroundStorage(props.endpoint)
+    this.storage = new PlaygroundStorage(this.getStorageKey(props))
     if (props.session) {
-      this.storage.setState(props.session)
+      this.storage.setState(props.session, props.endpoint)
     }
 
-    const sessions = this.initSessions()
+    const sessions = this.initSessions(props)
+    this.schemaFetcher = new SchemaFetcher()
 
     const selectedSessionIndex =
       parseInt(this.storage.getItem('selectedSessionIndex'), 10) || 0
@@ -142,7 +153,6 @@ export class Playground extends React.PureComponent<Props & DocsState, State> {
       selectUserSessionId: undefined,
       codeGenerationPopupOpen: false,
       disableQueryHeader: false,
-      theme: (localStorage.getItem('theme') as Theme) || 'dark',
       autoReloadSchema: false,
       useVim: localStorage.getItem('useVim') === 'true' || false,
       shareAllTabs: true,
@@ -167,9 +177,15 @@ export class Playground extends React.PureComponent<Props & DocsState, State> {
     }
   }
 
+  getStorageKey(props: Props = this.props) {
+    return props.endpoint
+    // const multi = !props.fixedEndpoints
+    // return multi ? 'multi' : props.endpoint
+  }
+
   componentWillMount() {
     // look, if there is a session. if not, initiate one.
-    this.fetchSchemas().then(this.initSessions)
+    this.initSessions()
   }
 
   componentDidMount() {
@@ -188,7 +204,7 @@ export class Playground extends React.PureComponent<Props & DocsState, State> {
     this.initWebsockets()
   }
 
-  componentDidUpdate(prevProps: Props) {
+  componentDidUpdate(prevProps: Props, prevState: State) {
     if (
       prevProps.endpoint !== this.props.endpoint ||
       prevProps.adminAuthToken !== this.props.adminAuthToken ||
@@ -197,81 +213,26 @@ export class Playground extends React.PureComponent<Props & DocsState, State> {
       this.saveSessions()
       this.saveHistory()
       this.storage.saveProject()
-      this.storage = new PlaygroundStorage(this.props.endpoint)
+      this.storage = new PlaygroundStorage(this.getStorageKey())
       const sessions = this.initSessions()
       this.setState(
         {
           sessions,
           history: this.storage.getHistory(),
+          selectedSessionIndex: 0,
         },
         () => {
           this.resetSubscriptions()
-          this.fetchSchemas().then(this.initSessions)
         },
       )
     }
 
-    if (this.state.autoReloadSchema && !this.schemaReloadInterval) {
-      this.fetchSchemas()
-      this.schemaReloadInterval = window.setInterval(() => {
-        this.fetchSchemas()
-      }, 4000)
+    if (
+      prevState.sessions.length !== this.state.sessions.length &&
+      typeof this.props.onUpdateSessionCount === 'function'
+    ) {
+      this.props.onUpdateSessionCount()
     }
-
-    if (!this.state.autoReloadSchema && this.schemaReloadInterval) {
-      window.clearInterval(this.schemaReloadInterval)
-      this.schemaReloadInterval = null
-    }
-  }
-
-  fetchSchemas = () => {
-    const additionalHeaders = {}
-
-    const headers = this.state.sessions[this.state.selectedSessionIndex].headers
-
-    if (headers) {
-      headers.forEach(header => (additionalHeaders[header.name] = header.value))
-    }
-
-    return this.fetchSchema(this.getSimpleEndpoint(), additionalHeaders).then(
-      simpleSchemaData => {
-        if (!simpleSchemaData || simpleSchemaData.error) {
-          const errorMessage = `Schema could not be fetched.\nPlease check if the endpoint '${this.getSimpleEndpoint()}' is a valid GraphQL Endpoint.`
-          this.setState({
-            response: {
-              date:
-                simpleSchemaData && simpleSchemaData.error
-                  ? simpleSchemaData.error
-                  : errorMessage,
-              time: new Date(),
-            },
-          } as State)
-          return
-        }
-
-        if (isEqual(this.rawSchemaCache, simpleSchemaData.data)) {
-          return
-        }
-
-        this.rawSchemaCache = simpleSchemaData.data
-
-        if (!simpleSchemaData.data) {
-          return
-        }
-
-        const simpleSchema = buildClientSchema(simpleSchemaData.data)
-
-        this.renewStack(simpleSchema)
-
-        const tracingSupported =
-          simpleSchemaData.extensions &&
-          Boolean(simpleSchemaData.extensions.tracing)
-        this.setState({
-          schemaCache: simpleSchema,
-          tracingSupported,
-        } as State)
-      },
-    )
   }
 
   componentWillUnmount() {
@@ -285,12 +246,10 @@ export class Playground extends React.PureComponent<Props & DocsState, State> {
   }
 
   setWS = (session: Session) => {
-    const connectionParams: any = {}
+    let connectionParams: any = {}
 
     if (session.headers) {
-      session.headers.forEach(header => {
-        connectionParams[header.name] = header.value
-      })
+      connectionParams = { ...this.parseHeaders(session.headers) }
     }
 
     if (this.wsConnections[session.id]) {
@@ -314,159 +273,133 @@ export class Playground extends React.PureComponent<Props & DocsState, State> {
     this.state.sessions.forEach(session => this.setWS(session))
   }
   setCursor(position: CursorPosition) {
-    const editor = this.graphiqlComponents[this.state.selectedSessionIndex]
-      .queryEditorComponent.editor
-    editor.setCursor(position)
+    if (this.graphiqlComponents) {
+      const editor = this.graphiqlComponents[this.state.selectedSessionIndex]
+      if (editor && editor.queryEditorComponent) {
+        editor.queryEditorComponent.editor.setCursor(position)
+      }
+    }
   }
-  renewStack(schema) {
-    const rootMap = getRootMap(schema)
-    const stacks = this.props.navStack
-      .map(stack => {
-        return getNewStack(rootMap, schema, stack)
-      })
-      .filter(s => s)
-    this.props.setStacks!(stacks)
-  }
-
-  extractServiceId() {
-    return this.props.endpoint.split('/').slice(-1)[0]
-  }
-
-  fetchSchema(endpointUrl: string, headers: any = {}) {
-    return fetch(endpointUrl, {
-      method: 'post',
-      credentials: 'include',
-      headers: {
-        'Content-Type': 'application/json',
-        'X-Apollo-Tracing': '1',
-        ...headers,
-      },
-      body: JSON.stringify({ query: introspectionQuery }),
-    })
-      .then(response => {
-        return response.json()
-      })
-      .catch(e => {
-        this.setState({
-          response: {
-            date: `Error: Could not fetch schema from ${
-              endpointUrl
-            }. Make sure the url is correct.`,
-            time: new Date(),
-            resultID: cuid(),
-          },
-        })
-      })
-  }
-
   render() {
-    const { sessions, selectedSessionIndex, theme } = this.state
+    const { sessions, selectedSessionIndex } = this.state
     const { isEndpoint } = this.props
-    const selectedEndpointUrl = isEndpoint
-      ? location.href
-      : this.getSimpleEndpoint()
+    const theme = this.props.settings['editor.theme']
+    const selectedEndpointUrl = isEndpoint ? location.href : this.getEndpoint()
     const isGraphcoolUrl = this.isGraphcoolUrl(selectedEndpointUrl)
 
     return (
-      <ThemeProvider theme={{ ...styledTheme, mode: theme }}>
-        <OldThemeProvider theme={this.state.theme}>
-          <PlaygroundWrapper className="playground">
-            <TabBar
-              sessions={sessions}
-              selectedSessionIndex={selectedSessionIndex}
-              onNewSession={this.handleNewSessionWithoutNewIndexZero}
-              onCloseSession={this.handleCloseSession}
-              onOpenHistory={this.handleOpenHistory}
-              onSelectSession={this.handleSelectSession}
-              isApp={this.props.isApp}
-            />
-            <GraphiqlsContainer
-              className={cx('graphiqls-container', {
-                'docs-graphiql': theme === 'light',
+      <PlaygroundWrapper className="playground">
+        <TabBar
+          sessions={sessions}
+          selectedSessionIndex={selectedSessionIndex}
+          onNewSession={this.handleNewSessionWithoutNewIndexZero}
+          onCloseSession={this.handleCloseSession}
+          onSelectSession={this.handleSelectSession}
+          isApp={this.props.isApp}
+        />
+        <GraphiqlsContainer
+          className={cx('graphiqls-container', {
+            'docs-graphiql': theme === 'light',
+          })}
+        >
+          {sessions.map((session, index) => (
+            <GraphiqlWrapper
+              key={session.id}
+              className={cx('graphiql-wrapper', {
+                active: index === selectedSessionIndex,
               })}
+              style={{
+                top: `-${100 * selectedSessionIndex}%`,
+              }}
             >
-              {sessions.map((session, index) => (
-                <GraphiqlWrapper
+              {session.isConfigTab ? (
+                <SettingsEditor
+                  value={this.props.configString}
+                  onChange={this.handleChangeConfig}
+                  onSave={this.handleSaveConfig}
+                  isYaml={this.props.configIsYaml}
+                  isConfig={true}
+                  readOnly={!this.props.canSaveConfig}
+                />
+              ) : session.isSettingsTab ? (
+                <SettingsEditor
+                  value={this.props.settingsString}
+                  onChange={this.handleChangeSettings}
+                  onSave={this.handleSaveSettings}
+                />
+              ) : session.isFile && session.file ? (
+                <FileEditor
+                  value={session.file!}
+                  onChange={this.handleFileChange}
+                />
+              ) : (
+                <GraphQLEditorSession
                   key={session.id}
-                  className={cx('graphiql-wrapper', {
-                    active: index === selectedSessionIndex,
-                  })}
-                  style={{
-                    top: `-${100 * selectedSessionIndex}%`,
+                  session={session}
+                  index={index}
+                  isGraphcoolUrl={isGraphcoolUrl}
+                  fetcher={this.fetcher}
+                  isEndpoint={Boolean(isEndpoint)}
+                  storage={this.storage.getSessionStorage(session.id)}
+                  onClickCodeGeneration={this.handleClickCodeGeneration}
+                  onEditOperationName={this.handleOperationNameChange}
+                  onEditVariables={this.handleVariableChange}
+                  onEditQuery={this.handleQueryChange}
+                  onChangeHeaders={this.handleChangeHeaders}
+                  onClickHistory={this.handleOpenHistory}
+                  onChangeEndpoint={this.handleChangeEndpoint}
+                  onClickShare={this.share}
+                  responses={
+                    this.state.response ? [this.state.response] : undefined
+                  }
+                  disableQueryHeader={this.state.disableQueryHeader}
+                  onRef={this.setRef}
+                  useVim={this.state.useVim && index === selectedSessionIndex}
+                  isActive={index === selectedSessionIndex}
+                  schemaFetcher={this.schemaFetcher}
+                  fixedEndpoint={this.props.fixedEndpoints}
+                  sharing={{
+                    localTheme: this.props.settings['editor.theme'],
+                    onShare: this.share,
+                    onToggleHistory: this.toggleShareHistory,
+                    onToggleAllTabs: this.toggleShareAllTabs,
+                    onToggleHttpHeaders: this.toggleShareHTTPHeaders,
+                    history: this.state.shareHistory,
+                    allTabs: this.state.shareAllTabs,
+                    httpHeaders: this.state.shareHttpHeaders,
+                    shareUrl: this.props.shareUrl,
+                    reshare: this.state.changed,
+                    isSharingAuthorization: this.isSharingAuthorization(),
                   }}
-                >
-                  <GraphQLEditorSession
-                    key={session.id}
-                    session={session}
-                    index={index}
-                    schemaCache={this.state.schemaCache}
-                    isGraphcoolUrl={isGraphcoolUrl}
-                    fetcher={this.fetcher}
-                    isEndpoint={Boolean(isEndpoint)}
-                    storage={this.storage.getSessionStorage(session.id)}
-                    onClickCodeGeneration={this.handleClickCodeGeneration}
-                    onEditOperationName={this.handleOperationNameChange}
-                    onEditVariables={this.handleVariableChange}
-                    onEditQuery={this.handleQueryChange}
-                    onChangeHeaders={this.handleChangeHeaders}
-                    responses={
-                      this.state.response ? [this.state.response] : undefined
-                    }
-                    disableQueryHeader={this.state.disableQueryHeader}
-                    onRef={this.setRef}
-                    useVim={this.state.useVim && index === selectedSessionIndex}
-                    isActive={index === selectedSessionIndex}
-                    tracingSupported={this.state.tracingSupported}
-                  />
-                </GraphiqlWrapper>
-              ))}
-            </GraphiqlsContainer>
-            <Settings
-              onToggleTheme={this.toggleTheme}
-              localTheme={this.state.theme}
-              autoReload={this.state.autoReloadSchema}
-              onToggleReload={this.toggleSchemaReload}
-              onReload={this.fetchSchemas}
-              endpoint={this.props.endpoint}
-              onChangeEndpoint={this.props.onChangeEndpoint}
-              useVim={this.state.useVim}
-              onToggleUseVim={this.toggleUseVim}
-              subscriptionsEndpoint={this.props.subscriptionsEndpoint || ''}
-              onChangeSubscriptionsEndpoint={
-                this.props.onChangeSubscriptionsEndpoint
-              }
-            />
-            <Share
-              localTheme={this.state.theme}
-              onShare={this.share}
-              onToggleHistory={this.toggleShareHistory}
-              onToggleAllTabs={this.toggleShareAllTabs}
-              onToggleHttpHeaders={this.toggleShareHTTPHeaders}
-              history={this.state.shareHistory}
-              allTabs={this.state.shareAllTabs}
-              httpHeaders={this.state.shareHttpHeaders}
-              shareUrl={this.props.shareUrl}
-              reshare={this.state.changed}
-              isSharingAuthorization={this.isSharingAuthorization()}
-            />
-            <GraphDocs schema={this.state.schemaCache} />
-            {this.state.historyOpen && (
-              <HistoryPopup
-                isOpen={this.state.historyOpen}
-                onRequestClose={this.handleCloseHistory}
-                historyItems={this.state.history}
-                onItemStarToggled={this.handleItemStarToggled}
-                fetcherCreater={this.fetcher}
-                schema={this.state.schemaCache}
-                onCreateSession={this.handleCreateSession}
-                isGraphcool={isGraphcoolUrl}
-              />
-            )}
-            {this.state.codeGenerationPopupOpen &&
-              this.renderCodeGenerationPopup()}
-          </PlaygroundWrapper>
-        </OldThemeProvider>
-      </ThemeProvider>
+                />
+              )}
+            </GraphiqlWrapper>
+          ))}
+        </GraphiqlsContainer>
+        <Settings onClick={this.openSettingsTab} />
+        {this.state.historyOpen && this.renderHistoryPopup()}
+        {this.state.codeGenerationPopupOpen && this.renderCodeGenerationPopup()}
+      </PlaygroundWrapper>
+    )
+  }
+
+  renderHistoryPopup() {
+    const { sessions, selectedSessionIndex } = this.state
+    const selectedSession = sessions[selectedSessionIndex]
+    const historyItems = this.state.history.filter(
+      s => s.endpoint === selectedSession.endpoint,
+    )
+
+    return (
+      <HistoryPopup
+        isOpen={this.state.historyOpen}
+        onRequestClose={this.handleCloseHistory}
+        historyItems={historyItems}
+        onItemStarToggled={this.handleItemStarToggled}
+        fetcherCreater={this.fetcher}
+        onCreateSession={this.handleCreateSession}
+        schemaFetcher={this.schemaFetcher}
+      />
     )
   }
 
@@ -474,9 +407,7 @@ export class Playground extends React.PureComponent<Props & DocsState, State> {
     const { sessions, selectedSessionIndex } = this.state
     const { isEndpoint } = this.props
     const selectedSession = sessions[selectedSessionIndex]
-    const selectedEndpointUrl = isEndpoint
-      ? location.href
-      : this.getSimpleEndpoint()
+    const selectedEndpointUrl = isEndpoint ? location.href : this.getEndpoint()
     return (
       <CodeGenerationPopup
         endpointUrl={selectedEndpointUrl}
@@ -498,6 +429,101 @@ export class Playground extends React.PureComponent<Props & DocsState, State> {
     }))
   }
 
+  handleChangeSettings = (settings: string) => {
+    const settingsSession = this.state.sessions.find(session =>
+      Boolean(session.isSettingsTab),
+    )
+    if (settingsSession) {
+      this.setValueInSession(settingsSession.id, 'hasChanged', true)
+    }
+    this.props.onChangeSettings(settings)
+  }
+
+  handleSaveSettings = () => {
+    const settingsSession = this.state.sessions.find(session =>
+      Boolean(session.isSettingsTab),
+    )
+    if (settingsSession) {
+      this.setValueInSession(settingsSession.id, 'hasChanged', false)
+    }
+    this.props.onSaveSettings()
+  }
+
+  handleChangeConfig = (config: string) => {
+    const configSession = this.state.sessions.find(session =>
+      Boolean(session.isConfigTab),
+    )
+    if (configSession) {
+      this.setValueInSession(configSession.id, 'hasChanged', true)
+    }
+    this.props.onChangeConfig(config)
+  }
+
+  handleSaveConfig = () => {
+    const configSession = this.state.sessions.find(session =>
+      Boolean(session.isConfigTab),
+    )
+    if (configSession) {
+      this.setValueInSession(configSession.id, 'hasChanged', false)
+    }
+    this.props.onSaveConfig()
+  }
+
+  handleFileChange = file => {
+    const session = this.state.sessions[this.state.selectedSessionIndex]
+    this.setValueInSession(session.id, 'file', file)
+    this.setValueInSession(session.id, 'hasChanged', true)
+  }
+
+  handleSaveFile = file => {
+    const session = this.state.sessions[this.state.selectedSessionIndex]
+    this.setValueInSession(session.id, 'hasChanged', false)
+  }
+
+  public openSettingsTab = () => {
+    const sessionIndex = this.state.sessions.findIndex(s =>
+      Boolean(s.isSettingsTab),
+    )
+    if (sessionIndex === -1) {
+      let session = this.createSession()
+      session = Immutable.set(session, 'isSettingsTab', true)
+      session = Immutable.set(session, 'isFile', true)
+      session = Immutable.set(session, 'name', 'Settings')
+      this.setState(state => {
+        return {
+          ...state,
+          sessions: state.sessions.concat(session),
+          selectedSessionIndex: state.sessions.length,
+          changed: false,
+        }
+      })
+    } else {
+      this.setState({ selectedSessionIndex: sessionIndex })
+    }
+  }
+
+  public openConfigTab = () => {
+    const sessionIndex = this.state.sessions.findIndex(s =>
+      Boolean(s.isConfigTab),
+    )
+    if (sessionIndex === -1) {
+      let session = this.createSession()
+      session = Immutable.set(session, 'isConfigTab', true)
+      session = Immutable.set(session, 'isFile', true)
+      session = Immutable.set(session, 'name', 'GraphQL Config')
+      this.setState(state => {
+        return {
+          ...state,
+          sessions: state.sessions.concat(session),
+          selectedSessionIndex: state.sessions.length,
+          changed: false,
+        }
+      })
+    } else {
+      this.setState({ selectedSessionIndex: sessionIndex })
+    }
+  }
+
   public newSession = (name?: string) => {
     let session = this.createSession()
     if (name) {
@@ -511,6 +537,27 @@ export class Playground extends React.PureComponent<Props & DocsState, State> {
         changed: true,
       }
     })
+  }
+
+  public newFileTab = (fileName: string, filePath: string, file: string) => {
+    const sessionIndex = this.state.sessions.findIndex(s => s.name === fileName)
+    if (sessionIndex === -1) {
+      let session = this.createSession()
+      session = Immutable.set(session, 'isFile', true)
+      session = Immutable.set(session, 'name', fileName)
+      session = Immutable.set(session, 'filePath', filePath)
+      session = Immutable.set(session, 'file', file)
+      this.setState(state => {
+        return {
+          ...state,
+          sessions: state.sessions.concat(session),
+          selectedSessionIndex: state.sessions.length,
+          changed: false,
+        }
+      })
+    } else {
+      this.setState({ selectedSessionIndex: sessionIndex })
+    }
   }
 
   public closeTab = () => {
@@ -598,13 +645,13 @@ export class Playground extends React.PureComponent<Props & DocsState, State> {
     }, 100)
   }
 
-  private toggleTheme = () => {
-    this.setState(state => {
-      const theme = state.theme === 'dark' ? 'light' : 'dark'
-      localStorage.setItem('theme', theme)
-      return { ...state, theme }
-    })
-  }
+  // private toggleTheme = () => {
+  //   this.setState(state => {
+  //     const theme = state.theme === 'dark' ? 'light' : 'dark'
+  //     localStorage.setItem('theme', theme)
+  //     return { ...state, theme }
+  //   })
+  // }
 
   private handleClickCodeGeneration = () => {
     this.setState({
@@ -716,7 +763,11 @@ export class Playground extends React.PureComponent<Props & DocsState, State> {
     })
   }
 
-  private initSessions = () => {
+  private handleChangeEndpoint = (sessionId: string, endpoint: string) => {
+    this.setValueInSession(sessionId, 'endpoint', endpoint)
+  }
+
+  private initSessions = (props = this.props) => {
     // defaulting to admin for deserialized sessions
     const sessions = this.storage.getSessions() // .map(session => Immutable.set(session, 'selectedViewer', 'ADMIN'))
 
@@ -741,7 +792,7 @@ export class Playground extends React.PureComponent<Props & DocsState, State> {
       return sessions
     }
 
-    return [this.createSession()]
+    return [this.createSession(undefined, props)]
   }
 
   private saveSessions = () => {
@@ -761,11 +812,14 @@ export class Playground extends React.PureComponent<Props & DocsState, State> {
     return this.handleNewSession(false)
   }
 
-  private createSession = (session?: Session) => {
+  private createSession = (session?: Session, props = this.props) => {
     let newSession
     const currentActiveSession =
       this.state && this.state.sessions[this.state.selectedSessionIndex]
-    const headers = currentActiveSession ? currentActiveSession.headers : []
+    const headers =
+      this.props.settings['editor.reuseHeaders'] && currentActiveSession
+        ? currentActiveSession.headers
+        : ''
     if (session) {
       newSession = Immutable.set(session, 'id', cuid())
     } else {
@@ -776,17 +830,8 @@ export class Playground extends React.PureComponent<Props & DocsState, State> {
           : defaultQuery
 
       newSession = Immutable({
-        id: cuid(),
-        selectedViewer: 'EVERYONE',
+        ...getDefaultSession(props.endpoint),
         query,
-        variables: '',
-        result: '',
-        operationName: undefined,
-        hasMutation: false,
-        hasSubscription: false,
-        hasQuery: false,
-        queryTypes: getQueryTypes(query),
-        starred: false,
         headers,
       })
     }
@@ -796,22 +841,10 @@ export class Playground extends React.PureComponent<Props & DocsState, State> {
   }
 
   private createSessionFromQuery = (query: string) => {
-    return Immutable({
-      id: cuid(),
-      selectedViewer: 'EVERYONE',
-      query,
-      variables: '',
-      result: '',
-      operationName: undefined,
-      hasMutation: false,
-      hasSubscription: false,
-      hasQuery: false,
-      queryTypes: getQueryTypes(query),
-      starred: false,
-    })
+    return Immutable(getDefaultSession(this.props.endpoint))
   }
 
-  private handleChangeHeaders = (sessionId: string, headers: any[]) => {
+  private handleChangeHeaders = (sessionId: string, headers: string) => {
     this.setValueInSession(sessionId, 'headers', headers)
   }
 
@@ -841,7 +874,7 @@ export class Playground extends React.PureComponent<Props & DocsState, State> {
     return endpoint.includes('api.graph.cool')
   }
 
-  private getSimpleEndpoint() {
+  private getEndpoint() {
     if (this.props.isEndpoint) {
       return location.pathname
     }
@@ -852,33 +885,11 @@ export class Playground extends React.PureComponent<Props & DocsState, State> {
     return this.props.endpoint.match(/(https?:\/\/.*?)\/?/)![1]
   }
 
-  get wsApiPrefix() {
-    const { endpoint } = this.props
-    const isDev = endpoint.indexOf('dev.graph.cool') > -1
-
-    // tslint:disable-next-line
-    if (isDev) {
-      return 'wss://dev.subscriptions.graph.cool/v1'
-    } else if (endpoint.includes('graph.cool')) {
-      return 'wss://subscriptions.graph.cool/v1'
-    }
-
-    return null
-  }
-
   private getWSEndpoint() {
     if (this.props.subscriptionsEndpoint) {
       return this.props.subscriptionsEndpoint
     }
-    if (this.wsApiPrefix) {
-      const projectId =
-        this.props.projectId ||
-        (this.props.endpoint.includes('graph.cool') &&
-          this.props.endpoint.split('/').slice(-1)[0])
-      return `${this.wsApiPrefix}/${projectId}`
-    } else {
-      return null
-    }
+    return null
   }
 
   private addToHistory(session: Session) {
@@ -952,27 +963,24 @@ export class Playground extends React.PureComponent<Props & DocsState, State> {
       }
     }
 
-    const endpoint = this.getSimpleEndpoint()
-
     let headers: any = {
       'Content-Type': 'application/json',
     }
 
     if (session.headers) {
-      session.headers.forEach(header => {
-        headers[header.name] = header.value
-      })
+      headers = { ...headers, ...this.parseHeaders(session.headers) }
     }
 
     if (requestHeaders) {
       headers = { ...headers, ...requestHeaders }
     }
 
-    return fetch(endpoint, {
-      // tslint:disable-line
+    return fetch(session.endpoint || this.getEndpoint(), {
+      // tslint:disable-lin
       method: 'post',
       headers,
-      credentials: 'include',
+      // TODO enable
+      // credentials: 'include',
       body: JSON.stringify(graphQLParams),
     }).then(response => {
       if (typeof this.props.onSuccess === 'function') {
@@ -988,6 +996,35 @@ export class Playground extends React.PureComponent<Props & DocsState, State> {
       this.storage.executedQuery()
       return response.json()
     })
+  }
+
+  private parseHeaders(headers: string) {
+    if (Array.isArray(headers)) {
+      return headers.reduce((acc, header) => {
+        return {
+          ...acc,
+          [header.name]: header.value,
+        }
+      }, {})
+    } else if (typeof headers === 'object') {
+      return headers
+    }
+    let jsonVariables
+
+    try {
+      jsonVariables =
+        headers && headers.trim() !== '' ? JSON.parse(headers) : undefined
+    } catch (error) {
+      /* tslint:disable-next-line */
+      console.error(`Headers are invalid JSON: ${error.message}.`)
+    }
+
+    if (typeof jsonVariables !== 'object') {
+      /* tslint:disable-next-line */
+      console.error('Headers are not a JSON object.')
+    }
+
+    return jsonVariables
   }
 
   private isSharingAuthorization = (): boolean => {
@@ -1016,14 +1053,14 @@ export class Playground extends React.PureComponent<Props & DocsState, State> {
     return isSharingAuthorization(sharableSessions)
   }
 
-  private toggleUseVim = () => {
-    this.setState(
-      state => ({ ...state, useVim: !state.useVim }),
-      () => {
-        localStorage.setItem('useVim', String(this.state.useVim))
-      },
-    )
-  }
+  // private toggleUseVim = () => {
+  //   this.setState(
+  //     state => ({ ...state, useVim: !state.useVim }),
+  //     () => {
+  //       localStorage.setItem('useVim', String(this.state.useVim))
+  //     },
+  //   )
+  // }
 
   private toggleShareAllTabs = () => {
     this.setState(state => ({ ...state, shareAllTabs: !state.shareAllTabs }))
@@ -1050,7 +1087,7 @@ export class Playground extends React.PureComponent<Props & DocsState, State> {
       sharingProject = {
         ...sharingProject,
         sessions: mapValues(sharingProject.sessions, (session: Session) => {
-          session.headers = []
+          session.headers = ''
           return session
         }),
       }
@@ -1084,27 +1121,8 @@ export default connect<any, any, Props>(state => state.graphiqlDocs, {
   setStacks,
 })(Playground)
 
-function isSharingAuthorization(sharableSessions: Session[]): boolean {
-  // If user's gonna share an Authorization header,
-  // let's warn her
-
-  // Check all sessions
-  for (const session of sharableSessions) {
-    // Check every header of each session
-    for (const header of session.headers || []) {
-      // If there's a Authorization header present,
-      // set the flag to `true` and stop the loop
-      if (header.name.toLowerCase() === 'authorization') {
-        // break
-        return true
-      }
-    }
-  }
-
-  return false
-}
-
 const PlaygroundWrapper = styled.div`
+  flex: 1;
   display: flex;
   flex-direction: column;
 
@@ -1139,4 +1157,9 @@ const GraphiqlWrapper = styled.div`
   width: 100%;
   height: 100%;
   position: relative;
+  overflow: hidden;
+  visibility: hidden;
+  &.active {
+    visibility: visible;
+  }
 `

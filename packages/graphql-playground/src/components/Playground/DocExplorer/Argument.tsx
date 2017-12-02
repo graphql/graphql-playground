@@ -7,7 +7,7 @@ export interface Props {
   x: number
   y: number
   showDefaultValue?: boolean
-  onSetWidth: (width: number) => void
+  sessionId: string
 }
 
 export default function Argument({
@@ -15,7 +15,7 @@ export default function Argument({
   showDefaultValue,
   x,
   y,
-  onSetWidth,
+  sessionId,
 }: Props) {
   return (
     <span className="arg">
@@ -28,17 +28,18 @@ export default function Argument({
         type={arg}
         x={x}
         y={y}
+        sessionId={sessionId}
         afterNode={
           arg.defaultValue !== undefined &&
-          showDefaultValue !== false &&
-          <span>
-            {' = '}
-            <span className="arg-default-value">
-              {print(astFromValue(arg.defaultValue, arg.type))}
+          showDefaultValue !== false && (
+            <span>
+              {' = '}
+              <span className="arg-default-value">
+                {print(astFromValue(arg.defaultValue, arg.type))}
+              </span>
             </span>
-          </span>
+          )
         }
-        onSetWidth={onSetWidth}
       />
     </span>
   )

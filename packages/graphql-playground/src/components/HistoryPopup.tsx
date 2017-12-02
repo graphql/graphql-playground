@@ -3,13 +3,14 @@ import * as Modal from 'react-modal'
 import HistoryHeader from './HistoryPopup/HistoryHeader'
 import { HistoryFilter, Session } from '../types'
 import HistoryItems from './HistoryPopup/HistoryItems'
-import GraphQLEditor from './Playground/GraphQLEditor'
+import * as theme from 'styled-theming'
 import { Icon } from 'graphcool-styles'
 import { modalStyle } from '../constants'
 import { withTheme, LocalThemeInterface } from './Theme'
 import * as cn from 'classnames'
-import styled from '../styled'
-import * as theme from 'styled-theming'
+import { SchemaFetcher } from './Playground/SchemaFetcher'
+import { QueryEditor } from './Playground/QueryEditor'
+import { styled } from '../styled'
 
 export interface Props {
   isOpen: boolean
@@ -17,9 +18,8 @@ export interface Props {
   historyItems: Session[]
   onItemStarToggled: (item: Session) => void
   fetcherCreater: (item: any, params: any) => Promise<any>
-  schema: any
   onCreateSession: (session: Session) => void
-  isGraphcool: boolean
+  schemaFetcher: SchemaFetcher
 }
 
 export interface State {
@@ -50,7 +50,6 @@ class HistoryPopup extends React.Component<Props & LocalThemeInterface, State> {
     })
 
     const selectedItem = items[this.state.selectedItemIndex]
-    const schema = this.props.schema
     let customModalStyle = modalStyle
     if (localTheme === 'light') {
       customModalStyle = {
@@ -109,17 +108,11 @@ class HistoryPopup extends React.Component<Props & LocalThemeInterface, State> {
                     'graphiql-wrapper': localTheme === 'light',
                   })}
                 >
-                  <GraphQLEditor
-                    schema={schema}
-                    variables={selectedItem.variables}
-                    query={selectedItem.query}
-                    fetcher={this.fetcher}
-                    disableQueryHeader={true}
-                    queryOnly={true}
-                    rerenderQuery={true}
-                    isActive={true}
-                    readonly={true}
-                  />
+                  <div className="graphiql-container">
+                    <div className="queryWrap">
+                      <QueryEditor value={selectedItem.query} />
+                    </div>
+                  </div>
                 </GraphiqlWrapper>
               </Big>
             </Right>
@@ -151,20 +144,6 @@ class HistoryPopup extends React.Component<Props & LocalThemeInterface, State> {
     this.props.onRequestClose()
   }
 
-  private fetcher = params => {
-    const { searchTerm, selectedFilter } = this.state
-    const items = this.props.historyItems.filter(item => {
-      return selectedFilter === 'STARRED'
-        ? item.starred
-        : true &&
-            (searchTerm && searchTerm.length > 0
-              ? item.query.toLowerCase().includes(searchTerm.toLowerCase())
-              : true)
-    })
-    const selectedItem = items[this.state.selectedItemIndex]
-    return this.props.fetcherCreater(selectedItem, params)
-  }
-
   private handleItemSelect = (index: number) => {
     this.setState({ selectedItemIndex: index } as State)
   }
@@ -179,49 +158,6 @@ class HistoryPopup extends React.Component<Props & LocalThemeInterface, State> {
 }
 
 export default withTheme<Props>(HistoryPopup)
-
-/*
-.left {
-  @p: .flex1, .bgWhite;
-}
-.right {
-  @p: .z2;
-  flex: 0 0 464px;
-}
-.right-header {
-  @p: .justifyBetween, .flex, .bgDarkBlue, .itemsCenter, .ph25;
-  padding-top: 20px;
-  padding-bottom: 20px;
-}
-.right-header.light {
-  background-color: #f6f7f7;
-}
-.right-empty {
-  @p: .bgDarkBlue, .h100, .flex, .justifyCenter, .itemsCenter;
-}
-.right-empty.light {
-  background-color: #f6f7f7;
-}
-.right-empty-text {
-  @p: .f16, .white60;
-}
-.view {
-  @p: .f14, .white40, .ttu, .fw6;
-}
-.use {
-  @p: .f14, .fw6, .pv10, .ph16, .bgGreen, .flex, .br2, .itemsCenter,
-    .pointer;
-}
-.use-text {
-  @p: .mr6, .white;
-}
-.graphiql-wrapper {
-  @p: .w100, .h100, .relative, .flex, .flexAuto;
-}
-.big {
-  @p: .h100, .flex, .flexAuto;
-}
-*/
 
 const Wrapper = styled.div`
   display: flex;

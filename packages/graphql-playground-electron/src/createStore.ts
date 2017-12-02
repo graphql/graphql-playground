@@ -19,13 +19,9 @@ if (typeof window !== 'undefined') {
 
 const composeEnhancers = compose
 
-const storage = composeEnhancers(
-  filter([
-    'graphiqlDocs.docsOpen',
-    'graphiqlDocs.docsWidth',
-    'history.history',
-  ]),
-)(adapter(localStorage))
+const storage = composeEnhancers(filter(['history.history']))(
+  adapter(localStorage),
+)
 
 const reducer = composeEnhancers(
   mergePersistedState((initialState, persistedState) => {
@@ -33,7 +29,9 @@ const reducer = composeEnhancers(
   }),
 )(combinedReducers)
 
-const enhancer = composeEnhancers(persistState(storage, 'graphiql'))
+const enhancer = composeEnhancers(
+  persistState(storage, 'graphql-playground-electron'),
+)
 
 const functions = [enhancer]
 //

@@ -1,8 +1,10 @@
 export interface Session {
   id: string
   name?: string
+  filePath?: string
 
   query: string
+  file?: string
   variables: string
   result?: string
   // result: string
@@ -19,9 +21,12 @@ export interface Session {
   hasQuery: boolean
   selectedUserToken?: string
   subscriptionId?: string
-  headers?: any[]
+  headers?: string
   hasChanged?: boolean
   absolutePath?: string
+  endpoint: string
+  isSettingsTab?: boolean
+  isConfigTab?: boolean
 }
 
 export interface QueryTypes {
@@ -48,3 +53,10 @@ export type GraphQLClient =
   | 'apollo'
   | 'graphql-request'
   | 'curl'
+
+export type Theme = 'dark' | 'light'
+export interface Response {
+  resultID: string
+  date: string
+  time: Date
+}

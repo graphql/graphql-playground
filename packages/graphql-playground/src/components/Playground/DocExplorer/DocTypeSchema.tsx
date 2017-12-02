@@ -6,7 +6,7 @@ export interface DocTypeSchemaProps {
   fields: any[]
   interfaces: any[]
   level: number
-  onSetWidth: (width: number) => void
+  sessionId: string
 }
 
 const DocTypeSchema = ({
@@ -14,7 +14,7 @@ const DocTypeSchema = ({
   fields,
   interfaces,
   level,
-  onSetWidth,
+  sessionId,
 }: DocTypeSchemaProps) => {
   const nonDeprecatedFields = fields.filter(data => !data.isDeprecated)
   const deprecatedFields = fields.filter(data => data.isDeprecated)
@@ -58,9 +58,8 @@ const DocTypeSchema = ({
         <span className="type-name">{type.name}</span>{' '}
         {interfaces.length === 0 && <span className="brace">{`{`}</span>}
       </div>
-      {interfaces.map((data, index) =>
+      {interfaces.map((data, index) => (
         <TypeLink
-          onSetWidth={onSetWidth}
           key={data.name}
           type={data}
           x={level}
@@ -69,26 +68,25 @@ const DocTypeSchema = ({
           className="doc-type-interface"
           beforeNode={<span className="field-name">implements</span>}
           afterNode={
-            index === interfaces.length - 1
-              ? <span className="brace">
-                  {'{'}
-                </span>
-              : null
+            index === interfaces.length - 1 ? (
+              <span className="brace">{'{'}</span>
+            ) : null
           }
-        />,
-      )}
-      {nonDeprecatedFields.map((data, index) =>
+          sessionId={sessionId}
+        />
+      ))}
+      {nonDeprecatedFields.map((data, index) => (
         <TypeLink
           key={data.name}
           type={data}
           x={level}
           y={index + interfaces.length}
-          onSetWidth={onSetWidth}
           collapsable={true}
-        />,
-      )}
+          sessionId={sessionId}
+        />
+      ))}
       {deprecatedFields.length > 0 && <br />}
-      {deprecatedFields.map((data, index) =>
+      {deprecatedFields.map((data, index) => (
         <div key={data.name}>
           <span className="doc-value-comment">
             # Deprecated: {data.deprecationReason}
@@ -97,15 +95,13 @@ const DocTypeSchema = ({
             type={data}
             x={level}
             y={index + nonDeprecatedFields.length + interfaces.length}
-            onSetWidth={onSetWidth}
             collapsable={true}
+            sessionId={sessionId}
           />
-        </div>,
-      )}
+        </div>
+      ))}
       <div className="doc-type-schema-line type-line">
-        <span className="brace">
-          {'}'}
-        </span>
+        <span className="brace">{'}'}</span>
       </div>
     </div>
   )

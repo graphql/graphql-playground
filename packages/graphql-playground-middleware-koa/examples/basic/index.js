@@ -2,8 +2,8 @@ const koa = require('koa')
 const koaRouter = require('koa-router')
 const koaBody = require('koa-bodyparser')
 const { graphqlKoa } = require('apollo-server-koa')
-const {makeExecutableSchema} = require('graphql-tools')
-const koaPlayground = require('graphql-playground-middleware-koa')
+const { makeExecutableSchema } = require('graphql-tools')
+const koaPlayground = require('graphql-playground-middleware-koa').default
 
 const schema = makeExecutableSchema({
   typeDefs: `
@@ -21,21 +21,26 @@ const schema = makeExecutableSchema({
   },
 })
 
-const app = new koa();
-const router = new koaRouter();
-const PORT = 4000;
+const app = new koa()
+const router = new koaRouter()
+const PORT = 4000
 
 // koaBody is needed just for POST.
-app.use(koaBody());
+app.use(koaBody())
 
-router.post('/graphql', graphqlKoa({ schema }));
+router.post('/graphql', graphqlKoa({ schema }))
 
-router.all('/playground', koaPlayground({
-  endpoint: '/graphql'
-}))
+router.all(
+  '/playground',
+  koaPlayground({
+    endpoint: '/graphql',
+  }),
+)
 
-app.use(router.routes());
-app.use(router.allowedMethods());
-app.listen(PORT);
+app.use(router.routes())
+app.use(router.allowedMethods())
+app.listen(PORT)
 
-console.log(`Serving the GraphQL Playground on http://localhost:${PORT}/playground`)
+console.log(
+  `Serving the GraphQL Playground on http://localhost:${PORT}/playground`,
+)
