@@ -29,6 +29,7 @@ function getParameterByName(name: string): string | null {
 
 export interface Props {
   endpoint?: string
+  endpointUrl?: string
   subscriptionEndpoint?: string
   setTitle?: boolean
   settings?: EditorSettings
@@ -91,7 +92,10 @@ class MiddlewareApp extends React.Component<Props, State> {
     const { activeEnv, projectName } = this.getInitialActiveEnv(config)
 
     let endpoint =
-      props.endpoint || getParameterByName('endpoint') || location.href
+      props.endpoint ||
+      props.endpointUrl ||
+      getParameterByName('endpoint') ||
+      location.href
 
     let subscriptionEndpoint: string | undefined | null =
       props.subscriptionEndpoint || getParameterByName('subscriptionEndpoint')
@@ -100,6 +104,8 @@ class MiddlewareApp extends React.Component<Props, State> {
       const endpoints = getActiveEndpoints(config, activeEnv, projectName)
       endpoint = endpoints.endpoint
       subscriptionEndpoint = endpoints.subscriptionEndpoint
+    } else {
+      subscriptionEndpoint = this.getGraphcoolSubscriptionEndpoint(endpoint)
     }
 
     this.state = {
@@ -119,6 +125,16 @@ class MiddlewareApp extends React.Component<Props, State> {
       activeEnv,
       activeProjectName: projectName,
     }
+  }
+
+  getGraphcoolSubscriptionEndpoint(endpoint) {
+    if (endpoint.includes('api.graph.cool')) {
+      return `wss://subscriptions.graph.cool/v1/${
+        endpoint.split('/').slice(-1)[0]
+      }`
+    }
+
+    return endpoint
   }
 
   migrateSettingsString(settingsString) {

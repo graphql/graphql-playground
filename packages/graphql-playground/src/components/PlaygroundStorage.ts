@@ -24,7 +24,7 @@ export default class PlaygroundStorage {
   }
 
   // migrate headers to new format
-  private static runMigration(project, migrationEndpoint?: string) {
+  private static runMigration(project, migrationEndpoint: string) {
     if (!project) {
       return project
     }
@@ -204,7 +204,7 @@ export default class PlaygroundStorage {
         date: new Date(item.date),
       }))
     }
-    return PlaygroundStorage.runMigration(result)
+    return PlaygroundStorage.runMigration(result, this.endpoint)
   }
 
   private getExecutedQueryCount() {
