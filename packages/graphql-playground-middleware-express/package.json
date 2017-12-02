@@ -1,6 +1,6 @@
 {
   "name": "graphql-playground-middleware-express",
-  "version": "1.3.1",
+  "version": "1.3.3",
   "homepage": "https://github.com/graphcool/graphql-playground/tree/master/packages/graphql-playground-middleware-express",
   "description": "GraphQL IDE for better development workflows (GraphQL Subscriptions, interactive docs & collaboration).",
   "contributors": [
