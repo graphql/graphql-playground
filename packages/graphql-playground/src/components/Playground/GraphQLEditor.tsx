@@ -81,6 +81,7 @@ export interface Props {
   hideGutters?: boolean
   readonly?: boolean
   useVim?: boolean
+  endpoint: string
 
   // sharing
   sharing?: SharingProps
@@ -472,7 +473,7 @@ export class GraphQLEditor extends React.PureComponent<
         `}</style>
         <div className="editorWrap">
           <TopBar
-            endpoint={this.props.session.endpoint}
+            endpoint={this.props.session.endpoint || this.props.endpoint}
             endpointDisabled={false}
             onChangeEndpoint={this.props.onChangeEndpoint}
             onClickHistory={this.props.onClickHistory}
@@ -705,7 +706,7 @@ export class GraphQLEditor extends React.PureComponent<
 
   private reloadSchema = async () => {
     const result = await this.props.schemaFetcher.refetch(
-      this.props.session.endpoint,
+      this.props.session.endpoint || this.props.endpoint,
       this.convertHeaders(this.props.session.headers),
     )
     if (result) {
@@ -746,7 +747,7 @@ export class GraphQLEditor extends React.PureComponent<
 
     this.props.schemaFetcher
       .fetch(
-        this.props.session.endpoint,
+        this.props.session.endpoint || this.props.endpoint,
         this.convertHeaders(this.props.session.headers),
       )
       .then(result => {

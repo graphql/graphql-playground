@@ -196,6 +196,8 @@ export default class PlaygroundStorage {
     try {
       result = JSON.parse(localStorage.getItem(this.endpoint) || '')
     } catch (e) {
+      /* tslint:disable-next-line */
+      console.info(e)
       //
     }
     if (result && result.history) {

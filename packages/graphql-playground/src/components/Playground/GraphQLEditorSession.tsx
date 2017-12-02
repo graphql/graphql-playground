@@ -29,6 +29,7 @@ export interface Props {
   isActive: boolean
   sharing?: SharingProps
   fixedEndpoint?: boolean
+  endpoint: string
 }
 
 export default class GraphQLEditorSession extends React.PureComponent<
@@ -50,9 +51,11 @@ export default class GraphQLEditorSession extends React.PureComponent<
       schemaFetcher,
       sharing,
       fixedEndpoint,
+      endpoint,
     } = this.props
     return (
       <GraphQLEditor
+        endpoint={endpoint}
         isActive={isActive}
         key={session.id}
         isGraphcoolUrl={isGraphcoolUrl}
