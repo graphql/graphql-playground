@@ -186,6 +186,12 @@ const template: any = [
       // },
       { type: 'separator' },
       {
+        label: 'Settings',
+        accelerator: 'Command+,',
+        click: () => send('Tab', 'Settings'),
+      },
+      { type: 'separator' },
+      {
         label: 'Quit',
         accelerator: 'Command+Q',
         click: () => app.quit(),

@@ -122,6 +122,12 @@ cd ${folderPath}; graphql playground`)
     createNewWindow()
   }
 
+  openSettingsTab = () => {
+    if (this.playground) {
+      this.playground.openSettingsTab()
+    }
+  }
+
   nextTab = () => {
     if (this.playground) {
       this.playground.nextTab()
@@ -186,8 +192,7 @@ cd ${folderPath}; graphql playground`)
   handleKeyDown = e => {
     if (e.key === '{' && e.metaKey) {
       this.prevTab()
-    }
-    if (e.key === '}' && e.metaKey) {
+    } else if (e.key === '}' && e.metaKey) {
       this.nextTab()
     }
   }
@@ -392,6 +397,9 @@ cd ${folderPath}; graphql playground`)
         break
       case 'Close':
         this.closeTab()
+        break
+      case 'Settings':
+        this.openSettingsTab()
         break
     }
   }
