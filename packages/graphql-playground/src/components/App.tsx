@@ -6,6 +6,7 @@ import Playground from './MiddlewareApp'
 import 'isomorphic-fetch'
 import EndpointPopup from './EndpointPopup'
 import Loading from './Loading'
+import { ThemeProvider, theme as styledTheme } from '../styled'
 // import {BrowserRouter} from 'react-router-dom'
 
 const store = createStore()
@@ -96,35 +97,37 @@ class App extends React.Component<Props, State> {
 
     return (
       <Provider store={store}>
-        <div className={'wrapper'}>
-          <style jsx={true}>{`
-            .wrapper {
-              @p: .w100, .h100, .bgDarkBlue;
-            }
-            .loading {
-              @p: .f20, .white, .flex, .w100, .h100, .bgDarkBlue, .itemsCenter,
-                .justifyCenter;
-            }
-          `}</style>
-          {this.state.loading ? (
-            <Loading />
-          ) : !this.state.endpoint || this.state.endpoint.length === 0 ? (
-            <EndpointPopup
-              onRequestClose={this.handleChangeEndpoint}
-              endpoint={
-                this.state.endpoint ||
-                localStorage.getItem('last-endpoint') ||
-                ''
+        <ThemeProvider theme={styledTheme}>
+          <div className={'wrapper'}>
+            <style jsx={true}>{`
+              .wrapper {
+                @p: .w100, .h100, .bgDarkBlue;
               }
-            />
-          ) : (
-            <Playground
-              endpoint={endpoint}
-              subscriptionEndpoint={subscriptionEndpoint}
-              session={this.state.session}
-            />
-          )}
-        </div>
+              .loading {
+                @p: .f20, .white, .flex, .w100, .h100, .bgDarkBlue, .itemsCenter,
+                  .justifyCenter;
+              }
+            `}</style>
+            {this.state.loading ? (
+              <Loading />
+            ) : !this.state.endpoint || this.state.endpoint.length === 0 ? (
+              <EndpointPopup
+                onRequestClose={this.handleChangeEndpoint}
+                endpoint={
+                  this.state.endpoint ||
+                  localStorage.getItem('last-endpoint') ||
+                  ''
+                }
+              />
+            ) : (
+              <Playground
+                endpoint={endpoint}
+                subscriptionEndpoint={subscriptionEndpoint}
+                session={this.state.session}
+              />
+            )}
+          </div>
+        </ThemeProvider>
       </Provider>
     )
   }
