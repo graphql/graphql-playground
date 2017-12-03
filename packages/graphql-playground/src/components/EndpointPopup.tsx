@@ -123,6 +123,7 @@ interface InputProps {
   invalid: boolean
 }
 
+// prettier-ignore
 const Input = styled.input`
   background: ${p => p.theme.colours.white10};
   border-radius: ${p => p.theme.sizes.smallRadius};
@@ -139,15 +140,14 @@ const Input = styled.input`
   transition: 250ms color;
 
   ${(p: InputProps) =>
-    p.valid
-      ? css`
-          color: ${k => k.theme.colours.green};
-        `
-      : p.invalid
-        ? css`
-            color: ${k => k.theme.colours.red};
-          `
-        : ``};
+    p.valid ? css`
+      color: ${k => k.theme.colours.green};
+    `
+    : p.invalid ? css`
+      color: ${k => k.theme.colours.red};
+    `
+    : ``
+  }
 `
 
 const Heading = styled.h1`
