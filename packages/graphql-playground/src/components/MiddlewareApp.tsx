@@ -65,11 +65,13 @@ export type Theme = 'dark' | 'light'
 export interface EditorSettings {
   ['editor.theme']: Theme
   ['editor.reuseHeaders']: boolean
+  ['tracing.hideTracingResponse']: boolean
 }
 
 const defaultSettings = `{
   "editor.theme": "dark",
-  "editor.reuseHeaders": true
+  "editor.reuseHeaders": true,
+  "tracing.hideTracingResponse": true
 }`
 
 class MiddlewareApp extends React.Component<Props, State> {

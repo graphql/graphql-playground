@@ -13,6 +13,8 @@ export interface Props {
   readOnly?: boolean
 }
 
+// TODO: Trigger onSave on CMD+S or CTRL+S
+
 export default class SettingsEditor extends React.Component<Props, {}> {
   render() {
     const { isConfig } = this.props

@@ -372,6 +372,7 @@ export class Playground extends React.PureComponent<Props & DocsState, State> {
                     reshare: this.state.changed,
                     isSharingAuthorization: this.isSharingAuthorization(),
                   }}
+                  settings={this.props.settings}
                 />
               )}
             </GraphiqlWrapper>
