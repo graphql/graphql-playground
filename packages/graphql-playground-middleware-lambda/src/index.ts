@@ -3,7 +3,7 @@ import {
   MiddlewareOptions,
   RenderPageOptions,
   renderPlaygroundPage,
-} from 'graphql-playground-middleware'
+} from 'graphql-playground-html'
 
 /* tslint:disable-next-line */
 const { version } = require('../package.json')

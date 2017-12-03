@@ -1,4 +1,4 @@
-export default () => ({
+const getLoadingMarkup = () => ({
   script: `
     const loadingWrapper = document.getElementById('loading-wrapper');
     loadingWrapper.classList.add('fadeOut');
@@ -465,3 +465,5 @@ export default () => ({
 </div>
 `,
 })
+
+export default getLoadingMarkup
