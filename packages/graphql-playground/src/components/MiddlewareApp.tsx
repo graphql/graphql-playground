@@ -165,6 +165,7 @@ class MiddlewareApp extends React.Component<Props, State> {
     ) {
       const { config, configIsYaml } = this.parseGraphQLConfig(
         nextProps.configString,
+        nextProps.env,
       )
       this.setState({ config, configIsYaml })
     }
@@ -196,6 +197,7 @@ class MiddlewareApp extends React.Component<Props, State> {
 
   parseGraphQLConfig(
     configString: string,
+    env = this.props.env,
   ): { config: GraphQLConfig; configIsYaml: boolean } {
     let config
     let isYaml = false
@@ -214,8 +216,8 @@ class MiddlewareApp extends React.Component<Props, State> {
       }
     }
 
-    if (this.props.env) {
-      config = resolveEnvsInValues(config, this.props.env)
+    if (env) {
+      config = resolveEnvsInValues(config, env)
     }
 
     return {
