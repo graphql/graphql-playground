@@ -31,6 +31,9 @@
     "@types/node": "^8.0.47",
     "typescript": "^2.6.1"
   },
+  "dependencies": {
+    "graphql-playground-html": "^1.2.0"
+  },
   "typings": "dist/index.d.ts",
   "typescript": {
     "definition": "dist/index.d.ts"
