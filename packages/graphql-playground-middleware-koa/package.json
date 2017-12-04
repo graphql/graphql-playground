@@ -1,6 +1,6 @@
 {
   "name": "graphql-playground-middleware-koa",
-  "version": "1.3.3",
+  "version": "1.3.5",
   "homepage": "https://github.com/graphcool/graphql-playground/tree/master/packages/graphql-playground-middleware-koa",
   "description": "GraphQL IDE for better development workflows (GraphQL Subscriptions, interactive docs & collaboration).",
   "contributors": [
@@ -37,6 +37,7 @@
     "definition": "dist/index.d.ts"
   },
   "dependencies": {
+    "graphql-playground-html": "^1.3.5",
     "graphql-playground-middleware": "^1.2.1-beta.6",
     "koa": "^2.4.1"
   }

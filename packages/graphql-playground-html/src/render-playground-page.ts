@@ -1,6 +1,10 @@
 import * as path from 'path'
 import * as fs from 'fs'
-import * as findUp from 'find-up'
+import {
+  getUsedEnvs,
+  getGraphQLConfig,
+  findGraphQLConfigFile,
+} from 'graphql-config'
 
 import getLoadingMarkup from './get-loading-markup'
 
@@ -16,13 +20,11 @@ export interface RenderPageOptions extends MiddlewareOptions {
   env?: any
 }
 
-const configPath = findUp.sync(['.graphqlconfig', '.graphqlconfig.yml'])
-const configString = configPath
-  ? fs.readFileSync(configPath, 'utf-8')
-  : undefined
-const folderName = configPath
-  ? path.basename(path.dirname(configPath))
-  : undefined
+const config = getGraphQLConfig().config
+const configPath = findGraphQLConfigFile(process.cwd())
+const configString = fs.readFileSync(configPath, 'utf-8')
+const folderName = path.basename(process.cwd())
+const env = getUsedEnvs(config)
 
 const loading = getLoadingMarkup()
 
@@ -32,7 +34,7 @@ export function renderPlaygroundPage(options: RenderPageOptions) {
     configString,
     folderName,
     canSaveConfig: false,
-    env: process.env,
+    env,
   }
   return `
   <!DOCTYPE html>
