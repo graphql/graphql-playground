@@ -76,6 +76,7 @@ class MiddlewareApp extends React.Component<Props, State> {
   playground: IPlayground
   constructor(props: Props) {
     super(props)
+    ;(global as any).m = this
 
     let settings = localStorage.getItem('settings') || defaultSettings
     settings = this.migrateSettingsString(settings)
@@ -83,10 +84,17 @@ class MiddlewareApp extends React.Component<Props, State> {
     let config
     let configIsYaml
 
-    if (props.configString) {
-      const result = this.parseGraphQLConfig(props.configString)
-      config = result.config
-      configIsYaml = result.configIsYaml
+    try {
+      if (props.configString) {
+        const result = this.parseGraphQLConfig(props.configString, props.env)
+        config = result.config
+        configIsYaml = result.configIsYaml
+      }
+    } catch (e) {
+      /* tslint:disable-next-line */
+      console.error(props)
+      /* tslint:disable-next-line */
+      console.error(e)
     }
 
     const { activeEnv, projectName } = this.getInitialActiveEnv(config)
