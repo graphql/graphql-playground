@@ -140,16 +140,21 @@ class MiddlewareApp extends React.Component<Props, State> {
   }
 
   migrateSettingsString(settingsString) {
+    const defaultSettingsObject = JSON.parse(defaultSettings)
     const replacementMap = {
       theme: 'editor.theme',
       reuseHeaders: 'editor.reuseHeaders',
     }
+
     try {
       const settings = JSON.parse(settingsString)
       return JSON.stringify(
-        mapKeys(settings, (value, key) => {
-          return replacementMap[key] || key
-        }),
+        {
+          ...defaultSettingsObject,
+          ...mapKeys(settings, (value, key) => {
+            return replacementMap[key] || key
+          }),
+        },
         null,
         2,
       )
