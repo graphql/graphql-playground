@@ -143,9 +143,9 @@ graphql-config@^1.0.9:
     minimatch "^3.0.4"
     rimraf "^2.6.2"
 
-graphql-playground-html@^1.3.5:
-  version "1.3.5"
-  resolved "https://registry.yarnpkg.com/graphql-playground-html/-/graphql-playground-html-1.3.5.tgz#962ea7b39682e2285712feb481ff06ea560cf900"
+graphql-playground-html@^1.3.6:
+  version "1.3.6"
+  resolved "https://registry.yarnpkg.com/graphql-playground-html/-/graphql-playground-html-1.3.6.tgz#3db97d5d7e7123cf62a86820b0be5d4b4092af4a"
   dependencies:
     graphql-config "^1.0.9"
 

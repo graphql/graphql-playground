@@ -20,21 +20,35 @@ export interface RenderPageOptions extends MiddlewareOptions {
   env?: any
 }
 
-const config = getGraphQLConfig().config
-const configPath = findGraphQLConfigFile(process.cwd())
-const configString = fs.readFileSync(configPath, 'utf-8')
-const folderName = path.basename(process.cwd())
-const env = getUsedEnvs(config)
-
 const loading = getLoadingMarkup()
 
 export function renderPlaygroundPage(options: RenderPageOptions) {
+  let config
+  let configPath
+  let configString
+  let folderName
+  let env
+  try {
+    config = getGraphQLConfig().config
+    configPath = findGraphQLConfigFile(process.cwd())
+    configString = fs.readFileSync(configPath, 'utf-8')
+    folderName = path.basename(process.cwd())
+    env = getUsedEnvs(config)
+  } catch (e) {
+    //
+  }
   const extendedOptions = {
     ...options,
     configString,
     folderName,
     canSaveConfig: false,
     env,
+  }
+  if (!extendedOptions.endpoint && !extendedOptions.configString) {
+    /* tslint:disable-next-line */
+    console.warn(
+      `WARNING: You didn't provide an endpoint and don't have a .graphqlconfig. Make sure you have at least one of them.`,
+    )
   }
   return `
   <!DOCTYPE html>
