@@ -92,6 +92,7 @@ ReactDOM.render(<Playground endpoint="https://api.graph.cool/simple/v1/swapi" />
 ```sh
 # Pick the one that matches your server framework
 yarn add graphql-playground-middleware-express  # for Express or Connect
+yarn add graphql-playground-middleware-restify
 yarn add graphql-playground-middleware-hapi
 yarn add graphql-playground-middleware-koa
 yarn add graphql-playground-middleware-lambda
@@ -102,6 +103,8 @@ yarn add graphql-playground-middleware-lambda
 We have a full example for each of the frameworks below:
 
 - **Express:** See [packages/graphql-playground-middleware-express/examples/basic](https://github.com/graphcool/graphql-playground/tree/master/packages/graphql-playground-middleware-express/examples/basic)
+
+- **Restify:** See [packages/graphql-playground-middleware-restify/examples/basic](https://github.com/graphcool/graphql-playground/tree/master/packages/graphql-playground-middleware-restify/examples/basic)
 
 - **Hapi:** See [packages/graphql-playground-middleware/examples/hapi](https://github.com/graphcool/graphql-playground/tree/master/packages/graphql-playground-middleware/examples/hapi)
 
