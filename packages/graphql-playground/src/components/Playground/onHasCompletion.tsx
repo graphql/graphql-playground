@@ -6,7 +6,7 @@
  *  LICENSE file in the root directory of this source tree.
  */
 
-import { GraphQLNonNull, GraphQLList } from 'graphql'
+// import { GraphQLNonNull, GraphQLList } from 'graphql'
 import * as marked from 'marked'
 
 /**
@@ -93,7 +93,7 @@ export default function onHasCompletion(cm, data, onHintInformationRender) {
     // Now that the UI has been set up, add info to information.
     const description = ctx.description
       ? marked(ctx.description, { sanitize: true })
-      : 'Self descriptive.'
+      : ''
     const type = ctx.type
       ? '<span class="infoType">' + renderType(ctx.type) + '</span>'
       : ''
@@ -124,11 +124,11 @@ export default function onHasCompletion(cm, data, onHintInformationRender) {
 }
 
 function renderType(type) {
-  if (type instanceof GraphQLNonNull) {
-    return `${renderType(type.ofType)}!`
-  }
-  if (type instanceof GraphQLList) {
-    return `[${renderType(type.ofType)}]`
-  }
-  return `<a class="typeName">${type.name}</a>`
+  // if (type instanceof GraphQLNonNull) {
+  //   return `${renderType(type.ofType)}!`
+  // }
+  // if (type instanceof GraphQLList) {
+  //   return `[${renderType(type.ofType)}]`
+  // }
+  return `<a class="typeName">${type}</a>`
 }

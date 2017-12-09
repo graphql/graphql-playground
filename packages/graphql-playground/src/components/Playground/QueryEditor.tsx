@@ -147,6 +147,11 @@ export class QueryEditor extends React.Component<Props, {}> {
     if (this.props.schema !== prevProps.schema) {
       this.editor.options.lint.schema = this.props.schema
       this.editor.options.hintOptions.schema = this.props.schema
+      if (this.props.schema) {
+        this.editor.options.hintOptions.schema.getType = type => {
+          return type
+        }
+      }
       CodeMirror.signal(this.editor, 'change', this.editor)
     }
     if (
