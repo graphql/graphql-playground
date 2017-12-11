@@ -9,6 +9,7 @@ import {
   getGraphQLConfig,
   findGraphQLConfigFile,
   GraphQLConfigData,
+  resolveEnvsInValues,
 } from 'graphql-config'
 import { createNewWindow } from './utils'
 import createStore from './createStore'
@@ -116,7 +117,10 @@ cd ${folderPath}; graphql playground`)
       }
 
       const config = await patchEndpointsToConfig(
-        getGraphQLConfig(path.dirname(configPath)).config,
+        resolveEnvsInValues(
+          getGraphQLConfig(path.dirname(configPath)).config,
+          process.env,
+        ),
         path.dirname(configPath),
       )
 
@@ -235,7 +239,7 @@ cd ${folderPath}; graphql playground`)
         ? path.basename(path.dirname(configPath))
         : undefined
       config = await patchEndpointsToConfig(
-        getGraphQLConfig(input.cwd).config,
+        resolveEnvsInValues(getGraphQLConfig(input.cwd).config, input.env),
         input.cwd,
       )
     }

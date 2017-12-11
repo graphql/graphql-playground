@@ -4,7 +4,9 @@ import {
   getUsedEnvs,
   getGraphQLConfig,
   findGraphQLConfigFile,
+  resolveEnvsInValues,
 } from 'graphql-config'
+import { patchEndpointsToConfig } from 'graphql-config-extension-graphcool'
 
 import getLoadingMarkup from './get-loading-markup'
 
@@ -22,23 +24,32 @@ export interface RenderPageOptions extends MiddlewareOptions {
 
 const loading = getLoadingMarkup()
 
-export function renderPlaygroundPage(options: RenderPageOptions) {
-  let config
-  let configPath
-  let configString
-  let folderName
-  let env
+let config
+let configPath
+let configString
+let folderName
+let env
+async function init() {
   try {
     config = getGraphQLConfig().config
+    config = resolveEnvsInValues(config, process.env)
+    config = await patchEndpointsToConfig(config, process.cwd())
     configPath = findGraphQLConfigFile(process.cwd())
     configString = fs.readFileSync(configPath, 'utf-8')
     folderName = path.basename(process.cwd())
     env = getUsedEnvs(config)
   } catch (e) {
-    //
+    /* tslint:disable-next-line */
+    console.error(e)
   }
+}
+
+init()
+
+export function renderPlaygroundPage(options: RenderPageOptions) {
   const extendedOptions = {
     ...options,
+    config,
     configString,
     folderName,
     canSaveConfig: false,
