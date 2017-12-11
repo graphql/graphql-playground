@@ -65,6 +65,7 @@ export interface Props {
   configIsYaml: boolean
   canSaveConfig: boolean
   fixedEndpoints: boolean
+  headers?: any
 }
 
 export interface State {
@@ -817,10 +818,15 @@ export class Playground extends React.PureComponent<Props & DocsState, State> {
     let newSession
     const currentActiveSession =
       this.state && this.state.sessions[this.state.selectedSessionIndex]
-    const headers =
-      this.props.settings['editor.reuseHeaders'] && currentActiveSession
-        ? currentActiveSession.headers
-        : ''
+    let headers
+    if (props.headers && typeof props.headers === 'object') {
+      headers = JSON.stringify(props.headers, null, 2)
+    } else {
+      headers =
+        this.props.settings['editor.reuseHeaders'] && currentActiveSession
+          ? currentActiveSession.headers
+          : ''
+    }
     if (session) {
       newSession = Immutable.set(session, 'id', cuid())
     } else {

@@ -5,7 +5,11 @@ import { Icon, $v } from 'graphcool-styles'
 import * as cx from 'classnames'
 import { Playground as IPlayground } from 'graphql-playground/lib/components/Playground'
 import Playground from 'graphql-playground'
-import { getGraphQLConfig, findGraphQLConfigFile } from 'graphql-config'
+import {
+  getGraphQLConfig,
+  findGraphQLConfigFile,
+  GraphQLConfigData,
+} from 'graphql-config'
 import { createNewWindow } from './utils'
 import createStore from './createStore'
 import InitialView from './InitialView/InitialView'
@@ -16,6 +20,7 @@ import * as os from 'os'
 import * as yaml from 'js-yaml'
 import * as findUp from 'find-up'
 import * as queryString from 'query-string'
+import { patchEndpointsToConfig } from 'graphql-config-extension-graphcool'
 // import { PermissionSession } from 'graphql-playground/lib/types'
 
 const { dialog } = remote
@@ -33,8 +38,10 @@ interface State {
   platformToken?: string
   configString?: string
   configPath?: string
+
   folderName?: string
   env?: any
+  config?: GraphQLConfigData
 }
 
 const events: any[] = []
@@ -93,7 +100,7 @@ export default class ElectronApp extends React.Component<{}, State> {
     this.setState({ endpoint } as State)
   }
 
-  handleSelectFolder = (folderPath: string) => {
+  handleSelectFolder = async (folderPath: string) => {
     try {
       // Get config from folderPath
       const configPath = findGraphQLConfigFile(folderPath)
@@ -108,9 +115,15 @@ Then open the graphql config with:
 cd ${folderPath}; graphql playground`)
       }
 
+      const config = await patchEndpointsToConfig(
+        getGraphQLConfig(path.dirname(configPath)).config,
+        path.dirname(configPath),
+      )
+
       this.setState({
         configString,
         configPath,
+        config,
         folderName: path.basename(folderPath),
       } as State)
     } catch (error) {
@@ -192,7 +205,7 @@ cd ${folderPath}; graphql playground`)
     }
   }
 
-  handleUrl = (event, url) => {
+  handleUrl = async (event, url) => {
     const cutIndex = url.indexOf('//')
     const query = url.slice(cutIndex + 2)
     const input = queryString.parse(query)
@@ -209,6 +222,7 @@ cd ${folderPath}; graphql playground`)
     let folderName
     let configPath
     const platformToken = input.platformToken
+    let config
 
     if (input.cwd) {
       configPath = findUp.sync(['.graphqlconfig', '.graphqlconfig.yml'], {
@@ -220,6 +234,10 @@ cd ${folderPath}; graphql playground`)
       folderName = configPath
         ? path.basename(path.dirname(configPath))
         : undefined
+      config = await patchEndpointsToConfig(
+        getGraphQLConfig(input.cwd).config,
+        input.cwd,
+      )
     }
 
     this.setState({
@@ -227,6 +245,7 @@ cd ${folderPath}; graphql playground`)
       folderName,
       env: input.env,
       endpoint,
+      config,
       platformToken,
     })
   }
@@ -403,6 +422,7 @@ cd ${folderPath}; graphql playground`)
       openTooltipTheme,
       platformToken,
       configString,
+      config,
     } = this.state
 
     return (
@@ -447,6 +467,7 @@ cd ${folderPath}; graphql playground`)
                 isElectron={true}
                 platformToken={platformToken}
                 configString={configString}
+                config={config}
                 onSaveConfig={this.saveConfig}
                 canSaveConfig={true}
                 env={this.state.env}

@@ -4,7 +4,7 @@ export function getActiveEndpoints(
   config: GraphQLConfig,
   envName: string,
   projectName?: string,
-): { endpoint: string; subscriptionEndpoint?: string } {
+): { endpoint: string; subscriptionEndpoint?: string; headers?: any } {
   if (projectName) {
     const env = config.projects![projectName].extensions!.endpoints![envName]!
     return getEndpointFromEndpointConfig(env)
@@ -27,6 +27,7 @@ export function getEndpointFromEndpointConfig(
       subscriptionEndpoint: env.subscription
         ? env.subscription!.url
         : undefined,
+      headers: env.headers,
     }
   }
 }

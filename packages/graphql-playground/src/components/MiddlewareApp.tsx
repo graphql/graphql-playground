@@ -11,7 +11,6 @@ import { styled, ThemeProvider, theme as styledTheme } from '../styled'
 import OldThemeProvider from './Theme/ThemeProvider'
 import { getActiveEndpoints } from './util'
 import PlaygroundStorage from './PlaygroundStorage'
-import { resolveEnvsInValues } from './resolveRefStrings'
 import { mapKeys } from 'lodash'
 
 const store = createStore()
@@ -44,6 +43,7 @@ export interface Props {
   platformToken?: string
   session?: any
   env?: any
+  config?: GraphQLConfig
 }
 
 export interface State {
@@ -54,11 +54,11 @@ export interface State {
   platformToken?: string
   settingsString: string
   settings: EditorSettings
-  config?: GraphQLConfig
   configIsYaml?: boolean
   configString?: string
   activeProjectName?: string
   activeEnv?: string
+  headers?: any
 }
 
 export type Theme = 'dark' | 'light'
@@ -81,24 +81,13 @@ class MiddlewareApp extends React.Component<Props, State> {
     let settings = localStorage.getItem('settings') || defaultSettings
     settings = this.migrateSettingsString(settings)
 
-    let config
-    let configIsYaml
+    const configIsYaml = props.configString
+      ? this.isConfigYaml(props.configString)
+      : false
 
-    try {
-      if (props.configString) {
-        const result = this.parseGraphQLConfig(props.configString, props.env)
-        config = result.config
-        configIsYaml = result.configIsYaml
-      }
-    } catch (e) {
-      /* tslint:disable-next-line */
-      console.error(props)
-      /* tslint:disable-next-line */
-      console.error(e)
-    }
+    const { activeEnv, projectName } = this.getInitialActiveEnv(props.config)
 
-    const { activeEnv, projectName } = this.getInitialActiveEnv(config)
-
+    let headers
     let endpoint =
       props.endpoint ||
       props.endpointUrl ||
@@ -108,10 +97,11 @@ class MiddlewareApp extends React.Component<Props, State> {
     let subscriptionEndpoint: string | undefined | null =
       props.subscriptionEndpoint || getParameterByName('subscriptionEndpoint')
 
-    if (props.configString && config && activeEnv) {
-      const endpoints = getActiveEndpoints(config, activeEnv, projectName)
+    if (props.configString && props.config && activeEnv) {
+      const endpoints = getActiveEndpoints(props.config, activeEnv, projectName)
       endpoint = endpoints.endpoint
       subscriptionEndpoint = endpoints.subscriptionEndpoint
+      headers = endpoints.headers
     } else {
       subscriptionEndpoint = this.getGraphcoolSubscriptionEndpoint(endpoint)
     }
@@ -127,11 +117,11 @@ class MiddlewareApp extends React.Component<Props, State> {
         : '',
       settingsString: settings,
       settings: this.getSettings(settings),
-      config,
       configIsYaml,
       configString: props.configString,
       activeEnv,
       activeProjectName: projectName,
+      headers,
     }
   }
 
@@ -171,11 +161,8 @@ class MiddlewareApp extends React.Component<Props, State> {
       nextProps.configString !== this.props.configString &&
       nextProps.configString
     ) {
-      const { config, configIsYaml } = this.parseGraphQLConfig(
-        nextProps.configString,
-        nextProps.env,
-      )
-      this.setState({ config, configIsYaml })
+      const configIsYaml = this.isConfigYaml(nextProps.configString)
+      this.setState({ configIsYaml })
     }
   }
 
@@ -203,35 +190,14 @@ class MiddlewareApp extends React.Component<Props, State> {
     return {}
   }
 
-  parseGraphQLConfig(
-    configString: string,
-    env = this.props.env,
-  ): { config: GraphQLConfig; configIsYaml: boolean } {
-    let config
-    let isYaml = false
+  isConfigYaml(configString: string) {
     try {
-      config = JSON.parse(configString)
+      yaml.safeLoad(configString)
+      return true
     } catch (e) {
       //
     }
-
-    if (!config) {
-      try {
-        config = yaml.safeLoad(configString)
-        isYaml = true
-      } catch (e) {
-        //
-      }
-    }
-
-    if (env) {
-      config = resolveEnvsInValues(config, env)
-    }
-
-    return {
-      config,
-      configIsYaml: isYaml,
-    }
+    return false
   }
 
   absolutizeUrl(url) {
@@ -281,10 +247,10 @@ class MiddlewareApp extends React.Component<Props, State> {
           <ThemeProvider theme={{ ...styledTheme, mode: theme }}>
             <OldThemeProvider theme={theme}>
               <App>
-                {this.state.config &&
+                {this.props.config &&
                   this.state.activeEnv && (
                     <ProjectsSideNav
-                      config={this.state.config}
+                      config={this.props.config}
                       folderName={this.props.folderName || 'GraphQL App'}
                       theme={theme}
                       activeEnv={this.state.activeEnv}
@@ -312,7 +278,7 @@ class MiddlewareApp extends React.Component<Props, State> {
                   onSaveSettings={this.handleSaveSettings}
                   onChangeSettings={this.handleChangeSettings}
                   getRef={this.getPlaygroundRef}
-                  config={this.state.config}
+                  config={this.props.config}
                   configString={this.state.configString}
                   configIsYaml={this.state.configIsYaml}
                   canSaveConfig={Boolean(this.props.canSaveConfig)}
@@ -321,6 +287,7 @@ class MiddlewareApp extends React.Component<Props, State> {
                   onUpdateSessionCount={this.handleUpdateSessionCount}
                   fixedEndpoints={Boolean(this.state.configString)}
                   session={this.props.session}
+                  headers={this.state.headers}
                 />
               </App>
             </OldThemeProvider>
@@ -368,14 +335,15 @@ class MiddlewareApp extends React.Component<Props, State> {
   }
 
   handleSelectEnv = (env: string, projectName?: string) => {
-    const { endpoint, subscriptionEndpoint } = getActiveEndpoints(
-      this.state.config!,
+    const { endpoint, subscriptionEndpoint, headers } = getActiveEndpoints(
+      this.props.config!,
       env,
       projectName,
     )!
     this.setState({
       activeEnv: env,
       endpoint,
+      headers,
       subscriptionEndpoint,
       activeProjectName: projectName,
     })
