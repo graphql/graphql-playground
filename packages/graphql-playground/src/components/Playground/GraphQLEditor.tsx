@@ -75,6 +75,7 @@ export interface Props {
   disableAutofocus?: boolean
   disableResize?: boolean
   fixedEndpoint?: boolean
+  shouldHideTracingResponse: boolean
 
   disableAnimation?: boolean
   hideLineNumbers?: boolean
@@ -902,7 +903,9 @@ export class GraphQLEditor extends React.PureComponent<
             let extensions
             if (result.extensions) {
               extensions = result.extensions
-              delete result.extensions
+              if (this.props.shouldHideTracingResponse) {
+                delete result.extensions.tracing
+              }
             }
             let isSubscription = false
             if (result.isSubscription) {

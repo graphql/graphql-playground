@@ -68,6 +68,9 @@ export default class Tab extends React.PureComponent<Props, State> {
           .tab:hover {
             @p: .bgDarkBlue;
           }
+          .tab:hover :global(.close) {
+            opacity: 1;
+          }
           .light.tab:hover {
             background-color: #eeeff0;
           }
@@ -120,12 +123,19 @@ export default class Tab extends React.PureComponent<Props, State> {
           }
 
           .close {
-            @p: .ml10, .o50, .relative;
+            @p: .ml10, .relative;
             top: 1px;
             height: 13px;
             width: 13px;
+            opacity: 0;
+
             &.active {
               @p: .o100;
+              opacity: 1;
+            }
+
+            &.hasCircle {
+              opacity: 1;
             }
           }
 
@@ -196,7 +206,11 @@ export default class Tab extends React.PureComponent<Props, State> {
             'New Tab'}
         </div>
         <div
-          className={`close ${index === selectedSessionIndex && 'active'}`}
+          className={`close${index === selectedSessionIndex ? ' active' : ''}${
+            session.isFile && session.hasChanged && !this.state.overCross
+              ? ' hasCircle'
+              : ''
+          }`}
           onClick={this.handleCloseSession}
           onMouseEnter={this.handleMouseOverCross}
           onMouseLeave={this.handleMouseOutCross}

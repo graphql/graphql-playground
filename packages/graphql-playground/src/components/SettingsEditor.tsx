@@ -13,7 +13,13 @@ export interface Props {
   readOnly?: boolean
 }
 
+// TODO: Trigger onSave on CMD+S or CTRL+S
+
 export default class SettingsEditor extends React.Component<Props, {}> {
+  componentDidMount() {
+    window.addEventListener('keydown', this.handleKeydown, true)
+  }
+
   render() {
     const { isConfig } = this.props
     return (
@@ -38,6 +44,13 @@ export default class SettingsEditor extends React.Component<Props, {}> {
         )}
       </Wrapper>
     )
+  }
+
+  private handleKeydown = (e: KeyboardEvent) => {
+    if (e.key === 's' && e.metaKey) {
+      e.preventDefault()
+      this.props.onSave()
+    }
   }
 }
 

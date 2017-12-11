@@ -139,6 +139,12 @@ cd ${folderPath}; graphql playground`)
     createNewWindow()
   }
 
+  openSettingsTab = () => {
+    if (this.playground) {
+      this.playground.openSettingsTab()
+    }
+  }
+
   nextTab = () => {
     if (this.playground) {
       this.playground.nextTab()
@@ -172,7 +178,7 @@ cd ${folderPath}; graphql playground`)
     ipcRenderer.on('File', this.readFileMessage)
     ipcRenderer.on('OpenSelectedFile', this.readOpenSelectedFileMessage)
     ipcRenderer.on('OpenUrl', this.handleUrl)
-    window.addEventListener('keydown', this.handleKeyDown)
+    window.addEventListener('keydown', this.handleKeyDown, true)
     this.consumeEvents()
     ipcRenderer.send('ready', '')
   }
@@ -197,14 +203,13 @@ cd ${folderPath}; graphql playground`)
       this.readOpenSelectedFileMessage,
     )
     ipcRenderer.removeListener('OpenUrl', this.handleUrl)
-    window.removeEventListener('keydown', this.handleKeyDown)
+    window.removeEventListener('keydown', this.handleKeyDown, true)
   }
 
   handleKeyDown = e => {
     if (e.key === '{' && e.metaKey) {
       this.prevTab()
-    }
-    if (e.key === '}' && e.metaKey) {
+    } else if (e.key === '}' && e.metaKey) {
       this.nextTab()
     }
   }
@@ -415,6 +420,9 @@ cd ${folderPath}; graphql playground`)
         break
       case 'Close':
         this.closeTab()
+        break
+      case 'Settings':
+        this.openSettingsTab()
         break
     }
   }
