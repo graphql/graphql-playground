@@ -3427,9 +3427,9 @@ graphql-language-service-utils@0.0.17:
     graphql "^0.10.1"
     graphql-language-service-types "0.0.21"
 
-graphql-playground@^1.3.7-alpha.2:
-  version "1.3.7-alpha.2"
-  resolved "https://registry.yarnpkg.com/graphql-playground/-/graphql-playground-1.3.7-alpha.2.tgz#5a931ffb7480fe9b9f8881694c1c53fff0c04f85"
+graphql-playground@^1.3.7:
+  version "1.3.7"
+  resolved "https://registry.yarnpkg.com/graphql-playground/-/graphql-playground-1.3.7.tgz#eed8470d4fe31588f50076b47131b8fdd8da3242"
   dependencies:
     calculate-size "^1.1.1"
     classnames "^2.2.5"
@@ -3445,6 +3445,7 @@ graphql-playground@^1.3.7-alpha.2:
     keycode "^2.1.9"
     lodash "^4.17.4"
     lodash.debounce "^4.0.8"
+    polished "^1.9.0"
     postcss-modules "^0.6.4"
     react "^16.0.0"
     react-addons-shallow-compare "^15.6.0"
