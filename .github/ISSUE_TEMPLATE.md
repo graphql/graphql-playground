@@ -1,13 +1,14 @@
-#### This issue pertains to:
+#### This issue pertains to the following package(s):
 
 - [ ] GraphQL Playground - Electron App
+- [ ] GraphQL Playground HTML
 - [ ] GraphQL Playground
 - [ ] GraphQL Playground Middleware
 
 #### What OS and OS version are you experiencing the issue(s) on?
 
 
-#### What version of graphql-playground(-electron/-middleware) are you experience the issue(s) on?
+#### What version of graphql-playground(-electron/-middleware) are you experiencing the issue(s) on?
 
 
 #### What is the expected behavior?
@@ -19,3 +20,4 @@
 #### What steps may we take to reproduce the behavior?
 
 
+_Please provide a gif or image of the issue for a quicker response/fix._
