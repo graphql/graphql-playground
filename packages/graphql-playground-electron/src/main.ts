@@ -81,7 +81,12 @@ async function forceSend(channel: string, arg: string, byPath?: string) {
   } else {
     window = currentWindows[0]
   }
-  const destroyed = window ? window.isDestroyed() : null
+  let destroyed = null
+  try {
+    destroyed = window ? window.isDestroyed() : null
+  } catch (e) {
+    //
+  }
   if (!window || destroyed) {
     window = createWindow()
   }
