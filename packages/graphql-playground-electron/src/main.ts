@@ -37,14 +37,19 @@ app.on('open-url', (event, url) => {
   const cutIndex = url.indexOf('//')
   const query = url.slice(cutIndex + 2)
   const input = queryString.parse(query)
-  if (input.env) {
+  let env
+  if (input.envPath) {
     try {
-      input.env = JSON.parse(input.env)
+      env = JSON.parse(fs.readFileSync(input.envPath, 'utf-8'))
+      fs.unlinkSync(input.envPath)
     } catch (e) {
       //
     }
   }
-  const msg = JSON.stringify(input)
+  const msg = JSON.stringify({
+    cwd: input.cwd,
+    env,
+  })
   forceSend('OpenUrl', msg, input.cwd)
 })
 
@@ -176,12 +181,13 @@ function createWindow() {
   windowById.set(newWindow.id, newWindow)
 
   // Emitted when the window is closed.
+  const id = newWindow.id
   newWindow.on('closed', function() {
     if (process.platform !== 'darwin' && windows.size === 0) {
       app.quit()
     }
     windows.delete(newWindow)
-    windowById.delete(newWindow.id)
+    windowById.delete(id)
     windowByPath.forEach((window, cwd) => {
       if (window === newWindow) {
         windowByPath.delete(cwd)

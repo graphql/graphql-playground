@@ -239,11 +239,20 @@ cd ${folderPath}; graphql playground`)
       folderName = configPath
         ? path.basename(path.dirname(configPath))
         : undefined
+      const rawConfig = getGraphQLConfig(input.cwd).config
       config = await patchEndpointsToConfig(
-        resolveEnvsInValues(getGraphQLConfig(input.cwd).config, input.env),
+        resolveEnvsInValues(rawConfig, input.env),
         input.cwd,
         input.env,
       )
+
+      if (!this.configContainsEndpoints(config)) {
+        const graphcoolNote = configString.includes('graphcool')
+          ? 'Please make sure to add stages to your graphcool.yml'
+          : ''
+        alert(`${configPath} does not include any endpoints. ${graphcoolNote}`)
+        return
+      }
     }
 
     ipcRenderer.send(
@@ -260,6 +269,27 @@ cd ${folderPath}; graphql playground`)
       config,
       platformToken,
     })
+  }
+
+  configContainsEndpoints(config: GraphQLConfigData): boolean {
+    if (
+      Object.keys((config.extensions && config.extensions.endpoints) || {})
+        .length > 0
+    ) {
+      return true
+    }
+    return Object.keys(config.projects).reduce((acc, curr) => {
+      const project = config.projects[curr]
+      if (
+        project.extensions &&
+        project.extensions.endpoints &&
+        Object.keys(project.extensions.endpoints).length > 0
+      ) {
+        return true
+      }
+
+      return acc
+    }, false)
   }
 
   readFileMessage = (event, message) => {
