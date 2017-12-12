@@ -20,7 +20,6 @@ import * as path from 'path'
 import * as os from 'os'
 import * as yaml from 'js-yaml'
 import * as findUp from 'find-up'
-import * as queryString from 'query-string'
 import { patchEndpointsToConfig } from 'graphql-config-extension-graphcool'
 // import { PermissionSession } from 'graphql-playground/lib/types'
 
@@ -116,14 +115,20 @@ Then open the graphql config with:
 cd ${folderPath}; graphql playground`)
       }
 
+      const configDir = path.dirname(configPath)
       const config = await patchEndpointsToConfig(
         resolveEnvsInValues(
           getGraphQLConfig(path.dirname(configPath)).config,
           process.env,
         ),
-        path.dirname(configPath),
+        configDir,
+        process.env,
       )
 
+      ipcRenderer.send(
+        'cwd',
+        JSON.stringify({ cwd: configDir, id: remote.getCurrentWindow().id }),
+      )
       this.setState({
         configString,
         configPath,
@@ -209,17 +214,8 @@ cd ${folderPath}; graphql playground`)
     }
   }
 
-  handleUrl = async (event, url) => {
-    const cutIndex = url.indexOf('//')
-    const query = url.slice(cutIndex + 2)
-    const input = queryString.parse(query)
-    if (input.env) {
-      try {
-        input.env = JSON.parse(input.env)
-      } catch (e) {
-        //
-      }
-    }
+  handleUrl = async (event, msg) => {
+    const input = JSON.parse(msg)
 
     const endpoint = input.endpoint
     let configString
@@ -241,12 +237,19 @@ cd ${folderPath}; graphql playground`)
       config = await patchEndpointsToConfig(
         resolveEnvsInValues(getGraphQLConfig(input.cwd).config, input.env),
         input.cwd,
+        input.env,
       )
     }
+
+    ipcRenderer.send(
+      'cwd',
+      JSON.stringify({ cwd: input.cwd, id: remote.getCurrentWindow().id }),
+    )
 
     this.setState({
       configString,
       folderName,
+      configPath,
       env: input.env,
       endpoint,
       config,

@@ -9,6 +9,7 @@ import {
   Menu,
   protocol,
 } from 'electron'
+import * as queryString from 'query-string'
 import * as electronLocalShortcut from 'electron-localshortcut'
 import * as fs from 'fs'
 import * as os from 'os'
@@ -32,12 +33,24 @@ const log = {
 
 app.on('open-url', (event, url) => {
   event.preventDefault()
-  forceSend('OpenUrl', url)
+
+  const cutIndex = url.indexOf('//')
+  const query = url.slice(cutIndex + 2)
+  const input = queryString.parse(query)
+  if (input.env) {
+    try {
+      input.env = JSON.parse(input.env)
+    } catch (e) {
+      //
+    }
+  }
+  const msg = JSON.stringify(input)
+  forceSend('OpenUrl', msg, input.cwd)
 })
 
 app.on('open-file', (event, path) => {
   event.preventDefault()
-  forceSend('OpenSelectedFile', path)
+  forceSend('OpenSelectedFile', path, path)
 })
 
 function getFocusedWindow(): any | null {
@@ -56,15 +69,23 @@ function send(channel: string, arg: string) {
 
 const readyWindowsPromises = {}
 
-async function forceSend(channel: string, arg: string) {
+async function forceSend(channel: string, arg: string, byPath?: string) {
   await appPromise
   const currentWindows = BrowserWindow.getAllWindows()
-  let window = currentWindows[0]
-  if (!window) {
+  let window
+  if (byPath) {
+    window = windowByPath.get(byPath)
+    if (!window && currentWindows.length === 1 && windowByPath.size === 0) {
+      window = currentWindows[0]
+    }
+  } else {
+    window = currentWindows[0]
+  }
+  const destroyed = window ? window.isDestroyed() : null
+  if (!window || destroyed) {
     window = createWindow()
   }
   await readyWindowsPromises[window.id]
-  log.info('force sending', channel, arg)
   window.webContents.send(channel, arg)
 }
 
@@ -113,6 +134,8 @@ ipcMain.on('async', (event, arg) => {
 })
 
 const windows = new Set([])
+const windowById: Map<number, Electron.BrowserWindow> = new Map()
+const windowByPath: Map<string, Electron.BrowserWindow> = new Map()
 
 function createWindow() {
   // Create the browser window.
@@ -145,6 +168,7 @@ function createWindow() {
   }
 
   windows.add(newWindow)
+  windowById.set(newWindow.id, newWindow)
 
   // Emitted when the window is closed.
   newWindow.on('closed', function() {
@@ -152,6 +176,12 @@ function createWindow() {
       app.quit()
     }
     windows.delete(newWindow)
+    windowById.delete(newWindow.id)
+    windowByPath.forEach((window, cwd) => {
+      if (window === newWindow) {
+        windowByPath.delete(cwd)
+      }
+    })
   })
 
   // electronLocalShortcut.register(newWindow, 'Cmd+Shift+]', () => {
@@ -169,6 +199,12 @@ function createWindow() {
 
   return newWindow
 }
+
+ipcMain.on('cwd', (event, msg) => {
+  const { cwd, id } = JSON.parse(msg)
+  const window = windowById.get(id)
+  windowByPath.set(cwd, window)
+})
 
 // TODO use proper typing, maybe we need to update to electron 1.7.1 as they fixed some ts definitions
 // https://github.com/electron/electron/releases/tag/v1.7.1

@@ -100,7 +100,7 @@
     "graphcool-tmp-ui": "^0.0.11",
     "graphcool-ui": "^0.0.13",
     "graphql-config": "^1.1.0",
-    "graphql-config-extension-graphcool": "^0.0.1",
+    "graphql-config-extension-graphcool": "^0.0.2",
     "js-yaml": "^3.10.0",
     "lodash.merge": "^4.6.0",
     "minimist": "^1.2.0",
