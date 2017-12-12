@@ -8,7 +8,7 @@
   "author": {
     "name": "Graphcool",
     "email": "contact@graph.cool",
-    "url": "graph.cool"
+    "url": "http://graph.cool"
   },
   "main": "lib/main.js",
   "build": {

@@ -3,6 +3,7 @@ import { Session } from '../../types'
 import GraphQLEditor from './GraphQLEditor'
 import { SchemaFetcher } from './SchemaFetcher'
 import { SharingProps } from '../Share'
+import { EditorSettings } from '../MiddlewareApp'
 
 export interface Props {
   session: Session
@@ -30,6 +31,7 @@ export interface Props {
   sharing?: SharingProps
   fixedEndpoint?: boolean
   endpoint: string
+  settings: EditorSettings
 }
 
 export default class GraphQLEditorSession extends React.PureComponent<
@@ -89,6 +91,7 @@ export default class GraphQLEditorSession extends React.PureComponent<
         onClickShare={this.handleClickShare}
         sharing={sharing}
         fixedEndpoint={fixedEndpoint}
+        shouldHideTracingResponse={this.shouldHideTracingResponse()}
       />
     )
   }
@@ -123,5 +126,9 @@ export default class GraphQLEditorSession extends React.PureComponent<
 
   private handleClickShare = () => {
     this.props.onClickShare(this.props.session.id)
+  }
+
+  private shouldHideTracingResponse = (): boolean => {
+    return this.props.settings['tracing.hideTracingResponse']
   }
 }

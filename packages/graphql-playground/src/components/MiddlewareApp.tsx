@@ -65,11 +65,13 @@ export type Theme = 'dark' | 'light'
 export interface EditorSettings {
   ['editor.theme']: Theme
   ['editor.reuseHeaders']: boolean
+  ['tracing.hideTracingResponse']: boolean
 }
 
 const defaultSettings = `{
   "editor.theme": "dark",
-  "editor.reuseHeaders": true
+  "editor.reuseHeaders": true,
+  "tracing.hideTracingResponse": true
 }`
 
 class MiddlewareApp extends React.Component<Props, State> {
@@ -136,16 +138,21 @@ class MiddlewareApp extends React.Component<Props, State> {
   }
 
   migrateSettingsString(settingsString) {
+    const defaultSettingsObject = JSON.parse(defaultSettings)
     const replacementMap = {
       theme: 'editor.theme',
       reuseHeaders: 'editor.reuseHeaders',
     }
+
     try {
       const settings = JSON.parse(settingsString)
       return JSON.stringify(
-        mapKeys(settings, (value, key) => {
-          return replacementMap[key] || key
-        }),
+        {
+          ...defaultSettingsObject,
+          ...mapKeys(settings, (value, key) => {
+            return replacementMap[key] || key
+          }),
+        },
         null,
         2,
       )
