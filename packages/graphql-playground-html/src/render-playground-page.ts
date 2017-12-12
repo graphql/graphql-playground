@@ -7,6 +7,7 @@ import {
   resolveEnvsInValues,
 } from 'graphql-config'
 import { patchEndpointsToConfig } from 'graphql-config-extension-graphcool'
+import * as dotenv from 'dotenv'
 
 import getLoadingMarkup from './get-loading-markup'
 
@@ -30,10 +31,11 @@ let configString
 let folderName
 let env
 async function init() {
+  dotenv.config()
   try {
     config = getGraphQLConfig().config
     config = resolveEnvsInValues(config, process.env)
-    config = await patchEndpointsToConfig(config, process.cwd())
+    config = await patchEndpointsToConfig(config, process.cwd(), process.env)
     configPath = findGraphQLConfigFile(process.cwd())
     configString = fs.readFileSync(configPath, 'utf-8')
     folderName = path.basename(process.cwd())

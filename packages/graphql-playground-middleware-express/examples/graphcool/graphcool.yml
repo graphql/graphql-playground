@@ -4,7 +4,5 @@ stages:
   default: dev
   dev: shared-eu-west-1
 
-secret: 'asdf'
-
 datamodel:
 - datamodel.graphql

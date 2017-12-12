@@ -133,9 +133,9 @@ graphcool-json-schema@^1.0.1-alpha.2:
   version "1.0.1-alpha.2"
   resolved "https://registry.yarnpkg.com/graphcool-json-schema/-/graphcool-json-schema-1.0.1-alpha.2.tgz#14dd7c880d9df9045b8e658896948522c89f4f49"
 
-graphcool-yml@^0.0.0-alpha.3:
-  version "0.0.0-alpha.3"
-  resolved "https://registry.yarnpkg.com/graphcool-yml/-/graphcool-yml-0.0.0-alpha.3.tgz#0086e450dedb6d0b6137ebcb09bca60485a55ce5"
+graphcool-yml@^0.0.2:
+  version "0.0.2"
+  resolved "https://registry.yarnpkg.com/graphcool-yml/-/graphcool-yml-0.0.2.tgz#e682f413e54615028d836d0cc105b372acabc63b"
   dependencies:
     ajv "^5.5.1"
     bluebird "^3.5.1"
@@ -150,11 +150,11 @@ graphcool-yml@^0.0.0-alpha.3:
     scuid "^1.0.2"
     yaml-ast-parser "^0.0.40"
 
-graphql-config-extension-graphcool@^0.0.1:
-  version "0.0.1"
-  resolved "https://registry.yarnpkg.com/graphql-config-extension-graphcool/-/graphql-config-extension-graphcool-0.0.1.tgz#fcb393a26a0fc5888db4430eceee3854a83d2c86"
+graphql-config-extension-graphcool@^0.0.2:
+  version "0.0.2"
+  resolved "https://registry.yarnpkg.com/graphql-config-extension-graphcool/-/graphql-config-extension-graphcool-0.0.2.tgz#e6c0f3e6f805ab3a4a8618d256a7acfe516ecc6f"
   dependencies:
-    graphcool-yml "^0.0.0-alpha.3"
+    graphcool-yml "^0.0.2"
     graphql-config "^1.1.0"
 
 graphql-config@^1.0.9:
