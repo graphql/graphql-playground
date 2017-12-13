@@ -29,6 +29,8 @@ import { EditorSettings } from './MiddlewareApp'
 import { GraphQLConfig } from '../graphqlConfig'
 import FileEditor from './FileEditor'
 
+import * as app from '../../package.json'
+
 export interface Response {
   resultID: string
   date: string
@@ -287,6 +289,9 @@ export class Playground extends React.PureComponent<Props & DocsState, State> {
     const theme = this.props.settings['editor.theme']
     const selectedEndpointUrl = isEndpoint ? location.href : this.getEndpoint()
     const isGraphcoolUrl = this.isGraphcoolUrl(selectedEndpointUrl)
+    const { version }: any = app
+
+    window.version = version
 
     return (
       <PlaygroundWrapper className="playground">

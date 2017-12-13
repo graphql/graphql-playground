@@ -33,6 +33,7 @@ export default class SettingsEditor extends React.Component<Props, {}> {
               isYaml={this.props.isYaml}
               readOnly={this.props.readOnly}
             />
+            <PlaygroundVersion>{window.version}</PlaygroundVersion>
           </div>
         </div>
         {!this.props.readOnly && (
@@ -84,4 +85,18 @@ const ButtonWrapper = styled.div`
   top: 16px;
   right: 16px;
   z-index: 2;
+`
+
+const versionColor = theme('mode', {
+  light: p => p.theme.colours.darkBlue20,
+  dark: p => p.theme.colours.white20,
+})
+
+const PlaygroundVersion = styled.span`
+  position: absolute;
+  right: 20px;
+  bottom: 17px;
+  color: ${versionColor};
+  font-weight: 700;
+  margin-right: 14px;
 `

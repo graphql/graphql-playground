@@ -6,7 +6,6 @@
  *  LICENSE file in the root directory of this source tree.
  */
 
-// import { GraphQLNonNull, GraphQLList } from 'graphql'
 import * as marked from 'marked'
 
 /**
@@ -124,11 +123,5 @@ export default function onHasCompletion(cm, data, onHintInformationRender) {
 }
 
 function renderType(type) {
-  // if (type instanceof GraphQLNonNull) {
-  //   return `${renderType(type.ofType)}!`
-  // }
-  // if (type instanceof GraphQLList) {
-  //   return `[${renderType(type.ofType)}]`
-  // }
   return `<a class="typeName">${type}</a>`
 }
