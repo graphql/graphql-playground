@@ -2,7 +2,7 @@ const express = require('express')
 const bodyParser = require('body-parser')
 const { graphqlExpress } = require('apollo-server-express')
 const { makeExecutableSchema } = require('graphql-tools')
-const expressPlayground = require('../../src/index').default
+const expressPlayground = require('graphql-playground-middleware-express').default
 
 const schema = makeExecutableSchema({
   typeDefs: `
@@ -19,12 +19,12 @@ const schema = makeExecutableSchema({
     },
   },
 })
-const PORT = 4000
+const PORT = 4001
 
 const app = express()
 
 app.use('/graphql', bodyParser.json(), graphqlExpress({ schema }))
-app.get('/playground', expressPlayground({ endpoint: '/graphql' }))
+app.get('/playground', expressPlayground({ endpoint: '/graphql', env: process.env, useGraphQLConfig: true}))
 
 app.listen(PORT)
 
