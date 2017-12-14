@@ -10,7 +10,8 @@ import PlaygroundStorage from './PlaygroundStorage'
 import { getQueryTypes } from './Playground/util/getQueryTypes'
 import debounce from 'graphiql/dist/utility/debounce'
 import { Observable } from 'rxjs/Observable'
-import { SubscriptionClient } from 'subscriptions-transport-ws'
+import { SubscriptionClient as WSSubscriptionClient } from 'subscriptions-transport-ws'
+import { SubscriptionClient as SSESubscriptionClient } from 'subscriptions-transport-sse'
 import isQuerySubscription from './Playground/util/isQuerySubscription'
 import HistoryPopup from './HistoryPopup'
 import * as cx from 'classnames'
@@ -100,7 +101,7 @@ export { GraphQLEditor }
 
 export class Playground extends React.PureComponent<Props & DocsState, State> {
   storage: PlaygroundStorage
-  wsConnections: { [sessionId: string]: any } = {}
+  connections: { [sessionId: string]: any } = {}
   observers: { [sessionId: string]: any } = {}
   graphiqlComponents: any[] = []
   private initialIndex: number = -1
@@ -202,7 +203,7 @@ export class Playground extends React.PureComponent<Props & DocsState, State> {
     ) {
       this.setCursor({ line: 3, ch: 6 })
     }
-    this.initWebsockets()
+    this.initSubscriptions()
   }
 
   componentDidUpdate(prevProps: Props, prevState: State) {
@@ -246,21 +247,23 @@ export class Playground extends React.PureComponent<Props & DocsState, State> {
     // this.storage.saveProject()
   }
 
-  setWS = (session: Session) => {
+  setConnection = (session: Session) => {
     let connectionParams: any = {}
 
     if (session.headers) {
       connectionParams = { ...this.parseHeaders(session.headers) }
     }
 
-    if (this.wsConnections[session.id]) {
-      this.wsConnections[session.id].unsubscribeAll()
+    if (this.connections[session.id]) {
+      this.connections[session.id].unsubscribeAll()
     }
 
-    const endpoint = this.getWSEndpoint()
+    const endpoint = this.getSubscriptionEndpoint()
+
     if (endpoint) {
       try {
-        this.wsConnections[session.id] = new SubscriptionClient(endpoint, {
+        const SubscriptionClient = endpoint.startsWith('http') ? SSESubscriptionClient : WSSubscriptionClient
+        this.connections[session.id] = new SubscriptionClient(endpoint, {
           timeout: 20000,
           connectionParams,
         })
@@ -270,8 +273,8 @@ export class Playground extends React.PureComponent<Props & DocsState, State> {
       }
     }
   }
-  initWebsockets() {
-    this.state.sessions.forEach(session => this.setWS(session))
+  initSubscriptions() {
+    this.state.sessions.forEach(session => this.setConnection(session))
   }
   setCursor(position: CursorPosition) {
     if (this.graphiqlComponents) {
@@ -676,7 +679,7 @@ export class Playground extends React.PureComponent<Props & DocsState, State> {
       delete this.observers[session.id]
     }
     this.cancelSubscription(session)
-    this.setWS(session)
+    this.setConnection(session)
   }
 
   private getUrlSession(sessions) {
@@ -893,7 +896,7 @@ export class Playground extends React.PureComponent<Props & DocsState, State> {
     return this.props.endpoint.match(/(https?:\/\/.*?)\/?/)![1]
   }
 
-  private getWSEndpoint() {
+  private getSubscriptionEndpoint() {
     if (this.props.subscriptionsEndpoint) {
       return this.props.subscriptionsEndpoint
     }
@@ -928,8 +931,8 @@ export class Playground extends React.PureComponent<Props & DocsState, State> {
   private cancelSubscription = (session: Session) => {
     this.setValueInSession(session.id, 'subscriptionActive', false)
     if (session.subscriptionId) {
-      if (this.wsConnections[session.id]) {
-        this.wsConnections[session.id].unsubscribe(session.subscriptionId)
+      if (this.connections[session.id]) {
+        this.connections[session.id].unsubscribe(session.subscriptionId)
       }
       this.setValueInSession(session.id, 'subscriptionId', null)
     }
@@ -953,9 +956,9 @@ export class Playground extends React.PureComponent<Props & DocsState, State> {
             this.setValueInSession(session.id, 'subscriptionActive', true)
           }
 
-          const wsConnection = this.wsConnections[session.id]
+          const connection = this.connections[session.id]
 
-          const id = wsConnection.subscribe(graphQLParams, (err, res) => {
+          const id = connection.subscribe(graphQLParams, (err, res) => {
             const data: any = { data: res, isSubscription: true }
             if (err) {
               data.error = err
