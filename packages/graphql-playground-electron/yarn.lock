@@ -3340,9 +3340,9 @@ graphcool-ui@^0.0.13:
     graphcool-styles "^0.1.31"
     react-modal "^1.6.5"
 
-graphcool-yml@^0.0.2:
-  version "0.0.2"
-  resolved "https://registry.yarnpkg.com/graphcool-yml/-/graphcool-yml-0.0.2.tgz#e682f413e54615028d836d0cc105b372acabc63b"
+graphcool-yml@^0.0.6:
+  version "0.0.6"
+  resolved "https://registry.yarnpkg.com/graphcool-yml/-/graphcool-yml-0.0.6.tgz#09d772ffc985b818925ca76d6d93eca29a6fe1d9"
   dependencies:
     ajv "^5.5.1"
     bluebird "^3.5.1"
@@ -3350,6 +3350,7 @@ graphcool-yml@^0.0.2:
     dotenv "^4.0.0"
     fs-extra "^4.0.3"
     graphcool-json-schema "^1.0.1-alpha.2"
+    isomorphic-fetch "^2.2.1"
     js-yaml "^3.10.0"
     jsonwebtoken "^8.1.0"
     lodash "^4.17.4"
@@ -3365,11 +3366,11 @@ graphiql@^0.11.2:
     codemirror-graphql "^0.6.8"
     marked "0.3.6"
 
-graphql-config-extension-graphcool@^0.0.2:
-  version "0.0.2"
-  resolved "https://registry.yarnpkg.com/graphql-config-extension-graphcool/-/graphql-config-extension-graphcool-0.0.2.tgz#e6c0f3e6f805ab3a4a8618d256a7acfe516ecc6f"
+graphql-config-extension-graphcool@^0.0.4:
+  version "0.0.4"
+  resolved "https://registry.yarnpkg.com/graphql-config-extension-graphcool/-/graphql-config-extension-graphcool-0.0.4.tgz#ee6febf942fb7baafb1f03af65b0f160ac47127c"
   dependencies:
-    graphcool-yml "^0.0.2"
+    graphcool-yml "^0.0.6"
     graphql-config "^1.1.0"
 
 graphql-config@^1.1.0:

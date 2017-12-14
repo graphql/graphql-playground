@@ -7,8 +7,8 @@
   resolved "https://registry.yarnpkg.com/@types/graphql/-/graphql-0.11.7.tgz#da39a2f7c74e793e32e2bb7b3b68da1691532dd5"
 
 "@types/lodash@^4.14.85":
-  version "4.14.88"
-  resolved "https://registry.yarnpkg.com/@types/lodash/-/lodash-4.14.88.tgz#97eaf2dc668f33ed8e511a5b627035f4ea20b0f5"
+  version "4.14.90"
+  resolved "https://registry.yarnpkg.com/@types/lodash/-/lodash-4.14.90.tgz#c853f6747080215372aca5a3770fc62d65a05186"
 
 "@types/node@^8.0.47":
   version "8.0.49"
@@ -139,9 +139,9 @@ graphcool-json-schema@^1.0.1-alpha.2:
   version "1.0.1-alpha.2"
   resolved "https://registry.yarnpkg.com/graphcool-json-schema/-/graphcool-json-schema-1.0.1-alpha.2.tgz#14dd7c880d9df9045b8e658896948522c89f4f49"
 
-graphcool-yml@^0.0.2:
-  version "0.0.2"
-  resolved "https://registry.yarnpkg.com/graphcool-yml/-/graphcool-yml-0.0.2.tgz#e682f413e54615028d836d0cc105b372acabc63b"
+graphcool-yml@^0.0.6:
+  version "0.0.6"
+  resolved "https://registry.yarnpkg.com/graphcool-yml/-/graphcool-yml-0.0.6.tgz#09d772ffc985b818925ca76d6d93eca29a6fe1d9"
   dependencies:
     ajv "^5.5.1"
     bluebird "^3.5.1"
@@ -149,6 +149,7 @@ graphcool-yml@^0.0.2:
     dotenv "^4.0.0"
     fs-extra "^4.0.3"
     graphcool-json-schema "^1.0.1-alpha.2"
+    isomorphic-fetch "^2.2.1"
     js-yaml "^3.10.0"
     jsonwebtoken "^8.1.0"
     lodash "^4.17.4"
@@ -156,24 +157,14 @@ graphcool-yml@^0.0.2:
     scuid "^1.0.2"
     yaml-ast-parser "^0.0.40"
 
-graphql-config-extension-graphcool@^0.0.2:
-  version "0.0.2"
-  resolved "https://registry.yarnpkg.com/graphql-config-extension-graphcool/-/graphql-config-extension-graphcool-0.0.2.tgz#e6c0f3e6f805ab3a4a8618d256a7acfe516ecc6f"
+graphql-config-extension-graphcool@^0.0.4:
+  version "0.0.4"
+  resolved "https://registry.yarnpkg.com/graphql-config-extension-graphcool/-/graphql-config-extension-graphcool-0.0.4.tgz#ee6febf942fb7baafb1f03af65b0f160ac47127c"
   dependencies:
-    graphcool-yml "^0.0.2"
+    graphcool-yml "^0.0.6"
     graphql-config "^1.1.0"
 
-graphql-config@^1.0.9:
-  version "1.0.9"
-  resolved "https://registry.yarnpkg.com/graphql-config/-/graphql-config-1.0.9.tgz#8fa416a7c2bdb8f62f441324775dd3ff8a266652"
-  dependencies:
-    graphql "^0.11.7"
-    graphql-request "^1.4.0"
-    js-yaml "^3.10.0"
-    minimatch "^3.0.4"
-    rimraf "^2.6.2"
-
-graphql-config@^1.1.0:
+graphql-config@^1.0.9, graphql-config@^1.1.0:
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/graphql-config/-/graphql-config-1.1.0.tgz#0d1089db1da7695f556ed9204099fea8a238af88"
   dependencies:
@@ -193,13 +184,13 @@ graphql-import@^0.1.5:
     graphql "^0.11.7"
     lodash "^4.17.4"
 
-graphql-playground-html@^1.3.7-alpha.8:
-  version "1.3.7-alpha.8"
-  resolved "https://registry.yarnpkg.com/graphql-playground-html/-/graphql-playground-html-1.3.7-alpha.8.tgz#7b0200da8bb73d1a6988c537e6e90764ac3ed71a"
+graphql-playground-html@^1.3.8-beta.1:
+  version "1.3.8-beta.1"
+  resolved "https://registry.yarnpkg.com/graphql-playground-html/-/graphql-playground-html-1.3.8-beta.1.tgz#35a4e0fd993f6b498ecf0496116f61f8e3107b3e"
   dependencies:
     dotenv "^4.0.0"
     graphql-config "^1.0.9"
-    graphql-config-extension-graphcool "^0.0.2"
+    graphql-config-extension-graphcool "^0.0.4"
 
 graphql-playground-middleware@^1.2.1-beta.6:
   version "1.2.1-beta.6"
@@ -237,6 +228,13 @@ inherits@2:
 is-stream@^1.0.1:
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/is-stream/-/is-stream-1.1.0.tgz#12d4a3dd4e68e0b79ceb8dbc84173ae80d91ca44"
+
+isomorphic-fetch@^2.2.1:
+  version "2.2.1"
+  resolved "https://registry.yarnpkg.com/isomorphic-fetch/-/isomorphic-fetch-2.2.1.tgz#611ae1acf14f5e81f729507472819fe9733558a9"
+  dependencies:
+    node-fetch "^1.0.1"
+    whatwg-fetch ">=0.10.0"
 
 iterall@1.1.3:
   version "1.1.3"
@@ -344,7 +342,7 @@ ms@^2.0.0:
   version "2.1.1"
   resolved "https://registry.yarnpkg.com/ms/-/ms-2.1.1.tgz#30a5864eb3ebb0a66f2ebe6d727af06a09d86e0a"
 
-node-fetch@1.7.3:
+node-fetch@1.7.3, node-fetch@^1.0.1:
   version "1.7.3"
   resolved "https://registry.yarnpkg.com/node-fetch/-/node-fetch-1.7.3.tgz#980f6f72d85211a5347c6b2bc18c5b84c3eb47ef"
   dependencies:
@@ -405,7 +403,7 @@ universalify@^0.1.0:
   version "0.1.1"
   resolved "https://registry.yarnpkg.com/universalify/-/universalify-0.1.1.tgz#fa71badd4437af4c148841e3b3b165f9e9e590b7"
 
-whatwg-fetch@2.0.3:
+whatwg-fetch@2.0.3, whatwg-fetch@>=0.10.0:
   version "2.0.3"
   resolved "https://registry.yarnpkg.com/whatwg-fetch/-/whatwg-fetch-2.0.3.tgz#9c84ec2dcf68187ff00bc64e1274b442176e1c84"
 

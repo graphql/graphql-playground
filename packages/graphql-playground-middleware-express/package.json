@@ -1,10 +1,8 @@
 {
   "name": "graphql-playground-middleware-express",
-  "version": "1.3.8-beta.3",
-  "homepage":
-    "https://github.com/graphcool/graphql-playground/tree/master/packages/graphql-playground-middleware-express",
-  "description":
-    "GraphQL IDE for better development workflows (GraphQL Subscriptions, interactive docs & collaboration).",
+  "version": "1.3.8",
+  "homepage": "https://github.com/graphcool/graphql-playground/tree/master/packages/graphql-playground-middleware-express",
+  "description": "GraphQL IDE for better development workflows (GraphQL Subscriptions, interactive docs & collaboration).",
   "contributors": [
     "Tim Suchanek <tim@graph.cool>",
     "Johannes Schickling <johannes@graph.cool>",
@@ -13,13 +11,20 @@
   "repository": "http://github.com/graphcool/graphql-playground.git",
   "license": "SEE LICENSE IN LICENSE",
   "main": "dist/index.js",
-  "files": ["dist"],
+  "files": [
+    "dist"
+  ],
   "playgroundVersion": "1.3.8-beta.2",
   "scripts": {
     "build": "tsc",
     "prepublishOnly": "npm run build"
   },
-  "keywords": ["graphql", "graphiql", "playground", "graphcool"],
+  "keywords": [
+    "graphql",
+    "graphiql",
+    "playground",
+    "graphcool"
+  ],
   "peerDependencies": {
     "express": "^4.16.2"
   },
@@ -28,7 +33,7 @@
     "typescript": "^2.6.1"
   },
   "dependencies": {
-    "graphql-playground-html": "^1.3.7-alpha.8",
+    "graphql-playground-html": "^1.3.8-beta.1",
     "graphql-playground-middleware": "^1.2.1-beta.6"
   },
   "typings": "dist/index.d.ts",
