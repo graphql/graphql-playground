@@ -104,7 +104,7 @@ class MiddlewareApp extends React.Component<Props, State> {
       endpoint = endpoints.endpoint
       subscriptionEndpoint = endpoints.subscriptionEndpoint
       headers = endpoints.headers
-    } else {
+    } else if (!subscriptionEndpoint) {
       subscriptionEndpoint = this.getGraphcoolSubscriptionEndpoint(endpoint)
     }
 
