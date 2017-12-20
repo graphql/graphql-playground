@@ -237,13 +237,13 @@ export class Playground extends React.PureComponent<Props & DocsState, State> {
   }
 
   componentWillUnmount() {
-    // this.storage.setItem(
-    //   'selectedSessionIndex',
-    //   String(this.state.selectedSessionIndex),
-    // )
-    // this.saveSessions()
-    // this.saveHistory()
-    // this.storage.saveProject()
+    this.storage.setItem(
+      'selectedSessionIndex',
+      String(this.state.selectedSessionIndex),
+    )
+    this.saveSessions()
+    this.saveHistory()
+    this.storage.saveProject()
   }
 
   setWS = (session: Session) => {
