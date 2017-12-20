@@ -44,6 +44,7 @@ export interface Props {
   session?: any
   env?: any
   config?: GraphQLConfig
+  configPath?: string
 }
 
 export interface State {
@@ -295,6 +296,7 @@ class MiddlewareApp extends React.Component<Props, State> {
                   fixedEndpoints={Boolean(this.state.configString)}
                   session={this.props.session}
                   headers={this.state.headers}
+                  configPath={this.props.configPath}
                 />
               </App>
             </OldThemeProvider>

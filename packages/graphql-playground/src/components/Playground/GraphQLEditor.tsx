@@ -902,9 +902,9 @@ export class GraphQLEditor extends React.PureComponent<
           if (queryID === this.editorQueryID) {
             let extensions
             if (result.extensions) {
-              extensions = result.extensions
+              extensions = { ...result.extensions }
               if (this.props.shouldHideTracingResponse) {
-                delete result.extensions.tracing
+                delete result.extensions
               }
             }
             let isSubscription = false

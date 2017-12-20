@@ -66,6 +66,7 @@ export interface Props {
   canSaveConfig: boolean
   fixedEndpoints: boolean
   headers?: any
+  configPath?: string
 }
 
 export interface State {
@@ -179,9 +180,9 @@ export class Playground extends React.PureComponent<Props & DocsState, State> {
   }
 
   getStorageKey(props: Props = this.props) {
-    return props.endpoint
-    // const multi = !props.fixedEndpoints
-    // return multi ? 'multi' : props.endpoint
+    // whenever possible, use the configPath as is more precise.
+    // localhost:4000 could be used by multiple endpoints
+    return props.configPath || props.endpoint
   }
 
   componentWillMount() {
