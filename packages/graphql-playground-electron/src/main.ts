@@ -38,6 +38,14 @@ app.on('open-url', (event, url) => {
   const query = url.slice(cutIndex + 2)
   const input = queryString.parse(query)
   let env
+  if (input.env) {
+    try {
+      env = JSON.parse(input.env)
+    } catch (e) {
+      // could
+      console.log('could not get env')
+    }
+  }
   if (input.envPath) {
     try {
       env = JSON.parse(fs.readFileSync(input.envPath, 'utf-8'))

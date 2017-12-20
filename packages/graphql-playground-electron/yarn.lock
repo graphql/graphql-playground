@@ -3299,9 +3299,9 @@ graceful-fs@^4.1.11, graceful-fs@^4.1.2, graceful-fs@^4.1.4, graceful-fs@^4.1.6,
   version "4.1.11"
   resolved "https://registry.yarnpkg.com/graceful-fs/-/graceful-fs-4.1.11.tgz#0e8bdfe4d1ddb8854d64e04ea7c00e2a026e5658"
 
-graphcool-json-schema@^1.0.1-alpha.2:
-  version "1.0.1-alpha.2"
-  resolved "https://registry.yarnpkg.com/graphcool-json-schema/-/graphcool-json-schema-1.0.1-alpha.2.tgz#14dd7c880d9df9045b8e658896948522c89f4f49"
+graphcool-json-schema@^1.0.1-beta.5:
+  version "1.0.1-beta.6"
+  resolved "https://registry.yarnpkg.com/graphcool-json-schema/-/graphcool-json-schema-1.0.1-beta.6.tgz#95c3442c84d6c7596c2e2e50db185529a18c501e"
 
 graphcool-styles@0.2.4:
   version "0.2.4"
@@ -3340,18 +3340,19 @@ graphcool-ui@^0.0.13:
     graphcool-styles "^0.1.31"
     react-modal "^1.6.5"
 
-graphcool-yml@^0.0.6:
-  version "0.0.6"
-  resolved "https://registry.yarnpkg.com/graphcool-yml/-/graphcool-yml-0.0.6.tgz#09d772ffc985b818925ca76d6d93eca29a6fe1d9"
+graphcool-yml@^0.0.21:
+  version "0.0.21"
+  resolved "https://registry.yarnpkg.com/graphcool-yml/-/graphcool-yml-0.0.21.tgz#9e944a76e582844ffa9b930d17c46fc14e07c2ea"
   dependencies:
     ajv "^5.5.1"
     bluebird "^3.5.1"
     debug "^3.1.0"
     dotenv "^4.0.0"
     fs-extra "^4.0.3"
-    graphcool-json-schema "^1.0.1-alpha.2"
+    graphcool-json-schema "^1.0.1-beta.5"
     isomorphic-fetch "^2.2.1"
     js-yaml "^3.10.0"
+    json-stable-stringify "^1.0.1"
     jsonwebtoken "^8.1.0"
     lodash "^4.17.4"
     replaceall "^0.1.6"
@@ -3366,11 +3367,11 @@ graphiql@^0.11.2:
     codemirror-graphql "^0.6.8"
     marked "0.3.6"
 
-graphql-config-extension-graphcool@^0.0.5:
-  version "0.0.5"
-  resolved "https://registry.yarnpkg.com/graphql-config-extension-graphcool/-/graphql-config-extension-graphcool-0.0.5.tgz#caa1c8cb834afdd2f74439f51d18c16ff781b3e6"
+graphql-config-extension-graphcool@0.1.4:
+  version "0.1.4"
+  resolved "https://registry.yarnpkg.com/graphql-config-extension-graphcool/-/graphql-config-extension-graphcool-0.1.4.tgz#bbfe32261a91f37bb71e65f6fc6fd365ec773930"
   dependencies:
-    graphcool-yml "^0.0.6"
+    graphcool-yml "^0.0.21"
     graphql-config "^1.1.0"
 
 graphql-config@^1.1.0:

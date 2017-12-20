@@ -4,7 +4,7 @@
   "homepage": "https://github.com/graphcool/graphql-playground",
   "repository": "graphcool/graphql-playground",
   "description": "Playground app",
-  "version": "1.3.9",
+  "version": "v1.3.10-beta.1",
   "author": {
     "name": "Graphcool",
     "email": "contact@graph.cool",
@@ -100,7 +100,7 @@
     "graphcool-tmp-ui": "^0.0.11",
     "graphcool-ui": "^0.0.13",
     "graphql-config": "^1.1.0",
-    "graphql-config-extension-graphcool": "^0.0.5",
+    "graphql-config-extension-graphcool": "0.1.4",
     "js-yaml": "^3.10.0",
     "lodash.merge": "^4.6.0",
     "minimist": "^1.2.0",
