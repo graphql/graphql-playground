@@ -35,6 +35,6 @@
   "dependencies": {
     "dotenv": "^4.0.0",
     "graphql-config": "^1.0.9",
-    "graphql-config-extension-graphcool": "^0.0.4"
+    "graphql-config-extension-graphcool": "0.1.4"
   }
 }

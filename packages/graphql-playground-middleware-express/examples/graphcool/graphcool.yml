@@ -1,8 +1,6 @@
 service: whh
 
-stages: 
-  default: dev
-  dev: shared-eu-west-1
-
 datamodel:
 - datamodel.graphql
+
+disableAuth: true
