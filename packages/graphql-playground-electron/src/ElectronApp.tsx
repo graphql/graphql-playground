@@ -110,7 +110,7 @@ export default class ElectronApp extends React.Component<{}, State> {
       if (configString.includes('${env:')) {
         alert(`You opened a .graphqlconfig file that includes environment variables.
 In order to use environment variables in the Playground, please start it from the graphql cli. Install with
-npm install -g graphql
+npm install -g graphql-cli
 Then open the graphql config with:
 cd ${folderPath}; graphql playground`)
       }

@@ -3,7 +3,10 @@
 - [ ] GraphQL Playground - Electron App
 - [ ] GraphQL Playground HTML
 - [ ] GraphQL Playground
-- [ ] GraphQL Playground Middleware
+- [ ] GraphQL Playground Express Middleware
+- [ ] GraphQL Playground Hapi Middleware
+- [ ] GraphQL Playground Koa Middleware
+- [ ] GraphQL Playground Lambda Middleware
 
 #### What OS and OS version are you experiencing the issue(s) on?
 
