@@ -135,33 +135,34 @@ graceful-fs@^4.1.2, graceful-fs@^4.1.6:
   version "4.1.11"
   resolved "https://registry.yarnpkg.com/graceful-fs/-/graceful-fs-4.1.11.tgz#0e8bdfe4d1ddb8854d64e04ea7c00e2a026e5658"
 
-graphcool-json-schema@^1.0.1-alpha.2:
-  version "1.0.1-alpha.2"
-  resolved "https://registry.yarnpkg.com/graphcool-json-schema/-/graphcool-json-schema-1.0.1-alpha.2.tgz#14dd7c880d9df9045b8e658896948522c89f4f49"
+graphcool-json-schema@^1.0.1-beta.5:
+  version "1.0.1-beta.6"
+  resolved "https://registry.yarnpkg.com/graphcool-json-schema/-/graphcool-json-schema-1.0.1-beta.6.tgz#95c3442c84d6c7596c2e2e50db185529a18c501e"
 
-graphcool-yml@^0.0.6:
-  version "0.0.6"
-  resolved "https://registry.yarnpkg.com/graphcool-yml/-/graphcool-yml-0.0.6.tgz#09d772ffc985b818925ca76d6d93eca29a6fe1d9"
+graphcool-yml@^0.0.22:
+  version "0.0.22"
+  resolved "https://registry.yarnpkg.com/graphcool-yml/-/graphcool-yml-0.0.22.tgz#8b227e1ec36d6b6f31eb1f67879e6f8b9332ca8f"
   dependencies:
     ajv "^5.5.1"
     bluebird "^3.5.1"
     debug "^3.1.0"
     dotenv "^4.0.0"
     fs-extra "^4.0.3"
-    graphcool-json-schema "^1.0.1-alpha.2"
+    graphcool-json-schema "^1.0.1-beta.5"
     isomorphic-fetch "^2.2.1"
     js-yaml "^3.10.0"
+    json-stable-stringify "^1.0.1"
     jsonwebtoken "^8.1.0"
     lodash "^4.17.4"
     replaceall "^0.1.6"
     scuid "^1.0.2"
     yaml-ast-parser "^0.0.40"
 
-graphql-config-extension-graphcool@^0.0.4:
-  version "0.0.4"
-  resolved "https://registry.yarnpkg.com/graphql-config-extension-graphcool/-/graphql-config-extension-graphcool-0.0.4.tgz#ee6febf942fb7baafb1f03af65b0f160ac47127c"
+graphql-config-extension-graphcool@^0.1.5:
+  version "0.1.5"
+  resolved "https://registry.yarnpkg.com/graphql-config-extension-graphcool/-/graphql-config-extension-graphcool-0.1.5.tgz#66d408c25653c09b815956dc3786e08dd742e73e"
   dependencies:
-    graphcool-yml "^0.0.6"
+    graphcool-yml "^0.0.22"
     graphql-config "^1.1.0"
 
 graphql-config@^1.0.9, graphql-config@^1.1.0:
@@ -184,13 +185,13 @@ graphql-import@^0.1.5:
     graphql "^0.11.7"
     lodash "^4.17.4"
 
-graphql-playground-html@^1.3.8-beta.1:
-  version "1.3.8-beta.1"
-  resolved "https://registry.yarnpkg.com/graphql-playground-html/-/graphql-playground-html-1.3.8-beta.1.tgz#35a4e0fd993f6b498ecf0496116f61f8e3107b3e"
+graphql-playground-html@^1.3.10-beta.3:
+  version "1.3.10-beta.3"
+  resolved "https://registry.yarnpkg.com/graphql-playground-html/-/graphql-playground-html-1.3.10-beta.3.tgz#27acc8b34d8314d143e1858d0aa393d09c4de63b"
   dependencies:
     dotenv "^4.0.0"
     graphql-config "^1.0.9"
-    graphql-config-extension-graphcool "^0.0.4"
+    graphql-config-extension-graphcool "^0.1.5"
 
 graphql-playground-middleware@^1.2.1-beta.6:
   version "1.2.1-beta.6"
@@ -251,11 +252,21 @@ json-schema-traverse@^0.3.0:
   version "0.3.1"
   resolved "https://registry.yarnpkg.com/json-schema-traverse/-/json-schema-traverse-0.3.1.tgz#349a6d44c53a51de89b40805c5d5e59b417d3340"
 
+json-stable-stringify@^1.0.1:
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/json-stable-stringify/-/json-stable-stringify-1.0.1.tgz#9a759d39c5f2ff503fd5300646ed445f88c4f9af"
+  dependencies:
+    jsonify "~0.0.0"
+
 jsonfile@^4.0.0:
   version "4.0.0"
   resolved "https://registry.yarnpkg.com/jsonfile/-/jsonfile-4.0.0.tgz#8771aae0799b64076b76640fca058f9c10e33ecb"
   optionalDependencies:
     graceful-fs "^4.1.6"
+
+jsonify@~0.0.0:
+  version "0.0.0"
+  resolved "https://registry.yarnpkg.com/jsonify/-/jsonify-0.0.0.tgz#2c74b6ee41d93ca51b7b5aaee8f503631d252a73"
 
 jsonwebtoken@^8.1.0:
   version "8.1.0"
