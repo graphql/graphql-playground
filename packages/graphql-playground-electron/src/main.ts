@@ -338,6 +338,9 @@ const template: any = [
 let appResolve
 const appPromise = new Promise(resolve => (appResolve = resolve))
 app.on('ready', () => {
+  globalShortcut.register('CommandOrControl+Shift+W', () => { 
+    app.quit(); 
+  });
   createWindow()
   // initAutoUpdate()
 
