@@ -33,18 +33,23 @@ const backgroundColor = theme('mode', {
 const Wrapper = styled.div`
   background: ${backgroundColor};
   position: relative;
+
   .variable-editor {
     height: 100% !important;
   }
+
   .CodeMirror {
     background: none !important;
+
     .CodeMirror-code {
       color: rgba(255, 255, 255, 0.7);
     }
+
     .cm-atom {
       color: rgba(42, 126, 210, 1);
     }
   }
+
   .CodeMirror-gutters {
     background: none !important;
   }

@@ -11,5 +11,17 @@ const {
   ThemeProvider,
 } = styledComponents as ThemedStyledComponentsModule<ThemeInterface>
 
-export { css, injectGlobal, keyframes, ThemeProvider, theme }
+const withProps = <U>() => <P, T, O>(
+  fn: styledComponents.ThemedStyledFunction<P, T, O>,
+) => fn as styledComponents.ThemedStyledFunction<P & U, T, O & U>
+
+export {
+  css,
+  injectGlobal,
+  keyframes,
+  ThemeProvider,
+  theme,
+  ThemeInterface,
+  withProps,
+}
 export default styled
