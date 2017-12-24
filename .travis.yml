@@ -17,7 +17,7 @@ install:
     security unlock-keychain -p travis build.keychain
     echo $CERTIFICATE_OSX_P12 | base64 --decode > certificate.p12
     security import certificate.p12 -k build.keychain -P $CERTIFICATE_OSX_PASSWORD -T /usr/bin/codesign
-    security set-key-partition-list -S apple-tool:,apple: -s -k travis ios-build.keychain
+    security set-key-partition-list -S apple-tool:,apple: -s -k travis build.keychain
   - npm i -g yarn
   - cd packages/graphql-playground-electron
   - yarn install
