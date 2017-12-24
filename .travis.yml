@@ -1,0 +1,17 @@
+notifications:
+  email: false
+
+os:
+  #- linux
+  - osx
+
+language: node_js
+node_js: "8"
+
+install:
+  - npm i -g yarn
+  - echo $CERTIFICATE_OSX_P12 | base64 --decode > certificate.p12
+  - security import certificate.p12 -P $CERTIFICATE_OSX_PASSWORD -T /usr/bin/codesign
+  - cd packages/graphql-playground-electron
+  - yarn install
+  - yarn mac
