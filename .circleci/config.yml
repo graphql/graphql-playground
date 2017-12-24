@@ -13,9 +13,9 @@ jobs:
       xcode: "9.0"
     steps:
       - checkout
-      - echo $CERTIFICATE_OSX_P12 | base64 --decode > certificate.p12
-      - security import certificate.p12 -P $CERTIFICATE_OSX_PASSWORD -T /usr/bin/codesign
-      - npm install
+      - run: echo $CERTIFICATE_OSX_P12 | base64 --decode > certificate.p12
+      - run: security import certificate.p12 -P $CERTIFICATE_OSX_PASSWORD -T /usr/bin/codesign
+      - run: npm install
 
       #- run: cd packages/graphql-playground-electron && yarn
       #- run: cd packages/graphql-playground-electron && yarn release
