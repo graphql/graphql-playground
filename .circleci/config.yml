@@ -11,7 +11,7 @@ jobs:
 
   electron-build-osx:
     macos:
-      xcode: "9.1"
+      xcode: "9.0"
     steps:
       - checkout
       - run: npm i -g yarn
