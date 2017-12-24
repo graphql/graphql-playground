@@ -60,3 +60,10 @@ export interface Response {
   date: string
   time: Date
 }
+
+export interface ISettings {
+  ['general.betaUpdates']: boolean
+  ['editor.theme']: Theme
+  ['editor.reuseHeaders']: boolean
+  ['tracing.hideTracingResponse']: boolean
+}

@@ -10,6 +10,7 @@ import ProjectsSideNav from './ProjectsSideNav'
 import { styled, ThemeProvider, theme as styledTheme } from '../styled'
 import OldThemeProvider from './Theme/ThemeProvider'
 import { getActiveEndpoints } from './util'
+import { ISettings } from '../types'
 import PlaygroundStorage from './PlaygroundStorage'
 import { mapKeys } from 'lodash'
 
@@ -31,7 +32,7 @@ export interface Props {
   endpointUrl?: string
   subscriptionEndpoint?: string
   setTitle?: boolean
-  settings?: EditorSettings
+  settings?: ISettings
   folderName?: string
   configString?: string
   showNewWorkspace?: boolean
@@ -54,7 +55,7 @@ export interface State {
   shareUrl?: string
   platformToken?: string
   settingsString: string
-  settings: EditorSettings
+  settings: ISettings
   configIsYaml?: boolean
   configString?: string
   activeProjectName?: string
@@ -62,27 +63,21 @@ export interface State {
   headers?: any
 }
 
-export type Theme = 'dark' | 'light'
-export interface EditorSettings {
-  ['editor.theme']: Theme
-  ['editor.reuseHeaders']: boolean
-  ['tracing.hideTracingResponse']: boolean
-}
-
 const defaultSettings = `{
+  "general.betaUpdates": false,
   "editor.theme": "dark",
   "editor.reuseHeaders": true,
   "tracing.hideTracingResponse": true
 }`
 
-class MiddlewareApp extends React.Component<Props, State> {
+export default class MiddlewareApp extends React.Component<Props, State> {
   playground: IPlayground
   constructor(props: Props) {
     super(props)
     ;(global as any).m = this
 
-    let settings = localStorage.getItem('settings') || defaultSettings
-    settings = this.migrateSettingsString(settings)
+    let settingsString = localStorage.getItem('settings') || defaultSettings
+    settingsString = this.migrateSettingsString(settingsString)
 
     const configIsYaml = props.configString
       ? this.isConfigYaml(props.configString)
@@ -118,8 +113,8 @@ class MiddlewareApp extends React.Component<Props, State> {
       subscriptionEndpoint: subscriptionEndpoint
         ? this.normalizeSubscriptionUrl(endpoint, subscriptionEndpoint)
         : '',
-      settingsString: settings,
-      settings: this.getSettings(settings),
+      settingsString,
+      settings: this.getSettings(settingsString),
       configIsYaml,
       configString: props.configString,
       activeEnv,
@@ -138,7 +133,7 @@ class MiddlewareApp extends React.Component<Props, State> {
     return endpoint
   }
 
-  migrateSettingsString(settingsString) {
+  migrateSettingsString(settingsString: string): string {
     const defaultSettingsObject = JSON.parse(defaultSettings)
     const replacementMap = {
       theme: 'editor.theme',
@@ -146,17 +141,12 @@ class MiddlewareApp extends React.Component<Props, State> {
     }
 
     try {
-      const settings = JSON.parse(settingsString)
-      return JSON.stringify(
-        {
-          ...defaultSettingsObject,
-          ...mapKeys(settings, (value, key) => {
-            return replacementMap[key] || key
-          }),
-        },
-        null,
-        2,
-      )
+      const currentSettings = JSON.parse(settingsString)
+      const settings = {
+        ...defaultSettingsObject,
+        ...mapKeys(currentSettings, (value, key) => replacementMap[key] || key),
+      }
+      return JSON.stringify(settings, null, 2)
     } catch (e) {
       //
     }
@@ -358,7 +348,7 @@ class MiddlewareApp extends React.Component<Props, State> {
     })
   }
 
-  getSettings(settingsString = this.state.settingsString): EditorSettings {
+  private getSettings(settingsString = this.state.settingsString): ISettings {
     try {
       const settings = JSON.parse(settingsString)
       return this.normalizeSettings(settings)
@@ -369,7 +359,7 @@ class MiddlewareApp extends React.Component<Props, State> {
     return JSON.parse(defaultSettings)
   }
 
-  normalizeSettings(settings: EditorSettings) {
+  private normalizeSettings(settings: ISettings) {
     const theme = settings['editor.theme']
     if (theme !== 'dark' && theme !== 'light') {
       settings['editor.theme'] = 'dark'
@@ -378,11 +368,11 @@ class MiddlewareApp extends React.Component<Props, State> {
     return settings
   }
 
-  handleChangeSettings = (settingsString: string) => {
+  private handleChangeSettings = (settingsString: string) => {
     this.setState({ settingsString })
   }
 
-  handleSaveSettings = () => {
+  private handleSaveSettings = () => {
     try {
       const settings = JSON.parse(this.state.settingsString)
       this.setState({ settings })
@@ -522,8 +512,6 @@ async function find(
   }
   return null
 }
-
-export default MiddlewareApp
 
 const App = styled.div`
   display: flex;

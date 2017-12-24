@@ -3,7 +3,7 @@ import { Session } from '../../types'
 import GraphQLEditor from './GraphQLEditor'
 import { SchemaFetcher } from './SchemaFetcher'
 import { SharingProps } from '../Share'
-import { EditorSettings } from '../MiddlewareApp'
+import { ISettings } from '../../types'
 
 export interface Props {
   session: Session
@@ -31,7 +31,7 @@ export interface Props {
   sharing?: SharingProps
   fixedEndpoint?: boolean
   endpoint: string
-  settings: EditorSettings
+  settings: ISettings
 }
 
 export default class GraphQLEditorSession extends React.PureComponent<

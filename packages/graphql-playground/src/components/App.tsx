@@ -2,11 +2,10 @@ import * as React from 'react'
 import * as fetch from 'isomorphic-fetch'
 import { Provider } from 'react-redux'
 import createStore from '../createStore'
-import Playground from './MiddlewareApp'
+import MiddlewareApp from './MiddlewareApp'
 import 'isomorphic-fetch'
 import EndpointPopup from './EndpointPopup'
 import Loading from './Loading'
-// import {BrowserRouter} from 'react-router-dom'
 
 const store = createStore()
 
@@ -36,7 +35,7 @@ export interface State {
   session?: any
 }
 
-class App extends React.Component<Props, State> {
+export default class App extends React.Component<Props, State> {
   constructor(props: Props) {
     super(props)
 
@@ -118,7 +117,7 @@ class App extends React.Component<Props, State> {
               }
             />
           ) : (
-            <Playground
+            <MiddlewareApp
               endpoint={endpoint}
               subscriptionEndpoint={subscriptionEndpoint}
               session={this.state.session}
@@ -134,5 +133,3 @@ class App extends React.Component<Props, State> {
     localStorage.setItem('last-endpoint', endpoint)
   }
 }
-
-export default App

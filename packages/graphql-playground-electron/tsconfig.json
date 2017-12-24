@@ -9,21 +9,27 @@
     "allowJs": true,
     "noImplicitReturns": true,
     "noImplicitThis": true,
-    "lib": ["es2015", "dom"],
+    "noUnusedLocals": true,
+    "lib": [
+      "es2015",
+      "dom"
+    ],
     "outDir": "lib",
     "baseUrl": "./",
     "skipDefaultLibCheck": true,
     "skipLibCheck": true
   },
   "exclude": [
-    "node_modules"
+    "node_modules",
+    "dist",
+    "lib"
   ],
   "include": [
     "typings/custom.d.ts",
     "typings/styled-jsx.d.ts"
   ],
   "files": [
-    "src/main.ts",
-    "src/root.tsx"
+    "src/app/index.tsx",
+    "src/main/index.ts",
   ]
 }

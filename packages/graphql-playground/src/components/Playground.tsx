@@ -25,7 +25,7 @@ import { isSharingAuthorization } from './Playground/util/session'
 import { SchemaFetcher } from './Playground/SchemaFetcher'
 import Settings from './Settings'
 import SettingsEditor from './SettingsEditor'
-import { EditorSettings } from './MiddlewareApp'
+import { ISettings } from '../types'
 import { GraphQLConfig } from '../graphqlConfig'
 import FileEditor from './FileEditor'
 
@@ -58,7 +58,7 @@ export interface Props {
   onSaveConfig: () => void
   onChangeConfig: (configString: string) => void
   onUpdateSessionCount?: () => void
-  settings: EditorSettings
+  settings: ISettings
   settingsString: string
   config: GraphQLConfig
   configString: string
