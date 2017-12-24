@@ -20,7 +20,7 @@ export class ConfigEditor extends React.Component<Props, {}> {
   ignoreChangeEvent: boolean
 
   constructor(props) {
-    super()
+    super(props)
 
     // Keep a cached version of the value, this cache will be updated when the
     // editor is updated, which can later be used to protect the editor from

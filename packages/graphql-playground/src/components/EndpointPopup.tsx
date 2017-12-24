@@ -16,6 +16,7 @@ export interface State {
 }
 
 export default class EndpointPopup extends React.Component<Props, State> {
+
   checkEndpoint = throttle(() => {
     if (this.state.endpoint.match(/^https?:\/\/\w+(\.\w+)*(:[0-9]+)?\/?.*$/)) {
       fetch(this.state.endpoint, {
@@ -41,15 +42,18 @@ export default class EndpointPopup extends React.Component<Props, State> {
         })
     }
   }, 500)
+
   constructor(props) {
-    super()
+    super(props)
     this.state = {
       endpoint: props.endpoint,
     }
   }
+  
   componentDidMount() {
     this.checkEndpoint()
   }
+
   render() {
     const { valid } = this.state
     return (

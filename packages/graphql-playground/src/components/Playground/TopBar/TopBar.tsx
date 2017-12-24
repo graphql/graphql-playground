@@ -166,4 +166,4 @@ const ReloadIcon = styled(Icon)`
       fill: ${iconColorHover};
     }
   }
-`
+` as any // TODO remove this once typings are fixed

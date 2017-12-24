@@ -43,7 +43,7 @@ export class QueryEditor extends React.Component<Props, {}> {
   private node: any
 
   constructor(props) {
-    super()
+    super(props)
 
     // Keep a cached version of the value, this cache will be updated when the
     // editor is updated, which can later be used to protect the editor from
