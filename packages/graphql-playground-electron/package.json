@@ -4,7 +4,7 @@
   "homepage": "https://github.com/graphcool/graphql-playground",
   "repository": "graphcool/graphql-playground",
   "description": "Playground app",
-  "version": "v1.3.11",
+  "version": "v1.3.12",
   "author": {
     "name": "Graphcool",
     "email": "contact@graph.cool",
