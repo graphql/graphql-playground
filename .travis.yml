@@ -14,7 +14,8 @@ install:
   #- if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then
       #export DISPLAY=:99.0 && sh -e /etc/init.d/xvfb start && sleep 3;
     #fi
-  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then
+  - |
+    if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then
       security create-keychain -p travis build.keychain
       security default-keychain -s build.keychain
       security unlock-keychain -p travis build.keychain
