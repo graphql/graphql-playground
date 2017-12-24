@@ -3340,9 +3340,9 @@ graphcool-ui@^0.0.13:
     graphcool-styles "^0.1.31"
     react-modal "^1.6.5"
 
-graphcool-yml@^0.0.21:
-  version "0.0.21"
-  resolved "https://registry.yarnpkg.com/graphcool-yml/-/graphcool-yml-0.0.21.tgz#9e944a76e582844ffa9b930d17c46fc14e07c2ea"
+graphcool-yml@0.1.1:
+  version "0.1.1"
+  resolved "https://registry.yarnpkg.com/graphcool-yml/-/graphcool-yml-0.1.1.tgz#fd69b1ecd611a79d2e7b3270a4013f10f694e266"
   dependencies:
     ajv "^5.5.1"
     bluebird "^3.5.1"
@@ -3350,6 +3350,26 @@ graphcool-yml@^0.0.21:
     dotenv "^4.0.0"
     fs-extra "^4.0.3"
     graphcool-json-schema "^1.0.1-beta.5"
+    isomorphic-fetch "^2.2.1"
+    js-yaml "^3.10.0"
+    json-stable-stringify "^1.0.1"
+    jsonwebtoken "^8.1.0"
+    lodash "^4.17.4"
+    replaceall "^0.1.6"
+    scuid "^1.0.2"
+    yaml-ast-parser "^0.0.40"
+
+graphcool-yml@^0.1.4:
+  version "0.1.4"
+  resolved "https://registry.yarnpkg.com/graphcool-yml/-/graphcool-yml-0.1.4.tgz#34eb3b857efad348b623d3ad73b33cc9b97f0d17"
+  dependencies:
+    ajv "^5.5.1"
+    bluebird "^3.5.1"
+    debug "^3.1.0"
+    dotenv "^4.0.0"
+    fs-extra "^4.0.3"
+    graphcool-json-schema "^1.0.1-beta.5"
+    graphcool-yml "0.1.1"
     isomorphic-fetch "^2.2.1"
     js-yaml "^3.10.0"
     json-stable-stringify "^1.0.1"
@@ -3367,11 +3387,11 @@ graphiql@^0.11.2:
     codemirror-graphql "^0.6.8"
     marked "0.3.6"
 
-graphql-config-extension-graphcool@0.1.4:
-  version "0.1.4"
-  resolved "https://registry.yarnpkg.com/graphql-config-extension-graphcool/-/graphql-config-extension-graphcool-0.1.4.tgz#bbfe32261a91f37bb71e65f6fc6fd365ec773930"
+graphql-config-extension-graphcool@^0.1.6:
+  version "0.1.6"
+  resolved "https://registry.yarnpkg.com/graphql-config-extension-graphcool/-/graphql-config-extension-graphcool-0.1.6.tgz#e6ebcfb919d2ea6c116f2d116e08510c5b0786b2"
   dependencies:
-    graphcool-yml "^0.0.21"
+    graphcool-yml "^0.1.4"
     graphql-config "^1.1.0"
 
 graphql-config@^1.1.0:
@@ -6884,18 +6904,6 @@ styled-components@^2.2.3:
 "styled-jsx-postcss@git+https://github.com/timsuchanek/styled-jsx-postcss#build3":
   version "0.2.0"
   resolved "git+https://github.com/timsuchanek/styled-jsx-postcss#677ee0fb7f9138047a00e03c8c3e44adbb33cf2a"
-  dependencies:
-    babel-traverse "^6.21.0"
-    babylon "^6.14.1"
-    deasync "^0.1.9"
-    postcss "^5.2.8"
-    postcss-load-plugins "^2.2.0"
-    styled-jsx "^0.5.7"
-
-"styled-jsx-postcss@git+https://github.com/timsuchanek/styled-jsx-postcss.git#build3":
-  version "0.2.0"
-  uid "677ee0fb7f9138047a00e03c8c3e44adbb33cf2a"
-  resolved "git+https://github.com/timsuchanek/styled-jsx-postcss.git#677ee0fb7f9138047a00e03c8c3e44adbb33cf2a"
   dependencies:
     babel-traverse "^6.21.0"
     babylon "^6.14.1"
