@@ -1,28 +1,21 @@
-notifications:
-  email: false
-
-os:
-  - linux
-  - osx
-
+os: osx
 osx_image: xcode9.2
 
 language: node_js
 node_js: "8"
 
 install:
-  #- if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then
-      #export DISPLAY=:99.0 && sh -e /etc/init.d/xvfb start && sleep 3;
-    #fi
   - |
-    if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then
-      security create-keychain -p travis build.keychain
-      security default-keychain -s build.keychain
-      security unlock-keychain -p travis build.keychain
-      echo $CERTIFICATE_OSX_P12 | base64 --decode > certificate.p12
-      security import certificate.p12 -k build.keychain -P $CERTIFICATE_OSX_PASSWORD -T /usr/bin/codesign
-      security set-key-partition-list -S apple-tool:,apple: -s -k travis build.keychain
-    fi
+    security create-keychain -p travis build.keychain
+    security default-keychain -s build.keychain
+    security unlock-keychain -p travis build.keychain
+    echo $CERTIFICATE_OSX_P12 | base64 --decode > certificate.p12
+    security import certificate.p12 -k build.keychain -P $CERTIFICATE_OSX_PASSWORD -T /usr/bin/codesign
+    security set-key-partition-list -S apple-tool:,apple: -s -k travis build.keychain
   - cd packages/graphql-playground-electron
   - yarn install
   - yarn release
+
+notifications:
+  email: false
+
