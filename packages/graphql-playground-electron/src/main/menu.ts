@@ -1,4 +1,9 @@
-import { MenuItemConstructorOptions, BrowserWindow, app } from 'electron'
+import {
+  MenuItemConstructorOptions,
+  BrowserWindow,
+  app,
+  dialog,
+} from 'electron'
 import { autoUpdater } from 'electron-updater'
 import { log } from '../shared/utils'
 import { WindowContext } from './types'
@@ -16,7 +21,19 @@ export const buildTemplate = (
       } as MenuItemConstructorOptions,
       {
         label: 'Check For Updates',
-        click: () => autoUpdater.checkForUpdates(),
+        click: async () => {
+          const { updateInfo, downloadPromise } = await autoUpdater.checkForUpdates()
+          if (updateInfo.version !== autoUpdater.currentVersion) {
+            const buttonIndex = dialog.showMessageBox({
+              message: `New version available: ${updateInfo.version}`,
+              buttons: ['Install Update', 'Later'],
+            })
+            if (buttonIndex === 0) {
+              await downloadPromise
+              autoUpdater.quitAndInstall()
+            }
+          }
+        },
       },
       { type: 'separator' },
       {

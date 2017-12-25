@@ -83,7 +83,7 @@ ipcMain.on('cwd', (event, msg) => {
 app.on('ready', () => {
   createWindow(windowContext)
 
-  if (!dev && process.platform !== 'linux') {
+  if (!dev) {
     const logger = require('electron-log')
     logger.transports.file.level = 'info'
     autoUpdater.logger = logger

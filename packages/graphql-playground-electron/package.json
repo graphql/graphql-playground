@@ -1,10 +1,10 @@
 {
-  "name": "playground",
+  "name": "graphql-playground",
   "productName": "GraphQL Playground",
   "homepage": "https://github.com/graphcool/graphql-playground",
   "repository": "graphcool/graphql-playground",
-  "description": "Playground app",
-  "version": "v1.3.12",
+  "description": "GraphQL IDE for better development workflows (GraphQL Subscriptions, interactive docs & collaboration)",
+  "version": "v1.3.13",
   "author": {
     "name": "Graphcool",
     "email": "contact@graph.cool",
@@ -136,7 +136,7 @@
     "concurrently": "^3.5.1",
     "css-loader": "^0.23.1",
     "electron": "^1.7.10",
-    "electron-builder": "19.33.0",
+    "electron-builder": "19.48.3",
     "electron-devtools-installer": "^2.2.3",
     "extract-text-webpack-plugin": "^2.0.0-beta.3",
     "file-loader": "^0.11.2",
