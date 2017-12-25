@@ -136,7 +136,7 @@
     "concurrently": "^3.5.1",
     "css-loader": "^0.23.1",
     "electron": "^1.7.10",
-    "electron-builder": "19.49.3",
+    "electron-builder": "19.45.5",
     "electron-devtools-installer": "^2.2.3",
     "extract-text-webpack-plugin": "^2.0.0-beta.3",
     "file-loader": "^0.11.2",
