@@ -27,6 +27,13 @@
         "deb"
       ]
     },
+    "nsis": {
+      "oneClick": false,
+      "perMachine": true,
+      "allowElevation": true,
+      "allowToChangeInstallationDirectory": true,
+      "runAfterFinish": false
+    },
     "files": [
       "lib/**/!(*.map)"
     ],
