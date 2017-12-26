@@ -19,9 +19,3 @@ export function createRemoteWindow() {
 
   win.loadURL(url)
 }
-
-export const log = {
-  info: (...args) => {
-    console.log(...args)
-  },
-}

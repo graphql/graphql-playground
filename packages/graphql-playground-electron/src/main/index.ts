@@ -10,12 +10,15 @@ import {
 } from 'electron'
 import * as queryString from 'query-string'
 import * as fs from 'fs'
-import { log } from '../shared/utils'
+import * as log from 'electron-log'
 import { buildTemplate } from './menu'
 import { createWindow } from './createWindow'
 import { WindowContext } from './types'
 import { startUpdates } from './updates'
 import squirrelStartup = require('electron-squirrel-startup')
+
+log.transports.file.level = 'info'
+log.transports.console.level = 'debug'
 
 // Immediately quit the app if squirrel is launching it
 if (squirrelStartup) {
@@ -93,17 +96,6 @@ app.on('ready', () => {
   createWindow(windowContext)
 
   startUpdates()
-  // const logger = require('electron-log')
-  // logger.transports.file.level = 'info'
-  // autoUpdater.logger = logger
-
-  // forceSend('SettingsRequest', '')
-
-  // ipcMain.once('SettingsResponse', (event, settingsString) => {
-  //   log.info('settings', settingsString)
-  //   autoUpdater.allowPrerelease = getBetaUpdates(settingsString)
-  //   autoUpdater.checkForUpdatesAndNotify()
-  // })
 
   const menu = Menu.buildFromTemplate(buildTemplate(windowContext))
   Menu.setApplicationMenu(menu)
@@ -177,14 +169,3 @@ async function forceSend(channel: string, arg: string, byPath?: string) {
   await windowContext.readyWindowsPromises[window.id]
   window.webContents.send(channel, arg)
 }
-
-// function getBetaUpdates(settingsString: string | undefined): boolean {
-//   try {
-//     const settings = JSON.parse(settingsString)
-//     return !!settings['general.betaUpdates']
-//   } catch (e) {
-//     //
-//   }
-
-//   return false
-// }

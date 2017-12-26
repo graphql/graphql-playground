@@ -2,12 +2,12 @@ import {
   MenuItemConstructorOptions,
   BrowserWindow,
   app,
-  dialog,
+  autoUpdater,
 } from 'electron'
-import { autoUpdater } from 'electron-updater'
-import { log } from '../shared/utils'
+import * as log from 'electron-log'
 import { WindowContext } from './types'
 import { createWindow } from './createWindow'
+import { notify } from './notify'
 
 export const buildTemplate = (
   windowContext: WindowContext,
@@ -21,25 +21,15 @@ export const buildTemplate = (
       } as MenuItemConstructorOptions,
       {
         label: 'Check For Updates',
-        click: async () => {
-          const {
-            updateInfo,
-            downloadPromise,
-          } = await autoUpdater.checkForUpdates()
-          if (updateInfo.version !== autoUpdater.currentVersion) {
-            const buttonIndex = dialog.showMessageBox({
-              message: `New version available: ${updateInfo.version}`,
-              buttons: ['Install Update', 'Later'],
+        click: () => {
+          autoUpdater.once('update-not-available', () => {
+            notify({
+              title: 'GraphQL Playground Updates',
+              body: 'Already up to date.',
             })
-            if (buttonIndex === 0) {
-              await downloadPromise
-              autoUpdater.quitAndInstall()
-            }
-          } else {
-            dialog.showMessageBox({
-              message: 'Already up to date.',
-            })
-          }
+          })
+
+          autoUpdater.checkForUpdates()
         },
       },
       { type: 'separator' },

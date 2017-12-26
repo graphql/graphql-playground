@@ -43,7 +43,7 @@ interface State {
   config?: GraphQLConfigData
 }
 
-ipcRenderer.once('SettingsRequest', () => {
+ipcRenderer.on('SettingsRequest', () => {
   ipcRenderer.send('SettingsResponse', localStorage.getItem('settings'))
 })
 

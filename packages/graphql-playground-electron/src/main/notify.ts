@@ -1,6 +1,13 @@
 import { shell, Notification } from 'electron'
 
-export const notify = ({ title, body, url, onClick }) => {
+interface NotificationOptions {
+  title: string
+  body: string
+  url?: string
+  onClick?: () => void
+}
+
+export const notify = ({ title, body, url, onClick }: NotificationOptions) => {
   const notification = new Notification({
     title,
     body,

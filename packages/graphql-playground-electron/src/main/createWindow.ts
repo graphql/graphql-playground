@@ -1,7 +1,8 @@
 import { BrowserWindow, app, ipcMain } from 'electron'
 import * as path from 'path'
 import dev = require('electron-is-dev')
-import { newWindowConfig, log } from '../shared/utils'
+import { newWindowConfig } from '../shared/utils'
+import * as log from 'electron-log'
 import { WindowContext } from './types'
 
 export function createWindow(windowContext: WindowContext) {
