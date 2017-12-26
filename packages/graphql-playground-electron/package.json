@@ -6,7 +6,9 @@
   "description": "GraphQL IDE for better development workflows (GraphQL Subscriptions, interactive docs & collaboration)",
   "version": "v1.3.14",
   "author": {
-    "name": "Graphcool"
+    "name": "Graphcool",
+    "email": "hello@graph.cool",
+    "url": "https://www.graph.cool"
   },
   "main": "lib/main",
   "build": {
