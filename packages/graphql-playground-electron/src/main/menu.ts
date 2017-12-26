@@ -22,7 +22,10 @@ export const buildTemplate = (
       {
         label: 'Check For Updates',
         click: async () => {
-          const { updateInfo, downloadPromise } = await autoUpdater.checkForUpdates()
+          const {
+            updateInfo,
+            downloadPromise,
+          } = await autoUpdater.checkForUpdates()
           if (updateInfo.version !== autoUpdater.currentVersion) {
             const buttonIndex = dialog.showMessageBox({
               message: `New version available: ${updateInfo.version}`,
@@ -32,6 +35,10 @@ export const buildTemplate = (
               await downloadPromise
               autoUpdater.quitAndInstall()
             }
+          } else {
+            dialog.showMessageBox({
+              message: 'Already up to date.',
+            })
           }
         },
       },
