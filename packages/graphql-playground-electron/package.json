@@ -4,7 +4,7 @@
   "homepage": "https://github.com/graphcool/graphql-playground",
   "repository": "graphcool/graphql-playground",
   "description": "GraphQL IDE for better development workflows (GraphQL Subscriptions, interactive docs & collaboration)",
-  "version": "v1.3.13",
+  "version": "v1.3.14",
   "author": {
     "name": "Graphcool"
   },
