@@ -10,12 +10,17 @@ import {
 } from 'electron'
 import * as queryString from 'query-string'
 import * as fs from 'fs'
-import dev = require('electron-is-dev')
-import { autoUpdater } from 'electron-updater'
 import { log } from '../shared/utils'
 import { buildTemplate } from './menu'
 import { createWindow } from './createWindow'
 import { WindowContext } from './types'
+import { startUpdates } from './updates'
+import squirrelStartup = require('electron-squirrel-startup')
+
+// Immediately quit the app if squirrel is launching it
+if (squirrelStartup) {
+  app.quit()
+}
 
 const windowContext: WindowContext = {
   readyWindowsPromises: {},
@@ -64,6 +69,10 @@ app.on('open-file', (event, filePath) => {
   forceSend('OpenSelectedFile', filePath, filePath)
 })
 
+ipcMain.on('online-status-changed', (event, status) => {
+  process.env.CONNECTION = status
+})
+
 ipcMain.on('async', (event, arg) => {
   const focusedWindow = BrowserWindow.getFocusedWindow()
   if (focusedWindow) {
@@ -83,19 +92,18 @@ ipcMain.on('cwd', (event, msg) => {
 app.on('ready', () => {
   createWindow(windowContext)
 
-  if (!dev) {
-    const logger = require('electron-log')
-    logger.transports.file.level = 'info'
-    autoUpdater.logger = logger
+  startUpdates()
+  // const logger = require('electron-log')
+  // logger.transports.file.level = 'info'
+  // autoUpdater.logger = logger
 
-    forceSend('SettingsRequest', '')
+  // forceSend('SettingsRequest', '')
 
-    ipcMain.once('SettingsResponse', (event, settingsString) => {
-      log.info('settings', settingsString)
-      autoUpdater.allowPrerelease = getBetaUpdates(settingsString)
-      autoUpdater.checkForUpdatesAndNotify()
-    })
-  }
+  // ipcMain.once('SettingsResponse', (event, settingsString) => {
+  //   log.info('settings', settingsString)
+  //   autoUpdater.allowPrerelease = getBetaUpdates(settingsString)
+  //   autoUpdater.checkForUpdatesAndNotify()
+  // })
 
   const menu = Menu.buildFromTemplate(buildTemplate(windowContext))
   Menu.setApplicationMenu(menu)
@@ -170,13 +178,13 @@ async function forceSend(channel: string, arg: string, byPath?: string) {
   window.webContents.send(channel, arg)
 }
 
-function getBetaUpdates(settingsString: string | undefined): boolean {
-  try {
-    const settings = JSON.parse(settingsString)
-    return !!settings['general.betaUpdates']
-  } catch (e) {
-    //
-  }
+// function getBetaUpdates(settingsString: string | undefined): boolean {
+//   try {
+//     const settings = JSON.parse(settingsString)
+//     return !!settings['general.betaUpdates']
+//   } catch (e) {
+//     //
+//   }
 
-  return false
-}
+//   return false
+// }

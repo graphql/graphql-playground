@@ -9,7 +9,7 @@ const HappyPack = require('happypack')
 
 module.exports = {
   devtool: 'cheap-module-eval-source-map',
-  entry: './src/app',
+  entry: './src/renderer',
   target: 'electron',
   output: {
     filename: '[name].[hash].js',
@@ -77,7 +77,7 @@ module.exports = {
     }),
     new HtmlWebpackPlugin({
       favicon: 'static/favicon.png',
-      template: 'src/app/index.html',
+      template: 'src/renderer/index.html',
     }),
     new webpack.NormalModuleReplacementPlugin(/\/iconv-loader$/, 'node-noop'),
     // See https://github.com/graphql/graphql-language-service/issues/111

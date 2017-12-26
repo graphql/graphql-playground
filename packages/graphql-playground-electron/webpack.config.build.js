@@ -11,7 +11,7 @@ module.exports = {
   devtool: 'source-map',
   target: 'electron-renderer',
   entry: {
-    app: ['./src/app'],
+    app: ['./src/renderer'],
   },
   output: {
     path: __dirname + '/dist',
@@ -89,7 +89,7 @@ module.exports = {
     }),
     new HtmlWebpackPlugin({
       favicon: 'static/favicon.png',
-      template: 'src/app/index.html',
+      template: 'src/renderer/index.html',
     }),
     new webpack.optimize.OccurrenceOrderPlugin(),
     /* new UglifyJSParallelPlugin({

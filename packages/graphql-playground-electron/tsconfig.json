@@ -29,7 +29,7 @@
     "typings/styled-jsx.d.ts"
   ],
   "files": [
-    "src/app/index.tsx",
+    "src/renderer/index.tsx",
     "src/main/index.ts",
   ]
 }

@@ -4,6 +4,12 @@ osx_image: xcode9.2
 language: node_js
 node_js: "8"
 
+cache:
+  directories:
+  - node_modules
+  - $HOME/.cache/electron
+  - $HOME/.cache/electron-builder
+
 install:
   - |
     security create-keychain -p travis build.keychain
@@ -19,3 +25,6 @@ install:
 notifications:
   email: false
 
+branches:
+  except:
+    - "/^v\\d+\\.\\d+\\.\\d+$/"
