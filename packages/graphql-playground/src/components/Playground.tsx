@@ -612,6 +612,21 @@ export class Playground extends React.PureComponent<Props & DocsState, State> {
     }
   }
 
+  public switchTab = (index: number) => {
+    const arrayIndex = index - 1
+    const { sessions, selectedSessionIndex } = this.state
+    const numberOfSessions = sessions.length
+
+    if (arrayIndex !== selectedSessionIndex || arrayIndex <= numberOfSessions) {
+      this.setState(state => {
+        return {
+          ...state,
+          selectedSessionIndex: arrayIndex,
+        }
+      })
+    }
+  }
+
   public handleNewSession = (newIndexZero: boolean = false) => {
     const session = this.createSession()
     if (session.query === defaultQuery) {

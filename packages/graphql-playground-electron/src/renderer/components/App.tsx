@@ -219,6 +219,8 @@ cd ${folderPath}; graphql playground`)
       this.prevTab()
     } else if (e.key === '}' && e.metaKey) {
       this.nextTab()
+    } else if (e.key >= 1 && e.key <= 9 && e.metaKey) {
+      this.playground.switchTab(e.key)
     }
   }
 
