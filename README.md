@@ -159,7 +159,7 @@ functions:
         cors: true
 ```
 
-## Development [![npm version](https://badge.fury.io/js/graphql-playground.svg)](https://badge.fury.io/js/graphql-playground)
+## Development [![npm version](https://badge.fury.io/js/graphql-playground.svg)](https://badge.fury.io/js/graphql-playground) [![Build Status](https://travis-ci.org/graphcool/graphql-playground.svg?branch=master)](https://travis-ci.org/graphcool/graphql-playground)
 
 This is a mono-repo setup containing packages for the `graphql-playground` and `graphql-playground-electron`.
 
