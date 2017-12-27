@@ -23,12 +23,6 @@ jobs:
           echo $CERTIFICATE_OSX_P12 | base64 --decode > certificate.p12
           security import certificate.p12 -k build.keychain -P $CERTIFICATE_OSX_PASSWORD -T /usr/bin/codesign
           security set-key-partition-list -S apple-tool:,apple: -s -k travis build.keychain
-      # - run: security create-keychain -p travis build.keychain
-      # - run: security default-keychain -s build.keychain
-      # - run: security unlock-keychain -p travis build.keychain
-      # - run: echo $CERTIFICATE_OSX_P12 | base64 --decode > certificate.p12
-      # - run: security import certificate.p12 -k build.keychain -P $CERTIFICATE_OSX_PASSWORD -T /usr/bin/codesign
-      # - run: security set-key-partition-list -S apple-tool:,apple: -s -k travis build.keychain
       - run: sudo npm i -g yarn
       # needed for release process
       - run: brew install gettext
