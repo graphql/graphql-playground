@@ -30,6 +30,8 @@ jobs:
       # - run: security import certificate.p12 -k build.keychain -P $CERTIFICATE_OSX_PASSWORD -T /usr/bin/codesign
       # - run: security set-key-partition-list -S apple-tool:,apple: -s -k travis build.keychain
       - run: sudo npm i -g yarn
+      # needed for release process
+      - run: brew install gettext
       - run: cd packages/graphql-playground-electron && yarn
       - run: cd packages/graphql-playground-electron && yarn release
 
