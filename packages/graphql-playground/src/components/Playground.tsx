@@ -83,7 +83,6 @@ export interface State {
   selectUserSessionId?: string
   codeGenerationPopupOpen: boolean
   disableQueryHeader: boolean
-  autoReloadSchema: boolean
   useVim: boolean
   userModelName: string
 
@@ -157,7 +156,6 @@ export class Playground extends React.PureComponent<Props & DocsState, State> {
       selectUserSessionId: undefined,
       codeGenerationPopupOpen: false,
       disableQueryHeader: false,
-      autoReloadSchema: false,
       useVim: localStorage.getItem('useVim') === 'true' || false,
       shareAllTabs: true,
       shareHttpHeaders: true,
@@ -428,14 +426,7 @@ export class Playground extends React.PureComponent<Props & DocsState, State> {
   }
 
   setRef = (index: number, ref: any) => {
-    this.graphiqlComponents[index] = ref
-  }
-
-  toggleSchemaReload = () => {
-    this.setState(state => ({
-      ...state,
-      autoReloadSchema: !state.autoReloadSchema,
-    }))
+    this.graphiqlComponents[index] = ref.getWrappedInstance()
   }
 
   handleChangeSettings = (settings: string) => {
@@ -487,6 +478,15 @@ export class Playground extends React.PureComponent<Props & DocsState, State> {
   handleSaveFile = file => {
     const session = this.state.sessions[this.state.selectedSessionIndex]
     this.setValueInSession(session.id, 'hasChanged', false)
+  }
+
+  public reloadSchema = () => {
+    if (this.graphiqlComponents) {
+      const editor = this.graphiqlComponents[this.state.selectedSessionIndex]
+      if (editor && editor.queryEditorComponent) {
+        editor.reloadSchema()
+      }
+    } 
   }
 
   public openSettingsTab = () => {

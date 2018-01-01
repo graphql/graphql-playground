@@ -79,7 +79,7 @@ export default class GraphQLEditorSession extends React.PureComponent<
         responses={responses}
         disableQueryHeader={disableQueryHeader}
         disableResize={false}
-        ref={this.setRef}
+        onRef={this.setRef}
         useVim={this.props.useVim}
         rerenderQuery={false}
         disableAnimation={true}
