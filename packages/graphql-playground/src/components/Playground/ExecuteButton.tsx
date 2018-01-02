@@ -7,9 +7,8 @@
  */
 
 import * as React from 'react'
-import * as cx from 'classnames'
-import { withTheme, LocalThemeInterface } from '../Theme'
 import * as cn from 'classnames'
+import { withTheme, LocalThemeInterface } from '../Theme'
 import ExecuteButtonOperation from './ExecuteButtonOperation'
 
 export interface Props {
@@ -122,7 +121,7 @@ class ExecuteButton extends React.Component<
           }
         `}</style>
         <div
-          className={cx('graphcool-execute-button', this.props.localTheme, {
+          className={cn('graphcool-execute-button', this.props.localTheme, {
             running: this.props.isRunning,
           })}
           onMouseDown={onMouseDown}

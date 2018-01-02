@@ -14,7 +14,7 @@ export class SchemaFetcher {
   }
   async fetch(endpoint: string, headers?: any) {
     const cachedSchema = this.cache.get(this.hash(endpoint, headers))
-    return cachedSchema || (await this.fetchSchema(endpoint, headers))
+    return cachedSchema || this.fetchSchema(endpoint, headers)
   }
   refetch(endpoint: string, headers: any) {
     return this.fetchSchema(endpoint, headers)

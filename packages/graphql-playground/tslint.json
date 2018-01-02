@@ -3,6 +3,7 @@
     "tslint-graphcool-frontend"
   ],
   "rules": {
-    "forin": false
+    "forin": false,
+    "no-submodule-imports": false
   }
 }
