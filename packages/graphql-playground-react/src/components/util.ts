@@ -20,13 +20,14 @@ export function getEndpointFromEndpointConfig(
   if (typeof env === 'string') {
     return {
       endpoint: env,
+      subscriptionEndpoint: env.replace(/^http/, 'ws'),
     }
   } else {
     return {
       endpoint: env.url,
       subscriptionEndpoint: env.subscription
         ? env.subscription!.url
-        : undefined,
+        : env.url.replace(/^http/, 'ws'),
       headers: env.headers,
     }
   }

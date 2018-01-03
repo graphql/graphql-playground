@@ -425,7 +425,7 @@ export class Playground extends React.PureComponent<Props & DocsState, State> {
   }
 
   setRef = (index: number, ref: any) => {
-    this.graphiqlComponents[index] = ref ?  ref.getWrappedInstance() : ref
+    this.graphiqlComponents[index] = ref ? ref.getWrappedInstance() : ref
   }
 
   handleChangeSettings = (settings: string) => {
@@ -974,7 +974,12 @@ export class Playground extends React.PureComponent<Props & DocsState, State> {
             this.setValueInSession(session.id, 'subscriptionActive', true)
           }
 
-          const wsConnection = this.wsConnections[session.id]
+          let wsConnection = this.wsConnections[session.id]
+
+          if (!wsConnection) {
+            this.setWS(session)
+            wsConnection = this.wsConnections[session.id]
+          }
 
           const id = wsConnection.subscribe(graphQLParams, (err, res) => {
             const data: any = { data: res, isSubscription: true }

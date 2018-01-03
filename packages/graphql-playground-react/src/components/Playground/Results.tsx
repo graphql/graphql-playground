@@ -2,6 +2,7 @@ import * as React from 'react'
 import ageOfDate from './util/ageOfDate'
 import { ResultViewer } from './ResultViewer'
 import { Response } from '../Playground'
+import * as cn from 'classnames'
 
 export interface Props {
   disableResize?: boolean
@@ -12,11 +13,14 @@ export interface Props {
 
 export default class Results extends React.Component<Props, {}> {
   render() {
+    const { disableResize } = this.props
+    const isSubscription = this.props.responses.length > 1
     return (
       <div
-        className={
-          'result-window' + (this.props.disableResize ? ' disableResize' : '')
-        }
+        className={cn('result-window', {
+          disableResize,
+          isSubscription,
+        })}
         ref={this.props.setRef}
       >
         <style jsx={true}>{`
@@ -54,6 +58,9 @@ export default class Results extends React.Component<Props, {}> {
             right: 0;
             bottom: 0;
             overflow: auto;
+          }
+          .isSubscription .result-viewer-wrapper {
+            position: relative;
           }
         `}</style>
         {this.props.responses.map(response => (
