@@ -29,6 +29,7 @@ export default function Argument({
         x={x}
         y={y}
         sessionId={sessionId}
+        lastActive={false}
         afterNode={
           arg.defaultValue !== undefined &&
           showDefaultValue !== false && (

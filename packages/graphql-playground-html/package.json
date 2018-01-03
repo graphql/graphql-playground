@@ -15,7 +15,7 @@
     "dist"
   ],
   "scripts": {
-    "build": "tsc",
+    "build": "rimraf dist && tsc",
     "prepare": "npm run build"
   },
   "keywords": [
@@ -35,6 +35,6 @@
   "dependencies": {
     "dotenv": "^4.0.0",
     "graphql-config": "^1.1.1",
-    "graphql-config-extension-graphcool": "^0.2.0"
+    "graphql-config-extension-graphcool": "^1.0.0"
   }
 }

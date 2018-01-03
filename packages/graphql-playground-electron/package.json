@@ -1,5 +1,5 @@
 {
-  "name": "graphql-playground",
+  "name": "graphql-playground-electron",
   "productName": "GraphQL Playground",
   "homepage": "https://github.com/graphcool/graphql-playground",
   "repository": "graphcool/graphql-playground",
@@ -94,7 +94,7 @@
     "graphcool-tmp-ui": "^0.0.11",
     "graphcool-ui": "^0.0.13",
     "graphql-config": "^1.1.2",
-    "graphql-config-extension-graphcool": "0.2.0",
+    "graphql-config-extension-graphcool": "1.0.0",
     "js-yaml": "^3.10.0",
     "lodash.merge": "^4.6.0",
     "minimist": "^1.2.0",
@@ -108,12 +108,12 @@
     "redux-localstorage-filter": "^0.1.1",
     "styled-jsx": "0.5.2",
     "styled-jsx-postcss": "git+https://github.com/timsuchanek/styled-jsx-postcss#build3",
-    "validator": "^8.0.0"
+    "validator": "^9.2.0"
   },
   "devDependencies": {
     "@types/classnames": "^2.2.3",
     "@types/node": "^8.5.2",
-    "@types/react": "16.0.31",
+    "@types/react": "16.0.33",
     "@types/react-addons-test-utils": "^0.14.20",
     "@types/react-dom": "16.0.3",
     "@types/react-redux": "^5.0.14",

@@ -16,7 +16,7 @@
   ],
   "playgroundVersion": "1.3.10",
   "scripts": {
-    "build": "tsc",
+    "build": "rimraf dist && tsc",
     "prepare": "npm run build"
   },
   "keywords": [

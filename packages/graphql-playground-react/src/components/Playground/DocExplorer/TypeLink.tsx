@@ -26,7 +26,7 @@ export interface Props {
   className?: string
   beforeNode?: JSX.Element | null | false
   afterNode?: JSX.Element | null | false
-  onSetWidth: (width: number) => void
+  onSetWidth?: (width: number) => void
   showParentName?: boolean
   collapsable?: boolean
   sessionId: string

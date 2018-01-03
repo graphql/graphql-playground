@@ -6,7 +6,7 @@ import {
   findGraphQLConfigFile,
   resolveEnvsInValues,
 } from 'graphql-config'
-import { patchEndpointsToConfig } from 'graphql-config-extension-graphcool'
+import { patchEndpointsToConfigData } from 'graphql-config-extension-graphcool'
 import * as dotenv from 'dotenv'
 
 import getLoadingMarkup from './get-loading-markup'
@@ -42,7 +42,7 @@ export async function renderPlaygroundPage(options: RenderPageOptions) {
   if (options.useGraphQLConfig) {
     let config = getGraphQLConfig().config
     config = resolveEnvsInValues(config, env)
-    config = await patchEndpointsToConfig(config, process.cwd(), env)
+    config = await patchEndpointsToConfigData(config, process.cwd(), env)
     const configPath = findGraphQLConfigFile(process.cwd())
     const configString = fs.readFileSync(configPath, 'utf-8')
     const folderName = path.basename(process.cwd())

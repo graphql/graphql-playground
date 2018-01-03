@@ -73,6 +73,7 @@ const DocTypeSchema = ({
             ) : null
           }
           sessionId={sessionId}
+          lastActive={false}
         />
       ))}
       {nonDeprecatedFields.map((data, index) => (
@@ -83,6 +84,7 @@ const DocTypeSchema = ({
           y={index + interfaces.length}
           collapsable={true}
           sessionId={sessionId}
+          lastActive={false}
         />
       ))}
       {deprecatedFields.length > 0 && <br />}
@@ -97,6 +99,7 @@ const DocTypeSchema = ({
             y={index + nonDeprecatedFields.length + interfaces.length}
             collapsable={true}
             sessionId={sessionId}
+            lastActive={false}
           />
         </div>
       ))}

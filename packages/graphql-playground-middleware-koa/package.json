@@ -15,8 +15,8 @@
   "main": "dist/index.js",
   "files": ["dist"],
   "scripts": {
-    "build": "tsc",
-    "prepublishOnly": "npm run build"
+    "build": "rimraf dist && tsc",
+    "prepare": "npm run build"
   },
   "keywords": ["graphql", "graphiql", "playground", "graphcool", "koa"],
   "peerDependencies": {

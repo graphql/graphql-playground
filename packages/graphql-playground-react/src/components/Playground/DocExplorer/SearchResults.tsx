@@ -50,7 +50,13 @@ export default class SearchResults extends React.Component<Props, {}> {
       if (withinType !== type && isMatch(typeName, searchValue)) {
         matchedTypes.push(
           <div className="doc-category-item" key={typeName}>
-            <TypeLink type={type} x={level} y={count++} sessionId={sessionId} />
+            <TypeLink
+              type={type}
+              x={level}
+              y={count++}
+              sessionId={sessionId}
+              lastActive={false}
+            />
           </div>,
         )
       }
@@ -84,6 +90,7 @@ export default class SearchResults extends React.Component<Props, {}> {
                 y={count++}
                 showParentName={true}
                 sessionId={sessionId}
+                lastActive={false}
               />
             </div>
           )

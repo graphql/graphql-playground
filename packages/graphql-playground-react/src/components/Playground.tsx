@@ -1145,7 +1145,7 @@ export class Playground extends React.PureComponent<Props & DocsState, State> {
   }
 }
 
-export default connect<any, any, Props>(state => state.graphiqlDocs, {
+export default connect<any, any, Props>((state: any) => state.graphiqlDocs, {
   setStacks,
 })(Playground)
 

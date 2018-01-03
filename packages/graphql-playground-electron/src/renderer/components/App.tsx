@@ -19,7 +19,7 @@ import * as path from 'path'
 import * as os from 'os'
 import * as yaml from 'js-yaml'
 import * as findUp from 'find-up'
-import { patchEndpointsToConfig } from 'graphql-config-extension-graphcool'
+import { patchEndpointsToConfigData } from 'graphql-config-extension-graphcool'
 // import { PermissionSession } from 'graphql-playground/lib/types'
 
 const { dialog } = remote
@@ -119,7 +119,7 @@ cd ${folderPath}; graphql playground`)
       }
 
       const configDir = path.dirname(configPath)
-      const config = await patchEndpointsToConfig(
+      const config = await patchEndpointsToConfigData(
         resolveEnvsInValues(
           getGraphQLConfig(path.dirname(configPath)).config,
           process.env,
@@ -251,7 +251,7 @@ cd ${folderPath}; graphql playground`)
         ? path.basename(path.dirname(configPath))
         : undefined
       const rawConfig = getGraphQLConfig(input.cwd).config
-      config = await patchEndpointsToConfig(
+      config = await patchEndpointsToConfigData(
         resolveEnvsInValues(rawConfig, input.env),
         input.cwd,
         input.env,

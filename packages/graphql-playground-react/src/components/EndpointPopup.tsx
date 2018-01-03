@@ -17,7 +17,8 @@ export interface State {
 
 export default class EndpointPopup extends React.Component<Props, State> {
 
-  checkEndpoint = throttle(() => {
+  // TODO remove `as any` once typescript 2.7 is released
+  checkEndpoint = (throttle as any)(() => {
     if (this.state.endpoint.match(/^https?:\/\/\w+(\.\w+)*(:[0-9]+)?\/?.*$/)) {
       fetch(this.state.endpoint, {
         method: 'post',

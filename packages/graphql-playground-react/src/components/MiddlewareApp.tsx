@@ -276,9 +276,9 @@ export default class MiddlewareApp extends React.Component<Props, State> {
                   onSaveSettings={this.handleSaveSettings}
                   onChangeSettings={this.handleChangeSettings}
                   getRef={this.getPlaygroundRef}
-                  config={this.props.config}
-                  configString={this.state.configString}
-                  configIsYaml={this.state.configIsYaml}
+                  config={this.props.config!}
+                  configString={this.state.configString!}
+                  configIsYaml={this.state.configIsYaml!}
                   canSaveConfig={Boolean(this.props.canSaveConfig)}
                   onChangeConfig={this.handleChangeConfig}
                   onSaveConfig={this.handleSaveConfig}

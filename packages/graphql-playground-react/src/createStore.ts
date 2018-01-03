@@ -2,7 +2,7 @@ import { compose, createStore, Store } from 'redux'
 import persistState, { mergePersistedState } from 'redux-localstorage'
 import filter from 'redux-localstorage-filter'
 import * as adapter from 'redux-localstorage/lib/adapters/localStorage'
-import * as merge from 'lodash/merge'
+import { merge } from 'lodash'
 import combinedReducers from './reducers'
 
 let localStorage: any = null

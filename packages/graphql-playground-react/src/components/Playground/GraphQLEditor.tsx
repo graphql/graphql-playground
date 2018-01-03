@@ -602,7 +602,7 @@ export class GraphQLEditor extends React.PureComponent<
           </div>
         </div>
         <GraphDocs
-          schema={this.state.schema}
+          schema={this.state.schema!}
           sessionId={this.props.session.id}
         />
       </div>
@@ -1204,7 +1204,8 @@ export class GraphQLEditor extends React.PureComponent<
 }
 
 export default withTheme<Props>(
-  connect<any, any, Props>(getSessionDocs, { setStacks }, null, {withRef: true})(GraphQLEditor),
+  // TODO fix redux types
+  connect<any, any, any>(getSessionDocs, { setStacks }, null, {withRef: true})(GraphQLEditor),
 )
 
 // Duck-type promise detection.

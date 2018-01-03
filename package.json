@@ -1,13 +1,17 @@
 {
-  "_workspaces": [
+  "private": true,
+  "workspaces": [
     "packages/*"
   ],
-  "homepage": "https://github.com/graphcool/graphql-playground",
+  "scripts": {
+    "build": "bash scripts/build.sh"
+  },
   "devDependencies": {
-    "@types/node": "^8.0.52",
+    "@types/node": "^8.5.2",
     "aws-lambda": "^0.1.2",
     "express": "^4.16.2",
     "hapi": "^16.6.2",
-    "koa": "^2.4.1"
+    "koa": "^2.4.1",
+    "rimraf": "^2.6.2"
   }
 }

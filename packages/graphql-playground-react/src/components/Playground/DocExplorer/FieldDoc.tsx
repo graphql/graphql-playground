@@ -87,6 +87,7 @@ export default class FieldDoc extends React.Component<Props, State> {
             y={-1}
             clickable={false}
             sessionId={this.props.sessionId}
+            lastActive={false}
           />
         </div>
         <MarkdownContent
@@ -149,6 +150,7 @@ export default class FieldDoc extends React.Component<Props, State> {
                 y={index + implementationsOffset}
                 collapsable={true}
                 sessionId={this.props.sessionId}
+                lastActive={false}
               />
             ))}
           </div>
