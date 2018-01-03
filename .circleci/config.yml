@@ -18,7 +18,6 @@ jobs:
     steps:
       - checkout
       - run: sudo npm i -g yarn
-      - run: yarn show-versions
       - run: |
           security create-keychain -p travis build.keychain
           security default-keychain -s build.keychain
