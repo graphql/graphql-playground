@@ -9,7 +9,7 @@ jobs:
       - checkout
       - run: sudo npm i -g yarn
       - run: yarn show-versions
-      - run: cd packages/graphql-playground-react && yarn
+      - run: yarn install
       - run: cd packages/graphql-playground-react && yarn build
 
   electron-build:
@@ -17,6 +17,8 @@ jobs:
       xcode: "9.0"
     steps:
       - checkout
+      - run: sudo npm i -g yarn
+      - run: yarn show-versions
       - run: |
           security create-keychain -p travis build.keychain
           security default-keychain -s build.keychain
@@ -28,7 +30,7 @@ jobs:
       - run: sudo npm i -g yarn
       # needed for release process
       - run: brew install gettext
-      - run: cd packages/graphql-playground-electron && yarn
+      - run: yarn install
       - run: |
           if [[ -z "$CIRCLE_PULL_REQUEST" && "$CIRCLE_BRANCH" == "master" ]]
           then
