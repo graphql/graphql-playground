@@ -8,8 +8,8 @@ jobs:
     steps:
       - checkout
       - run: sudo npm i -g yarn
-      - run: cd packages/graphql-playground && yarn
-      - run: cd packages/graphql-playground && yarn build
+      - run: cd packages/graphql-playground-react && yarn
+      - run: cd packages/graphql-playground-react && yarn build
 
   electron-build:
     macos:

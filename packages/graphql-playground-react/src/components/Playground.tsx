@@ -425,7 +425,7 @@ export class Playground extends React.PureComponent<Props & DocsState, State> {
   }
 
   setRef = (index: number, ref: any) => {
-    this.graphiqlComponents[index] = ref.getWrappedInstance()
+    this.graphiqlComponents[index] = ref ?  ref.getWrappedInstance() : ref
   }
 
   handleChangeSettings = (settings: string) => {
