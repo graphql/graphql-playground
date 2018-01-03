@@ -112,7 +112,7 @@ export class Playground extends React.PureComponent<Props & DocsState, State> {
     (sessionId: string, query: string) => {
       const queryTypes = getQueryTypes(query)
       this.setValueInSession(sessionId, 'queryTypes', queryTypes)
-    },
+    }
   )
 
   private handleQueryChange = debounce(
@@ -121,7 +121,7 @@ export class Playground extends React.PureComponent<Props & DocsState, State> {
       this.setValueInSession(sessionId, 'query', query)
       this.setValueInSession(sessionId, 'hasChanged', true)
       this.updateQueryTypes(sessionId, query)
-    },
+    }
   )
 
   constructor(props: Props & DocsState) {
@@ -162,7 +162,7 @@ export class Playground extends React.PureComponent<Props & DocsState, State> {
       changed: false,
       response: undefined,
       userModelName: 'User',
-      tracingSupported: false,
+      tracingSupported: false
     }
 
     if (typeof window === 'object') {
@@ -192,12 +192,12 @@ export class Playground extends React.PureComponent<Props & DocsState, State> {
   componentDidMount() {
     if (this.initialIndex > -1) {
       this.setState({
-        selectedSessionIndex: this.initialIndex,
+        selectedSessionIndex: this.initialIndex
       } as State)
     }
     if (
       ['STEP3_UNCOMMENT_DESCRIPTION', 'STEP3_OPEN_PLAYGROUND'].indexOf(
-        this.props.onboardingStep || '',
+        this.props.onboardingStep || ''
       ) > -1
     ) {
       this.setCursor({ line: 3, ch: 6 })
@@ -220,11 +220,11 @@ export class Playground extends React.PureComponent<Props & DocsState, State> {
         {
           sessions,
           history: this.storage.getHistory(),
-          selectedSessionIndex: 0,
+          selectedSessionIndex: 0
         },
         () => {
           this.resetSubscriptions()
-        },
+        }
       )
     }
 
@@ -239,7 +239,7 @@ export class Playground extends React.PureComponent<Props & DocsState, State> {
   componentWillUnmount() {
     this.storage.setItem(
       'selectedSessionIndex',
-      String(this.state.selectedSessionIndex),
+      String(this.state.selectedSessionIndex)
     )
     this.saveSessions()
     this.saveHistory()
@@ -262,7 +262,7 @@ export class Playground extends React.PureComponent<Props & DocsState, State> {
       try {
         this.wsConnections[session.id] = new SubscriptionClient(endpoint, {
           timeout: 20000,
-          connectionParams,
+          connectionParams
         })
       } catch (e) {
         /* tslint:disable-next-line */
@@ -303,17 +303,17 @@ export class Playground extends React.PureComponent<Props & DocsState, State> {
         />
         <GraphiqlsContainer
           className={cx('graphiqls-container', {
-            'docs-graphiql': theme === 'light',
+            'docs-graphiql': theme === 'light'
           })}
         >
           {sessions.map((session, index) => (
             <GraphiqlWrapper
               key={session.id}
               className={cx('graphiql-wrapper', {
-                active: index === selectedSessionIndex,
+                active: index === selectedSessionIndex
               })}
               style={{
-                top: `-${100 * selectedSessionIndex}%`,
+                top: `-${100 * selectedSessionIndex}%`
               }}
             >
               {session.isConfigTab ? (
@@ -374,7 +374,7 @@ export class Playground extends React.PureComponent<Props & DocsState, State> {
                     httpHeaders: this.state.shareHttpHeaders,
                     shareUrl: this.props.shareUrl,
                     reshare: this.state.changed,
-                    isSharingAuthorization: this.isSharingAuthorization(),
+                    isSharingAuthorization: this.isSharingAuthorization()
                   }}
                   settings={this.props.settings}
                 />
@@ -393,7 +393,7 @@ export class Playground extends React.PureComponent<Props & DocsState, State> {
     const { sessions, selectedSessionIndex } = this.state
     const selectedSession = sessions[selectedSessionIndex]
     const historyItems = this.state.history.filter(
-      s => s.endpoint === selectedSession.endpoint,
+      s => s.endpoint === selectedSession.endpoint
     )
 
     return (
@@ -425,12 +425,12 @@ export class Playground extends React.PureComponent<Props & DocsState, State> {
   }
 
   setRef = (index: number, ref: any) => {
-    this.graphiqlComponents[index] = ref.getWrappedInstance()
+    this.graphiqlComponents[index] = ref ? ref.getWrappedInstance() : ref
   }
 
   handleChangeSettings = (settings: string) => {
     const settingsSession = this.state.sessions.find(session =>
-      Boolean(session.isSettingsTab),
+      Boolean(session.isSettingsTab)
     )
     if (settingsSession) {
       this.setValueInSession(settingsSession.id, 'hasChanged', true)
@@ -440,7 +440,7 @@ export class Playground extends React.PureComponent<Props & DocsState, State> {
 
   handleSaveSettings = () => {
     const settingsSession = this.state.sessions.find(session =>
-      Boolean(session.isSettingsTab),
+      Boolean(session.isSettingsTab)
     )
     if (settingsSession) {
       this.setValueInSession(settingsSession.id, 'hasChanged', false)
@@ -450,7 +450,7 @@ export class Playground extends React.PureComponent<Props & DocsState, State> {
 
   handleChangeConfig = (config: string) => {
     const configSession = this.state.sessions.find(session =>
-      Boolean(session.isConfigTab),
+      Boolean(session.isConfigTab)
     )
     if (configSession) {
       this.setValueInSession(configSession.id, 'hasChanged', true)
@@ -460,7 +460,7 @@ export class Playground extends React.PureComponent<Props & DocsState, State> {
 
   handleSaveConfig = () => {
     const configSession = this.state.sessions.find(session =>
-      Boolean(session.isConfigTab),
+      Boolean(session.isConfigTab)
     )
     if (configSession) {
       this.setValueInSession(configSession.id, 'hasChanged', false)
@@ -485,12 +485,12 @@ export class Playground extends React.PureComponent<Props & DocsState, State> {
       if (editor && editor.queryEditorComponent) {
         editor.reloadSchema()
       }
-    } 
+    }
   }
 
   public openSettingsTab = () => {
     const sessionIndex = this.state.sessions.findIndex(s =>
-      Boolean(s.isSettingsTab),
+      Boolean(s.isSettingsTab)
     )
     if (sessionIndex === -1) {
       let session = this.createSession()
@@ -502,7 +502,7 @@ export class Playground extends React.PureComponent<Props & DocsState, State> {
           ...state,
           sessions: state.sessions.concat(session),
           selectedSessionIndex: state.sessions.length,
-          changed: false,
+          changed: false
         }
       })
     } else {
@@ -512,7 +512,7 @@ export class Playground extends React.PureComponent<Props & DocsState, State> {
 
   public openConfigTab = () => {
     const sessionIndex = this.state.sessions.findIndex(s =>
-      Boolean(s.isConfigTab),
+      Boolean(s.isConfigTab)
     )
     if (sessionIndex === -1) {
       let session = this.createSession()
@@ -524,7 +524,7 @@ export class Playground extends React.PureComponent<Props & DocsState, State> {
           ...state,
           sessions: state.sessions.concat(session),
           selectedSessionIndex: state.sessions.length,
-          changed: false,
+          changed: false
         }
       })
     } else {
@@ -542,7 +542,7 @@ export class Playground extends React.PureComponent<Props & DocsState, State> {
         ...state,
         sessions: state.sessions.concat(session),
         selectedSessionIndex: state.sessions.length,
-        changed: true,
+        changed: true
       }
     })
   }
@@ -560,7 +560,7 @@ export class Playground extends React.PureComponent<Props & DocsState, State> {
           ...state,
           sessions: state.sessions.concat(session),
           selectedSessionIndex: state.sessions.length,
-          changed: false,
+          changed: false
         }
       })
     } else {
@@ -588,7 +588,7 @@ export class Playground extends React.PureComponent<Props & DocsState, State> {
           selectedSessionIndex:
             selectedSessionIndex < numberOfSessions - 1
               ? selectedSessionIndex + 1
-              : 0,
+              : 0
         }
       })
     }
@@ -605,7 +605,7 @@ export class Playground extends React.PureComponent<Props & DocsState, State> {
           selectedSessionIndex:
             selectedSessionIndex > 0
               ? selectedSessionIndex - 1
-              : numberOfSessions - 1,
+              : numberOfSessions - 1
         }
       })
     }
@@ -620,7 +620,7 @@ export class Playground extends React.PureComponent<Props & DocsState, State> {
       this.setState(state => {
         return {
           ...state,
-          selectedSessionIndex: arrayIndex,
+          selectedSessionIndex: arrayIndex
         }
       })
     }
@@ -632,7 +632,7 @@ export class Playground extends React.PureComponent<Props & DocsState, State> {
       setTimeout(() => {
         this.setCursor({
           line: 1,
-          ch: 0,
+          ch: 0
         })
       }, 5)
     }
@@ -641,7 +641,7 @@ export class Playground extends React.PureComponent<Props & DocsState, State> {
         ...state,
         sessions: state.sessions.concat(session),
         selectedSessionIndex: newIndexZero ? 0 : state.sessions.length,
-        changed: true,
+        changed: true
       }
     })
   }
@@ -649,7 +649,7 @@ export class Playground extends React.PureComponent<Props & DocsState, State> {
     sessionId: string,
     key: string,
     value: any,
-    cb?: () => void,
+    cb?: () => void
   ) {
     this.setState(state => {
       // TODO optimize the lookup with a lookup table
@@ -657,7 +657,7 @@ export class Playground extends React.PureComponent<Props & DocsState, State> {
       return {
         ...state,
         sessions: Immutable.setIn(state.sessions, [i, key], value),
-        changed: true,
+        changed: true
       }
     })
     // hack to support older react versions
@@ -678,7 +678,7 @@ export class Playground extends React.PureComponent<Props & DocsState, State> {
 
   private handleClickCodeGeneration = () => {
     this.setState({
-      codeGenerationPopupOpen: true,
+      codeGenerationPopupOpen: true
     } as State)
   }
 
@@ -705,7 +705,7 @@ export class Playground extends React.PureComponent<Props & DocsState, State> {
       const uri = location.search.slice(prefix.length, location.search.length)
       const query = decodeURIComponent(uri)
       const equivalent = sessions.findIndex(
-        session => session.query.trim() === query.trim(),
+        session => session.query.trim() === query.trim()
       )
       if (equivalent > -1) {
         this.initialIndex = equivalent
@@ -723,7 +723,7 @@ export class Playground extends React.PureComponent<Props & DocsState, State> {
       return {
         ...state,
         sessions: state.sessions.concat(newSession),
-        selectedSessionIndex: state.sessions.length,
+        selectedSessionIndex: state.sessions.length
       }
     })
   }
@@ -750,10 +750,10 @@ export class Playground extends React.PureComponent<Props & DocsState, State> {
         ...state,
         sessions: [
           ...state.sessions.slice(0, i),
-          ...state.sessions.slice(i + 1, state.sessions.length),
+          ...state.sessions.slice(i + 1, state.sessions.length)
         ],
         selectedSessionIndex: nextSelectedSession,
-        changed: true,
+        changed: true
       }
     })
 
@@ -781,7 +781,7 @@ export class Playground extends React.PureComponent<Props & DocsState, State> {
       }
       return {
         ...state,
-        selectedSessionIndex: i,
+        selectedSessionIndex: i
       }
     })
   }
@@ -808,7 +808,7 @@ export class Playground extends React.PureComponent<Props & DocsState, State> {
         setTimeout(() => {
           this.setCursor({
             line: 1,
-            ch: 0,
+            ch: 0
           })
         }, 5)
       }
@@ -822,8 +822,8 @@ export class Playground extends React.PureComponent<Props & DocsState, State> {
     this.state.sessions.forEach(session =>
       this.storage.saveSession(
         Immutable.set(session, 'subscriptionActive', false),
-        false,
-      ),
+        false
+      )
     )
   }
 
@@ -860,7 +860,7 @@ export class Playground extends React.PureComponent<Props & DocsState, State> {
       newSession = Immutable({
         ...getDefaultSession(props.endpoint),
         query,
-        headers,
+        headers
       })
     }
 
@@ -882,7 +882,7 @@ export class Playground extends React.PureComponent<Props & DocsState, State> {
 
   private handleOperationNameChange = (
     sessionId: string,
-    operationName: string,
+    operationName: string
   ) => {
     this.setValueInSession(sessionId, 'operationName', operationName)
   }
@@ -893,7 +893,7 @@ export class Playground extends React.PureComponent<Props & DocsState, State> {
       const i = state.history.findIndex(s => s.id === sessionId)
       return {
         ...state,
-        history: Immutable.setIn(state.history, [i, key], value),
+        history: Immutable.setIn(state.history, [i, key], value)
       }
     })
   }
@@ -924,12 +924,12 @@ export class Playground extends React.PureComponent<Props & DocsState, State> {
     const id = cuid()
     const historySession = Immutable.merge(session, {
       id,
-      date: new Date(),
+      date: new Date()
     })
     this.setState(state => {
       return {
         ...state,
-        history: [historySession].concat(state.history),
+        history: [historySession].concat(state.history)
       }
     })
     this.storage.addToHistory(historySession)
@@ -940,7 +940,7 @@ export class Playground extends React.PureComponent<Props & DocsState, State> {
       item =>
         session.query === item.query &&
         session.variables === item.variables &&
-        session.operationName === item.operationName,
+        session.operationName === item.operationName
     )
     return Boolean(duplicate)
   }
@@ -992,7 +992,7 @@ export class Playground extends React.PureComponent<Props & DocsState, State> {
     }
 
     let headers: any = {
-      'Content-Type': 'application/json',
+      'Content-Type': 'application/json'
     }
 
     if (session.headers) {
@@ -1009,7 +1009,7 @@ export class Playground extends React.PureComponent<Props & DocsState, State> {
       headers,
       // TODO enable
       // credentials: 'include',
-      body: JSON.stringify(graphQLParams),
+      body: JSON.stringify(graphQLParams)
     }).then(response => {
       if (typeof this.props.onSuccess === 'function') {
         this.props.onSuccess(graphQLParams, response)
@@ -1018,7 +1018,7 @@ export class Playground extends React.PureComponent<Props & DocsState, State> {
         history.pushState(
           {},
           'Graphcool Playground',
-          `?query=${encodeURIComponent(query)}`,
+          `?query=${encodeURIComponent(query)}`
         )
       }
       this.storage.executedQuery()
@@ -1031,7 +1031,7 @@ export class Playground extends React.PureComponent<Props & DocsState, State> {
       return headers.reduce((acc, header) => {
         return {
           ...acc,
-          [header.name]: header.value,
+          [header.name]: header.value
         }
       }, {})
     } else if (typeof headers === 'object') {
@@ -1060,7 +1060,7 @@ export class Playground extends React.PureComponent<Props & DocsState, State> {
       sessions,
       shareHttpHeaders,
       shareAllTabs,
-      selectedSessionIndex,
+      selectedSessionIndex
     } = this.state
 
     // if we're not sharing *any* headers, then just return false
@@ -1097,7 +1097,7 @@ export class Playground extends React.PureComponent<Props & DocsState, State> {
   private toggleShareHTTPHeaders = () => {
     this.setState(state => ({
       ...state,
-      shareHttpHeaders: !state.shareHttpHeaders,
+      shareHttpHeaders: !state.shareHttpHeaders
     }))
   }
 
@@ -1117,7 +1117,7 @@ export class Playground extends React.PureComponent<Props & DocsState, State> {
         sessions: mapValues(sharingProject.sessions, (session: Session) => {
           session.headers = ''
           return session
-        }),
+        })
       }
     }
 
@@ -1128,15 +1128,15 @@ export class Playground extends React.PureComponent<Props & DocsState, State> {
       sharingProject = {
         ...sharingProject,
         sessions: {
-          [currentSession.id]: currentSession,
-        },
+          [currentSession.id]: currentSession
+        }
       }
     }
 
     if (!this.state.shareHistory) {
       sharingProject = {
         ...sharingProject,
-        history: [],
+        history: []
       }
     }
 
@@ -1146,7 +1146,7 @@ export class Playground extends React.PureComponent<Props & DocsState, State> {
 }
 
 export default connect<any, any, Props>(state => state.graphiqlDocs, {
-  setStacks,
+  setStacks
 })(Playground)
 
 const PlaygroundWrapper = styled.div`
