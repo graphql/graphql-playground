@@ -1,4 +1,6 @@
 service: whh
+stage: dev
+cluster: local
 
 datamodel:
 - datamodel.graphql
