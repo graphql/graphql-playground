@@ -1,5 +1,5 @@
 import * as styledComponents from 'styled-components'
-import { ThemedStyledComponentsModule } from 'styled-components'
+import { ThemedStyledComponentsModule } from 'styled-components' // tslint:disable-line
 
 import { ThemeInterface, theme } from './theme'
 

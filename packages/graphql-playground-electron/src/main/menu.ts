@@ -82,6 +82,11 @@ export const buildTemplate = (
         accelerator: 'Cmd+S',
         click: () => send('File', 'Save'),
       },
+      {
+        label: 'Reload Schema',
+        accelerator: 'Cmd+R',
+        click: () => send('Tab', 'ReloadSchema'),
+      },
     ],
   },
   {

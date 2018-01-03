@@ -179,6 +179,12 @@ cd ${folderPath}; graphql playground`)
     }
   }
 
+  reloadSchema = () => {
+    if (this.playground) {
+      this.playground.reloadSchema()
+    }
+  }
+
   componentDidMount() {
     ipcRenderer.removeListener('OpenUrl', pushOpenUrl)
     ipcRenderer.removeListener('OpenSelectedFile', pushSelectedFile)
@@ -461,6 +467,9 @@ cd ${folderPath}; graphql playground`)
         break
       case 'Settings':
         this.openSettingsTab()
+        break
+      case 'ReloadSchema':
+        this.reloadSchema()
         break
     }
   }

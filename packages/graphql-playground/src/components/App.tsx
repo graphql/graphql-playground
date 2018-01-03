@@ -1,5 +1,4 @@
 import * as React from 'react'
-import * as fetch from 'isomorphic-fetch'
 import { Provider } from 'react-redux'
 import createStore from '../createStore'
 import MiddlewareApp from './MiddlewareApp'

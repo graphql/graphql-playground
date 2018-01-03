@@ -3,7 +3,7 @@ import { GraphQLEditor } from './Playground/GraphQLEditor'
 import * as fetch from 'isomorphic-fetch'
 import { TabBar } from './Playground/TabBar'
 import { defaultQuery, getDefaultSession } from '../constants'
-import { Session } from '../types'
+import { Session, ISettings } from '../types'
 import * as cuid from 'cuid'
 import * as Immutable from 'seamless-immutable'
 import PlaygroundStorage from './PlaygroundStorage'
@@ -25,7 +25,6 @@ import { isSharingAuthorization } from './Playground/util/session'
 import { SchemaFetcher } from './Playground/SchemaFetcher'
 import Settings from './Settings'
 import SettingsEditor from './SettingsEditor'
-import { ISettings } from '../types'
 import { GraphQLConfig } from '../graphqlConfig'
 import FileEditor from './FileEditor'
 
@@ -83,7 +82,6 @@ export interface State {
   selectUserSessionId?: string
   codeGenerationPopupOpen: boolean
   disableQueryHeader: boolean
-  autoReloadSchema: boolean
   useVim: boolean
   userModelName: string
 
@@ -157,7 +155,6 @@ export class Playground extends React.PureComponent<Props & DocsState, State> {
       selectUserSessionId: undefined,
       codeGenerationPopupOpen: false,
       disableQueryHeader: false,
-      autoReloadSchema: false,
       useVim: localStorage.getItem('useVim') === 'true' || false,
       shareAllTabs: true,
       shareHttpHeaders: true,
@@ -428,14 +425,7 @@ export class Playground extends React.PureComponent<Props & DocsState, State> {
   }
 
   setRef = (index: number, ref: any) => {
-    this.graphiqlComponents[index] = ref
-  }
-
-  toggleSchemaReload = () => {
-    this.setState(state => ({
-      ...state,
-      autoReloadSchema: !state.autoReloadSchema,
-    }))
+    this.graphiqlComponents[index] = ref.getWrappedInstance()
   }
 
   handleChangeSettings = (settings: string) => {
@@ -487,6 +477,15 @@ export class Playground extends React.PureComponent<Props & DocsState, State> {
   handleSaveFile = file => {
     const session = this.state.sessions[this.state.selectedSessionIndex]
     this.setValueInSession(session.id, 'hasChanged', false)
+  }
+
+  public reloadSchema = () => {
+    if (this.graphiqlComponents) {
+      const editor = this.graphiqlComponents[this.state.selectedSessionIndex]
+      if (editor && editor.queryEditorComponent) {
+        editor.reloadSchema()
+      }
+    } 
   }
 
   public openSettingsTab = () => {

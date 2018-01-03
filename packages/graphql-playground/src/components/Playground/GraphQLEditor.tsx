@@ -58,6 +58,7 @@ export interface Props {
   onClickHistory?: () => void
   onChangeEndpoint?: (value: string) => void
   onClickShare?: () => void
+  onRef: any
   getDefaultFieldNames?: () => any
   showCodeGeneration?: boolean
   showEndpoints?: boolean
@@ -705,7 +706,7 @@ export class GraphQLEditor extends React.PureComponent<
 
   // Private methods
 
-  private reloadSchema = async () => {
+  public reloadSchema = async () => {
     const result = await this.props.schemaFetcher.refetch(
       this.props.session.endpoint || this.props.endpoint,
       this.convertHeaders(this.props.session.headers),
@@ -1203,7 +1204,7 @@ export class GraphQLEditor extends React.PureComponent<
 }
 
 export default withTheme<Props>(
-  connect<any, any, Props>(getSessionDocs, { setStacks })(GraphQLEditor),
+  connect<any, any, Props>(getSessionDocs, { setStacks }, null, {withRef: true})(GraphQLEditor),
 )
 
 // Duck-type promise detection.

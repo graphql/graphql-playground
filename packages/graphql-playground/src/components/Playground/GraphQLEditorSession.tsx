@@ -1,9 +1,8 @@
 import * as React from 'react'
-import { Session } from '../../types'
+import { Session, ISettings } from '../../types'
 import GraphQLEditor from './GraphQLEditor'
 import { SchemaFetcher } from './SchemaFetcher'
 import { SharingProps } from '../Share'
-import { ISettings } from '../../types'
 
 export interface Props {
   session: Session
@@ -79,7 +78,7 @@ export default class GraphQLEditorSession extends React.PureComponent<
         responses={responses}
         disableQueryHeader={disableQueryHeader}
         disableResize={false}
-        ref={this.setRef}
+        onRef={this.setRef}
         useVim={this.props.useVim}
         rerenderQuery={false}
         disableAnimation={true}
