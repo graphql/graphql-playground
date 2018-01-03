@@ -4,7 +4,10 @@
     "packages/*"
   ],
   "scripts": {
-    "build": "bash scripts/build.sh"
+    "build": "bash scripts/build.sh",
+    "show-versions": "bash scripts/versions.sh",
+    "release-html": "bash scripts/release-html.sh",
+    "release-react": "bash scripts/release-react.sh"
   },
   "devDependencies": {
     "@types/node": "^8.5.2",

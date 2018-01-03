@@ -8,6 +8,7 @@ jobs:
     steps:
       - checkout
       - run: sudo npm i -g yarn
+      - run: yarn show-versions
       - run: cd packages/graphql-playground-react && yarn
       - run: cd packages/graphql-playground-react && yarn build
 
@@ -22,6 +23,7 @@ jobs:
           security unlock-keychain -p travis build.keychain
           echo $CERTIFICATE_OSX_P12 | base64 --decode > certificate.p12
           security import certificate.p12 -k build.keychain -P $CERTIFICATE_OSX_PASSWORD -T /usr/bin/codesign
+          # needed for signing in CI environments (don't ask...)
           security set-key-partition-list -S apple-tool:,apple: -s -k travis build.keychain
       - run: sudo npm i -g yarn
       # needed for release process
