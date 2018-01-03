@@ -61,7 +61,7 @@ app.on('open-url', (event, url) => {
     }
   }
   const msg = JSON.stringify({
-    cwd: input.cwd,
+    ...input,
     env,
   })
   forceSend('OpenUrl', msg, input.cwd)

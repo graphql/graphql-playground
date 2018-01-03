@@ -241,28 +241,34 @@ cd ${folderPath}; graphql playground`)
     let config
 
     if (input.cwd) {
-      configPath = findUp.sync(['.graphqlconfig', '.graphqlconfig.yml'], {
-        cwd: input.cwd,
-      })
-      configString = configPath
-        ? fs.readFileSync(configPath, 'utf-8')
-        : undefined
-      folderName = configPath
-        ? path.basename(path.dirname(configPath))
-        : undefined
-      const rawConfig = getGraphQLConfig(input.cwd).config
-      config = await patchEndpointsToConfigData(
-        resolveEnvsInValues(rawConfig, input.env),
-        input.cwd,
-        input.env,
-      )
+      try {
+        configPath = findUp.sync(['.graphqlconfig', '.graphqlconfig.yml'], {
+          cwd: input.cwd,
+        })
+        configString = configPath
+          ? fs.readFileSync(configPath, 'utf-8')
+          : undefined
+        folderName = configPath
+          ? path.basename(path.dirname(configPath))
+          : undefined
+        const rawConfig = getGraphQLConfig(input.cwd).config
+        config = await patchEndpointsToConfigData(
+          resolveEnvsInValues(rawConfig, input.env),
+          input.cwd,
+          input.env,
+        )
 
-      if (!this.configContainsEndpoints(config)) {
-        const graphcoolNote = configString.includes('graphcool')
-          ? 'Please make sure to add stages to your graphcool.yml'
-          : ''
-        alert(`${configPath} does not include any endpoints. ${graphcoolNote}`)
-        return
+        if (!this.configContainsEndpoints(config)) {
+          const graphcoolNote = configString.includes('graphcool')
+            ? 'Please make sure to add stages to your graphcool.yml'
+            : ''
+          alert(
+            `${configPath} does not include any endpoints. ${graphcoolNote}`,
+          )
+          return
+        }
+      } catch (e) {
+        //
       }
     }
 
@@ -271,7 +277,7 @@ cd ${folderPath}; graphql playground`)
       JSON.stringify({ cwd: input.cwd, id: remote.getCurrentWindow().id }),
     )
 
-    this.setState({
+    const state = {
       configString,
       folderName,
       configPath,
@@ -279,7 +285,9 @@ cd ${folderPath}; graphql playground`)
       endpoint,
       config,
       platformToken,
-    })
+    }
+
+    this.setState(state)
   }
 
   configContainsEndpoints(config: GraphQLConfigData): boolean {
