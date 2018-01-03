@@ -66,13 +66,13 @@ export async function renderPlaygroundPage(options: RenderPageOptions) {
     <meta charset=utf-8 />
     <meta name="viewport" content="user-scalable=no, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, minimal-ui">
     <title>GraphQL Playground</title>
-    <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/graphql-playground@${
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/graphql-playground-react@${
       options.version
     }/build/static/css/index.css" />
-    <link rel="shortcut icon" href="//cdn.jsdelivr.net/npm/graphql-playground@${
+    <link rel="shortcut icon" href="//cdn.jsdelivr.net/npm/graphql-playground-react@${
       options.version
     }/build/favicon.png" />
-    <script src="//cdn.jsdelivr.net/npm/graphql-playground@${
+    <script src="//cdn.jsdelivr.net/npm/graphql-playground-react@${
       options.version
     }/build/static/js/middleware.js"></script>
   </head>
