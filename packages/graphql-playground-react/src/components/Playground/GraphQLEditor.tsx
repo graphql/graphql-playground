@@ -619,9 +619,7 @@ export class GraphQLEditor extends React.PureComponent<
       this.props.session.endpoint
     }' -H 'Origin: ${location.origin ||
       this.props.session
-        .endpoint}' -H 'Accept-Encoding: gzip, deflate, br' -H 'Content-Type: application/json' -H 'Accept: */*' -H 'Connection: keep-alive' -H 'DNT: 1' --data-binary '${
-      data
-    }' --compressed`
+        .endpoint}' -H 'Accept-Encoding: gzip, deflate, br' -H 'Content-Type: application/json' -H 'Accept: */*' -H 'Connection: keep-alive' -H 'DNT: 1' --data-binary '${data}' --compressed`
   }
 
   setQueryVariablesRef = ref => {
@@ -825,6 +823,8 @@ export class GraphQLEditor extends React.PureComponent<
       // If fetcher returned a Promise, then call the callback when the promise
       // resolves, otherwise handle the error.
       fetch.then(cb).catch(error => {
+        /* tslint:disable-next-line */
+        console.error(error)
         this.setState({
           isWaitingForResponse: false,
           responses: [
@@ -1205,7 +1205,9 @@ export class GraphQLEditor extends React.PureComponent<
 
 export default withTheme<Props>(
   // TODO fix redux types
-  connect<any, any, any>(getSessionDocs, { setStacks }, null, {withRef: true})(GraphQLEditor),
+  connect<any, any, any>(getSessionDocs, { setStacks }, null, {
+    withRef: true,
+  })(GraphQLEditor),
 )
 
 // Duck-type promise detection.

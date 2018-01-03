@@ -213,7 +213,7 @@ export default class MiddlewareApp extends React.Component<Props, State> {
       return `ws${secure}://${location.host}${subscriptionEndpoint}`
     }
 
-    return subscriptionEndpoint
+    return subscriptionEndpoint.replace(/^http/, 'ws')
   }
 
   componentWillMount() {

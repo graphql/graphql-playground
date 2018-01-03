@@ -485,7 +485,7 @@ export class Playground extends React.PureComponent<Props & DocsState, State> {
       if (editor && editor.queryEditorComponent) {
         editor.reloadSchema()
       }
-    } 
+    }
   }
 
   public openSettingsTab = () => {
@@ -865,6 +865,7 @@ export class Playground extends React.PureComponent<Props & DocsState, State> {
     }
 
     this.storage.saveSession(newSession)
+    this.setWS(newSession)
     return newSession
   }
 
