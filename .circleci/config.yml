@@ -30,7 +30,11 @@ jobs:
       - run: sudo npm i -g yarn
       # needed for release process
       - run: brew install gettext
-      - run: yarn install
+      # - run: yarn install
+      # temporarily delete workspace `package.json`
+      # pending: https://github.com/electron-userland/electron-builder/issues/2222
+      - run: rm package.json
+      - run: cd packages/graphql-playground-electron && yarn
       - run: |
           if [[ -z "$CIRCLE_PULL_REQUEST" && "$CIRCLE_BRANCH" == "master" ]]
           then
