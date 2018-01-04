@@ -2,8 +2,8 @@ import * as React from 'react'
 import { remote, ipcRenderer } from 'electron'
 import { Provider } from 'react-redux'
 import * as cx from 'classnames'
-import { Playground as IPlayground } from 'graphql-playground/lib/components/Playground'
-import Playground from 'graphql-playground'
+import { Playground as IPlayground } from 'graphql-playground-react/lib/components/Playground'
+import Playground from 'graphql-playground-react'
 import {
   getGraphQLConfig,
   findGraphQLConfigFile,

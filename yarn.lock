@@ -9088,6 +9088,18 @@ styled-components@^2.4.0:
     postcss-load-plugins "^2.2.0"
     styled-jsx "^0.5.7"
 
+"styled-jsx-postcss@git+https://github.com/timsuchanek/styled-jsx-postcss.git#build3":
+  version "0.2.0"
+  uid "677ee0fb7f9138047a00e03c8c3e44adbb33cf2a"
+  resolved "git+https://github.com/timsuchanek/styled-jsx-postcss.git#677ee0fb7f9138047a00e03c8c3e44adbb33cf2a"
+  dependencies:
+    babel-traverse "^6.21.0"
+    babylon "^6.14.1"
+    deasync "^0.1.9"
+    postcss "^5.2.8"
+    postcss-load-plugins "^2.2.0"
+    styled-jsx "^0.5.7"
+
 styled-jsx@0.5.2:
   version "0.5.2"
   resolved "https://registry.yarnpkg.com/styled-jsx/-/styled-jsx-0.5.2.tgz#59740216c3db371636f9beec02149f9da5ea02e5"
