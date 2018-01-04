@@ -10,39 +10,39 @@ const pkg = require('../package.json')
 
 export interface Register {
   (server: Server, options: MiddlewareOptions): void
+}
+
+export interface Plugin {
   pkg?: any
+  register: Register
 }
 
 // tslint:disable-next-line only-arrow-functions
-const hapi: Register = function(server, options: any) {
-  if (arguments.length !== 2) {
-    throw new Error(
-      `Playground middleware expects exactly 2 arguments, got ${
-        arguments.length
-      }`,
-    )
-  }
-
-  const { path, route: config = {}, ...rest } = options
-
-  const middlewareOptions: RenderPageOptions = {
-    ...rest,
-    version: pkg.version,
-  }
-
-  server.route({
-    method: 'GET',
-    path,
-    config,
-    handler: (request, reply) => {
-      reply(renderPlaygroundPage(middlewareOptions)).header(
-        'Content-Type',
-        'text/html',
+const plugin: Plugin = {
+  pkg,
+  register: function (server, options: any) {
+    if (arguments.length !== 2) {
+      throw new Error(
+        `Playground middleware expects exactly 2 arguments, got ${
+          arguments.length
+        }`,
       )
-    },
-  })
+    }
+
+    const { path, route: config = {}, ...rest } = options
+
+    const middlewareOptions: RenderPageOptions = {
+      ...rest,
+      version: '1.3.6' || pkg.version,
+    }
+
+    server.route({
+      method: 'GET',
+      path,
+      config,
+      handler: async (request, h) => h.response(await renderPlaygroundPage(middlewareOptions)).type('text/html')
+    })
+  }
 }
 
-hapi.pkg = pkg
-
-export default hapi
+export default plugin
