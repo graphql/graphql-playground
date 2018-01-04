@@ -5,8 +5,8 @@
     "start": "node server.js"
   },
   "dependencies": {
-    "express": "^4.13.3",
-    "express-graphql": "^0.6.2",
-    "graphql-playground": "^0.0.4"
+    "express": "4.16.2",
+    "express-graphql": "0.6.11",
+    "graphql-playground": "0.0.4"
   }
 }
