@@ -61,7 +61,7 @@ const startAppUpdates = () => {
   autoUpdater.on('update-downloaded', () => {
     log.info('Update downloaded')
     const buttonIndex = dialog.showMessageBox({
-      message: `Update downlaoded. Install now?`,
+      message: `Update downloaded. Install now?`,
       buttons: ['Install Update & Restart', 'Later'],
     })
     if (buttonIndex === 0) {
