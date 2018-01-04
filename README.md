@@ -171,6 +171,22 @@ $ yarn start
 Open
 [localhost:3000/middleware.html?endpoint=https://api.graph.cool/simple/v1/swapi](http://localhost:3000/middleware.html?endpoint=https://api.graph.cool/simple/v1/swapi) for local development!
 
+### Versions
+
+This is repository is a "mono repo" and contains multiple packages using [Yarn workspaces](https://yarnpkg.com/lang/en/docs/workspaces/). Please be aware that versions are **not** synchronised between packages. The versions of the [release page](https://github.com/graphcool/graphql-playground/releases) refer to the electron app.
+
+### Packages
+
+In the folder `packages` you'll find the following packages:
+
+* `graphql-playground-electron`: Cross-platform electron app which uses `graphql-playground-react`
+* `graphql-playground-html`: Simple HTML page rendering a version of `graphql-playground-react` hosted on JSDeliver
+* `graphql-playground-middleware-express`: Express middleware using `graphql-playground-html`
+* `graphql-playground-middleware-hapi`: Hapi middleware using `graphql-playground-html`
+* `graphql-playground-middleware-koa`: Koa middleware using `graphql-playground-html`
+* `graphql-playground-middleware-lambda`: AWS Lambda middleware using `graphql-playground-html`
+* `graphql-playground-react`: Core of GraphQL Playground built with ReactJS
+
 
 <a name="help-and-community" />
 
