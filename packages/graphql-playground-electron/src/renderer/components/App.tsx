@@ -241,6 +241,7 @@ cd ${folderPath}; graphql playground`)
     let config
 
     if (input.cwd) {
+      // use the endpoint as an alternative, only log the error
       try {
         configPath = findUp.sync(['.graphqlconfig', '.graphqlconfig.yml'], {
           cwd: input.cwd,
@@ -252,8 +253,9 @@ cd ${folderPath}; graphql playground`)
           ? path.basename(path.dirname(configPath))
           : undefined
         const rawConfig = getGraphQLConfig(input.cwd).config
+        const resolvedConfig = resolveEnvsInValues(rawConfig, input.env)
         config = await patchEndpointsToConfigData(
-          resolveEnvsInValues(rawConfig, input.env),
+          resolvedConfig,
           input.cwd,
           input.env,
         )
@@ -268,7 +270,7 @@ cd ${folderPath}; graphql playground`)
           return
         }
       } catch (e) {
-        //
+        console.error(e)
       }
     }
 
