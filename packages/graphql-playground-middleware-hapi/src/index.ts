@@ -9,15 +9,15 @@ import {
 const pkg = require('../package.json')
 
 export interface Register {
-  (server: Server, options: MiddlewareOptions, next: any): void
-  attributes?: any
+  (server: Server, options: MiddlewareOptions): void
+  pkg?: any
 }
 
 // tslint:disable-next-line only-arrow-functions
-const hapi: Register = function(server, options: any, next) {
-  if (arguments.length !== 3) {
+const hapi: Register = function(server, options: any) {
+  if (arguments.length !== 2) {
     throw new Error(
-      `Playground middleware expects exactly 3 arguments, got ${
+      `Playground middleware expects exactly 2 arguments, got ${
         arguments.length
       }`,
     )
@@ -41,13 +41,8 @@ const hapi: Register = function(server, options: any, next) {
       )
     },
   })
-
-  return next()
 }
 
-hapi.attributes = {
-  pkg,
-  multiple: false,
-}
+hapi.pkg = pkg
 
 export default hapi
