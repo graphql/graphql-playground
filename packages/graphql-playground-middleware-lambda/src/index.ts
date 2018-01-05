@@ -9,12 +9,16 @@ import {
 const { version } = require('../package.json')
 
 export default function lambdaPlayground(options: MiddlewareOptions) {
-  return (event, lambdaContext: lambda.Context, callback: lambda.Callback) => {
+  return async (
+    event,
+    lambdaContext: lambda.Context,
+    callback: lambda.Callback,
+  ) => {
     const middlewareOptions: RenderPageOptions = {
       ...options,
       version,
     }
-    const body = renderPlaygroundPage(middlewareOptions)
+    const body = await renderPlaygroundPage(middlewareOptions)
     callback(null, {
       statusCode: 200,
       headers: {
