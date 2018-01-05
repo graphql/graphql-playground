@@ -170,6 +170,10 @@ export class QueryEditor extends React.Component<Props, {}> {
       CodeMirror.signal(this.editor, 'change', this.editor)
       if (this.props.schema) {
         const oldGetType = this.editor.options.hintOptions.schema.getType
+        /**
+         * DANGER! THIS IS AN EXTREME HACK. As soon, as codemirror-graphql doesn't use getType in .hint anymore
+         * this can be removed.
+         */
         this.editor.options.hintOptions.schema.getType = type => {
           const result = oldGetType.call(
             this.editor.options.hintOptions.schema,
