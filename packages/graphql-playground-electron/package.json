@@ -4,7 +4,7 @@
   "homepage": "https://github.com/graphcool/graphql-playground",
   "repository": "graphcool/graphql-playground",
   "description": "GraphQL IDE for better development workflows (GraphQL Subscriptions, interactive docs & collaboration)",
-  "version": "1.3.21",
+  "version": "1.3.22",
   "author": {
     "name": "Graphcool",
     "email": "hello@graph.cool",
@@ -95,7 +95,7 @@
     "graphcool-ui": "^0.0.13",
     "graphql-config": "^1.1.2",
     "graphql-config-extension-graphcool": "1.0.1",
-    "graphql-playground-react": "1.3.20",
+    "graphql-playground-react": "1.3.21",
     "js-yaml": "^3.10.0",
     "lodash.merge": "^4.6.0",
     "minimist": "^1.2.0",
