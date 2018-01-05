@@ -213,14 +213,17 @@ export class Playground extends React.PureComponent<Props & DocsState, State> {
     ) {
       this.saveSessions()
       this.saveHistory()
+      this.storage.setItem('selectedSessionIndex', String(this.state.selectedSessionIndex))
       this.storage.saveProject()
-      this.storage = new PlaygroundStorage(this.getStorageKey())
+      const storageKey = this.getStorageKey()
+      this.storage = new PlaygroundStorage(storageKey)
       const sessions = this.initSessions()
+      const selectedSessionIndex = parseInt(this.storage.getItem('selectedSessionIndex'), 10) || 0
       this.setState(
         {
           sessions,
           history: this.storage.getHistory(),
-          selectedSessionIndex: 0,
+          selectedSessionIndex,
         },
         () => {
           this.resetSubscriptions()
