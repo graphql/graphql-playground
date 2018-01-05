@@ -172,11 +172,17 @@ export default class PlaygroundStorage {
   }
 
   public setItem(key: string, value: string) {
+    if (!this.project.data) {
+      this.project.data = {}
+    }
     this.project.data[key] = value
   }
 
   public getItem(key: string) {
-    return this.project.data[key]
+    if (this.project && this.project.data) {
+      return this.project.data[key]
+    }
+    return null
   }
 
   public saveProject() {
