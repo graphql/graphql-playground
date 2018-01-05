@@ -610,16 +610,43 @@ export class GraphQLEditor extends React.PureComponent<
   }
 
   getCurl = () => {
+    let variables
+    try {
+      variables = JSON.parse(this.state.variables)
+    } catch (e) {
+      //
+    }
     const data = JSON.stringify({
       query: this.state.query,
-      variables: this.state.variables,
+      variables: variables,
       operationName: this.state.operationName,
     })
+    let sessionHeaders
+
+    try {
+      sessionHeaders = JSON.parse(this.props.session.headers!)
+    } catch (e) {
+      //
+    }
+
+    const headers = {
+      'Accept-Encoding': 'gzip, deflate, br',
+      'Content-Type': 'application/json',
+      'Accept': '*/*',
+      'Connection': 'keep-alive',
+      'DNT': '1',
+      'Origin': location.origin ||
+      this.props.session
+        .endpoint,
+      ...sessionHeaders,
+    }
+    const headersString = Object.keys(headers).map(key => {
+      const value = headers[key]
+      return `-H '${key}: ${value}'`
+    }).join(' ')
     return `curl '${
       this.props.session.endpoint
-    }' -H 'Origin: ${location.origin ||
-      this.props.session
-        .endpoint}' -H 'Accept-Encoding: gzip, deflate, br' -H 'Content-Type: application/json' -H 'Accept: */*' -H 'Connection: keep-alive' -H 'DNT: 1' --data-binary '${data}' --compressed`
+    }' ${headersString} --data-binary '${data}' --compressed`
   }
 
   setQueryVariablesRef = ref => {
