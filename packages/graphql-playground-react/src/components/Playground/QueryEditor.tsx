@@ -8,6 +8,7 @@
 
 import * as React from 'react'
 import { GraphQLSchema } from 'graphql'
+import * as MD from 'markdown-it'
 
 import onHasCompletion from './onHasCompletion'
 /**
@@ -28,6 +29,7 @@ export interface Props {
   onEdit?: (value: string) => void
   onHintInformationRender?: (elem: any) => void
   onRunQuery?: () => void
+  onClickReference?: (reference: any) => void
   placeholder?: string
   readOnly?: boolean
   hideLineNumbers?: boolean
@@ -35,6 +37,8 @@ export interface Props {
   hideGutters?: boolean
   useVim?: boolean
 }
+
+const md = new MD()
 
 export class QueryEditor extends React.Component<Props, {}> {
   private cachedValue: string
@@ -61,12 +65,16 @@ export class QueryEditor extends React.Component<Props, {}> {
     require('codemirror/addon/edit/closebrackets')
     require('codemirror/addon/fold/foldgutter')
     require('codemirror/addon/fold/brace-fold')
+    require('codemirror/addon/search/search')
+    require('codemirror/addon/search/searchcursor')
+    require('codemirror/addon/search/jump-to-line')
+    require('codemirror/addon/dialog/dialog')
     require('codemirror/addon/lint/lint')
-    require('codemirror/addon/display/placeholder')
     require('codemirror/keymap/sublime')
-    require('codemirror/keymap/vim')
     require('codemirror-graphql/hint')
     require('codemirror-graphql/lint')
+    require('codemirror-graphql/info')
+    require('codemirror-graphql/jump')
     require('codemirror-graphql/mode')
 
     const gutters: any[] = []
@@ -102,8 +110,17 @@ export class QueryEditor extends React.Component<Props, {}> {
       },
       hintOptions: {
         schema: this.props.schema,
-        closeOnUnfocus: true,
+        closeOnUnfocus: false, // TODO reenable!!
         completeSingle: false,
+      },
+      info: {
+        schema: this.props.schema,
+        renderDescription: text => md.render(text),
+        onClick: this.props.onClickReference,
+      },
+      jump: {
+        schema: this.props.schema,
+        onClick: this.props.onClickReference,
       },
       gutters,
       extraKeys: {
@@ -143,16 +160,24 @@ export class QueryEditor extends React.Component<Props, {}> {
     // Ensure the changes caused by this update are not interpretted as
     // user-input changes which could otherwise result in an infinite
     // event loop.
+
     this.ignoreChangeEvent = true
     if (this.props.schema !== prevProps.schema) {
       this.editor.options.lint.schema = this.props.schema
       this.editor.options.hintOptions.schema = this.props.schema
+      this.editor.options.info.schema = this.props.schema
+      this.editor.options.jump.schema = this.props.schema
+      CodeMirror.signal(this.editor, 'change', this.editor)
       if (this.props.schema) {
+        const oldGetType = this.editor.options.hintOptions.schema.getType
         this.editor.options.hintOptions.schema.getType = type => {
-          return type
+          const result = oldGetType.call(
+            this.editor.options.hintOptions.schema,
+            type,
+          )
+          return result || type
         }
       }
-      CodeMirror.signal(this.editor, 'change', this.editor)
     }
     if (
       this.props.value !== prevProps.value &&

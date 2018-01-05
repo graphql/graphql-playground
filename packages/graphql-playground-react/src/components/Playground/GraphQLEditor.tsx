@@ -4,9 +4,7 @@ import { parse, print, GraphQLSchema } from 'graphql'
 import * as cn from 'classnames'
 import ExecuteButton from './ExecuteButton'
 import { QueryEditor } from './QueryEditor'
-import { VariableEditor } from 'graphiql/dist/components/VariableEditor'
 import CodeMirrorSizer from 'graphiql/dist/utility/CodeMirrorSizer'
-import getQueryFacts from 'graphiql/dist/utility/getQueryFacts'
 import getSelectedOperationName from 'graphiql/dist/utility/getSelectedOperationName'
 import debounce from 'graphiql/dist/utility/debounce'
 import find from 'graphiql/dist/utility/find'
@@ -30,6 +28,8 @@ import { getSessionDocs } from '../../selectors/sessionDocs'
 import { styled } from '../../styled/index'
 import TopBar from './TopBar/TopBar'
 import { SharingProps } from '../Share'
+import getQueryFacts from './util/getQueryFacts'
+import { VariableEditor } from './VariableEditor'
 
 /**
  * The top-level React component for GraphQLEditor, intended to encompass the entire
@@ -507,6 +507,7 @@ export class GraphQLEditor extends React.PureComponent<
                 hideGutters={this.props.hideGutters}
                 readOnly={this.props.readonly}
                 useVim={this.props.useVim}
+                onClickReference={this.handleClickReference}
               />
               <div className="variable-editor" style={variableStyle}>
                 <div
@@ -618,7 +619,7 @@ export class GraphQLEditor extends React.PureComponent<
     }
     const data = JSON.stringify({
       query: this.state.query,
-      variables: variables,
+      variables,
       operationName: this.state.operationName,
     })
     let sessionHeaders
@@ -632,18 +633,18 @@ export class GraphQLEditor extends React.PureComponent<
     const headers = {
       'Accept-Encoding': 'gzip, deflate, br',
       'Content-Type': 'application/json',
-      'Accept': '*/*',
-      'Connection': 'keep-alive',
-      'DNT': '1',
-      'Origin': location.origin ||
-      this.props.session
-        .endpoint,
+      Accept: '*/*',
+      Connection: 'keep-alive',
+      DNT: '1',
+      Origin: location.origin || this.props.session.endpoint,
       ...sessionHeaders,
     }
-    const headersString = Object.keys(headers).map(key => {
-      const value = headers[key]
-      return `-H '${key}: ${value}'`
-    }).join(' ')
+    const headersString = Object.keys(headers)
+      .map(key => {
+        const value = headers[key]
+        return `-H '${key}: ${value}'`
+      })
+      .join(' ')
     return `curl '${
       this.props.session.endpoint
     }' ${headersString} --data-binary '${data}' --compressed`
@@ -679,6 +680,10 @@ export class GraphQLEditor extends React.PureComponent<
 
   setResultComponent = ref => {
     this.resultComponent = ref
+  }
+
+  handleClickReference = reference => {
+    //
   }
 
   /**

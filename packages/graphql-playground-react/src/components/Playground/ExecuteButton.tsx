@@ -189,7 +189,7 @@ class ExecuteButton extends React.Component<
           this.onOptionSelected(
             this.props.operations.find(
               op => op.name.value === upEvent.target.textContent,
-            ),
+            ) || this.props.operations[0],
           )
           firstTime = false
         }
