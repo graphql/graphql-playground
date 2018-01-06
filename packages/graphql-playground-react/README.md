@@ -41,27 +41,30 @@ You can easily share your Playgrounds with others by clicking on the "Share" but
 
 > You can also find the announcement blog post [here](https://blog.graph.cool/introducing-graphql-playground-f1e0a018f05d).
 
-
 ## Usage
 
 ### Properties
+
 All interfaces, the React component `<Playground />` and all middlewares expose the same set of options:
 
-+ `properties`
-  + `endpoint` [`string`] - the GraphQL endpoint url.
-  + `subscriptionEndpoint` [`string`] - the GraphQL subscriptions endpoint url.
-  + `setTitle` [`boolean`] - reflect the current endpoint in the page title
+* `properties`
+  * `endpoint` [`string`] - the GraphQL endpoint url.
+  * `subscriptionEndpoint` [`string`] - the GraphQL subscriptions endpoint url.
+  * `setTitle` [`boolean`] - reflect the current endpoint in the page title
 
 ### As React Component
 
 #### Install
+
 ```sh
 yarn add graphql-playground
 ```
 
 #### Use
+
 GraphQL Playground provides a React component responsible for rendering the UI and Session management.
 There are **3 dependencies** needed in order to run the `graphql-playground` React component.
+
 1. _Open Sans_ and _Source Code Pro_ fonts
 2. Including `graphql-playground/playground.css`
 3. Rendering the `<Playground />` component
@@ -69,23 +72,29 @@ There are **3 dependencies** needed in order to run the `graphql-playground` Rea
 The GraphQL Playground requires **React 16**.
 
 Including Fonts (`1.`)
+
 ```html
 <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700|Source+Code+Pro:400,700" rel="stylesheet">
 ```
 
 Including stylesheet and the component (`2., 3.`)
+
 ```js
 import React from 'react'
 import ReactDOM from 'react-dom'
 import Playground from 'graphql-playground'
 import 'graphql-playground/playground.css'
 
-ReactDOM.render(<Playground endpoint="https://api.graph.cool/simple/v1/swapi" />, document.body)
+ReactDOM.render(
+  <Playground endpoint="https://api.graph.cool/simple/v1/swapi" />,
+  document.body,
+)
 ```
 
 ### As Server Middleware
 
 #### Install
+
 ```sh
 # Pick the one that matches your server framework
 yarn add graphql-playground-middleware-express  # for Express or Connect
@@ -98,21 +107,24 @@ yarn add graphql-playground-middleware-lambda
 
 We have a full example for each of the frameworks below:
 
-- **Express:** See [packages/graphql-playground-middleware-express/examples/basic](https://github.com/graphcool/graphql-playground/tree/master/packages/graphql-playground-middleware-express/examples/basic)
+* **Express:** See [packages/graphql-playground-middleware-express/examples/basic](https://github.com/graphcool/graphql-playground/tree/master/packages/graphql-playground-middleware-express/examples/basic)
 
-- **Hapi:** See [packages/graphql-playground-middleware/examples/hapi](https://github.com/graphcool/graphql-playground/tree/master/packages/graphql-playground-middleware/examples/hapi)
+* **Hapi:** See [packages/graphql-playground-middleware/examples/hapi](https://github.com/graphcool/graphql-playground/tree/master/packages/graphql-playground-middleware/examples/hapi)
 
-- **Koa:** See [packages/graphql-playground-middleware/examples/koa](https://github.com/graphcool/graphql-playground/tree/master/packages/graphql-playground-middleware/examples/koa)
+* **Koa:** See [packages/graphql-playground-middleware/examples/koa](https://github.com/graphcool/graphql-playground/tree/master/packages/graphql-playground-middleware/examples/koa)
 
-- **Lambda (as serverless handler):** See [serverless-graphql-apollo](https://github.com/serverless/serverless-graphql-apollo) or a quick example below.
+* **Lambda (as serverless handler):** See [serverless-graphql-apollo](https://github.com/serverless/serverless-graphql-apollo) or a quick example below.
 
 ### As serverless handler
+
 #### Install
+
 ```sh
 yarn add graphql-playground-middleware-lambda
 ```
 
 #### Usage
+
 `handler.js`
 
 ```js
@@ -123,17 +135,17 @@ import lambdaPlayground from 'graphql-playground-middleware-lambda'
 exports.graphqlHandler = function graphqlHandler(event, context, callback) {
   function callbackFilter(error, output) {
     // eslint-disable-next-line no-param-reassign
-    output.headers['Access-Control-Allow-Origin'] = '*';
-    callback(error, output);
+    output.headers['Access-Control-Allow-Origin'] = '*'
+    callback(error, output)
   }
 
-  const handler = graphqlLambda({ schema: myGraphQLSchema });
-  return handler(event, context, callbackFilter);
-};
+  const handler = graphqlLambda({ schema: myGraphQLSchema })
+  return handler(event, context, callbackFilter)
+}
 
 exports.playgroundHandler = lambdaPlayground({
   endpoint: '/dev/graphql',
-});
+})
 ```
 
 `serverless.yml`
@@ -165,9 +177,9 @@ $ cd packages/graphql-playground
 $ yarn
 $ yarn start
 ```
-Open
-[localhost:3000/middleware.html?endpoint=https://api.graph.cool/simple/v1/swapi](http://localhost:3000/middleware.html?endpoint=https://api.graph.cool/simple/v1/swapi) for local development!
 
+Open
+[localhost:3000/localDev.html?endpoint=https://api.graph.cool/simple/v1/swapi](http://localhost:3000/localDev.html?endpoint=https://api.graph.cool/simple/v1/swapi) for local development!
 
 <a name="help-and-community" />
 

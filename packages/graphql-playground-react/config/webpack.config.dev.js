@@ -42,6 +42,11 @@ module.exports = {
       require.resolve('react-dev-utils/webpackHotDevClient'),
       paths.middlewareIndexJs,
     ],
+    localDev: [
+      require.resolve('./polyfills'),
+      require.resolve('react-dev-utils/webpackHotDevClient'),
+      paths.localDevIndexJs,
+    ],
   },
   output: {
     // Next line is not used in dev but WebpackDevServer crashes without it:
@@ -218,14 +223,20 @@ module.exports = {
     // Generates an `index.html` file with the <script> injected.
     new HtmlWebpackPlugin({
       inject: true,
-      chunks: ["index"],
+      chunks: ['index'],
       template: paths.appHtml,
     }),
     new HtmlWebpackPlugin({
       inject: true,
-      chunks: ["middleware"],
+      chunks: ['middleware'],
       template: paths.appHtml,
       filename: 'middleware.html',
+    }),
+    new HtmlWebpackPlugin({
+      inject: true,
+      chunks: ['localDev'],
+      template: paths.appHtml,
+      filename: 'localDev.html',
     }),
     // Add module names to factory functions so they appear in browser profiler.
     new webpack.NamedModulesPlugin(),
