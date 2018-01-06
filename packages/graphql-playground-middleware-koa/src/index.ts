@@ -6,7 +6,7 @@ import {
 } from 'graphql-playground-html'
 
 /* tslint:disable-next-line */
-const { version } = require('../package.json')
+const { playgroundVersion } = require('../package.json')
 
 export type KoaPlaygroundMiddleware = (ctx: Context, next: () => void) => void
 
@@ -15,12 +15,12 @@ export type Register = (options: MiddlewareOptions) => KoaPlaygroundMiddleware
 const koa: Register = options => {
   const middlewareOptions: RenderPageOptions = {
     ...options,
-    version,
+    version: playgroundVersion,
   }
 
   return async function voyager(ctx, next) {
     try {
-      ctx.body = renderPlaygroundPage(middlewareOptions)
+      ctx.body = await renderPlaygroundPage(middlewareOptions)
       await next()
     } catch (err) {
       ctx.body = { message: err.message }

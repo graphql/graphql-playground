@@ -34,8 +34,7 @@
     "typescript": "2.6.2"
   },
   "dependencies": {
-    "graphql-playground-html": "1.4.2",
-    "graphql-playground-middleware": "^1.2.1-beta.6"
+    "graphql-playground-html": "1.4.2"
   },
   "typings": "dist/index.d.ts",
   "typescript": {

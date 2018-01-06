@@ -27,18 +27,16 @@ const hapi: Register = function(server, options: any, next) {
 
   const middlewareOptions: RenderPageOptions = {
     ...rest,
-    version: pkg.version,
+    version: pkg.playgroundVersion,
   }
 
   server.route({
     method: 'GET',
     path,
     config,
-    handler: (request, reply) => {
-      reply(renderPlaygroundPage(middlewareOptions)).header(
-        'Content-Type',
-        'text/html',
-      )
+    handler: async (request, reply) => {
+      const body = await renderPlaygroundPage(middlewareOptions)
+      reply(body).header('Content-Type', 'text/html')
     },
   })
 

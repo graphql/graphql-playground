@@ -14,6 +14,7 @@
   "files": [
     "dist"
   ],
+  "playgroundVersion": "1.3.21",
   "scripts": {
     "build": "rimraf dist && tsc",
     "prepare": "npm run build"
@@ -39,7 +40,6 @@
   },
   "dependencies": {
     "graphql-playground-html": "^1.3.6",
-    "graphql-playground-middleware": "^1.2.1-beta.6",
     "koa": "^2.4.1"
   }
 }

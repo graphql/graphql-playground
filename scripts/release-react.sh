@@ -8,7 +8,7 @@ middlewares=(
   graphql-playground-middleware-express
   # graphql-playground-middleware-hapi
   # graphql-playground-middleware-koa
-  # graphql-playground-middleware-lambda
+  graphql-playground-middleware-lambda
 )
 
 cd graphql-playground-react
@@ -22,7 +22,7 @@ for middleware in "${middlewares[@]}"
 do
   cd $middleware
   echo "Releasing ${middleware}..."
-  yarn add graphql-playground-react@$version
+  cat package.json | jq ".playgroundVersion = \"$version\"" > package.json
   npm version patch --no-git-tag-version
   npm publish
   cd ..
