@@ -1016,8 +1016,7 @@ export class Playground extends React.PureComponent<Props & DocsState, State> {
       // tslint:disable-lin
       method: 'post',
       headers,
-      // TODO enable
-      // credentials: 'include',
+      credentials: this.props.settings["request.credentials"],
       body: JSON.stringify(graphQLParams),
     }).then(response => {
       if (typeof this.props.onSuccess === 'function') {

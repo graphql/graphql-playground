@@ -67,6 +67,7 @@ const defaultSettings = `{
   "general.betaUpdates": false,
   "editor.theme": "dark",
   "editor.reuseHeaders": true,
+  "request.credentials": "omit",
   "tracing.hideTracingResponse": true
 }`
 
