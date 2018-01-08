@@ -169,9 +169,9 @@
   version "8.5.7"
   resolved "https://registry.yarnpkg.com/@types/node/-/node-8.5.7.tgz#9c498c35af354dcfbca3790fb2e81129e93cf0e2"
 
-"@types/node@8.5.5":
-  version "8.5.5"
-  resolved "https://registry.yarnpkg.com/@types/node/-/node-8.5.5.tgz#6f9e8164ae1a55a9beb1d2571cfb7acf9d720c61"
+"@types/node@8.5.8":
+  version "8.5.8"
+  resolved "https://registry.yarnpkg.com/@types/node/-/node-8.5.8.tgz#92509422653f10e9c0ac18d87e0610b39f9821c7"
 
 "@types/podium@*":
   version "1.0.0"
@@ -4182,25 +4182,6 @@ graphcool-ui@^0.0.13:
     graphcool-styles "^0.1.31"
     react-modal "^1.6.5"
 
-graphcool-yml@0.2.2:
-  version "0.2.2"
-  resolved "https://registry.yarnpkg.com/graphcool-yml/-/graphcool-yml-0.2.2.tgz#b9f67b6581e149d573f631afdd938cb5f44f9813"
-  dependencies:
-    ajv "^5.5.1"
-    bluebird "^3.5.1"
-    debug "^3.1.0"
-    dotenv "^4.0.0"
-    fs-extra "^4.0.3"
-    graphcool-json-schema "1.2.0"
-    isomorphic-fetch "^2.2.1"
-    js-yaml "^3.10.0"
-    json-stable-stringify "^1.0.1"
-    jsonwebtoken "^8.1.0"
-    lodash "^4.17.4"
-    replaceall "^0.1.6"
-    scuid "^1.0.2"
-    yaml-ast-parser "^0.0.40"
-
 graphcool-yml@0.4.8:
   version "0.4.8"
   resolved "https://registry.yarnpkg.com/graphcool-yml/-/graphcool-yml-0.4.8.tgz#c1e70a88ccc8b8eea81fb80b7c369a2b734240b9"
@@ -4233,13 +4214,6 @@ graphql-config-extension-graphcool@1.0.4:
   resolved "https://registry.yarnpkg.com/graphql-config-extension-graphcool/-/graphql-config-extension-graphcool-1.0.4.tgz#9346aace7e42688e35e4bd44039117608916aad0"
   dependencies:
     graphcool-yml "0.4.8"
-    graphql-config "^1.1.4"
-
-graphql-config-extension-graphcool@^1.0.0:
-  version "1.0.2"
-  resolved "https://registry.yarnpkg.com/graphql-config-extension-graphcool/-/graphql-config-extension-graphcool-1.0.2.tgz#e24d528575997a414e4798c855e5d8b6963ca79a"
-  dependencies:
-    graphcool-yml "0.2.2"
     graphql-config "^1.1.4"
 
 graphql-config@1.1.4:
@@ -4353,14 +4327,6 @@ graphql-language-service-utils@^1.0.18:
   dependencies:
     graphql-config "1.1.4"
     graphql-language-service-types "^1.0.18"
-
-graphql-playground-html@1.4.2:
-  version "1.4.2"
-  resolved "https://registry.yarnpkg.com/graphql-playground-html/-/graphql-playground-html-1.4.2.tgz#af97a84ea6cf6ba18e8ff148a6a8b17eef40aa46"
-  dependencies:
-    dotenv "^4.0.0"
-    graphql-config "^1.1.1"
-    graphql-config-extension-graphcool "^1.0.0"
 
 graphql-playground-react@1.3.22:
   version "1.3.22"
