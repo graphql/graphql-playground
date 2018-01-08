@@ -4228,13 +4228,6 @@ graphiql@^0.11.2:
     codemirror-graphql "^0.6.11"
     markdown-it "^8.4.0"
 
-graphql-config-extension-graphcool@1.0.1:
-  version "1.0.1"
-  resolved "https://registry.yarnpkg.com/graphql-config-extension-graphcool/-/graphql-config-extension-graphcool-1.0.1.tgz#841210ddac9ea43d97a3c1faf65555ec5fb6fcbf"
-  dependencies:
-    graphcool-yml "0.2.2"
-    graphql-config "^1.1.4"
-
 graphql-config-extension-graphcool@1.0.4:
   version "1.0.4"
   resolved "https://registry.yarnpkg.com/graphql-config-extension-graphcool/-/graphql-config-extension-graphcool-1.0.4.tgz#9346aace7e42688e35e4bd44039117608916aad0"
@@ -4360,6 +4353,14 @@ graphql-language-service-utils@^1.0.18:
   dependencies:
     graphql-config "1.1.4"
     graphql-language-service-types "^1.0.18"
+
+graphql-playground-html@1.4.2:
+  version "1.4.2"
+  resolved "https://registry.yarnpkg.com/graphql-playground-html/-/graphql-playground-html-1.4.2.tgz#af97a84ea6cf6ba18e8ff148a6a8b17eef40aa46"
+  dependencies:
+    dotenv "^4.0.0"
+    graphql-config "^1.1.1"
+    graphql-config-extension-graphcool "^1.0.0"
 
 graphql-playground-react@1.3.22:
   version "1.3.22"
@@ -9324,18 +9325,6 @@ styled-components@^2.4.0:
 "styled-jsx-postcss@git+https://github.com/timsuchanek/styled-jsx-postcss#build3":
   version "0.2.0"
   resolved "git+https://github.com/timsuchanek/styled-jsx-postcss#677ee0fb7f9138047a00e03c8c3e44adbb33cf2a"
-  dependencies:
-    babel-traverse "^6.21.0"
-    babylon "^6.14.1"
-    deasync "^0.1.9"
-    postcss "^5.2.8"
-    postcss-load-plugins "^2.2.0"
-    styled-jsx "^0.5.7"
-
-"styled-jsx-postcss@git+https://github.com/timsuchanek/styled-jsx-postcss.git#build3":
-  version "0.2.0"
-  uid "677ee0fb7f9138047a00e03c8c3e44adbb33cf2a"
-  resolved "git+https://github.com/timsuchanek/styled-jsx-postcss.git#677ee0fb7f9138047a00e03c8c3e44adbb33cf2a"
   dependencies:
     babel-traverse "^6.21.0"
     babylon "^6.14.1"
