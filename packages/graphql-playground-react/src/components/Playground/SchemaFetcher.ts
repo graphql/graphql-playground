@@ -38,7 +38,11 @@ export class SchemaFetcher {
     })
     const schemaData = await response.json()
 
-    if (!schemaData || schemaData.error || !schemaData.data) {
+    if (schemaData && (schemaData.errors || !schemaData.data)) {
+      throw new Error(JSON.stringify(schemaData, null, 2))
+    }
+
+    if (!schemaData) {
       throw new NoSchemaError(endpoint)
     }
 

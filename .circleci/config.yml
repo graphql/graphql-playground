@@ -10,7 +10,7 @@ jobs:
       - run: sudo npm i -g yarn
       - run: yarn show-versions
       - run: yarn install
-      - run: cd packages/graphql-playground-react && yarn build
+      - run: cd packages/graphql-playground-react && yarn && yarn build
 
   electron-build:
     macos:

@@ -350,6 +350,23 @@ export class GraphQLEditor extends React.PureComponent<
     return ''
   }
 
+  tokenInvalid() {
+    if (this.state.responses.length === 1) {
+      const response = this.state.responses[0].date
+      if (response) {
+        try {
+          const data = JSON.parse(response)
+          if (data && data.errors && data.errors[0].code === 3015) {
+            return true
+          }
+        } catch (e) {
+          //
+        }
+      }
+    }
+    return false
+  }
+
   render() {
     const children = React.Children.toArray(this.props.children)
     const footer = find(children, child => child.type === GraphQLEditor.Footer)
