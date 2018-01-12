@@ -114,7 +114,7 @@
   "devDependencies": {
     "@types/classnames": "2.2.3",
     "@types/node": "8.5.5",
-    "@types/react": "16.0.33",
+    "@types/react": "16.0.34",
     "@types/react-addons-test-utils": "0.14.20",
     "@types/react-dom": "16.0.3",
     "@types/react-redux": "5.0.14",
