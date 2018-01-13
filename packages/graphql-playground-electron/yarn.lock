@@ -3513,12 +3513,12 @@ graphql-config-extension-graphcool@1.0.4:
     graphcool-yml "0.4.8"
     graphql-config "^1.1.4"
 
-graphql-config-extension-prisma@0.0.1:
-  version "0.0.1"
-  resolved "https://registry.yarnpkg.com/graphql-config-extension-prisma/-/graphql-config-extension-prisma-0.0.1.tgz#ab02d0aa80bc12883e4c898b04e0db5e73ed1936"
+graphql-config-extension-prisma@0.0.3:
+  version "0.0.3"
+  resolved "https://registry.yarnpkg.com/graphql-config-extension-prisma/-/graphql-config-extension-prisma-0.0.3.tgz#2fea0a34ef128e1763cb3ebfa6becd99549fe1ef"
   dependencies:
     graphql-config "^1.1.4"
-    prisma-yml "0.0.2"
+    prisma-yml "0.0.4"
 
 graphql-config@1.1.4:
   version "1.1.4"
@@ -6150,12 +6150,13 @@ prisma-json-schema@^0.0.1:
   version "0.0.1"
   resolved "https://registry.yarnpkg.com/prisma-json-schema/-/prisma-json-schema-0.0.1.tgz#0802e156a293faefdf21e5e41beb8d3681f45cb1"
 
-prisma-yml@0.0.2:
-  version "0.0.2"
-  resolved "https://registry.yarnpkg.com/prisma-yml/-/prisma-yml-0.0.2.tgz#7f86e5fcb7dfe4a8cbf104a8b36ea9de69a9c0d3"
+prisma-yml@0.0.4:
+  version "0.0.4"
+  resolved "https://registry.yarnpkg.com/prisma-yml/-/prisma-yml-0.0.4.tgz#66b54f5056f087ff548719bb62e5251ca49fe4b1"
   dependencies:
     ajv "^5.5.1"
     bluebird "^3.5.1"
+    chalk "^2.3.0"
     debug "^3.1.0"
     dotenv "^4.0.0"
     fs-extra "^4.0.3"

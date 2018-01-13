@@ -20,6 +20,7 @@ import * as os from 'os'
 import * as yaml from 'js-yaml'
 import * as findUp from 'find-up'
 import { patchEndpointsToConfigData } from 'graphql-config-extension-graphcool'
+import { patchEndpointsToConfigData as patchPrismaEndpointsToConfigData } from 'graphql-config-extension-prisma'
 // import { PermissionSession } from 'graphql-playground/lib/types'
 
 const { dialog } = remote
@@ -119,7 +120,15 @@ cd ${folderPath}; graphql playground`)
       }
 
       const configDir = path.dirname(configPath)
-      const config = await patchEndpointsToConfigData(
+      let config = await patchEndpointsToConfigData(
+        resolveEnvsInValues(
+          getGraphQLConfig(path.dirname(configPath)).config,
+          process.env,
+        ),
+        configDir,
+        process.env,
+      )
+      config = await patchPrismaEndpointsToConfigData(
         resolveEnvsInValues(
           getGraphQLConfig(path.dirname(configPath)).config,
           process.env,
@@ -255,6 +264,11 @@ cd ${folderPath}; graphql playground`)
         const rawConfig = getGraphQLConfig(input.cwd).config
         const resolvedConfig = resolveEnvsInValues(rawConfig, input.env)
         config = await patchEndpointsToConfigData(
+          resolvedConfig,
+          input.cwd,
+          input.env,
+        )
+        config = await patchPrismaEndpointsToConfigData(
           resolvedConfig,
           input.cwd,
           input.env,
