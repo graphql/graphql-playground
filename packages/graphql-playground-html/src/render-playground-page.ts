@@ -7,6 +7,7 @@ import {
   resolveEnvsInValues,
 } from 'graphql-config'
 import { patchEndpointsToConfigData } from 'graphql-config-extension-graphcool'
+import { patchEndpointsToConfigData as patchPrismaEndpointsToConfigData } from 'graphql-config-extension-prisma'
 import * as dotenv from 'dotenv'
 
 import getLoadingMarkup from './get-loading-markup'
@@ -43,6 +44,7 @@ export async function renderPlaygroundPage(options: RenderPageOptions) {
     let config = getGraphQLConfig().config
     config = resolveEnvsInValues(config, env)
     config = await patchEndpointsToConfigData(config, process.cwd(), env)
+    config = await patchPrismaEndpointsToConfigData(config, process.cwd(), env)
     const configPath = findGraphQLConfigFile(process.cwd())
     const configString = fs.readFileSync(configPath, 'utf-8')
     const folderName = path.basename(process.cwd())

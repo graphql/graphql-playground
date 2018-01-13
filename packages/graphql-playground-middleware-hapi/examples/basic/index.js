@@ -1,6 +1,6 @@
 const hapi = require('hapi')
 const { graphqlHapi } = require('apollo-server-hapi')
-const hapiPlayground = require('graphql-playground-middleware-hapi').default
+const hapiPlayground = require('../../src/index').default
 const { makeExecutableSchema } = require('graphql-tools')
 
 const server = new hapi.Server({ debug: { request: '*' } })
