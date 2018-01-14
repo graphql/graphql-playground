@@ -53,9 +53,7 @@ export default class GraphQLEditorSession extends React.PureComponent<
       sharing,
       fixedEndpoint,
       endpoint,
-      settings
     } = this.props
-    console.log(settings)
     return (
       <GraphQLEditor
         endpoint={endpoint}
@@ -93,8 +91,6 @@ export default class GraphQLEditorSession extends React.PureComponent<
         sharing={sharing}
         fixedEndpoint={fixedEndpoint}
         shouldHideTracingResponse={this.shouldHideTracingResponse()}
-        fontSize={settings['editor.fontSize']}
-        fontFamily={settings['editor.fontFamily']}
       />
     )
   }

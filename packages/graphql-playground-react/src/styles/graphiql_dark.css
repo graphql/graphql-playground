@@ -7,10 +7,6 @@
   -webkit-box-direction: normal;
   -ms-flex-direction: row;
   flex-direction: row;
-  font-family: system, -apple-system, 'San Francisco', '.SFNSDisplay-Regular',
-    'Segoe UI', Segoe, 'Segoe WP', 'Helvetica Neue', helvetica, 'Lucida Grande',
-    arial, sans-serif;
-  font-size: 14px;
   height: 100%;
   margin: 0;
   overflow: hidden;
@@ -368,8 +364,7 @@
 
 .graphiql-container .CodeMirror {
   color: rgba(255, 255, 255, 0.3);
-  font-family: 'Source Code Pro', 'Consolas', 'Inconsolata', 'Droid Sans Mono',
-    'Monaco', monospace;
+  font-family: inherit;
   font-size: inherit;
   line-height: 1.6;
   height: 100%;
@@ -583,7 +578,8 @@ div.CodeMirror-lint-message-warning {
 .CodeMirror-linenumber {
   font-family: Open Sans, sans-serif;
   font-weight: 600;
-  font-size: 12px;
+  font-size: inherit;
+  line-height: 1.6;
   color: rgba(255, 255, 255, 0.2);
   min-width: 20px;
   padding: 0 3px 0 5px;

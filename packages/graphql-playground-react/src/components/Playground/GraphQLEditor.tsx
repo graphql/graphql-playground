@@ -85,8 +85,6 @@ export interface Props {
   useVim?: boolean
   endpoint: string
 
-  fontSize: number
-  fontFamily: string
   // sharing
   sharing?: SharingProps
 }
@@ -388,12 +386,8 @@ export class GraphQLEditor extends React.PureComponent<
       height: tracingOpen ? this.state.responseTracingHeight : null,
     }
 
-    const { fontFamily, fontSize } = this.props
-
-    console.log(fontFamily)
-
     return (
-      <GraphqlContainer
+      <div
         className={cn('graphiql-container', { isActive: this.props.isActive })}
       >
         <style jsx={true}>{`
@@ -411,6 +405,10 @@ export class GraphQLEditor extends React.PureComponent<
             @p: .bgLightOrange;
             left: -53px;
             top: 120px;
+          }
+
+          .subtitle, .response-tracing-title {
+            font-family: 'Open Sans',sans-serif;
           }
 
           .queryWrap {
@@ -492,7 +490,7 @@ export class GraphQLEditor extends React.PureComponent<
             transition: opacity 300ms ease-in;
           }
         `}</style>
-        <EditorWrap className="editorWrap" fontSize={fontSize} >
+        <div className="editorWrap">
           <TopBar
             endpoint={this.props.session.endpoint || this.props.endpoint}
             endpointDisabled={false}
@@ -620,12 +618,12 @@ export class GraphQLEditor extends React.PureComponent<
               </div>
             )}
           </div>
-        </EditorWrap>
+        </div>
         <GraphDocs
           schema={this.state.schema!}
           sessionId={this.props.session.id}
         />
-      </GraphqlContainer>
+      </div>
     )
   }
 
@@ -1287,12 +1285,3 @@ const ResultDragBar = styled(DragBar)`
   left: 0px;
   z-index: 1;
 `
-
-const GraphqlContainer = styled.div`
-  font-family: 'Open Sans', sans-serif;
-`
-
-const EditorWrap = styled.div`
-  font-family: ${(p: any) => (p.fontFamily)};
-  font-size: ${(p: any) => (p.fontSize)}px;
-`as any
