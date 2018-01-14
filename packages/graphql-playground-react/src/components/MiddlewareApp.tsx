@@ -65,6 +65,8 @@ export interface State {
 
 const defaultSettings = `{
   "general.betaUpdates": false,
+  "editor.fontFamily": "'Source Code Pro', 'Consolas', 'Inconsolata', 'Droid Sans Mono', 'Monaco', monospace",
+  "editor.fontSize": 14,
   "editor.theme": "dark",
   "editor.reuseHeaders": true,
   "request.credentials": "omit",

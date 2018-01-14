@@ -63,6 +63,8 @@ export interface Response {
 
 export interface ISettings {
   ['general.betaUpdates']: boolean
+  ['editor.fontFamily']: string
+  ['editor.fontSize']: number
   ['editor.theme']: Theme
   ['editor.reuseHeaders']: boolean
   ['tracing.hideTracingResponse']: boolean

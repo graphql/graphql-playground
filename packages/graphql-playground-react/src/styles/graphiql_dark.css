@@ -370,7 +370,8 @@
   color: rgba(255, 255, 255, 0.3);
   font-family: 'Source Code Pro', 'Consolas', 'Inconsolata', 'Droid Sans Mono',
     'Monaco', monospace;
-  font-size: 14px;
+  font-size: inherit;
+  line-height: 1.6;
   height: 100%;
   left: 0;
   position: absolute;
