@@ -83,7 +83,7 @@
     "prettier": "1.9.2",
     "promise": "7.1.1",
     "raw-loader": "0.5.1",
-    "react-dev-utils": "4.2.1",
+    "react-dev-utils": "5.0.0",
     "recursive-readdir": "2.2.1",
     "rimraf": "2.6.2",
     "source-map-loader": "0.2.3",
