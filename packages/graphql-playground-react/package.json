@@ -101,7 +101,7 @@
     "webpack": "3.10.0",
     "webpack-dev-server": "2.9.7",
     "webpack-manifest-plugin": "1.1.0",
-    "whatwg-fetch": "1.0.0",
+    "whatwg-fetch": "1.1.1",
     "why-did-you-update": "0.1.0"
   },
   "babel": {
