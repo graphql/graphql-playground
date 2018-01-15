@@ -2761,11 +2761,11 @@ figures@^2.0.0:
   dependencies:
     escape-string-regexp "^1.0.5"
 
-file-loader@0.9.0:
-  version "0.9.0"
-  resolved "https://registry.yarnpkg.com/file-loader/-/file-loader-0.9.0.tgz#1d2daddd424ce6d1b07cfe3f79731bed3617ab42"
+file-loader@0.11.2:
+  version "0.11.2"
+  resolved "https://registry.yarnpkg.com/file-loader/-/file-loader-0.11.2.tgz#4ff1df28af38719a6098093b88c82c71d1794a34"
   dependencies:
-    loader-utils "~0.2.5"
+    loader-utils "^1.0.2"
 
 filename-regex@^2.0.0:
   version "2.0.1"
@@ -4426,7 +4426,7 @@ loader-runner@^2.3.0:
   version "2.3.0"
   resolved "https://registry.yarnpkg.com/loader-runner/-/loader-runner-2.3.0.tgz#f482aea82d543e07921700d5a46ef26fdac6b8a2"
 
-loader-utils@0.2.x, loader-utils@^0.2.11, loader-utils@^0.2.16, loader-utils@^0.2.7, loader-utils@~0.2.2, loader-utils@~0.2.5:
+loader-utils@0.2.x, loader-utils@^0.2.11, loader-utils@^0.2.16, loader-utils@^0.2.7, loader-utils@~0.2.2:
   version "0.2.17"
   resolved "https://registry.yarnpkg.com/loader-utils/-/loader-utils-0.2.17.tgz#f86e6374d43205a6e6c60e9196f17c0299bfb348"
   dependencies:
