@@ -1,16 +1,5 @@
-import * as path from 'path'
-import * as fs from 'fs'
-import {
-  // getUsedEnvs,
-  getGraphQLConfig,
-  findGraphQLConfigFile,
-  resolveEnvsInValues,
-} from 'graphql-config'
-import { patchEndpointsToConfigData } from 'graphql-config-extension-graphcool'
-import { patchEndpointsToConfigData as patchPrismaEndpointsToConfigData } from 'graphql-config-extension-prisma'
-import * as dotenv from 'dotenv'
-
 import getLoadingMarkup from './get-loading-markup'
+import { GraphQLConfigData } from 'graphql-config/lib/types'
 
 export interface MiddlewareOptions {
   endpoint?: string
@@ -18,7 +7,7 @@ export interface MiddlewareOptions {
   htmlTitle?: string
   workspaceName?: string
   env?: any
-  useGraphQLConfig?: boolean
+  config?: GraphQLConfigData
 }
 
 export interface RenderPageOptions extends MiddlewareOptions {
@@ -28,11 +17,7 @@ export interface RenderPageOptions extends MiddlewareOptions {
 
 const loading = getLoadingMarkup()
 
-dotenv.config()
-
-export async function renderPlaygroundPage(options: RenderPageOptions) {
-  const env = options.env || {}
-
+export function renderPlaygroundPage(options: RenderPageOptions) {
   const extendedOptions: any = {
     ...options,
     canSaveConfig: false,
@@ -40,20 +25,11 @@ export async function renderPlaygroundPage(options: RenderPageOptions) {
   if (options.htmlTitle) {
     extendedOptions.title = options.htmlTitle
   }
-  if (options.useGraphQLConfig) {
-    let config = getGraphQLConfig().config
-    config = resolveEnvsInValues(config, env)
-    config = await patchEndpointsToConfigData(config, process.cwd(), env)
-    config = await patchPrismaEndpointsToConfigData(config, process.cwd(), env)
-    const configPath = findGraphQLConfigFile(process.cwd())
-    const configString = fs.readFileSync(configPath, 'utf-8')
-    const folderName = path.basename(process.cwd())
-    extendedOptions.folderName = options.workspaceName || folderName
-    extendedOptions.config = config
-    extendedOptions.configString = configString
-  }
   if (options.subscriptionsEndpoint) {
     extendedOptions.subscriptionEndpoint = options.subscriptionsEndpoint
+  }
+  if (options.config) {
+    extendedOptions.configString = JSON.stringify(options.config, null, 2)
   }
   if (!extendedOptions.endpoint && !extendedOptions.configString) {
     /* tslint:disable-next-line */

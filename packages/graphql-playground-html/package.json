@@ -1,6 +1,6 @@
 {
   "name": "graphql-playground-html",
-  "version": "1.4.4",
+  "version": "1.5.0",
   "homepage": "https://github.com/graphcool/graphql-playground/tree/master/packages/graphql-playground-html",
   "description": "GraphQL IDE for better development workflows (GraphQL Subscriptions, interactive docs & collaboration).",
   "contributors": [
@@ -26,6 +26,7 @@
   ],
   "devDependencies": {
     "@types/node": "8.5.5",
+    "graphql-config": "1.1.7",
     "rimraf": "2.6.2",
     "typescript": "2.6.2"
   },
@@ -33,10 +34,5 @@
   "typescript": {
     "definition": "dist/index.d.ts"
   },
-  "dependencies": {
-    "dotenv": "^4.0.0",
-    "graphql-config": "^1.1.1",
-    "graphql-config-extension-graphcool": "1.0.4",
-    "graphql-config-extension-prisma": "0.0.3"
-  }
+  "dependencies": {}
 }
