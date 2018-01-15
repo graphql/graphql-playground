@@ -150,7 +150,7 @@
     "prettier": "1.9.2",
     "raw-loader": "0.5.1",
     "react-addons-test-utils": "15.6.2",
-    "react-test-renderer": "15.6.2",
+    "react-test-renderer": "16.2.0",
     "redux-mock-store": "1.4.0",
     "rimraf": "2.6.2",
     "style-loader": "0.18.2",
