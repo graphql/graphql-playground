@@ -122,6 +122,7 @@ export interface State {
   nextQueryStartTime?: Date
   tracingSupported?: boolean
   queryVariablesActive: boolean
+  endpointUnreachable: boolean
 }
 
 export interface SimpleProps {
@@ -251,6 +252,7 @@ export class GraphQLEditor extends React.PureComponent<
       subscription: null,
       selectedVariableNames: [],
       queryVariablesActive,
+      endpointUnreachable: false,
       ...queryFacts,
     }
 
@@ -502,6 +504,7 @@ export class GraphQLEditor extends React.PureComponent<
             sharing={this.props.sharing}
             onReloadSchema={this.reloadSchema}
             fixedEndpoint={this.props.fixedEndpoint}
+            endpointUnreachable={this.state.endpointUnreachable}
           />
           <div
             ref={this.setEditorBarComponent}
@@ -805,15 +808,25 @@ export class GraphQLEditor extends React.PureComponent<
           this.renewStacks(schema)
           this.setState({
             schema,
+            endpointUnreachable: false,
             tracingSupported,
           })
         }
       })
-      .catch(error => {
-        this.setState({
-          schema: null,
-          responses: [{ date: error.message, time: new Date() }],
-        })
+      .catch(async error => {
+        if (error.message === 'Failed to fetch') {
+          setTimeout(() => {
+            this.setState({
+              endpointUnreachable: true,
+            })
+            this.ensureOfSchema()
+          }, 1000)
+        } else {
+          this.setState({
+            schema: null,
+            responses: [{ date: error.message, time: new Date() }],
+          })
+        }
       })
   }
 
