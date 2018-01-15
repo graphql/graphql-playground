@@ -7463,15 +7463,15 @@ type-is@~1.6.15:
     media-typer "0.3.0"
     mime-types "~2.1.15"
 
-typescript-styled-plugin@0.2.2:
-  version "0.2.2"
-  resolved "https://registry.yarnpkg.com/typescript-styled-plugin/-/typescript-styled-plugin-0.2.2.tgz#155b17df98d88b595a1e03cc859a545df840c634"
+typescript-styled-plugin@0.3.1:
+  version "0.3.1"
+  resolved "https://registry.yarnpkg.com/typescript-styled-plugin/-/typescript-styled-plugin-0.3.1.tgz#30396fb845103e20c20251b354b880f76979ec3e"
   dependencies:
-    typescript-template-language-service-decorator "^1.0.3"
+    typescript-template-language-service-decorator "^1.1.0"
     vscode-css-languageservice "^2.1.10"
     vscode-languageserver-types "^3.4.0"
 
-typescript-template-language-service-decorator@^1.0.3:
+typescript-template-language-service-decorator@^1.1.0:
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/typescript-template-language-service-decorator/-/typescript-template-language-service-decorator-1.1.0.tgz#0b3dacebc1442fea1e8288b0952ec01ba6bfa595"
 
