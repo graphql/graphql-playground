@@ -7553,9 +7553,9 @@ supports-color@^5.1.0:
   dependencies:
     has-flag "^2.0.0"
 
-svgo-loader@1.2.1:
-  version "1.2.1"
-  resolved "https://registry.yarnpkg.com/svgo-loader/-/svgo-loader-1.2.1.tgz#e255cdebf56753ff83bd28d1d7a20762c0df5130"
+svgo-loader@2.1.0:
+  version "2.1.0"
+  resolved "https://registry.yarnpkg.com/svgo-loader/-/svgo-loader-2.1.0.tgz#e86c0ca08c1149bb1fb4b3a469dabac847f5e24a"
   dependencies:
     loader-utils "^1.0.3"
 
