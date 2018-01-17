@@ -85,7 +85,7 @@
     "classnames": "^2.2.5",
     "date-fns": "^1.29.0",
     "electron-is-dev": "^0.3.0",
-    "electron-localshortcut": "^2.0.2",
+    "electron-localshortcut": "^3.0.0",
     "electron-log": "^2.2.13",
     "electron-squirrel-startup": "^1.0.0",
     "electron-updater": "2.17.6",
