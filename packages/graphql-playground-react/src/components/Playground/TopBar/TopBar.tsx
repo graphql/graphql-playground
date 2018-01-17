@@ -187,9 +187,9 @@ const ReloadIcon = styled(Icon)`
 
 const Spinner = styled.div`
   & {
-    width: 40px;
-    height: 40px;
-    margin: 40px auto;
+    width: 16px;
+    height: 16px;
+    margin: 6px;
     background-color: #333;
     border-radius: 100%;
     -webkit-animation: sk-pulseScaleOut 1s infinite ease-in-out;
