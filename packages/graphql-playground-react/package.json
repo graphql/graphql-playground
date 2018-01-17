@@ -151,7 +151,7 @@
     "styled-jsx": "^2.2.1",
     "styled-jsx-postcss": "git+https://github.com/timsuchanek/styled-jsx-postcss#build3",
     "styled-theming": "^2.2.0",
-    "subscriptions-transport-ws": "^0.8.1"
+    "subscriptions-transport-ws": "^0.9.5"
   },
   "lint-staged": {
     "*.{ts,tsx}": [

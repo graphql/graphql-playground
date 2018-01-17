@@ -984,18 +984,29 @@ export class Playground extends React.PureComponent<Props & DocsState, State> {
             wsConnection = this.wsConnections[session.id]
           }
 
-          const id = wsConnection.subscribe(graphQLParams, (err, res) => {
-            const data: any = { data: res, isSubscription: true }
-            if (err) {
-              data.error = err
+          const request = wsConnection.request(graphQLParams)
+
+          const id = cuid()
+
+          request.subscribe({
+            next: (err, res) => {
+              const data: any = { data: res, isSubscription: true }
+              if (err) {
+                data.error = err
+              }
+              observer.next(data)
+            },
+            error: error => {
+              observer.next({
+                data: { error }
+              })
+            },
+            complete: () => {
+              this.cancelSubscription(session)
             }
-            observer.next(data)
           })
 
           this.setValueInSession(session.id, 'subscriptionId', id)
-          return () => {
-            this.cancelSubscription(session)
-          }
         })
       }
     }
