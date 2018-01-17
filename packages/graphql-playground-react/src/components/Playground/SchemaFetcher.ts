@@ -36,6 +36,7 @@ export class SchemaFetcher {
       },
       body: JSON.stringify({ query: introspectionQuery }),
     })
+
     const schemaData = await response.json()
 
     if (schemaData && (schemaData.errors || !schemaData.data)) {

@@ -1,5 +1,5 @@
 import getLoadingMarkup from './get-loading-markup'
-import { GraphQLConfigData } from 'graphql-config/lib/types'
+import { GraphQLConfigData } from 'graphql-config'
 
 export interface MiddlewareOptions {
   endpoint?: string

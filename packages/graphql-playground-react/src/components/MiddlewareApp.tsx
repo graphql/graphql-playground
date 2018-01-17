@@ -209,13 +209,19 @@ export default class MiddlewareApp extends React.Component<Props, State> {
   }
 
   normalizeSubscriptionUrl(endpoint, subscriptionEndpoint) {
-    if (subscriptionEndpoint.startsWith('/')) {
-      const secure =
-        endpoint.includes('https') || location.href.includes('https') ? 's' : ''
-      return `ws${secure}://${location.host}${subscriptionEndpoint}`
+    if (subscriptionEndpoint) {
+      if (subscriptionEndpoint.startsWith('/')) {
+        const secure =
+          endpoint.includes('https') || location.href.includes('https')
+            ? 's'
+            : ''
+        return `ws${secure}://${location.host}${subscriptionEndpoint}`
+      } else {
+        return subscriptionEndpoint.replace(/^http/, 'ws')
+      }
     }
 
-    return subscriptionEndpoint.replace(/^http/, 'ws')
+    return endpoint.replace(/^http/, 'ws')
   }
 
   componentWillMount() {
