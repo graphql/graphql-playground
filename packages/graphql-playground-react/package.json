@@ -129,7 +129,7 @@
     "markdown-it": "^8.4.0",
     "marked": "^0.3.9",
     "polished": "^1.9.0",
-    "postcss-modules": "^0.6.4",
+    "postcss-modules": "^1.1.0",
     "prop-types": "^15.6.0",
     "react": "^16.2.0",
     "react-addons-shallow-compare": "^15.6.2",
@@ -148,6 +148,7 @@
     "rxjs": "^5.0.3",
     "seamless-immutable": "^7.0.1",
     "styled-components": "^2.4.0",
+    "styled-jsx": "^2.2.1",
     "styled-jsx-postcss": "git+https://github.com/timsuchanek/styled-jsx-postcss#build3",
     "styled-theming": "^2.2.0",
     "subscriptions-transport-ws": "^0.8.1"
