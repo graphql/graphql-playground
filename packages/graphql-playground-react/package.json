@@ -39,7 +39,7 @@
     "@types/hapi": "16.1.12",
     "@types/jest": "22.0.0",
     "@types/koa": "2.0.43",
-    "@types/node": "8.5.5",
+    "@types/node": "9.3.0",
     "@types/react": "16.0.34",
     "@types/react-dom": "16.0.3",
     "autoprefixer": "6.5.1",
