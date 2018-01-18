@@ -1470,7 +1470,7 @@ buffer@^5.0.3:
     base64-js "^1.0.2"
     ieee754 "^1.1.4"
 
-builder-util-runtime@3.4.1, builder-util-runtime@~3.4.1:
+builder-util-runtime@3.4.1:
   version "3.4.1"
   resolved "https://registry.yarnpkg.com/builder-util-runtime/-/builder-util-runtime-3.4.1.tgz#5fb4cea5bb2bdfae1262aba099c21b2bdcecd742"
   dependencies:
@@ -1482,6 +1482,15 @@ builder-util-runtime@3.4.1, builder-util-runtime@~3.4.1:
 builder-util-runtime@^3.3.1, builder-util-runtime@^3.4.0, builder-util-runtime@^3.4.1, builder-util-runtime@^3.5.0:
   version "3.5.0"
   resolved "https://registry.yarnpkg.com/builder-util-runtime/-/builder-util-runtime-3.5.0.tgz#c78f3c6c06aacf53a544d8c6c0728f69bc176c19"
+  dependencies:
+    bluebird-lst "^1.0.5"
+    debug "^3.1.0"
+    fs-extra-p "^4.5.0"
+    sax "^1.2.4"
+
+builder-util-runtime@~4.0.2:
+  version "4.0.2"
+  resolved "https://registry.yarnpkg.com/builder-util-runtime/-/builder-util-runtime-4.0.2.tgz#673f1a0f2e275e6f80a16ce57225589a003c9a52"
   dependencies:
     bluebird-lst "^1.0.5"
     debug "^3.1.0"
@@ -2636,12 +2645,12 @@ electron-to-chromium@^1.2.7:
   dependencies:
     electron-releases "^2.1.0"
 
-electron-updater@2.17.6:
-  version "2.17.6"
-  resolved "https://registry.yarnpkg.com/electron-updater/-/electron-updater-2.17.6.tgz#dd2d522afca972df2fd8e132bc44b4c5852c8d5e"
+electron-updater@2.19.1:
+  version "2.19.1"
+  resolved "https://registry.yarnpkg.com/electron-updater/-/electron-updater-2.19.1.tgz#2265136b7ef15f7cb06e4032eaaf64382f642437"
   dependencies:
     bluebird-lst "^1.0.5"
-    builder-util-runtime "~3.4.1"
+    builder-util-runtime "~4.0.2"
     electron-is-dev "^0.3.0"
     fs-extra-p "^4.5.0"
     js-yaml "^3.10.0"
@@ -7458,17 +7467,6 @@ styled-components@^2.4.0:
 "styled-jsx-postcss@git+https://github.com/timsuchanek/styled-jsx-postcss#build3":
   version "0.2.0"
   resolved "git+https://github.com/timsuchanek/styled-jsx-postcss#677ee0fb7f9138047a00e03c8c3e44adbb33cf2a"
-  dependencies:
-    babel-traverse "^6.21.0"
-    babylon "^6.14.1"
-    deasync "^0.1.9"
-    postcss "^5.2.8"
-    postcss-load-plugins "^2.2.0"
-    styled-jsx "^0.5.7"
-
-"styled-jsx-postcss@git+https://github.com/timsuchanek/styled-jsx-postcss.git#build3":
-  version "0.2.0"
-  resolved "git+https://github.com/timsuchanek/styled-jsx-postcss.git#677ee0fb7f9138047a00e03c8c3e44adbb33cf2a"
   dependencies:
     babel-traverse "^6.21.0"
     babylon "^6.14.1"
