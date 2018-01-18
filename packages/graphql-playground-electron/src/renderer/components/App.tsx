@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { remote, ipcRenderer } from 'electron'
+import { remote, ipcRenderer, webFrame } from 'electron'
 import { Provider } from 'react-redux'
 import * as cx from 'classnames'
 import { Playground as IPlayground } from 'graphql-playground-react/lib/components/Playground'
@@ -19,7 +19,6 @@ import * as path from 'path'
 import * as os from 'os'
 import * as yaml from 'js-yaml'
 import * as findUp from 'find-up'
-import { patchEndpointsToConfigData } from 'graphql-config-extension-graphcool'
 import { patchEndpointsToConfigData as patchPrismaEndpointsToConfigData } from 'graphql-config-extension-prisma'
 // import { PermissionSession } from 'graphql-playground/lib/types'
 
@@ -236,6 +235,12 @@ cd ${folderPath}; graphql playground`)
       this.nextTab()
     } else if (e.key >= 1 && e.key <= 9 && e.metaKey) {
       this.playground.switchTab(e.key)
+    } else if (e.key === '=' && e.metaKey) {
+      const zoom = webFrame.getZoomFactor()
+      webFrame.setZoomFactor(zoom + 0.1)
+    } else if (e.key === '-' && e.metaKey) {
+      const zoom = webFrame.getZoomFactor()
+      webFrame.setZoomFactor(zoom - 0.1)
     }
   }
 
