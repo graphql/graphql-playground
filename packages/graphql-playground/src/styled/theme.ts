@@ -9,6 +9,7 @@ export interface Colours {
   darkBlue10: string
   darkerBlue: string
   darkestBlue: string
+  white80: string
   white70: string
   white60: string
   white30: string
@@ -18,6 +19,8 @@ export interface Colours {
   black40: string
   paleText: string
   paleGrey: string
+  red: string
+  purple: string
 }
 
 export const colours: Colours = {
@@ -36,8 +39,11 @@ export const colours: Colours = {
   white30: 'rgba(255, 255, 255, 0.3)',
   white60: 'rgba(255, 255, 255, 0.6)',
   white70: 'rgba(255, 255, 255, 0.7)',
+  white80: 'rgba(255, 255, 255, 0.8)',
   white: 'rgba(255, 255, 255, 1)',
   black40: 'rgba(0, 0, 0, 0.4)',
+  red: '#f25c54',
+  purple: 'rgb(164, 3, 111)',
 
   paleText: 'rgba(0, 0, 0, 0.5)',
   paleGrey: '#f3f4f4', // use for bgs, borders, etc
@@ -48,6 +54,7 @@ export interface Sizes {
   small10: string
   small12: string
   small16: string
+  medium25: string
   smallRadius: string
   fontLight: string
   fontSemiBold: string
@@ -61,6 +68,7 @@ export const sizes: Sizes = {
   small10: '10px',
   small12: '12px',
   small16: '16px',
+  medium25: '25px',
 
   // font weights
   fontLight: '300',
