@@ -92,7 +92,7 @@
     "find-up": "^2.1.0",
     "graphcool-styles": "^0.2.5",
     "graphcool-tmp-ui": "^0.0.11",
-    "graphcool-ui": "^0.0.13",
+    "graphcool-ui": "^0.0.14",
     "graphql-config": "^1.1.2",
     "graphql-config-extension-graphcool": "1.0.4",
     "graphql-config-extension-prisma": "0.0.3",
