@@ -7466,17 +7466,6 @@ styled-components@^2.4.0:
     postcss-load-plugins "^2.2.0"
     styled-jsx "^0.5.7"
 
-"styled-jsx-postcss@git+https://github.com/timsuchanek/styled-jsx-postcss.git#build3":
-  version "0.2.0"
-  resolved "git+https://github.com/timsuchanek/styled-jsx-postcss.git#677ee0fb7f9138047a00e03c8c3e44adbb33cf2a"
-  dependencies:
-    babel-traverse "^6.21.0"
-    babylon "^6.14.1"
-    deasync "^0.1.9"
-    postcss "^5.2.8"
-    postcss-load-plugins "^2.2.0"
-    styled-jsx "^0.5.7"
-
 styled-jsx@0.5.2:
   version "0.5.2"
   resolved "https://registry.yarnpkg.com/styled-jsx/-/styled-jsx-0.5.2.tgz#59740216c3db371636f9beec02149f9da5ea02e5"
@@ -8100,9 +8089,9 @@ vm-browserify@0.0.4:
   dependencies:
     indexof "0.0.1"
 
-wait-on@2.0.2:
-  version "2.0.2"
-  resolved "https://registry.yarnpkg.com/wait-on/-/wait-on-2.0.2.tgz#0a84fd07024c6fc268cb0eabe585be217aaf2baa"
+wait-on@2.1.0:
+  version "2.1.0"
+  resolved "https://registry.yarnpkg.com/wait-on/-/wait-on-2.1.0.tgz#3c4ace1f57266ca5be7fa25e0c15803b889ca46a"
   dependencies:
     core-js "^2.4.1"
     joi "^9.2.0"
