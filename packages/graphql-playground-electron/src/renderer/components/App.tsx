@@ -20,6 +20,7 @@ import * as os from 'os'
 import * as yaml from 'js-yaml'
 import * as findUp from 'find-up'
 import { patchEndpointsToConfigData as patchPrismaEndpointsToConfigData } from 'graphql-config-extension-prisma'
+import { patchEndpointsToConfigData } from 'graphql-config-extension-graphcool'
 // import { PermissionSession } from 'graphql-playground/lib/types'
 
 const { dialog } = remote
