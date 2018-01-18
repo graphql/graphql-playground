@@ -1,10 +1,17 @@
 <p align="center"><img src="https://imgur.com/5fzMbyV.png" width="269"></p>
 
+
+[![npm version](https://badge.fury.io/js/graphql-playground-react.svg)](https://badge.fury.io/js/graphql-playground-react)  [![CircleCI](https://circleci.com/gh/graphcool/graphql-playground.svg?style=shield)](https://circleci.com/gh/graphcool/graphql-playground)
+
 GraphQL IDE for better development workflows (GraphQL Subscriptions, interactive docs & collaboration). <br />
 **You can download the [desktop app](https://github.com/graphcool/graphql-playground/releases) or use the web version at graphqlbin.com: [Demo](https://www.graphqlbin.com/RVIn)**
 
 
 [![](https://i.imgur.com/AE5W6OW.png)](https://www.graphqlbin.com/RVIn)
+## Installation
+```sh
+$ brew cask install graphql-playground
+```
 
 ## Features
 
@@ -159,7 +166,7 @@ functions:
         cors: true
 ```
 
-## Development [![npm version](https://badge.fury.io/js/graphql-playground-react.svg)](https://badge.fury.io/js/graphql-playground-react)  [![CircleCI](https://circleci.com/gh/graphcool/graphql-playground.svg?style=shield)](https://circleci.com/gh/graphcool/graphql-playground)
+## Development
 
 This is a mono-repo setup containing packages for the `graphql-playground-react` and `graphql-playground-electron`.
 
