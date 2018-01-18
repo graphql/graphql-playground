@@ -1,5 +1,10 @@
 {
   "extends": [
     "config:base"
+  ],
+  "packageFiles": [
+    "packages/graphql-playground-react/package.json",
+    "packages/graphql-playground-html/package.json",
+    "packages/graphql-playground-electron/package.json"
   ]
 }
