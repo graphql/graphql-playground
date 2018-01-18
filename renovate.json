@@ -2,7 +2,7 @@
   "extends": [
     "config:base"
   ],
-  "excludePackageNames": [
+  "ignoreDeps": [
     "hapi"
   ]
 }
