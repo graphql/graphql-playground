@@ -88,7 +88,7 @@
     "electron-localshortcut": "^2.0.2",
     "electron-log": "^2.2.13",
     "electron-squirrel-startup": "^1.0.0",
-    "electron-updater": "2.17.6",
+    "electron-updater": "2.19.1",
     "find-up": "^2.1.0",
     "graphcool-styles": "^0.2.5",
     "graphcool-tmp-ui": "^0.0.11",
