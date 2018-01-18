@@ -286,7 +286,7 @@ export class Playground extends React.PureComponent<Props & DocsState, State> {
   }
   render() {
     const { sessions, selectedSessionIndex } = this.state
-    const { isEndpoint } = this.props
+    const { isEndpoint, settings } = this.props
     const theme = this.props.settings['editor.theme']
     const selectedEndpointUrl = isEndpoint ? location.href : this.getEndpoint()
     const isGraphcoolUrl = this.isGraphcoolUrl(selectedEndpointUrl)
@@ -318,6 +318,8 @@ export class Playground extends React.PureComponent<Props & DocsState, State> {
               style={{
                 top: `-${100 * selectedSessionIndex}%`,
               }}
+              fontSize={settings['editor.fontSize']}
+              fontFamily={settings['editor.fontFamily']}
             >
               {session.isConfigTab ? (
                 <SettingsEditor
@@ -1209,4 +1211,7 @@ const GraphiqlWrapper = styled.div`
   &.active {
     visibility: visible;
   }
-`
+
+  font-family: ${(p: any) => (p.fontFamily)};
+  font-size: ${(p: any) => (p.fontSize)}px;
+`as any

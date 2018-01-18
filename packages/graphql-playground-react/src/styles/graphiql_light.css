@@ -7,11 +7,8 @@
   -webkit-box-direction: normal;
   -ms-flex-direction: row;
   flex-direction: row;
-  font-family: system, -apple-system, 'San Francisco', '.SFNSDisplay-Regular',
-    'Segoe UI', Segoe, 'Segoe WP', 'Helvetica Neue', helvetica, 'Lucida Grande',
-    arial, sans-serif;
   font-weight: 500;
-  font-size: 14px;
+  font-size: inherit;
   height: 100%;
   margin: 0;
   overflow: visible;
@@ -429,13 +426,13 @@
 }
 
 @-webkit-keyframes insertionFade {
-  .docs-graphiql from,
+  from,
   to {
     background: rgba(255, 255, 255, 0);
     border-color: rgba(255, 255, 255, 0);
   }
 
-  .docs-graphiql 15%,
+  15%,
   85% {
     background: #fbffc9;
     border-color: #f0f3c0;
@@ -443,13 +440,13 @@
 }
 
 @keyframes insertionFade {
-  .docs-graphiql from,
+  from,
   to {
     background: rgba(255, 255, 255, 0);
     border-color: rgba(255, 255, 255, 0);
   }
 
-  .docs-graphiql 15%,
+  15%,
   85% {
     background: #fbffc9;
     border-color: #f0f3c0;
@@ -594,7 +591,8 @@ div.CodeMirror-lint-message-warning {
 .docs-graphiql .CodeMirror {
   /* Set height, width, borders, and global font properties here */
   color: black;
-  font-family: monospace;
+  font-family: inherit;
+  font-size: inherit;
   height: auto;
 }
 
@@ -615,7 +613,7 @@ div.CodeMirror-lint-message-warning {
 .docs-graphiql .CodeMirror-linenumber {
   font-family: Open Sans, sans-serif;
   font-weight: 600;
-  font-size: 12px;
+  font-size: inherit;
   color: rgba(0, 0, 0, 0.1);
   min-width: 20px;
   padding: 0 3px 0 5px;
@@ -655,24 +653,24 @@ div.CodeMirror-lint-message-warning {
   width: auto;
 }
 @-webkit-keyframes blink {
-  .docs-graphiql 0% {
+  0% {
     background: #7e7;
   }
-  .docs-graphiql 50% {
+  50% {
     background: none;
   }
-  .docs-graphiql 100% {
+  100% {
     background: #7e7;
   }
 }
 @keyframes blink {
-  .docs-graphiql 0% {
+  0% {
     background: #7e7;
   }
-  .docs-graphiql 50% {
+  50% {
     background: none;
   }
-  .docs-graphiql 100% {
+  100% {
     background: #7e7;
   }
 }
@@ -811,7 +809,7 @@ div.CodeMirror-lint-message-warning {
   background: white;
   overflow: hidden;
   position: relative;
-  line-height: 24px;
+  line-height: 1.6;
 }
 
 .docs-graphiql .CodeMirror-scroll {
@@ -1031,7 +1029,7 @@ div.CodeMirror-lint-message-warning {
   padding-right: 0.1px;
 }
 
-.docs-graphiql @media print {
+@media print {
   /* Hide the cursor when printing */
   .docs-graphiql .CodeMirror div.CodeMirror-cursors {
     visibility: hidden;

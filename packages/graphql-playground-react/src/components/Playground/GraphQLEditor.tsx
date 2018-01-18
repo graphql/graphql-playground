@@ -393,10 +393,6 @@ export class GraphQLEditor extends React.PureComponent<
         className={cn('graphiql-container', { isActive: this.props.isActive })}
       >
         <style jsx={true}>{`
-          .graphiql-container {
-            font-family: Open Sans, sans-serif;
-          }
-
           .docs-button,
           .schema-button {
             @p: .absolute, .white, .bgGreen, .pa6, .br2, .z2, .ttu, .fw6, .f14,
@@ -411,6 +407,10 @@ export class GraphQLEditor extends React.PureComponent<
             @p: .bgLightOrange;
             left: -53px;
             top: 120px;
+          }
+
+          .subtitle, .response-tracing-title {
+            font-family: 'Open Sans',sans-serif;
           }
 
           .queryWrap {

@@ -153,6 +153,7 @@ class GraphDocs extends React.Component<
           .graph-docs {
             @p: .absolute, .h100;
             right: -2px;
+            font-family: 'Open Sans', sans-serif;
           }
           .graph-docs.open {
             z-index: 2000;
