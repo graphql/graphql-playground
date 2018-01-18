@@ -39,7 +39,7 @@
     "definition": "dist/index.d.ts"
   },
   "dependencies": {
-    "graphql-playground-html": "1.5.0",
+    "graphql-playground-html": "1.5.2",
     "koa": "^2.4.1"
   }
 }
