@@ -156,7 +156,7 @@
     "style-loader": "0.18.2",
     "svgo-loader": "1.2.1",
     "ts-loader": "2.3.7",
-    "tslint": "5.8.0",
+    "tslint": "5.9.1",
     "tslint-graphcool-frontend": "0.0.3",
     "tslint-loader": "3.5.3",
     "typescript": "2.6.2",
