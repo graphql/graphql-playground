@@ -172,11 +172,17 @@ export default class PlaygroundStorage {
   }
 
   public setItem(key: string, value: string) {
+    if (!this.project.data) {
+      this.project.data = {}
+    }
     this.project.data[key] = value
   }
 
   public getItem(key: string) {
-    return this.project.data[key]
+    if (this.project && this.project.data) {
+      return this.project.data[key]
+    }
+    return null
   }
 
   public saveProject() {
@@ -194,7 +200,8 @@ export default class PlaygroundStorage {
   private getProject() {
     let result: any = null
     try {
-      result = JSON.parse(localStorage.getItem(this.endpoint) || '')
+      const data = localStorage.getItem(this.endpoint) || '{}'
+      result = JSON.parse(data)
     } catch (e) {
       /* tslint:disable-next-line */
       console.info(e)
@@ -206,6 +213,7 @@ export default class PlaygroundStorage {
         date: new Date(item.date),
       }))
     }
+
     return PlaygroundStorage.runMigration(result, this.endpoint)
   }
 

@@ -213,14 +213,17 @@ export class Playground extends React.PureComponent<Props & DocsState, State> {
     ) {
       this.saveSessions()
       this.saveHistory()
+      this.storage.setItem('selectedSessionIndex', String(this.state.selectedSessionIndex))
       this.storage.saveProject()
-      this.storage = new PlaygroundStorage(this.getStorageKey())
+      const storageKey = this.getStorageKey()
+      this.storage = new PlaygroundStorage(storageKey)
       const sessions = this.initSessions()
+      const selectedSessionIndex = parseInt(this.storage.getItem('selectedSessionIndex'), 10) || 0
       this.setState(
         {
           sessions,
           history: this.storage.getHistory(),
-          selectedSessionIndex: 0,
+          selectedSessionIndex,
         },
         () => {
           this.resetSubscriptions()
@@ -981,18 +984,29 @@ export class Playground extends React.PureComponent<Props & DocsState, State> {
             wsConnection = this.wsConnections[session.id]
           }
 
-          const id = wsConnection.subscribe(graphQLParams, (err, res) => {
-            const data: any = { data: res, isSubscription: true }
-            if (err) {
-              data.error = err
+          const request = wsConnection.request(graphQLParams)
+
+          const id = cuid()
+
+          request.subscribe({
+            next: (err, res) => {
+              const data: any = { data: res, isSubscription: true }
+              if (err) {
+                data.error = err
+              }
+              observer.next(data)
+            },
+            error: error => {
+              observer.next({
+                data: { error }
+              })
+            },
+            complete: () => {
+              this.cancelSubscription(session)
             }
-            observer.next(data)
           })
 
           this.setValueInSession(session.id, 'subscriptionId', id)
-          return () => {
-            this.cancelSubscription(session)
-          }
         })
       }
     }
@@ -1013,8 +1027,7 @@ export class Playground extends React.PureComponent<Props & DocsState, State> {
       // tslint:disable-lin
       method: 'post',
       headers,
-      // TODO enable
-      // credentials: 'include',
+      credentials: this.props.settings["request.credentials"],
       body: JSON.stringify(graphQLParams),
     }).then(response => {
       if (typeof this.props.onSuccess === 'function') {

@@ -67,6 +67,7 @@ const defaultSettings = `{
   "general.betaUpdates": false,
   "editor.theme": "dark",
   "editor.reuseHeaders": true,
+  "request.credentials": "omit",
   "tracing.hideTracingResponse": true
 }`
 
@@ -92,7 +93,7 @@ export default class MiddlewareApp extends React.Component<Props, State> {
       getParameterByName('endpoint') ||
       location.href
 
-    let subscriptionEndpoint: string | undefined | null =
+    let subscriptionEndpoint: any =
       props.subscriptionEndpoint || getParameterByName('subscriptionEndpoint')
 
     if (props.configString && props.config && activeEnv) {
@@ -104,15 +105,16 @@ export default class MiddlewareApp extends React.Component<Props, State> {
       subscriptionEndpoint = this.getGraphcoolSubscriptionEndpoint(endpoint)
     }
 
+    subscriptionEndpoint =
+      this.normalizeSubscriptionUrl(endpoint, subscriptionEndpoint) || undefined
+
     this.state = {
       endpoint: this.absolutizeUrl(endpoint),
       platformToken:
         props.platformToken ||
         localStorage.getItem('platform-token') ||
         undefined,
-      subscriptionEndpoint: subscriptionEndpoint
-        ? this.normalizeSubscriptionUrl(endpoint, subscriptionEndpoint)
-        : '',
+      subscriptionEndpoint,
       settingsString,
       settings: this.getSettings(settingsString),
       configIsYaml,
@@ -207,13 +209,19 @@ export default class MiddlewareApp extends React.Component<Props, State> {
   }
 
   normalizeSubscriptionUrl(endpoint, subscriptionEndpoint) {
-    if (subscriptionEndpoint.startsWith('/')) {
-      const secure =
-        endpoint.includes('https') || location.href.includes('https') ? 's' : ''
-      return `ws${secure}://${location.host}${subscriptionEndpoint}`
+    if (subscriptionEndpoint) {
+      if (subscriptionEndpoint.startsWith('/')) {
+        const secure =
+          endpoint.includes('https') || location.href.includes('https')
+            ? 's'
+            : ''
+        return `ws${secure}://${location.host}${subscriptionEndpoint}`
+      } else {
+        return subscriptionEndpoint.replace(/^http/, 'ws')
+      }
     }
 
-    return subscriptionEndpoint.replace(/^http/, 'ws')
+    return endpoint.replace(/^http/, 'ws')
   }
 
   componentWillMount() {

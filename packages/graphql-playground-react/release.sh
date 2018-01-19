@@ -2,7 +2,7 @@
 
 set -e
 
-npm publish
+#npm publish
 
 curl -X POST \
   http://purge.jsdelivr.net/ \
@@ -10,8 +10,8 @@ curl -X POST \
   -H 'content-type: application/json' \
   -d '{
 	"path": [
-		"/npm/graphql-playground/middleware-build/static/css/main.css",
-		"/npm/graphql-playground/middleware-build/static/js/main.js"
+		"/npm/graphql-playground-react/build/static/css/middleware.css",
+		"/npm/graphql-playground-react/build/static/js/middleware.js"
 	]
 }'
 

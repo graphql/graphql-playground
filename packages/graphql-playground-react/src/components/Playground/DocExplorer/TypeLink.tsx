@@ -3,9 +3,9 @@ import * as cx from 'classnames'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import { GraphQLList, GraphQLNonNull, isType } from 'graphql'
-import { Icon } from 'graphcool-styles'
 import ArgumentInline from './ArgumentInline'
 import { addStack } from '../../../actions/graphiql-docs'
+import { Triangle } from '../../Icons/Triangle'
 
 interface ReduxProps {
   keyMove: boolean
@@ -155,7 +155,8 @@ class TypeLink extends React.Component<
           .doc-category-icon {
             @p: .absolute;
             right: 10px;
-            top: calc(50% - 4px);
+            top: 50%;
+            transform: translateY(-50%);
           }
         `}</style>
         <style jsx={true} global={true}>{`
@@ -208,12 +209,7 @@ class TypeLink extends React.Component<
         <span className="type-name">{renderType(type.type || type)}</span>
         {clickable && (
           <span className="doc-category-icon">
-            <Icon
-              src={require('graphcool-styles/icons/fill/triangle.svg')}
-              color="rgba(0, 0, 0, .2)"
-              width={6}
-              height={7}
-            />
+            <Triangle />
           </span>
         )}
         {afterNode && ' '}

@@ -1,5 +1,5 @@
 {
-  "name": "@saeris/graphql-playground-middleware-hapi",
+  "name": "graphql-playground-middleware-hapi",
   "version": "1.4.0",
   "homepage": "https://github.com/graphcool/graphql-playground/tree/master/packages/graphql-playground-middleware-hapi",
   "description": "GraphQL IDE for better development workflows (GraphQL Subscriptions, interactive docs & collaboration).",
@@ -31,15 +31,15 @@
     "hapi": "^17.0.0"
   },
   "devDependencies": {
-    "@types/node": "^8.0.47",
-    "rimraf": "^2.6.2",
-    "typescript": "^2.6.1"
+    "@types/node": "9.3.0",
+    "rimraf": "2.6.2",
+    "typescript": "2.6.2"
   },
   "typings": "dist/index.d.ts",
   "typescript": {
     "definition": "dist/index.d.ts"
   },
   "dependencies": {
-    "graphql-playground-html": "^1.5.2"
+    "graphql-playground-html": "1.5.2"
   }
 }

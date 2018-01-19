@@ -6,15 +6,19 @@ import {
 } from 'graphql-playground-html'
 
 /* tslint:disable-next-line */
-const { version } = require('../package.json')
+const { playgroundVersion } = require('../package.json')
 
 export default function lambdaPlayground(options: MiddlewareOptions) {
-  return (event, lambdaContext: lambda.Context, callback: lambda.Callback) => {
+  return async (
+    event,
+    lambdaContext: lambda.Context,
+    callback: lambda.Callback,
+  ) => {
     const middlewareOptions: RenderPageOptions = {
       ...options,
-      version,
+      version: playgroundVersion,
     }
-    const body = renderPlaygroundPage(middlewareOptions)
+    const body = await renderPlaygroundPage(middlewareOptions)
     callback(null, {
       statusCode: 200,
       headers: {

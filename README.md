@@ -1,10 +1,17 @@
 <p align="center"><img src="https://imgur.com/5fzMbyV.png" width="269"></p>
 
+
+[![npm version](https://badge.fury.io/js/graphql-playground-react.svg)](https://badge.fury.io/js/graphql-playground-react)  [![CircleCI](https://circleci.com/gh/graphcool/graphql-playground.svg?style=shield)](https://circleci.com/gh/graphcool/graphql-playground)
+
 GraphQL IDE for better development workflows (GraphQL Subscriptions, interactive docs & collaboration). <br />
 **You can download the [desktop app](https://github.com/graphcool/graphql-playground/releases) or use the web version at graphqlbin.com: [Demo](https://www.graphqlbin.com/RVIn)**
 
 
 [![](https://i.imgur.com/AE5W6OW.png)](https://www.graphqlbin.com/RVIn)
+## Installation
+```sh
+$ brew cask install graphql-playground
+```
 
 ## Features
 
@@ -103,9 +110,9 @@ We have a full example for each of the frameworks below:
 
 - **Express:** See [packages/graphql-playground-middleware-express/examples/basic](https://github.com/graphcool/graphql-playground/tree/master/packages/graphql-playground-middleware-express/examples/basic)
 
-- **Hapi:** See [packages/graphql-playground-middleware/examples/hapi](https://github.com/graphcool/graphql-playground/tree/master/packages/graphql-playground-middleware/examples/hapi)
+- **Hapi:** See [packages/graphql-playground-middleware-hapi](https://github.com/graphcool/graphql-playground/tree/master/packages/graphql-playground-middleware-hapi)
 
-- **Koa:** See [packages/graphql-playground-middleware/examples/koa](https://github.com/graphcool/graphql-playground/tree/master/packages/graphql-playground-middleware/examples/koa)
+- **Koa:** See [packages/graphql-playground-middleware-koa](https://github.com/graphcool/graphql-playground/tree/master/packages/graphql-playground-middleware-koa)
 
 - **Lambda (as serverless handler):** See [serverless-graphql-apollo](https://github.com/serverless/serverless-graphql-apollo) or a quick example below.
 
@@ -159,17 +166,34 @@ functions:
         cors: true
 ```
 
-## Development [![npm version](https://badge.fury.io/js/graphql-playground.svg)](https://badge.fury.io/js/graphql-playground)  [![CircleCI](https://circleci.com/gh/graphcool/graphql-playground.svg?style=shield)](https://circleci.com/gh/graphcool/graphql-playground)
+## Development
 
 This is a mono-repo setup containing packages for the `graphql-playground-react` and `graphql-playground-electron`.
 
 ```sh
-$ cd packages/graphql-playground-react
+# installs all dependencies for all packages
 $ yarn
+$ cd packages/graphql-playground-react
 $ yarn start
 ```
 Open
 [localhost:3000/middleware.html?endpoint=https://api.graph.cool/simple/v1/swapi](http://localhost:3000/middleware.html?endpoint=https://api.graph.cool/simple/v1/swapi) for local development!
+
+### Versions
+
+This is repository is a "mono repo" and contains multiple packages using [Yarn workspaces](https://yarnpkg.com/lang/en/docs/workspaces/). Please be aware that versions are **not** synchronised between packages. The versions of the [release page](https://github.com/graphcool/graphql-playground/releases) refer to the electron app.
+
+### Packages
+
+In the folder `packages` you'll find the following packages:
+
+* `graphql-playground-electron`: Cross-platform electron app which uses `graphql-playground-react`
+* `graphql-playground-html`: Simple HTML page rendering a version of `graphql-playground-react` hosted on JSDeliver
+* `graphql-playground-middleware-express`: Express middleware using `graphql-playground-html`
+* `graphql-playground-middleware-hapi`: Hapi middleware using `graphql-playground-html`
+* `graphql-playground-middleware-koa`: Koa middleware using `graphql-playground-html`
+* `graphql-playground-middleware-lambda`: AWS Lambda middleware using `graphql-playground-html`
+* `graphql-playground-react`: Core of GraphQL Playground built with ReactJS
 
 
 <a name="help-and-community" />

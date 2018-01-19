@@ -1,6 +1,6 @@
 service: whh
 stage: dev
-cluster: workspace-asd/graphcool-eu1
+cluster: workspace-asd/prisma-eu1
 
 datamodel:
 - datamodel.graphql

@@ -215,39 +215,41 @@ class GraphDocs extends React.Component<
           onMouseDown={this.handleDocsResizeStart}
         />
         <div className="doc-explorer-gradient" />
-        <div
-          className="doc-explorer"
-          onKeyDown={this.handleKeyDown}
-          onMouseMove={this.handleMouseMove}
-          tabIndex={0}
-          ref={this.setDocExplorerRef}
-        >
-          <div className="doc-explorer-container">
-            {emptySchema && <ColumnDoc>{emptySchema}</ColumnDoc>}
-            {schema && (
-              <RootColumn
-                schema={schema}
-                width={this.state.widthMap.root || columnWidth - 1}
-                searchValue={this.state.searchValue}
-                handleSearch={this.handleSearch}
-                sessionId={this.props.sessionId}
-              />
-            )}
-            {navStack.map((stack, index) => (
-              <ColumnDoc
-                key={index}
-                width={this.state.widthMap[stack.field.path] || columnWidth}
-              >
-                <FieldDoc
+        {docsOpen && (
+          <div
+            className="doc-explorer"
+            onKeyDown={this.handleKeyDown}
+            onMouseMove={this.handleMouseMove}
+            tabIndex={0}
+            ref={this.setDocExplorerRef}
+          >
+            <div className="doc-explorer-container">
+              {emptySchema && <ColumnDoc>{emptySchema}</ColumnDoc>}
+              {schema && (
+                <RootColumn
                   schema={schema}
-                  field={stack.field}
-                  level={index + 1}
+                  width={this.state.widthMap.root || columnWidth - 1}
+                  searchValue={this.state.searchValue}
+                  handleSearch={this.handleSearch}
                   sessionId={this.props.sessionId}
                 />
-              </ColumnDoc>
-            ))}
+              )}
+              {navStack.map((stack, index) => (
+                <ColumnDoc
+                  key={index}
+                  width={this.state.widthMap[stack.field.path] || columnWidth}
+                >
+                  <FieldDoc
+                    schema={schema}
+                    field={stack.field}
+                    level={index + 1}
+                    sessionId={this.props.sessionId}
+                  />
+                </ColumnDoc>
+              ))}
+            </div>
           </div>
-        </div>
+        )}
       </div>
     )
   }
@@ -261,7 +263,7 @@ class GraphDocs extends React.Component<
   }
 
   private handleToggleDocs = () => {
-    if (!this.props.docsOpen) {
+    if (!this.props.docsOpen && this.refDocExplorer) {
       this.refDocExplorer.focus()
     }
     this.props.toggleDocs(this.props.sessionId)

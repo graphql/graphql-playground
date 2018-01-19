@@ -3,7 +3,7 @@ const koaRouter = require('koa-router')
 const koaBody = require('koa-bodyparser')
 const { graphqlKoa } = require('apollo-server-koa')
 const { makeExecutableSchema } = require('graphql-tools')
-const koaPlayground = require('graphql-playground-middleware-koa').default
+const koaPlayground = require('../../src/index').default
 
 const schema = makeExecutableSchema({
   typeDefs: `

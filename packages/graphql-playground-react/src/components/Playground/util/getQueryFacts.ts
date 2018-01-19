@@ -49,13 +49,9 @@ export function collectVariables(schema, documentAST) {
       const variableDefinitions = definition.variableDefinitions
       if (variableDefinitions) {
         variableDefinitions.forEach(({ variable, type }) => {
-          try {
-            const inputType = typeFromAST(schema, getDeepType(type))
-            if (inputType) {
-              variableToType[variable.name.value] = inputType
-            }
-          } catch (e) {
-            debugger
+          const inputType = typeFromAST(schema, type)
+          if (inputType) {
+            variableToType[variable.name.value] = inputType
           }
         })
       }
@@ -64,9 +60,9 @@ export function collectVariables(schema, documentAST) {
   return variableToType
 }
 
-function getDeepType(type) {
-  if (type.type) {
-    return getDeepType(type.type)
-  }
-  return type
-}
+// function getDeepType(type) {
+//   if (type.type) {
+//     return getDeepType(type.type)
+//   }
+//   return type
+// }

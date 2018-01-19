@@ -1,9 +1,9 @@
 import * as React from 'react'
-import { remote, ipcRenderer } from 'electron'
+import { remote, ipcRenderer, webFrame } from 'electron'
 import { Provider } from 'react-redux'
 import * as cx from 'classnames'
-import { Playground as IPlayground } from 'graphql-playground/lib/components/Playground'
-import Playground from 'graphql-playground'
+import { Playground as IPlayground } from 'graphql-playground-react/lib/components/Playground'
+import Playground from 'graphql-playground-react'
 import {
   getGraphQLConfig,
   findGraphQLConfigFile,
@@ -19,6 +19,7 @@ import * as path from 'path'
 import * as os from 'os'
 import * as yaml from 'js-yaml'
 import * as findUp from 'find-up'
+import { patchEndpointsToConfigData as patchPrismaEndpointsToConfigData } from 'graphql-config-extension-prisma'
 import { patchEndpointsToConfigData } from 'graphql-config-extension-graphcool'
 // import { PermissionSession } from 'graphql-playground/lib/types'
 
@@ -119,7 +120,15 @@ cd ${folderPath}; graphql playground`)
       }
 
       const configDir = path.dirname(configPath)
-      const config = await patchEndpointsToConfigData(
+      let config = await patchEndpointsToConfigData(
+        resolveEnvsInValues(
+          getGraphQLConfig(path.dirname(configPath)).config,
+          process.env,
+        ),
+        configDir,
+        process.env,
+      )
+      config = await patchPrismaEndpointsToConfigData(
         resolveEnvsInValues(
           getGraphQLConfig(path.dirname(configPath)).config,
           process.env,
@@ -227,6 +236,12 @@ cd ${folderPath}; graphql playground`)
       this.nextTab()
     } else if (e.key >= 1 && e.key <= 9 && e.metaKey) {
       this.playground.switchTab(e.key)
+    } else if (e.key === '=' && e.metaKey) {
+      const zoom = webFrame.getZoomFactor()
+      webFrame.setZoomFactor(zoom + 0.1)
+    } else if (e.key === '-' && e.metaKey) {
+      const zoom = webFrame.getZoomFactor()
+      webFrame.setZoomFactor(zoom - 0.1)
     }
   }
 
@@ -241,6 +256,7 @@ cd ${folderPath}; graphql playground`)
     let config
 
     if (input.cwd) {
+      // use the endpoint as an alternative, only log the error
       try {
         configPath = findUp.sync(['.graphqlconfig', '.graphqlconfig.yml'], {
           cwd: input.cwd,
@@ -252,8 +268,14 @@ cd ${folderPath}; graphql playground`)
           ? path.basename(path.dirname(configPath))
           : undefined
         const rawConfig = getGraphQLConfig(input.cwd).config
+        const resolvedConfig = resolveEnvsInValues(rawConfig, input.env)
         config = await patchEndpointsToConfigData(
-          resolveEnvsInValues(rawConfig, input.env),
+          resolvedConfig,
+          input.cwd,
+          input.env,
+        )
+        config = await patchPrismaEndpointsToConfigData(
+          resolvedConfig,
           input.cwd,
           input.env,
         )
@@ -268,7 +290,7 @@ cd ${folderPath}; graphql playground`)
           return
         }
       } catch (e) {
-        //
+        console.error(e)
       }
     }
 
