@@ -5,6 +5,7 @@ import MiddlewareApp from './MiddlewareApp'
 import 'isomorphic-fetch'
 import EndpointPopup from './EndpointPopup'
 import Loading from './Loading'
+import { ThemeProvider, theme as styledTheme } from '../styled'
 
 const store = createStore()
 
@@ -104,17 +105,22 @@ export default class App extends React.Component<Props, State> {
                 .justifyCenter;
             }
           `}</style>
+
           {this.state.loading ? (
-            <Loading />
+            <ThemeProvider theme={styledTheme}>
+              <Loading />
+            </ThemeProvider>
           ) : !this.state.endpoint || this.state.endpoint.length === 0 ? (
-            <EndpointPopup
-              onRequestClose={this.handleChangeEndpoint}
-              endpoint={
-                this.state.endpoint ||
-                localStorage.getItem('last-endpoint') ||
-                ''
-              }
-            />
+            <ThemeProvider theme={styledTheme}>
+              <EndpointPopup
+                onRequestClose={this.handleChangeEndpoint}
+                endpoint={
+                  this.state.endpoint ||
+                  localStorage.getItem('last-endpoint') ||
+                  ''
+                }
+              />
+            </ThemeProvider>
           ) : (
             <MiddlewareApp
               endpoint={endpoint}
