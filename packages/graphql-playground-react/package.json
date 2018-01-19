@@ -67,7 +67,7 @@
     "html-webpack-plugin": "2.30.1",
     "http-proxy-middleware": "0.17.4",
     "husky": "0.14.3",
-    "jest": "22.1.3",
+    "jest": "22.1.4",
     "json-loader": "0.5.7",
     "lint-staged": "6.0.1",
     "node-noop": "1.0.0",
