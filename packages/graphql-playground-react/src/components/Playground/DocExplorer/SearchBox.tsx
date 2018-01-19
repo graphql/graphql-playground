@@ -46,7 +46,7 @@ export default class SearchBox extends React.Component<Props, State> {
           .label {
             @p: .bgWhite, .bbox, .w100, .flex, .itemsCenter, .bgWhite;
             padding: 12px 14px 13px 15px;
-            box-shadow: 0 1px 3px rgba(0, 0, 0, .1);
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
           }
           .input {
             @p: .f16, .ml10;
@@ -55,7 +55,7 @@ export default class SearchBox extends React.Component<Props, State> {
             color: rgba(0, 0, 0, 0.3);
           }
         `}</style>
-        {this.props.isShown &&
+        {this.props.isShown && (
           <label className="label">
             <Icon
               src={require('graphcool-styles/icons/stroke/search.svg')}
@@ -70,7 +70,8 @@ export default class SearchBox extends React.Component<Props, State> {
               value={this.state.value}
               placeholder={this.props.placeholder || 'Search the schema ...'}
             />
-          </label>}
+          </label>
+        )}
       </div>
     )
   }

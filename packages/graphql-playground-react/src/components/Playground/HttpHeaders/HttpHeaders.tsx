@@ -78,22 +78,23 @@ class HttpHeaders extends React.PureComponent<Props, State> {
         >
           <div className="list-content">
             {headers &&
-              headers.map((header, index) =>
+              headers.map((header, index) => (
                 <HttpListItem
                   key={index}
                   index={index}
                   header={header}
                   onChange={this.handleChange}
                   onDelete={this.handleDelete}
-                />,
-              )}
-            {newHeader &&
+                />
+              ))}
+            {newHeader && (
               <HttpListItem
                 index={-1}
                 header={{ name: '', value: '' }}
                 onChange={this.handleChange}
                 onDelete={this.handleDelete}
-              />}
+              />
+            )}
             <div
               className="row row-inactive"
               onClick={this.handleClickNewHeader}

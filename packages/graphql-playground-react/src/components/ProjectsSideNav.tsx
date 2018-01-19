@@ -28,7 +28,7 @@ export default class ProjectsSideNav extends React.Component<Props, {}> {
     const projects = config.projects
     return (
       <SideNav>
-        <DraggableHeader isElectron={isElectron}/>
+        <DraggableHeader isElectron={isElectron} />
         <List>
           <div>
             <TitleRow>
@@ -176,7 +176,7 @@ const DraggableHeader = styled.div`
   -webkit-app-region: drag;
   max-width: 222px;
   overflow: hidden;
-`as any
+` as any
 
 // TODO fix typing
 const List = styled.div`

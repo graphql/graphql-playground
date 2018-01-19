@@ -20,12 +20,12 @@ const UnionTypeSchema = ({ schema, type }: EnumTypeSchemaProps) => {
       <span className="field-name">union</span>{' '}
       <span className="type-name">{type.name}</span>
       {' = '}
-      {types.map((value, index) =>
+      {types.map((value, index) => (
         <div key={value.name} className="doc-value">
           <span className="type-name">{value.name}</span>{' '}
           {index < types.length - 1 && <span>|</span>}
-        </div>,
-      )}
+        </div>
+      ))}
     </div>
   )
 }

@@ -14,21 +14,18 @@ export default function Argument({ arg, showDefaultValue }: Props) {
           @p: .ml16;
         }
       `}</style>
-      <span className="arg-name">
-        {arg.name}
-      </span>
+      <span className="arg-name">{arg.name}</span>
       {': '}
-      <span className="type-name">
-        {renderType(arg.type)}
-      </span>
+      <span className="type-name">{renderType(arg.type)}</span>
       {arg.defaultValue !== undefined &&
-        showDefaultValue !== false &&
-        <span>
-          {' = '}
-          <span className="arg-default-value">
-            {print(astFromValue(arg.defaultValue, arg.type))}
+        showDefaultValue !== false && (
+          <span>
+            {' = '}
+            <span className="arg-default-value">
+              {print(astFromValue(arg.defaultValue, arg.type))}
+            </span>
           </span>
-        </span>}
+        )}
     </div>
   )
 }
@@ -51,9 +48,5 @@ function renderType(type) {
       </span>
     )
   }
-  return (
-    <span>
-      {type.name}
-    </span>
-  )
+  return <span>{type.name}</span>
 }

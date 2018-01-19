@@ -213,12 +213,16 @@ export class Playground extends React.PureComponent<Props & DocsState, State> {
     ) {
       this.saveSessions()
       this.saveHistory()
-      this.storage.setItem('selectedSessionIndex', String(this.state.selectedSessionIndex))
+      this.storage.setItem(
+        'selectedSessionIndex',
+        String(this.state.selectedSessionIndex),
+      )
       this.storage.saveProject()
       const storageKey = this.getStorageKey()
       this.storage = new PlaygroundStorage(storageKey)
       const sessions = this.initSessions()
-      const selectedSessionIndex = parseInt(this.storage.getItem('selectedSessionIndex'), 10) || 0
+      const selectedSessionIndex =
+        parseInt(this.storage.getItem('selectedSessionIndex'), 10) || 0
       this.setState(
         {
           sessions,
@@ -998,12 +1002,12 @@ export class Playground extends React.PureComponent<Props & DocsState, State> {
             },
             error: error => {
               observer.next({
-                data: { error }
+                data: { error },
               })
             },
             complete: () => {
               this.cancelSubscription(session)
-            }
+            },
           })
 
           this.setValueInSession(session.id, 'subscriptionId', id)
@@ -1027,7 +1031,7 @@ export class Playground extends React.PureComponent<Props & DocsState, State> {
       // tslint:disable-lin
       method: 'post',
       headers,
-      credentials: this.props.settings["request.credentials"],
+      credentials: this.props.settings['request.credentials'],
       body: JSON.stringify(graphQLParams),
     }).then(response => {
       if (typeof this.props.onSuccess === 'function') {

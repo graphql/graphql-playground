@@ -107,8 +107,8 @@ export function A({
 
         .button {
           @p: .br2, .pv6, .ph10, .buttonShadow, .white, .bgBlue;
-          transition: background .25s ease, box-shadow .25s ease,
-            transform .25s ease;
+          transition: background 0.25s ease, box-shadow 0.25s ease,
+            transform 0.25s ease;
         }
 
         .button :global(svg) {
@@ -239,14 +239,15 @@ export function A({
       {
         <div>
           {children ? children : 'Learn more'}
-          {!hideArrow &&
+          {!hideArrow && (
             <Icon
               src={require('graphcool-styles/icons/fill/fullArrowRight.svg')}
               color={$v.blue}
               width={14}
               height={11}
               className="arrow"
-            />}
+            />
+          )}
         </div>
       }
     </div>

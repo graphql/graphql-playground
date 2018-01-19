@@ -25,18 +25,18 @@ const EnumTypeSchema = ({ type }: EnumTypeSchemaProps) => {
       <span className="brace">{'{'}</span>
       {values
         .filter((value: any) => !value.isDeprecated)
-        .map((value, index) =>
-          <Value key={value.name} first={index === 0} value={value} />,
-        )}
+        .map((value, index) => (
+          <Value key={value.name} first={index === 0} value={value} />
+        ))}
       {deprecatedValues.length > 0 && <br />}
-      {deprecatedValues.map((value, index) =>
+      {deprecatedValues.map((value, index) => (
         <Value
           first={index === 0}
           key={value.name}
           value={value}
           isDeprecated={true}
-        />,
-      )}
+        />
+      ))}
       <span className="brace">{'}'}</span>
     </div>
   )
@@ -50,7 +50,7 @@ interface ValueProps {
   first: boolean
 }
 
-const Value = ({ value, isDeprecated, first }: ValueProps) =>
+const Value = ({ value, isDeprecated, first }: ValueProps) => (
   <div className={`doc-value${first ? ' doc-value--first' : ''}`}>
     <style jsx={true}>{`
       .doc-value {
@@ -67,15 +67,14 @@ const Value = ({ value, isDeprecated, first }: ValueProps) =>
         @p: .ph16, .black50;
       }
     `}</style>
-    <div className="field-name">
-      {value.name}
-    </div>
-    {value.description &&
-      <div className="doc-value-comment">
-        {value.description}
-      </div>}
-    {isDeprecated &&
+    <div className="field-name">{value.name}</div>
+    {value.description && (
+      <div className="doc-value-comment">{value.description}</div>
+    )}
+    {isDeprecated && (
       <div className="doc-value-comment">
         Deprecated: {value.deprecationReason}
-      </div>}
+      </div>
+    )}
   </div>
+)

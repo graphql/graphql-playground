@@ -10,7 +10,7 @@ export interface Props {
 
 /* tslint:disable */
 
-const HistoryChooser = ({ selectedFilter, onSelectFilter }: Props) =>
+const HistoryChooser = ({ selectedFilter, onSelectFilter }: Props) => (
   <div>
     <style jsx={true}>{`
       .chooser {
@@ -75,5 +75,6 @@ const HistoryChooser = ({ selectedFilter, onSelectFilter }: Props) =>
       </div>
     </div>
   </div>
+)
 
 export default HistoryChooser

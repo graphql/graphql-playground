@@ -91,7 +91,10 @@ require('isomorphic-fetch')
       if (this.client === 'graphql-request') {
         return `function getItem() {
   return client.request(\`
-${strippedQuery.split('\n').map(line => '    ' + line).join('\n')}
+${strippedQuery
+          .split('\n')
+          .map(line => '    ' + line)
+          .join('\n')}
   \`)
 }`
       }
@@ -138,7 +141,10 @@ ${strippedQuery.split('\n').map(line => '    ' + line).join('\n')}
     if (this.client === 'graphql-request') {
       return `function setItem() {
   return client.request(\`
-${strippedQuery.split('\n').map(line => '    ' + line).join('\n')}
+${strippedQuery
+        .split('\n')
+        .map(line => '    ' + line)
+        .join('\n')}
   \`)
 }`
     }

@@ -78,25 +78,27 @@ export default class HttpListItem extends React.Component<Props, State> {
             onKeyDown={this.handleKeyDown}
           />
         </div>
-        {editing
-          ? <div className="icon" onClick={this.handleValidate}>
-              <Icon
-                src={require('graphcool-styles/icons/fill/check.svg')}
-                color={$v.darkBlue50}
-                width={20}
-                height={20}
-              />
-            </div>
-          : <div className="icon" onClick={this.handleDelete}>
-              <Icon
-                src={require('graphcool-styles/icons/stroke/cross.svg')}
-                color={$v.darkBlue50}
-                width={10}
-                height={10}
-                stroke={true}
-                strokeWidth={6}
-              />
-            </div>}
+        {editing ? (
+          <div className="icon" onClick={this.handleValidate}>
+            <Icon
+              src={require('graphcool-styles/icons/fill/check.svg')}
+              color={$v.darkBlue50}
+              width={20}
+              height={20}
+            />
+          </div>
+        ) : (
+          <div className="icon" onClick={this.handleDelete}>
+            <Icon
+              src={require('graphcool-styles/icons/stroke/cross.svg')}
+              color={$v.darkBlue50}
+              width={10}
+              height={10}
+              stroke={true}
+              strokeWidth={6}
+            />
+          </div>
+        )}
       </div>
     )
   }

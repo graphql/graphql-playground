@@ -56,7 +56,7 @@ export default class TableComponent extends React.Component<Props, State> {
           }
           .ReactVirtualized__Table__Grid {
             @inherit: .bgWhite;
-            box-shadow: 0 1px 4px rgba(0, 0, 0, .1);
+            box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
           }
           .table-header {
             @inherit: .fw6;
@@ -74,7 +74,7 @@ export default class TableComponent extends React.Component<Props, State> {
           loadMoreRows={this.props.loadMoreRows}
           rowCount={rowCount}
         >
-          {({ onRowsRendered, registerChild }) =>
+          {({ onRowsRendered, registerChild }) => (
             <Table
               headerHeight={54}
               height={height}
@@ -93,25 +93,27 @@ export default class TableComponent extends React.Component<Props, State> {
               rowClassName={this.rowClassName}
               scrollToIndex={this.props.scrollToIndex}
             >
-              {fields.map(field =>
+              {fields.map(field => (
                 <Column
                   key={field.name}
                   label={field.name}
                   dataKey={field.name}
                   width={field.width}
-                />,
-              )}
-            </Table>}
+                />
+              ))}
+            </Table>
+          )}
         </InfiniteLoader>
       </div>
     )
   }
 
   private rowClassName = ({ index }) => {
-    return `table-row ${this.props.rows[index] &&
-    this.props.rows[index].selected
-      ? 'selected'
-      : ''}`
+    return `table-row ${
+      this.props.rows[index] && this.props.rows[index].selected
+        ? 'selected'
+        : ''
+    }`
   }
 
   private noRowsRenderer = () => {
@@ -142,9 +144,10 @@ export default class TableComponent extends React.Component<Props, State> {
   private textToString(value) {
     if (value instanceof Date) {
       return (
-        `${pZ(value.getMonth() + 1)}/${pZ(
-          value.getDate(),
-        )}/${value.getFullYear().toString().slice(2, 4)} ` +
+        `${pZ(value.getMonth() + 1)}/${pZ(value.getDate())}/${value
+          .getFullYear()
+          .toString()
+          .slice(2, 4)} ` +
         `${value.getHours()}:${pZ(value.getMinutes())}:${pZ(
           value.getSeconds(),
         )}`

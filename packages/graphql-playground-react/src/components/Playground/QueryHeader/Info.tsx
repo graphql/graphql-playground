@@ -1,6 +1,6 @@
 import * as React from 'react'
 
-const Info = props =>
+const Info = props => (
   <div className="info">
     <style jsx={true}>{`
       .question-mark {
@@ -20,7 +20,7 @@ const Info = props =>
         @inherit: .br2, .bgWhite, .pa16, .black50, .f14, .fw4, .relative;
         &:before {
           @inherit: .absolute, .bgWhite;
-          content: "";
+          content: '';
           top: -4px;
           left: 55px;
           transform: rotate(45deg);
@@ -40,10 +40,9 @@ const Info = props =>
     `}</style>
     <div className="question-mark">?</div>
     <div className="tooltip">
-      <div className="tooltip-content">
-        {props.children}
-      </div>
+      <div className="tooltip-content">{props.children}</div>
     </div>
   </div>
+)
 
 export default Info

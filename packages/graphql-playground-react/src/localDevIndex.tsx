@@ -16,11 +16,7 @@ if (process.env.NODE_ENV !== 'production') {
 ;(window as any)['GraphQLPlayground'] = {
   init(element: HTMLElement, options) {
     ReactDOM.render(
-      <MiddlewareApp
-        setTitle={true}
-        showNewWorkspace={false}
-        {...options}
-      />,
+      <MiddlewareApp setTitle={true} showNewWorkspace={false} {...options} />,
       element,
     )
   },

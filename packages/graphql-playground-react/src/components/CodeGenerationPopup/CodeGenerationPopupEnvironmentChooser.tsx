@@ -12,7 +12,7 @@ export interface Props {
 }
 
 /* tslint:disable */
-const Chooser = (props: Props) =>
+const Chooser = (props: Props) => (
   <div className={cx($p.bt, $p.bb, $p.bBlack10, $p.flex1)}>
     <style jsx={true}>{`
       .condition-button:not(.bgGreen):hover {
@@ -86,5 +86,6 @@ const Chooser = (props: Props) =>
       </div>
     </div>
   </div>
+)
 
 export default Chooser

@@ -2,8 +2,8 @@ export default function ageOfDate(date: Date) {
   const now = new Date()
   const diffMs = Math.abs(date.getTime() - now.getTime())
   const diffDays = Math.floor(diffMs / 86400000)
-  const diffHrs = Math.floor(diffMs % 86400000 / 3600000)
-  const diffMins = Math.round(diffMs % 86400000 % 3600000 / 60000)
+  const diffHrs = Math.floor((diffMs % 86400000) / 3600000)
+  const diffMins = Math.round(((diffMs % 86400000) % 3600000) / 60000)
 
   if (diffDays > 0) {
     return `${diffDays} days ago`

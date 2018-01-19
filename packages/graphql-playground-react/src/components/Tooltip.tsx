@@ -102,58 +102,58 @@ const Wrapper = styled.div`
           visibility: hidden;
           opacity: 0;
         `} ${(p: WrapperProps) =>
-      p.anchorTop
-        ? css`
-            bottom: 100%;
-            margin-bottom: 16px;
+  p.anchorTop
+    ? css`
+        bottom: 100%;
+        margin-bottom: 16px;
 
-            ${BigTriangle} {
-              bottom: -10px;
-            }
-          `
-        : ''} ${(p: WrapperProps) =>
-      p.anchorBottom
-        ? css`
-            top: 100%;
-            margin-top: 16px;
+        ${BigTriangle} {
+          bottom: -10px;
+        }
+      `
+    : ''} ${(p: WrapperProps) =>
+  p.anchorBottom
+    ? css`
+        top: 100%;
+        margin-top: 16px;
 
-            ${BigTriangle} {
-              top: -10px;
-              border-width: 0 10px 10px 10px;
-              border-color: ${k => k.theme.colours.paleGrey} transparent
-                ${k => k.theme.colours.paleGrey} transparent;
-            }
-          `
-        : ''} ${(p: WrapperProps) =>
-      p.anchorLeft
-        ? css`
-            left: 0;
-            transform: none;
+        ${BigTriangle} {
+          top: -10px;
+          border-width: 0 10px 10px 10px;
+          border-color: ${k => k.theme.colours.paleGrey} transparent
+            ${k => k.theme.colours.paleGrey} transparent;
+        }
+      `
+    : ''} ${(p: WrapperProps) =>
+  p.anchorLeft
+    ? css`
+        left: 0;
+        transform: none;
 
-            ${BigTriangle} {
-              left: 25px;
-            }
-          `
-        : ''} ${(p: WrapperProps) =>
-      p.anchorRight
-        ? css`
-            right: 0;
-            transform: none;
+        ${BigTriangle} {
+          left: 25px;
+        }
+      `
+    : ''} ${(p: WrapperProps) =>
+  p.anchorRight
+    ? css`
+        right: 0;
+        transform: none;
 
-            ${BigTriangle} {
-              right: 25px;
-            }
-          `
-        : ''} ${(p: WrapperProps) =>
-      p.anchorCenter
-        ? css`
-            left: 50%;
+        ${BigTriangle} {
+          right: 25px;
+        }
+      `
+    : ''} ${(p: WrapperProps) =>
+  p.anchorCenter
+    ? css`
+        left: 50%;
 
-            ${BigTriangle} {
-              left: calc(50% - 10px);
-            }
-          `
-        : ''};
+        ${BigTriangle} {
+          left: calc(50% - 10px);
+        }
+      `
+    : ''};
 `
 
 const Content = styled.div`
