@@ -1,12 +1,16 @@
 const hapi = require('hapi')
 const { graphqlHapi } = require('apollo-server-hapi')
-const hapiPlayground = require('../../src/index').default
+const hapiPlayground = require('../../dist').default
 const { makeExecutableSchema } = require('graphql-tools')
-
-const server = new hapi.Server({ debug: { request: '*' } })
 
 const HOST = 'localhost'
 const PORT = 4000
+
+const server = new hapi.Server({
+  host: HOST,
+  port: PORT,
+  debug: { request: '*' }
+})
 
 const schema = makeExecutableSchema({
   typeDefs: `
@@ -24,13 +28,8 @@ const schema = makeExecutableSchema({
   },
 })
 
-server.connection({
-  host: HOST,
-  port: PORT,
-})
-
-server.register({
-  register: graphqlHapi,
+const api = {
+  plugin: graphqlHapi,
   options: {
     path: '/graphql',
     graphqlOptions: {
@@ -40,19 +39,30 @@ server.register({
       cors: true,
     },
   },
-})
+}
 
-server.register({
-  register: hapiPlayground,
+const playground = {
+  plugin: hapiPlayground,
   options: {
     path: '/playground',
     endpoint: '/graphql',
   },
-})
+}
 
-server.start(err => {
-  if (err) {
-    throw err
+const plugins = [
+  api,
+  playground,
+]
+
+async function start() {
+  console.log(`Setting up server...`)
+  try {
+    await server.register(plugins)
+    await server.start()
+    console.log(`Server running at: ${server.info.uri}`)
+  } catch (err) {
+    console.log(`Failed to start server!`, err)
   }
-  console.log(`Server running at: ${server.info.uri}`)
-})
+}
+
+start()

@@ -5,47 +5,38 @@ import {
   renderPlaygroundPage,
 } from 'graphql-playground-html'
 
-// tslint:disable-next-line
 const pkg = require('../package.json')
 
 export interface Register {
-  (server: Server, options: MiddlewareOptions, next: any): void
-  attributes?: any
+  (server: Server, options: MiddlewareOptions): void
 }
 
-// tslint:disable-next-line only-arrow-functions
-const hapi: Register = function(server, options: any, next) {
-  if (arguments.length !== 3) {
-    throw new Error(
-      `Playground middleware expects exactly 3 arguments, got ${
-        arguments.length
-      }`,
-    )
-  }
-
-  const { path, route: config = {}, ...rest } = options
-
-  const middlewareOptions: RenderPageOptions = {
-    ...rest,
-    version: pkg.playgroundVersion,
-  }
-
-  server.route({
-    method: 'GET',
-    path,
-    config,
-    handler: async (request, reply) => {
-      const body = await renderPlaygroundPage(middlewareOptions)
-      reply(body).header('Content-Type', 'text/html')
-    },
-  })
-
-  return next()
+export interface Plugin {
+  pkg?: any
+  register: Register
 }
 
-hapi.attributes = {
+const plugin: Plugin = {
   pkg,
-  multiple: false,
+  register: function (server, options: any) {
+    if (arguments.length !== 2) {
+      throw new Error(`Playground middleware expects exactly 2 arguments, got ${arguments.length}`)
+    }
+
+    const { path, route: config = {}, ...rest } = options
+
+    const middlewareOptions: RenderPageOptions = {
+      ...rest,
+      version: pkg.playgroundVersion,
+    }
+
+    server.route({
+      method: 'GET',
+      path,
+      config,
+      handler: (request, h) => h.response(renderPlaygroundPage(middlewareOptions)).type('text/html')
+    })
+  }
 }
 
-export default hapi
+export default plugin

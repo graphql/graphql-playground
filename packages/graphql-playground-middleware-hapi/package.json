@@ -6,7 +6,8 @@
   "contributors": [
     "Tim Suchanek <tim@graph.cool>",
     "Johannes Schickling <johannes@graph.cool>",
-    "Mohammad Rajabifard <mo.rajbi@gmail.com>"
+    "Mohammad Rajabifard <mo.rajbi@gmail.com>",
+    "Drake Costa <drake@saeris.io>"
   ],
   "repository": "http://github.com/graphcool/graphql-playground.git",
   "license": "SEE LICENSE IN LICENSE",
@@ -27,7 +28,7 @@
     "hapi"
   ],
   "peerDependencies": {
-    "hapi": "^16.6.2"
+    "hapi": "^17.0.0"
   },
   "devDependencies": {
     "@types/node": "9.3.0",
