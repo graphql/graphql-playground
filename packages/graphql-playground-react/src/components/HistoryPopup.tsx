@@ -169,6 +169,7 @@ export default withTheme<Props>(HistoryPopup)
 }
 .right-header {
   @p: .justifyBetween, .flex, .bgDarkBlue, .itemsCenter, .ph25;
+  
   padding-top: 20px;
   padding-bottom: 20px;
 }

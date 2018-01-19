@@ -155,7 +155,7 @@
   },
   "lint-staged": {
     "*.{ts,tsx}": [
-      "prettier --single-quote --no-semi --trailing-comma all --write",
+      "prettier --single-quote --no-semi --write",
       "tslint",
       "git add"
     ],
