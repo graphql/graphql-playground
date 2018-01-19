@@ -1,6 +1,6 @@
 const hapi = require('hapi')
 const { graphqlHapi } = require('apollo-server-hapi')
-const hapiPlayground = require('@saeris/graphql-playground-middleware-hapi').default
+const hapiPlayground = require('../../dist').default
 const { makeExecutableSchema } = require('graphql-tools')
 
 const HOST = 'localhost'
