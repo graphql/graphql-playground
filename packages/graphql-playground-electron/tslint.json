@@ -1,5 +1,11 @@
 {
   "extends": [
     "tslint-graphcool-frontend"
-  ]
+  ],
+  "rules": {
+    "no-console": false,
+    "no-implicit-dependencies": false,
+    "no-submodule-imports": false,
+    "jsx-no-lambda": false
+  }
 }

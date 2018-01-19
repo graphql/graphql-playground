@@ -2,7 +2,8 @@ schemaPath: schema.graphql
 projects:
   db:
     extensions:
-      graphcool: graphcool.yml
+      # graphcool: graphcool.yml
+      prisma: prisma.yml
   gateway:
     extensions:
       endpoints:

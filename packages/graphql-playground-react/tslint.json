@@ -1,0 +1,9 @@
+{
+  "extends": [
+    "tslint-graphcool-frontend"
+  ],
+  "rules": {
+    "forin": false,
+    "no-submodule-imports": false
+  }
+}

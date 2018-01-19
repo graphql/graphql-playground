@@ -1,5 +1,0 @@
-{
-  "extends": [
-    "tslint-graphcool-frontend"
-  ]
-}

@@ -1,15 +1,5 @@
-import * as path from 'path'
-import * as fs from 'fs'
-import {
-  // getUsedEnvs,
-  getGraphQLConfig,
-  findGraphQLConfigFile,
-  resolveEnvsInValues,
-} from 'graphql-config'
-import { patchEndpointsToConfig } from 'graphql-config-extension-graphcool'
-import * as dotenv from 'dotenv'
-
 import getLoadingMarkup from './get-loading-markup'
+import { GraphQLConfigData } from 'graphql-config'
 
 export interface MiddlewareOptions {
   endpoint?: string
@@ -17,7 +7,7 @@ export interface MiddlewareOptions {
   htmlTitle?: string
   workspaceName?: string
   env?: any
-  useGraphQLConfig?: boolean
+  config?: GraphQLConfigData
 }
 
 export interface RenderPageOptions extends MiddlewareOptions {
@@ -27,11 +17,7 @@ export interface RenderPageOptions extends MiddlewareOptions {
 
 const loading = getLoadingMarkup()
 
-dotenv.config()
-
-export async function renderPlaygroundPage(options: RenderPageOptions) {
-  const env = options.env || {}
-
+export function renderPlaygroundPage(options: RenderPageOptions) {
   const extendedOptions: any = {
     ...options,
     canSaveConfig: false,
@@ -39,19 +25,11 @@ export async function renderPlaygroundPage(options: RenderPageOptions) {
   if (options.htmlTitle) {
     extendedOptions.title = options.htmlTitle
   }
-  if (options.useGraphQLConfig) {
-    let config = getGraphQLConfig().config
-    config = resolveEnvsInValues(config, env)
-    config = await patchEndpointsToConfig(config, process.cwd(), env)
-    const configPath = findGraphQLConfigFile(process.cwd())
-    const configString = fs.readFileSync(configPath, 'utf-8')
-    const folderName = path.basename(process.cwd())
-    extendedOptions.folderName = options.workspaceName || folderName
-    extendedOptions.config = config
-    extendedOptions.configString = configString
-  }
   if (options.subscriptionsEndpoint) {
     extendedOptions.subscriptionEndpoint = options.subscriptionsEndpoint
+  }
+  if (options.config) {
+    extendedOptions.configString = JSON.stringify(options.config, null, 2)
   }
   if (!extendedOptions.endpoint && !extendedOptions.configString) {
     /* tslint:disable-next-line */
@@ -66,13 +44,13 @@ export async function renderPlaygroundPage(options: RenderPageOptions) {
     <meta charset=utf-8 />
     <meta name="viewport" content="user-scalable=no, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, minimal-ui">
     <title>GraphQL Playground</title>
-    <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/graphql-playground@${
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/graphql-playground-react@${
       options.version
     }/build/static/css/index.css" />
-    <link rel="shortcut icon" href="//cdn.jsdelivr.net/npm/graphql-playground@${
+    <link rel="shortcut icon" href="//cdn.jsdelivr.net/npm/graphql-playground-react@${
       options.version
     }/build/favicon.png" />
-    <script src="//cdn.jsdelivr.net/npm/graphql-playground@${
+    <script src="//cdn.jsdelivr.net/npm/graphql-playground-react@${
       options.version
     }/build/static/js/middleware.js"></script>
   </head>

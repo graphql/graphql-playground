@@ -1,5 +1,5 @@
-type User @model {
-  id: ID! @isUnique
+type User {
+  id: ID! @unique
   name: String!
   trolo: Int
 }

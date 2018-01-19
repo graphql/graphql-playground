@@ -1,8 +1,8 @@
 service: whh
-
-stages: 
-  default: dev
-  dev: shared-eu-west-1
+stage: dev
+cluster: workspace-asd/graphcool-eu1
 
 datamodel:
 - datamodel.graphql
+
+disableAuth: true

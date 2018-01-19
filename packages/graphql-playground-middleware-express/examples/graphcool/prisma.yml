@@ -1,0 +1,8 @@
+service: whh
+stage: dev
+cluster: workspace-asd/prisma-eu1
+
+datamodel:
+- datamodel.graphql
+
+disableAuth: true

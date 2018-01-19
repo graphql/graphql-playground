@@ -1,3 +1,5 @@
+version: 2
+
 jobs:
 
   playground-build:
@@ -5,20 +7,47 @@ jobs:
       - image: circleci/node:8
     steps:
       - checkout
-      - run: cd packages/graphql-playground && yarn
-      - run: cd packages/graphql-playground && yarn build
+      - run: sudo npm i -g yarn
+      - run: yarn show-versions
+      - run: yarn install
+      - run: cd packages/graphql-playground-react && yarn && yarn build
 
-  #electron-build:
-    #docker:
-      #- image: circleci/node:8
-    #steps:
-      #- checkout
-      #- run: cd packages/graphql-playground-electron && yarn
-      #- run: cd packages/graphql-playground-electron && yarn release
+  electron-build:
+    macos:
+      xcode: "9.0"
+    steps:
+      - checkout
+      - run: sudo npm i -g yarn
+      - run: |
+          if [[ -z "$CIRCLE_PULL_REQUEST" && "$CIRCLE_BRANCH" == "master" ]]
+          then
+            security create-keychain -p travis build.keychain
+            security default-keychain -s build.keychain
+            security unlock-keychain -p travis build.keychain
+            echo $CERTIFICATE_OSX_P12 | base64 --decode > certificate.p12
+            security import certificate.p12 -k build.keychain -P $CERTIFICATE_OSX_PASSWORD -T /usr/bin/codesign
+            # needed for signing in CI environments (don't ask...)
+            security set-key-partition-list -S apple-tool:,apple: -s -k travis build.keychain
+          fi
+      - run: sudo npm i -g yarn
+      # needed for release process
+      - run: brew install gettext
+      # - run: yarn install
+      # temporarily delete workspace `package.json`
+      # pending: https://github.com/electron-userland/electron-builder/issues/2222
+      - run: rm package.json
+      - run: cd packages/graphql-playground-electron && yarn
+      - run: |
+          if [[ -z "$CIRCLE_PULL_REQUEST" && "$CIRCLE_BRANCH" == "master" ]]
+          then
+            cd packages/graphql-playground-electron && yarn release
+          else
+            cd packages/graphql-playground-electron && yarn build
+          fi
 
 workflows:
   version: 2
   build:
     jobs:
       - playground-build
-      #- electron-build
+      - electron-build

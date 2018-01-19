@@ -1,13 +1,20 @@
 {
+  "private": true,
   "_workspaces": [
     "packages/*"
   ],
-  "homepage": "https://github.com/graphcool/graphql-playground",
+  "scripts": {
+    "build": "bash scripts/build.sh",
+    "show-versions": "bash scripts/versions.sh",
+    "release-html": "bash scripts/release-html.sh",
+    "release-react": "bash scripts/release-react.sh"
+  },
   "devDependencies": {
-    "@types/node": "^8.0.52",
-    "aws-lambda": "^0.1.2",
-    "express": "^4.16.2",
-    "hapi": "^16.6.2",
-    "koa": "^2.4.1"
+    "@types/node": "9.3.0",
+    "aws-lambda": "0.1.2",
+    "express": "4.16.2",
+    "hapi": "16.6.2",
+    "koa": "2.4.1",
+    "rimraf": "2.6.2"
   }
 }
