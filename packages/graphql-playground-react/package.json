@@ -73,7 +73,7 @@
     "node-noop": "1.0.0",
     "object-assign": "4.1.1",
     "postcss-cssnext": "2.11.0",
-    "postcss-flexbugs-fixes": "3.2.0",
+    "postcss-flexbugs-fixes": "3.3.0",
     "postcss-import": "9.1.0",
     "postcss-inherit": "git+https://github.com/timsuchanek/postcss-inherit#build3",
     "postcss-inject": "1.0.1",
