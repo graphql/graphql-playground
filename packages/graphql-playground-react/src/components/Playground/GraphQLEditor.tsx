@@ -123,6 +123,7 @@ export interface State {
   tracingSupported?: boolean
   queryVariablesActive: boolean
   endpointUnreachable: boolean
+  isReloadingSchema: boolean
 }
 
 export interface SimpleProps {
@@ -503,6 +504,7 @@ export class GraphQLEditor extends React.PureComponent<
             onClickShare={this.props.onClickShare}
             sharing={this.props.sharing}
             onReloadSchema={this.reloadSchema}
+            isReloadingSchema={this.state.isReloadingSchema}
             fixedEndpoint={this.props.fixedEndpoint}
             endpointUnreachable={this.state.endpointUnreachable}
           />
@@ -757,14 +759,19 @@ export class GraphQLEditor extends React.PureComponent<
   // Private methods
 
   public reloadSchema = async () => {
-    const result = await this.props.schemaFetcher.refetch(
-      this.props.session.endpoint || this.props.endpoint,
-      this.convertHeaders(this.props.session.headers),
-    )
-    if (result) {
-      const { schema } = result
-      this.setState({ schema })
-      this.renewStacks(schema)
+    try {
+      this.setState({ isReloadingSchema: true })
+      const result = await this.props.schemaFetcher.refetch(
+        this.props.session.endpoint || this.props.endpoint,
+        this.convertHeaders(this.props.session.headers),
+      )
+      if (result) {
+        const { schema } = result
+        this.setState({ schema, isReloadingSchema: false })
+        this.renewStacks(schema)
+      }
+    } catch (e) {
+      this.setState({ isReloadingSchema: false })
     }
   }
 

@@ -4,8 +4,8 @@ import * as theme from 'styled-theming'
 import { darken, lighten } from 'polished'
 import * as CopyToClipboard from 'react-copy-to-clipboard'
 import Share, { SharingProps } from '../../Share'
+import ReloadIcon from './ReloadIcon'
 import { StyledComponentClass } from 'styled-components'
-import { Icon } from 'graphcool-styles'
 import * as cx from 'classnames'
 
 export interface Props {
@@ -17,6 +17,7 @@ export interface Props {
   curl: string
   onClickShare?: () => void
   onReloadSchema?: () => void
+  isReloadingSchema: boolean
   sharing?: SharingProps
   fixedEndpoint?: boolean
   endpointUnreachable: boolean
@@ -45,10 +46,8 @@ export default class TopBar extends React.Component<Props, {}> {
             </ReachError>
           ) : (
             <ReloadIcon
-              src={require('graphcool-styles/icons/fill/reload.svg')}
-              width={20}
-              height={20}
-              onClick={this.props.onReloadSchema}
+              isReloadingSchema={this.props.isReloadingSchema}
+              onReloadSchema={this.props.onReloadSchema}
             />
           )}
         </UrlBarWrapper>
@@ -96,16 +95,6 @@ const inactiveFontColor = theme('mode', {
 })
 
 const fontColor = theme('mode', {
-  light: p => p.theme.colours.darkBlue60,
-  dark: p => p.theme.colours.white60,
-})
-
-const iconColor = theme('mode', {
-  light: p => p.theme.colours.darkBlue20,
-  dark: p => p.theme.colours.white20,
-})
-
-const iconColorHover = theme('mode', {
   light: p => p.theme.colours.darkBlue60,
   dark: p => p.theme.colours.white60,
 })
@@ -171,19 +160,6 @@ const ReachError = styled.div`
   align-items: center;
   color: #f25c54;
 `
-
-const ReloadIcon = styled(Icon)`
-  position: absolute;
-  right: 5px;
-  cursor: pointer;
-  svg {
-    fill: ${iconColor};
-    transition: 0.1s linear all;
-    &:hover {
-      fill: ${iconColorHover};
-    }
-  }
-` as any // TODO remove this once typings are fixed
 
 const Spinner = styled.div`
   & {
