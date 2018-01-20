@@ -139,7 +139,7 @@ export interface ToolbarButtonProps extends SimpleProps {
 export class GraphQLEditor extends React.PureComponent<
   Props & LocalThemeInterface & ReduxProps,
   State
-> {
+  > {
   static Logo: (props: SimpleProps) => JSX.Element
   static Toolbar: (props: SimpleProps) => JSX.Element
   static Footer: (props: SimpleProps) => JSX.Element
@@ -191,10 +191,10 @@ export class GraphQLEditor extends React.PureComponent<
       props.storage || typeof window !== 'undefined'
         ? window.localStorage
         : {
-            setItem: () => null,
-            removeItem: () => null,
-            getItem: () => null,
-          }
+          setItem: () => null,
+          removeItem: () => null,
+          getItem: () => null,
+        }
 
     // Determine the initial query to display.
     const query =
@@ -218,10 +218,10 @@ export class GraphQLEditor extends React.PureComponent<
       props.operationName !== undefined
         ? props.operationName
         : getSelectedOperationName(
-            null,
-            this.storageGet('operationName'),
-            queryFacts && queryFacts.operations,
-          )
+          null,
+          this.storageGet('operationName'),
+          queryFacts && queryFacts.operations,
+        )
 
     let queryVariablesActive = this.storageGet('queryVariablesActive')
     queryVariablesActive =
@@ -254,6 +254,7 @@ export class GraphQLEditor extends React.PureComponent<
       selectedVariableNames: [],
       queryVariablesActive,
       endpointUnreachable: false,
+      isReloadingSchema: false,
       ...queryFacts,
     }
 
@@ -273,7 +274,7 @@ export class GraphQLEditor extends React.PureComponent<
 
     // Utility for keeping CodeMirror correctly sized.
     this.codeMirrorSizer = new CodeMirrorSizer()
-    ;(global as any).g = this
+      ; (global as any).g = this
   }
 
   componentWillReceiveProps(nextProps) {
@@ -566,13 +567,13 @@ export class GraphQLEditor extends React.PureComponent<
                     onRunQuery={this.handleEditorRunQuery}
                   />
                 ) : (
-                  <VariableEditor
-                    ref={this.setVariableEditorComponent}
-                    value={this.props.session.headers}
-                    onEdit={this.props.onChangeHeaders}
-                    onRunQuery={this.handleEditorRunQuery}
-                  />
-                )}
+                    <VariableEditor
+                      ref={this.setVariableEditorComponent}
+                      value={this.props.session.headers}
+                      onEdit={this.props.onChangeHeaders}
+                      onRunQuery={this.handleEditorRunQuery}
+                    />
+                  )}
               </div>
               <QueryDragBar ref={this.setQueryResizer} />
             </div>
@@ -669,7 +670,7 @@ export class GraphQLEditor extends React.PureComponent<
       .join(' ')
     return `curl '${
       this.props.session.endpoint
-    }' ${headersString} --data-binary '${data}' --compressed`
+      }' ${headersString} --data-binary '${data}' --compressed`
   }
 
   setQueryVariablesRef = ref => {
@@ -806,9 +807,9 @@ export class GraphQLEditor extends React.PureComponent<
 
     this.props.schemaFetcher
       .fetch(
-        this.props.session.endpoint || this.props.endpoint,
-        this.convertHeaders(this.props.session.headers),
-      )
+      this.props.session.endpoint || this.props.endpoint,
+      this.convertHeaders(this.props.session.headers),
+    )
       .then(result => {
         if (result) {
           const { schema, tracingSupported } = result
@@ -1297,11 +1298,11 @@ const DragBar = styled.div`
   cursor: col-resize;
 `
 
-const QueryDragBar = styled(DragBar)`
+const QueryDragBar = styled(DragBar) `
   right: 0px;
 `
 
-const ResultDragBar = styled(DragBar)`
+const ResultDragBar = styled(DragBar) `
   left: 0px;
   z-index: 1;
 `
