@@ -1,7 +1,6 @@
 import * as React from 'react'
-import { styled, keyframes } from '../../../styled/index'
+import { styled, keyframes, withProps } from '../../../styled/index'
 import * as theme from 'styled-theming'
-import { StyledComponentClass } from 'styled-components'
 
 export interface Props {
   isReloadingSchema: boolean
@@ -89,22 +88,19 @@ const Svg = styled.svg`
   }
 `
 
-const showWhenReloading = bool => props =>
-  props.isReloadingSchema ? Number(bool) : Number(!bool)
-
-const Circle: StyledComponentClass<any, any, any> = styled.circle`
+const Circle = withProps<Props>()(styled.circle) `
   fill: none;
   stroke: ${iconColor};
   stroke-dasharray: 37.68;
   transition: opacity 0.3s ease-in-out;
-  opacity: ${showWhenReloading(true)};
+  opacity: ${p => p.isReloadingSchema ? 1 : 0};
   transform-origin: 9.5px 10px;
   animation: ${refreshFrames} 2s linear infinite;
 `
 
-const Icon: StyledComponentClass<any, any, any> = styled.path`
+const Icon = withProps<Props>()(styled.path) `
   transition: opacity 0.3s ease-in-out;
-  opacity: ${showWhenReloading(false)};
+  opacity: ${p => p.isReloadingSchema ? 0 : 1};
   transform-origin: 9.5px 10px;
   animation: ${reloadAction} 0.5s linear;
 `
