@@ -768,11 +768,18 @@ export class GraphQLEditor extends React.PureComponent<
       )
       if (result) {
         const { schema } = result
-        this.setState({ schema, isReloadingSchema: false })
+        this.setState({
+          schema,
+          isReloadingSchema: false,
+          endpointUnreachable: false,
+        })
         this.renewStacks(schema)
       }
     } catch (e) {
-      this.setState({ isReloadingSchema: false })
+      this.setState({
+        isReloadingSchema: false,
+        endpointUnreachable: true,
+      })
     }
   }
 

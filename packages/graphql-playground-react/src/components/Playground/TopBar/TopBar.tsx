@@ -45,11 +45,11 @@ export default class TopBar extends React.Component<Props, {}> {
               <Spinner />
             </ReachError>
           ) : (
-            <ReloadIcon
-              isReloadingSchema={this.props.isReloadingSchema}
-              onReloadSchema={this.props.onReloadSchema}
-            />
-          )}
+              <ReloadIcon
+                isReloadingSchema={this.props.isReloadingSchema}
+                onReloadSchema={this.props.onReloadSchema}
+              />
+            )}
         </UrlBarWrapper>
         <CopyToClipboard text={this.props.curl}>
           <Button>Copy CURL</Button>
