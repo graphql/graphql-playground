@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { styled } from '../../../styled/index'
+import { styled, keyframes, withProps } from '../../../styled'
 import * as theme from 'styled-theming'
 import { darken, lighten } from 'polished'
 import * as CopyToClipboard from 'react-copy-to-clipboard'
@@ -23,6 +23,10 @@ export interface Props {
   endpointUnreachable: boolean
 }
 
+interface ErrorMessageProps {
+  visibleIf: boolean
+}
+
 export default class TopBar extends React.Component<Props, {}> {
   render() {
     const { endpointUnreachable } = this.props
@@ -39,17 +43,14 @@ export default class TopBar extends React.Component<Props, {}> {
             disabled={this.props.fixedEndpoint}
             className={cx({ active: !this.props.fixedEndpoint })}
           />
-          {endpointUnreachable ? (
-            <ReachError>
-              <span>Server cannot be reached</span>
-              <Spinner />
-            </ReachError>
-          ) : (
-              <ReloadIcon
-                isReloadingSchema={this.props.isReloadingSchema}
-                onReloadSchema={this.props.onReloadSchema}
-              />
-            )}
+          <ReachError visibleIf={endpointUnreachable}>
+            <span>Server cannot be reached</span>
+            <Spinner />
+          </ReachError>
+          <ReloadIcon
+            isReloadingSchema={this.props.isReloadingSchema}
+            onReloadSchema={this.props.onReloadSchema}
+          />
         </UrlBarWrapper>
         <CopyToClipboard text={this.props.curl}>
           <Button>Copy CURL</Button>
@@ -153,46 +154,33 @@ const UrlBarWrapper = styled.div`
   align-items: center;
 `
 
-const ReachError = styled.div`
+const ReachError = withProps<ErrorMessageProps>()(styled.div) `
+  opacity: ${p => p.visibleIf ? 1 : 0};
+  transition: opacity 0.5s ease-out;
   position: absolute;
-  right: 5px;
+  right: -5px;
   display: flex;
   align-items: center;
+  justify-content: flex-end;
   color: #f25c54;
+  user-select: none;
+`
+
+const pulseScaleOut = keyframes`
+    0% {
+      transform: scale(0);
+    }
+    100% {
+      transform: scale(1);
+      opacity: 0;
+    }
 `
 
 const Spinner = styled.div`
-  & {
     width: 40px;
     height: 40px;
     margin: 40px auto;
     background-color: #333;
     border-radius: 100%;
-    -webkit-animation: sk-pulseScaleOut 1s infinite ease-in-out;
-    animation: sk-pulseScaleOut 1s infinite ease-in-out;
-  }
-
-  @-webkit-keyframes sk-pulseScaleOut {
-    0% {
-      -webkit-transform: scale(0);
-      transform: scale(0);
-    }
-    100% {
-      -webkit-transform: scale(1);
-      transform: scale(1);
-      opacity: 0;
-    }
-  }
-
-  @keyframes sk-pulseScaleOut {
-    0% {
-      -webkit-transform: scale(0);
-      transform: scale(0);
-    }
-    100% {
-      -webkit-transform: scale(1);
-      transform: scale(1);
-      opacity: 0;
-    }
-  }
+    animation: ${pulseScaleOut} 1s infinite ease-in-out;
 `
