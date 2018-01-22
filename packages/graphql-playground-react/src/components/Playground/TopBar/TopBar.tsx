@@ -5,9 +5,7 @@ import { darken, lighten } from 'polished'
 import * as CopyToClipboard from 'react-copy-to-clipboard'
 import Share, { SharingProps } from '../../Share'
 import ReloadIcon from './ReloadIcon'
-import { StyledComponentClass } from 'styled-components'
 import { keyframes, StyledComponentClass } from 'styled-components'
-import { Icon } from 'graphcool-styles'
 import * as cx from 'classnames'
 
 export interface Props {
@@ -166,31 +164,6 @@ const ReachError = styled.div`
   align-items: center;
   color: #f25c54;
 `
-
-
-const Spinner = styled.div`
-  & {
-    width: 40px;
-    height: 40px;
-    margin: 40px auto;
-    background-color: #333;
-    border-radius: 100%;
-    -webkit-animation: sk-pulseScaleOut 1s infinite ease-in-out;
-    animation: sk-pulseScaleOut 1s infinite ease-in-out;
-`
-
-const ReloadIcon = styled(Icon)`
-  position: absolute;
-  right: 5px;
-  cursor: pointer;
-  svg {
-    fill: ${iconColor};
-    transition: 0.1s linear all;
-    &:hover {
-      fill: ${iconColorHover};
-    }
-  }
-` as any // TODO remove this once typings are fixed
 
 const bounceAnimation = keyframes`
   0%, 100% {
