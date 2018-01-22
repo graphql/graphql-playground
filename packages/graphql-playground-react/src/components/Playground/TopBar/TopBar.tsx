@@ -4,6 +4,8 @@ import * as theme from 'styled-theming'
 import { darken, lighten } from 'polished'
 import * as CopyToClipboard from 'react-copy-to-clipboard'
 import Share, { SharingProps } from '../../Share'
+import ReloadIcon from './ReloadIcon'
+import { StyledComponentClass } from 'styled-components'
 import { keyframes, StyledComponentClass } from 'styled-components'
 import { Icon } from 'graphcool-styles'
 import * as cx from 'classnames'
@@ -17,6 +19,7 @@ export interface Props {
   curl: string
   onClickShare?: () => void
   onReloadSchema?: () => void
+  isReloadingSchema: boolean
   sharing?: SharingProps
   fixedEndpoint?: boolean
   endpointUnreachable: boolean
@@ -44,13 +47,11 @@ export default class TopBar extends React.Component<Props, {}> {
               <Spinner />
             </ReachError>
           ) : (
-            <ReloadIcon
-              src={require('graphcool-styles/icons/fill/reload.svg')}
-              width={20}
-              height={20}
-              onClick={this.props.onReloadSchema}
-            />
-          )}
+              <ReloadIcon
+                isReloadingSchema={this.props.isReloadingSchema}
+                onReloadSchema={this.props.onReloadSchema}
+              />
+            )}
         </UrlBarWrapper>
         <CopyToClipboard text={this.props.curl}>
           <Button>Copy CURL</Button>
@@ -96,16 +97,6 @@ const inactiveFontColor = theme('mode', {
 })
 
 const fontColor = theme('mode', {
-  light: p => p.theme.colours.darkBlue60,
-  dark: p => p.theme.colours.white60,
-})
-
-const iconColor = theme('mode', {
-  light: p => p.theme.colours.darkBlue20,
-  dark: p => p.theme.colours.white20,
-})
-
-const iconColorHover = theme('mode', {
   light: p => p.theme.colours.darkBlue60,
   dark: p => p.theme.colours.white60,
 })
@@ -174,6 +165,18 @@ const ReachError = styled.div`
   display: flex;
   align-items: center;
   color: #f25c54;
+`
+
+
+const Spinner = styled.div`
+  & {
+    width: 40px;
+    height: 40px;
+    margin: 40px auto;
+    background-color: #333;
+    border-radius: 100%;
+    -webkit-animation: sk-pulseScaleOut 1s infinite ease-in-out;
+    animation: sk-pulseScaleOut 1s infinite ease-in-out;
 `
 
 const ReloadIcon = styled(Icon)`
