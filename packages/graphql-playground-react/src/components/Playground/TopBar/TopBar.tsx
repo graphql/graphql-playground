@@ -4,7 +4,7 @@ import * as theme from 'styled-theming'
 import { darken, lighten } from 'polished'
 import * as CopyToClipboard from 'react-copy-to-clipboard'
 import Share, { SharingProps } from '../../Share'
-import { StyledComponentClass } from 'styled-components'
+import { keyframes, StyledComponentClass } from 'styled-components'
 import { Icon } from 'graphcool-styles'
 import * as cx from 'classnames'
 
@@ -115,6 +115,11 @@ const barBorder = theme('mode', {
   dark: p => '#09141c',
 })
 
+const spinnerColor = theme('mode', {
+  light: p => p.theme.colours.black40,
+  dark: p => p.theme.colours.white30,
+})
+
 export const Button: StyledComponentClass<any, any, any> = styled.button`
   text-transform: uppercase;
   font-weight: 600;
@@ -138,8 +143,7 @@ export const Button: StyledComponentClass<any, any, any> = styled.button`
 const TopBarWrapper = styled.div`
   display: flex;
   background: ${backgroundColor};
-  padding: 10px;
-  padding-bottom: 4px;
+  padding: 10px 10px 4px;
   align-items: center;
 `
 
@@ -185,38 +189,45 @@ const ReloadIcon = styled(Icon)`
   }
 ` as any // TODO remove this once typings are fixed
 
-const Spinner = styled.div`
-  & {
-    width: 40px;
-    height: 40px;
-    margin: 40px auto;
-    background-color: #333;
-    border-radius: 100%;
-    -webkit-animation: sk-pulseScaleOut 1s infinite ease-in-out;
-    animation: sk-pulseScaleOut 1s infinite ease-in-out;
+const bounceAnimation = keyframes`
+  0%, 100% {
+    transform: scale(0);
   }
-
-  @-webkit-keyframes sk-pulseScaleOut {
-    0% {
-      -webkit-transform: scale(0);
-      transform: scale(0);
-    }
-    100% {
-      -webkit-transform: scale(1);
-      transform: scale(1);
-      opacity: 0;
-    }
-  }
-
-  @keyframes sk-pulseScaleOut {
-    0% {
-      -webkit-transform: scale(0);
-      transform: scale(0);
-    }
-    100% {
-      -webkit-transform: scale(1);
-      transform: scale(1);
-      opacity: 0;
-    }
+  50% {
+    transform: scale(1);
   }
 `
+
+const Pulse = styled.div`
+  width: 16px;
+  height: 16px;
+  background-color: ${spinnerColor};
+  border-radius: 100%;
+  animation: ${bounceAnimation} 2s infinite ease-in-out;
+  -webkit-animation: ${bounceAnimation} 2s infinite ease-in-out;
+`
+
+const DelayedPulse = styled.div`
+  width: 16px;
+  height: 16px;
+  position: absolute;
+  top: 0;
+  background-color: ${spinnerColor};
+  border-radius: 100%;
+  animation: ${bounceAnimation} 2s infinite ease-in-out;
+  -webkit-animation: ${bounceAnimation} 2s infinite ease-in-out;
+  animation-delay: -1s;
+  -webkit-animation-delay: -1.0s;
+`
+
+const SpinnerWrapper = styled.div`
+  position: relative;
+  margin: 6px;
+`
+
+const Spinner = () => (
+  <SpinnerWrapper>
+    <Pulse />
+    <DelayedPulse />
+  </SpinnerWrapper>
+)
