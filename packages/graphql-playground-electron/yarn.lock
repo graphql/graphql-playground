@@ -1744,14 +1744,7 @@ code-point-at@^1.0.0:
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/code-point-at/-/code-point-at-1.1.0.tgz#0d070b4d043a5bea33a2f1a40e2edb3d9a4ccf77"
 
-codemirror-graphql@0.6.11:
-  version "0.6.11"
-  resolved "https://registry.yarnpkg.com/codemirror-graphql/-/codemirror-graphql-0.6.11.tgz#795efa3933523815a5245eefe8d6831d3c4ad026"
-  dependencies:
-    graphql-language-service-interface "0.0.19"
-    graphql-language-service-parser "0.0.15"
-
-codemirror-graphql@^0.6.11, codemirror-graphql@^0.6.12:
+codemirror-graphql@0.6.12, codemirror-graphql@^0.6.11, codemirror-graphql@^0.6.12:
   version "0.6.12"
   resolved "https://registry.yarnpkg.com/codemirror-graphql/-/codemirror-graphql-0.6.12.tgz#91a273fe5188857524a30221d06e645b4ca41f00"
   dependencies:
@@ -2097,7 +2090,7 @@ css-loader@0.28.9:
     postcss-value-parser "^3.3.0"
     source-list-map "^2.0.0"
 
-css-modules-loader-core@^1.0.1:
+css-modules-loader-core@^1.0.1, css-modules-loader-core@^1.1.0:
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/css-modules-loader-core/-/css-modules-loader-core-1.1.0.tgz#5908668294a1becd261ae0a4ce21b0b551f21d16"
   dependencies:
@@ -3551,22 +3544,6 @@ graphql-import@^0.4.0:
     graphql "^0.12.3"
     lodash "^4.17.4"
 
-graphql-language-service-config@0.0.17:
-  version "0.0.17"
-  resolved "https://registry.yarnpkg.com/graphql-language-service-config/-/graphql-language-service-config-0.0.17.tgz#36b5a9906c0bf0d356d31b7583058f9b85d1793e"
-  dependencies:
-    graphql-language-service-types "0.0.21"
-
-graphql-language-service-interface@0.0.19:
-  version "0.0.19"
-  resolved "https://registry.yarnpkg.com/graphql-language-service-interface/-/graphql-language-service-interface-0.0.19.tgz#c58fa7bd95d2f30e33e04937a1a2c00a9740926e"
-  dependencies:
-    graphql "^0.10.1"
-    graphql-language-service-config "0.0.17"
-    graphql-language-service-parser "0.0.15"
-    graphql-language-service-types "0.0.21"
-    graphql-language-service-utils "0.0.17"
-
 graphql-language-service-interface@^1.0.16:
   version "1.0.18"
   resolved "https://registry.yarnpkg.com/graphql-language-service-interface/-/graphql-language-service-interface-1.0.18.tgz#c0fc1ef72c6f6f4bf9042bd7a8a8a66e0772caa8"
@@ -3575,12 +3552,6 @@ graphql-language-service-interface@^1.0.16:
     graphql-language-service-parser "^1.0.18"
     graphql-language-service-types "^1.0.18"
     graphql-language-service-utils "^1.0.18"
-
-graphql-language-service-parser@0.0.15:
-  version "0.0.15"
-  resolved "https://registry.yarnpkg.com/graphql-language-service-parser/-/graphql-language-service-parser-0.0.15.tgz#fd64afd8873624fa3c4a5831a08de9ccd6cc5182"
-  dependencies:
-    graphql-language-service-types "0.0.21"
 
 graphql-language-service-parser@^0.1.14:
   version "0.1.14"
@@ -3595,12 +3566,6 @@ graphql-language-service-parser@^1.0.18:
     graphql-config "1.1.4"
     graphql-language-service-types "^1.0.18"
 
-graphql-language-service-types@0.0.21:
-  version "0.0.21"
-  resolved "https://registry.yarnpkg.com/graphql-language-service-types/-/graphql-language-service-types-0.0.21.tgz#b9453366fc8985765034bf34056fe93603a24b82"
-  dependencies:
-    graphql "^0.10.1"
-
 graphql-language-service-types@^0.1.14:
   version "0.1.14"
   resolved "https://registry.yarnpkg.com/graphql-language-service-types/-/graphql-language-service-types-0.1.14.tgz#e6112785fc23ea8222f59a7f00e61b359f263c88"
@@ -3611,13 +3576,6 @@ graphql-language-service-types@^1.0.18:
   dependencies:
     graphql-config "1.1.4"
 
-graphql-language-service-utils@0.0.17:
-  version "0.0.17"
-  resolved "https://registry.yarnpkg.com/graphql-language-service-utils/-/graphql-language-service-utils-0.0.17.tgz#a8b91eca80c6aa5a0d461a0bbb63317986f9b989"
-  dependencies:
-    graphql "^0.10.1"
-    graphql-language-service-types "0.0.21"
-
 graphql-language-service-utils@^1.0.18:
   version "1.0.18"
   resolved "https://registry.yarnpkg.com/graphql-language-service-utils/-/graphql-language-service-utils-1.0.18.tgz#133fd0ce8ce360aad09c41feb47015eb7878cd3a"
@@ -3625,20 +3583,20 @@ graphql-language-service-utils@^1.0.18:
     graphql-config "1.1.4"
     graphql-language-service-types "^1.0.18"
 
-graphql-playground-react@1.4.1:
-  version "1.4.1"
-  resolved "https://registry.yarnpkg.com/graphql-playground-react/-/graphql-playground-react-1.4.1.tgz#54254e83ba5988eba8680ca5a10c5c2f27df378a"
+graphql-playground-react@1.4.2:
+  version "1.4.2"
+  resolved "https://registry.yarnpkg.com/graphql-playground-react/-/graphql-playground-react-1.4.2.tgz#7fca83656655d5b32acfddd4b8f98506d8751bac"
   dependencies:
     calculate-size "^1.1.1"
     classnames "^2.2.5"
     codemirror "^5.27.4"
-    codemirror-graphql "0.6.11"
+    codemirror-graphql "0.6.12"
     cuid "^1.3.8"
     graphcool-styles "0.2.7"
     graphcool-tmp-ui "^0.0.11"
     graphcool-ui "0.0.14"
     graphiql "^0.11.2"
-    graphql "^0.10.5"
+    graphql "^0.11.7"
     isomorphic-fetch "^2.2.1"
     js-yaml "^3.10.0"
     json-stable-stringify "^1.0.1"
@@ -3648,7 +3606,7 @@ graphql-playground-react@1.4.1:
     markdown-it "^8.4.0"
     marked "^0.3.9"
     polished "^1.9.0"
-    postcss-modules "^0.6.4"
+    postcss-modules "^1.1.0"
     prop-types "^15.6.0"
     react "^16.2.0"
     react-addons-shallow-compare "^15.6.2"
@@ -3656,10 +3614,10 @@ graphql-playground-react@1.4.1:
     react-copy-to-clipboard "^5.0.1"
     react-dom "^16.2.0"
     react-helmet "^5.2.0"
-    react-modal "^3.1.10"
+    react-modal "^3.1.11"
     react-redux "^5.0.6"
     react-router-dom "^4.2.2"
-    react-transition-group "^1.1.3"
+    react-transition-group "^2.2.1"
     react-virtualized "^9.12.0"
     redux "^3.7.2"
     redux-localstorage rc
@@ -3667,9 +3625,11 @@ graphql-playground-react@1.4.1:
     rxjs "^5.0.3"
     seamless-immutable "^7.0.1"
     styled-components "^2.4.0"
+    styled-jsx "^2.2.1"
     styled-jsx-postcss "git+https://github.com/timsuchanek/styled-jsx-postcss#build3"
     styled-theming "^2.2.0"
-    subscriptions-transport-ws "^0.8.1"
+    subscriptions-transport-ws "^0.9.5"
+    webpack-bundle-analyzer "^2.9.2"
 
 graphql-playground@1.3.17:
   version "1.3.17"
@@ -3733,11 +3693,17 @@ graphql-tag@^2.4.2:
   version "2.6.1"
   resolved "https://registry.yarnpkg.com/graphql-tag/-/graphql-tag-2.6.1.tgz#4788d509f6e29607d947fc47a40c4e18f736d34a"
 
-graphql@^0.10.1, graphql@^0.10.5:
+graphql@^0.10.5:
   version "0.10.5"
   resolved "https://registry.yarnpkg.com/graphql/-/graphql-0.10.5.tgz#c9be17ca2bdfdbd134077ffd9bbaa48b8becd298"
   dependencies:
     iterall "^1.1.0"
+
+graphql@^0.11.7:
+  version "0.11.7"
+  resolved "https://registry.yarnpkg.com/graphql/-/graphql-0.11.7.tgz#e5abaa9cb7b7cccb84e9f0836bf4370d268750c6"
+  dependencies:
+    iterall "1.1.3"
 
 graphql@^0.12.3:
   version "0.12.3"
@@ -5969,6 +5935,15 @@ postcss-modules@^0.6.4:
     postcss "^5.2.8"
     string-hash "^1.1.1"
 
+postcss-modules@^1.1.0:
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/postcss-modules/-/postcss-modules-1.1.0.tgz#c9f94f76ff6addf7c35b842e69ed442118156bb0"
+  dependencies:
+    css-modules-loader-core "^1.1.0"
+    generic-names "^1.0.2"
+    postcss "^6.0.1"
+    string-hash "^1.1.1"
+
 postcss-normalize-charset@^1.1.0:
   version "1.1.1"
   resolved "https://registry.yarnpkg.com/postcss-normalize-charset/-/postcss-normalize-charset-1.1.1.tgz#ef9ee71212d7fe759c78ed162f61ed62b5cb93f1"
@@ -6379,6 +6354,14 @@ react-modal@^3.1.10:
     prop-types "^15.5.10"
     warning "^3.0.0"
 
+react-modal@^3.1.11:
+  version "3.1.11"
+  resolved "https://registry.yarnpkg.com/react-modal/-/react-modal-3.1.11.tgz#95c8223fcee7013258ad2d149c38c9f870c89958"
+  dependencies:
+    exenv "^1.2.0"
+    prop-types "^15.5.10"
+    warning "^3.0.0"
+
 react-proxy@^1.1.7:
   version "1.1.8"
   resolved "https://registry.yarnpkg.com/react-proxy/-/react-proxy-1.1.8.tgz#9dbfd9d927528c3aa9f444e4558c37830ab8c26a"
@@ -6454,6 +6437,17 @@ react-transition-group@^1.1.3:
     dom-helpers "^3.2.0"
     loose-envify "^1.3.1"
     prop-types "^15.5.6"
+    warning "^3.0.0"
+
+react-transition-group@^2.2.1:
+  version "2.2.1"
+  resolved "https://registry.yarnpkg.com/react-transition-group/-/react-transition-group-2.2.1.tgz#e9fb677b79e6455fd391b03823afe84849df4a10"
+  dependencies:
+    chain-function "^1.0.0"
+    classnames "^2.2.5"
+    dom-helpers "^3.2.0"
+    loose-envify "^1.3.1"
+    prop-types "^15.5.8"
     warning "^3.0.0"
 
 react-virtualized@^9.12.0:
@@ -7406,7 +7400,18 @@ styled-components@^2.4.0:
     postcss-load-plugins "^2.2.0"
     styled-jsx "^0.5.7"
 
-styled-jsx@2.2.1:
+"styled-jsx-postcss@git+https://github.com/timsuchanek/styled-jsx-postcss.git#build3":
+  version "0.2.0"
+  resolved "git+https://github.com/timsuchanek/styled-jsx-postcss.git#677ee0fb7f9138047a00e03c8c3e44adbb33cf2a"
+  dependencies:
+    babel-traverse "^6.21.0"
+    babylon "^6.14.1"
+    deasync "^0.1.9"
+    postcss "^5.2.8"
+    postcss-load-plugins "^2.2.0"
+    styled-jsx "^0.5.7"
+
+styled-jsx@2.2.1, styled-jsx@^2.2.1:
   version "2.2.1"
   resolved "https://registry.yarnpkg.com/styled-jsx/-/styled-jsx-2.2.1.tgz#8b38b9e53e5d9767e392595ab1afdc8426b3ba5d"
   dependencies:
@@ -7455,6 +7460,19 @@ subscriptions-transport-ws@^0.8.1:
     eventemitter3 "^2.0.3"
     graphql-subscriptions "^0.4.4"
     graphql-tag "^2.4.2"
+    iterall "^1.1.1"
+    lodash.assign "^4.2.0"
+    lodash.isobject "^3.0.2"
+    lodash.isstring "^4.0.1"
+    symbol-observable "^1.0.4"
+    ws "^3.0.0"
+
+subscriptions-transport-ws@^0.9.5:
+  version "0.9.5"
+  resolved "https://registry.yarnpkg.com/subscriptions-transport-ws/-/subscriptions-transport-ws-0.9.5.tgz#faa9eb1230d5f2efe355368cd973b867e4483c53"
+  dependencies:
+    backo2 "^1.0.2"
+    eventemitter3 "^2.0.3"
     iterall "^1.1.1"
     lodash.assign "^4.2.0"
     lodash.isobject "^3.0.2"
@@ -8052,7 +8070,7 @@ wbuf@^1.1.0, wbuf@^1.7.2:
   dependencies:
     minimalistic-assert "^1.0.0"
 
-webpack-bundle-analyzer@2.9.2:
+webpack-bundle-analyzer@2.9.2, webpack-bundle-analyzer@^2.9.2:
   version "2.9.2"
   resolved "https://registry.yarnpkg.com/webpack-bundle-analyzer/-/webpack-bundle-analyzer-2.9.2.tgz#63ed86eb71cc4cda86f68e685a84530ba0126449"
   dependencies:
