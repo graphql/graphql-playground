@@ -17,6 +17,18 @@ export interface RenderPageOptions extends MiddlewareOptions {
 
 const loading = getLoadingMarkup()
 
+const getCdnMarkup = options => `
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/graphql-playground-react@${
+  options.version
+  }/build/static/css/index.css" />
+    <link rel="shortcut icon" href="//cdn.jsdelivr.net/npm/graphql-playground-react@${
+  options.version
+  }/build/favicon.png" />
+    <script src="//cdn.jsdelivr.net/npm/graphql-playground-react@${
+  options.version
+  }/build/static/js/middleware.js"></script>
+`
+
 export function renderPlaygroundPage(options: RenderPageOptions) {
   const extendedOptions: any = {
     ...options,
@@ -37,22 +49,16 @@ export function renderPlaygroundPage(options: RenderPageOptions) {
       `WARNING: You didn't provide an endpoint and don't have a .graphqlconfig. Make sure you have at least one of them.`,
     )
   }
+
   return `
   <!DOCTYPE html>
   <html>
   <head>
     <meta charset=utf-8 />
     <meta name="viewport" content="user-scalable=no, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, minimal-ui">
-    <title>GraphQL Playground</title>
-    <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/graphql-playground-react@${
-      options.version
-    }/build/static/css/index.css" />
-    <link rel="shortcut icon" href="//cdn.jsdelivr.net/npm/graphql-playground-react@${
-      options.version
-    }/build/favicon.png" />
-    <script src="//cdn.jsdelivr.net/npm/graphql-playground-react@${
-      options.version
-    }/build/static/js/middleware.js"></script>
+    <link rel="shortcut icon" href="https://graphcool-playground.netlify.com/favicon.png">
+    <title>${extendedOptions.title}</title>
+    ${extendedOptions.env === 'react' || extendedOptions.env === 'electron' ? '' : getCdnMarkup(extendedOptions)}
   </head>
   <body>
     <style type="text/css">
@@ -111,10 +117,10 @@ export function renderPlaygroundPage(options: RenderPageOptions) {
         root.classList.add('playgroundIn');
   
         GraphQLPlayground.init(root, ${JSON.stringify(
-          extendedOptions,
-          null,
-          2,
-        )})
+      extendedOptions,
+      null,
+      2,
+    )})
       })
     </script>
   </body>
