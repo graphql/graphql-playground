@@ -535,5 +535,7 @@ const appearIn = keyframes`
 const App = styled.div`
   display: flex;
   width: 100%;
+  opacity: 0;
+  transform: translateY(10px);
   animation: ${appearIn} 0.5s ease-out forwards 0.2s;
 `
