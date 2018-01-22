@@ -15,6 +15,8 @@
   "license": "SEE LICENSE IN LICENSE",
   "scripts": {
     "start": "node scripts/start.js",
+    "start:analyze": "ANALYZE_BUNDLE=true node scripts/start.js",
+    "start:graphql-bin": "ACTIVE_APP=graphqlbin node scripts/start.js",
     "prepublishOnly": "yarn build",
     "copy-styles": "cat src/styles/*.css > playground.css",
     "build": "rimraf dist build dist && yarn build-app && yarn build-package && yarn copy-styles",
@@ -119,7 +121,7 @@
     "graphcool-tmp-ui": "^0.0.11",
     "graphcool-ui": "0.0.14",
     "graphiql": "^0.11.2",
-    "graphql": "^0.12.3",
+    "graphql": "^0.11.7",
     "isomorphic-fetch": "^2.2.1",
     "js-yaml": "^3.10.0",
     "json-stable-stringify": "^1.0.1",
@@ -151,7 +153,8 @@
     "styled-jsx": "^2.2.1",
     "styled-jsx-postcss": "git+https://github.com/timsuchanek/styled-jsx-postcss#build3",
     "styled-theming": "^2.2.0",
-    "subscriptions-transport-ws": "^0.9.5"
+    "subscriptions-transport-ws": "^0.9.5",
+    "webpack-bundle-analyzer": "^2.9.2"
   },
   "lint-staged": {
     "*.{ts,tsx}": [
