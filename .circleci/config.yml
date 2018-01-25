@@ -51,4 +51,4 @@ workflows:
     jobs:
       - playground-build
       # Disable electron build until Circle's OSX open-source plan is activated
-      # - electron-build
+      - electron-build
