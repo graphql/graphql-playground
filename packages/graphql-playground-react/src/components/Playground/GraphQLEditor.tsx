@@ -623,11 +623,7 @@ export class GraphQLEditor extends React.PureComponent<
           </div>
         </div>
         <GraphDocs
-          ref={(ref: any) => {
-            if (ref) {
-              this.docExplorerComponent = ref.getWrappedInstance()
-            }
-          }}
+          ref={this.setDocExplorerRef}
           schema={this.state.schema!}
           sessionId={this.props.session.id}
         />
@@ -705,6 +701,12 @@ export class GraphQLEditor extends React.PureComponent<
 
   setResultComponent = ref => {
     this.resultComponent = ref
+  }
+
+  setDocExplorerRef = ref => {
+    if (ref) {
+      this.docExplorerComponent = ref.getWrappedInstance()
+    }
   }
 
   handleClickReference = reference => {
