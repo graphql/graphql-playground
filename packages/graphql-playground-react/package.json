@@ -57,7 +57,7 @@
     "case-sensitive-paths-webpack-plugin": "2.1.1",
     "chalk": "2.3.0",
     "connect-history-api-fallback": "1.5.0",
-    "cross-spawn": "5.1.0",
+    "cross-spawn": "6.0.3",
     "css-loader": "0.28.9",
     "detect-port": "1.2.2",
     "dotenv": "4.0.0",
