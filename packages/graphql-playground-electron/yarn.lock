@@ -1459,9 +1459,18 @@ buffer@^5.0.3:
     base64-js "^1.0.2"
     ieee754 "^1.1.4"
 
-builder-util-runtime@4.0.2, builder-util-runtime@^4.0.2, builder-util-runtime@~4.0.2:
+builder-util-runtime@4.0.2, builder-util-runtime@^4.0.2:
   version "4.0.2"
   resolved "https://registry.yarnpkg.com/builder-util-runtime/-/builder-util-runtime-4.0.2.tgz#673f1a0f2e275e6f80a16ce57225589a003c9a52"
+  dependencies:
+    bluebird-lst "^1.0.5"
+    debug "^3.1.0"
+    fs-extra-p "^4.5.0"
+    sax "^1.2.4"
+
+builder-util-runtime@~4.0.3:
+  version "4.0.3"
+  resolved "https://registry.yarnpkg.com/builder-util-runtime/-/builder-util-runtime-4.0.3.tgz#c9f1959598e3fb534cdbe9ce4160e985af11a0fe"
   dependencies:
     bluebird-lst "^1.0.5"
     debug "^3.1.0"
@@ -2608,19 +2617,19 @@ electron-to-chromium@^1.2.7:
   dependencies:
     electron-releases "^2.1.0"
 
-electron-updater@2.19.1:
-  version "2.19.1"
-  resolved "https://registry.yarnpkg.com/electron-updater/-/electron-updater-2.19.1.tgz#2265136b7ef15f7cb06e4032eaaf64382f642437"
+electron-updater@2.20.1:
+  version "2.20.1"
+  resolved "https://registry.yarnpkg.com/electron-updater/-/electron-updater-2.20.1.tgz#3d2714a3e472fbf198f6053daf8fd12209101aa2"
   dependencies:
     bluebird-lst "^1.0.5"
-    builder-util-runtime "~4.0.2"
+    builder-util-runtime "~4.0.3"
     electron-is-dev "^0.3.0"
     fs-extra-p "^4.5.0"
     js-yaml "^3.10.0"
     lazy-val "^1.0.3"
     lodash.isequal "^4.5.0"
-    semver "^5.4.1"
-    source-map-support "^0.5.0"
+    semver "^5.5.0"
+    source-map-support "^0.5.2"
 
 electron@1.8.1:
   version "1.8.1"
@@ -7115,15 +7124,15 @@ source-map-support@^0.4.15:
   dependencies:
     source-map "^0.5.6"
 
-source-map-support@^0.5.0:
-  version "0.5.0"
-  resolved "https://registry.yarnpkg.com/source-map-support/-/source-map-support-0.5.0.tgz#2018a7ad2bdf8faf2691e5fddab26bed5a2bacab"
-  dependencies:
-    source-map "^0.6.0"
-
 source-map-support@^0.5.1:
   version "0.5.1"
   resolved "https://registry.yarnpkg.com/source-map-support/-/source-map-support-0.5.1.tgz#72291517d1fd0cb9542cee6c27520884b5da1a07"
+  dependencies:
+    source-map "^0.6.0"
+
+source-map-support@^0.5.2:
+  version "0.5.2"
+  resolved "https://registry.yarnpkg.com/source-map-support/-/source-map-support-0.5.2.tgz#1a6297fd5b2e762b39688c7fc91233b60984f0a5"
   dependencies:
     source-map "^0.6.0"
 
