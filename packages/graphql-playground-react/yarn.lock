@@ -6727,9 +6727,9 @@ react-transition-group@^2.2.1:
     prop-types "^15.5.8"
     warning "^3.0.0"
 
-react-virtualized@^9.12.0:
-  version "9.16.1"
-  resolved "https://registry.yarnpkg.com/react-virtualized/-/react-virtualized-9.16.1.tgz#2a9c8262094bc5cca309a3ee29f2b4b572ae95a1"
+react-virtualized@^9.0.0:
+  version "9.18.0"
+  resolved "https://registry.yarnpkg.com/react-virtualized/-/react-virtualized-9.18.0.tgz#d95ccdcfe82c7791da661be3ebc59f4bbc224f07"
   dependencies:
     babel-runtime "^6.26.0"
     classnames "^2.2.3"

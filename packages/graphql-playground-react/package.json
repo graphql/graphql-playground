@@ -143,7 +143,7 @@
     "react-redux": "^5.0.6",
     "react-router-dom": "^4.2.2",
     "react-transition-group": "^2.2.1",
-    "react-virtualized": "^9.12.0",
+    "react-virtualized": "^9.0.0",
     "redux": "^3.7.2",
     "redux-localstorage": "rc",
     "redux-localstorage-filter": "^0.1.1",
