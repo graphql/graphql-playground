@@ -1,6 +1,6 @@
 import * as React from 'react'
 import * as ReactDOM from 'react-dom'
-import { parse, print, GraphQLSchema } from 'graphql'
+import { parse, print, GraphQLSchema, isNamedType } from 'graphql'
 import * as cn from 'classnames'
 import ExecuteButton from './ExecuteButton'
 import { QueryEditor } from './QueryEditor'
@@ -19,7 +19,7 @@ import Spinner from '../Spinner'
 import Results from './Results'
 import ReponseTracing from './ResponseTracing'
 import withTheme from '../Theme/withTheme'
-import { LocalThemeInterface } from '../Theme/index'
+import { LocalThemeInterface } from '../Theme'
 import GraphDocs from './DocExplorer/GraphDocs'
 import { SchemaFetcher } from './SchemaFetcher'
 import { setStacks } from '../../actions/graphiql-docs'
@@ -105,13 +105,11 @@ export interface State {
   variableEditorHeight: number
   responseTracingOpen: boolean
   responseTracingHeight: number
-  docExploreOpen: boolean
   docExplorerWidth: number
   isWaitingForReponse: boolean
   subscription: any
   variableToType: any
   operations: any[]
-  docExplorerOpen: boolean
   schemaExplorerOpen: boolean
   schemaExplorerWidth: number
   isWaitingForResponse: boolean
@@ -244,7 +242,6 @@ export class GraphQLEditor extends React.PureComponent<
       responseTracingOpen: false,
       responseTracingHeight:
         Number(this.storageGet('responseTracingHeight')) || 300,
-      docExplorerOpen: false,
       docExplorerWidth: Number(this.storageGet('docExplorerWidth')) || 350,
       schemaExplorerOpen: false,
       schemaExplorerWidth:
@@ -626,6 +623,7 @@ export class GraphQLEditor extends React.PureComponent<
           </div>
         </div>
         <GraphDocs
+          ref={this.setDocExplorerRef}
           schema={this.state.schema!}
           sessionId={this.props.session.id}
         />
@@ -703,6 +701,12 @@ export class GraphQLEditor extends React.PureComponent<
 
   setResultComponent = ref => {
     this.resultComponent = ref
+  }
+
+  setDocExplorerRef = ref => {
+    if (ref) {
+      this.docExplorerComponent = ref.getWrappedInstance()
+    }
   }
 
   handleClickReference = reference => {
@@ -1269,11 +1273,14 @@ export class GraphQLEditor extends React.PureComponent<
       const typeName = event.target.innerHTML
       const schema = this.state.schema
       if (schema) {
-        const type = schema.getType(typeName)
-        if (type) {
-          this.setState({ docExplorerOpen: true } as State, () => {
-            this.docExplorerComponent.showDoc(type)
-          })
+        // TODO: There is no way as of now to retrieve the NAMED_TYPE of a GraphQLList(Type).
+        // We're therefore removing any '[' or '!' characters, to properly find its NAMED_TYPE. (eg. [Type!]! => Type)
+        // This should be removed as soon as there's a safer way to do that.
+        const namedTypeName = typeName.replace(/[\]\[!]/g, '')
+        const type = schema.getType(namedTypeName)
+
+        if (isNamedType(type)) {
+          this.docExplorerComponent.showDocFromType(type)
         }
       }
     }
