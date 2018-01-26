@@ -149,7 +149,7 @@
     "redux-localstorage-filter": "^0.1.1",
     "rxjs": "^5.0.3",
     "seamless-immutable": "^7.0.1",
-    "styled-components": "^2.4.0",
+    "styled-components": "^3.0.1",
     "styled-jsx": "^2.2.1",
     "styled-jsx-postcss": "git+https://github.com/timsuchanek/styled-jsx-postcss#build3",
     "styled-theming": "^2.2.0",
