@@ -90,7 +90,7 @@
     "rimraf": "2.6.2",
     "source-map-loader": "0.2.3",
     "strip-ansi": "4.0.0",
-    "style-loader": "0.19.1",
+    "style-loader": "0.20.1",
     "svg-inline-loader": "0.8.0",
     "sw-precache-webpack-plugin": "0.11.4",
     "ts-loader": "3.2.0",
