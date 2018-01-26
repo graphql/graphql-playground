@@ -71,7 +71,7 @@
     "husky": "0.14.3",
     "jest": "22.1.4",
     "json-loader": "0.5.7",
-    "lint-staged": "6.0.1",
+    "lint-staged": "6.1.0",
     "node-noop": "1.0.0",
     "object-assign": "4.1.1",
     "postcss-cssnext": "2.11.0",
