@@ -10,7 +10,11 @@ import debounce from 'graphiql/dist/utility/debounce'
 import find from 'graphiql/dist/utility/find'
 import { fillLeafs } from 'graphiql/dist/utility/fillLeafs'
 import { getLeft, getTop } from 'graphiql/dist/utility/elementPosition'
-import { OperationDefinition, Session } from '../../types'
+import {
+  OperationDefinition,
+  Session,
+  ApolloLinkExecuteResponse,
+} from '../../types'
 import { Response } from '../Playground'
 import { connect } from 'react-redux'
 
@@ -30,6 +34,7 @@ import TopBar from './TopBar/TopBar'
 import { SharingProps } from '../Share'
 import getQueryFacts from './util/getQueryFacts'
 import { VariableEditor } from './VariableEditor'
+import { GraphQLRequest, FetchResult } from 'apollo-link'
 
 /**
  * The top-level React component for GraphQLEditor, intended to encompass the entire
@@ -37,7 +42,7 @@ import { VariableEditor } from './VariableEditor'
  */
 
 export interface Props {
-  fetcher: (params: any, headers?: any) => Promise<any>
+  fetcher: (graphQLRequest: GraphQLRequest) => ApolloLinkExecuteResponse
   schemaFetcher: SchemaFetcher
   isGraphcoolUrl?: boolean
   query?: string
@@ -59,7 +64,6 @@ export interface Props {
   onChangeEndpoint?: (value: string) => void
   onClickShare?: () => void
   onRef: any
-  getDefaultFieldNames?: () => any
   showCodeGeneration?: boolean
   showEndpoints?: boolean
   showQueryTitle?: boolean
@@ -97,7 +101,7 @@ export interface ReduxProps {
 export interface State {
   schema?: GraphQLSchema | null
   query: string
-  variables?: any
+  variables: string
   operationName?: string
   responses: any[]
   editorFlex: number
@@ -521,7 +525,7 @@ export class GraphQLEditor extends React.PureComponent<
                 value={this.state.query}
                 onEdit={this.handleEditQuery}
                 onHintInformationRender={this.handleHintInformationRender}
-                onRunQuery={this.handleEditorRunQuery}
+                onRunQuery={this.runQueryAtCursor}
                 disableAutofocus={this.props.disableAutofocus}
                 hideLineNumbers={this.props.hideLineNumbers}
                 hideGutters={this.props.hideGutters}
@@ -561,14 +565,14 @@ export class GraphQLEditor extends React.PureComponent<
                     variableToType={this.state.variableToType}
                     onEdit={this.handleEditVariables}
                     onHintInformationRender={this.handleHintInformationRender}
-                    onRunQuery={this.handleEditorRunQuery}
+                    onRunQuery={this.runQueryAtCursor}
                   />
                 ) : (
                   <VariableEditor
                     ref={this.setVariableEditorComponent}
                     value={this.props.session.headers}
                     onEdit={this.props.onChangeHeaders}
-                    onRunQuery={this.handleEditorRunQuery}
+                    onRunQuery={this.runQueryAtCursor}
                   />
                 )}
               </div>
@@ -723,8 +727,7 @@ export class GraphQLEditor extends React.PureComponent<
     const { insertions, result } = fillLeafs(
       this.state.schema,
       this.state.query,
-      this.props.getDefaultFieldNames,
-    )
+    ) as { insertions: { index: number; string: string }[]; result: string }
     if (insertions && insertions.length > 0) {
       const editor = this.queryEditorComponent.getCodeMirror()
       editor.operation(() => {
@@ -733,10 +736,10 @@ export class GraphQLEditor extends React.PureComponent<
         editor.setValue(result)
         let added = 0
         try {
-          const markers = insertions.map(({ index, str }) =>
+          const markers = insertions.map(({ index, string }) =>
             editor.markText(
               editor.posFromIndex(index + added),
-              editor.posFromIndex(index + (added += str.length)),
+              editor.posFromIndex(index + (added += string.length)),
               {
                 className: 'autoInsertedLeaf',
                 clearOnEnter: true,
@@ -749,9 +752,9 @@ export class GraphQLEditor extends React.PureComponent<
           //
         }
         let newCursorIndex = cursorIndex
-        insertions.forEach(({ index, str }) => {
-          if (index < cursorIndex && str) {
-            newCursorIndex += str.length
+        insertions.forEach(({ index, string }) => {
+          if (index < cursorIndex && string) {
+            newCursorIndex += string.length
           }
         })
         editor.setCursor(editor.posFromIndex(newCursorIndex))
@@ -871,13 +874,16 @@ export class GraphQLEditor extends React.PureComponent<
     }
   }
 
-  private fetchQuery(query, variables, operationName, cb) {
-    const fetcher: any = this.props.fetcher
-    let jsonVariables = null
+  private fetchQuery(
+    query,
+    variables: string,
+    operationName: string | undefined,
+    cb: (value: FetchResult) => void,
+  ) {
+    let jsonVariables = {}
 
     try {
-      jsonVariables =
-        variables && variables.trim() !== '' ? JSON.parse(variables) : null
+      jsonVariables = JSON.parse(variables)
     } catch (error) {
       throw new Error(`Variables are invalid JSON: ${error.message}.`)
     }
@@ -891,59 +897,38 @@ export class GraphQLEditor extends React.PureComponent<
       headers['X-Apollo-Tracing'] = '1'
     }
 
-    const fetch = fetcher(
-      {
-        query,
-        variables: jsonVariables,
-        operationName,
+    const fetch = this.props.fetcher({
+      query,
+      variables: jsonVariables,
+      operationName,
+      context: {
+        headers: headers,
       },
-      headers,
-    )
+    })
 
-    if (isPromise(fetch)) {
-      // If fetcher returned a Promise, then call the callback when the promise
-      // resolves, otherwise handle the error.
-      fetch.then(cb).catch(error => {
-        /* tslint:disable-next-line */
-        console.error(error)
+    const subscription = fetch.subscribe({
+      next: cb,
+      error: error => {
         this.setState({
           isWaitingForResponse: false,
           responses: [
-            { date: error && String(error.stack || error), time: new Date() },
+            {
+              date: error && String(error.stack || error),
+              time: new Date(),
+            },
           ],
+          subscription: null,
         } as State)
-      })
-    } else if (isObservable(fetch)) {
-      // If the fetcher returned an Observable, then subscribe to it, calling
-      // the callback on each next value, and handling both errors and the
-      // completion of the Observable. Returns a Subscription object.
-      const subscription = fetch.subscribe({
-        // next: cb,
-        next: cb,
-        error: error => {
-          this.setState({
-            isWaitingForResponse: false,
-            responses: [
-              {
-                date: error && String(error.stack || error),
-                time: new Date(),
-              },
-            ],
-            subscription: null,
-          } as State)
-        },
-        complete: () => {
-          this.setState({
-            isWaitingForResponse: false,
-            subscription: null,
-          } as State)
-        },
-      })
+      },
+      complete: () => {
+        this.setState({
+          isWaitingForResponse: false,
+          subscription: null,
+        } as State)
+      },
+    })
 
-      return subscription
-    } else {
-      throw new Error('Fetcher did not return Promise or Observable.')
-    }
+    return subscription
   }
 
   private handleRunQuery = selectedOperationName => {
@@ -1110,10 +1095,6 @@ export class GraphQLEditor extends React.PureComponent<
         elem.removeEventListener('click', this.onClickHintInformation)
       }),
     )
-  }
-
-  private handleEditorRunQuery = () => {
-    this.runQueryAtCursor()
   }
 
   private handleResizeStart = downEvent => {
@@ -1293,16 +1274,6 @@ export default withTheme<Props>(
     withRef: true,
   })(GraphQLEditor),
 )
-
-// Duck-type promise detection.
-function isPromise(value) {
-  return typeof value === 'object' && typeof value.then === 'function'
-}
-
-// Duck-type observable detection.
-function isObservable(value) {
-  return typeof value === 'object' && typeof value.subscribe === 'function'
-}
 
 const DragBar = styled.div`
   width: 15px;

@@ -1,15 +1,19 @@
 import * as React from 'react'
-import { Session, ISettings } from '../../types'
+import { Session, ISettings, ApolloLinkExecuteResponse } from '../../types'
 import GraphQLEditor from './GraphQLEditor'
 import { SchemaFetcher } from './SchemaFetcher'
 import { SharingProps } from '../Share'
+import { GraphQLRequest, Observable, FetchResult } from 'apollo-link'
 
 export interface Props {
   session: Session
   index: number
   onRef: (index: number, ref: any) => void
   isGraphcoolUrl: boolean
-  fetcher: (session: Session, graphQLParams: any, headers?: any) => Promise<any>
+  fetcher: (
+    session: Session,
+    graphQLRequest: GraphQLRequest,
+  ) => ApolloLinkExecuteResponse
   schemaFetcher: SchemaFetcher
   isEndpoint: boolean
   storage?: any
@@ -37,8 +41,8 @@ export default class GraphQLEditorSession extends React.PureComponent<
   Props,
   {}
 > {
-  fetcher = (graphQLParams, headers?: any) => {
-    return this.props.fetcher(this.props.session, graphQLParams, headers)
+  fetcher = (graphQLRequest: GraphQLRequest): Observable<FetchResult> => {
+    return this.props.fetcher(this.props.session, graphQLRequest)
   }
   render() {
     const {

@@ -3,15 +3,14 @@ import { GraphQLEditor } from './Playground/GraphQLEditor'
 import * as fetch from 'isomorphic-fetch'
 import { TabBar } from './Playground/TabBar'
 import { defaultQuery, getDefaultSession } from '../constants'
-import { Session, ISettings } from '../types'
+import { Session, ISettings, ApolloLinkExecuteResponse } from '../types'
 import * as cuid from 'cuid'
 import * as Immutable from 'seamless-immutable'
 import PlaygroundStorage from './PlaygroundStorage'
 import { getQueryTypes } from './Playground/util/getQueryTypes'
 import debounce from 'graphiql/dist/utility/debounce'
-import { Observable } from 'rxjs/Observable'
 import { SubscriptionClient } from 'subscriptions-transport-ws'
-import isQuerySubscription from './Playground/util/isQuerySubscription'
+import hasSubscription from './Playground/util/hasSubscription'
 import HistoryPopup from './HistoryPopup'
 import * as cx from 'classnames'
 import CodeGenerationPopup from './CodeGenerationPopup/CodeGenerationPopup'
@@ -27,6 +26,9 @@ import Settings from './Settings'
 import SettingsEditor from './SettingsEditor'
 import { GraphQLConfig } from '../graphqlConfig'
 import FileEditor from './FileEditor'
+import { ApolloLink, execute, GraphQLRequest } from 'apollo-link'
+import { WebSocketLink } from 'apollo-link-ws'
+import { HttpLink } from 'apollo-link-http'
 
 import * as app from '../../package.json'
 
@@ -68,6 +70,7 @@ export interface Props {
   fixedEndpoints: boolean
   headers?: any
   configPath?: string
+  createApolloLink?: (Session) => ApolloLink
 }
 
 export interface State {
@@ -101,7 +104,7 @@ export { GraphQLEditor }
 
 export class Playground extends React.PureComponent<Props & DocsState, State> {
   storage: PlaygroundStorage
-  wsConnections: { [sessionId: string]: any } = {}
+  apolloLinks: { [sessionId: string]: any } = {}
   observers: { [sessionId: string]: any } = {}
   graphiqlComponents: any[] = []
   private initialIndex: number = -1
@@ -202,7 +205,7 @@ export class Playground extends React.PureComponent<Props & DocsState, State> {
     ) {
       this.setCursor({ line: 3, ch: 6 })
     }
-    this.initWebsockets()
+    this.initApolloLinks()
   }
 
   componentDidUpdate(prevProps: Props, prevState: State) {
@@ -253,33 +256,18 @@ export class Playground extends React.PureComponent<Props & DocsState, State> {
     this.storage.saveProject()
   }
 
-  setWS = (session: Session) => {
-    let connectionParams: any = {}
-
-    if (session.headers) {
-      connectionParams = { ...this.parseHeaders(session.headers) }
+  setApolloLink = (session: Session) => {
+    if (this.apolloLinks[session.id]) {
+      this.apolloLinks[session.id].unsubscribeAll()
     }
 
-    if (this.wsConnections[session.id]) {
-      this.wsConnections[session.id].unsubscribeAll()
-    }
-
-    const endpoint = this.getWSEndpoint()
-    if (endpoint) {
-      try {
-        this.wsConnections[session.id] = new SubscriptionClient(endpoint, {
-          timeout: 20000,
-          connectionParams,
-        })
-      } catch (e) {
-        /* tslint:disable-next-line */
-        console.error(e)
-      }
-    }
+    this.apolloLinks[session.id] = this.createDefaultApolloLink(session)
   }
-  initWebsockets() {
-    this.state.sessions.forEach(session => this.setWS(session))
+
+  initApolloLinks() {
+    this.state.sessions.forEach(session => this.setApolloLink(session))
   }
+
   setCursor(position: CursorPosition) {
     if (this.graphiqlComponents) {
       const editor = this.graphiqlComponents[this.state.selectedSessionIndex]
@@ -288,6 +276,7 @@ export class Playground extends React.PureComponent<Props & DocsState, State> {
       }
     }
   }
+
   render() {
     const { sessions, selectedSessionIndex } = this.state
     const { isEndpoint } = this.props
@@ -703,7 +692,7 @@ export class Playground extends React.PureComponent<Props & DocsState, State> {
       delete this.observers[session.id]
     }
     this.cancelSubscription(session)
-    this.setWS(session)
+    this.setApolloLink(session)
   }
 
   private getUrlSession(sessions) {
@@ -872,7 +861,7 @@ export class Playground extends React.PureComponent<Props & DocsState, State> {
     }
 
     this.storage.saveSession(newSession)
-    this.setWS(newSession)
+    this.setApolloLink(newSession)
     return newSession
   }
 
@@ -956,94 +945,47 @@ export class Playground extends React.PureComponent<Props & DocsState, State> {
   private cancelSubscription = (session: Session) => {
     this.setValueInSession(session.id, 'subscriptionActive', false)
     if (session.subscriptionId) {
-      if (this.wsConnections[session.id]) {
-        this.wsConnections[session.id].unsubscribe(session.subscriptionId)
+      if (this.apolloLinks[session.id]) {
+        this.apolloLinks[session.id].unsubscribe(session.subscriptionId)
       }
       this.setValueInSession(session.id, 'subscriptionId', null)
     }
   }
 
-  private fetcher = (session: Session, graphQLParams, requestHeaders?: any) => {
-    const { query, operationName } = graphQLParams
-
-    if (!query.includes('IntrospectionQuery')) {
-      if (!this.historyIncludes(session)) {
-        setImmediate(() => {
-          this.addToHistory(session)
-        })
-      }
-
-      if (isQuerySubscription(query, operationName)) {
-        /* tslint:disable-next-line */
-        return Observable.create(observer => {
-          this.observers[session.id] = observer
-          if (!session.subscriptionActive) {
-            this.setValueInSession(session.id, 'subscriptionActive', true)
-          }
-
-          let wsConnection = this.wsConnections[session.id]
-
-          if (!wsConnection) {
-            this.setWS(session)
-            wsConnection = this.wsConnections[session.id]
-          }
-
-          const request = wsConnection.request(graphQLParams)
-
-          const id = cuid()
-
-          request.subscribe({
-            next: res => {
-              const data: any = { data: res, isSubscription: true }
-              observer.next(data)
-            },
-            error: error => {
-              observer.next({
-                data: { error },
-              })
-            },
-            complete: () => {
-              this.cancelSubscription(session)
-            },
-          })
-
-          this.setValueInSession(session.id, 'subscriptionId', id)
-        })
-      }
-    }
-
-    let headers: any = {
-      'Content-Type': 'application/json',
-    }
-
+  private createDefaultApolloLink = (session: Session): ApolloLink => {
+    let connectionParams = {}
     if (session.headers) {
-      headers = { ...headers, ...this.parseHeaders(session.headers) }
+      connectionParams = { ...this.parseHeaders(session.headers) }
     }
 
-    if (requestHeaders) {
-      headers = { ...headers, ...requestHeaders }
+    let endpoint = this.getWSEndpoint()
+    if (endpoint === null) {
+      endpoint = this.getEndpoint()
     }
-
-    return fetch(session.endpoint || this.getEndpoint(), {
-      // tslint:disable-lin
-      method: 'post',
-      headers,
-      credentials: this.props.settings['request.credentials'],
-      body: JSON.stringify(graphQLParams),
-    }).then(response => {
-      if (typeof this.props.onSuccess === 'function') {
-        this.props.onSuccess(graphQLParams, response)
-      }
-      if (this.props.isEndpoint) {
-        history.pushState(
-          {},
-          'Graphcool Playground',
-          `?query=${encodeURIComponent(query)}`,
-        )
-      }
-      this.storage.executedQuery()
-      return response.json()
+    const subscriptionClient = new SubscriptionClient(endpoint, {
+      timeout: 20000,
+      connectionParams,
     })
+
+    const httpLink = new HttpLink({
+      uri: () => this.getEndpoint(),
+      fetch,
+      headers: session.headers,
+    })
+
+    const webSocketLink = new WebSocketLink(subscriptionClient)
+    return ApolloLink.split(
+      operation => hasSubscription(operation.query),
+      webSocketLink,
+      httpLink,
+    )
+  }
+
+  private fetcher = (
+    session: Session,
+    graphqQLRequest: GraphQLRequest,
+  ): ApolloLinkExecuteResponse => {
+    return execute(this.apolloLinks[session.id], graphqQLRequest)
   }
 
   private parseHeaders(headers: string) {

@@ -23,56 +23,47 @@ export interface Props {
   endpointUnreachable: boolean
 }
 
-export default class TopBar extends React.Component<Props, {}> {
-  render() {
-    const { endpointUnreachable } = this.props
-    return (
-      <TopBarWrapper>
-        <Button onClick={this.props.onClickPrettify}>Prettify</Button>
-        <Button onClick={this.props.onClickHistory}>History</Button>
-        <UrlBarWrapper>
-          <UrlBar
-            value={this.props.endpoint}
-            onChange={this.onChange}
-            onKeyDown={this.onKeyDown}
-            onBlur={this.props.onReloadSchema}
-            disabled={this.props.fixedEndpoint}
-            className={cx({ active: !this.props.fixedEndpoint })}
-          />
-          {endpointUnreachable ? (
-            <ReachError>
-              <span>Server cannot be reached</span>
-              <Spinner />
-            </ReachError>
-          ) : (
-            <ReloadIcon
-              isReloadingSchema={this.props.isReloadingSchema}
-              onReloadSchema={this.props.onReloadSchema}
-            />
-          )}
-        </UrlBarWrapper>
-        <CopyToClipboard text={this.props.curl}>
-          <Button>Copy CURL</Button>
-        </CopyToClipboard>
-        {this.props.sharing && (
-          <Share {...this.props.sharing}>
-            <Button>Share Playground</Button>
-          </Share>
-        )}
-      </TopBarWrapper>
-    )
-  }
-  onChange = e => {
-    if (typeof this.props.onChangeEndpoint === 'function') {
-      this.props.onChangeEndpoint(e.target.value)
-    }
-  }
-  onKeyDown = e => {
-    if (e.keyCode === 13 && typeof this.props.onReloadSchema === 'function') {
-      this.props.onReloadSchema()
-    }
-  }
-}
+const TopBar: React.SFC<Props> = props => (
+  <TopBarWrapper>
+    <Button onClick={props.onClickPrettify}>Prettify</Button>
+    <Button onClick={props.onClickHistory}>History</Button>
+    <UrlBarWrapper>
+      <UrlBar
+        value={props.endpoint}
+        onChange={({ target }) =>
+          props.onChangeEndpoint ? props.onChangeEndpoint(target.value) : null
+        }
+        onKeyDown={({ keyCode }) =>
+          keyCode === 13 && props.onReloadSchema ? props.onReloadSchema() : null
+        }
+        onBlur={props.onReloadSchema}
+        disabled={props.fixedEndpoint}
+        className={cx({ active: !props.fixedEndpoint })}
+      />
+      {props.endpointUnreachable ? (
+        <ReachError>
+          <span>Server cannot be reached</span>
+          <Spinner />
+        </ReachError>
+      ) : (
+        <ReloadIcon
+          isReloadingSchema={props.isReloadingSchema}
+          onReloadSchema={props.onReloadSchema}
+        />
+      )}
+    </UrlBarWrapper>
+    <CopyToClipboard text={props.curl}>
+      <Button>Copy CURL</Button>
+    </CopyToClipboard>
+    {props.sharing && (
+      <Share {...props.sharing}>
+        <Button>Share Playground</Button>
+      </Share>
+    )}
+  </TopBarWrapper>
+)
+
+export default TopBar
 
 const buttonColor = theme('mode', {
   light: p => p.theme.colours.darkBlue10,
