@@ -94,7 +94,7 @@
     "graphcool-tmp-ui": "^0.0.11",
     "graphcool-ui": "^0.0.14",
     "graphql-config": "^1.1.7",
-    "graphql-config-extension-graphcool": "1.0.5",
+    "graphql-config-extension-graphcool": "1.0.6",
     "graphql-config-extension-prisma": "0.0.3",
     "graphql-playground-react": "1.4.2",
     "js-yaml": "^3.10.0",
