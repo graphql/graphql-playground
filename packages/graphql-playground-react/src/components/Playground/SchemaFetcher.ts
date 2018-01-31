@@ -28,10 +28,10 @@ export class SchemaFetcher {
   ): Promise<{ schema: GraphQLSchema; tracingSupported: boolean } | null> {
     const response = await fetch(endpoint, {
       method: 'post',
+      credentials: 'include',
       headers: {
         'Content-Type': 'application/json',
         'X-Apollo-Tracing': '1',
-        credentials: 'include',
         ...headers,
       },
       body: JSON.stringify({ query: introspectionQuery }),
