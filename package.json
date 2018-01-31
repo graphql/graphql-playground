@@ -10,7 +10,7 @@
     "release-react": "bash scripts/release-react.sh"
   },
   "devDependencies": {
-    "@types/node": "9.3.0",
+    "@types/node": "9.4.0",
     "aws-lambda": "0.1.2",
     "express": "4.16.2",
     "hapi": "16.6.2",
