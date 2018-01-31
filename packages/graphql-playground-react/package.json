@@ -42,7 +42,7 @@
     "@types/jest": "22.1.1",
     "@types/koa": "2.0.43",
     "@types/node": "9.4.0",
-    "@types/react": "16.0.34",
+    "@types/react": "16.0.35",
     "@types/react-dom": "16.0.3",
     "autoprefixer": "7.2.5",
     "babel-cli": "6.26.0",
