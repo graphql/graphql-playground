@@ -93,7 +93,7 @@
     "style-loader": "0.19.1",
     "svg-inline-loader": "0.8.0",
     "sw-precache-webpack-plugin": "0.11.4",
-    "ts-loader": "3.2.0",
+    "ts-loader": "3.4.0",
     "tslint": "5.9.1",
     "tslint-graphcool-frontend": "0.0.3",
     "tslint-loader": "3.5.3",
