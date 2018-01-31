@@ -6,6 +6,14 @@ const config = require('./webpack.config')
 const HappyPack = require('happypack')
 const os = require('os')
 const UglifyJSParallelPlugin = require('webpack-uglify-parallel')
+const { renderPlaygroundPage } = require('graphql-playground-html');
+
+const appEntrypoint = 'src/renderer/index.html' 
+
+// Create the playground entry point if it doesn't exist
+if(!fs.existsSync(appEntrypoint)) {
+  fs.writeFileSync(appEntrypoint, renderPlaygroundPage({env: 'react'}));
+}
 
 module.exports = {
   devtool: 'source-map',
@@ -89,7 +97,7 @@ module.exports = {
     }),
     new HtmlWebpackPlugin({
       favicon: 'static/favicon.png',
-      template: 'src/renderer/index.html',
+      template: appEntrypoint,
     }),
     new webpack.optimize.OccurrenceOrderPlugin(),
     /* new UglifyJSParallelPlugin({
