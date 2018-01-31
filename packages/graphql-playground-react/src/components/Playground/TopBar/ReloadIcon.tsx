@@ -88,19 +88,19 @@ const Svg = styled.svg`
   }
 `
 
-const Circle = withProps<Props>()(styled.circle) `
+const Circle = withProps<Props>()(styled.circle)`
   fill: none;
   stroke: ${iconColor};
   stroke-dasharray: 37.68;
   transition: opacity 0.3s ease-in-out;
-  opacity: ${p => p.isReloadingSchema ? 1 : 0};
+  opacity: ${p => (p.isReloadingSchema ? 1 : 0)};
   transform-origin: 9.5px 10px;
   animation: ${refreshFrames} 2s linear infinite;
 `
 
-const Icon = withProps<Props>()(styled.path) `
+const Icon = withProps<Props>()(styled.path)`
   transition: opacity 0.3s ease-in-out;
-  opacity: ${p => p.isReloadingSchema ? 0 : 1};
+  opacity: ${p => (p.isReloadingSchema ? 0 : 1)};
   transform-origin: 9.5px 10px;
   animation: ${reloadAction} 0.5s linear;
 `

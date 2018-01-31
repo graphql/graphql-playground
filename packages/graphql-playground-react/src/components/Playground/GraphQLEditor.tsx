@@ -1,6 +1,6 @@
 import * as React from 'react'
 import * as ReactDOM from 'react-dom'
-import { parse, print, GraphQLSchema } from 'graphql'
+import { parse, print, GraphQLSchema, isNamedType } from 'graphql'
 import * as cn from 'classnames'
 import ExecuteButton from './ExecuteButton'
 import { QueryEditor } from './QueryEditor'
@@ -19,7 +19,7 @@ import Spinner from '../Spinner'
 import Results from './Results'
 import ReponseTracing from './ResponseTracing'
 import withTheme from '../Theme/withTheme'
-import { LocalThemeInterface } from '../Theme/index'
+import { LocalThemeInterface } from '../Theme'
 import GraphDocs from './DocExplorer/GraphDocs'
 import { SchemaFetcher } from './SchemaFetcher'
 import { setStacks } from '../../actions/graphiql-docs'
@@ -105,13 +105,11 @@ export interface State {
   variableEditorHeight: number
   responseTracingOpen: boolean
   responseTracingHeight: number
-  docExploreOpen: boolean
   docExplorerWidth: number
   isWaitingForReponse: boolean
   subscription: any
   variableToType: any
   operations: any[]
-  docExplorerOpen: boolean
   schemaExplorerOpen: boolean
   schemaExplorerWidth: number
   isWaitingForResponse: boolean
@@ -139,7 +137,7 @@ export interface ToolbarButtonProps extends SimpleProps {
 export class GraphQLEditor extends React.PureComponent<
   Props & LocalThemeInterface & ReduxProps,
   State
-  > {
+> {
   static Logo: (props: SimpleProps) => JSX.Element
   static Toolbar: (props: SimpleProps) => JSX.Element
   static Footer: (props: SimpleProps) => JSX.Element
@@ -191,10 +189,10 @@ export class GraphQLEditor extends React.PureComponent<
       props.storage || typeof window !== 'undefined'
         ? window.localStorage
         : {
-          setItem: () => null,
-          removeItem: () => null,
-          getItem: () => null,
-        }
+            setItem: () => null,
+            removeItem: () => null,
+            getItem: () => null,
+          }
 
     // Determine the initial query to display.
     const query =
@@ -218,10 +216,10 @@ export class GraphQLEditor extends React.PureComponent<
       props.operationName !== undefined
         ? props.operationName
         : getSelectedOperationName(
-          null,
-          this.storageGet('operationName'),
-          queryFacts && queryFacts.operations,
-        )
+            null,
+            this.storageGet('operationName'),
+            queryFacts && queryFacts.operations,
+          )
 
     let queryVariablesActive = this.storageGet('queryVariablesActive')
     queryVariablesActive =
@@ -244,7 +242,6 @@ export class GraphQLEditor extends React.PureComponent<
       responseTracingOpen: false,
       responseTracingHeight:
         Number(this.storageGet('responseTracingHeight')) || 300,
-      docExplorerOpen: false,
       docExplorerWidth: Number(this.storageGet('docExplorerWidth')) || 350,
       schemaExplorerOpen: false,
       schemaExplorerWidth:
@@ -274,7 +271,7 @@ export class GraphQLEditor extends React.PureComponent<
 
     // Utility for keeping CodeMirror correctly sized.
     this.codeMirrorSizer = new CodeMirrorSizer()
-      ; (global as any).g = this
+    ;(global as any).g = this
   }
 
   componentWillReceiveProps(nextProps) {
@@ -567,13 +564,13 @@ export class GraphQLEditor extends React.PureComponent<
                     onRunQuery={this.handleEditorRunQuery}
                   />
                 ) : (
-                    <VariableEditor
-                      ref={this.setVariableEditorComponent}
-                      value={this.props.session.headers}
-                      onEdit={this.props.onChangeHeaders}
-                      onRunQuery={this.handleEditorRunQuery}
-                    />
-                  )}
+                  <VariableEditor
+                    ref={this.setVariableEditorComponent}
+                    value={this.props.session.headers}
+                    onEdit={this.props.onChangeHeaders}
+                    onRunQuery={this.handleEditorRunQuery}
+                  />
+                )}
               </div>
               <QueryDragBar ref={this.setQueryResizer} />
             </div>
@@ -626,6 +623,7 @@ export class GraphQLEditor extends React.PureComponent<
           </div>
         </div>
         <GraphDocs
+          ref={this.setDocExplorerRef}
           schema={this.state.schema!}
           sessionId={this.props.session.id}
         />
@@ -670,7 +668,7 @@ export class GraphQLEditor extends React.PureComponent<
       .join(' ')
     return `curl '${
       this.props.session.endpoint
-      }' ${headersString} --data-binary '${data}' --compressed`
+    }' ${headersString} --data-binary '${data}' --compressed`
   }
 
   setQueryVariablesRef = ref => {
@@ -703,6 +701,12 @@ export class GraphQLEditor extends React.PureComponent<
 
   setResultComponent = ref => {
     this.resultComponent = ref
+  }
+
+  setDocExplorerRef = ref => {
+    if (ref) {
+      this.docExplorerComponent = ref.getWrappedInstance()
+    }
   }
 
   handleClickReference = reference => {
@@ -814,9 +818,9 @@ export class GraphQLEditor extends React.PureComponent<
 
     this.props.schemaFetcher
       .fetch(
-      this.props.session.endpoint || this.props.endpoint,
-      this.convertHeaders(this.props.session.headers),
-    )
+        this.props.session.endpoint || this.props.endpoint,
+        this.convertHeaders(this.props.session.headers),
+      )
       .then(result => {
         if (result) {
           const { schema, tracingSupported } = result
@@ -1269,11 +1273,14 @@ export class GraphQLEditor extends React.PureComponent<
       const typeName = event.target.innerHTML
       const schema = this.state.schema
       if (schema) {
-        const type = schema.getType(typeName)
-        if (type) {
-          this.setState({ docExplorerOpen: true } as State, () => {
-            this.docExplorerComponent.showDoc(type)
-          })
+        // TODO: There is no way as of now to retrieve the NAMED_TYPE of a GraphQLList(Type).
+        // We're therefore removing any '[' or '!' characters, to properly find its NAMED_TYPE. (eg. [Type!]! => Type)
+        // This should be removed as soon as there's a safer way to do that.
+        const namedTypeName = typeName.replace(/[\]\[!]/g, '')
+        const type = schema.getType(namedTypeName)
+
+        if (isNamedType(type)) {
+          this.docExplorerComponent.showDocFromType(type)
         }
       }
     }
@@ -1305,11 +1312,11 @@ const DragBar = styled.div`
   cursor: col-resize;
 `
 
-const QueryDragBar = styled(DragBar) `
+const QueryDragBar = styled(DragBar)`
   right: 0px;
 `
 
-const ResultDragBar = styled(DragBar) `
+const ResultDragBar = styled(DragBar)`
   left: 0px;
   z-index: 1;
 `

@@ -45,11 +45,11 @@ export default class TopBar extends React.Component<Props, {}> {
               <Spinner />
             </ReachError>
           ) : (
-              <ReloadIcon
-                isReloadingSchema={this.props.isReloadingSchema}
-                onReloadSchema={this.props.onReloadSchema}
-              />
-            )}
+            <ReloadIcon
+              isReloadingSchema={this.props.isReloadingSchema}
+              onReloadSchema={this.props.onReloadSchema}
+            />
+          )}
         </UrlBarWrapper>
         <CopyToClipboard text={this.props.curl}>
           <Button>Copy CURL</Button>
@@ -193,7 +193,7 @@ const DelayedPulse = styled.div`
   animation: ${bounceAnimation} 2s infinite ease-in-out;
   -webkit-animation: ${bounceAnimation} 2s infinite ease-in-out;
   animation-delay: -1s;
-  -webkit-animation-delay: -1.0s;
+  -webkit-animation-delay: -1s;
 `
 
 const SpinnerWrapper = styled.div`

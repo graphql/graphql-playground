@@ -254,6 +254,16 @@ class GraphDocs extends React.Component<
     )
   }
 
+  public showDocFromType = (type) => {
+    this.props.toggleDocs(this.props.sessionId, true);
+    this.props.addStack(
+      this.props.sessionId,
+      type,
+      0,
+      0
+    )
+  }
+
   private setDocExplorerRef = ref => {
     this.refDocExplorer = ref
   }
@@ -426,4 +436,6 @@ const mapDispatchToProps = dispatch =>
 export default connect<StateFromProps, DispatchFromProps, Props>(
   getSessionDocs,
   mapDispatchToProps,
+  null,
+  { withRef: true }
 )(GraphDocs)

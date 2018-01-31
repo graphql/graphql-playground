@@ -1,6 +1,6 @@
 {
   "name": "graphql-playground-middleware-hapi",
-  "version": "1.4.0",
+  "version": "1.5.0",
   "homepage": "https://github.com/graphcool/graphql-playground/tree/master/packages/graphql-playground-middleware-hapi",
   "description": "GraphQL IDE for better development workflows (GraphQL Subscriptions, interactive docs & collaboration).",
   "contributors": [
@@ -15,7 +15,7 @@
   "files": [
     "dist"
   ],
-  "playgroundVersion": "1.4.0",
+  "playgroundVersion": "1.4.2",
   "scripts": {
     "build": "rimraf dist && tsc",
     "prepare": "npm run build"

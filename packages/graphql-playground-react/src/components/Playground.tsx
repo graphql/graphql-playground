@@ -993,11 +993,8 @@ export class Playground extends React.PureComponent<Props & DocsState, State> {
           const id = cuid()
 
           request.subscribe({
-            next: (err, res) => {
+            next: res => {
               const data: any = { data: res, isSubscription: true }
-              if (err) {
-                data.error = err
-              }
               observer.next(data)
             },
             error: error => {

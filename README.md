@@ -1,7 +1,7 @@
 <p align="center"><img src="https://imgur.com/5fzMbyV.png" width="269"></p>
 
 
-[![npm version](https://badge.fury.io/js/graphql-playground-react.svg)](https://badge.fury.io/js/graphql-playground-react)  [![CircleCI](https://circleci.com/gh/graphcool/graphql-playground.svg?style=shield)](https://circleci.com/gh/graphcool/graphql-playground)
+[![npm version](https://badge.fury.io/js/graphql-playground-react.svg)](https://badge.fury.io/js/graphql-playground-react) [![Build Status](https://travis-ci.org/graphcool/graphql-playground.svg?branch=master)](https://travis-ci.org/graphcool/graphql-playground) [![CircleCI](https://circleci.com/gh/graphcool/graphql-playground.svg?style=shield)](https://circleci.com/gh/graphcool/graphql-playground)
 
 GraphQL IDE for better development workflows (GraphQL Subscriptions, interactive docs & collaboration). <br />
 **You can download the [desktop app](https://github.com/graphcool/graphql-playground/releases) or use the web version at graphqlbin.com: [Demo](https://www.graphqlbin.com/RVIn)**
