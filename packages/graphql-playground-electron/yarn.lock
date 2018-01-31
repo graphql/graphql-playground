@@ -3479,12 +3479,12 @@ graphiql@^0.11.2:
     codemirror-graphql "^0.6.11"
     markdown-it "^8.4.0"
 
-graphql-config-extension-graphcool@1.0.5:
-  version "1.0.5"
-  resolved "https://registry.yarnpkg.com/graphql-config-extension-graphcool/-/graphql-config-extension-graphcool-1.0.5.tgz#34c727c560d4f3d415d9b4d61c6a0d5bb78ca686"
+graphql-config-extension-graphcool@1.0.6:
+  version "1.0.6"
+  resolved "https://registry.yarnpkg.com/graphql-config-extension-graphcool/-/graphql-config-extension-graphcool-1.0.6.tgz#65c1a43d128251b2415c2d02f924158338f05f6a"
   dependencies:
     graphcool-yml "0.4.15"
-    graphql-config "1.1.7"
+    graphql-config "1.2.0"
 
 graphql-config-extension-prisma@0.0.3:
   version "0.0.3"
@@ -3504,9 +3504,9 @@ graphql-config@1.1.4:
     minimatch "^3.0.4"
     rimraf "^2.6.2"
 
-graphql-config@1.1.7, graphql-config@^1.1.7:
-  version "1.1.7"
-  resolved "https://registry.yarnpkg.com/graphql-config/-/graphql-config-1.1.7.tgz#546c443d3ad877ceb8e13f40fbc8937af0d35dbe"
+graphql-config@1.2.0:
+  version "1.2.0"
+  resolved "https://registry.yarnpkg.com/graphql-config/-/graphql-config-1.2.0.tgz#c1396e7705ce82870923134426d1b19b2de6c326"
   dependencies:
     graphql "^0.12.3"
     graphql-import "^0.4.0"
@@ -3524,6 +3524,16 @@ graphql-config@^1.1.4:
     js-yaml "^3.10.0"
     minimatch "^3.0.4"
     rimraf "^2.6.2"
+
+graphql-config@^1.1.7:
+  version "1.1.7"
+  resolved "https://registry.yarnpkg.com/graphql-config/-/graphql-config-1.1.7.tgz#546c443d3ad877ceb8e13f40fbc8937af0d35dbe"
+  dependencies:
+    graphql "^0.12.3"
+    graphql-import "^0.4.0"
+    graphql-request "^1.4.0"
+    js-yaml "^3.10.0"
+    minimatch "^3.0.4"
 
 graphql-import@^0.1.7:
   version "0.1.9"
