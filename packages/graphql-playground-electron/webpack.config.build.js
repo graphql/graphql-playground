@@ -5,14 +5,15 @@ const path = require('path')
 const config = require('./webpack.config')
 const HappyPack = require('happypack')
 const os = require('os')
+const fs = require('fs')
 const UglifyJSParallelPlugin = require('webpack-uglify-parallel')
-const { renderPlaygroundPage } = require('graphql-playground-html');
+const { renderPlaygroundPage } = require('graphql-playground-html')
 
-const appEntrypoint = 'src/renderer/index.html' 
+const appEntrypoint = 'src/renderer/index.html'
 
 // Create the playground entry point if it doesn't exist
-if(!fs.existsSync(appEntrypoint)) {
-  fs.writeFileSync(appEntrypoint, renderPlaygroundPage({env: 'react'}));
+if (!fs.existsSync(appEntrypoint)) {
+  fs.writeFileSync(appEntrypoint, renderPlaygroundPage({ env: 'react' }))
 }
 
 module.exports = {
@@ -27,7 +28,7 @@ module.exports = {
     sourceMapFilename: '[file].map',
     publicPath: './',
   },
-   node: {
+  node: {
     __dirname: false,
     __filename: false,
   },
@@ -91,7 +92,7 @@ module.exports = {
   plugins: [
     new webpack.DefinePlugin({
       'process.env': {
-        NODE_ENV: JSON.stringify('production')
+        NODE_ENV: JSON.stringify('production'),
       },
       __EXAMPLE_ADDR__: '"https://dynamic-resources.graph.cool"',
     }),
@@ -111,7 +112,10 @@ module.exports = {
       mangle: false,
     }), */
     // https://github.com/graphql/graphql-language-service/issues/111
-    new webpack.ContextReplacementPlugin(/graphql-language-service-interface[\/\\]dist/, /\.js$/),
+    new webpack.ContextReplacementPlugin(
+      /graphql-language-service-interface[\/\\]dist/,
+      /\.js$/,
+    ),
     new webpack.NormalModuleReplacementPlugin(/\/iconv-loader$/, 'node-noop'),
     new webpack.optimize.CommonsChunkPlugin('vendor'),
     new webpack.optimize.ModuleConcatenationPlugin(),

@@ -54,10 +54,10 @@ export default class App extends React.Component<Props, State> {
 
       // DOM side-effect:
       // #loading-wrapper is a hardcoded DOM element in the HTML entrypoint
-      const loadingWrapper = document.getElementById('loading-wrapper');
+      const loadingWrapper = document.getElementById('loading-wrapper')
 
       if (loadingWrapper) {
-        loadingWrapper.classList.remove('fadeOut');
+        loadingWrapper.classList.remove('fadeOut')
       }
 
       fetch('https://api.graph.cool/simple/v1/cj81hi46q03c30196uxaswrz2', {
@@ -80,7 +80,7 @@ export default class App extends React.Component<Props, State> {
         .then(res => res.json())
         .then(res => {
           if (loadingWrapper) {
-            loadingWrapper.classList.add('fadeOut');
+            loadingWrapper.classList.add('fadeOut')
           }
 
           if (!res.data || res.data.session === null) {
@@ -118,9 +118,8 @@ export default class App extends React.Component<Props, State> {
             }
           `}</style>
 
-          {this.state.loading ? (
-            null
-          ) : !this.state.endpoint || this.state.endpoint.length === 0 ? (
+          {this.state.loading ? null : !this.state.endpoint ||
+          this.state.endpoint.length === 0 ? (
             <ThemeProvider theme={styledTheme}>
               <EndpointPopup
                 onRequestClose={this.handleChangeEndpoint}
@@ -132,12 +131,12 @@ export default class App extends React.Component<Props, State> {
               />
             </ThemeProvider>
           ) : (
-                <MiddlewareApp
-                  endpoint={endpoint}
-                  subscriptionEndpoint={subscriptionEndpoint}
-                  session={this.state.session}
-                />
-              )}
+            <MiddlewareApp
+              endpoint={endpoint}
+              subscriptionEndpoint={subscriptionEndpoint}
+              session={this.state.session}
+            />
+          )}
         </div>
       </Provider>
     )

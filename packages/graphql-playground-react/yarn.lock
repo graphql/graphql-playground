@@ -3361,12 +3361,29 @@ graphql-config@1.1.4:
     minimatch "^3.0.4"
     rimraf "^2.6.2"
 
+graphql-config@1.1.7:
+  version "1.1.7"
+  resolved "https://registry.yarnpkg.com/graphql-config/-/graphql-config-1.1.7.tgz#546c443d3ad877ceb8e13f40fbc8937af0d35dbe"
+  dependencies:
+    graphql "^0.12.3"
+    graphql-import "^0.4.0"
+    graphql-request "^1.4.0"
+    js-yaml "^3.10.0"
+    minimatch "^3.0.4"
+
 graphql-import@^0.1.7:
   version "0.1.9"
   resolved "https://registry.yarnpkg.com/graphql-import/-/graphql-import-0.1.9.tgz#9161f4f7ea92337b60fd40e22e64d3a68c212729"
   dependencies:
     "@types/graphql" "0.11.7"
     "@types/lodash" "^4.14.85"
+    graphql "^0.12.3"
+    lodash "^4.17.4"
+
+graphql-import@^0.4.0:
+  version "0.4.2"
+  resolved "https://registry.yarnpkg.com/graphql-import/-/graphql-import-0.4.2.tgz#e4925e838cf41d69d81d3879788ef8ee77532977"
+  dependencies:
     graphql "^0.12.3"
     lodash "^4.17.4"
 
@@ -3408,6 +3425,12 @@ graphql-language-service-utils@^1.0.18:
   dependencies:
     graphql-config "1.1.4"
     graphql-language-service-types "^1.0.18"
+
+graphql-playground-html@^1.5.2:
+  version "1.5.2"
+  resolved "https://registry.yarnpkg.com/graphql-playground-html/-/graphql-playground-html-1.5.2.tgz#ccd97ac1960cfb1872b314bafb1957e7a6df7984"
+  dependencies:
+    graphql-config "1.1.7"
 
 graphql-request@^1.4.0:
   version "1.4.1"

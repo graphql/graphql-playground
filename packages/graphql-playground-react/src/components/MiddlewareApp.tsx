@@ -7,7 +7,12 @@ import * as fetch from 'isomorphic-fetch'
 import { GraphQLConfig } from '../graphqlConfig'
 import * as yaml from 'js-yaml'
 import ProjectsSideNav from './ProjectsSideNav'
-import { styled, ThemeProvider, theme as styledTheme, keyframes } from '../styled'
+import {
+  styled,
+  ThemeProvider,
+  theme as styledTheme,
+  keyframes,
+} from '../styled'
 import OldThemeProvider from './Theme/ThemeProvider'
 import { getActiveEndpoints } from './util'
 import { ISettings } from '../types'
@@ -75,7 +80,7 @@ export default class MiddlewareApp extends React.Component<Props, State> {
   playground: IPlayground
   constructor(props: Props) {
     super(props)
-      ; (global as any).m = this
+    ;(global as any).m = this
 
     let settingsString = localStorage.getItem('settings') || defaultSettings
     settingsString = this.migrateSettingsString(settingsString)
@@ -116,7 +121,7 @@ export default class MiddlewareApp extends React.Component<Props, State> {
         undefined,
       subscriptionEndpoint,
       settingsString,
-      settings: this.getSettings(settingsString),
+      settings: this.props.settings || this.getSettings(settingsString),
       configIsYaml,
       configString: props.configString,
       activeEnv,
@@ -129,7 +134,7 @@ export default class MiddlewareApp extends React.Component<Props, State> {
     if (endpoint.includes('api.graph.cool')) {
       return `wss://subscriptions.graph.cool/v1/${
         endpoint.split('/').slice(-1)[0]
-        }`
+      }`
     }
 
     return endpoint
@@ -530,7 +535,7 @@ const appearIn = keyframes`
     opacity: 1;
     transform: translateY(0);
   }
-`;
+`
 
 const App = styled.div`
   display: flex;
