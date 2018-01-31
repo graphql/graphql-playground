@@ -8,6 +8,15 @@ export interface MiddlewareOptions {
   workspaceName?: string
   env?: any
   config?: GraphQLConfigData
+  settings?: ISettings
+}
+
+export type Theme = 'dark' | 'light'
+export interface ISettings {
+  ['general.betaUpdates']: boolean
+  ['editor.theme']: Theme
+  ['editor.reuseHeaders']: boolean
+  ['tracing.hideTracingResponse']: boolean
 }
 
 export interface RenderPageOptions extends MiddlewareOptions {
@@ -19,14 +28,14 @@ const loading = getLoadingMarkup()
 
 const getCdnMarkup = options => `
     <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/graphql-playground-react@${
-  options.version
-  }/build/static/css/index.css" />
+      options.version
+    }/build/static/css/index.css" />
     <link rel="shortcut icon" href="//cdn.jsdelivr.net/npm/graphql-playground-react@${
-  options.version
-  }/build/favicon.png" />
+      options.version
+    }/build/favicon.png" />
     <script src="//cdn.jsdelivr.net/npm/graphql-playground-react@${
-  options.version
-  }/build/static/js/middleware.js"></script>
+      options.version
+    }/build/static/js/middleware.js"></script>
 `
 
 export function renderPlaygroundPage(options: RenderPageOptions) {
@@ -58,7 +67,11 @@ export function renderPlaygroundPage(options: RenderPageOptions) {
     <meta name="viewport" content="user-scalable=no, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, minimal-ui">
     <link rel="shortcut icon" href="https://graphcool-playground.netlify.com/favicon.png">
     <title>${extendedOptions.title}</title>
-    ${extendedOptions.env === 'react' || extendedOptions.env === 'electron' ? '' : getCdnMarkup(extendedOptions)}
+    ${
+      extendedOptions.env === 'react' || extendedOptions.env === 'electron'
+        ? ''
+        : getCdnMarkup(extendedOptions)
+    }
   </head>
   <body>
     <style type="text/css">
@@ -117,10 +130,10 @@ export function renderPlaygroundPage(options: RenderPageOptions) {
         root.classList.add('playgroundIn');
   
         GraphQLPlayground.init(root, ${JSON.stringify(
-      extendedOptions,
-      null,
-      2,
-    )})
+          extendedOptions,
+          null,
+          2,
+        )})
       })
     </script>
   </body>
