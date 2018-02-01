@@ -8,31 +8,24 @@ export interface Props {
   highlight: any
 }
 
-export default class ExecuteButtonOperation extends React.Component<Props, {}> {
-  render() {
-    const { operation, highlight } = this.props
-    return (
-      <li
-        key={operation.name ? operation.name.value : '*'}
-        className={operation === highlight ? 'selected' : ''}
-        onMouseOver={this.handleMouseOver}
-        onMouseOut={this.handleMouseOut}
-        onMouseUp={this.handleMouseUp}
-      >
-        {operation.name ? operation.name.value : '<Unnamed>'}
-      </li>
-    )
-  }
+const ExecuteButtonOperation: React.SFC<Props> = ({
+  highlight,
+  onMouseOver,
+  onMouseOut,
+  onMouseUp,
+  operation,
+}) => (
+  <li
+    key={operation.name ? operation.name.value : '*'}
+    className={operation === highlight ? 'selected' : ''}
+    // tslint:disable-next-line
+    onMouseOver={() => onMouseOver(operation)}
+    onMouseOut={onMouseOut}
+    // tslint:disable-next-line
+    onMouseUp={() => onMouseUp(operation)}
+  >
+    {operation.name ? operation.name.value : '<Unnamed>'}
+  </li>
+)
 
-  private handleMouseOver = () => {
-    this.props.onMouseOver(this.props.operation)
-  }
-
-  private handleMouseOut = () => {
-    this.props.onMouseOut()
-  }
-
-  private handleMouseUp = () => {
-    this.props.onMouseUp(this.props.operation)
-  }
-}
+export default ExecuteButtonOperation
