@@ -66,14 +66,14 @@ All interfaces, the React component `<Playground />` and all middlewares expose 
 
 #### Install
 ```sh
-yarn add graphql-playground
+yarn add graphql-playground-react
 ```
 
 #### Use
 GraphQL Playground provides a React component responsible for rendering the UI and Session management.
-There are **3 dependencies** needed in order to run the `graphql-playground` React component.
+There are **3 dependencies** needed in order to run the `graphql-playground-react` React component.
 1. _Open Sans_ and _Source Code Pro_ fonts
-2. Including `graphql-playground/playground.css`
+2. Including `graphql-playground-react/playground.css`
 3. Rendering the `<Playground />` component
 
 The GraphQL Playground requires **React 16**.
@@ -87,8 +87,8 @@ Including stylesheet and the component (`2., 3.`)
 ```js
 import React from 'react'
 import ReactDOM from 'react-dom'
-import Playground from 'graphql-playground'
-import 'graphql-playground/playground.css'
+import Playground from 'graphql-playground-react'
+import 'graphql-playground-react/playground.css'
 
 ReactDOM.render(<Playground endpoint="https://api.graph.cool/simple/v1/swapi" />, document.body)
 ```
