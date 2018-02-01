@@ -7,26 +7,24 @@ export interface ToggleProps {
   activeChoice: string
 }
 
-export default function Toggle({
+const Toggle: React.SFC<ToggleProps> = ({
   choices,
   onChange,
   activeChoice,
-}: ToggleProps) {
-  return (
-    <Wrapper>
-      {choices.map((choice, i) => (
-        <Choice
-          active={choice === activeChoice}
-          key={choice}
-          // tslint:disable-next-line
-          onClick={() => onChange(choice, i)}
-        >
-          {choice}
-        </Choice>
-      ))}
-    </Wrapper>
-  )
-}
+}) => (
+  <Wrapper>
+    {choices.map((choice, i) => (
+      <Choice
+        active={choice === activeChoice}
+        key={choice}
+        // tslint:disable-next-line
+        onClick={() => onChange(choice, i)}
+      >
+        {choice}
+      </Choice>
+    ))}
+  </Wrapper>
+)
 
 const Wrapper = styled.div`
   display: flex;
@@ -59,3 +57,5 @@ const Choice = styled.div`
     }
   `}
 `
+
+export default Toggle
