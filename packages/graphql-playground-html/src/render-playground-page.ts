@@ -66,7 +66,7 @@ export function renderPlaygroundPage(options: RenderPageOptions) {
     <meta charset=utf-8 />
     <meta name="viewport" content="user-scalable=no, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, minimal-ui">
     <link rel="shortcut icon" href="https://graphcool-playground.netlify.com/favicon.png">
-    <title>${extendedOptions.title}</title>
+    <title>${extendedOptions.title || 'GraphQL Playground'}</title>
     ${
       extendedOptions.env === 'react' || extendedOptions.env === 'electron'
         ? ''
