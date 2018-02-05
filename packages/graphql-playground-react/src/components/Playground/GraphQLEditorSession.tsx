@@ -25,6 +25,7 @@ export interface Props {
   onClickHistory: () => void
   onChangeEndpoint: (sessionId: string, value: string) => void
   onClickShare: (sessionId: string) => void
+  onStopQuery: (sessionId: string) => void
   headers?: any[]
   disableQueryHeader?: boolean
   disableResize?: boolean
@@ -92,6 +93,7 @@ export default class GraphQLEditorSession extends React.PureComponent<
         onClickHistory={this.handleClickHistory}
         onChangeEndpoint={this.handleChangeEndpoint}
         onClickShare={this.handleClickShare}
+        onStopQuery={this.handleStopQuery}
         sharing={sharing}
         fixedEndpoint={fixedEndpoint}
         shouldHideTracingResponse={this.shouldHideTracingResponse()}
@@ -129,6 +131,10 @@ export default class GraphQLEditorSession extends React.PureComponent<
 
   private handleClickShare = () => {
     this.props.onClickShare(this.props.session.id)
+  }
+
+  private handleStopQuery = () => {
+    this.props.onStopQuery(this.props.session.id)
   }
 
   private shouldHideTracingResponse = (): boolean => {

@@ -10,7 +10,7 @@ import PlaygroundStorage from './PlaygroundStorage'
 import { getQueryTypes } from './Playground/util/getQueryTypes'
 import debounce from 'graphiql/dist/utility/debounce'
 import { SubscriptionClient } from 'subscriptions-transport-ws'
-import hasSubscription from './Playground/util/hasSubscription'
+import { isSubscription } from './Playground/util/hasSubscription'
 import HistoryPopup from './HistoryPopup'
 import * as cx from 'classnames'
 import CodeGenerationPopup from './CodeGenerationPopup/CodeGenerationPopup'
@@ -26,11 +26,12 @@ import Settings from './Settings'
 import SettingsEditor from './SettingsEditor'
 import { GraphQLConfig } from '../graphqlConfig'
 import FileEditor from './FileEditor'
-import { ApolloLink, execute, GraphQLRequest } from 'apollo-link'
+import { ApolloLink, execute } from 'apollo-link'
 import { WebSocketLink } from 'apollo-link-ws'
 import { HttpLink } from 'apollo-link-http'
 
 import * as app from '../../package.json'
+import { parse } from 'graphql'
 
 export interface Response {
   resultID: string
@@ -174,7 +175,6 @@ export class Playground extends React.PureComponent<Props & DocsState, State> {
       })
     }
     ;(global as any).p = this
-    this.fetcher = this.fetcher.bind(this)
 
     if (typeof this.props.getRef === 'function') {
       this.props.getRef(this)
@@ -373,6 +373,7 @@ export class Playground extends React.PureComponent<Props & DocsState, State> {
                     isSharingAuthorization: this.isSharingAuthorization(),
                   }}
                   settings={this.props.settings}
+                  onStopQuery={this.handleStopQuery}
                 />
               )}
             </GraphiqlWrapper>
@@ -422,6 +423,17 @@ export class Playground extends React.PureComponent<Props & DocsState, State> {
 
   setRef = (index: number, ref: any) => {
     this.graphiqlComponents[index] = ref ? ref.getWrappedInstance() : ref
+  }
+
+  getSession = (sessionId: string) => {
+    return this.state.sessions.find(session => session.id === sessionId)
+  }
+
+  handleStopQuery = (sessionId: string) => {
+    const session = this.getSession(sessionId)
+    if (session && session.subscriptionActive) {
+      this.setValueInSession(sessionId, 'subscriptionActive', false)
+    }
   }
 
   handleChangeSettings = (settings: string) => {
@@ -656,21 +668,7 @@ export class Playground extends React.PureComponent<Props & DocsState, State> {
         changed: true,
       }
     })
-    // hack to support older react versions
-    setTimeout(() => {
-      if (typeof cb === 'function') {
-        cb()
-      }
-    }, 100)
   }
-
-  // private toggleTheme = () => {
-  //   this.setState(state => {
-  //     const theme = state.theme === 'dark' ? 'light' : 'dark'
-  //     localStorage.setItem('theme', theme)
-  //     return { ...state, theme }
-  //   })
-  // }
 
   private handleClickCodeGeneration = () => {
     this.setState({
@@ -917,30 +915,30 @@ export class Playground extends React.PureComponent<Props & DocsState, State> {
     return null
   }
 
-  private addToHistory(session: Session) {
-    const id = cuid()
-    const historySession = Immutable.merge(session, {
-      id,
-      date: new Date(),
-    })
-    this.setState(state => {
-      return {
-        ...state,
-        history: [historySession].concat(state.history),
-      }
-    })
-    this.storage.addToHistory(historySession)
-  }
+  // private addToHistory(session: Session) {
+  //   const id = cuid()
+  //   const historySession = Immutable.merge(session, {
+  //     id,
+  //     date: new Date(),
+  //   })
+  //   this.setState(state => {
+  //     return {
+  //       ...state,
+  //       history: [historySession].concat(state.history),
+  //     }
+  //   })
+  //   this.storage.addToHistory(historySession)
+  // }
 
-  private historyIncludes(session: Session) {
-    const duplicate = this.state.history.find(
-      item =>
-        session.query === item.query &&
-        session.variables === item.variables &&
-        session.operationName === item.operationName,
-    )
-    return Boolean(duplicate)
-  }
+  // private historyIncludes(session: Session) {
+  //   const duplicate = this.state.history.find(
+  //     item =>
+  //       session.query === item.query &&
+  //       session.variables === item.variables &&
+  //       session.operationName === item.operationName,
+  //   )
+  //   return Boolean(duplicate)
+  // }
 
   private cancelSubscription = (session: Session) => {
     this.setValueInSession(session.id, 'subscriptionActive', false)
@@ -958,24 +956,24 @@ export class Playground extends React.PureComponent<Props & DocsState, State> {
       connectionParams = { ...this.parseHeaders(session.headers) }
     }
 
-    let endpoint = this.getWSEndpoint()
-    if (endpoint === null) {
-      endpoint = this.getEndpoint()
+    let wsEndpoint = this.getWSEndpoint()
+    if (wsEndpoint === null) {
+      wsEndpoint = this.getEndpoint()
     }
-    const subscriptionClient = new SubscriptionClient(endpoint, {
+    const subscriptionClient = new SubscriptionClient(wsEndpoint, {
       timeout: 20000,
       connectionParams,
     })
 
     const httpLink = new HttpLink({
-      uri: () => this.getEndpoint(),
+      uri: this.getEndpoint(),
       fetch,
       headers: session.headers,
     })
 
     const webSocketLink = new WebSocketLink(subscriptionClient)
     return ApolloLink.split(
-      operation => hasSubscription(operation.query),
+      operation => isSubscription(operation),
       webSocketLink,
       httpLink,
     )
@@ -983,9 +981,19 @@ export class Playground extends React.PureComponent<Props & DocsState, State> {
 
   private fetcher = (
     session: Session,
-    graphqQLRequest: GraphQLRequest,
+    graphqQLRequest,
   ): ApolloLinkExecuteResponse => {
-    return execute(this.apolloLinks[session.id], graphqQLRequest)
+    const { query, ...rest } = graphqQLRequest
+    const operation = {
+      ...rest,
+      query: parse(query),
+    }
+    this.setValueInSession(
+      session.id,
+      'subscriptionActive',
+      isSubscription(operation),
+    )
+    return execute(this.apolloLinks[session.id], operation)
   }
 
   private parseHeaders(headers: string) {

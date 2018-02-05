@@ -1,10 +1,25 @@
-import { DocumentNode } from 'graphql'
+import { Operation } from 'apollo-link'
+import { OperationDefinitionNode } from 'graphql'
 
-const isSubscription = definition =>
-  definition.kind === 'OperationDefinition' &&
-  definition.operation === 'subscription'
+export function isSubscription(operation: Operation): boolean {
+  const selectedOperation = getSelectedOperation(operation)
+  if (selectedOperation) {
+    return selectedOperation.operation === 'subscription'
+  }
+  return false
+}
 
-const hasSubscription = (query: DocumentNode): boolean =>
-  query.definitions.some(isSubscription)
+function getSelectedOperation(
+  operation: Operation,
+): OperationDefinitionNode | undefined {
+  if (operation.query.definitions.length === 1) {
+    return operation.query.definitions[0] as OperationDefinitionNode
+  }
 
-export default hasSubscription
+  return operation.query.definitions.find(
+    d =>
+      d.kind === 'OperationDefinition' &&
+      !!d.name &&
+      d.name.value === operation.operationName,
+  ) as OperationDefinitionNode
+}

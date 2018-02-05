@@ -63,6 +63,7 @@ export interface Props {
   onClickHistory?: () => void
   onChangeEndpoint?: (value: string) => void
   onClickShare?: () => void
+  onStopQuery: () => void
   onRef: any
   showCodeGeneration?: boolean
   showEndpoints?: boolean
@@ -110,7 +111,6 @@ export interface State {
   responseTracingOpen: boolean
   responseTracingHeight: number
   docExplorerWidth: number
-  isWaitingForReponse: boolean
   subscription: any
   variableToType: any
   operations: any[]
@@ -435,18 +435,6 @@ export class GraphQLEditor extends React.PureComponent<
             right: 38px;
             z-index: 2;
           }
-          .download-button {
-            @p: .white50, .bgDarkBlue, .ttu, .f14, .fw6, .br2, .pointer,
-              .absolute;
-            right: 25px;
-            padding: 5px 9px 6px 9px;
-            letter-spacing: 0.53px;
-            z-index: 2;
-            background-color: $darkerBlue !important;
-            top: initial !important;
-            bottom: 21px !important;
-          }
-
           .intro {
             @p: .absolute, .tlCenter, .top50, .left50, .white20, .f16, .tc;
             font-family: 'Source Code Pro', 'Consolas', 'Inconsolata',
@@ -456,12 +444,12 @@ export class GraphQLEditor extends React.PureComponent<
           }
 
           .listening {
-            @p: .f16, .white40, .absolute, .bottom0;
+            @p: .f16, .white40, .absolute, .bottom0, .bgDarkBlue;
             font-family: 'Source Code Pro', 'Consolas', 'Inconsolata',
               'Droid Sans Mono', 'Monaco', monospace;
             letter-spacing: 0.6px;
             padding-left: 24px;
-            padding-bottom: 30px;
+            padding-bottom: 60px;
           }
 
           .onboarding-hint {
@@ -601,7 +589,7 @@ export class GraphQLEditor extends React.PureComponent<
                       Hit the Play Button to get a response here
                     </div>
                   ))}
-                {Boolean(this.state.subscription) && (
+                {this.props.session.subscriptionActive && (
                   <div className="listening">Listening &hellip;</div>
                 )}
                 <div className="response-tracing" style={tracingStyle}>
@@ -727,7 +715,10 @@ export class GraphQLEditor extends React.PureComponent<
     const { insertions, result } = fillLeafs(
       this.state.schema,
       this.state.query,
-    ) as { insertions: { index: number; string: string }[]; result: string }
+    ) as {
+      insertions: Array<{ index: number; string: string }>
+      result: string
+    }
     if (insertions && insertions.length > 0) {
       const editor = this.queryEditorComponent.getCodeMirror()
       editor.operation(() => {
@@ -736,6 +727,7 @@ export class GraphQLEditor extends React.PureComponent<
         editor.setValue(result)
         let added = 0
         try {
+          /* tslint:disable-next-line */
           const markers = insertions.map(({ index, string }) =>
             editor.markText(
               editor.posFromIndex(index + added),
@@ -752,6 +744,7 @@ export class GraphQLEditor extends React.PureComponent<
           //
         }
         let newCursorIndex = cursorIndex
+        /* tslint:disable-next-line */
         insertions.forEach(({ index, string }) => {
           if (index < cursorIndex && string) {
             newCursorIndex += string.length
@@ -844,6 +837,8 @@ export class GraphQLEditor extends React.PureComponent<
             this.ensureOfSchema()
           }, 1000)
         } else {
+          /* tslint:disable-next-line */
+          console.error(error)
           this.setState({
             schema: null,
             responses: [{ date: error.message, time: new Date() }],
@@ -876,22 +871,10 @@ export class GraphQLEditor extends React.PureComponent<
 
   private fetchQuery(
     query,
-    variables: string,
+    variables: any,
     operationName: string | undefined,
     cb: (value: FetchResult) => void,
   ) {
-    let jsonVariables = {}
-
-    try {
-      jsonVariables = JSON.parse(variables)
-    } catch (error) {
-      throw new Error(`Variables are invalid JSON: ${error.message}.`)
-    }
-
-    if (typeof jsonVariables !== 'object') {
-      throw new Error('Variables are not a JSON object.')
-    }
-
     const headers = {}
     if (this.state.responseTracingOpen) {
       headers['X-Apollo-Tracing'] = '1'
@@ -899,10 +882,10 @@ export class GraphQLEditor extends React.PureComponent<
 
     const fetch = this.props.fetcher({
       query,
-      variables: jsonVariables,
+      variables,
       operationName,
       context: {
-        headers: headers,
+        headers,
       },
     })
 
@@ -919,16 +902,27 @@ export class GraphQLEditor extends React.PureComponent<
           ],
           subscription: null,
         } as State)
+        this.props.onStopQuery()
       },
       complete: () => {
         this.setState({
           isWaitingForResponse: false,
           subscription: null,
         } as State)
+        this.props.onStopQuery()
       },
     })
 
     return subscription
+  }
+
+  private getVariables() {
+    try {
+      return JSON.parse(this.props.session.variables)
+    } catch (e) {
+      //
+    }
+    return {}
   }
 
   private handleRunQuery = selectedOperationName => {
@@ -939,8 +933,8 @@ export class GraphQLEditor extends React.PureComponent<
     // in case autoCompletion fails (the function returns undefined),
     // the current query from the editor.
     const editedQuery = this.autoCompleteLeafs() || this.state.query
-    const variables = this.state.variables
-    let operationName = this.state.operationName
+    const variables = this.getVariables()
+    let operationName = this.props.session.operationName
 
     // If an operation was explicitly provided, different from the current
     // operation name, then report that it changed.
@@ -965,7 +959,7 @@ export class GraphQLEditor extends React.PureComponent<
         editedQuery,
         variables,
         operationName,
-        result => {
+        (result: any) => {
           if (queryID === this.editorQueryID) {
             let extensions
             if (result.extensions) {
@@ -974,15 +968,10 @@ export class GraphQLEditor extends React.PureComponent<
                 delete result.extensions
               }
             }
-            let isSubscription = false
-            if (result.isSubscription) {
-              isSubscription = true
-              delete result.isSubscription
-            }
             let responses
             const response = JSON.stringify(result, null, 2)
 
-            if (isSubscription) {
+            if (this.props.session.subscriptionActive) {
               responses = this.state.responses
                 .filter(res => res && res.date)
                 .slice(0, 100)
@@ -1012,6 +1001,8 @@ export class GraphQLEditor extends React.PureComponent<
 
       this.setState({ subscription } as State)
     } catch (error) {
+      /* tslint:disable-next-line */
+      console.error(error)
       this.setState({
         isWaitingForResponse: false,
         responses: [{ date: error.message, time: new Date() }],
@@ -1020,17 +1011,18 @@ export class GraphQLEditor extends React.PureComponent<
   }
 
   private handleStopQuery = () => {
-    const subscription = this.state.subscription
+    const { subscription } = this.state
     this.setState({
       isWaitingForResponse: false,
       subscription: null,
     } as State)
     if (subscription) {
+      this.props.onStopQuery()
       subscription.unsubscribe()
     }
   }
 
-  private runQueryAtCursor() {
+  private runQueryAtCursor = () => {
     if (this.state.subscription) {
       this.handleStopQuery()
       return
