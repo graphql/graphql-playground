@@ -1,7 +1,12 @@
-export function whatChanged(oldProps, newProps, oldState, newState) {
+export function whatChanged(
+  oldProps,
+  newProps,
+  oldState?: any,
+  newState?: any,
+) {
   return {
     props: getUnequalProps(oldProps, newProps),
-    state: getUnequalProps(oldState, newState),
+    state: oldState && newState ? getUnequalProps(oldState, newState) : null,
   }
 }
 

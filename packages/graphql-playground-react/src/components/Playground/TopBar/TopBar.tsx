@@ -7,6 +7,7 @@ import Share, { SharingProps } from '../../Share'
 import ReloadIcon from './ReloadIcon'
 import { keyframes, StyledComponentClass } from 'styled-components'
 import * as cx from 'classnames'
+import shallowEqual from '../util/shallowEqual'
 
 export interface Props {
   endpoint: string
@@ -24,6 +25,24 @@ export interface Props {
 }
 
 export default class TopBar extends React.Component<Props, {}> {
+  shouldComponentUpdate(nextProps: Props) {
+    const deconstruct = ({ sharing, ...restProps }: Props) => ({
+      sharing,
+      restProps,
+    })
+    const deconstructedProps = deconstruct(this.props)
+    const deconstructedNextProps = deconstruct(nextProps)
+    const shouldUpdate =
+      !shallowEqual(
+        deconstructedProps.sharing,
+        deconstructedNextProps.sharing,
+      ) ||
+      !shallowEqual(
+        deconstructedProps.restProps,
+        deconstructedNextProps.restProps,
+      )
+    return shouldUpdate
+  }
   render() {
     const { endpointUnreachable } = this.props
     return (

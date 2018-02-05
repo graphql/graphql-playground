@@ -485,10 +485,7 @@ export default class MiddlewareApp extends React.Component<Props, State> {
 
   private wsEndpointValid(url): Promise<boolean> {
     return new Promise(resolve => {
-      const socket = new WebSocket(
-        'wss://subscriptions.graph.cool/v1/cirs1ufsg02b101619ru0bx5r',
-        'graphql-ws',
-      )
+      const socket = new WebSocket(url, 'graphql-ws')
       socket.addEventListener('open', event => {
         socket.send(JSON.stringify({ type: 'connection_init' }))
       })

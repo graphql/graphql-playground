@@ -32,16 +32,16 @@ module.exports = {
   // This means they will be the "root" imports that are included in JS bundle.
   // The first two entry points enable "hot" CSS and auto-refreshes for JS.
   entry: {
-    index: [
-      require.resolve('./polyfills'),
-      require.resolve('react-dev-utils/webpackHotDevClient'),
-      paths.appIndexJs,
-    ],
-    middleware: [
-      require.resolve('./polyfills'),
-      require.resolve('react-dev-utils/webpackHotDevClient'),
-      paths.middlewareIndexJs,
-    ],
+    // index: [
+    //   require.resolve('./polyfills'),
+    //   require.resolve('react-dev-utils/webpackHotDevClient'),
+    //   paths.appIndexJs,
+    // ],
+    // middleware: [
+    //   require.resolve('./polyfills'),
+    //   require.resolve('react-dev-utils/webpackHotDevClient'),
+    //   paths.middlewareIndexJs,
+    // ],
     localDev: [
       require.resolve('./polyfills'),
       require.resolve('react-dev-utils/webpackHotDevClient'),
@@ -221,17 +221,17 @@ module.exports = {
     // In development, this will be an empty string.
     new InterpolateHtmlPlugin(env.raw),
     // Generates an `index.html` file with the <script> injected.
-    new HtmlWebpackPlugin({
-      inject: true,
-      chunks: ['index'],
-      template: paths.appHtml,
-    }),
-    new HtmlWebpackPlugin({
-      inject: true,
-      chunks: ['middleware'],
-      template: paths.appHtml,
-      filename: 'middleware.html',
-    }),
+    // new HtmlWebpackPlugin({
+    //   inject: true,
+    //   chunks: ['index'],
+    //   template: paths.appHtml,
+    // }),
+    // new HtmlWebpackPlugin({
+    //   inject: true,
+    //   chunks: ['middleware'],
+    //   template: paths.appHtml,
+    //   filename: 'middleware.html',
+    // }),
     new HtmlWebpackPlugin({
       inject: true,
       chunks: ['localDev'],
