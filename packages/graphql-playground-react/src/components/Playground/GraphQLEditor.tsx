@@ -7,7 +7,6 @@ import { QueryEditor } from './QueryEditor'
 import CodeMirrorSizer from 'graphiql/dist/utility/CodeMirrorSizer'
 import getSelectedOperationName from 'graphiql/dist/utility/getSelectedOperationName'
 import debounce from 'graphiql/dist/utility/debounce'
-import find from 'graphiql/dist/utility/find'
 import { fillLeafs } from 'graphiql/dist/utility/fillLeafs'
 import { getLeft, getTop } from 'graphiql/dist/utility/elementPosition'
 import {
@@ -100,11 +99,6 @@ export interface ReduxProps {
 }
 
 export interface State {
-  schema?: GraphQLSchema | null
-  query: string
-  variables: string
-  operationName?: string
-  responses: any[]
   editorFlex: number
   variableEditorOpen: boolean
   variableEditorHeight: number
@@ -119,13 +113,18 @@ export interface State {
   isWaitingForResponse: boolean
   selectedVariableNames: string[]
   responseExtensions: any
-  currentQueryStartTime?: Date
-  currentQueryEndTime?: Date
   nextQueryStartTime?: Date
   tracingSupported?: boolean
   queryVariablesActive: boolean
   endpointUnreachable: boolean
   isReloadingSchema: boolean
+  schema?: GraphQLSchema | null
+  query: string
+  variables: string
+  operationName?: string
+  responses: any[]
+  currentQueryStartTime?: Date
+  currentQueryEndTime?: Date
 }
 
 export interface SimpleProps {
@@ -142,11 +141,6 @@ export class GraphQLEditor extends React.PureComponent<
   Props & LocalThemeInterface & ReduxProps,
   State
 > {
-  static Logo: (props: SimpleProps) => JSX.Element
-  static Toolbar: (props: SimpleProps) => JSX.Element
-  static Footer: (props: SimpleProps) => JSX.Element
-  static ToolbarButton: (props: ToolbarButtonProps) => JSX.Element
-
   public codeMirrorSizer
   public queryEditorComponent
   public variableEditorComponent
@@ -373,9 +367,6 @@ export class GraphQLEditor extends React.PureComponent<
   }
 
   render() {
-    const children = React.Children.toArray(this.props.children)
-    const footer = find(children, child => child.type === GraphQLEditor.Footer)
-
     const queryWrapStyle = {
       WebkitFlex: this.state.editorFlex,
       flex: this.state.editorFlex,
@@ -582,7 +573,6 @@ export class GraphQLEditor extends React.PureComponent<
                   responses={this.state.responses}
                   hideGutters={this.props.hideGutters}
                 />
-                {footer}
                 {!this.state.responses ||
                   (this.state.responses.length === 0 && (
                     <div className="intro">
@@ -1018,7 +1008,12 @@ export class GraphQLEditor extends React.PureComponent<
     } as State)
     if (subscription) {
       this.props.onStopQuery()
-      subscription.unsubscribe()
+      try {
+        subscription.unsubscribe()
+      } catch (e) {
+        /* tslint:disable-next-line */
+        console.error(e)
+      }
     }
   }
 
