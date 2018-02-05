@@ -752,10 +752,7 @@ export class GraphQLEditor extends React.PureComponent<
   public reloadSchema = async () => {
     try {
       this.setState({ isReloadingSchema: true })
-      const result = await this.props.schemaFetcher.refetch(
-        this.props.session.endpoint || this.props.endpoint,
-        this.convertHeaders(this.props.session.headers),
-      )
+      const result = await this.props.schemaFetcher.refetch(this.props.session)
       if (result) {
         const { schema } = result
         this.setState({
@@ -783,19 +780,6 @@ export class GraphQLEditor extends React.PureComponent<
     this.props.setStacks(this.props.session.id, stacks)
   }
 
-  private convertHeaders(headers) {
-    if (headers) {
-      try {
-        return JSON.parse(headers)
-      } catch (e) {
-        /* tslint:disable-next-line */
-        console.error(e)
-      }
-    }
-
-    return undefined
-  }
-
   private ensureOfSchema() {
     // Only perform introspection if a schema is not provided (undefined)
     if (this.state.schema !== undefined) {
@@ -803,10 +787,7 @@ export class GraphQLEditor extends React.PureComponent<
     }
 
     this.props.schemaFetcher
-      .fetch(
-        this.props.session.endpoint || this.props.endpoint,
-        this.convertHeaders(this.props.session.headers),
-      )
+      .fetch(this.props.session)
       .then(result => {
         if (result) {
           const { schema, tracingSupported } = result

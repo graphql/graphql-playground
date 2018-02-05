@@ -31,7 +31,8 @@ import { WebSocketLink } from 'apollo-link-ws'
 import { HttpLink } from 'apollo-link-http'
 
 import * as app from '../../package.json'
-import { parse } from 'graphql'
+import { parseHeaders } from './Playground/util/parseHeaders'
+import { makeOperation } from './Playground/util/makeOperation'
 
 export interface Response {
   resultID: string
@@ -46,9 +47,6 @@ export interface Props {
   adminAuthToken?: string
   onSuccess?: (graphQLParams: any, response: any) => void
   isEndpoint?: boolean
-  onboardingStep?: string
-  tether?: any
-  nextStep?: () => void
   isApp?: boolean
   onChangeEndpoint?: (endpoint: string) => void
   share: (state: any) => void
@@ -71,7 +69,7 @@ export interface Props {
   fixedEndpoints: boolean
   headers?: any
   configPath?: string
-  createApolloLink?: (Session) => ApolloLink
+  createApolloLink?: (session: Session) => ApolloLink
 }
 
 export interface State {
@@ -136,7 +134,10 @@ export class Playground extends React.PureComponent<Props & DocsState, State> {
     }
 
     const sessions = this.initSessions(props)
-    this.schemaFetcher = new SchemaFetcher(this.props.settings)
+    this.schemaFetcher = new SchemaFetcher(
+      this.props.settings,
+      this.createApolloLink,
+    )
 
     const selectedSessionIndex =
       parseInt(this.storage.getItem('selectedSessionIndex'), 10) || 0
@@ -198,13 +199,6 @@ export class Playground extends React.PureComponent<Props & DocsState, State> {
         selectedSessionIndex: this.initialIndex,
       } as State)
     }
-    if (
-      ['STEP3_UNCOMMENT_DESCRIPTION', 'STEP3_OPEN_PLAYGROUND'].indexOf(
-        this.props.onboardingStep || '',
-      ) > -1
-    ) {
-      this.setCursor({ line: 3, ch: 6 })
-    }
     this.initApolloLinks()
   }
 
@@ -256,12 +250,27 @@ export class Playground extends React.PureComponent<Props & DocsState, State> {
     this.storage.saveProject()
   }
 
-  setApolloLink = (session: Session) => {
+  setApolloLink = (session: Session): ApolloLink => {
     if (this.apolloLinks[session.id]) {
       this.apolloLinks[session.id].unsubscribeAll()
     }
 
-    this.apolloLinks[session.id] = this.createDefaultApolloLink(session)
+    this.apolloLinks[session.id] = this.createApolloLink(session)
+    return this.apolloLinks[session.id]
+  }
+
+  createApolloLink = (session: Session) => {
+    return typeof this.props.createApolloLink === 'function'
+      ? this.props.createApolloLink(session)
+      : this.createDefaultApolloLink(session)
+  }
+
+  getApolloLink = (session: Session) => {
+    if (this.apolloLinks[session.id]) {
+      return this.apolloLinks[session.id]
+    }
+
+    return this.setApolloLink(session)
   }
 
   initApolloLinks() {
@@ -765,14 +774,6 @@ export class Playground extends React.PureComponent<Props & DocsState, State> {
   private handleSelectSession = (session: Session) => {
     this.setState(state => {
       const i = state.sessions.findIndex(s => s.id === session.id)
-
-      if (
-        this.props.onboardingStep === 'STEP3_SELECT_QUERY_TAB' &&
-        i === 0 &&
-        typeof this.props.nextStep === 'function'
-      ) {
-        this.props.nextStep()
-      }
       return {
         ...state,
         selectedSessionIndex: i,
@@ -950,10 +951,17 @@ export class Playground extends React.PureComponent<Props & DocsState, State> {
     }
   }
 
-  private createDefaultApolloLink = (session: Session): ApolloLink => {
+  private createDefaultApolloLink = (
+    session: Session,
+    extraHeaders?: any,
+  ): ApolloLink => {
     let connectionParams = {}
+    const headers = {
+      ...parseHeaders(session.headers),
+      ...extraHeaders,
+    }
     if (session.headers) {
-      connectionParams = { ...this.parseHeaders(session.headers) }
+      connectionParams = { ...headers }
     }
 
     let wsEndpoint = this.getWSEndpoint()
@@ -968,7 +976,7 @@ export class Playground extends React.PureComponent<Props & DocsState, State> {
     const httpLink = new HttpLink({
       uri: this.getEndpoint(),
       fetch,
-      headers: session.headers,
+      headers,
     })
 
     const webSocketLink = new WebSocketLink(subscriptionClient)
@@ -983,46 +991,13 @@ export class Playground extends React.PureComponent<Props & DocsState, State> {
     session: Session,
     graphqQLRequest,
   ): ApolloLinkExecuteResponse => {
-    const { query, ...rest } = graphqQLRequest
-    const operation = {
-      ...rest,
-      query: parse(query),
-    }
+    const operation = makeOperation(graphqQLRequest)
     this.setValueInSession(
       session.id,
       'subscriptionActive',
       isSubscription(operation),
     )
     return execute(this.apolloLinks[session.id], operation)
-  }
-
-  private parseHeaders(headers: string) {
-    if (Array.isArray(headers)) {
-      return headers.reduce((acc, header) => {
-        return {
-          ...acc,
-          [header.name]: header.value,
-        }
-      }, {})
-    } else if (typeof headers === 'object') {
-      return headers
-    }
-    let jsonVariables
-
-    try {
-      jsonVariables =
-        headers && headers.trim() !== '' ? JSON.parse(headers) : undefined
-    } catch (error) {
-      /* tslint:disable-next-line */
-      console.error(`Headers are invalid JSON: ${error.message}.`)
-    }
-
-    if (typeof jsonVariables !== 'object') {
-      /* tslint:disable-next-line */
-      console.error('Headers are not a JSON object.')
-    }
-
-    return jsonVariables
   }
 
   private isSharingAuthorization = (): boolean => {
