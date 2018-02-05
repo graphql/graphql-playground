@@ -135,7 +135,7 @@ export class Playground extends React.PureComponent<Props & DocsState, State> {
     }
 
     const sessions = this.initSessions(props)
-    this.schemaFetcher = new SchemaFetcher()
+    this.schemaFetcher = new SchemaFetcher(this.props.settings)
 
     const selectedSessionIndex =
       parseInt(this.storage.getItem('selectedSessionIndex'), 10) || 0

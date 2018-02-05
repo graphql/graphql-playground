@@ -1,6 +1,7 @@
 import { GraphQLSchema, introspectionQuery, buildClientSchema } from 'graphql'
 import * as stringify from 'json-stable-stringify'
 import { NoSchemaError } from './util/NoSchemaError'
+import { ISettings } from '../../types'
 
 export interface TracingSchemaTuple {
   schema: GraphQLSchema
@@ -9,7 +10,9 @@ export interface TracingSchemaTuple {
 
 export class SchemaFetcher {
   cache: Map<string, TracingSchemaTuple>
-  constructor() {
+  settings: ISettings
+  constructor(settings: ISettings) {
+    this.settings = settings
     this.cache = new Map()
   }
   async fetch(endpoint: string, headers?: any) {
@@ -28,10 +31,10 @@ export class SchemaFetcher {
   ): Promise<{ schema: GraphQLSchema; tracingSupported: boolean } | null> {
     const response = await fetch(endpoint, {
       method: 'post',
+      credentials: this.settings['request.credentials'],
       headers: {
         'Content-Type': 'application/json',
         'X-Apollo-Tracing': '1',
-        credentials: 'include',
         ...headers,
       },
       body: JSON.stringify({ query: introspectionQuery }),
@@ -48,6 +51,15 @@ export class SchemaFetcher {
     }
 
     const schema = buildClientSchema(schemaData.data)
+    /**
+     * DANGER! THIS IS AN EXTREME HACK. As soon, as codemirror-graphql doesn't use getType in .hint anymore
+     * this can be removed.
+     */
+    const oldGetType = schema.getType
+    schema.getType = type => {
+      const getTypeResult = oldGetType.call(schema, type)
+      return getTypeResult || type
+    }
     const tracingSupported =
       schemaData.extensions && Boolean(schemaData.extensions.tracing)
     const result = {

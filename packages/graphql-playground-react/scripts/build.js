@@ -21,6 +21,13 @@ var stripAnsi = require('strip-ansi');
 
 var useYarn = fs.existsSync(paths.yarnLockFile);
 
+const { renderPlaygroundPage } = require('graphql-playground-html');
+
+// Create the playground entry point if it doesn't exist
+if(!fs.existsSync(paths.appHtml)) {
+  fs.writeFileSync(paths.appHtml, renderPlaygroundPage({env: 'react'}));
+}
+
 // Warn and crash if required files are missing
 if (!checkRequiredFiles([paths.appHtml, paths.appIndexJs])) {
   process.exit(1);
