@@ -21,7 +21,7 @@
   "keywords": ["graphql", "graphiql", "playground", "graphcool"],
   "devDependencies": {
     "@types/node": "9.4.0",
-    "graphql-config": "1.1.7",
+    "graphql-config": "1.2.1",
     "rimraf": "2.6.2",
     "typescript": "2.6.2"
   },
@@ -30,6 +30,6 @@
     "definition": "dist/index.d.ts"
   },
   "dependencies": {
-    "graphql-config": "1.1.7"
+    "graphql-config": "1.2.1"
   }
 }
