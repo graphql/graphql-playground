@@ -1,7 +1,7 @@
 import * as React from 'react'
 import * as Modal from 'react-modal'
 import HistoryHeader from './HistoryPopup/HistoryHeader'
-import { HistoryFilter, Session } from '../types'
+import { HistoryFilter, Session, ApolloLinkExecuteResponse } from '../types'
 import HistoryItems from './HistoryPopup/HistoryItems'
 import { Icon } from 'graphcool-styles'
 import { modalStyle } from '../constants'
@@ -11,13 +11,17 @@ import { SchemaFetcher } from './Playground/SchemaFetcher'
 import { QueryEditor } from './Playground/QueryEditor'
 import { styled } from '../styled'
 import * as theme from 'styled-theming'
+import { GraphQLRequest } from 'apollo-link'
 
 export interface Props {
   isOpen: boolean
   onRequestClose: () => void
   historyItems: Session[]
   onItemStarToggled: (item: Session) => void
-  fetcherCreater: (item: any, params: any) => Promise<any>
+  fetcherCreater: (
+    item: Session,
+    params: GraphQLRequest,
+  ) => ApolloLinkExecuteResponse
   onCreateSession: (session: Session) => void
   schemaFetcher: SchemaFetcher
 }
@@ -169,7 +173,7 @@ export default withTheme<Props>(HistoryPopup)
 }
 .right-header {
   @p: .justifyBetween, .flex, .bgDarkBlue, .itemsCenter, .ph25;
-  
+
   padding-top: 20px;
   padding-bottom: 20px;
 }

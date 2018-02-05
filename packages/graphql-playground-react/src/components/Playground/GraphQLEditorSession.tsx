@@ -1,15 +1,19 @@
 import * as React from 'react'
-import { Session, ISettings } from '../../types'
+import { Session, ISettings, ApolloLinkExecuteResponse } from '../../types'
 import GraphQLEditor from './GraphQLEditor'
 import { SchemaFetcher } from './SchemaFetcher'
 import { SharingProps } from '../Share'
+import { GraphQLRequest, Observable, FetchResult } from 'apollo-link'
 
 export interface Props {
   session: Session
   index: number
   onRef: (index: number, ref: any) => void
   isGraphcoolUrl: boolean
-  fetcher: (session: Session, graphQLParams: any, headers?: any) => Promise<any>
+  fetcher: (
+    session: Session,
+    graphQLRequest: GraphQLRequest,
+  ) => ApolloLinkExecuteResponse
   schemaFetcher: SchemaFetcher
   isEndpoint: boolean
   storage?: any
@@ -21,6 +25,7 @@ export interface Props {
   onClickHistory: () => void
   onChangeEndpoint: (sessionId: string, value: string) => void
   onClickShare: (sessionId: string) => void
+  onStopQuery: (sessionId: string) => void
   headers?: any[]
   disableQueryHeader?: boolean
   disableResize?: boolean
@@ -37,8 +42,8 @@ export default class GraphQLEditorSession extends React.PureComponent<
   Props,
   {}
 > {
-  fetcher = (graphQLParams, headers?: any) => {
-    return this.props.fetcher(this.props.session, graphQLParams, headers)
+  fetcher = (graphQLRequest: GraphQLRequest): Observable<FetchResult> => {
+    return this.props.fetcher(this.props.session, graphQLRequest)
   }
   render() {
     const {
@@ -88,6 +93,7 @@ export default class GraphQLEditorSession extends React.PureComponent<
         onClickHistory={this.handleClickHistory}
         onChangeEndpoint={this.handleChangeEndpoint}
         onClickShare={this.handleClickShare}
+        onStopQuery={this.handleStopQuery}
         sharing={sharing}
         fixedEndpoint={fixedEndpoint}
         shouldHideTracingResponse={this.shouldHideTracingResponse()}
@@ -125,6 +131,10 @@ export default class GraphQLEditorSession extends React.PureComponent<
 
   private handleClickShare = () => {
     this.props.onClickShare(this.props.session.id)
+  }
+
+  private handleStopQuery = () => {
+    this.props.onStopQuery(this.props.session.id)
   }
 
   private shouldHideTracingResponse = (): boolean => {

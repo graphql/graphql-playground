@@ -1,3 +1,5 @@
+import { Observable, FetchResult } from 'apollo-link'
+
 export interface Session {
   id: string
   name?: string
@@ -43,6 +45,8 @@ export interface OperationDefinition {
   endLine: number
   name: string
 }
+
+export type ApolloLinkExecuteResponse = Observable<FetchResult>
 
 export type HistoryFilter = 'HISTORY' | 'STARRED'
 
