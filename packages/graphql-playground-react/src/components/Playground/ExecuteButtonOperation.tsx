@@ -8,24 +8,31 @@ export interface Props {
   highlight: any
 }
 
-const ExecuteButtonOperation: React.SFC<Props> = ({
-  highlight,
-  onMouseOver,
-  onMouseOut,
-  onMouseUp,
-  operation,
-}) => (
-  <li
-    key={operation.name ? operation.name.value : '*'}
-    className={operation === highlight ? 'selected' : ''}
-    // tslint:disable-next-line
-    onMouseOver={() => onMouseOver(operation)}
-    onMouseOut={onMouseOut}
-    // tslint:disable-next-line
-    onMouseUp={() => onMouseUp(operation)}
-  >
-    {operation.name ? operation.name.value : '<Unnamed>'}
-  </li>
-)
+class ExecuteButtonOperation extends React.PureComponent<Props> {
+  render() {
+    return (
+      <li
+        key={this.props.operation.name ? this.props.operation.name.value : '*'}
+        className={
+          this.props.operation === this.props.highlight ? 'selected' : ''
+        }
+        onMouseOver={this.onMouseOver}
+        onMouseOut={this.props.onMouseOut}
+        onMouseUp={this.onMouseUp}
+      >
+        {this.props.operation.name
+          ? this.props.operation.name.value
+          : '<Unnamed>'}
+      </li>
+    )
+  }
+  private onMouseOver = () => {
+    this.props.onMouseOver(this.props.operation)
+  }
+
+  private onMouseUp = () => {
+    this.props.onMouseUp(this.props.operation)
+  }
+}
 
 export default ExecuteButtonOperation
