@@ -63,7 +63,7 @@
     "dotenv": "5.0.0",
     "extract-text-webpack-plugin": "3.0.2",
     "file-loader": "1.1.6",
-    "filesize": "3.5.11",
+    "filesize": "3.6.0",
     "fs-extra": "5.0.0",
     "graphql-playground-html": "1.5.2",
     "gzip-size": "4.1.0",
