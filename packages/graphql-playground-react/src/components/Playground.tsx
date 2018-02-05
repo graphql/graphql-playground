@@ -251,9 +251,10 @@ export class Playground extends React.PureComponent<Props & DocsState, State> {
   }
 
   setApolloLink = (session: Session): ApolloLink => {
-    if (this.apolloLinks[session.id]) {
-      this.apolloLinks[session.id].unsubscribeAll()
-    }
+    // TODO reenable unsubscribe logic
+    // if (this.apolloLinks[session.id]) {
+    //   this.apolloLinks[session.id].unsubscribeAll()
+    // }
 
     this.apolloLinks[session.id] = this.createApolloLink(session)
     return this.apolloLinks[session.id]
