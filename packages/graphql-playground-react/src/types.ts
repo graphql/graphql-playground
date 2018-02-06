@@ -2,33 +2,54 @@ import { Observable, FetchResult } from 'apollo-link'
 
 export interface Session {
   id: string
-  name?: string
-  filePath?: string
+  endpoint: string
 
   query: string
   file?: string
   variables: string
-  result?: string
-  // result: string
+  responses?: Response[]
   operationName?: string
+  queryRunning: boolean
   subscriptionActive: boolean
+  operations: OperationDefinition[]
 
   // additional props that are interactive in graphiql, these are not represented in graphiqls state
-  isFile?: boolean
   queryTypes: QueryTypes
-  starred?: boolean
   date: Date
   hasMutation: boolean
   hasSubscription: boolean
   hasQuery: boolean
+
+  isFile?: boolean
+  starred?: boolean
+  name?: string
+  filePath?: string
   selectedUserToken?: string
-  subscriptionId?: string
   headers?: string
   hasChanged?: boolean
   absolutePath?: string
-  endpoint: string
   isSettingsTab?: boolean
   isConfigTab?: boolean
+
+  currentQueryStartTime?: Date
+  currentQueryEndTime?: Date
+
+  isReloadingSchema: boolean
+
+  responseExtensions: any
+  queryVariablesActive: boolean
+  endpointUnreachable: boolean
+  selectedVariableNames: string[]
+
+  // editor settings
+  editorFlex: number
+  variableEditorOpen: boolean
+  variableEditorHeight: number
+  responseTracingOpen: boolean
+  responseTracingHeight: number
+  docExplorerWidth: number
+  nextQueryStartTime?: Date
+  tracingSupported?: boolean
 }
 
 export interface QueryTypes {

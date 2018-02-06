@@ -4,8 +4,10 @@ import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import { GraphQLList, GraphQLNonNull, isType } from 'graphql'
 import ArgumentInline from './ArgumentInline'
-import { addStack } from '../../../actions/graphiql-docs'
+import { addStack } from '../../../actions/docs'
 import { Triangle } from '../../Icons/Triangle'
+import toJS from '../util/toJS'
+import { Map } from 'immutable'
 
 interface ReduxProps {
   keyMove: boolean
@@ -241,23 +243,23 @@ function renderType(type) {
 }
 
 const mapStateToProps = (state, { x, y, sessionId }) => {
-  const docs = state.graphiqlDocs[sessionId]
+  const docs = state.docs.get(sessionId)
   if (docs) {
-    const nav = docs.navStack[x]
+    const nav = docs.navStack.get(x)
     if (nav) {
       const isActive = nav.x === x && nav.y === y
-      return {
+      return Map({
         isActive,
         keyMove: docs.keyMove,
         lastActive: isActive && x === docs.navStack.length - 1,
-      }
+      })
     }
   }
-  return {
+  return Map({
     isActive: false,
     keyMove: false,
     lastActive: false,
-  }
+  })
 }
 
 const mapDispatchToProps = dispatch =>
@@ -271,4 +273,4 @@ const mapDispatchToProps = dispatch =>
 export default connect<ReduxProps, DispatchFromProps, Props>(
   mapStateToProps,
   mapDispatchToProps,
-)(TypeLink)
+)(toJS(TypeLink))

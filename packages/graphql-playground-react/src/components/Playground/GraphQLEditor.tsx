@@ -1,6 +1,6 @@
 import * as React from 'react'
 import * as ReactDOM from 'react-dom'
-import { parse, print, GraphQLSchema, isNamedType } from 'graphql'
+import { parse, print, isNamedType } from 'graphql'
 import * as cn from 'classnames'
 import ExecuteButton from './ExecuteButton'
 import { QueryEditor } from './QueryEditor'
@@ -9,12 +9,7 @@ import getSelectedOperationName from 'graphiql/dist/utility/getSelectedOperation
 import debounce from 'graphiql/dist/utility/debounce'
 import { fillLeafs } from 'graphiql/dist/utility/fillLeafs'
 import { getLeft, getTop } from 'graphiql/dist/utility/elementPosition'
-import {
-  OperationDefinition,
-  Session,
-  ApolloLinkExecuteResponse,
-} from '../../types'
-import { Response } from '../Playground'
+import { Session, ApolloLinkExecuteResponse } from '../../types'
 import { connect } from 'react-redux'
 
 import { defaultQuery } from '../../constants'
@@ -25,7 +20,7 @@ import withTheme from '../Theme/withTheme'
 import { LocalThemeInterface } from '../Theme'
 import GraphDocs from './DocExplorer/GraphDocs'
 import { SchemaFetcher } from './SchemaFetcher'
-import { setStacks } from '../../actions/graphiql-docs'
+import { setStacks } from '../../actions/docs'
 import { getRootMap, getNewStack } from './util/stack'
 import { getSessionDocs } from '../../selectors/sessionDocs'
 import { styled } from '../../styled/index'
@@ -42,89 +37,28 @@ import { GraphQLRequest, FetchResult } from 'apollo-link'
 
 export interface Props {
   fetcher: (graphQLRequest: GraphQLRequest) => ApolloLinkExecuteResponse
-  schemaFetcher: SchemaFetcher
-  isGraphcoolUrl?: boolean
-  query?: string
-  variables?: string
-  operationName?: string
-  responses?: Response[]
-  isActive: boolean
-  session: Session
-
-  storage?: any
-  defaultQuery?: string
   onEditQuery?: (data: any) => void
   onEditVariables?: (variables: any) => any
   onEditOperationName?: (name: any) => any
   onToggleDocs?: (value: boolean) => any
-  onClickCodeGeneration?: any
   onChangeHeaders?: (headers: string) => any
   onClickHistory?: () => void
   onChangeEndpoint?: (value: string) => void
   onClickShare?: () => void
   onStopQuery: () => void
+
   onRef: any
-  showCodeGeneration?: boolean
-  showEndpoints?: boolean
-  showQueryTitle?: boolean
-  showResponseTitle?: boolean
-  showDownloadJsonButton?: boolean
-  disableQueryHeader?: boolean
-  queryOnly?: boolean
-  showDocs?: boolean
-  rerenderQuery?: boolean
-  operations?: OperationDefinition[]
-  showSchema?: boolean
-  schemaIdl?: string
-  schemaModelName?: string
-  disableAutofocus?: boolean
-  disableResize?: boolean
   fixedEndpoint?: boolean
   shouldHideTracingResponse: boolean
 
-  disableAnimation?: boolean
-  hideLineNumbers?: boolean
-  hideGutters?: boolean
-  readonly?: boolean
   useVim?: boolean
-  endpoint: string
-
-  // sharing
-  sharing?: SharingProps
 }
 
 export interface ReduxProps {
   setStacks: (sessionId: string, stack: any[]) => void
   navStack: any[]
-}
-
-export interface State {
-  editorFlex: number
-  variableEditorOpen: boolean
-  variableEditorHeight: number
-  responseTracingOpen: boolean
-  responseTracingHeight: number
-  docExplorerWidth: number
-  subscription: any
-  variableToType: any
-  operations: any[]
-  schemaExplorerOpen: boolean
-  schemaExplorerWidth: number
-  isWaitingForResponse: boolean
-  selectedVariableNames: string[]
-  responseExtensions: any
-  nextQueryStartTime?: Date
-  tracingSupported?: boolean
-  queryVariablesActive: boolean
-  endpointUnreachable: boolean
-  isReloadingSchema: boolean
-  schema?: GraphQLSchema | null
-  query: string
-  variables: string
-  operationName?: string
-  responses: any[]
-  currentQueryStartTime?: Date
-  currentQueryEndTime?: Date
+  session: Session
+  sharing: SharingProps
 }
 
 export interface SimpleProps {
@@ -241,9 +175,6 @@ export class GraphQLEditor extends React.PureComponent<
       responseTracingHeight:
         Number(this.storageGet('responseTracingHeight')) || 300,
       docExplorerWidth: Number(this.storageGet('docExplorerWidth')) || 350,
-      schemaExplorerOpen: false,
-      schemaExplorerWidth:
-        Number(this.storageGet('schemaExplorerWidth')) || 350,
       isWaitingForResponse: false,
       subscription: null,
       selectedVariableNames: [],
@@ -493,10 +424,10 @@ export class GraphQLEditor extends React.PureComponent<
                 onEdit={this.handleEditQuery}
                 onHintInformationRender={this.handleHintInformationRender}
                 onRunQuery={this.runQueryAtCursor}
-                disableAutofocus={this.props.disableAutofocus}
-                hideLineNumbers={this.props.hideLineNumbers}
-                hideGutters={this.props.hideGutters}
-                readOnly={this.props.readonly}
+                disableAutofocus={false}
+                hideLineNumbers={false}
+                hideGutters={false}
+                readOnly={false}
                 useVim={this.props.useVim}
                 onClickReference={this.handleClickReference}
               />
@@ -540,7 +471,6 @@ export class GraphQLEditor extends React.PureComponent<
                   <VariableEditor
                     ref={this.setVariableEditorComponent}
                     value={this.state.variables}
-                    variableToType={this.state.variableToType}
                     onEdit={this.handleEditVariables}
                     onHintInformationRender={this.handleHintInformationRender}
                     onRunQuery={this.runQueryAtCursor}
@@ -1164,11 +1094,13 @@ export class GraphQLEditor extends React.PureComponent<
   }
 
   private selectQueryVariables = () => {
+    // SELECT_QUERY_VARIABLES
     this.setState({ queryVariablesActive: true })
     this.storageSet('queryVariablesActive', 'true')
   }
 
   private selectHttpHeaders = () => {
+    // UNSELECT_QUERY_VARIABLES
     this.setState({ queryVariablesActive: false })
     this.storageSet('queryVariablesActive', 'false')
   }

@@ -11,7 +11,7 @@ import {
   toggleDocs,
   changeWidthDocs,
   changeKeyMove,
-} from '../../../actions/graphiql-docs'
+} from '../../../actions/docs'
 import Spinner from '../../Spinner'
 import { columnWidth } from '../../../constants'
 import RootColumn from './RootColumn'
@@ -24,6 +24,7 @@ import {
 } from '../util/stack'
 import { GraphQLSchema } from 'graphql'
 import { getSessionDocs } from '../../../selectors/sessionDocs'
+import toJS from '../util/toJS'
 
 interface StateFromProps {
   navStack: any[]
@@ -433,4 +434,4 @@ export default connect<StateFromProps, DispatchFromProps, Props>(
   mapDispatchToProps,
   null,
   { withRef: true },
-)(GraphDocs)
+)(toJS(GraphDocs))

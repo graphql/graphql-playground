@@ -13,11 +13,8 @@ import { SubscriptionClient } from 'subscriptions-transport-ws'
 import { isSubscription } from './Playground/util/hasSubscription'
 import HistoryPopup from './HistoryPopup'
 import * as cx from 'classnames'
-import CodeGenerationPopup from './CodeGenerationPopup/CodeGenerationPopup'
-import { connect } from 'react-redux'
-import { DocsState } from '../reducers/graphiql-docs'
+import { DocsState } from '../reducers/docs'
 import GraphQLEditorSession from './Playground/GraphQLEditorSession'
-import { setStacks } from '../actions/graphiql-docs'
 import { mapValues } from 'lodash'
 import { styled } from '../styled'
 import { isSharingAuthorization } from './Playground/util/session'
@@ -82,7 +79,6 @@ export interface State {
   adminAuthToken: string | null
   response?: Response
   selectUserSessionId?: string
-  codeGenerationPopupOpen: boolean
   disableQueryHeader: boolean
   useVim: boolean
   userModelName: string
@@ -101,7 +97,7 @@ export interface CursorPosition {
 
 export { GraphQLEditor }
 
-export class Playground extends React.PureComponent<Props & DocsState, State> {
+export default class Playground extends React.PureComponent<Props, State> {
   storage: PlaygroundStorage
   apolloLinks: { [sessionId: string]: any } = {}
   observers: { [sessionId: string]: any } = {}
@@ -158,7 +154,6 @@ export class Playground extends React.PureComponent<Props & DocsState, State> {
           props.adminAuthToken) ||
         localStorage.getItem('token'),
       selectUserSessionId: undefined,
-      codeGenerationPopupOpen: false,
       disableQueryHeader: false,
       useVim: localStorage.getItem('useVim') === 'true' || false,
       shareAllTabs: true,
@@ -352,7 +347,6 @@ export class Playground extends React.PureComponent<Props & DocsState, State> {
                   isEndpoint={Boolean(isEndpoint)}
                   endpoint={this.props.endpoint}
                   storage={this.storage.getSessionStorage(session.id)}
-                  onClickCodeGeneration={this.handleClickCodeGeneration}
                   onEditOperationName={this.handleOperationNameChange}
                   onEditVariables={this.handleVariableChange}
                   onEditQuery={this.handleQueryChange}
@@ -391,7 +385,6 @@ export class Playground extends React.PureComponent<Props & DocsState, State> {
         </GraphiqlsContainer>
         <Settings onClick={this.openSettingsTab} />
         {this.state.historyOpen && this.renderHistoryPopup()}
-        {this.state.codeGenerationPopupOpen && this.renderCodeGenerationPopup()}
       </PlaygroundWrapper>
     )
   }
@@ -412,21 +405,6 @@ export class Playground extends React.PureComponent<Props & DocsState, State> {
         fetcherCreater={this.fetcher}
         onCreateSession={this.handleCreateSession}
         schemaFetcher={this.schemaFetcher}
-      />
-    )
-  }
-
-  renderCodeGenerationPopup() {
-    const { sessions, selectedSessionIndex } = this.state
-    const { isEndpoint } = this.props
-    const selectedSession = sessions[selectedSessionIndex]
-    const selectedEndpointUrl = isEndpoint ? location.href : this.getEndpoint()
-    return (
-      <CodeGenerationPopup
-        endpointUrl={selectedEndpointUrl}
-        isOpen={this.state.codeGenerationPopupOpen}
-        onRequestClose={this.handleCloseCodeGeneration}
-        query={selectedSession.query}
       />
     )
   }
@@ -678,16 +656,6 @@ export class Playground extends React.PureComponent<Props & DocsState, State> {
         changed: true,
       }
     })
-  }
-
-  private handleClickCodeGeneration = () => {
-    this.setState({
-      codeGenerationPopupOpen: true,
-    } as State)
-  }
-
-  private handleCloseCodeGeneration = () => {
-    this.setState({ codeGenerationPopupOpen: false } as State)
   }
 
   private resetSubscriptions() {
@@ -944,12 +912,12 @@ export class Playground extends React.PureComponent<Props & DocsState, State> {
 
   private cancelSubscription = (session: Session) => {
     this.setValueInSession(session.id, 'subscriptionActive', false)
-    if (session.subscriptionId) {
-      if (this.apolloLinks[session.id]) {
-        this.apolloLinks[session.id].unsubscribe(session.subscriptionId)
-      }
-      this.setValueInSession(session.id, 'subscriptionId', null)
-    }
+    // if (session.subscriptionId) {
+    //   if (this.apolloLinks[session.id]) {
+    //     this.apolloLinks[session.id].unsubscribe(session.subscriptionId)
+    //   }
+    //   this.setValueInSession(session.id, 'subscriptionId', null)
+    // }
   }
 
   private createDefaultApolloLink = (
@@ -1090,10 +1058,6 @@ export class Playground extends React.PureComponent<Props & DocsState, State> {
     this.setState({ changed: false })
   }
 }
-
-export default connect<any, any, Props>((state: any) => state.graphiqlDocs, {
-  setStacks,
-})(Playground)
 
 const PlaygroundWrapper = styled.div`
   flex: 1;

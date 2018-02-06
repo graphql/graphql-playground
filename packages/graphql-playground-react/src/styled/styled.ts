@@ -1,5 +1,6 @@
 import * as styledComponents from 'styled-components'
 import { ThemedStyledComponentsModule } from 'styled-components' // tslint:disable-line
+import { ComponentClass } from 'react' // tslint:disable-line
 
 import { ThemeInterface, theme } from './theme'
 
@@ -17,3 +18,5 @@ const {
 
 export { css, injectGlobal, keyframes, ThemeProvider, theme, withProps }
 export default styled
+
+export { ComponentClass }

@@ -1,4 +1,4 @@
-import { defaultSessionState } from '../reducers/docs'
+import { defaultSessionState } from './reducers'
 
 export const getSessionDocs = ({ docs }, { sessionId }) => {
   return docs.get(sessionId) || defaultSessionState

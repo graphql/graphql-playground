@@ -19,9 +19,9 @@ if (typeof window !== 'undefined') {
 
 const storage = compose(
   filter([
-    'graphiqlDocs.*.docsOpen',
-    'graphiqlDocs.*.docsWidth',
-    'history.history',
+    // 'graphiqlDocs.*.docsOpen',
+    // 'graphiqlDocs.*.docsWidth',
+    // 'history.history',
   ]),
 )(adapter(localStorage))
 

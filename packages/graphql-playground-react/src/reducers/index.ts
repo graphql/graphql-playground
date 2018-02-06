@@ -1,8 +1,8 @@
 import { combineReducers, Reducer } from 'redux'
-import graphiqlDocs from './graphiql-docs'
+import docs from './docs'
 
 const combinedReducers: Reducer<any> = combineReducers({
-  graphiqlDocs,
+  docs,
 })
 
 export default combinedReducers

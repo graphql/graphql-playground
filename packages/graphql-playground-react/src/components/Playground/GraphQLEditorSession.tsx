@@ -20,7 +20,6 @@ export interface Props {
   onEditQuery: (sessionId: string, data: any) => void
   onEditVariables: (sessionId: string, variables: any) => any
   onEditOperationName: (sessionId: string, name: any) => any
-  onClickCodeGeneration: any
   onChangeHeaders: (sessionId: string, headers: string) => any
   onClickHistory: () => void
   onChangeEndpoint: (sessionId: string, value: string) => void
@@ -32,7 +31,7 @@ export interface Props {
   responses?: any
   useVim: boolean
   isActive: boolean
-  sharing?: SharingProps
+  sharing: SharingProps
   fixedEndpoint?: boolean
   endpoint: string
   settings: ISettings
@@ -48,12 +47,6 @@ export default class GraphQLEditorSession extends React.PureComponent<
   render() {
     const {
       session,
-      isGraphcoolUrl,
-      isEndpoint,
-      storage,
-      responses,
-      disableQueryHeader,
-      isActive,
       schemaFetcher,
       sharing,
       fixedEndpoint,
@@ -62,32 +55,14 @@ export default class GraphQLEditorSession extends React.PureComponent<
     return (
       <GraphQLEditor
         endpoint={endpoint}
-        isActive={isActive}
         key={session.id}
-        isGraphcoolUrl={isGraphcoolUrl}
         fetcher={this.fetcher}
-        showQueryTitle={false}
-        showResponseTitle={false}
-        showEndpoints={!isEndpoint}
-        showDownloadJsonButton={true}
-        showCodeGeneration={true}
-        storage={storage}
-        query={session.query}
-        variables={session.variables}
-        operationName={session.operationName}
-        onClickCodeGeneration={this.props.onClickCodeGeneration}
         onEditOperationName={this.handleOperationNameChange}
         onEditVariables={this.handleVariableChange}
         onEditQuery={this.handleQueryChange}
         onChangeHeaders={this.handleChangeHeaders}
-        responses={responses}
-        disableQueryHeader={disableQueryHeader}
-        disableResize={false}
         onRef={this.setRef}
         useVim={this.props.useVim}
-        rerenderQuery={false}
-        disableAnimation={true}
-        disableAutofocus={!isActive}
         session={session}
         schemaFetcher={schemaFetcher}
         onClickHistory={this.handleClickHistory}
