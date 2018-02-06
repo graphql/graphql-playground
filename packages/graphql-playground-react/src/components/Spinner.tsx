@@ -1,15 +1,11 @@
 import * as React from 'react'
 import { keyframes, styled } from '../styled'
 
-const Spinner = () => {
-  return (
-    <Wrapper>
-      <SpinnerNode />
-    </Wrapper>
-  )
-}
-
-export default Spinner
+const Spinner = () => (
+  <Wrapper>
+    <SpinnerNode />
+  </Wrapper>
+)
 
 const rotation = keyframes`
   from {
@@ -45,3 +41,5 @@ const SpinnerNode = styled.div`
   border-right: 6px solid rgba(150, 150, 150, 0.15);
   border-top: 6px solid rgba(150, 150, 150, 0.8);
 `
+
+export default Spinner
