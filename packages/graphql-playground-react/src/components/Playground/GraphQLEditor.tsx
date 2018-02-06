@@ -367,21 +367,6 @@ export class GraphQLEditor extends React.PureComponent<
   }
 
   render() {
-    const queryWrapStyle = {
-      WebkitFlex: this.state.editorFlex,
-      flex: this.state.editorFlex,
-    }
-
-    const variableOpen = this.state.variableEditorOpen
-    const variableStyle = {
-      height: variableOpen ? this.state.variableEditorHeight : null,
-    }
-
-    const tracingOpen = this.state.responseTracingOpen
-    const tracingStyle = {
-      height: tracingOpen ? this.state.responseTracingHeight : null,
-    }
-
     return (
       <div
         className={cn('graphiql-container', { isActive: this.props.isActive })}
@@ -496,7 +481,10 @@ export class GraphQLEditor extends React.PureComponent<
           >
             <div
               className={cn('queryWrap', this.props.localTheme)}
-              style={queryWrapStyle}
+              style={{
+                WebkitFlex: this.state.editorFlex,
+                flex: this.state.editorFlex,
+              }}
             >
               <QueryEditor
                 ref={this.setQueryEditorComponent}
@@ -512,10 +500,21 @@ export class GraphQLEditor extends React.PureComponent<
                 useVim={this.props.useVim}
                 onClickReference={this.handleClickReference}
               />
-              <div className="variable-editor" style={variableStyle}>
+              <div
+                className="variable-editor"
+                style={{
+                  height: this.state.variableEditorOpen
+                    ? this.state.variableEditorHeight
+                    : null,
+                }}
+              >
                 <div
                   className="variable-editor-title"
-                  style={{ cursor: variableOpen ? 'row-resize' : 'n-resize' }}
+                  style={{
+                    cursor: this.state.variableEditorOpen
+                      ? 'row-resize'
+                      : 'n-resize',
+                  }}
                   onMouseDown={this.handleVariableResizeStart}
                 >
                   <span
@@ -582,10 +581,21 @@ export class GraphQLEditor extends React.PureComponent<
                 {this.props.session.subscriptionActive && (
                   <div className="listening">Listening &hellip;</div>
                 )}
-                <div className="response-tracing" style={tracingStyle}>
+                <div
+                  className="response-tracing"
+                  style={{
+                    height: this.state.responseTracingOpen
+                      ? this.state.responseTracingHeight
+                      : null,
+                  }}
+                >
                   <div
                     className="response-tracing-title"
-                    style={{ cursor: tracingOpen ? 'row-resize' : 'n-resize' }}
+                    style={{
+                      cursor: this.state.responseTracingOpen
+                        ? 'row-resize'
+                        : 'n-resize',
+                    }}
                     onMouseDown={this.handleTracingResizeStart}
                   >
                     Tracing
