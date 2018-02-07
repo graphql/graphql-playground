@@ -46,6 +46,7 @@ export interface Props {
   onChangeEndpoint?: (value: string) => void
   onClickShare?: () => void
   onStopQuery: () => void
+  sessionId: string
 
   onRef: any
   fixedEndpoint?: boolean
@@ -392,18 +393,8 @@ export class GraphQLEditor extends React.PureComponent<
         `}</style>
         <div className="editorWrap">
           <TopBar
-            endpoint={this.props.session.endpoint || this.props.endpoint}
-            endpointDisabled={false}
-            onChangeEndpoint={this.props.onChangeEndpoint}
-            onClickHistory={this.props.onClickHistory}
-            curl={this.getCurl()}
+            sessionId={this.props.sessionId}
             onClickPrettify={this.handlePrettifyQuery}
-            onClickShare={this.props.onClickShare}
-            sharing={this.props.sharing}
-            onReloadSchema={this.reloadSchema}
-            isReloadingSchema={this.state.isReloadingSchema}
-            fixedEndpoint={this.props.fixedEndpoint}
-            endpointUnreachable={this.state.endpointUnreachable}
           />
           <div
             ref={this.setEditorBarComponent}

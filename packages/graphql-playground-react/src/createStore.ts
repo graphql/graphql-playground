@@ -4,6 +4,8 @@ import filter from 'redux-localstorage-filter'
 import * as adapter from 'redux-localstorage/lib/adapters/localStorage'
 import { merge } from 'lodash'
 import combinedReducers from './reducers'
+import { fromJS } from 'immutable'
+import createSagaMiddleware from 'redux-saga'
 
 let localStorage: any = null
 
@@ -27,13 +29,13 @@ const storage = compose(
 
 const reducer = compose(
   mergePersistedState((initialState, persistedState) => {
-    return merge({}, initialState, persistedState)
+    return fromJS(merge({}, initialState, persistedState))
   }),
 )(combinedReducers)
 
-const enhancer = compose(persistState(storage, 'graphiql'))
+const enhancer = compose(persistState(storage, 'graphql-playground'))
 
-const functions = [enhancer]
+const functions = [enhancer, createSagaMiddleware()]
 
 const composeEnhancers =
   (window as any).__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose

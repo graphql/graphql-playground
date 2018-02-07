@@ -1,96 +1,106 @@
-import { createActions } from 'redux-actions'
-
-export const {
+import { Map, List } from 'immutable'
+import { handleActions, combineActions } from 'redux-actions'
+import {
   editQuery,
   editVariables,
   editOperationName,
   editHeaders,
   editEndpoint,
-  startQuery,
-  stopQuery,
   setEditorFlex,
   selectQueryVariables,
   unselectQueryVariables,
-  closeTracing,
-  openTracing,
-  closeVariables,
-  openVariables,
-  addResponse,
-  setResponse,
-  clearResponses,
-  schemaFetchingSuccess,
-  schemaFetchingError,
-  renewStacks,
-  runQuery,
-} = createActions({
-  // simple property setting
-  EDIT_QUERY: simpleAction('query'),
-  EDIT_VARIABLES: simpleAction('variables'),
-  EDIT_OPERATION_NAME: simpleAction('operationName'),
-  EDIT_HEADERS: simpleAction('headers'),
-  EDIT_ENDPOINT: simpleAction('endpoint'),
-  SET_EDITOR_FLEX: simpleAction('editorFlex'),
-  SELECT_QUERY_VARIABLES: simpleAction('queryVariablesActive', true),
-  UNSELECT_QUERY_VARIABLES: simpleAction('queryVariablesActive', false),
+} from './actions'
+import { Session } from '../../types'
 
-  // setting multiple props
-  /*
-    this.setState({
-      responseTracingOpen: false,
-      responseTracingHeight: hadHeight,
-    } as State)
-  */
-  CLOSE_TRACING: simpleAction('responseTracingHeight'),
-  OPEN_TRACING: simpleAction('responseTracingHeight'),
-  // setting multiple props
-  /*
-    this.setState({
-      responseTracingOpen: false,
-      responseTracingHeight: hadHeight,
-    } as State)
-  */
-  CLOSE_VARIABLES: simpleAction('variableEditorHeight'),
-  OPEN_VARIABLES: simpleAction('variableEditorHeight'),
+export type SessionState = Map<string, Session>
 
-  /*
-    a littlebit more complex state mutations
-  */
-  ADD_RESPONSE: simpleAction('response'),
-  SET_RESPONSE: simpleAction('response'),
-  CLEAR_RESPONSES: simpleAction(),
+export const defaultSessionState: SessionState = Map({})
 
-  SCHEMA_FETCHING_SUCCESS: (endpoint, tracingSupported) => ({
-    endpoint,
-    tracingSupported,
-  }),
-  /*
-        this.setState({
-          schema,
-          isReloadingSchema: false,
-          endpointUnreachable: false,
-          + tracingSupported
-        })
-  */
-  SCHEMA_FETCHING_ERROR: () => ({}),
-  /*
-
-      this.setState({
-        isReloadingSchema: false,
-        endpointUnreachable: true,
+export default handleActions(
+  {
+    [combineActions(
+      editQuery,
+      editVariables,
+      editOperationName,
+      editHeaders,
+      editEndpoint,
+      setEditorFlex,
+      selectQueryVariables,
+      unselectQueryVariables,
+    )]: (state, { payload }) => {
+      const keyName = Object.keys(payload)[1]
+      console.log(`setting simpleAction ${keyName}`)
+      return state.setIn([payload.sessionId, keyName], payload[keyName])
+    },
+    CLOSE_TRACING: (state, { payload }) => {
+      const { responseTracingHeight } = payload
+      return state.mergeDeepIn(
+        [payload.sessionId],
+        Map({ responseTracingHeight, responseTracingOpen: false }),
+      )
+    },
+    OPEN_TRACING: (state, { payload }) => {
+      const { responseTracingHeight } = payload
+      return state.mergeDeepIn(
+        [payload.sessionId],
+        Map({ responseTracingHeight, responseTracingOpen: true }),
+      )
+    },
+    CLOSE_VARIABLES: (state, { payload }) => {
+      const { variableEditorHeight } = payload
+      return state.mergeDeepIn(
+        [payload.sessionId],
+        Map({ variableEditorHeight, variableEditorOpen: false }),
+      )
+    },
+    OPEN_VARIABLES: (state, { payload }) => {
+      const { variableEditorHeight } = payload
+      return state.mergeDeepIn(
+        [payload.sessionId],
+        Map({ variableEditorHeight, variableEditorOpen: true }),
+      )
+    },
+    ADD_RESPONSE: (state, { payload }) => {
+      return state.updateIn([payload.sessionId, 'responses'], responses =>
+        responses.push(Map(payload.response)),
+      )
+    },
+    SET_RESPONSE: (state, { payload }) => {
+      return state.setIn(
+        [payload.sessionId, 'responses'],
+        List(Map(payload.response)),
+      )
+    },
+    CLEAR_RESPONSES: (state, { payload }) => {
+      return state.setIn([payload.sessionId, 'responses'], List())
+    },
+    SCHEMA_FETCHING_SUCCESS: (state, { payload }) => {
+      return state.map((session, sessionId) => {
+        if (session.get('endpoint') === payload.endpoint) {
+          return session.merge(
+            Map({
+              tracingSupported: payload.tracingSupported,
+              isReloadingSchema: false,
+              endpointUnreachable: false,
+            }),
+          )
+        }
+        return session
       })
-  */
-
-  RENEW_STACKS: simpleAction(),
-  /*
-  GraphQLEditor.renewStacks()
-  */
-
-  RUN_QUERY: (sessionId, operationName) => ({ sessionId, operationName }),
-  START_QUERY: simpleAction('queryRunning', true),
-  STOP_QUERY: simpleAction('queryRunning', false),
-  /* GraphQLEditor.handleRunQuery */
-})
-
-function simpleAction(key?: any, defaultValue?: any) {
-  return (sessionId, value) => ({ sessionId, [key]: value || defaultValue })
-}
+    },
+    SCHEMA_FETCHING_ERROR: (state, { payload }) => {
+      return state.map((session, sessionId) => {
+        if (session.get('endpoint') === payload.endpoint) {
+          return session.merge(
+            Map({
+              isReloadingSchema: false,
+              endpointUnreachable: true,
+            }),
+          )
+        }
+        return session
+      })
+    },
+  },
+  defaultSessionState,
+)
