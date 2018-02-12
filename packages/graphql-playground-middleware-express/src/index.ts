@@ -24,9 +24,9 @@ const express: Register = function voyagerExpress(options: MiddlewareOptions) {
     version: playgroundVersion,
   }
 
-  return async (req, res, next) => {
+  return (req, res, next) => {
     res.setHeader('Content-Type', 'text/html')
-    const playground = await renderPlaygroundPage(middlewareOptions)
+    const playground = renderPlaygroundPage(middlewareOptions)
     res.write(playground)
     res.end()
     next()

@@ -4,7 +4,7 @@ import createStore from '../createStore'
 import MiddlewareApp from './MiddlewareApp'
 import 'isomorphic-fetch'
 import EndpointPopup from './EndpointPopup'
-import Loading from './Loading'
+import { ThemeProvider, theme as styledTheme } from '../styled'
 
 const store = createStore()
 
@@ -51,6 +51,15 @@ export default class App extends React.Component<Props, State> {
         return
       }
       this.setState({ loading: true })
+
+      // DOM side-effect:
+      // #loading-wrapper is a hardcoded DOM element in the HTML entrypoint
+      const loadingWrapper = document.getElementById('loading-wrapper')
+
+      if (loadingWrapper) {
+        loadingWrapper.classList.remove('fadeOut')
+      }
+
       fetch('https://api.graph.cool/simple/v1/cj81hi46q03c30196uxaswrz2', {
         method: 'post',
         headers: {
@@ -70,6 +79,10 @@ export default class App extends React.Component<Props, State> {
       })
         .then(res => res.json())
         .then(res => {
+          if (loadingWrapper) {
+            loadingWrapper.classList.add('fadeOut')
+          }
+
           if (!res.data || res.data.session === null) {
             return this.props.history.push('/new')
           }
@@ -97,24 +110,26 @@ export default class App extends React.Component<Props, State> {
         <div className={'wrapper'}>
           <style jsx={true}>{`
             .wrapper {
-              @p: .w100, .h100, .bgDarkBlue;
+              @p: .w100, .h100;
             }
             .loading {
               @p: .f20, .white, .flex, .w100, .h100, .bgDarkBlue, .itemsCenter,
                 .justifyCenter;
             }
           `}</style>
-          {this.state.loading ? (
-            <Loading />
-          ) : !this.state.endpoint || this.state.endpoint.length === 0 ? (
-            <EndpointPopup
-              onRequestClose={this.handleChangeEndpoint}
-              endpoint={
-                this.state.endpoint ||
-                localStorage.getItem('last-endpoint') ||
-                ''
-              }
-            />
+
+          {this.state.loading ? null : !this.state.endpoint ||
+          this.state.endpoint.length === 0 ? (
+            <ThemeProvider theme={styledTheme}>
+              <EndpointPopup
+                onRequestClose={this.handleChangeEndpoint}
+                endpoint={
+                  this.state.endpoint ||
+                  localStorage.getItem('last-endpoint') ||
+                  ''
+                }
+              />
+            </ThemeProvider>
           ) : (
             <MiddlewareApp
               endpoint={endpoint}

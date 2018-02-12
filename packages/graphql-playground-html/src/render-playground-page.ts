@@ -1,15 +1,5 @@
-import * as path from 'path'
-import * as fs from 'fs'
-import {
-  // getUsedEnvs,
-  getGraphQLConfig,
-  findGraphQLConfigFile,
-  resolveEnvsInValues,
-} from 'graphql-config'
-import { patchEndpointsToConfigData } from 'graphql-config-extension-graphcool'
-import * as dotenv from 'dotenv'
-
 import getLoadingMarkup from './get-loading-markup'
+import { GraphQLConfigData } from 'graphql-config'
 
 export interface MiddlewareOptions {
   endpoint?: string
@@ -17,7 +7,16 @@ export interface MiddlewareOptions {
   htmlTitle?: string
   workspaceName?: string
   env?: any
-  useGraphQLConfig?: boolean
+  config?: GraphQLConfigData
+  settings?: ISettings
+}
+
+export type Theme = 'dark' | 'light'
+export interface ISettings {
+  ['general.betaUpdates']: boolean
+  ['editor.theme']: Theme
+  ['editor.reuseHeaders']: boolean
+  ['tracing.hideTracingResponse']: boolean
 }
 
 export interface RenderPageOptions extends MiddlewareOptions {
@@ -27,45 +26,7 @@ export interface RenderPageOptions extends MiddlewareOptions {
 
 const loading = getLoadingMarkup()
 
-dotenv.config()
-
-export async function renderPlaygroundPage(options: RenderPageOptions) {
-  const env = options.env || {}
-
-  const extendedOptions: any = {
-    ...options,
-    canSaveConfig: false,
-  }
-  if (options.htmlTitle) {
-    extendedOptions.title = options.htmlTitle
-  }
-  if (options.useGraphQLConfig) {
-    let config = getGraphQLConfig().config
-    config = resolveEnvsInValues(config, env)
-    config = await patchEndpointsToConfigData(config, process.cwd(), env)
-    const configPath = findGraphQLConfigFile(process.cwd())
-    const configString = fs.readFileSync(configPath, 'utf-8')
-    const folderName = path.basename(process.cwd())
-    extendedOptions.folderName = options.workspaceName || folderName
-    extendedOptions.config = config
-    extendedOptions.configString = configString
-  }
-  if (options.subscriptionsEndpoint) {
-    extendedOptions.subscriptionEndpoint = options.subscriptionsEndpoint
-  }
-  if (!extendedOptions.endpoint && !extendedOptions.configString) {
-    /* tslint:disable-next-line */
-    console.warn(
-      `WARNING: You didn't provide an endpoint and don't have a .graphqlconfig. Make sure you have at least one of them.`,
-    )
-  }
-  return `
-  <!DOCTYPE html>
-  <html>
-  <head>
-    <meta charset=utf-8 />
-    <meta name="viewport" content="user-scalable=no, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, minimal-ui">
-    <title>GraphQL Playground</title>
+const getCdnMarkup = options => `
     <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/graphql-playground-react@${
       options.version
     }/build/static/css/index.css" />
@@ -75,6 +36,42 @@ export async function renderPlaygroundPage(options: RenderPageOptions) {
     <script src="//cdn.jsdelivr.net/npm/graphql-playground-react@${
       options.version
     }/build/static/js/middleware.js"></script>
+`
+
+export function renderPlaygroundPage(options: RenderPageOptions) {
+  const extendedOptions: any = {
+    ...options,
+    canSaveConfig: false,
+  }
+  if (options.htmlTitle) {
+    extendedOptions.title = options.htmlTitle
+  }
+  if (options.subscriptionsEndpoint) {
+    extendedOptions.subscriptionEndpoint = options.subscriptionsEndpoint
+  }
+  if (options.config) {
+    extendedOptions.configString = JSON.stringify(options.config, null, 2)
+  }
+  if (!extendedOptions.endpoint && !extendedOptions.configString) {
+    /* tslint:disable-next-line */
+    console.warn(
+      `WARNING: You didn't provide an endpoint and don't have a .graphqlconfig. Make sure you have at least one of them.`,
+    )
+  }
+
+  return `
+  <!DOCTYPE html>
+  <html>
+  <head>
+    <meta charset=utf-8 />
+    <meta name="viewport" content="user-scalable=no, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, minimal-ui">
+    <link rel="shortcut icon" href="https://graphcool-playground.netlify.com/favicon.png">
+    <title>${extendedOptions.title || 'GraphQL Playground'}</title>
+    ${
+      extendedOptions.env === 'react' || extendedOptions.env === 'electron'
+        ? ''
+        : getCdnMarkup(extendedOptions)
+    }
   </head>
   <body>
     <style type="text/css">

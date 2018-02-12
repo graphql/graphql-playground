@@ -6,6 +6,14 @@ const path = require('path')
 const fs = require('fs')
 const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin')
 const HappyPack = require('happypack')
+const { renderPlaygroundPage } = require('graphql-playground-html');
+
+const appEntrypoint = 'src/renderer/index.html' 
+
+// Create the playground entry point if it doesn't exist
+if(!fs.existsSync(appEntrypoint)) {
+  fs.writeFileSync(appEntrypoint, renderPlaygroundPage({env: 'react'}));
+}
 
 module.exports = {
   devtool: 'cheap-module-eval-source-map',

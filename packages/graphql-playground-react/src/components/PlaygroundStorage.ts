@@ -200,7 +200,8 @@ export default class PlaygroundStorage {
   private getProject() {
     let result: any = null
     try {
-      result = JSON.parse(localStorage.getItem(this.endpoint) || '{}')
+      const data = localStorage.getItem(this.endpoint) || '{}'
+      result = JSON.parse(data)
     } catch (e) {
       /* tslint:disable-next-line */
       console.info(e)
@@ -212,6 +213,7 @@ export default class PlaygroundStorage {
         date: new Date(item.date),
       }))
     }
+
     return PlaygroundStorage.runMigration(result, this.endpoint)
   }
 

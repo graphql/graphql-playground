@@ -1,10 +1,17 @@
 <p align="center"><img src="https://imgur.com/5fzMbyV.png" width="269"></p>
 
+
+[![npm version](https://badge.fury.io/js/graphql-playground-react.svg)](https://badge.fury.io/js/graphql-playground-react) [![Build Status](https://travis-ci.org/graphcool/graphql-playground.svg?branch=master)](https://travis-ci.org/graphcool/graphql-playground) [![CircleCI](https://circleci.com/gh/graphcool/graphql-playground.svg?style=shield)](https://circleci.com/gh/graphcool/graphql-playground)
+
 GraphQL IDE for better development workflows (GraphQL Subscriptions, interactive docs & collaboration). <br />
 **You can download the [desktop app](https://github.com/graphcool/graphql-playground/releases) or use the web version at graphqlbin.com: [Demo](https://www.graphqlbin.com/RVIn)**
 
 
 [![](https://i.imgur.com/AE5W6OW.png)](https://www.graphqlbin.com/RVIn)
+## Installation
+```sh
+$ brew cask install graphql-playground
+```
 
 ## Features
 
@@ -59,14 +66,14 @@ All interfaces, the React component `<Playground />` and all middlewares expose 
 
 #### Install
 ```sh
-yarn add graphql-playground
+yarn add graphql-playground-react
 ```
 
 #### Use
 GraphQL Playground provides a React component responsible for rendering the UI and Session management.
-There are **3 dependencies** needed in order to run the `graphql-playground` React component.
+There are **3 dependencies** needed in order to run the `graphql-playground-react` React component.
 1. _Open Sans_ and _Source Code Pro_ fonts
-2. Including `graphql-playground/playground.css`
+2. Including `graphql-playground-react/playground.css`
 3. Rendering the `<Playground />` component
 
 The GraphQL Playground requires **React 16**.
@@ -80,8 +87,8 @@ Including stylesheet and the component (`2., 3.`)
 ```js
 import React from 'react'
 import ReactDOM from 'react-dom'
-import Playground from 'graphql-playground'
-import 'graphql-playground/playground.css'
+import Playground from 'graphql-playground-react'
+import 'graphql-playground-react/playground.css'
 
 ReactDOM.render(<Playground endpoint="https://api.graph.cool/simple/v1/swapi" />, document.body)
 ```
@@ -159,7 +166,7 @@ functions:
         cors: true
 ```
 
-## Development [![npm version](https://badge.fury.io/js/graphql-playground.svg)](https://badge.fury.io/js/graphql-playground)  [![CircleCI](https://circleci.com/gh/graphcool/graphql-playground.svg?style=shield)](https://circleci.com/gh/graphcool/graphql-playground)
+## Development
 
 This is a mono-repo setup containing packages for the `graphql-playground-react` and `graphql-playground-electron`.
 

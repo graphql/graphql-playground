@@ -4,9 +4,10 @@ import * as theme from 'styled-theming'
 import { darken, lighten } from 'polished'
 import * as CopyToClipboard from 'react-copy-to-clipboard'
 import Share, { SharingProps } from '../../Share'
-import { StyledComponentClass } from 'styled-components'
-import { Icon } from 'graphcool-styles'
+import ReloadIcon from './ReloadIcon'
+import { keyframes, StyledComponentClass } from 'styled-components'
 import * as cx from 'classnames'
+import shallowEqual from '../util/shallowEqual'
 
 export interface Props {
   endpoint: string
@@ -17,12 +18,33 @@ export interface Props {
   curl: string
   onClickShare?: () => void
   onReloadSchema?: () => void
+  isReloadingSchema: boolean
   sharing?: SharingProps
   fixedEndpoint?: boolean
+  endpointUnreachable: boolean
 }
 
 export default class TopBar extends React.Component<Props, {}> {
+  shouldComponentUpdate(nextProps: Props) {
+    const deconstruct = ({ sharing, ...restProps }: Props) => ({
+      sharing,
+      restProps,
+    })
+    const deconstructedProps = deconstruct(this.props)
+    const deconstructedNextProps = deconstruct(nextProps)
+    const shouldUpdate =
+      !shallowEqual(
+        deconstructedProps.sharing,
+        deconstructedNextProps.sharing,
+      ) ||
+      !shallowEqual(
+        deconstructedProps.restProps,
+        deconstructedNextProps.restProps,
+      )
+    return shouldUpdate
+  }
   render() {
+    const { endpointUnreachable } = this.props
     return (
       <TopBarWrapper>
         <Button onClick={this.props.onClickPrettify}>Prettify</Button>
@@ -36,12 +58,17 @@ export default class TopBar extends React.Component<Props, {}> {
             disabled={this.props.fixedEndpoint}
             className={cx({ active: !this.props.fixedEndpoint })}
           />
-          <ReloadIcon
-            src={require('graphcool-styles/icons/fill/reload.svg')}
-            width={20}
-            height={20}
-            onClick={this.props.onReloadSchema}
-          />
+          {endpointUnreachable ? (
+            <ReachError>
+              <span>Server cannot be reached</span>
+              <Spinner />
+            </ReachError>
+          ) : (
+            <ReloadIcon
+              isReloadingSchema={this.props.isReloadingSchema}
+              onReloadSchema={this.props.onReloadSchema}
+            />
+          )}
         </UrlBarWrapper>
         <CopyToClipboard text={this.props.curl}>
           <Button>Copy CURL</Button>
@@ -91,19 +118,14 @@ const fontColor = theme('mode', {
   dark: p => p.theme.colours.white60,
 })
 
-const iconColor = theme('mode', {
-  light: p => p.theme.colours.darkBlue20,
-  dark: p => p.theme.colours.white20,
-})
-
-const iconColorHover = theme('mode', {
-  light: p => p.theme.colours.darkBlue60,
-  dark: p => p.theme.colours.white60,
-})
-
 const barBorder = theme('mode', {
   light: p => p.theme.colours.darkBlue20,
   dark: p => '#09141c',
+})
+
+const spinnerColor = theme('mode', {
+  light: p => p.theme.colours.black40,
+  dark: p => p.theme.colours.white30,
 })
 
 export const Button: StyledComponentClass<any, any, any> = styled.button`
@@ -129,8 +151,7 @@ export const Button: StyledComponentClass<any, any, any> = styled.button`
 const TopBarWrapper = styled.div`
   display: flex;
   background: ${backgroundColor};
-  padding: 10px;
-  padding-bottom: 4px;
+  padding: 10px 10px 4px;
   align-items: center;
 `
 
@@ -155,15 +176,53 @@ const UrlBarWrapper = styled.div`
   align-items: center;
 `
 
-const ReloadIcon = styled(Icon)`
+const ReachError = styled.div`
   position: absolute;
   right: 5px;
-  cursor: pointer;
-  svg {
-    fill: ${iconColor};
-    transition: 0.1s linear all;
-    &:hover {
-      fill: ${iconColorHover};
-    }
+  display: flex;
+  align-items: center;
+  color: #f25c54;
+`
+
+const bounceAnimation = keyframes`
+  0%, 100% {
+    transform: scale(0);
   }
-` as any // TODO remove this once typings are fixed
+  50% {
+    transform: scale(1);
+  }
+`
+
+const Pulse = styled.div`
+  width: 16px;
+  height: 16px;
+  background-color: ${spinnerColor};
+  border-radius: 100%;
+  animation: ${bounceAnimation} 2s infinite ease-in-out;
+  -webkit-animation: ${bounceAnimation} 2s infinite ease-in-out;
+`
+
+const DelayedPulse = styled.div`
+  width: 16px;
+  height: 16px;
+  position: absolute;
+  top: 0;
+  background-color: ${spinnerColor};
+  border-radius: 100%;
+  animation: ${bounceAnimation} 2s infinite ease-in-out;
+  -webkit-animation: ${bounceAnimation} 2s infinite ease-in-out;
+  animation-delay: -1s;
+  -webkit-animation-delay: -1s;
+`
+
+const SpinnerWrapper = styled.div`
+  position: relative;
+  margin: 6px;
+`
+
+const Spinner = () => (
+  <SpinnerWrapper>
+    <Pulse />
+    <DelayedPulse />
+  </SpinnerWrapper>
+)

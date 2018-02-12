@@ -6,7 +6,7 @@ export interface Props {
   showQueryTitle?: boolean
 }
 
-const QueryHeader = ({ onPrettify, showQueryTitle }: Props) =>
+const QueryHeader = ({ onPrettify, showQueryTitle }: Props) => (
   <div className="query-header">
     <style jsx={true}>{`
       .query-header {
@@ -24,5 +24,6 @@ const QueryHeader = ({ onPrettify, showQueryTitle }: Props) =>
       Prettify
     </div>
   </div>
+)
 
 export default QueryHeader

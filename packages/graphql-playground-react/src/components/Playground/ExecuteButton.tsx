@@ -7,9 +7,12 @@
  */
 
 import * as React from 'react'
-import * as cn from 'classnames'
+import * as cx from 'classnames'
 import { withTheme, LocalThemeInterface } from '../Theme'
 import ExecuteButtonOperation from './ExecuteButtonOperation'
+import { withProps, styled } from '../../styled'
+import * as theme from 'styled-theming'
+import { mix, lighten } from 'polished'
 
 export interface Props {
   onRun: (data?: any) => void
@@ -89,41 +92,10 @@ class ExecuteButton extends React.Component<
     )
 
     return (
-      <div className={cn('execute-button-wrap', this.props.localTheme)}>
-        <style jsx={true}>{`
-          .execute-button-wrap {
-            position: absolute;
-            left: -63px;
-            z-index: 5;
-            top: 15px;
-            margin: 0 14px 0 28px;
-          }
-
-          .graphcool-execute-button {
-            @p: .br100, .flex, .itemsCenter, .justifyCenter, .pointer;
-            background-color: rgb(185, 191, 196);
-            border: 6px solid rgb(11, 20, 28);
-            width: 60px;
-            height: 60px;
-          }
-
-          .graphcool-execute-button.light {
-            background-color: #0f202d;
-            border: 6px solid #eeeff0;
-          }
-
-          .graphcool-execute-button.light :global(svg) {
-            fill: white;
-          }
-
-          .graphcool-execute-button.running {
-            @p: .bgrRed;
-          }
-        `}</style>
-        <div
-          className={cn('graphcool-execute-button', this.props.localTheme, {
-            running: this.props.isRunning,
-          })}
+      <Wrapper className={this.props.localTheme}>
+        <Button
+          className={cx(this.props.localTheme)}
+          isRunning={String(this.props.isRunning)}
           onMouseDown={onMouseDown}
           onClick={onClick}
           title="Execute Query (Ctrl-Enter)"
@@ -135,9 +107,9 @@ class ExecuteButton extends React.Component<
           >
             {pathJSX}
           </svg>
-        </div>
+        </Button>
         {options}
-      </div>
+      </Wrapper>
     )
   }
 
@@ -201,3 +173,65 @@ class ExecuteButton extends React.Component<
 }
 
 export default withTheme<Props>(ExecuteButton)
+
+const Wrapper = styled.div`
+  position: absolute;
+  left: -62px;
+  z-index: 5;
+  top: 15px;
+  margin: 0 14px 0 28px;
+`
+
+const buttonBackground = theme.variants('mode', 'isRunning', {
+  true: {
+    light: p => p.theme.colours.red,
+    dark: p => p.theme.colours.red,
+  },
+  false: {
+    dark: 'rgb(185, 191, 196)',
+    light: p => mix(0.6, p.theme.colours.darkBlue, 'white'),
+  },
+})
+
+const buttonBackgroundHover = theme.variants('mode', 'isRunning', {
+  true: {
+    light: p => lighten(0.1, p.theme.colours.red),
+    dark: p => lighten(0.1, p.theme.colours.red),
+  },
+  false: {
+    dark: 'rgb(195, 201, 206)',
+    light: p => mix(0.8, p.theme.colours.darkBlue, 'white'),
+  },
+})
+
+const buttonBorderColor = theme('mode', {
+  light: '#eeeff0',
+  dark: 'rgb(11, 20, 28)',
+})
+
+interface ButtonProps {
+  isRunning: string
+}
+
+const Button = withProps<ButtonProps>()(styled.div)`
+  width: 60px;
+  height: 60px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 100%;
+  transition: background-color 100ms;
+  background-color: ${buttonBackground};
+  border: 6px solid ${buttonBorderColor};
+  cursor: pointer;
+
+  svg {
+    fill: ${p => (p.theme.mode === 'light' ? 'white' : 'inherit')};
+  }
+
+  &:hover {
+    background-color: ${buttonBackgroundHover};
+  }
+`

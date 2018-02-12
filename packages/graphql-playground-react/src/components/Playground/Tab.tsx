@@ -31,9 +31,8 @@ export default class Tab extends React.PureComponent<Props, State> {
 
     return (
       <div
-        className={`tab ${index === selectedSessionIndex && 'active'} ${
-          localTheme
-        }`}
+        className={`tab ${index === selectedSessionIndex &&
+          'active'} ${localTheme}`}
         onClick={this.handleSelectSession}
       >
         <style jsx={true}>{`

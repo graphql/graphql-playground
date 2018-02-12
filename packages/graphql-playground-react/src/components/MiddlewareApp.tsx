@@ -7,7 +7,12 @@ import * as fetch from 'isomorphic-fetch'
 import { GraphQLConfig } from '../graphqlConfig'
 import * as yaml from 'js-yaml'
 import ProjectsSideNav from './ProjectsSideNav'
-import { styled, ThemeProvider, theme as styledTheme } from '../styled'
+import {
+  styled,
+  ThemeProvider,
+  theme as styledTheme,
+  keyframes,
+} from '../styled'
 import OldThemeProvider from './Theme/ThemeProvider'
 import { getActiveEndpoints } from './util'
 import { ISettings } from '../types'
@@ -116,7 +121,7 @@ export default class MiddlewareApp extends React.Component<Props, State> {
         undefined,
       subscriptionEndpoint,
       settingsString,
-      settings: this.getSettings(settingsString),
+      settings: this.props.settings || this.getSettings(settingsString),
       configIsYaml,
       configString: props.configString,
       activeEnv,
@@ -209,13 +214,19 @@ export default class MiddlewareApp extends React.Component<Props, State> {
   }
 
   normalizeSubscriptionUrl(endpoint, subscriptionEndpoint) {
-    if (subscriptionEndpoint.startsWith('/')) {
-      const secure =
-        endpoint.includes('https') || location.href.includes('https') ? 's' : ''
-      return `ws${secure}://${location.host}${subscriptionEndpoint}`
+    if (subscriptionEndpoint) {
+      if (subscriptionEndpoint.startsWith('/')) {
+        const secure =
+          endpoint.includes('https') || location.href.includes('https')
+            ? 's'
+            : ''
+        return `ws${secure}://${location.host}${subscriptionEndpoint}`
+      } else {
+        return subscriptionEndpoint.replace(/^http/, 'ws')
+      }
     }
 
-    return subscriptionEndpoint.replace(/^http/, 'ws')
+    return endpoint.replace(/^http/, 'ws')
   }
 
   componentWillMount() {
@@ -474,10 +485,7 @@ export default class MiddlewareApp extends React.Component<Props, State> {
 
   private wsEndpointValid(url): Promise<boolean> {
     return new Promise(resolve => {
-      const socket = new WebSocket(
-        'wss://subscriptions.graph.cool/v1/cirs1ufsg02b101619ru0bx5r',
-        'graphql-ws',
-      )
+      const socket = new WebSocket(url, 'graphql-ws')
       socket.addEventListener('open', event => {
         socket.send(JSON.stringify({ type: 'connection_init' }))
       })
@@ -515,7 +523,21 @@ async function find(
   return null
 }
 
+const appearIn = keyframes`
+  from { 
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to { 
+    opacity: 1;
+    transform: translateY(0);
+  }
+`
+
 const App = styled.div`
   display: flex;
   width: 100%;
+  opacity: 0;
+  transform: translateY(10px);
+  animation: ${appearIn} 0.5s ease-out forwards 0.2s;
 `

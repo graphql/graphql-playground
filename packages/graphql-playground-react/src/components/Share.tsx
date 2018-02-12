@@ -48,122 +48,72 @@ export default class Share extends React.Component<SharingProps, State> {
     } = this.props
     return (
       <Wrapper>
-        <style jsx={true}>{`
-          .share {
-            z-index: 1005;
-          }
-          .tooltip-text {
-            @p: .mr10, .darkBlue50, .fw6, .ttu, .f14;
-            letter-spacing: 0.53px;
-          }
-          .icon {
-            @p: .pointer, .relative;
-          }
-          .tooltip {
-            @p: .absolute;
-            right: -21px;
-          }
-          .row {
-            @p: .flex, .itemsCenter, .justifyBetween, .relative;
-            min-width: 245px;
-          }
-          .copy {
-            @p: .absolute, .right0;
-          }
-          .row + .row {
-            @p: .mt16;
-          }
-          .button {
-            @p: .br2, .f14, .fw6, .ttu, .flex, .itemsCenter, .white40;
-            border: 1.5px solid rgba(255, 255, 255, 0.2);
-            padding: 5px 9px 6px 9px;
-          }
-          .button:hover,
-          .button.open {
-            @p: .bWhite70, .white80;
-          }
-          .button span {
-            @p: .ml10;
-          }
-          .button.light {
-            @p: .bDarkBlue10, .darkBlue40;
-          }
-          .button.light:hover,
-          .button.light.open {
-            @p: .bDarkBlue70, .darkBlue80;
-          }
-          .button.light:hover :global(svg),
-          .button.light.open :global(svg) {
-            stroke: $darkBlue80;
-          }
-          .button:hover :global(svg),
-          .button.open :global(svg) {
-            stroke: $white80;
-          }
-          input {
-            @p: .bgDarkBlue10, .br2, .pv6, .ph10, .fw6, .darkBlue, .f12, .db,
-              .w100;
-          }
-          .copy:hover :global(svg) {
-            fill: $darkBlue60;
-          }
-        `}</style>
         <IconWrapper>
           <div onClick={this.toggleTooltip}>{this.props.children}</div>
-          <TooltipWrapper>
-            <Tooltip
-              open={open}
-              onClose={this.toggleTooltip}
-              anchorOrigin={{
-                horizontal: 'right',
-                vertical: 'bottom',
-              }}
-              renderAfterContent={this.renderAuthSharingWarning}
-            >
-              <div>
-                <Row>
-                  <TooltipText onClick={onToggleAllTabs}>
-                    Share all tabs{' '}
-                  </TooltipText>
-                  <ToggleButton checked={allTabs} onChange={onToggleAllTabs} />
-                </Row>
-                <Row>
-                  <TooltipText onClick={onToggleHttpHeaders}>
-                    HTTP headers{' '}
-                  </TooltipText>
-                  <ToggleButton
-                    checked={httpHeaders}
-                    onChange={onToggleHttpHeaders}
-                  />
-                </Row>
-                <Row>
-                  <TooltipText onClick={onToggleHistory}>History </TooltipText>
-                  <ToggleButton checked={history} onChange={onToggleHistory} />
-                </Row>
-                {shareUrl && (
+          {open && (
+            <TooltipWrapper>
+              <Tooltip
+                open={open}
+                onClose={this.toggleTooltip}
+                anchorOrigin={{
+                  horizontal: 'right',
+                  vertical: 'bottom',
+                }}
+                renderAfterContent={this.renderAuthSharingWarning}
+              >
+                <div>
                   <Row>
-                    <Input value={shareUrl} disabled={true} />
-                    <CopyWrapper>
-                      <Copy text={shareUrl}>
-                        <Icon
-                          src={require('graphcool-styles/icons/fill/copy.svg')}
-                          color={$v.darkBlue30}
-                          width={25}
-                          height={25}
-                        />
-                      </Copy>
-                    </CopyWrapper>
+                    <TooltipText onClick={onToggleAllTabs}>
+                      Share all tabs{' '}
+                    </TooltipText>
+                    <ToggleButton
+                      checked={allTabs}
+                      onChange={onToggleAllTabs}
+                    />
                   </Row>
-                )}
-                <Row>
-                  <div />
-                  <Button hideArrow={true} onClick={onShare}>
-                    {reshare && shareUrl ? 'Reshare' : 'Share'}
-                  </Button>
-                </Row>
-              </div>
-            </Tooltip>
-          </TooltipWrapper>
+                  <Row>
+                    <TooltipText onClick={onToggleHttpHeaders}>
+                      HTTP headers{' '}
+                    </TooltipText>
+                    <ToggleButton
+                      checked={httpHeaders}
+                      onChange={onToggleHttpHeaders}
+                    />
+                  </Row>
+                  <Row>
+                    <TooltipText onClick={onToggleHistory}>
+                      History{' '}
+                    </TooltipText>
+                    <ToggleButton
+                      checked={history}
+                      onChange={onToggleHistory}
+                    />
+                  </Row>
+                  {shareUrl && (
+                    <Row>
+                      <Input value={shareUrl} disabled={true} />
+                      <CopyWrapper>
+                        <Copy text={shareUrl}>
+                          <Icon
+                            src={require('graphcool-styles/icons/fill/copy.svg')}
+                            color={$v.darkBlue30}
+                            width={25}
+                            height={25}
+                          />
+                        </Copy>
+                      </CopyWrapper>
+                    </Row>
+                  )}
+                  <Row>
+                    <div />
+                    <Button hideArrow={true} onClick={onShare}>
+                      {reshare && shareUrl ? 'Reshare' : 'Share'}
+                    </Button>
+                  </Row>
+                </div>
+              </Tooltip>
+            </TooltipWrapper>
+          )}
         </IconWrapper>
       </Wrapper>
     )

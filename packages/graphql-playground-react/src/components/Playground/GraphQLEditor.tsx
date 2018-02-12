@@ -1,16 +1,19 @@
 import * as React from 'react'
 import * as ReactDOM from 'react-dom'
-import { parse, print, GraphQLSchema } from 'graphql'
+import { parse, print, GraphQLSchema, isNamedType } from 'graphql'
 import * as cn from 'classnames'
 import ExecuteButton from './ExecuteButton'
 import { QueryEditor } from './QueryEditor'
 import CodeMirrorSizer from 'graphiql/dist/utility/CodeMirrorSizer'
 import getSelectedOperationName from 'graphiql/dist/utility/getSelectedOperationName'
 import debounce from 'graphiql/dist/utility/debounce'
-import find from 'graphiql/dist/utility/find'
 import { fillLeafs } from 'graphiql/dist/utility/fillLeafs'
 import { getLeft, getTop } from 'graphiql/dist/utility/elementPosition'
-import { OperationDefinition, Session } from '../../types'
+import {
+  OperationDefinition,
+  Session,
+  ApolloLinkExecuteResponse,
+} from '../../types'
 import { Response } from '../Playground'
 import { connect } from 'react-redux'
 
@@ -19,7 +22,7 @@ import Spinner from '../Spinner'
 import Results from './Results'
 import ReponseTracing from './ResponseTracing'
 import withTheme from '../Theme/withTheme'
-import { LocalThemeInterface } from '../Theme/index'
+import { LocalThemeInterface } from '../Theme'
 import GraphDocs from './DocExplorer/GraphDocs'
 import { SchemaFetcher } from './SchemaFetcher'
 import { setStacks } from '../../actions/graphiql-docs'
@@ -30,6 +33,7 @@ import TopBar from './TopBar/TopBar'
 import { SharingProps } from '../Share'
 import getQueryFacts from './util/getQueryFacts'
 import { VariableEditor } from './VariableEditor'
+import { GraphQLRequest, FetchResult } from 'apollo-link'
 
 /**
  * The top-level React component for GraphQLEditor, intended to encompass the entire
@@ -37,7 +41,7 @@ import { VariableEditor } from './VariableEditor'
  */
 
 export interface Props {
-  fetcher: (params: any, headers?: any) => Promise<any>
+  fetcher: (graphQLRequest: GraphQLRequest) => ApolloLinkExecuteResponse
   schemaFetcher: SchemaFetcher
   isGraphcoolUrl?: boolean
   query?: string
@@ -58,8 +62,8 @@ export interface Props {
   onClickHistory?: () => void
   onChangeEndpoint?: (value: string) => void
   onClickShare?: () => void
+  onStopQuery: () => void
   onRef: any
-  getDefaultFieldNames?: () => any
   showCodeGeneration?: boolean
   showEndpoints?: boolean
   showQueryTitle?: boolean
@@ -95,33 +99,32 @@ export interface ReduxProps {
 }
 
 export interface State {
-  schema?: GraphQLSchema | null
-  query: string
-  variables?: any
-  operationName?: string
-  responses: any[]
   editorFlex: number
   variableEditorOpen: boolean
   variableEditorHeight: number
   responseTracingOpen: boolean
   responseTracingHeight: number
-  docExploreOpen: boolean
   docExplorerWidth: number
-  isWaitingForReponse: boolean
   subscription: any
   variableToType: any
   operations: any[]
-  docExplorerOpen: boolean
   schemaExplorerOpen: boolean
   schemaExplorerWidth: number
   isWaitingForResponse: boolean
   selectedVariableNames: string[]
   responseExtensions: any
-  currentQueryStartTime?: Date
-  currentQueryEndTime?: Date
   nextQueryStartTime?: Date
   tracingSupported?: boolean
   queryVariablesActive: boolean
+  endpointUnreachable: boolean
+  isReloadingSchema: boolean
+  schema?: GraphQLSchema | null
+  query: string
+  variables: string
+  operationName?: string
+  responses: any[]
+  currentQueryStartTime?: Date
+  currentQueryEndTime?: Date
 }
 
 export interface SimpleProps {
@@ -138,11 +141,6 @@ export class GraphQLEditor extends React.PureComponent<
   Props & LocalThemeInterface & ReduxProps,
   State
 > {
-  static Logo: (props: SimpleProps) => JSX.Element
-  static Toolbar: (props: SimpleProps) => JSX.Element
-  static Footer: (props: SimpleProps) => JSX.Element
-  static ToolbarButton: (props: ToolbarButtonProps) => JSX.Element
-
   public codeMirrorSizer
   public queryEditorComponent
   public variableEditorComponent
@@ -242,7 +240,6 @@ export class GraphQLEditor extends React.PureComponent<
       responseTracingOpen: false,
       responseTracingHeight:
         Number(this.storageGet('responseTracingHeight')) || 300,
-      docExplorerOpen: false,
       docExplorerWidth: Number(this.storageGet('docExplorerWidth')) || 350,
       schemaExplorerOpen: false,
       schemaExplorerWidth:
@@ -251,6 +248,8 @@ export class GraphQLEditor extends React.PureComponent<
       subscription: null,
       selectedVariableNames: [],
       queryVariablesActive,
+      endpointUnreachable: false,
+      isReloadingSchema: false,
       ...queryFacts,
     }
 
@@ -368,24 +367,6 @@ export class GraphQLEditor extends React.PureComponent<
   }
 
   render() {
-    const children = React.Children.toArray(this.props.children)
-    const footer = find(children, child => child.type === GraphQLEditor.Footer)
-
-    const queryWrapStyle = {
-      WebkitFlex: this.state.editorFlex,
-      flex: this.state.editorFlex,
-    }
-
-    const variableOpen = this.state.variableEditorOpen
-    const variableStyle = {
-      height: variableOpen ? this.state.variableEditorHeight : null,
-    }
-
-    const tracingOpen = this.state.responseTracingOpen
-    const tracingStyle = {
-      height: tracingOpen ? this.state.responseTracingHeight : null,
-    }
-
     return (
       <div
         className={cn('graphiql-container', { isActive: this.props.isActive })}
@@ -430,18 +411,6 @@ export class GraphQLEditor extends React.PureComponent<
             right: 38px;
             z-index: 2;
           }
-          .download-button {
-            @p: .white50, .bgDarkBlue, .ttu, .f14, .fw6, .br2, .pointer,
-              .absolute;
-            right: 25px;
-            padding: 5px 9px 6px 9px;
-            letter-spacing: 0.53px;
-            z-index: 2;
-            background-color: $darkerBlue !important;
-            top: initial !important;
-            bottom: 21px !important;
-          }
-
           .intro {
             @p: .absolute, .tlCenter, .top50, .left50, .white20, .f16, .tc;
             font-family: 'Source Code Pro', 'Consolas', 'Inconsolata',
@@ -451,12 +420,12 @@ export class GraphQLEditor extends React.PureComponent<
           }
 
           .listening {
-            @p: .f16, .white40, .absolute, .bottom0;
+            @p: .f16, .white40, .absolute, .bottom0, .bgDarkBlue;
             font-family: 'Source Code Pro', 'Consolas', 'Inconsolata',
               'Droid Sans Mono', 'Monaco', monospace;
             letter-spacing: 0.6px;
             padding-left: 24px;
-            padding-bottom: 30px;
+            padding-bottom: 60px;
           }
 
           .onboarding-hint {
@@ -501,7 +470,9 @@ export class GraphQLEditor extends React.PureComponent<
             onClickShare={this.props.onClickShare}
             sharing={this.props.sharing}
             onReloadSchema={this.reloadSchema}
+            isReloadingSchema={this.state.isReloadingSchema}
             fixedEndpoint={this.props.fixedEndpoint}
+            endpointUnreachable={this.state.endpointUnreachable}
           />
           <div
             ref={this.setEditorBarComponent}
@@ -510,7 +481,10 @@ export class GraphQLEditor extends React.PureComponent<
           >
             <div
               className={cn('queryWrap', this.props.localTheme)}
-              style={queryWrapStyle}
+              style={{
+                WebkitFlex: this.state.editorFlex,
+                flex: this.state.editorFlex,
+              }}
             >
               <QueryEditor
                 ref={this.setQueryEditorComponent}
@@ -518,7 +492,7 @@ export class GraphQLEditor extends React.PureComponent<
                 value={this.state.query}
                 onEdit={this.handleEditQuery}
                 onHintInformationRender={this.handleHintInformationRender}
-                onRunQuery={this.handleEditorRunQuery}
+                onRunQuery={this.runQueryAtCursor}
                 disableAutofocus={this.props.disableAutofocus}
                 hideLineNumbers={this.props.hideLineNumbers}
                 hideGutters={this.props.hideGutters}
@@ -526,10 +500,21 @@ export class GraphQLEditor extends React.PureComponent<
                 useVim={this.props.useVim}
                 onClickReference={this.handleClickReference}
               />
-              <div className="variable-editor" style={variableStyle}>
+              <div
+                className="variable-editor"
+                style={{
+                  height: this.state.variableEditorOpen
+                    ? this.state.variableEditorHeight
+                    : null,
+                }}
+              >
                 <div
                   className="variable-editor-title"
-                  style={{ cursor: variableOpen ? 'row-resize' : 'n-resize' }}
+                  style={{
+                    cursor: this.state.variableEditorOpen
+                      ? 'row-resize'
+                      : 'n-resize',
+                  }}
                   onMouseDown={this.handleVariableResizeStart}
                 >
                   <span
@@ -558,14 +543,14 @@ export class GraphQLEditor extends React.PureComponent<
                     variableToType={this.state.variableToType}
                     onEdit={this.handleEditVariables}
                     onHintInformationRender={this.handleHintInformationRender}
-                    onRunQuery={this.handleEditorRunQuery}
+                    onRunQuery={this.runQueryAtCursor}
                   />
                 ) : (
                   <VariableEditor
                     ref={this.setVariableEditorComponent}
                     value={this.props.session.headers}
                     onEdit={this.props.onChangeHeaders}
-                    onRunQuery={this.handleEditorRunQuery}
+                    onRunQuery={this.runQueryAtCursor}
                   />
                 )}
               </div>
@@ -587,20 +572,30 @@ export class GraphQLEditor extends React.PureComponent<
                   responses={this.state.responses}
                   hideGutters={this.props.hideGutters}
                 />
-                {footer}
                 {!this.state.responses ||
                   (this.state.responses.length === 0 && (
                     <div className="intro">
                       Hit the Play Button to get a response here
                     </div>
                   ))}
-                {Boolean(this.state.subscription) && (
+                {this.props.session.subscriptionActive && (
                   <div className="listening">Listening &hellip;</div>
                 )}
-                <div className="response-tracing" style={tracingStyle}>
+                <div
+                  className="response-tracing"
+                  style={{
+                    height: this.state.responseTracingOpen
+                      ? this.state.responseTracingHeight
+                      : null,
+                  }}
+                >
                   <div
                     className="response-tracing-title"
-                    style={{ cursor: tracingOpen ? 'row-resize' : 'n-resize' }}
+                    style={{
+                      cursor: this.state.responseTracingOpen
+                        ? 'row-resize'
+                        : 'n-resize',
+                    }}
                     onMouseDown={this.handleTracingResizeStart}
                   >
                     Tracing
@@ -620,6 +615,7 @@ export class GraphQLEditor extends React.PureComponent<
           </div>
         </div>
         <GraphDocs
+          ref={this.setDocExplorerRef}
           schema={this.state.schema!}
           sessionId={this.props.session.id}
         />
@@ -699,6 +695,12 @@ export class GraphQLEditor extends React.PureComponent<
     this.resultComponent = ref
   }
 
+  setDocExplorerRef = ref => {
+    if (ref) {
+      this.docExplorerComponent = ref.getWrappedInstance()
+    }
+  }
+
   handleClickReference = reference => {
     //
   }
@@ -713,8 +715,10 @@ export class GraphQLEditor extends React.PureComponent<
     const { insertions, result } = fillLeafs(
       this.state.schema,
       this.state.query,
-      this.props.getDefaultFieldNames,
-    )
+    ) as {
+      insertions: Array<{ index: number; string: string }>
+      result: string
+    }
     if (insertions && insertions.length > 0) {
       const editor = this.queryEditorComponent.getCodeMirror()
       editor.operation(() => {
@@ -723,10 +727,11 @@ export class GraphQLEditor extends React.PureComponent<
         editor.setValue(result)
         let added = 0
         try {
-          const markers = insertions.map(({ index, str }) =>
+          /* tslint:disable-next-line */
+          const markers = insertions.map(({ index, string }) =>
             editor.markText(
               editor.posFromIndex(index + added),
-              editor.posFromIndex(index + (added += str.length)),
+              editor.posFromIndex(index + (added += string.length)),
               {
                 className: 'autoInsertedLeaf',
                 clearOnEnter: true,
@@ -739,9 +744,10 @@ export class GraphQLEditor extends React.PureComponent<
           //
         }
         let newCursorIndex = cursorIndex
-        insertions.forEach(({ index, str }) => {
-          if (index < cursorIndex && str) {
-            newCursorIndex += str.length
+        /* tslint:disable-next-line */
+        insertions.forEach(({ index, string }) => {
+          if (index < cursorIndex && string) {
+            newCursorIndex += string.length
           }
         })
         editor.setCursor(editor.posFromIndex(newCursorIndex))
@@ -754,14 +760,23 @@ export class GraphQLEditor extends React.PureComponent<
   // Private methods
 
   public reloadSchema = async () => {
-    const result = await this.props.schemaFetcher.refetch(
-      this.props.session.endpoint || this.props.endpoint,
-      this.convertHeaders(this.props.session.headers),
-    )
-    if (result) {
-      const { schema } = result
-      this.setState({ schema })
-      this.renewStacks(schema)
+    try {
+      this.setState({ isReloadingSchema: true })
+      const result = await this.props.schemaFetcher.refetch(this.props.session)
+      if (result) {
+        const { schema } = result
+        this.setState({
+          schema,
+          isReloadingSchema: false,
+          endpointUnreachable: false,
+        })
+        this.renewStacks(schema)
+      }
+    } catch (e) {
+      this.setState({
+        isReloadingSchema: false,
+        endpointUnreachable: true,
+      })
     }
   }
 
@@ -775,19 +790,6 @@ export class GraphQLEditor extends React.PureComponent<
     this.props.setStacks(this.props.session.id, stacks)
   }
 
-  private convertHeaders(headers) {
-    if (headers) {
-      try {
-        return JSON.parse(headers)
-      } catch (e) {
-        /* tslint:disable-next-line */
-        console.error(e)
-      }
-    }
-
-    return undefined
-  }
-
   private ensureOfSchema() {
     // Only perform introspection if a schema is not provided (undefined)
     if (this.state.schema !== undefined) {
@@ -795,25 +797,34 @@ export class GraphQLEditor extends React.PureComponent<
     }
 
     this.props.schemaFetcher
-      .fetch(
-        this.props.session.endpoint || this.props.endpoint,
-        this.convertHeaders(this.props.session.headers),
-      )
+      .fetch(this.props.session)
       .then(result => {
         if (result) {
           const { schema, tracingSupported } = result
           this.renewStacks(schema)
           this.setState({
             schema,
+            endpointUnreachable: false,
             tracingSupported,
           })
         }
       })
-      .catch(error => {
-        this.setState({
-          schema: null,
-          responses: [{ date: error.message, time: new Date() }],
-        })
+      .catch(async error => {
+        if (error.message === 'Failed to fetch') {
+          setTimeout(() => {
+            this.setState({
+              endpointUnreachable: true,
+            })
+            this.ensureOfSchema()
+          }, 1000)
+        } else {
+          /* tslint:disable-next-line */
+          console.error(error)
+          this.setState({
+            schema: null,
+            responses: [{ date: error.message, time: new Date() }],
+          })
+        }
       })
   }
 
@@ -839,79 +850,60 @@ export class GraphQLEditor extends React.PureComponent<
     }
   }
 
-  private fetchQuery(query, variables, operationName, cb) {
-    const fetcher: any = this.props.fetcher
-    let jsonVariables = null
-
-    try {
-      jsonVariables =
-        variables && variables.trim() !== '' ? JSON.parse(variables) : null
-    } catch (error) {
-      throw new Error(`Variables are invalid JSON: ${error.message}.`)
-    }
-
-    if (typeof jsonVariables !== 'object') {
-      throw new Error('Variables are not a JSON object.')
-    }
-
+  private fetchQuery(
+    query,
+    variables: any,
+    operationName: string | undefined,
+    cb: (value: FetchResult) => void,
+  ) {
     const headers = {}
     if (this.state.responseTracingOpen) {
       headers['X-Apollo-Tracing'] = '1'
     }
 
-    const fetch = fetcher(
-      {
-        query,
-        variables: jsonVariables,
-        operationName,
+    const fetch = this.props.fetcher({
+      query,
+      variables,
+      operationName,
+      context: {
+        headers,
       },
-      headers,
-    )
+    })
 
-    if (isPromise(fetch)) {
-      // If fetcher returned a Promise, then call the callback when the promise
-      // resolves, otherwise handle the error.
-      fetch.then(cb).catch(error => {
-        /* tslint:disable-next-line */
-        console.error(error)
+    const subscription = fetch.subscribe({
+      next: cb,
+      error: error => {
         this.setState({
           isWaitingForResponse: false,
           responses: [
-            { date: error && String(error.stack || error), time: new Date() },
+            {
+              date: error && String(error.stack || error),
+              time: new Date(),
+            },
           ],
+          subscription: null,
         } as State)
-      })
-    } else if (isObservable(fetch)) {
-      // If the fetcher returned an Observable, then subscribe to it, calling
-      // the callback on each next value, and handling both errors and the
-      // completion of the Observable. Returns a Subscription object.
-      const subscription = fetch.subscribe({
-        // next: cb,
-        next: cb,
-        error: error => {
-          this.setState({
-            isWaitingForResponse: false,
-            responses: [
-              {
-                date: error && String(error.stack || error),
-                time: new Date(),
-              },
-            ],
-            subscription: null,
-          } as State)
-        },
-        complete: () => {
-          this.setState({
-            isWaitingForResponse: false,
-            subscription: null,
-          } as State)
-        },
-      })
+        this.props.onStopQuery()
+      },
+      complete: () => {
+        this.setState({
+          isWaitingForResponse: false,
+          subscription: null,
+        } as State)
+        this.props.onStopQuery()
+      },
+    })
 
-      return subscription
-    } else {
-      throw new Error('Fetcher did not return Promise or Observable.')
+    return subscription
+  }
+
+  private getVariables() {
+    try {
+      return JSON.parse(this.props.session.variables)
+    } catch (e) {
+      //
     }
+    return {}
   }
 
   private handleRunQuery = selectedOperationName => {
@@ -922,8 +914,8 @@ export class GraphQLEditor extends React.PureComponent<
     // in case autoCompletion fails (the function returns undefined),
     // the current query from the editor.
     const editedQuery = this.autoCompleteLeafs() || this.state.query
-    const variables = this.state.variables
-    let operationName = this.state.operationName
+    const variables = this.getVariables()
+    let operationName = this.props.session.operationName
 
     // If an operation was explicitly provided, different from the current
     // operation name, then report that it changed.
@@ -948,7 +940,7 @@ export class GraphQLEditor extends React.PureComponent<
         editedQuery,
         variables,
         operationName,
-        result => {
+        (result: any) => {
           if (queryID === this.editorQueryID) {
             let extensions
             if (result.extensions) {
@@ -957,15 +949,10 @@ export class GraphQLEditor extends React.PureComponent<
                 delete result.extensions
               }
             }
-            let isSubscription = false
-            if (result.isSubscription) {
-              isSubscription = true
-              delete result.isSubscription
-            }
             let responses
             const response = JSON.stringify(result, null, 2)
 
-            if (isSubscription) {
+            if (this.props.session.subscriptionActive) {
               responses = this.state.responses
                 .filter(res => res && res.date)
                 .slice(0, 100)
@@ -995,6 +982,8 @@ export class GraphQLEditor extends React.PureComponent<
 
       this.setState({ subscription } as State)
     } catch (error) {
+      /* tslint:disable-next-line */
+      console.error(error)
       this.setState({
         isWaitingForResponse: false,
         responses: [{ date: error.message, time: new Date() }],
@@ -1003,17 +992,23 @@ export class GraphQLEditor extends React.PureComponent<
   }
 
   private handleStopQuery = () => {
-    const subscription = this.state.subscription
+    const { subscription } = this.state
     this.setState({
       isWaitingForResponse: false,
       subscription: null,
     } as State)
     if (subscription) {
-      subscription.unsubscribe()
+      this.props.onStopQuery()
+      try {
+        subscription.unsubscribe()
+      } catch (e) {
+        /* tslint:disable-next-line */
+        console.error(e)
+      }
     }
   }
 
-  private runQueryAtCursor() {
+  private runQueryAtCursor = () => {
     if (this.state.subscription) {
       this.handleStopQuery()
       return
@@ -1078,10 +1073,6 @@ export class GraphQLEditor extends React.PureComponent<
         elem.removeEventListener('click', this.onClickHintInformation)
       }),
     )
-  }
-
-  private handleEditorRunQuery = () => {
-    this.runQueryAtCursor()
   }
 
   private handleResizeStart = downEvent => {
@@ -1241,11 +1232,14 @@ export class GraphQLEditor extends React.PureComponent<
       const typeName = event.target.innerHTML
       const schema = this.state.schema
       if (schema) {
-        const type = schema.getType(typeName)
-        if (type) {
-          this.setState({ docExplorerOpen: true } as State, () => {
-            this.docExplorerComponent.showDoc(type)
-          })
+        // TODO: There is no way as of now to retrieve the NAMED_TYPE of a GraphQLList(Type).
+        // We're therefore removing any '[' or '!' characters, to properly find its NAMED_TYPE. (eg. [Type!]! => Type)
+        // This should be removed as soon as there's a safer way to do that.
+        const namedTypeName = typeName.replace(/[\]\[!]/g, '')
+        const type = schema.getType(namedTypeName)
+
+        if (isNamedType(type)) {
+          this.docExplorerComponent.showDocFromType(type)
         }
       }
     }
@@ -1258,16 +1252,6 @@ export default withTheme<Props>(
     withRef: true,
   })(GraphQLEditor),
 )
-
-// Duck-type promise detection.
-function isPromise(value) {
-  return typeof value === 'object' && typeof value.then === 'function'
-}
-
-// Duck-type observable detection.
-function isObservable(value) {
-  return typeof value === 'object' && typeof value.subscribe === 'function'
-}
 
 const DragBar = styled.div`
   width: 15px;

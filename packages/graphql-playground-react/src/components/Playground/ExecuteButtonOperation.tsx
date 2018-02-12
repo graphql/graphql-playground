@@ -8,31 +8,31 @@ export interface Props {
   highlight: any
 }
 
-export default class ExecuteButtonOperation extends React.Component<Props, {}> {
+class ExecuteButtonOperation extends React.PureComponent<Props> {
   render() {
-    const { operation, highlight } = this.props
     return (
       <li
-        key={operation.name ? operation.name.value : '*'}
-        className={operation === highlight ? 'selected' : ''}
-        onMouseOver={this.handleMouseOver}
-        onMouseOut={this.handleMouseOut}
-        onMouseUp={this.handleMouseUp}
+        key={this.props.operation.name ? this.props.operation.name.value : '*'}
+        className={
+          this.props.operation === this.props.highlight ? 'selected' : ''
+        }
+        onMouseOver={this.onMouseOver}
+        onMouseOut={this.props.onMouseOut}
+        onMouseUp={this.onMouseUp}
       >
-        {operation.name ? operation.name.value : '<Unnamed>'}
+        {this.props.operation.name
+          ? this.props.operation.name.value
+          : '<Unnamed>'}
       </li>
     )
   }
-
-  private handleMouseOver = () => {
+  private onMouseOver = () => {
     this.props.onMouseOver(this.props.operation)
   }
 
-  private handleMouseOut = () => {
-    this.props.onMouseOut()
-  }
-
-  private handleMouseUp = () => {
+  private onMouseUp = () => {
     this.props.onMouseUp(this.props.operation)
   }
 }
+
+export default ExecuteButtonOperation

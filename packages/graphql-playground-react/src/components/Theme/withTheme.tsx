@@ -5,7 +5,9 @@ export interface ThemeProps {
   onRef?: any
 }
 
-function withTheme<Props = { onRef?: any}>(Component): React.ComponentClass<Props> {
+function withTheme<Props = { onRef?: any }>(
+  Component,
+): React.ComponentClass<Props> {
   return class WithTheme extends React.Component<Props & ThemeProps, {}> {
     static contextTypes = {
       localTheme: PropTypes.object,
@@ -31,7 +33,11 @@ function withTheme<Props = { onRef?: any}>(Component): React.ComponentClass<Prop
 
     render() {
       return (
-        <Component localTheme={this.context.localTheme.theme} {...this.props} ref={this.props.onRef}/>
+        <Component
+          localTheme={this.context.localTheme.theme}
+          {...this.props}
+          ref={this.props.onRef}
+        />
       )
     }
   }

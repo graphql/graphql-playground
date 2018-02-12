@@ -38,35 +38,29 @@ export default class SchemaDoc extends React.Component<Props, {}> {
           }
         />
         <div className="doc-category">
-          <div className="doc-category-title">
-            {'root types'}
-          </div>
+          <div className="doc-category-title">{'root types'}</div>
           <div className="doc-category-item">
-            <span className="keyword">
-              {'query'}
-            </span>
+            <span className="keyword">{'query'}</span>
             {': '}
             <TypeLink type={queryType} onClick={this.props.onClickType} />
           </div>
-          {mutationType &&
+          {mutationType && (
             <div className="doc-category-item">
-              <span className="keyword">
-                {'mutation'}
-              </span>
+              <span className="keyword">{'mutation'}</span>
               {': '}
               <TypeLink type={mutationType} onClick={this.props.onClickType} />
-            </div>}
-          {subscriptionType &&
+            </div>
+          )}
+          {subscriptionType && (
             <div className="doc-category-item">
-              <span className="keyword">
-                {'subscription'}
-              </span>
+              <span className="keyword">{'subscription'}</span>
               {': '}
               <TypeLink
                 type={subscriptionType}
                 onClick={this.props.onClickType}
               />
-            </div>}
+            </div>
+          )}
         </div>
       </div>
     )

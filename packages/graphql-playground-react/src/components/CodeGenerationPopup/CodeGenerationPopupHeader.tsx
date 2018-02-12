@@ -6,7 +6,7 @@ export interface Props {
   queryActive: boolean
 }
 
-export default (props: Props) =>
+export default (props: Props) => (
   <div
     className={cx(
       $p.flex,
@@ -29,3 +29,4 @@ export default (props: Props) =>
       </div>
     </div>
   </div>
+)

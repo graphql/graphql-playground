@@ -4,7 +4,6 @@ import MiddlewareApp from './components/MiddlewareApp'
 import './styles/graphiql_dark.css'
 import './styles/graphiql_light.css'
 import './index.css'
-import 'graphcool-styles/dist/styles.css'
 
 if (process.env.NODE_ENV !== 'production') {
   /* tslint:disable-next-line */
@@ -16,11 +15,7 @@ if (process.env.NODE_ENV !== 'production') {
 ;(window as any)['GraphQLPlayground'] = {
   init(element: HTMLElement, options) {
     ReactDOM.render(
-      <MiddlewareApp
-        setTitle={true}
-        showNewWorkspace={false}
-        {...options}
-      />,
+      <MiddlewareApp setTitle={true} showNewWorkspace={false} {...options} />,
       element,
     )
   },

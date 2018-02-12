@@ -71,6 +71,7 @@ export class QueryEditor extends React.Component<Props, {}> {
     require('codemirror/addon/dialog/dialog')
     require('codemirror/addon/lint/lint')
     require('codemirror/keymap/sublime')
+    require('codemirror/keymap/vim')
     require('codemirror-graphql/hint')
     require('codemirror-graphql/lint')
     require('codemirror-graphql/info')
@@ -168,20 +169,6 @@ export class QueryEditor extends React.Component<Props, {}> {
       this.editor.options.info.schema = this.props.schema
       this.editor.options.jump.schema = this.props.schema
       CodeMirror.signal(this.editor, 'change', this.editor)
-      if (this.props.schema) {
-        const oldGetType = this.editor.options.hintOptions.schema.getType
-        /**
-         * DANGER! THIS IS AN EXTREME HACK. As soon, as codemirror-graphql doesn't use getType in .hint anymore
-         * this can be removed.
-         */
-        this.editor.options.hintOptions.schema.getType = type => {
-          const result = oldGetType.call(
-            this.editor.options.hintOptions.schema,
-            type,
-          )
-          return result || type
-        }
-      }
     }
     if (
       this.props.value !== prevProps.value &&
@@ -189,10 +176,6 @@ export class QueryEditor extends React.Component<Props, {}> {
     ) {
       this.cachedValue = this.props.value
       this.editor.setValue(this.props.value)
-    }
-    if (this.props.useVim !== prevProps.useVim) {
-      this.editor.options.keyMap = this.props.useVim ? 'vim' : 'sublime'
-      CodeMirror.signal(this.editor, 'change', this.editor)
     }
     if (this.props.readOnly !== prevProps.readOnly) {
       this.editor.options.readOnly = this.props.readOnly

@@ -9,7 +9,7 @@ export interface Props {
   onSearch: (value: string) => void
 }
 
-const HistoryHeader = (props: Props) =>
+const HistoryHeader = (props: Props) => (
   <div className="history-header">
     <style jsx={true}>{`
       .history-header {
@@ -31,5 +31,6 @@ const HistoryHeader = (props: Props) =>
       isShown={true}
     />
   </div>
+)
 
 export default HistoryHeader
