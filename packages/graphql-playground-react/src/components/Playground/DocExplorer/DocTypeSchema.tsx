@@ -1,3 +1,4 @@
+import { GraphQLInterfaceType } from 'graphql'
 import * as React from 'react'
 import TypeLink from './TypeLink'
 
@@ -18,6 +19,9 @@ const DocTypeSchema = ({
 }: DocTypeSchemaProps) => {
   const nonDeprecatedFields = fields.filter(data => !data.isDeprecated)
   const deprecatedFields = fields.filter(data => data.isDeprecated)
+
+  const typeInstance = type instanceof GraphQLInterfaceType ? 'interface ' : 'type'
+
   return (
     <div className="doc-type-schema">
       <style jsx={true} global={true}>{`
@@ -54,7 +58,7 @@ const DocTypeSchema = ({
         }
       `}</style>
       <div className="doc-type-schema-line type-line">
-        <span className="field-name">type</span>{' '}
+        <span className="field-name">{typeInstance}</span>{' '}
         <span className="type-name">{type.name}</span>{' '}
         {interfaces.length === 0 && <span className="brace">{`{`}</span>}
       </div>
