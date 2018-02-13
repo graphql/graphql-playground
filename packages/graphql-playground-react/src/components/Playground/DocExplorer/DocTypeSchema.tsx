@@ -20,7 +20,8 @@ const DocTypeSchema = ({
   const nonDeprecatedFields = fields.filter(data => !data.isDeprecated)
   const deprecatedFields = fields.filter(data => data.isDeprecated)
 
-  const typeInstance = type instanceof GraphQLInterfaceType ? 'interface ' : 'type'
+  const typeInstance =
+    type instanceof GraphQLInterfaceType ? 'interface ' : 'type'
 
   return (
     <div className="doc-type-schema">

@@ -12,7 +12,7 @@ const UnionTypeSchema = ({
   schema,
   type,
   level,
-  sessionId
+  sessionId,
 }: EnumTypeSchemaProps) => {
   const types = schema.getPossibleTypes(type)
   return (
