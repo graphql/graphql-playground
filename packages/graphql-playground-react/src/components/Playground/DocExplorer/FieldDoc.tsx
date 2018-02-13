@@ -5,7 +5,7 @@ import {
   GraphQLInterfaceType,
   GraphQLEnumType,
   GraphQLUnionType,
-  GraphQLScalarType
+  GraphQLScalarType,
 } from 'graphql'
 import MarkdownContent from 'graphiql/dist/components/DocExplorer/MarkdownContent'
 import TypeLink from './TypeLink'
@@ -58,12 +58,17 @@ export default class FieldDoc extends React.Component<Props, State> {
     const implementationsOffset =
       obj.fields.length + obj.interfaces.length + obj.args.length
 
-    const typeInstance =
-      type instanceof GraphQLInterfaceType
-        ? 'inferface'
-        : type instanceof GraphQLUnionType
-          ? 'union'
-          : type instanceof GraphQLEnumType ? 'enum' : 'type'
+    let typeInstance
+
+    if (type instanceof GraphQLInterfaceType) {
+      typeInstance = 'interface'
+    } else if (type instanceof GraphQLUnionType) {
+      typeInstance = 'union'
+    } else if (type instanceof GraphQLEnumType) {
+      typeInstance = 'enum'
+    } else {
+      typeInstance = 'type'
+    }
 
     return (
       <div>
