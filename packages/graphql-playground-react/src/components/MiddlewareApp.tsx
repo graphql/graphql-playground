@@ -18,6 +18,7 @@ import { getActiveEndpoints } from './util'
 import { ISettings } from '../types'
 import PlaygroundStorage from './PlaygroundStorage'
 import { mapKeys } from 'lodash'
+import * as queryString from 'query-string'
 
 const store = createStore()
 
@@ -90,16 +91,23 @@ export default class MiddlewareApp extends React.Component<Props, State> {
       : false
 
     const { activeEnv, projectName } = this.getInitialActiveEnv(props.config)
+    const params = queryString.parse(location.search)
 
     let headers
     let endpoint =
-      props.endpoint ||
-      props.endpointUrl ||
-      getParameterByName('endpoint') ||
-      location.href
+      props.endpoint || props.endpointUrl || params.endpoint || location.href
 
     let subscriptionEndpoint: any =
-      props.subscriptionEndpoint || getParameterByName('subscriptionEndpoint')
+      props.subscriptionEndpoint || params.subscriptionEndpointndpoint
+
+    const paramHeaders = params.headers
+    if (paramHeaders) {
+      try {
+        headers = JSON.parse(paramHeaders)
+      } catch (e) {
+        //
+      }
+    }
 
     if (props.configString && props.config && activeEnv) {
       const endpoints = getActiveEndpoints(props.config, activeEnv, projectName)
