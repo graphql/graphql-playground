@@ -22,17 +22,6 @@ import * as queryString from 'query-string'
 
 const store = createStore()
 
-function getParameterByName(name: string): string | null {
-  const url = window.location.href
-  name = name.replace(/[\[\]]/g, '\\$&')
-  const regexa = new RegExp('[?&]' + name + '(=([^&#]*)|&|#|$)')
-  const results = regexa.exec(url)
-  if (!results || !results[2]) {
-    return null
-  }
-  return decodeURIComponent(results[2].replace(/\+/g, ' '))
-}
-
 export interface Props {
   endpoint?: string
   endpointUrl?: string
@@ -47,7 +36,6 @@ export interface Props {
   onSaveConfig?: (configString: string) => void
   onNewWorkspace?: () => void
   getRef?: (ref: any) => void
-  platformToken?: string
   session?: any
   env?: any
   config?: GraphQLConfig
@@ -59,7 +47,6 @@ export interface State {
   subscriptionPrefix?: string
   subscriptionEndpoint?: string
   shareUrl?: string
-  platformToken?: string
   settingsString: string
   settings: ISettings
   configIsYaml?: boolean
@@ -95,7 +82,10 @@ export default class MiddlewareApp extends React.Component<Props, State> {
 
     let headers
     let endpoint =
-      props.endpoint || props.endpointUrl || params.endpoint || location.href
+      props.endpoint ||
+      props.endpointUrl ||
+      params.endpoint ||
+      `${location.origin}${location.pathname}`
 
     let subscriptionEndpoint: any =
       props.subscriptionEndpoint || params.subscriptionEndpointndpoint
@@ -123,10 +113,6 @@ export default class MiddlewareApp extends React.Component<Props, State> {
 
     this.state = {
       endpoint: this.absolutizeUrl(endpoint),
-      platformToken:
-        props.platformToken ||
-        localStorage.getItem('platform-token') ||
-        undefined,
       subscriptionEndpoint,
       settingsString,
       settings: this.props.settings || this.getSettings(settingsString),
@@ -237,14 +223,6 @@ export default class MiddlewareApp extends React.Component<Props, State> {
     return endpoint.replace(/^http/, 'ws')
   }
 
-  componentWillMount() {
-    const platformToken = getParameterByName('platform-token')
-    if (platformToken && platformToken.length > 0) {
-      localStorage.setItem('platform-token', platformToken)
-      window.location.replace(window.location.origin + window.location.pathname)
-    }
-  }
-
   componentDidMount() {
     if (this.state.subscriptionEndpoint === '') {
       this.updateSubscriptionsUrl()
@@ -291,7 +269,6 @@ export default class MiddlewareApp extends React.Component<Props, State> {
                   onChangeSubscriptionsEndpoint={
                     this.handleChangeSubscriptionsEndpoint
                   }
-                  adminAuthToken={this.state.platformToken}
                   settings={this.normalizeSettings(this.state.settings)}
                   settingsString={this.state.settingsString}
                   onSaveSettings={this.handleSaveSettings}
@@ -449,10 +426,7 @@ export default class MiddlewareApp extends React.Component<Props, State> {
   }
 
   private getTitle() {
-    if (
-      this.state.platformToken ||
-      this.state.endpoint.includes('api.graph.cool')
-    ) {
+    if (this.state.endpoint.includes('api.graph.cool')) {
       const projectId = this.getProjectId(this.state.endpoint)
       const cluster = this.state.endpoint.includes('api.graph.cool')
         ? 'shared'
