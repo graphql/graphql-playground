@@ -133,14 +133,11 @@ export class Playground extends React.PureComponent<Props & DocsState, State> {
       this.storage.setState(props.session, props.endpoint)
     }
 
-    const sessions = this.initSessions(props)
+    const { sessions, selectedSessionIndex } = this.initSessions(props)
     this.schemaFetcher = new SchemaFetcher(
       this.props.settings,
       this.createApolloLink,
     )
-
-    const selectedSessionIndex =
-      parseInt(this.storage.getItem('selectedSessionIndex'), 10) || 0
 
     this.state = {
       schema: null,
@@ -188,11 +185,6 @@ export class Playground extends React.PureComponent<Props & DocsState, State> {
     return props.configPath || props.endpoint
   }
 
-  componentWillMount() {
-    // look, if there is a session. if not, initiate one.
-    this.initSessions()
-  }
-
   componentDidMount() {
     if (this.initialIndex > -1) {
       this.setState({
@@ -217,9 +209,7 @@ export class Playground extends React.PureComponent<Props & DocsState, State> {
       this.storage.saveProject()
       const storageKey = this.getStorageKey()
       this.storage = new PlaygroundStorage(storageKey)
-      const sessions = this.initSessions()
-      const selectedSessionIndex =
-        parseInt(this.storage.getItem('selectedSessionIndex'), 10) || 0
+      const { sessions, selectedSessionIndex } = this.initSessions()
       this.setState(
         {
           sessions,
@@ -788,17 +778,40 @@ export class Playground extends React.PureComponent<Props & DocsState, State> {
     this.setValueInSession(sessionId, 'endpoint', endpoint)
   }
 
-  private initSessions = (props = this.props) => {
-    // defaulting to admin for deserialized sessions
-    const sessions = this.storage.getSessions() // .map(session => Immutable.set(session, 'selectedViewer', 'ADMIN'))
+  private initSessions = (
+    props = this.props,
+  ): { sessions: Session[]; selectedSessionIndex: number } => {
+    let selectedSessionIndex =
+      parseInt(this.storage.getItem('selectedSessionIndex'), 10) || 0
+    const sessions = this.storage.getSessions()
 
     const urlSession = this.getUrlSession(sessions)
 
     if (urlSession) {
       if (sessions.length === 1 && sessions[0].query === defaultQuery) {
-        return [urlSession]
+        return {
+          sessions: [urlSession],
+          selectedSessionIndex,
+        }
       }
-      return sessions.concat(urlSession)
+      return {
+        sessions: sessions.concat(urlSession),
+        selectedSessionIndex,
+      }
+    }
+
+    // in the case of header injection, open that tab directly
+    // but only create a new tab if there is not already a tab with the right credentials open!
+    if (props.headers && props.headers.Authorization) {
+      const authSessionIndex = sessions.findIndex(s =>
+        s.headers.includes(props.headers.Authorization),
+      )
+      if (authSessionIndex > -1) {
+        selectedSessionIndex = authSessionIndex
+      } else {
+        const newLength = sessions.push(this.createSession(undefined, props))
+        selectedSessionIndex = newLength - 1
+      }
     }
 
     if (sessions.length > 0) {
@@ -810,10 +823,16 @@ export class Playground extends React.PureComponent<Props & DocsState, State> {
           })
         }, 5)
       }
-      return sessions
+      return {
+        sessions,
+        selectedSessionIndex,
+      }
     }
 
-    return [this.createSession(undefined, props)]
+    return {
+      sessions: [this.createSession(undefined, props)],
+      selectedSessionIndex,
+    }
   }
 
   private saveSessions = () => {
@@ -974,6 +993,7 @@ export class Playground extends React.PureComponent<Props & DocsState, State> {
     const subscriptionClient = new SubscriptionClient(wsEndpoint, {
       timeout: 20000,
       connectionParams,
+      lazy: true,
     })
 
     const httpLink = new HttpLink({
@@ -1000,7 +1020,8 @@ export class Playground extends React.PureComponent<Props & DocsState, State> {
       'subscriptionActive',
       isSubscription(operation),
     )
-    return execute(this.apolloLinks[session.id], operation)
+    const link = this.setApolloLink(session)
+    return execute(link, operation)
   }
 
   private isSharingAuthorization = (): boolean => {

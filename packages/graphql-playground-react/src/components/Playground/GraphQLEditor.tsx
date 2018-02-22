@@ -873,11 +873,14 @@ export class GraphQLEditor extends React.PureComponent<
     const subscription = fetch.subscribe({
       next: cb,
       error: error => {
+        const errorMessage = error.result
+          ? JSON.stringify(error.result, null, 2)
+          : error.stack || error
         this.setState({
           isWaitingForResponse: false,
           responses: [
             {
-              date: error && String(error.stack || error),
+              date: errorMessage,
               time: new Date(),
             },
           ],
