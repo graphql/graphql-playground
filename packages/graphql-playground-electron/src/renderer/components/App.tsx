@@ -21,6 +21,10 @@ import * as yaml from 'js-yaml'
 import * as findUp from 'find-up'
 import { patchEndpointsToConfigData as patchPrismaEndpointsToConfigData } from 'graphql-config-extension-prisma'
 import { patchEndpointsToConfigData } from 'graphql-config-extension-graphcool'
+import * as Raven from 'raven-js'
+Raven
+    .config('https://a6598aa49ea24f409f301f813f229086@sentry.io/297186')
+    .install()
 // import { PermissionSession } from 'graphql-playground/lib/types'
 
 const { dialog } = remote
