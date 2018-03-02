@@ -35,7 +35,6 @@ interface State {
   shareUrl?: string
   loading: boolean
   session?: any
-  platformToken?: string
   configString?: string
   configPath?: string
 
@@ -72,12 +71,11 @@ export default class App extends React.Component<{}, State> {
 
   constructor(props) {
     super(props)
-    const { endpoint, platformToken } = this.getArgs()
+    const { endpoint } = this.getArgs()
     this.state = {
       openTooltipTheme: false,
       theme: 'dark',
       endpoint,
-      platformToken,
       loading: false,
     }
     ;(global as any).a = this
@@ -95,7 +93,7 @@ export default class App extends React.Component<{}, State> {
     return {
       endpoint: args.endpoint,
       subscriptionsEndpoint: args['subscriptions-endpoint'],
-      platformToken: args['platform-token'] || localStorage.platformToken,
+      // platformToken: args['platform-token'] || localStorage.platformToken,
       env: args.env,
     }
   }
@@ -252,7 +250,7 @@ cd ${folderPath}; graphql playground`)
     let configString
     let folderName
     let configPath
-    const platformToken = input.platformToken
+    // const platformToken = input.platformToken
     let config
 
     if (input.cwd) {
@@ -306,7 +304,7 @@ cd ${folderPath}; graphql playground`)
       env: input.env,
       endpoint,
       config,
-      platformToken,
+      // platformToken,
     }
 
     this.setState(state)
@@ -505,7 +503,7 @@ cd ${folderPath}; graphql playground`)
   }
 
   render() {
-    const { theme, endpoint, platformToken, configString, config } = this.state
+    const { theme, endpoint, configString, config } = this.state
 
     return (
       <Provider store={store}>
@@ -547,7 +545,6 @@ cd ${folderPath}; graphql playground`)
                 getRef={this.setRef}
                 endpoint={endpoint}
                 isElectron={true}
-                platformToken={platformToken}
                 configString={configString}
                 config={config}
                 onSaveConfig={this.saveConfig}

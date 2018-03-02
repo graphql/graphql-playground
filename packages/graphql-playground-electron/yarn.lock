@@ -34,10 +34,6 @@
   version "0.11.7"
   resolved "https://registry.yarnpkg.com/@types/graphql/-/graphql-0.11.7.tgz#da39a2f7c74e793e32e2bb7b3b68da1691532dd5"
 
-"@types/graphql@^0.9.1":
-  version "0.9.4"
-  resolved "https://registry.yarnpkg.com/@types/graphql/-/graphql-0.9.4.tgz#cdeb6bcbef9b6c584374b81aa7f48ecf3da404fa"
-
 "@types/lodash@^4.14.85":
   version "4.14.92"
   resolved "https://registry.yarnpkg.com/@types/lodash/-/lodash-4.14.92.tgz#6e3cb0b71a1e12180a47a42a744e856c3ae99a57"
@@ -1783,7 +1779,7 @@ code-point-at@^1.0.0:
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/code-point-at/-/code-point-at-1.1.0.tgz#0d070b4d043a5bea33a2f1a40e2edb3d9a4ccf77"
 
-codemirror-graphql@0.6.12, codemirror-graphql@^0.6.11, codemirror-graphql@^0.6.12:
+codemirror-graphql@0.6.12, codemirror-graphql@^0.6.11:
   version "0.6.12"
   resolved "https://registry.yarnpkg.com/codemirror-graphql/-/codemirror-graphql-0.6.12.tgz#91a273fe5188857524a30221d06e645b4ca41f00"
   dependencies:
@@ -2129,7 +2125,7 @@ css-loader@0.28.9:
     postcss-value-parser "^3.3.0"
     source-list-map "^2.0.0"
 
-css-modules-loader-core@^1.0.1, css-modules-loader-core@^1.1.0:
+css-modules-loader-core@^1.1.0:
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/css-modules-loader-core/-/css-modules-loader-core-1.1.0.tgz#5908668294a1becd261ae0a4ce21b0b551f21d16"
   dependencies:
@@ -3441,17 +3437,6 @@ graphcool-json-schema@1.2.1:
   version "1.2.1"
   resolved "https://registry.yarnpkg.com/graphcool-json-schema/-/graphcool-json-schema-1.2.1.tgz#6cefb6c8b50543615e6efa43bb54f9e3fbb281f3"
 
-graphcool-styles@0.2.4:
-  version "0.2.4"
-  resolved "https://registry.yarnpkg.com/graphcool-styles/-/graphcool-styles-0.2.4.tgz#c04aa8a440280e910e4c9cfa1ef97052d1060198"
-  dependencies:
-    html-webpack-plugin "^2.24.1"
-    interactive "^0.1.9"
-    isomorphic-fetch "^2.2.1"
-    object-assign "^4.1.0"
-    react-dom "^15.3.2"
-    webpack-dev-server "^1.16.2"
-
 graphcool-styles@0.2.7:
   version "0.2.7"
   resolved "https://registry.yarnpkg.com/graphcool-styles/-/graphcool-styles-0.2.7.tgz#60e0a561d45012c17617ecd0453486a1833af96c"
@@ -3679,50 +3664,6 @@ graphql-playground-react@1.4.6:
     webpack-bundle-analyzer "^2.9.2"
     zen-observable "^0.7.1"
 
-graphql-playground@1.3.17:
-  version "1.3.17"
-  resolved "https://registry.yarnpkg.com/graphql-playground/-/graphql-playground-1.3.17.tgz#1584bbcc948a7f9bac9399b9c269439da3086791"
-  dependencies:
-    calculate-size "^1.1.1"
-    classnames "^2.2.5"
-    codemirror "^5.27.4"
-    codemirror-graphql "^0.6.12"
-    cuid "^1.3.8"
-    graphcool-styles "0.2.4"
-    graphcool-tmp-ui "^0.0.11"
-    graphiql "^0.11.2"
-    graphql "^0.10.5"
-    isomorphic-fetch "^2.2.1"
-    js-yaml "^3.10.0"
-    json-stable-stringify "^1.0.1"
-    keycode "^2.1.9"
-    lodash "^4.17.4"
-    lodash.debounce "^4.0.8"
-    marked "^0.3.9"
-    polished "^1.9.0"
-    postcss-modules "^0.6.4"
-    prop-types "^15.6.0"
-    react "^16.2.0"
-    react-addons-shallow-compare "^15.6.2"
-    react-codemirror "^1.0.0"
-    react-copy-to-clipboard "^5.0.1"
-    react-dom "^16.2.0"
-    react-helmet "^5.2.0"
-    react-modal "^3.1.10"
-    react-redux "^5.0.6"
-    react-router-dom "^4.2.2"
-    react-transition-group "^1.1.3"
-    react-virtualized "^9.12.0"
-    redux "^3.7.2"
-    redux-localstorage rc
-    redux-localstorage-filter "^0.1.1"
-    rxjs "^5.0.3"
-    seamless-immutable "^7.0.1"
-    styled-components "^2.4.0"
-    styled-jsx-postcss "git+https://github.com/timsuchanek/styled-jsx-postcss#build3"
-    styled-theming "^2.2.0"
-    subscriptions-transport-ws "^0.8.1"
-
 graphql-request@^1.4.0:
   version "1.4.1"
   resolved "https://registry.yarnpkg.com/graphql-request/-/graphql-request-1.4.1.tgz#0772743cfac8dfdd4d69d36106a96c9bdd191ce8"
@@ -3734,24 +3675,6 @@ graphql-request@^1.5.0:
   resolved "https://registry.yarnpkg.com/graphql-request/-/graphql-request-1.5.0.tgz#69b30a1767189fcba27f5c907c0a87339f90b5d8"
   dependencies:
     cross-fetch "1.1.1"
-
-graphql-subscriptions@^0.4.4:
-  version "0.4.4"
-  resolved "https://registry.yarnpkg.com/graphql-subscriptions/-/graphql-subscriptions-0.4.4.tgz#39cff32d08dd3c990113864bab77154403727e9b"
-  dependencies:
-    "@types/graphql" "^0.9.1"
-    es6-promise "^4.0.5"
-    iterall "^1.1.1"
-
-graphql-tag@^2.4.2:
-  version "2.6.1"
-  resolved "https://registry.yarnpkg.com/graphql-tag/-/graphql-tag-2.6.1.tgz#4788d509f6e29607d947fc47a40c4e18f736d34a"
-
-graphql@^0.10.5:
-  version "0.10.5"
-  resolved "https://registry.yarnpkg.com/graphql/-/graphql-0.10.5.tgz#c9be17ca2bdfdbd134077ffd9bbaa48b8becd298"
-  dependencies:
-    iterall "^1.1.0"
 
 graphql@^0.11.7:
   version "0.11.7"
@@ -4499,7 +4422,7 @@ items@2.x.x:
   version "2.1.1"
   resolved "https://registry.yarnpkg.com/items/-/items-2.1.1.tgz#8bd16d9c83b19529de5aea321acaada78364a198"
 
-iterall@1.1.3, iterall@^1.1.0, iterall@^1.1.1:
+iterall@1.1.3, iterall@^1.1.1:
   version "1.1.3"
   resolved "https://registry.yarnpkg.com/iterall/-/iterall-1.1.3.tgz#1cbbff96204056dde6656e2ed2e2226d0e6d72c9"
 
@@ -5984,15 +5907,6 @@ postcss-modules-values@1.3.0, postcss-modules-values@^1.3.0:
     icss-replace-symbols "^1.1.0"
     postcss "^6.0.1"
 
-postcss-modules@^0.6.4:
-  version "0.6.4"
-  resolved "https://registry.yarnpkg.com/postcss-modules/-/postcss-modules-0.6.4.tgz#77a58bb77ba1b4392b270c0b59852fd75e89a8b4"
-  dependencies:
-    css-modules-loader-core "^1.0.1"
-    generic-names "^1.0.2"
-    postcss "^5.2.8"
-    string-hash "^1.1.1"
-
 postcss-modules@^1.1.0:
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/postcss-modules/-/postcss-modules-1.1.0.tgz#c9f94f76ff6addf7c35b842e69ed442118156bb0"
@@ -6200,7 +6114,7 @@ promise@^7.1.1:
   dependencies:
     asap "~2.0.3"
 
-prop-types@^15.5.10, prop-types@^15.5.4, prop-types@^15.5.6, prop-types@^15.5.7, prop-types@^15.5.8, prop-types@^15.6.0:
+prop-types@^15.5.10, prop-types@^15.5.4, prop-types@^15.5.7, prop-types@^15.5.8, prop-types@^15.6.0:
   version "15.6.0"
   resolved "https://registry.yarnpkg.com/prop-types/-/prop-types-15.6.0.tgz#ceaf083022fc46b4a35f69e13ef75aed0d639856"
   dependencies:
@@ -6413,14 +6327,6 @@ react-modal@^1.6.5:
     prop-types "^15.5.7"
     react-dom-factories "^1.0.0"
 
-react-modal@^3.1.10:
-  version "3.1.10"
-  resolved "https://registry.yarnpkg.com/react-modal/-/react-modal-3.1.10.tgz#8898b5cc4ebba78adbb8dea4c55a69818aa682cc"
-  dependencies:
-    exenv "^1.2.0"
-    prop-types "^15.5.10"
-    warning "^3.0.0"
-
 react-modal@^3.1.11:
   version "3.1.11"
   resolved "https://registry.yarnpkg.com/react-modal/-/react-modal-3.1.11.tgz#95c8223fcee7013258ad2d149c38c9f870c89958"
@@ -6495,16 +6401,6 @@ react-transform-hmr@^1.0.3:
   dependencies:
     global "^4.3.0"
     react-proxy "^1.1.7"
-
-react-transition-group@^1.1.3:
-  version "1.2.1"
-  resolved "https://registry.yarnpkg.com/react-transition-group/-/react-transition-group-1.2.1.tgz#e11f72b257f921b213229a774df46612346c7ca6"
-  dependencies:
-    chain-function "^1.0.0"
-    dom-helpers "^3.2.0"
-    loose-envify "^1.3.1"
-    prop-types "^15.5.6"
-    warning "^3.0.0"
 
 react-transition-group@^2.2.1:
   version "2.2.1"
@@ -6911,7 +6807,7 @@ rx@^4.1.0:
   version "4.1.0"
   resolved "https://registry.yarnpkg.com/rx/-/rx-4.1.0.tgz#a5f13ff79ef3b740fe30aa803fb09f98805d4782"
 
-rxjs@^5.0.3, rxjs@^5.4.2:
+rxjs@^5.4.2:
   version "5.5.6"
   resolved "https://registry.yarnpkg.com/rxjs/-/rxjs-5.5.6.tgz#e31fb96d6fd2ff1fd84bcea8ae9c02d007179c02"
   dependencies:
@@ -7450,19 +7346,6 @@ style-loader@0.20.1:
     loader-utils "^1.1.0"
     schema-utils "^0.4.3"
 
-styled-components@^2.4.0:
-  version "2.4.0"
-  resolved "https://registry.yarnpkg.com/styled-components/-/styled-components-2.4.0.tgz#086d0fd483d54638837fca3ea546a030b94adf75"
-  dependencies:
-    buffer "^5.0.3"
-    css-to-react-native "^2.0.3"
-    fbjs "^0.8.9"
-    hoist-non-react-statics "^1.2.0"
-    is-plain-object "^2.0.1"
-    prop-types "^15.5.4"
-    stylis "^3.4.0"
-    supports-color "^3.2.3"
-
 styled-components@^3.0.1:
   version "3.1.4"
   resolved "https://registry.yarnpkg.com/styled-components/-/styled-components-3.1.4.tgz#1bdc1409c9bacafee3510c573d23b73039b0d875"
@@ -7480,18 +7363,6 @@ styled-components@^3.0.1:
 "styled-jsx-postcss@git+https://github.com/timsuchanek/styled-jsx-postcss#build3":
   version "0.2.0"
   resolved "git+https://github.com/timsuchanek/styled-jsx-postcss#677ee0fb7f9138047a00e03c8c3e44adbb33cf2a"
-  dependencies:
-    babel-traverse "^6.21.0"
-    babylon "^6.14.1"
-    deasync "^0.1.9"
-    postcss "^5.2.8"
-    postcss-load-plugins "^2.2.0"
-    styled-jsx "^0.5.7"
-
-"styled-jsx-postcss@git+https://github.com/timsuchanek/styled-jsx-postcss.git#build3":
-  version "0.2.0"
-  uid "677ee0fb7f9138047a00e03c8c3e44adbb33cf2a"
-  resolved "git+https://github.com/timsuchanek/styled-jsx-postcss.git#677ee0fb7f9138047a00e03c8c3e44adbb33cf2a"
   dependencies:
     babel-traverse "^6.21.0"
     babylon "^6.14.1"
@@ -7540,21 +7411,6 @@ stylis@3.4.5:
 stylis@^3.4.0:
   version "3.4.7"
   resolved "https://registry.yarnpkg.com/stylis/-/stylis-3.4.7.tgz#4fa57ef276d1ed20aafda4e1a97c35b5b87d59ce"
-
-subscriptions-transport-ws@^0.8.1:
-  version "0.8.3"
-  resolved "https://registry.yarnpkg.com/subscriptions-transport-ws/-/subscriptions-transport-ws-0.8.3.tgz#d4b22db7f5951bd30e7c6f4dc4774d34ed9f1751"
-  dependencies:
-    backo2 "^1.0.2"
-    eventemitter3 "^2.0.3"
-    graphql-subscriptions "^0.4.4"
-    graphql-tag "^2.4.2"
-    iterall "^1.1.1"
-    lodash.assign "^4.2.0"
-    lodash.isobject "^3.0.2"
-    lodash.isstring "^4.0.1"
-    symbol-observable "^1.0.4"
-    ws "^3.0.0"
 
 subscriptions-transport-ws@^0.9.5:
   version "0.9.5"
