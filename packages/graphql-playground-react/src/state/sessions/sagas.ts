@@ -1,8 +1,14 @@
-import { put, takeLatest, ForkEffect, call, select } from 'redux-saga/effects'
+import {
+  put,
+  takeLatest,
+  ForkEffect,
+  call,
+  select,
+  takeEvery,
+} from 'redux-saga/effects'
 import { delay } from 'redux-saga'
-import { getSelectedSession, getOperations } from './selectors'
+import { getSelectedSession } from './selectors'
 import getSelectedOperationName from '../../components/Playground/util/getSelectedOperationName'
-import { Session } from '../../types'
 import { schemaFetcher } from '../../components/Playground'
 import { getQueryFacts } from '../../components/Playground/util/getQueryFacts'
 import { fromJS, is } from 'immutable'
@@ -18,22 +24,15 @@ import {
 import { getRootMap, getNewStack } from '../../components/Playground/util/stack'
 import { DocsSessionState } from '../docs/reducers'
 import { setStacks } from '../docs/actions'
-
-function* runQuerySaga(action) {
-  // run the query
-  // console.log(`runQuery`, action)
-  const { payload } = action
-  yield put({
-    type: 'ADD_RESPONSE',
-    sessionId: payload.sessionId,
-    response: { date: { hello: 'world' } },
-  })
-}
+import { HistoryState } from '../history/reducers'
+import { getSelectedWorkspace } from '../root/reducers'
+import { addHistoryItem } from '../history/actions'
+import { SessionProps } from '../../types'
 
 function* setQueryFacts() {
   // debounce by 150 ms
   yield call(delay, 150)
-  const session: Session = yield select(getSelectedSession)
+  const session: SessionProps = yield select(getSelectedSession)
 
   const schema = yield schemaFetcher.fetch(session)
   const queryFacts = getQueryFacts(schema, session.query)
@@ -61,10 +60,10 @@ function* setQueryFacts() {
 
 function* runQueryAtPosition(action) {
   const { position } = action.payload
-  const session: Session = yield select(getSelectedSession)
+  const session: SessionProps = yield select(getSelectedSession)
   if (session.operations) {
     let operationName
-    for (const operation of session.operations) {
+    for (const operation of session.operations as any) {
       if (operation.loc.start <= position && operation.loc.end >= position) {
         operationName = operation.name && operation.name.value
       }
@@ -74,7 +73,7 @@ function* runQueryAtPosition(action) {
 }
 
 function* fetchSchemaSaga() {
-  const session: Session = yield select(getSelectedSession)
+  const session: SessionProps = yield select(getSelectedSession)
   yield schemaFetcher.refetch(session)
   try {
     yield call(schemaFetchingSuccess)
@@ -86,7 +85,7 @@ function* fetchSchemaSaga() {
 }
 
 function* renewStacks() {
-  const session: Session = yield select(getSelectedSession)
+  const session: SessionProps = yield select(getSelectedSession)
   const docs: DocsSessionState = yield select(getSelectedSession)
   const schema = yield schemaFetcher.fetch(session)
   const rootMap = getRootMap(schema)
@@ -96,16 +95,30 @@ function* renewStacks() {
   yield call(setStacks, session.id, stacks)
 }
 
-export default function* sessionsSaga() {
-  yield takeLatest('RUN_QUERY', runQuerySaga)
+function* addToHistory({ payload }) {
+  const { sessionId } = payload
+  const workspace = yield select(getSelectedWorkspace)
+  const session = workspace.getIn(['sessions', sessionId])
 
-  // subscribe to several queries
-  yield takeLatest('GET_QUERY_FACTS', setQueryFacts)
-  yield takeLatest('SET_OPERATION_NAME', setQueryFacts)
-  yield takeLatest('EDIT_QUERY', setQueryFacts)
-  yield takeLatest('RUN_QUERY_AT_POSITION', runQueryAtPosition)
-  yield takeLatest('FETCH_SCHEMA', fetchSchemaSaga)
-  yield takeLatest('SCHEMA_FETCHING_SUCCESS', renewStacks)
+  const history: HistoryState = workspace.get('history')
+
+  const exists = history.toKeyedSeq().find(item => is(item, session))
+  if (!exists) {
+    yield call(addHistoryItem, session)
+  }
 }
 
+export default function* sessionsSaga() {
+  yield [
+    takeLatest('GET_QUERY_FACTS', setQueryFacts),
+    takeLatest('SET_OPERATION_NAME', setQueryFacts),
+    takeLatest('EDIT_QUERY', setQueryFacts),
+    takeLatest('RUN_QUERY_AT_POSITION', runQueryAtPosition),
+    takeLatest('FETCH_SCHEMA', fetchSchemaSaga),
+    takeLatest('SCHEMA_FETCHING_SUCCESS', renewStacks),
+    takeEvery('QUERY_SUCCESS' as any, addToHistory),
+  ]
+}
+
+// needed to fix typescript
 export { ForkEffect }

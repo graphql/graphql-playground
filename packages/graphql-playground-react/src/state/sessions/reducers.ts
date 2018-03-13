@@ -14,10 +14,13 @@ import {
   setVariableToType,
   setOperations,
   setOperationName,
+  setSubscriptionActive,
+  startQuery,
 } from './actions'
 import { getSelectedSessionId } from './selectors'
 import { getDefaultSession } from '../../constants'
 import { SessionProps } from '../../types'
+import * as cuid from 'cuid'
 
 export type SessionType = Record<SessionProps>
 export interface SessionStateProps {
@@ -28,12 +31,18 @@ export type SessionStateType = Record<SessionStateProps>
 
 export const Session = Record(getDefaultSession(''))
 
-export const defaultSessionState = {
-  sessions: OrderedMap(new Session()),
-  selectedSessionId: '',
+function makeSession() {
+  return new Session().set('id', cuid())
 }
 
-const SessionState = Record(defaultSessionState)
+export function makeSessionState(endpoint) {
+  const SessionState = Record({
+    sessions: OrderedMap(new Session({ endpoint: endpoint || '' })),
+    selectedSessionId: '',
+  })
+
+  return new SessionState()
+}
 
 export default handleActions(
   {
@@ -51,17 +60,16 @@ export default handleActions(
       setVariableToType,
       setOperations,
       setOperationName,
-    )]: (state, { payload }) => {
+      setSubscriptionActive,
+      startQuery,
+    )]: (state, payload) => {
       const keyName = Object.keys(payload)[1]
       return state.setIn(
-        ['sessions', payload.sessionId, keyName],
+        ['sessions', getSelectedSessionId(state), keyName],
         payload[keyName],
       )
     },
-    SET_SELECTED_SESSION_ID: (state, { sessionId }) =>
-      state.set('selectedSessionId', sessionId),
-    CLOSE_TRACING: (state, { payload }) => {
-      const { responseTracingHeight } = payload
+    CLOSE_TRACING: (state, { responseTracingHeight }) => {
       return state.mergeDeepIn(
         ['sessions', getSelectedSessionId(state)],
         Map({ responseTracingHeight, responseTracingOpen: false }),
@@ -75,40 +83,37 @@ export default handleActions(
       ]
       return state.setIn(path, !state.getIn(path))
     },
-    OPEN_TRACING: (state, { payload }) => {
-      const { responseTracingHeight } = payload
+    OPEN_TRACING: (state, { responseTracingHeight }) => {
       return state.mergeDeepIn(
         ['sessions', getSelectedSessionId(state)],
         Map({ responseTracingHeight, responseTracingOpen: true }),
       )
     },
-    CLOSE_VARIABLES: (state, { payload }) => {
-      const { variableEditorHeight } = payload
+    CLOSE_VARIABLES: (state, { variableEditorHeight }) => {
       return state.mergeDeepIn(
         ['sessions', getSelectedSessionId(state)],
         Map({ variableEditorHeight, variableEditorOpen: false }),
       )
     },
-    OPEN_VARIABLES: (state, { payload }) => {
-      const { variableEditorHeight } = payload
+    OPEN_VARIABLES: (state, { variableEditorHeight }) => {
       return state.mergeDeepIn(
         ['sessions', getSelectedSessionId(state)],
         Map({ variableEditorHeight, variableEditorOpen: true }),
       )
     },
-    ADD_RESPONSE: (state, { payload }) => {
+    ADD_RESPONSE: (state, { response }) => {
       return state.updateIn(
         ['sessions', getSelectedSessionId(state), 'responses'],
-        responses => responses.push(Map(payload.response)),
+        responses => responses.push(Map(response)),
       )
     },
-    SET_RESPONSE: (state, { payload }) => {
+    SET_RESPONSE: (state, { response }) => {
       return state.setIn(
         ['sessions', getSelectedSessionId(state), 'responses'],
-        List(Map(payload.response)),
+        List(Map(response)),
       )
     },
-    CLEAR_RESPONSES: (state, { payload }) => {
+    CLEAR_RESPONSES: state => {
       return state.setIn(
         ['sessions', getSelectedSessionId(state), 'responses'],
         List(),
@@ -120,7 +125,13 @@ export default handleActions(
         true,
       )
     },
-    SCHEMA_FETCHING_SUCCESS: (state, { payload }) => {
+    STOP_QUERY: state => {
+      return state.setIn(
+        ['sessions', getSelectedSessionId(state), 'queryRunning'],
+        false,
+      )
+    },
+    SCHEMA_FETCHING_SUCCESS: (state, payload) => {
       const newSessions = state.get('sessions').map((session, sessionId) => {
         if (session.get('endpoint') === payload.endpoint) {
           return session.merge(
@@ -135,7 +146,7 @@ export default handleActions(
       })
       return state.set('sessions', newSessions)
     },
-    SCHEMA_FETCHING_ERROR: (state, { payload }) => {
+    SCHEMA_FETCHING_ERROR: (state, payload) => {
       const newSessions = state.get('sessions').map((session, sessionId) => {
         if (session.get('endpoint') === payload.endpoint) {
           return session.merge(
@@ -149,6 +160,170 @@ export default handleActions(
       })
       return state.set('sessions', newSessions)
     },
+    SET_SELECTED_SESSION_ID: (state, { sessionId }) =>
+      state.set('selectedSessionId', sessionId),
+    OPEN_SETTINGS_TAB: (state: any) => {
+      let newState = state
+      let settingsTab = state.sessions.find(value =>
+        value.get('isSettingsTab', false),
+      )
+      if (!settingsTab) {
+        settingsTab = makeSession().merge({
+          isSettingsTab: true,
+          isFile: true,
+          name: 'Settings',
+          changed: false,
+        })
+        newState = newState.sessions.set(settingsTab.id, settingsTab)
+      }
+      return newState.set('selectedSessionId', settingsTab.id)
+    },
+    OPEN_CONFIG_TAB: state => {
+      let newState = state
+      let configTab = state.sessions.find(value =>
+        value.get('isConfigTab', false),
+      )
+      if (!configTab) {
+        configTab = makeSession().merge({
+          isConfigTab: true,
+          isFile: true,
+          name: 'GraphQL Config',
+          changed: false,
+        })
+        newState = newState.sessions.set(configTab.id, configTab)
+      }
+      return newState.set('selectedSessionId', configTab.id)
+    },
+    NEW_FILE_TAB: (state, { fileName, filePath, file }) => {
+      let newState = state
+      let fileTab = state.sessions.find(
+        value => value.get('name', '') === fileName,
+      )
+      if (!fileTab) {
+        fileTab = makeSession().merge({
+          isFile: true,
+          name: fileName,
+          changed: false,
+          file,
+          filePath,
+        })
+        newState = newState.sessions.set(fileTab.id, fileTab)
+      }
+      return newState.set('selectedSessionId', fileTab.id)
+    },
+    NEW_SESSION: (state, { reuseHeaders }) => {
+      let session = makeSession()
+      if (reuseHeaders) {
+        const selectedSessionId = getSelectedSessionId(state)
+        const currentSession = state.sessions.get(selectedSessionId)
+        session = session.set('heaaders', currentSession)
+      }
+      return state.setIn(['sessions', session.id], session)
+    },
+    DUPLICATE_SESSION: (state, { session }) => {
+      const newSession = session.set('id', cuid())
+      const newState = state.setIn(['sessions', newSession.id], newSession)
+      return newState.set('selectedSessionIndex', newSession.id)
+    },
+    NEW_SESSION_FROM_QUERY: (state, { query }) => {
+      const session = makeSession().set('query', query)
+      return state.setIn(['sessions', session.id], session)
+    },
+    CLOSE_SELECTED_TAB: state => {
+      const selectedSessionId = getSelectedSessionId(state)
+      return closeTab(state, selectedSessionId)
+    },
+    SELECT_NEXT_TAB: state => {
+      const selectedSessionId = getSelectedSessionId(state)
+      const count = state.sessoins.size
+      const keys = state.sessions.keySeq()
+      const index = keys.indexOf(selectedSessionId)
+      if (index + 1 < count) {
+        return state.set('selectedSessionId', keys.get(index + 1))
+      }
+      return state.set('selectedSessionId', keys.get(0))
+    },
+    SELECT_PREV_TAB: state => {
+      const selectedSessionId = getSelectedSessionId(state)
+      const count = state.sessoins.size
+      const keys = state.sessions.keySeq()
+      const index = keys.indexOf(selectedSessionId)
+      if (index - 1 > 0) {
+        return state.set('selectedSessionId', keys.get(index - 1))
+      }
+      return state.set('selectedSessionId', keys.get(count - 1))
+    },
+    SELECT_TAB_INDEX: (state, { index }) => {
+      const keys = state.sessions.keySeq()
+      return state.set('selectedSessionId', keys.get(index))
+    },
+    SELECT_TAB: (state, { sessionId }) => {
+      return state.set('selectedSessionId', sessionId)
+    },
+    CLOSE_TAB: (state, { sessionId }) => {
+      return closeTab(state, sessionId)
+    },
+    EDIT_SETTINGS: state => {
+      return state.setIn(
+        ['sessions', getSelectedSessionId(state), 'changed'],
+        true,
+      )
+    },
+    SAVE_SETTINGS: state => {
+      return state.setIn(
+        ['sessions', getSelectedSessionId(state), 'changed'],
+        false,
+      )
+    },
+    EDIT_CONFIG: state => {
+      return state.setIn(
+        ['sessions', getSelectedSessionId(state), 'changed'],
+        true,
+      )
+    },
+    SAVE_CONFIG: state => {
+      return state.setIn(
+        ['sessions', getSelectedSessionId(state), 'changed'],
+        false,
+      )
+    },
+    EDIT_FILE: state => {
+      return state.setIn(
+        ['sessions', getSelectedSessionId(state), 'changed'],
+        true,
+      )
+    },
+    SAVE_FILE: state => {
+      return state.setIn(
+        ['sessions', getSelectedSessionId(state), 'changed'],
+        false,
+      )
+    },
   },
-  new SessionState(),
+  makeSessionState,
 )
+
+function closeTab(state, sessionId) {
+  const length = state.sessions.size
+  const keys = state.sessions.keySeq()
+  let newState = state.removeIn(['sessions', sessionId])
+  // if there is only one session, delete it and replace it by a new one
+  if (length === 1) {
+    const newSession = makeSession()
+    newState = newState.set('selectedSessionId', newSession.id)
+    return newState.setIn(['sessions', newSession.id], newSession)
+  }
+  const selectedSessionId = getSelectedSessionId(state)
+  const sessionIndex = keys.indexOf(sessionId)
+  // if the session to be closed is selected, unselect it
+  if (selectedSessionId === sessionId) {
+    const leftNeighbour = sessionIndex - 1
+    if (leftNeighbour < 0) {
+      return newState.set('selectedSessionId', keys.get(0))
+    }
+    return newState.set('selectedSessionId', keys.get(leftNeighbour))
+  } else {
+    // otherwise the old selected session still can be selected, only the session has to be removed
+    return newState
+  }
+}

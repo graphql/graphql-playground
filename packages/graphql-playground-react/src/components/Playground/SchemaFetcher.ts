@@ -1,6 +1,5 @@
 import { GraphQLSchema, introspectionQuery, buildClientSchema } from 'graphql'
 import { NoSchemaError } from './util/NoSchemaError'
-import { Session } from '../../types'
 import { parseHeaders } from './util/parseHeaders'
 import { ApolloLink, execute } from 'apollo-link'
 import { setIn } from 'immutable'
@@ -11,7 +10,12 @@ export interface TracingSchemaTuple {
   tracingSupported: boolean
 }
 
-export type LinkGetter = (session: Session) => ApolloLink
+export interface SchemaFetchProps {
+  endpoint: string
+  headers: string
+}
+
+export type LinkGetter = (session: SchemaFetchProps) => ApolloLink
 
 export class SchemaFetcher {
   cache: Map<string, TracingSchemaTuple>
@@ -20,19 +24,19 @@ export class SchemaFetcher {
     this.cache = new Map()
     this.linkGetter = linkGetter
   }
-  async fetch(session: Session) {
+  async fetch(session: SchemaFetchProps) {
     const cachedSchema = this.cache.get(this.hash(session))
     return cachedSchema || this.fetchSchema(session)
   }
-  refetch(session: Session) {
+  refetch(session: SchemaFetchProps) {
     return this.fetchSchema(session)
   }
-  hash(session: Session) {
+  hash(session: SchemaFetchProps) {
     const { endpoint, headers } = session
     return `${endpoint}~${headers}`
   }
   private fetchSchema(
-    session: Session,
+    session: SchemaFetchProps,
   ): Promise<{ schema: GraphQLSchema; tracingSupported: boolean } | null> {
     const { endpoint } = session
     const headers = {
@@ -40,7 +44,7 @@ export class SchemaFetcher {
       'X-Apollo-Tracing': '1',
     }
 
-    const newSession = setIn<Session>(session, ['headers'], headers)
+    const newSession = setIn<SchemaFetchProps>(session, ['headers'], headers)
 
     const link = this.linkGetter(newSession)
 

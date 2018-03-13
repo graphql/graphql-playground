@@ -23,6 +23,7 @@ export const {
   addResponse,
   setResponse,
   clearResponses,
+  openSettingsTab,
   schemaFetchingSuccess,
   schemaFetchingError,
   renewStacks,
@@ -32,6 +33,25 @@ export const {
   updateQueryFacts,
   runQueryAtPosition,
   toggleTracing,
+  newSession,
+  newSessionFromQuery,
+  newFileTab,
+  closeTab,
+  closeSelectedTab,
+  editSettings,
+  saveSettings,
+  editConfig,
+  saveConfig,
+  editFile,
+  saveFile,
+  selectTab,
+  selectTabIndex,
+  selectNextTab,
+  selectPrevTab,
+  duplicateSession,
+  querySuccess,
+  queryError,
+  setSubscriptionActive,
 } = createActions({
   // simple property setting
   EDIT_QUERY: simpleAction('query'),
@@ -48,6 +68,7 @@ export const {
   SET_VARIABLE_EDITOR_HEIGHT: simpleAction('variableEditorHeight'),
   SET_RESPONSE_TRACING_HEIGHT: simpleAction('responceTracingHeight'),
   SET_TRACING_SUPPORTED: simpleAction('tracingSupported'),
+  SET_SUBSCRIPTION_ACTIVE: simpleAction('subscriptionActive'),
 
   UPDATE_QUERY_FACTS: simpleAction(),
   PRETTIFY_QUERY: simpleAction(),
@@ -107,24 +128,36 @@ export const {
   */
 
   RUN_QUERY: operationName => ({ operationName }),
+  QUERY_SUCCESS: simpleAction(),
+  QUERY_ERROR: simpleAction(),
   RUN_QUERY_AT_POSITION: position => ({ position }),
   START_QUERY: simpleAction('queryRunning', true),
-  STOP_QUERY: simpleAction('queryRunning', false),
+  STOP_QUERY: sessionId => ({ sessionId }),
   /* GraphQLEditor.handleRunQuery */
   OPEN_SETTINGS_TAB: () => ({}),
   OPEN_CONFIG_TAB: () => ({}),
-  NEW_SESSION: (newIndex?: number) => ({ newIndex }),
+  NEW_SESSION: reuseHeaders => ({ reuseHeaders }),
   NEW_SESSION_FROM_QUERY: (query: string) => ({ query }),
   NEW_FILE_TAB: (fileName: string, filePath: string, file: string) => ({
     fileName,
     filePath,
     file,
   }),
+  DUPLICATE_SESSION: simpleAction('sessionId'),
   CLOSE_SELECTED_TAB: () => ({}),
   SELECT_NEXT_TAB: () => ({}),
   SELECT_PREV_TAB: () => ({}),
-  GOTO_TAB: (index: number) => ({ index }),
-  CLOSE_SESSION: simpleAction(),
+  SELECT_TAB: simpleAction('sessionId'),
+  SELECT_TAB_INDEX: simpleAction('index'),
+  CLOSE_TAB: simpleAction('sessionId'),
+
+  // files, settings, config
+  EDIT_SETTINGS: simpleAction(),
+  SAVE_SETTINGS: simpleAction(),
+  EDIT_CONFIG: simpleAction(),
+  SAVE_CONFIG: simpleAction(),
+  EDIT_FILE: simpleAction(),
+  SAVE_FILE: simpleAction(),
 })
 
 function simpleAction(key?: any, defaultValue?: any) {

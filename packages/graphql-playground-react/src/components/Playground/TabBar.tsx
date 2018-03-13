@@ -1,17 +1,24 @@
 import * as React from 'react'
 import * as cx from 'classnames'
-import { Session } from '../../types'
 import { Icon } from 'graphcool-styles'
 import { withTheme, OptionalLocalThemeInterface } from '../Theme'
 import Tab from './Tab'
+import { connect } from 'react-redux'
+import { createStructuredSelector } from 'reselect'
+import {
+  getSessionsArray,
+  getSelectedSessionId,
+} from '../../state/sessions/selectors'
+import { SessionProps } from '../../types'
 
 export interface Props extends OptionalLocalThemeInterface {
-  sessions: Session[]
-  selectedSessionIndex: number
   onNewSession: any
-  onCloseSession: (session: Session) => void
-  onSelectSession: (session: Session) => void
   isApp?: boolean
+}
+
+export interface ReduxProps {
+  sessions: SessionProps[]
+  selectedSessionId: string
 }
 
 const white20 = '#4a555f'
@@ -20,13 +27,11 @@ const darkBlue20 = '#c2c8cb'
 export const TabBar = withTheme<Props>(
   ({
     sessions,
-    selectedSessionIndex,
-    onNewSession,
-    onSelectSession,
-    onCloseSession,
     localTheme,
     isApp,
-  }: Props) => {
+    selectedSessionId,
+    onNewSession,
+  }: Props & ReduxProps) => {
     return (
       <div className={cx('tabbar', localTheme)}>
         <style jsx={true}>{`
@@ -176,10 +181,7 @@ export const TabBar = withTheme<Props>(
             <Tab
               key={session.id}
               session={session}
-              index={index}
-              onSelectSession={onSelectSession}
-              selectedSessionIndex={selectedSessionIndex}
-              onCloseSession={onCloseSession}
+              selectedSessionId={selectedSessionId}
               localTheme={localTheme}
             />
           ))}
@@ -198,3 +200,10 @@ export const TabBar = withTheme<Props>(
     )
   },
 )
+
+const mapStateToProps = createStructuredSelector({
+  sessions: getSessionsArray,
+  selectedSessionId: getSelectedSessionId,
+})
+
+export default connect(mapStateToProps)(TabBar)

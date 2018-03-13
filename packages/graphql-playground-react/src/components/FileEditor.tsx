@@ -2,13 +2,17 @@ import * as React from 'react'
 import { styled } from '../styled'
 import * as theme from 'styled-theming'
 import { QueryEditor } from './Playground/QueryEditor'
+import { createStructuredSelector } from 'reselect'
+import { getFile } from '../state/sessions/selectors'
+import { editFile } from '../state/sessions/actions'
+import { connect } from 'react-redux'
 
 export interface Props {
   value: string
   onChange: (value: string) => void
 }
 
-export default class FileEditor extends React.Component<Props, {}> {
+class FileEditor extends React.Component<Props, {}> {
   render() {
     return (
       <Wrapper className="graphiql-container">
@@ -16,7 +20,7 @@ export default class FileEditor extends React.Component<Props, {}> {
           <div className="queryWrap">
             <QueryEditor
               value={this.props.value}
-              onEdit={this.props.onChange}
+              onChange={this.props.onChange}
             />
           </div>
         </div>
@@ -24,6 +28,12 @@ export default class FileEditor extends React.Component<Props, {}> {
     )
   }
 }
+
+const mapStateToProps = createStructuredSelector({
+  value: getFile,
+})
+
+export default connect(mapStateToProps, { onChange: editFile })(FileEditor)
 
 const backgroundColor = theme('mode', {
   light: p => p.theme.colours.darkBlue10,

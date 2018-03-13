@@ -2,12 +2,14 @@ import * as React from 'react'
 import Icon from 'graphcool-styles/dist/components/Icon/Icon'
 import { styled } from '../styled'
 import * as theme from 'styled-theming'
+import { openSettingsTab } from '../state/sessions/actions'
+import { connect } from 'react-redux'
 
 export interface Props {
   onClick: () => void
 }
 
-export default class Settings extends React.Component<Props, {}> {
+class Settings extends React.Component<Props, {}> {
   render() {
     return (
       <Wrapper>
@@ -24,6 +26,8 @@ export default class Settings extends React.Component<Props, {}> {
     )
   }
 }
+
+export default connect(null, { openSettingsTab })(Settings)
 
 const Wrapper = styled.div`
   position: absolute;

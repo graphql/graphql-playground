@@ -3,6 +3,10 @@ import { styled } from '../styled'
 import * as theme from 'styled-theming'
 import { Button } from './Playground/TopBar/TopBar'
 import { ConfigEditor } from './Playground/ConfigEditor'
+import { connect } from 'react-redux'
+import { createStructuredSelector } from 'reselect'
+import { getSettingsString, getConfigString } from '../state/general/selectors'
+import { setSettingsString, setConfigString } from '../state/general/actions'
 
 export interface Props {
   value: string
@@ -15,7 +19,7 @@ export interface Props {
 
 // TODO: Trigger onSave on CMD+S or CTRL+S
 
-export default class SettingsEditor extends React.Component<Props, {}> {
+export class SettingsEditor extends React.Component<Props, {}> {
   componentDidMount() {
     window.addEventListener('keydown', this.handleKeydown, true)
   }
@@ -54,6 +58,21 @@ export default class SettingsEditor extends React.Component<Props, {}> {
     }
   }
 }
+const playgroundSettingsSelector = createStructuredSelector({
+  value: getSettingsString,
+})
+
+export const PlaygroundSettingsEditor = connect(playgroundSettingsSelector, {
+  onChange: setSettingsString,
+})(SettingsEditor)
+
+const configSelector = createStructuredSelector({
+  value: getConfigString,
+})
+
+export const GraphQLConfigEditor = connect(configSelector, {
+  onChange: setConfigString,
+})
 
 const backgroundColor = theme('mode', {
   light: p => p.theme.colours.darkBlue10,

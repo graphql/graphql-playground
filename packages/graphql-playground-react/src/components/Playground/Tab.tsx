@@ -1,22 +1,27 @@
 import * as React from 'react'
-import { Session } from '../../types'
 import Icon from 'graphcool-styles/dist/components/Icon/Icon'
 import { $v } from 'graphcool-styles'
+import { SessionProps } from '../../types'
+import { connect } from 'react-redux'
+import { closeTab, selectTab } from '../../state/sessions/actions'
+import * as cn from 'classnames'
 
 export interface Props {
-  session: Session
-  index: number
-  onSelectSession: (session: Session) => void
-  onCloseSession: (session: Session) => void
-  selectedSessionIndex: number
+  session: SessionProps
   localTheme?: string
+  selectedSessionId: string
+}
+
+export interface ReduxProps {
+  selectTab: (sessionId: string) => void
+  closeTab: (sessionId: string) => void
 }
 
 export interface State {
   overCross: boolean
 }
 
-export default class Tab extends React.PureComponent<Props, State> {
+class Tab extends React.PureComponent<Props & ReduxProps, State> {
   constructor(props) {
     super(props)
 
@@ -26,13 +31,14 @@ export default class Tab extends React.PureComponent<Props, State> {
   }
 
   render() {
-    const { session, index, selectedSessionIndex, localTheme } = this.props
+    const { session, selectedSessionId, localTheme } = this.props
     const { queryTypes } = session
+
+    const active = session.id === selectedSessionId
 
     return (
       <div
-        className={`tab ${index === selectedSessionIndex &&
-          'active'} ${localTheme}`}
+        className={cn('tab', localTheme, { active })}
         onClick={this.handleSelectSession}
       >
         <style jsx={true}>{`
@@ -173,7 +179,7 @@ export default class Tab extends React.PureComponent<Props, State> {
             @p: .flex;
           }
         `}</style>
-        <div className={`icons ${index === selectedSessionIndex && 'active'}`}>
+        <div className={cn('icons', { active })}>
           {session.subscriptionActive && <div className="red-dot" />}
           <div className="query-types">
             {queryTypes.query && <div className="query-type query">Q</div>}
@@ -195,21 +201,18 @@ export default class Tab extends React.PureComponent<Props, State> {
             )}
           </div>
         </div>
-        <div
-          className={`operation-name ${index === selectedSessionIndex &&
-            'active'}`}
-        >
+        <div className={cn('operation-name', { active })}>
           {session.name ||
             session.operationName ||
             queryTypes.firstOperationName ||
             'New Tab'}
         </div>
         <div
-          className={`close${index === selectedSessionIndex ? ' active' : ''}${
-            session.isFile && session.hasChanged && !this.state.overCross
-              ? ' hasCircle'
-              : ''
-          }`}
+          className={cn('close', {
+            active,
+            hasCircle:
+              session.isFile && session.hasChanged && !this.state.overCross,
+          })}
           onClick={this.handleCloseSession}
           onMouseEnter={this.handleMouseOverCross}
           onMouseLeave={this.handleMouseOutCross}
@@ -240,11 +243,13 @@ export default class Tab extends React.PureComponent<Props, State> {
   }
 
   private handleSelectSession = () => {
-    this.props.onSelectSession(this.props.session)
+    this.props.selectTab(this.props.session.id)
   }
 
   private handleCloseSession = (e: any) => {
     e.stopPropagation()
-    this.props.onCloseSession(this.props.session)
+    this.props.closeTab(this.props.session.id)
   }
 }
+
+export default connect(null, { closeTab, selectTab })(Tab)

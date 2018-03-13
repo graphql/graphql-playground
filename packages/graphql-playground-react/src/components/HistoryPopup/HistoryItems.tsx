@@ -1,13 +1,13 @@
 import * as React from 'react'
-import { Session } from '../../types'
 import { Icon, $v } from 'graphcool-styles'
 import * as cx from 'classnames'
+import { SessionProps } from '../../types'
 
 export interface Props {
-  items: Session[]
+  items: SessionProps[]
   selectedItemIndex: number
   onItemSelect: (index: number) => void
-  onItemStarToggled: (item: Session) => void
+  onItemStarToggled: (sessionId: string) => void
   searchTerm: string
 }
 
@@ -80,7 +80,7 @@ const HistoryItems = ({
         onClick={() => onItemSelect(index)}
       >
         <div className="left">
-          <div className="star" onClick={() => onItemStarToggled(item)}>
+          <div className="star" onClick={() => onItemStarToggled(item.id)}>
             <Icon
               src={require('../../assets/icons/star.svg')}
               color={item.starred ? 'rgb(221,171,0)' : $v.gray30}

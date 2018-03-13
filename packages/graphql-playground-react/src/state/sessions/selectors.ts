@@ -71,9 +71,31 @@ export const getParsedHeaders = createSelector([getHeaders], headers => {
   return {}
 })
 
+export const getParsedVariables = createSelector([getVariables], variables => {
+  try {
+    const json = JSON.parse(variables)
+    return json
+  } catch (e) {
+    //
+  }
+
+  return {}
+})
+
 export const getTracing = createSelector(
   [getResponseExtensions],
   extensions => extensions && extensions.tracing,
+)
+
+export const getSessionsMap = createSelector([getSelectedWorkspace], state =>
+  state.get('sessions'),
+)
+
+export const getSessions = createSelector([getSelectedWorkspace], state =>
+  state
+    .get('sessions')
+    .toArray()
+    .map(arr => arr[1]),
 )
 
 export const getSelectedSession = createSelector(

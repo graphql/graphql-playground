@@ -60,8 +60,7 @@ import {
  */
 
 export interface Props {
-  fetcher: (graphQLRequest: GraphQLRequest) => ApolloLinkExecuteResponse
-  onRef: any
+  onRef?: any
   schema?: GraphQLSchema
 }
 
@@ -110,7 +109,7 @@ export interface ToolbarButtonProps extends SimpleProps {
   label: string
 }
 
-export class GraphQLEditor extends React.PureComponent<
+class GraphQLEditor extends React.PureComponent<
   Props & LocalThemeInterface & ReduxProps
 > {
   public codeMirrorSizer

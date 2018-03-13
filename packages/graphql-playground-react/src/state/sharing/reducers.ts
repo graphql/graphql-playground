@@ -1,19 +1,17 @@
-import { Map } from 'immutable'
+import { Map, Record } from 'immutable'
 import { handleActions } from 'redux-actions'
 
-export interface SharingState {
+export interface SharingStateType {
   history: boolean
   headers: boolean
   allTabs: boolean
 }
 
-const defaultSharingState: SharingState = {
+export const SharingState = Record({
   history: false,
   headers: true,
   allTabs: true,
-}
-
-const defaultState: Map<string, any> = Map(defaultSharingState)
+})
 
 export default handleActions(
   {
@@ -22,5 +20,5 @@ export default handleActions(
       state.set('headers', !state.get('headers')),
     TOGGLE_SHARE_ALL_TABS: state => state.set('allTabs', !state.get('allTabs')),
   },
-  defaultState,
+  new SharingState(),
 )

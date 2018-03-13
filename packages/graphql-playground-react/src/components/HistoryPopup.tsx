@@ -1,29 +1,29 @@
 import * as React from 'react'
 import * as Modal from 'react-modal'
 import HistoryHeader from './HistoryPopup/HistoryHeader'
-import { HistoryFilter, Session, ApolloLinkExecuteResponse } from '../types'
+import { HistoryFilter, SessionProps } from '../types'
 import HistoryItems from './HistoryPopup/HistoryItems'
 import { Icon } from 'graphcool-styles'
 import { modalStyle } from '../constants'
 import { withTheme, LocalThemeInterface } from './Theme'
 import * as cn from 'classnames'
-import { SchemaFetcher } from './Playground/SchemaFetcher'
 import { QueryEditor } from './Playground/QueryEditor'
 import { styled } from '../styled'
 import * as theme from 'styled-theming'
-import { GraphQLRequest } from 'apollo-link'
+import { connect } from 'react-redux'
+import { createStructuredSelector } from 'reselect'
+import { getHistory } from '../state/history/selectors'
+import { getHistoryOpen } from '../state/general/selectors'
+import { closeHistory, openHistory } from '../state/general/actions'
+import { duplicateSession } from '../state/sessions/actions'
+import { toggleHistoryItemStarring } from '../state/history/actions'
 
-export interface Props {
+export interface ReduxProps {
   isOpen: boolean
-  onRequestClose: () => void
-  historyItems: Session[]
-  onItemStarToggled: (item: Session) => void
-  fetcherCreater: (
-    item: Session,
-    params: GraphQLRequest,
-  ) => ApolloLinkExecuteResponse
-  onCreateSession: (session: Session) => void
-  schemaFetcher: SchemaFetcher
+  closeHistory: () => void
+  historyItems: SessionProps[]
+  toggleHistoryItemStarring: (sessionId: string) => void
+  duplicateSession: (session: SessionProps) => void
 }
 
 export interface State {
@@ -32,7 +32,10 @@ export interface State {
   searchTerm: string
 }
 
-class HistoryPopup extends React.Component<Props & LocalThemeInterface, State> {
+class HistoryPopup extends React.Component<
+  ReduxProps & LocalThemeInterface,
+  State
+> {
   constructor(props) {
     super(props)
     this.state = {
@@ -68,7 +71,7 @@ class HistoryPopup extends React.Component<Props & LocalThemeInterface, State> {
     return (
       <Modal
         isOpen={this.props.isOpen}
-        onRequestClose={this.props.onRequestClose}
+        onRequestClose={this.props.closeHistory}
         contentLabel="GraphiQL Session History"
         style={customModalStyle}
       >
@@ -84,7 +87,7 @@ class HistoryPopup extends React.Component<Props & LocalThemeInterface, State> {
               selectedItemIndex={this.state.selectedItemIndex}
               searchTerm={this.state.searchTerm}
               onItemSelect={this.handleItemSelect}
-              onItemStarToggled={this.props.onItemStarToggled}
+              onItemStarToggled={this.props.toggleHistoryItemStarring}
             />
           </Left>
           {Boolean(selectedItem) ? (
@@ -144,8 +147,8 @@ class HistoryPopup extends React.Component<Props & LocalThemeInterface, State> {
               : true)
     })
     const selectedItem = items[this.state.selectedItemIndex]
-    this.props.onCreateSession(selectedItem)
-    this.props.onRequestClose()
+    this.props.duplicateSession(selectedItem)
+    this.props.closeHistory()
   }
 
   private handleItemSelect = (index: number) => {
@@ -161,51 +164,19 @@ class HistoryPopup extends React.Component<Props & LocalThemeInterface, State> {
   }
 }
 
-export default withTheme<Props>(HistoryPopup)
+const mapStateToProps = createStructuredSelector({
+  items: getHistory,
+  isOpen: getHistoryOpen,
+})
 
-/*
-.left {
-  @p: .flex1, .bgWhite;
-}
-.right {
-  @p: .z2;
-  flex: 0 0 464px;
-}
-.right-header {
-  @p: .justifyBetween, .flex, .bgDarkBlue, .itemsCenter, .ph25;
-
-  padding-top: 20px;
-  padding-bottom: 20px;
-}
-.right-header.light {
-  background-color: #f6f7f7;
-}
-.right-empty {
-  @p: .bgDarkBlue, .h100, .flex, .justifyCenter, .itemsCenter;
-}
-.right-empty.light {
-  background-color: #f6f7f7;
-}
-.right-empty-text {
-  @p: .f16, .white60;
-}
-.view {
-  @p: .f14, .white40, .ttu, .fw6;
-}
-.use {
-  @p: .f14, .fw6, .pv10, .ph16, .bgGreen, .flex, .br2, .itemsCenter,
-    .pointer;
-}
-.use-text {
-  @p: .mr6, .white;
-}
-.graphiql-wrapper {
-  @p: .w100, .h100, .relative, .flex, .flexAuto;
-}
-.big {
-  @p: .h100, .flex, .flexAuto;
-}
-*/
+export default withTheme<{}>(
+  connect(mapStateToProps, {
+    closeHistory,
+    openHistory,
+    duplicateSession,
+    toggleHistoryItemStarring,
+  })(HistoryPopup),
+)
 
 const Wrapper = styled.div`
   display: flex;

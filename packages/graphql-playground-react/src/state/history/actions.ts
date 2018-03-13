@@ -1,6 +1,6 @@
 import { createActions } from 'redux-actions'
 
-export const { toggleHistoryItemStarring } = createActions({
+export const { toggleHistoryItemStarring, addHistoryItem } = createActions({
   TOGGLE_HISTORY_ITEM_STARRING: sessionId => ({ sessionId }),
-  SET_ITEM: session => ({ session }),
+  ADD_HISTORY_ITEM: session => ({ session }),
 })

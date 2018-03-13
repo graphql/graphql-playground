@@ -34,15 +34,15 @@ export interface Props {
 }
 
 export interface ReduxProps {
-  showDocForReference: (reference: any) => void
-  editQuery: (query: string) => void
+  showDocForReference?: (reference: any) => void
+  onChange?: (query: string) => void
   value: string
 }
 
 const md = new MD()
 const AUTO_COMPLETE_AFTER_KEY = /^[a-zA-Z0-9_@(]$/
 
-class QueryEditor extends React.PureComponent<Props & ReduxProps, {}> {
+export class QueryEditor extends React.PureComponent<Props & ReduxProps, {}> {
   private cachedValue: string
   private editor: any
   private ignoreChangeEvent: boolean
@@ -210,9 +210,9 @@ class QueryEditor extends React.PureComponent<Props & ReduxProps, {}> {
   }
 
   private onEdit = () => {
-    if (!this.ignoreChangeEvent) {
+    if (!this.ignoreChangeEvent && this.props.onChange) {
       this.cachedValue = this.editor.getValue()
-      this.props.editQuery(this.cachedValue)
+      this.props.onChange(this.cachedValue)
     }
   }
 
@@ -229,4 +229,4 @@ const mapStateToProps = createStructuredSelector({
   value: getQuery,
 })
 
-export default connect(mapStateToProps, { editQuery })(QueryEditor)
+export default connect(mapStateToProps, { onChange: editQuery })(QueryEditor)

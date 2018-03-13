@@ -1,23 +1,42 @@
-import { Map } from 'immutable'
+import { Record } from 'immutable'
 import { handleActions } from 'redux-actions'
 
-export interface GeneralState {
+export interface GeneralStateType {
   historyOpen: boolean
   fixedEndpoint: boolean
+  endpoint: string
+  settingsString: string
+  configString: string
+  envVars: any
 }
 
-const defaultSessionDocsState: GeneralState = {
+const DefaultSessionDocsState = Record<GeneralStateType>({
   historyOpen: false,
   fixedEndpoint: false,
-}
-
-const defaultState: Map<string, any> = Map(defaultSessionDocsState)
+  endpoint: '',
+  settingsString: '',
+  configString: '',
+  envVars: {},
+})
 
 export default handleActions(
   {
-    SET_HISTORY_OPEN: (state, { open }) => state.set('historyOpen', open),
+    OPEN_HISTORY: state => state.set('historyOpen', true),
+    CLOSE_HISTORY: state => state.set('historyOpen', false),
     SET_ENDPOINT_DISABLED: (state, { value }) =>
       state.set('endpointDisabled', value),
+    SET_CONFIG_STRING: (state, { configString }) =>
+      state.set('configString', configString),
+    SET_SETTINGS_STRING: (state, { settingsString }) =>
+      state.set('settingsString', settingsString),
   },
-  defaultState,
+  new DefaultSessionDocsState(),
 )
+
+export const defaultSettings = {
+  'general.betaUpdates': false,
+  'editor.theme': 'dark',
+  'editor.reuseHeaders': true,
+  'request.credentials': 'omit',
+  'tracing.hideTracingResponse': true,
+}
