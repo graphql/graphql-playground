@@ -1,34 +1,58 @@
 import * as React from 'react'
 import * as ReactDOM from 'react-dom'
-import { parse, print, isNamedType } from 'graphql'
+import { isNamedType, GraphQLSchema } from 'graphql'
 import * as cn from 'classnames'
 import ExecuteButton from './ExecuteButton'
-import { QueryEditor } from './QueryEditor'
+import QueryEditor from './QueryEditor'
 import CodeMirrorSizer from 'graphiql/dist/utility/CodeMirrorSizer'
-import getSelectedOperationName from 'graphiql/dist/utility/getSelectedOperationName'
-import debounce from 'graphiql/dist/utility/debounce'
 import { fillLeafs } from 'graphiql/dist/utility/fillLeafs'
 import { getLeft, getTop } from 'graphiql/dist/utility/elementPosition'
-import { Session, ApolloLinkExecuteResponse } from '../../types'
+import { ApolloLinkExecuteResponse } from '../../types'
 import { connect } from 'react-redux'
 
-import { defaultQuery } from '../../constants'
 import Spinner from '../Spinner'
 import Results from './Results'
 import ReponseTracing from './ResponseTracing'
 import withTheme from '../Theme/withTheme'
 import { LocalThemeInterface } from '../Theme'
 import GraphDocs from './DocExplorer/GraphDocs'
-import { SchemaFetcher } from './SchemaFetcher'
-import { setStacks } from '../../actions/docs'
-import { getRootMap, getNewStack } from './util/stack'
-import { getSessionDocs } from '../../selectors/sessionDocs'
 import { styled } from '../../styled/index'
 import TopBar from './TopBar/TopBar'
-import { SharingProps } from '../Share'
-import getQueryFacts from './util/getQueryFacts'
-import { VariableEditor } from './VariableEditor'
-import { GraphQLRequest, FetchResult } from 'apollo-link'
+import VariableEditor from './VariableEditor'
+import { GraphQLRequest } from 'apollo-link'
+import { createStructuredSelector } from 'reselect'
+import {
+  getQueryRunning,
+  getResponses,
+  getSubscriptionActive,
+  getVariableEditorOpen,
+  getVariableEditorHeight,
+  getResponseTracingOpen,
+  getResponseTracingHeight,
+  getResponseExtensions,
+  getCurrentQueryStartTime,
+  getCurrentQueryEndTime,
+  getTracingSupported,
+  getEditorFlex,
+  getQueryVariablesActive,
+  getHeaders,
+  getOperations,
+  getOperationName,
+  getHeadersCount,
+} from '../../state/sessions/selectors'
+import {
+  updateQueryFacts,
+  stopQuery,
+  runQueryAtPosition,
+  closeQueryVariables,
+  openQueryVariables,
+  openVariables,
+  closeVariables,
+  openTracing,
+  closeTracing,
+  toggleTracing,
+  setEditorFlex,
+} from '../../state/sessions/actions'
 
 /**
  * The top-level React component for GraphQLEditor, intended to encompass the entire
@@ -37,29 +61,43 @@ import { GraphQLRequest, FetchResult } from 'apollo-link'
 
 export interface Props {
   fetcher: (graphQLRequest: GraphQLRequest) => ApolloLinkExecuteResponse
-  onEditQuery?: (data: any) => void
-  onEditVariables?: (variables: any) => any
-  onEditOperationName?: (name: any) => any
-  onToggleDocs?: (value: boolean) => any
-  onChangeHeaders?: (headers: string) => any
-  onClickHistory?: () => void
-  onChangeEndpoint?: (value: string) => void
-  onClickShare?: () => void
-  onStopQuery: () => void
-  sessionId: string
-
   onRef: any
-  fixedEndpoint?: boolean
-  shouldHideTracingResponse: boolean
-
-  useVim?: boolean
+  schema?: GraphQLSchema
 }
 
 export interface ReduxProps {
   setStacks: (sessionId: string, stack: any[]) => void
+  updateQueryFacts: () => void
+  runQueryAtPosition: (position: number) => void
+  fetchSchema: () => void
+  openQueryVariables: () => void
+  closeQueryVariables: () => void
+  openVariables: (height: number) => void
+  closeVariables: (height: number) => void
+  openTracing: (height: number) => void
+  closeTracing: (height: number) => void
+  toggleTracing: () => void
+  setEditorFlex: (flex: number) => void
+  stopQuery: () => void
   navStack: any[]
-  session: Session
-  sharing: SharingProps
+  // sesion props
+  queryRunning: boolean
+  responses: Response[]
+  subscriptionActive: boolean
+  variableEditorOpen: boolean
+  variableEditorHeight: number
+  currentQueryStartTime?: Date
+  currentQueryEndTime?: Date
+  responseTracingOpen: boolean
+  responseTracingHeight: number
+  responseExtensions: any
+  tracingSupported?: boolean
+  editorFlex: number
+  headers: string
+  headersCount: number
+  queryVariablesActive: boolean
+  operationName: string
+  query: string
 }
 
 export interface SimpleProps {
@@ -73,8 +111,7 @@ export interface ToolbarButtonProps extends SimpleProps {
 }
 
 export class GraphQLEditor extends React.PureComponent<
-  Props & LocalThemeInterface & ReduxProps,
-  State
+  Props & LocalThemeInterface & ReduxProps
 > {
   public codeMirrorSizer
   public queryEditorComponent
@@ -83,167 +120,19 @@ export class GraphQLEditor extends React.PureComponent<
   public editorBarComponent
   public docExplorerComponent: any // later React.Component<...>
 
-  private storage: any
-  private editorQueryID: number
-  private resultID: number = 0
   private queryResizer: any
   private responseResizer: any
   private queryVariablesRef
   private httpHeadersRef
 
-  private updateQueryFacts = debounce(150, query => {
-    const queryFacts = getQueryFacts(this.state.schema, query)
-    if (queryFacts) {
-      // Update operation name should any query names change.
-      const operationName = getSelectedOperationName(
-        this.state.operations,
-        this.state.operationName,
-        queryFacts.operations,
-      )
-
-      // Report changing of operationName if it changed.
-      const onEditOperationName = this.props.onEditOperationName
-      if (onEditOperationName && operationName !== this.state.operationName) {
-        onEditOperationName(operationName)
-      }
-
-      this.setState({
-        operationName,
-        ...queryFacts,
-      })
-    }
-  })
-
-  constructor(props: Props & LocalThemeInterface & ReduxProps) {
-    super(props)
-
-    // Cache the storage instance
-    this.storage =
-      props.storage || typeof window !== 'undefined'
-        ? window.localStorage
-        : {
-            setItem: () => null,
-            removeItem: () => null,
-            getItem: () => null,
-          }
-
-    // Determine the initial query to display.
-    const query =
-      props.query !== undefined
-        ? props.query
-        : this.storageGet('query') !== null
-          ? this.storageGet('query')
-          : props.defaultQuery !== undefined ? props.defaultQuery : defaultQuery
-
-    // Get the initial query facts.
-    const queryFacts = getQueryFacts(null, query)
-
-    // Determine the initial variables to display.
-    const variables =
-      props.variables !== undefined
-        ? props.variables
-        : this.storageGet('variables')
-
-    // Determine the initial operationName to use.
-    const operationName =
-      props.operationName !== undefined
-        ? props.operationName
-        : getSelectedOperationName(
-            null,
-            this.storageGet('operationName'),
-            queryFacts && queryFacts.operations,
-          )
-
-    let queryVariablesActive = this.storageGet('queryVariablesActive')
-    queryVariablesActive =
-      queryVariablesActive === 'true'
-        ? true
-        : queryVariablesActive === 'false' ? false : true
-
-    // Initialize state
-    this.state = {
-      query,
-      variables,
-      operationName,
-      responses: props.responses || [],
-      editorFlex: Number(this.storageGet('editorFlex')) || 1,
-      variableEditorOpen: queryVariablesActive
-        ? Boolean(variables)
-        : props.session.headers && props.session.headers.length > 0,
-      variableEditorHeight:
-        Number(this.storageGet('variableEditorHeight')) || 200,
-      responseTracingOpen: false,
-      responseTracingHeight:
-        Number(this.storageGet('responseTracingHeight')) || 300,
-      docExplorerWidth: Number(this.storageGet('docExplorerWidth')) || 350,
-      isWaitingForResponse: false,
-      subscription: null,
-      selectedVariableNames: [],
-      queryVariablesActive,
-      endpointUnreachable: false,
-      isReloadingSchema: false,
-      ...queryFacts,
-    }
-
-    // Ensure only the last executed editor query is rendered.
-    this.editorQueryID = 0
-
-    // Subscribe to the browser window closing, treating it as an unmount.
-    if (typeof window === 'object') {
-      window.addEventListener('beforeunload', () => this.componentWillUnmount())
-    }
-  }
-
   componentDidMount() {
     // Ensure a form of a schema exists (including `null`) and
     // if not, fetch one using an introspection query.
-    this.ensureOfSchema()
+    this.props.fetchSchema()
 
     // Utility for keeping CodeMirror correctly sized.
     this.codeMirrorSizer = new CodeMirrorSizer()
     ;(global as any).g = this
-  }
-
-  componentWillReceiveProps(nextProps) {
-    let nextSchema = this.state.schema
-    let nextQuery = this.state.query
-    let nextVariables = this.state.variables
-    let nextOperationName = this.state.operationName
-    let nextResponses = this.state.responses
-
-    if (nextProps.schema !== undefined) {
-      nextSchema = nextProps.schema
-    }
-    if (
-      nextProps.query !== undefined &&
-      (this.props.rerenderQuery || nextProps.rerenderQuery)
-    ) {
-      nextQuery = nextProps.query
-    }
-    if (nextProps.variables !== undefined) {
-      nextVariables = nextProps.variables
-    }
-    if (nextProps.operationName !== undefined) {
-      nextOperationName = nextProps.operationName
-    }
-    if (nextProps.responses !== undefined) {
-      nextResponses = nextProps.responses
-    }
-    if (
-      nextSchema !== this.state.schema ||
-      nextQuery !== this.state.query ||
-      nextOperationName !== this.state.operationName
-    ) {
-      this.updateQueryFacts(nextQuery)
-    }
-
-    this.setState({
-      schema: nextSchema,
-      query: nextQuery,
-      variables: nextVariables,
-      operationName: nextOperationName,
-      responses: nextResponses,
-    } as State)
   }
 
   componentDidUpdate() {
@@ -255,54 +144,14 @@ export class GraphQLEditor extends React.PureComponent<
       // this.resultComponent,
     ]
     this.codeMirrorSizer.updateSizes(components)
-    if (this.resultComponent && Boolean(this.state.subscription)) {
+    if (this.resultComponent && Boolean(this.props.subscriptionActive)) {
       this.resultComponent.scrollTop = this.resultComponent.scrollHeight
     }
   }
 
-  // When the component is about to unmount, store any persistable state, such
-  // that when the component is remounted, it will use the last used values.
-  componentWillUnmount() {
-    this.storageSet('query', this.state.query)
-    this.storageSet('variables', this.state.variables)
-    this.storageSet('operationName', this.state.operationName)
-    this.storageSet('editorFlex', this.state.editorFlex)
-    this.storageSet('variableEditorHeight', this.state.variableEditorHeight)
-  }
-
-  getHeaderCount() {
-    try {
-      const headers = JSON.parse(this.props.session.headers!)
-      return `(${Object.keys(headers).length})`
-    } catch (e) {
-      //
-    }
-
-    return ''
-  }
-
-  tokenInvalid() {
-    if (this.state.responses.length === 1) {
-      const response = this.state.responses[0].date
-      if (response) {
-        try {
-          const data = JSON.parse(response)
-          if (data && data.errors && data.errors[0].code === 3015) {
-            return true
-          }
-        } catch (e) {
-          //
-        }
-      }
-    }
-    return false
-  }
-
   render() {
     return (
-      <div
-        className={cn('graphiql-container', { isActive: this.props.isActive })}
-      >
+      <div className={cn('graphiql-container')}>
         <style jsx={true}>{`
           .graphiql-container {
             font-family: Open Sans, sans-serif;
@@ -392,10 +241,7 @@ export class GraphQLEditor extends React.PureComponent<
           }
         `}</style>
         <div className="editorWrap">
-          <TopBar
-            sessionId={this.props.sessionId}
-            onClickPrettify={this.handlePrettifyQuery}
-          />
+          <TopBar />
           <div
             ref={this.setEditorBarComponent}
             className="editorBar"
@@ -404,36 +250,29 @@ export class GraphQLEditor extends React.PureComponent<
             <div
               className={cn('queryWrap', this.props.localTheme)}
               style={{
-                WebkitFlex: this.state.editorFlex,
-                flex: this.state.editorFlex,
+                WebkitFlex: this.props.editorFlex,
+                flex: this.props.editorFlex,
               }}
             >
               <QueryEditor
                 ref={this.setQueryEditorComponent}
-                schema={this.state.schema}
-                value={this.state.query}
-                onEdit={this.handleEditQuery}
+                schema={this.props.schema}
                 onHintInformationRender={this.handleHintInformationRender}
                 onRunQuery={this.runQueryAtCursor}
-                disableAutofocus={false}
-                hideLineNumbers={false}
-                hideGutters={false}
-                readOnly={false}
-                useVim={this.props.useVim}
                 onClickReference={this.handleClickReference}
               />
               <div
                 className="variable-editor"
                 style={{
-                  height: this.state.variableEditorOpen
-                    ? this.state.variableEditorHeight
+                  height: this.props.variableEditorOpen
+                    ? this.props.variableEditorHeight
                     : null,
                 }}
               >
                 <div
                   className="variable-editor-title"
                   style={{
-                    cursor: this.state.variableEditorOpen
+                    cursor: this.props.variableEditorOpen
                       ? 'row-resize'
                       : 'n-resize',
                   }}
@@ -441,147 +280,76 @@ export class GraphQLEditor extends React.PureComponent<
                 >
                   <span
                     className={cn('subtitle', {
-                      active: this.state.queryVariablesActive,
+                      active: this.props.queryVariablesActive,
                     })}
                     ref={this.setQueryVariablesRef}
-                    onClick={this.selectQueryVariables}
+                    onClick={this.props.openQueryVariables}
                   >
                     {'Query Variables'}
                   </span>
                   <span
                     className={cn('subtitle', {
-                      active: !this.state.queryVariablesActive,
+                      active: !this.props.queryVariablesActive,
                     })}
                     ref={this.setHttpHeadersRef}
-                    onClick={this.selectHttpHeaders}
+                    onClick={this.props.closeQueryVariables}
                   >
-                    {'HTTP Headers ' + this.getHeaderCount()}
+                    {'HTTP Headers ' + this.props.headersCount}
                   </span>
                 </div>
-                {this.state.queryVariablesActive ? (
-                  <VariableEditor
-                    ref={this.setVariableEditorComponent}
-                    value={this.state.variables}
-                    onEdit={this.handleEditVariables}
-                    onHintInformationRender={this.handleHintInformationRender}
-                    onRunQuery={this.runQueryAtCursor}
-                  />
-                ) : (
-                  <VariableEditor
-                    ref={this.setVariableEditorComponent}
-                    value={this.props.session.headers}
-                    onEdit={this.props.onChangeHeaders}
-                    onRunQuery={this.runQueryAtCursor}
-                  />
-                )}
+                <VariableEditor
+                  ref={this.setVariableEditorComponent}
+                  onHintInformationRender={
+                    this.props.queryVariablesActive
+                      ? this.handleHintInformationRender
+                      : undefined
+                  }
+                  onRunQuery={this.runQueryAtCursor}
+                />
               </div>
               <QueryDragBar ref={this.setQueryResizer} />
             </div>
-            {!this.props.queryOnly && (
-              <div className="resultWrap">
-                <ResultDragBar ref={this.setResponseResizer} />
-                <ExecuteButton
-                  isRunning={Boolean(this.state.subscription)}
-                  onRun={this.handleRunQuery}
-                  onStop={this.handleStopQuery}
-                  operations={this.state.operations}
-                />
-                {this.state.isWaitingForResponse && <Spinner />}
-                <Results
-                  setRef={this.setResultComponent}
-                  disableResize={this.props.disableResize}
-                  responses={this.state.responses}
-                  hideGutters={this.props.hideGutters}
-                />
-                {!this.state.responses ||
-                  (this.state.responses.length === 0 && (
-                    <div className="intro">
-                      Hit the Play Button to get a response here
-                    </div>
-                  ))}
-                {this.props.session.subscriptionActive && (
-                  <div className="listening">Listening &hellip;</div>
-                )}
-                <div
-                  className="response-tracing"
-                  style={{
-                    height: this.state.responseTracingOpen
-                      ? this.state.responseTracingHeight
-                      : null,
-                  }}
-                >
-                  <div
-                    className="response-tracing-title"
-                    style={{
-                      cursor: this.state.responseTracingOpen
-                        ? 'row-resize'
-                        : 'n-resize',
-                    }}
-                    onMouseDown={this.handleTracingResizeStart}
-                  >
-                    Tracing
+            <div className="resultWrap">
+              <ResultDragBar ref={this.setResponseResizer} />
+              <ExecuteButton />
+              {this.props.queryRunning && <Spinner />}
+              <Results setRef={this.setResultComponent} />
+              {!this.props.responses ||
+                (this.props.responses.length === 0 && (
+                  <div className="intro">
+                    Hit the Play Button to get a response here
                   </div>
-                  <ReponseTracing
-                    tracing={
-                      this.state.responseExtensions &&
-                      this.state.responseExtensions.tracing
-                    }
-                    startTime={this.state.currentQueryStartTime}
-                    endTime={this.state.currentQueryEndTime}
-                    tracingSupported={this.state.tracingSupported}
-                  />
+                ))}
+              {this.props.subscriptionActive && (
+                <div className="listening">Listening &hellip;</div>
+              )}
+              <div
+                className="response-tracing"
+                style={{
+                  height: this.props.responseTracingOpen
+                    ? this.props.responseTracingHeight
+                    : null,
+                }}
+              >
+                <div
+                  className="response-tracing-title"
+                  style={{
+                    cursor: this.props.responseTracingOpen
+                      ? 'row-resize'
+                      : 'n-resize',
+                  }}
+                  onMouseDown={this.handleTracingResizeStart}
+                >
+                  Tracing
                 </div>
+                <ReponseTracing />
               </div>
-            )}
+            </div>
           </div>
         </div>
-        <GraphDocs
-          ref={this.setDocExplorerRef}
-          schema={this.state.schema!}
-          sessionId={this.props.session.id}
-        />
+        <GraphDocs ref={this.setDocExplorerRef} schema={this.props.schema} />
       </div>
     )
-  }
-
-  getCurl = () => {
-    let variables
-    try {
-      variables = JSON.parse(this.state.variables)
-    } catch (e) {
-      //
-    }
-    const data = JSON.stringify({
-      query: this.state.query,
-      variables,
-      operationName: this.state.operationName,
-    })
-    let sessionHeaders
-
-    try {
-      sessionHeaders = JSON.parse(this.props.session.headers!)
-    } catch (e) {
-      //
-    }
-
-    const headers = {
-      'Accept-Encoding': 'gzip, deflate, br',
-      'Content-Type': 'application/json',
-      Accept: '*/*',
-      Connection: 'keep-alive',
-      DNT: '1',
-      Origin: location.origin || this.props.session.endpoint,
-      ...sessionHeaders,
-    }
-    const headersString = Object.keys(headers)
-      .map(key => {
-        const value = headers[key]
-        return `-H '${key}: ${value}'`
-      })
-      .join(' ')
-    return `curl '${
-      this.props.session.endpoint
-    }' ${headersString} --data-binary '${data}' --compressed`
   }
 
   setQueryVariablesRef = ref => {
@@ -634,8 +402,8 @@ export class GraphQLEditor extends React.PureComponent<
    */
   autoCompleteLeafs() {
     const { insertions, result } = fillLeafs(
-      this.state.schema,
-      this.state.query,
+      this.props.schema,
+      this.props.query,
     ) as {
       insertions: Array<{ index: number; string: string }>
       result: string
@@ -678,308 +446,17 @@ export class GraphQLEditor extends React.PureComponent<
     return result
   }
 
-  // Private methods
-
-  public reloadSchema = async () => {
-    try {
-      this.setState({ isReloadingSchema: true })
-      const result = await this.props.schemaFetcher.refetch(this.props.session)
-      if (result) {
-        const { schema } = result
-        this.setState({
-          schema,
-          isReloadingSchema: false,
-          endpointUnreachable: false,
-        })
-        this.renewStacks(schema)
-      }
-    } catch (e) {
-      this.setState({
-        isReloadingSchema: false,
-        endpointUnreachable: true,
-      })
-    }
-  }
-
-  private renewStacks(schema) {
-    const rootMap = getRootMap(schema)
-    const stacks = this.props.navStack
-      .map(stack => {
-        return getNewStack(rootMap, schema, stack)
-      })
-      .filter(s => s)
-    this.props.setStacks(this.props.session.id, stacks)
-  }
-
-  private ensureOfSchema() {
-    // Only perform introspection if a schema is not provided (undefined)
-    if (this.state.schema !== undefined) {
-      return
-    }
-
-    this.props.schemaFetcher
-      .fetch(this.props.session)
-      .then(result => {
-        if (result) {
-          const { schema, tracingSupported } = result
-          this.renewStacks(schema)
-          this.setState({
-            schema,
-            endpointUnreachable: false,
-            tracingSupported,
-          })
-        }
-      })
-      .catch(async error => {
-        if (error.message === 'Failed to fetch') {
-          setTimeout(() => {
-            this.setState({
-              endpointUnreachable: true,
-            })
-            this.ensureOfSchema()
-          }, 1000)
-        } else {
-          /* tslint:disable-next-line */
-          console.error(error)
-          this.setState({
-            schema: null,
-            responses: [{ date: error.message, time: new Date() }],
-          })
-        }
-      })
-  }
-
-  private storageGet = (name: string): any => {
-    if (this.storage) {
-      const value = this.storage.getItem('graphiql:' + name)
-      // Clean up any inadvertently saved null/undefined values.
-      if (value === 'null' || value === 'undefined') {
-        this.storage.removeItem('graphiql:' + name)
-      } else {
-        return value
-      }
-    }
-  }
-
-  private storageSet = (name: string, value: any): void => {
-    if (this.storage) {
-      if (value !== undefined) {
-        this.storage.setItem('graphiql:' + name, value)
-      } else {
-        this.storage.removeItem('graphiql:' + name)
-      }
-    }
-  }
-
-  private fetchQuery(
-    query,
-    variables: any,
-    operationName: string | undefined,
-    cb: (value: FetchResult) => void,
-  ) {
-    const headers = {}
-    if (this.state.responseTracingOpen) {
-      headers['X-Apollo-Tracing'] = '1'
-    }
-
-    const fetch = this.props.fetcher({
-      query,
-      variables,
-      operationName,
-      context: {
-        headers,
-      },
-    })
-
-    const subscription = fetch.subscribe({
-      next: cb,
-      error: error => {
-        this.setState({
-          isWaitingForResponse: false,
-          responses: [
-            {
-              date: error && String(error.stack || error),
-              time: new Date(),
-            },
-          ],
-          subscription: null,
-        } as State)
-        this.props.onStopQuery()
-      },
-      complete: () => {
-        this.setState({
-          isWaitingForResponse: false,
-          subscription: null,
-        } as State)
-        this.props.onStopQuery()
-      },
-    })
-
-    return subscription
-  }
-
-  private getVariables() {
-    try {
-      return JSON.parse(this.props.session.variables)
-    } catch (e) {
-      //
-    }
-    return {}
-  }
-
-  private handleRunQuery = selectedOperationName => {
-    this.editorQueryID++
-    const queryID = this.editorQueryID
-
-    // Use the edited query after autoCompleteLeafs() runs or,
-    // in case autoCompletion fails (the function returns undefined),
-    // the current query from the editor.
-    const editedQuery = this.autoCompleteLeafs() || this.state.query
-    const variables = this.getVariables()
-    let operationName = this.props.session.operationName
-
-    // If an operation was explicitly provided, different from the current
-    // operation name, then report that it changed.
-    if (selectedOperationName && selectedOperationName !== operationName) {
-      operationName = selectedOperationName
-      const onEditOperationName = this.props.onEditOperationName
-      if (onEditOperationName) {
-        onEditOperationName(operationName)
-      }
-    }
-
-    try {
-      this.setState({
-        isWaitingForResponse: true,
-        responses: [{ date: null, time: new Date() }],
-        operationName,
-        nextQueryStartTime: new Date(),
-      } as State)
-
-      // _fetchQuery may return a subscription.
-      const subscription = this.fetchQuery(
-        editedQuery,
-        variables,
-        operationName,
-        (result: any) => {
-          if (queryID === this.editorQueryID) {
-            let extensions
-            if (result.extensions) {
-              extensions = { ...result.extensions }
-              if (this.props.shouldHideTracingResponse) {
-                delete result.extensions
-              }
-            }
-            let responses
-            const response = JSON.stringify(result, null, 2)
-
-            if (this.props.session.subscriptionActive) {
-              responses = this.state.responses
-                .filter(res => res && res.date)
-                .slice(0, 100)
-                .concat({
-                  date: response,
-                  time: new Date(),
-                  resultID: this.resultID++,
-                })
-            } else {
-              responses = [
-                { date: response, time: new Date(), resultID: this.resultID++ },
-              ]
-            }
-            this.setState(state => {
-              return {
-                isWaitingForResponse: false,
-                responses,
-                responseExtensions: extensions,
-                currentQueryStartTime: state.nextQueryStartTime,
-                nextQueryStartTime: undefined,
-                currentQueryEndTime: new Date(),
-              } as State
-            })
-          }
-        },
-      )
-
-      this.setState({ subscription } as State)
-    } catch (error) {
-      /* tslint:disable-next-line */
-      console.error(error)
-      this.setState({
-        isWaitingForResponse: false,
-        responses: [{ date: error.message, time: new Date() }],
-      } as State)
-    }
-  }
-
-  private handleStopQuery = () => {
-    const { subscription } = this.state
-    this.setState({
-      isWaitingForResponse: false,
-      subscription: null,
-    } as State)
-    if (subscription) {
-      this.props.onStopQuery()
-      try {
-        subscription.unsubscribe()
-      } catch (e) {
-        /* tslint:disable-next-line */
-        console.error(e)
-      }
-    }
-  }
-
   private runQueryAtCursor = () => {
-    if (this.state.subscription) {
-      this.handleStopQuery()
+    if (this.props.queryRunning) {
+      this.props.stopQuery()
       return
     }
 
-    let operationName
-    const operations = this.state.operations
-    if (operations) {
-      const editor = this.queryEditorComponent.getCodeMirror()
-      if (editor.hasFocus()) {
-        const cursor = editor.getCursor()
-        const cursorIndex = editor.indexFromPos(cursor)
-
-        // Loop through all operations to see if one contains the cursor.
-        for (const operation of operations) {
-          if (
-            operation.loc.start <= cursorIndex &&
-            operation.loc.end >= cursorIndex
-          ) {
-            operationName = operation.name && operation.name.value
-            break
-          }
-        }
-      }
-    }
-
-    this.handleRunQuery(operationName)
-  }
-
-  private handlePrettifyQuery = () => {
-    const query = print(parse(this.state.query))
     const editor = this.queryEditorComponent.getCodeMirror()
-    editor.setValue(query)
-  }
-
-  private handleEditQuery = value => {
-    if (this.state.schema) {
-      this.updateQueryFacts(value)
-    }
-    this.setState({ query: value } as State)
-    if (this.props.onEditQuery) {
-      return this.props.onEditQuery(value)
-    }
-    return null
-  }
-
-  private handleEditVariables = value => {
-    this.setState({ variables: value } as State)
-    if (this.props.onEditVariables) {
-      this.props.onEditVariables(value)
+    if (editor.hasFocus()) {
+      const cursor = editor.getCursor()
+      const cursorIndex = editor.indexFromPos(cursor)
+      this.props.runQueryAtPosition(cursorIndex)
     }
   }
 
@@ -997,9 +474,6 @@ export class GraphQLEditor extends React.PureComponent<
   }
 
   private handleResizeStart = downEvent => {
-    if (this.props.disableResize) {
-      return
-    }
     if (!this.didClickDragBar(downEvent)) {
       return
     }
@@ -1016,7 +490,7 @@ export class GraphQLEditor extends React.PureComponent<
       const editorBar = ReactDOM.findDOMNode(this.editorBarComponent)
       const leftSize = moveEvent.clientX - getLeft(editorBar) - offset
       const rightSize = editorBar.clientWidth - leftSize
-      this.setState({ editorFlex: leftSize / rightSize } as State)
+      this.props.setEditorFlex(leftSize / rightSize)
     }
 
     let onMouseUp: any = () => {
@@ -1042,8 +516,7 @@ export class GraphQLEditor extends React.PureComponent<
     downEvent.preventDefault()
 
     let didMove = false
-    const wasOpen = this.state.responseTracingOpen
-    const hadHeight = this.state.responseTracingHeight
+    const hadHeight = this.props.responseTracingHeight
     const offset = downEvent.clientY - getTop(downEvent.target)
 
     let onMouseMove: any = moveEvent => {
@@ -1057,21 +530,15 @@ export class GraphQLEditor extends React.PureComponent<
       const topSize = moveEvent.clientY - getTop(editorBar) - offset
       const bottomSize = editorBar.clientHeight - topSize
       if (bottomSize < 60) {
-        this.setState({
-          responseTracingOpen: false,
-          responseTracingHeight: hadHeight,
-        } as State)
+        this.props.closeTracing(hadHeight)
       } else {
-        this.setState({
-          responseTracingOpen: true,
-          responseTracingHeight: bottomSize,
-        } as State)
+        this.props.openTracing(hadHeight)
       }
     }
 
     let onMouseUp: any = () => {
       if (!didMove) {
-        this.setState({ responseTracingOpen: !wasOpen } as State)
+        this.props.toggleTracing()
       }
 
       document.removeEventListener('mousemove', onMouseMove)
@@ -1084,24 +551,12 @@ export class GraphQLEditor extends React.PureComponent<
     document.addEventListener('mouseup', onMouseUp)
   }
 
-  private selectQueryVariables = () => {
-    // SELECT_QUERY_VARIABLES
-    this.setState({ queryVariablesActive: true })
-    this.storageSet('queryVariablesActive', 'true')
-  }
-
-  private selectHttpHeaders = () => {
-    // UNSELECT_QUERY_VARIABLES
-    this.setState({ queryVariablesActive: false })
-    this.storageSet('queryVariablesActive', 'false')
-  }
-
   private handleVariableResizeStart = downEvent => {
     downEvent.preventDefault()
 
     let didMove = false
-    const wasOpen = this.state.variableEditorOpen
-    const hadHeight = this.state.variableEditorHeight
+    const wasOpen = this.props.variableEditorOpen
+    const hadHeight = this.props.variableEditorHeight
     const offset = downEvent.clientY - getTop(downEvent.target)
 
     if (
@@ -1123,15 +578,9 @@ export class GraphQLEditor extends React.PureComponent<
       const topSize = moveEvent.clientY - getTop(editorBar) - offset
       const bottomSize = editorBar.clientHeight - topSize
       if (bottomSize < 60) {
-        this.setState({
-          variableEditorOpen: false,
-          variableEditorHeight: hadHeight,
-        } as State)
+        this.props.closeVariables(hadHeight)
       } else {
-        this.setState({
-          variableEditorOpen: true,
-          variableEditorHeight: bottomSize,
-        } as State)
+        this.props.openVariables(bottomSize)
       }
     }
 
@@ -1153,7 +602,7 @@ export class GraphQLEditor extends React.PureComponent<
   private onClickHintInformation = event => {
     if (event.target.className === 'typeName') {
       const typeName = event.target.innerHTML
-      const schema = this.state.schema
+      const schema = this.props.schema
       if (schema) {
         // TODO: There is no way as of now to retrieve the NAMED_TYPE of a GraphQLList(Type).
         // We're therefore removing any '[' or '!' characters, to properly find its NAMED_TYPE. (eg. [Type!]! => Type)
@@ -1169,11 +618,48 @@ export class GraphQLEditor extends React.PureComponent<
   }
 }
 
+const mapStateToProps = createStructuredSelector({
+  queryRunning: getQueryRunning,
+  responses: getResponses,
+  subscriptionActive: getSubscriptionActive,
+  variableEditorOpen: getVariableEditorOpen,
+  variableEditorHeight: getVariableEditorHeight,
+  responseTracingOpen: getResponseTracingOpen,
+  responseTracingHeight: getResponseTracingHeight,
+  responseExtensions: getResponseExtensions,
+  currentQueryStartTime: getCurrentQueryStartTime,
+  currentQueryEndTime: getCurrentQueryEndTime,
+  tracingSupported: getTracingSupported,
+  editorFlex: getEditorFlex,
+  queryVariablesActive: getQueryVariablesActive,
+  headers: getHeaders,
+  operations: getOperations,
+  operationName: getOperationName,
+  headersCount: getHeadersCount,
+})
+
 export default withTheme<Props>(
   // TODO fix redux types
-  connect<any, any, any>(getSessionDocs, { setStacks }, null, {
-    withRef: true,
-  })(GraphQLEditor),
+  connect<any, any, any>(
+    mapStateToProps,
+    {
+      updateQueryFacts,
+      stopQuery,
+      runQueryAtPosition,
+      openQueryVariables,
+      closeQueryVariables,
+      openVariables,
+      closeVariables,
+      openTracing,
+      closeTracing,
+      toggleTracing,
+      setEditorFlex,
+    },
+    null,
+    {
+      withRef: true,
+    },
+  )(GraphQLEditor),
 )
 
 const DragBar = styled.div`

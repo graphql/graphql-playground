@@ -11,7 +11,7 @@ import {
   toggleDocs,
   changeWidthDocs,
   changeKeyMove,
-} from '../../../actions/docs'
+} from '../../../state/docs/actions'
 import Spinner from '../../Spinner'
 import { columnWidth } from '../../../constants'
 import RootColumn from './RootColumn'
@@ -23,8 +23,8 @@ import {
   getElement,
 } from '../util/stack'
 import { GraphQLSchema } from 'graphql'
-import { getSessionDocs } from '../../../selectors/sessionDocs'
 import toJS from '../util/toJS'
+import { getSessionDocs } from '../../../state/docs/selectors'
 
 interface StateFromProps {
   navStack: any[]

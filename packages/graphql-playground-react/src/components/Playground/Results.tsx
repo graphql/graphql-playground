@@ -3,23 +3,22 @@ import ageOfDate from './util/ageOfDate'
 import { ResultViewer } from './ResultViewer'
 import { Response } from '../Playground'
 import * as cn from 'classnames'
+import { connect } from 'react-redux'
+import { createStructuredSelector } from 'reselect'
+import { getResponses } from '../../state/sessions/selectors'
+import { toJS } from './util/toJS'
 
 export interface Props {
-  disableResize?: boolean
   setRef: (ref: any) => void
-  hideGutters?: boolean
+}
+
+export interface ReduxProps {
   responses: Response[]
 }
 
-const Results: React.SFC<Props> = ({
-  disableResize,
-  setRef,
-  hideGutters,
-  responses,
-}) => (
+const Results: React.SFC<Props & ReduxProps> = ({ setRef, responses }) => (
   <div
     className={cn('result-window', {
-      disableResize,
       isSubscription: responses.length > 1,
     })}
     ref={setRef}
@@ -27,10 +26,6 @@ const Results: React.SFC<Props> = ({
     <style jsx={true}>{`
       .result-window {
         @p: .bgDarkBlue, .nosb, .relative;
-      }
-
-      .result-window.disableResize :global(.CodeMirror-gutters) {
-        cursor: default !important;
       }
 
       .subscription-time {
@@ -75,11 +70,15 @@ const Results: React.SFC<Props> = ({
             </div>
           )}
         <div className="result-viewer-wrapper">
-          <ResultViewer value={response.date} hideGutters={hideGutters} />
+          <ResultViewer value={response.date} />
         </div>
       </div>
     ))}
   </div>
 )
 
-export default Results
+const mapStateToProps = createStructuredSelector({
+  responses: getResponses,
+})
+
+export default connect(mapStateToProps)(toJS(Results))

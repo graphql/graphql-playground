@@ -5,8 +5,9 @@ import MiddlewareApp from './MiddlewareApp'
 import 'isomorphic-fetch'
 import EndpointPopup from './EndpointPopup'
 import { ThemeProvider, theme as styledTheme } from '../styled'
+import { Store } from 'redux'
 
-const store = createStore()
+export const store: Store<any> = createStore()
 
 function getParameterByName(name: string): string {
   const url = window.location.href

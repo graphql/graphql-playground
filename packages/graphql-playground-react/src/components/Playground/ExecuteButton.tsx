@@ -13,11 +13,15 @@ import ExecuteButtonOperation from './ExecuteButtonOperation'
 import { withProps, styled } from '../../styled'
 import * as theme from 'styled-theming'
 import { mix, lighten } from 'polished'
+import { connect } from 'react-redux'
+import { runQuery, stopQuery } from '../../state/sessions/actions'
+import { createStructuredSelector } from 'reselect'
+import { getQueryRunning, getOperations } from '../../state/sessions/selectors'
 
-export interface Props {
-  onRun: (data?: any) => void
-  onStop: () => void
-  isRunning: boolean
+export interface ReduxProps {
+  runQuery: (operationName?: string) => void
+  stopQuery: () => void
+  queryRunning: boolean
   operations: any[]
 }
 
@@ -35,7 +39,7 @@ let firstTime = true
  * queries to run.
  */
 class ExecuteButton extends React.Component<
-  Props & LocalThemeInterface,
+  LocalThemeInterface & ReduxProps,
   State
 > {
   constructor(props) {
@@ -48,7 +52,7 @@ class ExecuteButton extends React.Component<
   }
 
   render() {
-    const operations = this.props.operations
+    const { operations } = this.props
     const optionsOpen = this.state.optionsOpen
     const hasOptions = operations && operations.length > 1
 
@@ -74,18 +78,18 @@ class ExecuteButton extends React.Component<
     // Allow click event if there is a running query or if there are not options
     // for which operation to run.
     let onClick
-    if (this.props.isRunning || !hasOptions) {
+    if (this.props.queryRunning || !hasOptions) {
       onClick = this.onClick
     }
 
     // Allow mouse down if there is no running query, there are options for
     // which operation to run, and the dropdown is currently closed.
     let onMouseDown
-    if (!this.props.isRunning && hasOptions && !optionsOpen) {
+    if (!this.props.queryRunning && hasOptions && !optionsOpen) {
       onMouseDown = this.onOptionsOpen
     }
 
-    const pathJSX = this.props.isRunning ? (
+    const pathJSX = this.props.queryRunning ? (
       <rect fill="#FFFFFF" x="10" y="10" width="13" height="13" rx="1" />
     ) : (
       <path d="M 11 9 L 24 16 L 11 23 z" />
@@ -95,7 +99,7 @@ class ExecuteButton extends React.Component<
       <Wrapper className={this.props.localTheme}>
         <Button
           className={cx(this.props.localTheme)}
-          isRunning={String(this.props.isRunning)}
+          isRunning={String(this.props.queryRunning)}
           onMouseDown={onMouseDown}
           onClick={onClick}
           title="Execute Query (Ctrl-Enter)"
@@ -103,7 +107,7 @@ class ExecuteButton extends React.Component<
           <svg
             width="35"
             height="35"
-            viewBox={`${this.props.isRunning ? 4 : 3}.5,4.5,24,24`}
+            viewBox={`${this.props.queryRunning ? 4 : 3}.5,4.5,24,24`}
           >
             {pathJSX}
           </svg>
@@ -126,16 +130,16 @@ class ExecuteButton extends React.Component<
   }
 
   private onClick = () => {
-    if (this.props.isRunning) {
-      this.props.onStop()
+    if (this.props.queryRunning) {
+      this.props.stopQuery()
     } else {
-      this.props.onRun()
+      this.props.runQuery()
     }
   }
 
   private onOptionSelected = operation => {
     this.setState({ optionsOpen: false } as State)
-    this.props.onRun(operation.name && operation.name.value)
+    this.props.runQuery(operation.name && operation.name.value)
   }
 
   private onOptionsOpen = downEvent => {
@@ -172,7 +176,14 @@ class ExecuteButton extends React.Component<
   }
 }
 
-export default withTheme<Props>(ExecuteButton)
+const mapStateToProps = createStructuredSelector({
+  queryRunning: getQueryRunning,
+  operations: getOperations,
+})
+
+export default withTheme<{}>(
+  connect(mapStateToProps, { runQuery, stopQuery })(ExecuteButton),
+)
 
 const Wrapper = styled.div`
   position: absolute;

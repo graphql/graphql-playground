@@ -1,7 +1,6 @@
 import { GraphQLSchema, introspectionQuery, buildClientSchema } from 'graphql'
-import * as stringify from 'json-stable-stringify'
 import { NoSchemaError } from './util/NoSchemaError'
-import { ISettings, Session } from '../../types'
+import { Session } from '../../types'
 import { parseHeaders } from './util/parseHeaders'
 import { ApolloLink, execute } from 'apollo-link'
 import { setIn } from 'immutable'
@@ -16,10 +15,8 @@ export type LinkGetter = (session: Session) => ApolloLink
 
 export class SchemaFetcher {
   cache: Map<string, TracingSchemaTuple>
-  settings: ISettings
   linkGetter: LinkGetter
-  constructor(settings: ISettings, linkGetter: LinkGetter) {
-    this.settings = settings
+  constructor(linkGetter: LinkGetter) {
     this.cache = new Map()
     this.linkGetter = linkGetter
   }
@@ -32,7 +29,7 @@ export class SchemaFetcher {
   }
   hash(session: Session) {
     const { endpoint, headers } = session
-    return stringify({ endpoint, headers })
+    return `${endpoint}~${headers}`
   }
   private fetchSchema(
     session: Session,

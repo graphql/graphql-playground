@@ -9,8 +9,11 @@
 import * as React from 'react'
 import { GraphQLSchema } from 'graphql'
 import * as MD from 'markdown-it'
-
+import { connect } from 'react-redux'
 import onHasCompletion from './onHasCompletion'
+import { editQuery } from '../../state/sessions/actions'
+import { createStructuredSelector } from 'reselect'
+import { getQuery } from '../../state/sessions/selectors'
 /**
  * QueryEditor
  *
@@ -25,22 +28,21 @@ import onHasCompletion from './onHasCompletion'
  */
 export interface Props {
   schema?: GraphQLSchema | null
-  value: string
-  onEdit?: (value: string) => void
   onHintInformationRender?: (elem: any) => void
   onRunQuery?: () => void
   onClickReference?: (reference: any) => void
-  placeholder?: string
-  readOnly?: boolean
-  hideLineNumbers?: boolean
-  disableAutofocus?: boolean
-  hideGutters?: boolean
-  useVim?: boolean
+}
+
+export interface ReduxProps {
+  showDocForReference: (reference: any) => void
+  editQuery: (query: string) => void
+  value: string
 }
 
 const md = new MD()
+const AUTO_COMPLETE_AFTER_KEY = /^[a-zA-Z0-9_@(]$/
 
-export class QueryEditor extends React.Component<Props, {}> {
+class QueryEditor extends React.PureComponent<Props & ReduxProps, {}> {
   private cachedValue: string
   private editor: any
   private ignoreChangeEvent: boolean
@@ -79,39 +81,30 @@ export class QueryEditor extends React.Component<Props, {}> {
     require('codemirror-graphql/mode')
 
     const gutters: any[] = []
-    if (!this.props.hideLineNumbers) {
-      gutters.push('CodeMirror-linenumbers')
-    }
-    if (!this.props.hideGutters) {
-      gutters.push('CodeMirror-foldgutter')
-    }
-    let foldGutter: any = {}
-    if (!this.props.hideGutters) {
-      foldGutter = {
-        minFoldSize: 4,
-      }
-    }
+    gutters.push('CodeMirror-linenumbers')
+    gutters.push('CodeMirror-foldgutter')
 
     this.editor = CodeMirror(this.node, {
-      autofocus: !this.props.disableAutofocus,
-      placeholder: this.props.placeholder,
+      autofocus: true,
       value: this.props.value || '',
-      lineNumbers: !this.props.hideLineNumbers,
+      lineNumbers: true,
       tabSize: 2,
       mode: 'graphql',
       theme: 'graphiql',
-      keyMap: this.props.useVim ? 'vim' : 'sublime',
+      keyMap: 'sublime',
       autoCloseBrackets: true,
       matchBrackets: true,
       showCursorWhenSelecting: true,
-      readOnly: Boolean(this.props.readOnly),
-      foldGutter,
+      readOnly: false,
+      foldGutter: {
+        minFoldSize: 4,
+      },
       lint: {
         schema: this.props.schema,
       },
       hintOptions: {
         schema: this.props.schema,
-        closeOnUnfocus: false, // TODO reenable!!
+        closeOnUnfocus: true,
         completeSingle: false,
       },
       info: {
@@ -177,10 +170,6 @@ export class QueryEditor extends React.Component<Props, {}> {
       this.cachedValue = this.props.value
       this.editor.setValue(this.props.value)
     }
-    if (this.props.readOnly !== prevProps.readOnly) {
-      this.editor.options.readOnly = this.props.readOnly
-      CodeMirror.signal(this.editor, 'change', this.editor)
-    }
     this.ignoreChangeEvent = false
   }
 
@@ -215,17 +204,7 @@ export class QueryEditor extends React.Component<Props, {}> {
   }
 
   private onKeyUp = (_, event) => {
-    if (this.props.useVim) {
-      return
-    }
-    const code = event.keyCode
-    if (
-      (code >= 65 && code <= 90) || // letters
-      (!event.shiftKey && code >= 48 && code <= 57) || // numbers
-      (event.shiftKey && code === 189) || // underscore
-      (event.shiftKey && code === 50) || // @
-      (event.shiftKey && code === 57) // (
-    ) {
+    if (AUTO_COMPLETE_AFTER_KEY.test(event.key)) {
       this.editor.execCommand('autocomplete')
     }
   }
@@ -233,9 +212,7 @@ export class QueryEditor extends React.Component<Props, {}> {
   private onEdit = () => {
     if (!this.ignoreChangeEvent) {
       this.cachedValue = this.editor.getValue()
-      if (this.props.onEdit) {
-        this.props.onEdit(this.cachedValue)
-      }
+      this.props.editQuery(this.cachedValue)
     }
   }
 
@@ -247,3 +224,9 @@ export class QueryEditor extends React.Component<Props, {}> {
     onHasCompletion(cm, data, this.props.onHintInformationRender)
   }
 }
+
+const mapStateToProps = createStructuredSelector({
+  value: getQuery,
+})
+
+export default connect(mapStateToProps, { editQuery })(QueryEditor)

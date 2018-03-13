@@ -1,6 +1,7 @@
 import * as cuid from 'cuid'
 import { getQueryTypes } from './components/Playground/util/getQueryTypes'
 import { Session } from './types'
+import { List, Map } from 'immutable'
 
 export const columnWidth = 300
 
@@ -129,7 +130,7 @@ export function getDefaultSession(endpoint: string): Session {
     id: cuid(),
     query: defaultQuery,
     variables: '',
-    responses: [],
+    responses: List([]),
     endpoint,
     operationName: undefined,
     hasMutation: false,
@@ -140,19 +141,17 @@ export function getDefaultSession(endpoint: string): Session {
     date: new Date(),
     starred: false,
     queryRunning: false,
-    operations: [],
+    operations: List([]),
     isReloadingSchema: false,
     responseExtensions: {},
-    selectedVariableNames: [],
     queryVariablesActive: false,
     endpointUnreachable: false,
-    editor: {
-      editorFlex: 1,
-      variableEditorOpen: false,
-      variableEditorHeight: 200,
-      responseTracingOpen: false,
-      responseTracingHeight: 300,
-      docExplorerWidth: 350,
-    },
+    editorFlex: 1,
+    variableEditorOpen: false,
+    variableEditorHeight: 200,
+    responseTracingOpen: false,
+    responseTracingHeight: 300,
+    docExplorerWidth: 350,
+    variableToType: Map({}),
   }
 }

@@ -8,8 +8,25 @@
 
 import * as React from 'react'
 import onHasCompletion from './onHasCompletion'
+import { connect } from 'react-redux'
+import { VariableToType } from '../../types'
+import { editVariables } from '../../state/sessions/actions'
+import { getVariables, getVariableToType } from '../../state/sessions/selectors'
+import { createStructuredSelector } from 'reselect'
 
 /* tslint:disable */
+
+interface Props {
+  onHintInformationRender: () => void
+  onRunQuery: () => void
+  prettifyQuery: () => void
+}
+
+interface ReduxProps {
+  value: string
+  variableToType: VariableToType
+  editVariables: (variable: string) => void
+}
 
 /**
  * VariableEditor
@@ -24,7 +41,8 @@ import onHasCompletion from './onHasCompletion'
  *   - readOnly: Turns the editor to read-only mode.
  *
  */
-export class VariableEditor extends React.Component<any> {
+
+class VariableEditor extends React.PureComponent<Props & ReduxProps> {
   cachedValue: any
   editor: any
   ignoreChangeEvent: boolean
@@ -61,12 +79,12 @@ export class VariableEditor extends React.Component<any> {
       lineNumbers: true,
       tabSize: 2,
       mode: 'graphql-variables',
-      theme: this.props.editorTheme || 'graphiql',
+      theme: 'graphiql',
       keyMap: 'sublime',
       autoCloseBrackets: true,
       matchBrackets: true,
       showCursorWhenSelecting: true,
-      readOnly: this.props.readOnly ? 'nocursor' : false,
+      readOnly: false,
       foldGutter: {
         minFoldSize: 4,
       },
@@ -97,8 +115,8 @@ export class VariableEditor extends React.Component<any> {
         },
 
         'Shift-Ctrl-P': () => {
-          if (this.props.onPrettifyQuery) {
-            this.props.onPrettifyQuery()
+          if (this.props.prettifyQuery) {
+            this.props.prettifyQuery()
           }
         },
 
@@ -189,9 +207,7 @@ export class VariableEditor extends React.Component<any> {
   _onEdit = () => {
     if (!this.ignoreChangeEvent) {
       this.cachedValue = this.editor.getValue()
-      if (this.props.onEdit) {
-        this.props.onEdit(this.cachedValue)
-      }
+      this.props.editVariables(this.cachedValue)
     }
   }
 
@@ -199,3 +215,10 @@ export class VariableEditor extends React.Component<any> {
     onHasCompletion(cm, data, this.props.onHintInformationRender)
   }
 }
+
+const mapStateToProps = createStructuredSelector({
+  value: getVariables,
+  variableToType: getVariableToType,
+})
+
+export default connect(mapStateToProps, { editVariables })(VariableEditor)

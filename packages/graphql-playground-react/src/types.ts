@@ -1,17 +1,21 @@
 import { Observable, FetchResult } from 'apollo-link'
+import { List, Map } from 'immutable'
 
-export interface Session {
+export interface SessionProps {
   id: string
   endpoint: string
 
   query: string
   file?: string
   variables: string
-  responses?: Response[]
+  responses?: List<Response>
   operationName?: string
   queryRunning: boolean
   subscriptionActive: boolean
-  operations: OperationDefinition[]
+
+  // query facts
+  operations: List<OperationDefinition>
+  variableToType: Map<string, any>
 
   // additional props that are interactive in graphiql, these are not represented in graphiqls state
   queryTypes: QueryTypes
@@ -39,7 +43,6 @@ export interface Session {
   responseExtensions: any
   queryVariablesActive: boolean
   endpointUnreachable: boolean
-  selectedVariableNames: string[]
 
   // editor settings
   editorFlex: number
@@ -47,9 +50,9 @@ export interface Session {
   variableEditorHeight: number
   responseTracingOpen: boolean
   responseTracingHeight: number
-  docExplorerWidth: number
   nextQueryStartTime?: Date
   tracingSupported?: boolean
+  docExplorerWidth: number
 }
 
 export interface QueryTypes {

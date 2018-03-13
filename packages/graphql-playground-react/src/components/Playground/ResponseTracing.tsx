@@ -3,6 +3,14 @@ import { $v } from 'graphcool-styles'
 import TracingRow from './TracingRow'
 import * as theme from 'styled-theming'
 import styled from '../../styled/styled'
+import { createStructuredSelector } from 'reselect'
+import {
+  getTracing,
+  getCurrentQueryStartTime,
+  getCurrentQueryEndTime,
+  getTracingSupported,
+} from '../../state/sessions/selectors'
+import { connect } from 'react-redux'
 
 export interface TracingFormat {
   version: 1
@@ -21,7 +29,7 @@ export interface TracingFormat {
   }
 }
 
-export interface Props {
+export interface ReduxProps {
   tracing?: TracingFormat
   tracingSupported?: boolean
   startTime?: Date
@@ -63,7 +71,7 @@ const TracingRows = styled.div`
   height: calc(100% + 116px);
 `
 
-export default class ResponseTracing extends React.Component<Props, {}> {
+class ResponseTracing extends React.PureComponent<ReduxProps> {
   render() {
     const { tracing, tracingSupported, startTime, endTime } = this.props
     const requestMs =
@@ -111,3 +119,12 @@ export default class ResponseTracing extends React.Component<Props, {}> {
     )
   }
 }
+
+const mapStateToProps = createStructuredSelector({
+  tracing: getTracing,
+  startTime: getCurrentQueryStartTime,
+  endTime: getCurrentQueryEndTime,
+  tracingSupported: getTracingSupported,
+})
+
+export default connect(mapStateToProps)(ResponseTracing)

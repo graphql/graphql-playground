@@ -14,7 +14,7 @@ import { parse, typeFromAST } from 'graphql'
  *
  * If the query cannot be parsed, returns undefined.
  */
-export default function getQueryFacts(schema, documentStr): any {
+export function getQueryFacts(schema, documentStr): any {
   if (!documentStr) {
     return
   }

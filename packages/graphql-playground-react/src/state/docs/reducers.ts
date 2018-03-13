@@ -1,9 +1,9 @@
-import { columnWidth } from '../constants'
 import { GraphQLField } from 'graphql'
-import { Map, List } from 'immutable'
+import { Map, List, Record } from 'immutable'
 import { handleActions } from 'redux-actions'
+import { columnWidth } from '../../constants'
 
-export type DocsState = Map<string, SessionState>
+export type DocsState = Map<string, DocsSessionState>
 
 export interface NavItem {
   x: number
@@ -11,19 +11,19 @@ export interface NavItem {
   field: GraphQLField<any, any>
 }
 
-export interface SessionState {
+export interface DocsSessionState {
   readonly navStack: List<Map<string, NavItem>>
   readonly docsOpen: boolean
   readonly docsWidth: number
   readonly keyMove: boolean
 }
 
-export const defaultSessionState: SessionState = {
+export const DocsSession = Record<DocsSessionState>({
   navStack: List([]),
   docsOpen: false,
   docsWidth: columnWidth,
   keyMove: false,
-}
+})
 
 const defaultState: DocsState = Map({})
 

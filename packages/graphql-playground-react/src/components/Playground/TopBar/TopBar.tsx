@@ -2,59 +2,62 @@ import * as React from 'react'
 import { styled } from '../../../styled/index'
 import * as theme from 'styled-theming'
 import { darken, lighten } from 'polished'
-import * as CopyToClipboard from 'react-copy-to-clipboard'
+import * as copy from 'copy-to-clipboard'
+
 import Share, { SharingProps } from '../../Share'
 import ReloadIcon from './ReloadIcon'
 import { keyframes, StyledComponentClass } from 'styled-components'
 import * as cx from 'classnames'
-import shallowEqual from '../util/shallowEqual'
+import { createStructuredSelector } from 'reselect'
+import {
+  getEndpoint,
+  getCurrentSession,
+} from '../../../state/sessions/selectors'
+import { connect } from 'react-redux'
+import { getFixedEndpoint } from '../../../state/general/selectors'
+import PropTypes from 'prop-types'
+import {
+  editEndpoint,
+  prettifyQuery,
+  fetchSchema,
+} from '../../../state/sessions/actions'
+import { setHistoryOpen } from '../../../state/general/actions'
+import { share } from '../../../state/sharing/actions'
 
 export interface Props {
   endpoint: string
-  onChangeEndpoint?: (value: string) => void
-  endpointDisabled: boolean
-  onClickPrettify?: () => void
-  onClickHistory?: () => void
-  curl: string
-  onClickShare?: () => void
-  onReloadSchema?: () => void
+  fixedEndpoint?: boolean
   isReloadingSchema: boolean
   sharing?: SharingProps
-  fixedEndpoint?: boolean
   endpointUnreachable: boolean
+
+  editEndpoint: (value: string) => void
+  prettifyQuery: () => void
+  setHistoryOpen: (open: boolean) => void
+  share: () => void
+  fetchSchema: () => void
 }
 
-export default class TopBar extends React.Component<Props, {}> {
-  shouldComponentUpdate(nextProps: Props) {
-    const deconstruct = ({ sharing, ...restProps }: Props) => ({
-      sharing,
-      restProps,
-    })
-    const deconstructedProps = deconstruct(this.props)
-    const deconstructedNextProps = deconstruct(nextProps)
-    const shouldUpdate =
-      !shallowEqual(
-        deconstructedProps.sharing,
-        deconstructedNextProps.sharing,
-      ) ||
-      !shallowEqual(
-        deconstructedProps.restProps,
-        deconstructedNextProps.restProps,
-      )
-    return shouldUpdate
+class TopBar extends React.Component<Props, {}> {
+  contextTypes = {
+    store: PropTypes.shape({
+      subscribe: PropTypes.func.isRequired,
+      dispatch: PropTypes.func.isRequired,
+      getState: PropTypes.func.isRequired,
+    }),
   }
   render() {
     const { endpointUnreachable } = this.props
     return (
       <TopBarWrapper>
-        <Button onClick={this.props.onClickPrettify}>Prettify</Button>
-        <Button onClick={this.props.onClickHistory}>History</Button>
+        <Button onClick={this.props.prettifyQuery}>Prettify</Button>
+        <Button onClick={this.openHistory}>History</Button>
         <UrlBarWrapper>
           <UrlBar
             value={this.props.endpoint}
             onChange={this.onChange}
             onKeyDown={this.onKeyDown}
-            onBlur={this.props.onReloadSchema}
+            onBlur={this.props.fetchSchema}
             disabled={this.props.fixedEndpoint}
             className={cx({ active: !this.props.fixedEndpoint })}
           />
@@ -66,13 +69,11 @@ export default class TopBar extends React.Component<Props, {}> {
           ) : (
             <ReloadIcon
               isReloadingSchema={this.props.isReloadingSchema}
-              onReloadSchema={this.props.onReloadSchema}
+              onReloadSchema={this.props.fetchSchema}
             />
           )}
         </UrlBarWrapper>
-        <CopyToClipboard text={this.props.curl}>
-          <Button>Copy CURL</Button>
-        </CopyToClipboard>
+        <Button onClick={this.copyCurlToClipboard}>Copy CURL</Button>
         {this.props.sharing && (
           <Share {...this.props.sharing}>
             <Button>Share Playground</Button>
@@ -81,17 +82,74 @@ export default class TopBar extends React.Component<Props, {}> {
       </TopBarWrapper>
     )
   }
+  copyCurlToClipboard = () => {
+    const curl = this.getCurl()
+    copy(curl)
+  }
   onChange = e => {
-    if (typeof this.props.onChangeEndpoint === 'function') {
-      this.props.onChangeEndpoint(e.target.value)
-    }
+    this.props.editEndpoint(e.target.value)
   }
   onKeyDown = e => {
-    if (e.keyCode === 13 && typeof this.props.onReloadSchema === 'function') {
-      this.props.onReloadSchema()
+    if (e.keyCode === 13) {
+      this.props.fetchSchema()
     }
   }
+  openHistory = () => {
+    this.props.setHistoryOpen(true)
+  }
+  getCurl = () => {
+    // no need to rerender the whole time. only on-demand the store is fetched
+    const session = getCurrentSession(this.context.store.getState())
+    let variables
+    try {
+      variables = JSON.parse(session.variables)
+    } catch (e) {
+      //
+    }
+    const data = JSON.stringify({
+      query: session.query,
+      variables,
+      operationName: session.operationName,
+    })
+    let sessionHeaders
+    try {
+      sessionHeaders = JSON.parse(session.headers!)
+    } catch (e) {
+      //
+    }
+    const headers = {
+      'Accept-Encoding': 'gzip, deflate, br',
+      'Content-Type': 'application/json',
+      Accept: 'application/json',
+      Connection: 'keep-alive',
+      DNT: '1',
+      Origin: location.origin || session.endpoint,
+      ...sessionHeaders,
+    }
+    const headersString = Object.keys(headers)
+      .map(key => {
+        const value = headers[key]
+        return `-H '${key}: ${value}'`
+      })
+      .join(' ')
+    return `curl '${
+      session.endpoint
+    }' ${headersString} --data-binary '${data}' --compressed`
+  }
 }
+
+const mapStateToProps = createStructuredSelector({
+  endpoint: getEndpoint,
+  fixedEndpoint: getFixedEndpoint,
+})
+
+export default connect(mapStateToProps, {
+  editEndpoint,
+  prettifyQuery,
+  setHistoryOpen,
+  share,
+  fetchSchema,
+})(TopBar)
 
 const buttonColor = theme('mode', {
   light: p => p.theme.colours.darkBlue10,

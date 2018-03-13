@@ -13,8 +13,6 @@ import { SubscriptionClient } from 'subscriptions-transport-ws'
 import { isSubscription } from './Playground/util/hasSubscription'
 import HistoryPopup from './HistoryPopup'
 import * as cx from 'classnames'
-import { DocsState } from '../reducers/docs'
-import GraphQLEditorSession from './Playground/GraphQLEditorSession'
 import { mapValues } from 'lodash'
 import { styled } from '../styled'
 import { isSharingAuthorization } from './Playground/util/session'
@@ -30,6 +28,7 @@ import { HttpLink } from 'apollo-link-http'
 import * as app from '../../package.json'
 import { parseHeaders } from './Playground/util/parseHeaders'
 import { makeOperation } from './Playground/util/makeOperation'
+import { DocsState } from '../state/docs/reducers'
 
 export interface Response {
   resultID: string
@@ -97,6 +96,8 @@ export interface CursorPosition {
 
 export { GraphQLEditor }
 
+export let schemaFetcher: SchemaFetcher
+
 export default class Playground extends React.PureComponent<Props, State> {
   storage: PlaygroundStorage
   apolloLinks: { [sessionId: string]: any } = {}
@@ -130,8 +131,7 @@ export default class Playground extends React.PureComponent<Props, State> {
     }
 
     const sessions = this.initSessions(props)
-    this.schemaFetcher = new SchemaFetcher(
-      this.props.settings,
+    schemaFetcher = this.schemaFetcher = new SchemaFetcher(
       this.createApolloLink,
     )
 
@@ -273,14 +273,14 @@ export default class Playground extends React.PureComponent<Props, State> {
     this.state.sessions.forEach(session => this.setApolloLink(session))
   }
 
-  setCursor(position: CursorPosition) {
-    if (this.graphiqlComponents) {
-      const editor = this.graphiqlComponents[this.state.selectedSessionIndex]
-      if (editor && editor.queryEditorComponent) {
-        editor.queryEditorComponent.editor.setCursor(position)
-      }
-    }
-  }
+  // setCursor(position: CursorPosition) {
+  //   if (this.graphiqlComponents) {
+  //     const editor = this.graphiqlComponents[this.state.selectedSessionIndex]
+  //     if (editor && editor.queryEditorComponent) {
+  //       editor.queryEditorComponent.editor.setCursor(position)
+  //     }
+  //   }
+  // }
 
   render() {
     const { sessions, selectedSessionIndex } = this.state
@@ -338,7 +338,7 @@ export default class Playground extends React.PureComponent<Props, State> {
                   onChange={this.handleFileChange}
                 />
               ) : (
-                <GraphQLEditorSession
+                <GraphQLEditor
                   key={session.id}
                   session={session}
                   index={index}
@@ -424,145 +424,145 @@ export default class Playground extends React.PureComponent<Props, State> {
     }
   }
 
-  handleChangeSettings = (settings: string) => {
-    const settingsSession = this.state.sessions.find(session =>
-      Boolean(session.isSettingsTab),
-    )
-    if (settingsSession) {
-      this.setValueInSession(settingsSession.id, 'hasChanged', true)
-    }
-    this.props.onChangeSettings(settings)
-  }
+  // handleChangeSettings = (settings: string) => {
+  //   const settingsSession = this.state.sessions.find(session =>
+  //     Boolean(session.isSettingsTab),
+  //   )
+  //   if (settingsSession) {
+  //     this.setValueInSession(settingsSession.id, 'hasChanged', true)
+  //   }
+  //   this.props.onChangeSettings(settings)
+  // }
 
-  handleSaveSettings = () => {
-    const settingsSession = this.state.sessions.find(session =>
-      Boolean(session.isSettingsTab),
-    )
-    if (settingsSession) {
-      this.setValueInSession(settingsSession.id, 'hasChanged', false)
-    }
-    this.props.onSaveSettings()
-  }
+  // handleSaveSettings = () => {
+  //   const settingsSession = this.state.sessions.find(session =>
+  //     Boolean(session.isSettingsTab),
+  //   )
+  //   if (settingsSession) {
+  //     this.setValueInSession(settingsSession.id, 'hasChanged', false)
+  //   }
+  //   this.props.onSaveSettings()
+  // }
 
-  handleChangeConfig = (config: string) => {
-    const configSession = this.state.sessions.find(session =>
-      Boolean(session.isConfigTab),
-    )
-    if (configSession) {
-      this.setValueInSession(configSession.id, 'hasChanged', true)
-    }
-    this.props.onChangeConfig(config)
-  }
+  // handleChangeConfig = (config: string) => {
+  //   const configSession = this.state.sessions.find(session =>
+  //     Boolean(session.isConfigTab),
+  //   )
+  //   if (configSession) {
+  //     this.setValueInSession(configSession.id, 'hasChanged', true)
+  //   }
+  //   this.props.onChangeConfig(config)
+  // }
 
-  handleSaveConfig = () => {
-    const configSession = this.state.sessions.find(session =>
-      Boolean(session.isConfigTab),
-    )
-    if (configSession) {
-      this.setValueInSession(configSession.id, 'hasChanged', false)
-    }
-    this.props.onSaveConfig()
-  }
+  // handleSaveConfig = () => {
+  //   const configSession = this.state.sessions.find(session =>
+  //     Boolean(session.isConfigTab),
+  //   )
+  //   if (configSession) {
+  //     this.setValueInSession(configSession.id, 'hasChanged', false)
+  //   }
+  //   this.props.onSaveConfig()
+  // }
 
-  handleFileChange = file => {
-    const session = this.state.sessions[this.state.selectedSessionIndex]
-    this.setValueInSession(session.id, 'file', file)
-    this.setValueInSession(session.id, 'hasChanged', true)
-  }
+  // handleFileChange = file => {
+  //   const session = this.state.sessions[this.state.selectedSessionIndex]
+  //   this.setValueInSession(session.id, 'file', file)
+  //   this.setValueInSession(session.id, 'hasChanged', true)
+  // }
 
-  handleSaveFile = file => {
-    const session = this.state.sessions[this.state.selectedSessionIndex]
-    this.setValueInSession(session.id, 'hasChanged', false)
-  }
+  // handleSaveFile = file => {
+  //   const session = this.state.sessions[this.state.selectedSessionIndex]
+  //   this.setValueInSession(session.id, 'hasChanged', false)
+  // }
 
-  public reloadSchema = () => {
-    if (this.graphiqlComponents) {
-      const editor = this.graphiqlComponents[this.state.selectedSessionIndex]
-      if (editor && editor.queryEditorComponent) {
-        editor.reloadSchema()
-      }
-    }
-  }
+  // public reloadSchema = () => {
+  //   if (this.graphiqlComponents) {
+  //     const editor = this.graphiqlComponents[this.state.selectedSessionIndex]
+  //     if (editor && editor.queryEditorComponent) {
+  //       editor.reloadSchema()
+  //     }
+  //   }
+  // }
 
-  public openSettingsTab = () => {
-    const sessionIndex = this.state.sessions.findIndex(s =>
-      Boolean(s.isSettingsTab),
-    )
-    if (sessionIndex === -1) {
-      let session = this.createSession()
-      session = Immutable.set(session, 'isSettingsTab', true)
-      session = Immutable.set(session, 'isFile', true)
-      session = Immutable.set(session, 'name', 'Settings')
-      this.setState(state => {
-        return {
-          ...state,
-          sessions: state.sessions.concat(session),
-          selectedSessionIndex: state.sessions.length,
-          changed: false,
-        }
-      })
-    } else {
-      this.setState({ selectedSessionIndex: sessionIndex })
-    }
-  }
+  // public openSettingsTab = () => {
+  //   const sessionIndex = this.state.sessions.findIndex(s =>
+  //     Boolean(s.isSettingsTab),
+  //   )
+  //   if (sessionIndex === -1) {
+  //     let session = this.createSession()
+  //     session = Immutable.set(session, 'isSettingsTab', true)
+  //     session = Immutable.set(session, 'isFile', true)
+  //     session = Immutable.set(session, 'name', 'Settings')
+  //     this.setState(state => {
+  //       return {
+  //         ...state,
+  //         sessions: state.sessions.concat(session),
+  //         selectedSessionIndex: state.sessions.length,
+  //         changed: false,
+  //       }
+  //     })
+  //   } else {
+  //     this.setState({ selectedSessionIndex: sessionIndex })
+  //   }
+  // }
 
-  public openConfigTab = () => {
-    const sessionIndex = this.state.sessions.findIndex(s =>
-      Boolean(s.isConfigTab),
-    )
-    if (sessionIndex === -1) {
-      let session = this.createSession()
-      session = Immutable.set(session, 'isConfigTab', true)
-      session = Immutable.set(session, 'isFile', true)
-      session = Immutable.set(session, 'name', 'GraphQL Config')
-      this.setState(state => {
-        return {
-          ...state,
-          sessions: state.sessions.concat(session),
-          selectedSessionIndex: state.sessions.length,
-          changed: false,
-        }
-      })
-    } else {
-      this.setState({ selectedSessionIndex: sessionIndex })
-    }
-  }
+  // public openConfigTab = () => {
+  //   const sessionIndex = this.state.sessions.findIndex(s =>
+  //     Boolean(s.isConfigTab),
+  //   )
+  //   if (sessionIndex === -1) {
+  //     let session = this.createSession()
+  //     session = Immutable.set(session, 'isConfigTab', true)
+  //     session = Immutable.set(session, 'isFile', true)
+  //     session = Immutable.set(session, 'name', 'GraphQL Config')
+  //     this.setState(state => {
+  //       return {
+  //         ...state,
+  //         sessions: state.sessions.concat(session),
+  //         selectedSessionIndex: state.sessions.length,
+  //         changed: false,
+  //       }
+  //     })
+  //   } else {
+  //     this.setState({ selectedSessionIndex: sessionIndex })
+  //   }
+  // }
 
-  public newSession = (name?: string) => {
-    let session = this.createSession()
-    if (name) {
-      session = Immutable.set(session, 'name', name)
-    }
-    this.setState(state => {
-      return {
-        ...state,
-        sessions: state.sessions.concat(session),
-        selectedSessionIndex: state.sessions.length,
-        changed: true,
-      }
-    })
-  }
+  // public newSession = (name?: string) => {
+  //   let session = this.createSession()
+  //   if (name) {
+  //     session = Immutable.set(session, 'name', name)
+  //   }
+  //   this.setState(state => {
+  //     return {
+  //       ...state,
+  //       sessions: state.sessions.concat(session),
+  //       selectedSessionIndex: state.sessions.length,
+  //       changed: true,
+  //     }
+  //   })
+  // }
 
-  public newFileTab = (fileName: string, filePath: string, file: string) => {
-    const sessionIndex = this.state.sessions.findIndex(s => s.name === fileName)
-    if (sessionIndex === -1) {
-      let session = this.createSession()
-      session = Immutable.set(session, 'isFile', true)
-      session = Immutable.set(session, 'name', fileName)
-      session = Immutable.set(session, 'filePath', filePath)
-      session = Immutable.set(session, 'file', file)
-      this.setState(state => {
-        return {
-          ...state,
-          sessions: state.sessions.concat(session),
-          selectedSessionIndex: state.sessions.length,
-          changed: false,
-        }
-      })
-    } else {
-      this.setState({ selectedSessionIndex: sessionIndex })
-    }
-  }
+  // public newFileTab = (fileName: string, filePath: string, file: string) => {
+  //   const sessionIndex = this.state.sessions.findIndex(s => s.name === fileName)
+  //   if (sessionIndex === -1) {
+  //     let session = this.createSession()
+  //     session = Immutable.set(session, 'isFile', true)
+  //     session = Immutable.set(session, 'name', fileName)
+  //     session = Immutable.set(session, 'filePath', filePath)
+  //     session = Immutable.set(session, 'file', file)
+  //     this.setState(state => {
+  //       return {
+  //         ...state,
+  //         sessions: state.sessions.concat(session),
+  //         selectedSessionIndex: state.sessions.length,
+  //         changed: false,
+  //       }
+  //     })
+  //   } else {
+  //     this.setState({ selectedSessionIndex: sessionIndex })
+  //   }
+  // }
 
   public closeTab = () => {
     const { sessions, selectedSessionIndex } = this.state

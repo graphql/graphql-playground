@@ -4,10 +4,10 @@ import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import { GraphQLList, GraphQLNonNull, isType } from 'graphql'
 import ArgumentInline from './ArgumentInline'
-import { addStack } from '../../../actions/docs'
 import { Triangle } from '../../Icons/Triangle'
 import toJS from '../util/toJS'
 import { Map } from 'immutable'
+import { addStack } from '../../../state/docs/actions'
 
 interface ReduxProps {
   keyMove: boolean

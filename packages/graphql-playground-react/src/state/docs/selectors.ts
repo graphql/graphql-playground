@@ -1,16 +1,9 @@
-import { defaultSessionState } from './reducers'
+import { createSelector } from 'reselect'
+import { getSelectedWorkspace } from '../root/reducers'
+import { getSelectedSessionId } from '../sessions/selectors'
+import { DocsSession } from './reducers'
 
-export const getSessionDocs = ({ docs }, { sessionId }) => {
-  return docs.get(sessionId) || defaultSessionState
-  // return
-  // if (sessionDocs) {
-  //   return {
-  //     navStack: sessionDocs.navStack,
-  //     docsOpen: sessionDocs.docsOpen,
-  //     docsWidth: sessionDocs.docsWidth,
-  //     keyMove: sessionDocs.keyMove,
-  //   }
-  // } else {
-  //   return defaultSessionState
-  // }
-}
+export const getSessionDocs = createSelector([getSelectedWorkspace], state => {
+  const sessionId = getSelectedSessionId(state)
+  return state.docs.get(sessionId) || new DocsSession()
+})

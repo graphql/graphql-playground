@@ -1,5 +1,5 @@
 import * as React from 'react'
-import _ from 'lodash'
+import * as _ from 'lodash'
 import getDisplayName from 'react-display-name'
 
 /* tslint:disable */
@@ -8,15 +8,15 @@ import getDisplayName from 'react-display-name'
  * Optionally, filter which props get converted.
  */
 export default function toJS(propsMap) {
-  function decorate(Component: any) {
+  function decorate(component: any) {
     class ToJS extends React.Component {
-      static displayName = `ToJS(${getDisplayName(Component)})`
-      static WrappedComponent = Component
+      static displayName = `ToJS(${getDisplayName(component)})`
+      static WrappedComponent = component
 
       toJS(): any {
         return _.reduce(
           this.props,
-          (result, value, key) => {
+          (result, value: any, key) => {
             if (propsMap) {
               if (propsMap[key]) {
                 result[propsMap[key]] =
@@ -35,7 +35,7 @@ export default function toJS(propsMap) {
       }
 
       render() {
-        return <Component {...this.toJS()} />
+        return React.createElement(component, this.toJS())
       }
     }
     return ToJS
@@ -58,4 +58,3 @@ export default function toJS(propsMap) {
     return decorate.apply(null, arguments)
   }
 }
-a
