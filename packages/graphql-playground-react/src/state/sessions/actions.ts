@@ -33,6 +33,7 @@ export const {
   updateQueryFacts,
   runQueryAtPosition,
   toggleTracing,
+  toggleVariables,
   newSession,
   newSessionFromQuery,
   newFileTab,
@@ -92,6 +93,7 @@ export const {
   */
   CLOSE_VARIABLES: simpleAction('variableEditorHeight'),
   OPEN_VARIABLES: simpleAction('variableEditorHeight'),
+  TOGGLE_VARIABLES: simpleAction(),
 
   /*
     a littlebit more complex state mutations

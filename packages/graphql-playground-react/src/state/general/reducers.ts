@@ -10,7 +10,7 @@ export interface GeneralStateType {
   envVars: any
 }
 
-const DefaultSessionDocsState = Record<GeneralStateType>({
+export const GeneralState = Record<GeneralStateType>({
   historyOpen: false,
   fixedEndpoint: false,
   endpoint: '',
@@ -30,7 +30,7 @@ export default handleActions(
     SET_SETTINGS_STRING: (state, { settingsString }) =>
       state.set('settingsString', settingsString),
   },
-  new DefaultSessionDocsState(),
+  new GeneralState(),
 )
 
 export const defaultSettings = {

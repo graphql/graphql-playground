@@ -11,18 +11,18 @@ import * as cx from 'classnames'
 import { createStructuredSelector } from 'reselect'
 import {
   getEndpoint,
-  getCurrentSession,
+  getSelectedSession,
 } from '../../../state/sessions/selectors'
 import { connect } from 'react-redux'
 import { getFixedEndpoint } from '../../../state/general/selectors'
-import PropTypes from 'prop-types'
+import * as PropTypes from 'prop-types'
 import {
   editEndpoint,
   prettifyQuery,
   fetchSchema,
 } from '../../../state/sessions/actions'
-import { setHistoryOpen } from '../../../state/general/actions'
 import { share } from '../../../state/sharing/actions'
+import { openHistory } from '../../../state/general/actions'
 
 export interface Props {
   endpoint: string
@@ -33,13 +33,13 @@ export interface Props {
 
   editEndpoint: (value: string) => void
   prettifyQuery: () => void
-  setHistoryOpen: (open: boolean) => void
+  openHistory: () => void
   share: () => void
   fetchSchema: () => void
 }
 
 class TopBar extends React.Component<Props, {}> {
-  contextTypes = {
+  static contextTypes = {
     store: PropTypes.shape({
       subscribe: PropTypes.func.isRequired,
       dispatch: PropTypes.func.isRequired,
@@ -95,11 +95,11 @@ class TopBar extends React.Component<Props, {}> {
     }
   }
   openHistory = () => {
-    this.props.setHistoryOpen(true)
+    this.props.openHistory()
   }
   getCurl = () => {
     // no need to rerender the whole time. only on-demand the store is fetched
-    const session = getCurrentSession(this.context.store.getState())
+    const session = getSelectedSession(this.context.store.getState())
     let variables
     try {
       variables = JSON.parse(session.variables)
@@ -146,7 +146,7 @@ const mapStateToProps = createStructuredSelector({
 export default connect(mapStateToProps, {
   editEndpoint,
   prettifyQuery,
-  setHistoryOpen,
+  openHistory,
   share,
   fetchSchema,
 })(TopBar)

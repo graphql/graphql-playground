@@ -6,7 +6,7 @@ import * as cn from 'classnames'
 import { connect } from 'react-redux'
 import { createStructuredSelector } from 'reselect'
 import { getResponses } from '../../state/sessions/selectors'
-import { toJS } from './util/toJS'
+import toJS from './util/toJS'
 
 export interface Props {
   setRef: (ref: any) => void

@@ -23,7 +23,6 @@ import {
   getElement,
 } from '../util/stack'
 import { GraphQLSchema } from 'graphql'
-import toJS from '../util/toJS'
 import { getSessionDocs } from '../../../state/docs/selectors'
 
 interface StateFromProps {
@@ -434,4 +433,4 @@ export default connect<StateFromProps, DispatchFromProps, Props>(
   mapDispatchToProps,
   null,
   { withRef: true },
-)(toJS(GraphDocs))
+)(GraphDocs)

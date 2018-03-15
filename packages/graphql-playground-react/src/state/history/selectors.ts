@@ -1,5 +1,5 @@
 import { createSelector } from 'reselect'
-import { getSelectedWorkspace } from '../root/reducers'
+import { getSelectedWorkspace } from '../workspace/reducers'
 
 export const getHistory = createSelector(
   [getSelectedWorkspace],

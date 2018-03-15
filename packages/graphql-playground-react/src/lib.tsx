@@ -1,5 +1,5 @@
 import MiddlewareApp from './components/MiddlewareApp'
-import { GraphQLEditor } from './components/Playground/GraphQLEditor'
+import GraphQLEditor from './components/Playground/GraphQLEditor'
 
 export { MiddlewareApp as Playground, GraphQLEditor }
 

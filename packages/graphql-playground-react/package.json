@@ -143,6 +143,7 @@
     "react": "^16.2.0",
     "react-addons-shallow-compare": "^15.6.2",
     "react-codemirror": "^1.0.0",
+    "react-copy-to-clipboard": "^5.0.1",
     "react-display-name": "^0.2.3",
     "react-dom": "^16.2.0",
     "react-helmet": "^5.2.0",

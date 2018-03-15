@@ -1,5 +1,32 @@
 import { createSelector } from 'reselect'
-import { getSelectedWorkspace } from '../root/reducers'
+import { makeWorkspace } from '../workspace/reducers'
+
+function getSelectedWorkspaceId(state) {
+  return state.get('selectedWorkspace')
+}
+function getSelectedWorkspace(state) {
+  return (
+    state.getIn(['workspaces', getSelectedWorkspaceId(state)]) ||
+    makeWorkspace('')
+  )
+}
+
+export const getSessionsState = createSelector(
+  [getSelectedWorkspace],
+  workspace => workspace.get('sessions'),
+)
+
+export const getSelectedSession = createSelector([getSessionsState], state => {
+  const id = getSelectedSessionId(state)
+  const session = state.getIn(['sessions', id])
+  return session
+})
+
+export const getSelectedSessionId = state => state.get('selectedSessionId')
+
+const makeSessionSelector = prop => {
+  return createSelector([getSelectedSession], session => session.get(prop))
+}
 
 export const getEndpoint = makeSessionSelector('endpoint')
 export const getQuery = makeSessionSelector('query')
@@ -87,23 +114,11 @@ export const getTracing = createSelector(
   extensions => extensions && extensions.tracing,
 )
 
-export const getSessionsMap = createSelector([getSelectedWorkspace], state =>
-  state.get('sessions'),
-)
-
-export const getSessions = createSelector([getSelectedWorkspace], state =>
-  state
+export const getSessionsArray = createSelector([getSessionsState], state => {
+  const array = state
     .get('sessions')
     .toArray()
-    .map(arr => arr[1]),
-)
+    .map(arr => arr[1])
 
-export const getSelectedSession = createSelector(
-  [getSelectedWorkspace],
-  state => state.getIn(['sessions', getSelectedSessionId(state)]),
-)
-export const getSelectedSessionId = state => state.get('selectedSessionId')
-
-function makeSessionSelector(prop) {
-  return createSelector([getSelectedSession], session => session.get(prop))
-}
+  return array
+})

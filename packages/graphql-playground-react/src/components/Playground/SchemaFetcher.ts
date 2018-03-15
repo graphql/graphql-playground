@@ -12,7 +12,7 @@ export interface TracingSchemaTuple {
 
 export interface SchemaFetchProps {
   endpoint: string
-  headers: string
+  headers?: string
 }
 
 export type LinkGetter = (session: SchemaFetchProps) => ApolloLink

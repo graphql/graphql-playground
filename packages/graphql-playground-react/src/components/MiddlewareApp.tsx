@@ -1,6 +1,6 @@
 import * as React from 'react'
 import { Provider } from 'react-redux'
-import createStore from '../createStore'
+import createStore from '../state/createStore'
 import Playground, { Playground as IPlayground } from './Playground'
 import { Helmet } from 'react-helmet'
 import * as fetch from 'isomorphic-fetch'
@@ -16,8 +16,8 @@ import {
 import OldThemeProvider from './Theme/ThemeProvider'
 import { getActiveEndpoints } from './util'
 import { ISettings } from '../types'
-import PlaygroundStorage from './PlaygroundStorage'
 import { mapKeys } from 'lodash'
+import { defaultSettings } from '../state/general/reducers'
 
 const store = createStore()
 
@@ -68,21 +68,15 @@ export interface State {
   headers?: any
 }
 
-const defaultSettings = `{
-  "general.betaUpdates": false,
-  "editor.theme": "dark",
-  "editor.reuseHeaders": true,
-  "request.credentials": "omit",
-  "tracing.hideTracingResponse": true
-}`
-
 export default class MiddlewareApp extends React.Component<Props, State> {
   playground: IPlayground
   constructor(props: Props) {
     super(props)
     ;(global as any).m = this
 
-    let settingsString = localStorage.getItem('settings') || defaultSettings
+    let settingsString =
+      localStorage.getItem('settings') ||
+      JSON.stringify(defaultSettings, null, 2)
     settingsString = this.migrateSettingsString(settingsString)
 
     const configIsYaml = props.configString
@@ -113,6 +107,8 @@ export default class MiddlewareApp extends React.Component<Props, State> {
     subscriptionEndpoint =
       this.normalizeSubscriptionUrl(endpoint, subscriptionEndpoint) || undefined
 
+    this.removeLoader()
+
     this.state = {
       endpoint: this.absolutizeUrl(endpoint),
       platformToken:
@@ -130,6 +126,13 @@ export default class MiddlewareApp extends React.Component<Props, State> {
     }
   }
 
+  removeLoader() {
+    const loadingWrapper = document.getElementById('loading-wrapper')
+    if (loadingWrapper) {
+      loadingWrapper.remove()
+    }
+  }
+
   getGraphcoolSubscriptionEndpoint(endpoint) {
     if (endpoint.includes('api.graph.cool')) {
       return `wss://subscriptions.graph.cool/v1/${
@@ -141,7 +144,6 @@ export default class MiddlewareApp extends React.Component<Props, State> {
   }
 
   migrateSettingsString(settingsString: string): string {
-    const defaultSettingsObject = JSON.parse(defaultSettings)
     const replacementMap = {
       theme: 'editor.theme',
       reuseHeaders: 'editor.reuseHeaders',
@@ -150,7 +152,7 @@ export default class MiddlewareApp extends React.Component<Props, State> {
     try {
       const currentSettings = JSON.parse(settingsString)
       const settings = {
-        ...defaultSettingsObject,
+        ...defaultSettings,
         ...mapKeys(currentSettings, (value, key) => replacementMap[key] || key),
       }
       return JSON.stringify(settings, null, 2)
@@ -314,11 +316,8 @@ export default class MiddlewareApp extends React.Component<Props, State> {
   }
 
   getSessionCount = (endpoint: string): number => {
-    if (this.state.endpoint === endpoint && this.playground) {
-      return this.playground.state.sessions.length
-    }
-
-    return PlaygroundStorage.getSessionCount(endpoint)
+    // TODO
+    return 5
   }
 
   getPlaygroundRef = ref => {
@@ -329,7 +328,8 @@ export default class MiddlewareApp extends React.Component<Props, State> {
   }
 
   handleStartEditConfig = () => {
-    this.playground.openConfigTab()
+    // TODO
+    // this.playground.openConfigTab()
   }
 
   handleChangeConfig = (configString: string) => {
@@ -369,7 +369,7 @@ export default class MiddlewareApp extends React.Component<Props, State> {
       // ignore
     }
 
-    return JSON.parse(defaultSettings)
+    return defaultSettings as any
   }
 
   private normalizeSettings(settings: ISettings) {

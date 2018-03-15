@@ -1,5 +1,4 @@
 import {
-  put,
   takeLatest,
   ForkEffect,
   call,
@@ -9,7 +8,6 @@ import {
 import { delay } from 'redux-saga'
 import { getSelectedSession } from './selectors'
 import getSelectedOperationName from '../../components/Playground/util/getSelectedOperationName'
-import { schemaFetcher } from '../../components/Playground'
 import { getQueryFacts } from '../../components/Playground/util/getQueryFacts'
 import { fromJS, is } from 'immutable'
 import {
@@ -25,9 +23,10 @@ import { getRootMap, getNewStack } from '../../components/Playground/util/stack'
 import { DocsSessionState } from '../docs/reducers'
 import { setStacks } from '../docs/actions'
 import { HistoryState } from '../history/reducers'
-import { getSelectedWorkspace } from '../root/reducers'
 import { addHistoryItem } from '../history/actions'
 import { SessionProps } from '../../types'
+import { schemaFetcher } from './fetchingSagas'
+import { getSelectedWorkspace } from '../workspace/reducers'
 
 function* setQueryFacts() {
   // debounce by 150 ms
@@ -108,17 +107,15 @@ function* addToHistory({ payload }) {
   }
 }
 
-export default function* sessionsSaga() {
-  yield [
-    takeLatest('GET_QUERY_FACTS', setQueryFacts),
-    takeLatest('SET_OPERATION_NAME', setQueryFacts),
-    takeLatest('EDIT_QUERY', setQueryFacts),
-    takeLatest('RUN_QUERY_AT_POSITION', runQueryAtPosition),
-    takeLatest('FETCH_SCHEMA', fetchSchemaSaga),
-    takeLatest('SCHEMA_FETCHING_SUCCESS', renewStacks),
-    takeEvery('QUERY_SUCCESS' as any, addToHistory),
-  ]
-}
+export const sessionsSagas = [
+  takeLatest('GET_QUERY_FACTS', setQueryFacts),
+  takeLatest('SET_OPERATION_NAME', setQueryFacts),
+  takeLatest('EDIT_QUERY', setQueryFacts),
+  takeLatest('RUN_QUERY_AT_POSITION', runQueryAtPosition),
+  takeLatest('FETCH_SCHEMA', fetchSchemaSaga),
+  takeLatest('SCHEMA_FETCHING_SUCCESS', renewStacks),
+  takeEvery('QUERY_SUCCESS' as any, addToHistory),
+]
 
 // needed to fix typescript
 export { ForkEffect }

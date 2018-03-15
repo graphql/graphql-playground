@@ -22,6 +22,7 @@ import { getDefaultSession } from '../../constants'
 import { SessionProps } from '../../types'
 import * as cuid from 'cuid'
 
+export { SessionProps } from '../../types'
 export type SessionType = Record<SessionProps>
 export interface SessionStateProps {
   sessions: OrderedMap<string, SessionType>
@@ -36,9 +37,10 @@ function makeSession() {
 }
 
 export function makeSessionState(endpoint) {
+  const session = new Session({ endpoint: endpoint || '' })
   const SessionState = Record({
-    sessions: OrderedMap(new Session({ endpoint: endpoint || '' })),
-    selectedSessionId: '',
+    sessions: OrderedMap({ [session.id]: session }),
+    selectedSessionId: session.id,
   })
 
   return new SessionState()
@@ -100,6 +102,14 @@ export default handleActions(
         ['sessions', getSelectedSessionId(state)],
         Map({ variableEditorHeight, variableEditorOpen: true }),
       )
+    },
+    TOGGLE_VARIABLES: state => {
+      const path = [
+        'sessions',
+        getSelectedSessionId(state),
+        'variableEditorOpen',
+      ]
+      return state.setIn(path, !state.getIn(path))
     },
     ADD_RESPONSE: (state, { response }) => {
       return state.updateIn(
@@ -216,7 +226,7 @@ export default handleActions(
       if (reuseHeaders) {
         const selectedSessionId = getSelectedSessionId(state)
         const currentSession = state.sessions.get(selectedSessionId)
-        session = session.set('heaaders', currentSession)
+        session = session.set('headers', currentSession)
       }
       return state.setIn(['sessions', session.id], session)
     },
@@ -300,7 +310,7 @@ export default handleActions(
       )
     },
   },
-  makeSessionState,
+  makeSessionState(''),
 )
 
 function closeTab(state, sessionId) {

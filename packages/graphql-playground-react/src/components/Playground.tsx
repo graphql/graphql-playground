@@ -1,32 +1,17 @@
 import * as React from 'react'
 import GraphQLEditor from './Playground/GraphQLEditor'
-import * as fetch from 'isomorphic-fetch'
-import { TabBar } from './Playground/TabBar'
-import { ISettings, ApolloLinkExecuteResponse, SessionProps } from '../types'
-import * as Immutable from 'seamless-immutable'
-import PlaygroundStorage from './PlaygroundStorage'
-import { SubscriptionClient } from 'subscriptions-transport-ws'
-import { isSubscription } from './Playground/util/hasSubscription'
+import TabBar from './Playground/TabBar'
+import { ISettings, SessionProps } from '../types'
 import HistoryPopup from './HistoryPopup'
 import * as cx from 'classnames'
-import { mapValues } from 'lodash'
 import { styled } from '../styled'
-import { isSharingAuthorization } from './Playground/util/session'
-import { SchemaFetcher } from './Playground/SchemaFetcher'
 import Settings from './Settings'
-import SettingsEditor, {
-  PlaygroundSettingsEditor,
-  GraphQLConfigEditor,
-} from './SettingsEditor'
+import { PlaygroundSettingsEditor, GraphQLConfigEditor } from './SettingsEditor'
 import { GraphQLConfig } from '../graphqlConfig'
 import FileEditor from './FileEditor'
-import { ApolloLink, execute } from 'apollo-link'
-import { WebSocketLink } from 'apollo-link-ws'
-import { HttpLink } from 'apollo-link-http'
+import { ApolloLink } from 'apollo-link'
 
 import * as app from '../../package.json'
-import { parseHeaders } from './Playground/util/parseHeaders'
-import { makeOperation } from './Playground/util/makeOperation'
 import { connect } from 'react-redux'
 import {
   selectTabIndex,
@@ -38,7 +23,7 @@ import {
   saveConfig,
   setTracingSupported,
 } from '../state/sessions/actions'
-import { initState } from '../state/root/actions'
+import { initState } from '../state/workspace/actions'
 import { GraphQLSchema } from 'graphql'
 import { createStructuredSelector } from 'reselect'
 import {
@@ -118,7 +103,6 @@ export interface CursorPosition {
 export { GraphQLEditor }
 
 export class Playground extends React.PureComponent<Props & ReduxProps, State> {
-  storage: PlaygroundStorage
   apolloLinks: { [sessionId: string]: any } = {}
   observers: { [sessionId: string]: any } = {}
   graphiqlComponents: any[] = []

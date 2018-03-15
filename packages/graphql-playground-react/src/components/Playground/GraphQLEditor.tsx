@@ -7,7 +7,6 @@ import QueryEditor from './QueryEditor'
 import CodeMirrorSizer from 'graphiql/dist/utility/CodeMirrorSizer'
 import { fillLeafs } from 'graphiql/dist/utility/fillLeafs'
 import { getLeft, getTop } from 'graphiql/dist/utility/elementPosition'
-import { ApolloLinkExecuteResponse } from '../../types'
 import { connect } from 'react-redux'
 
 import Spinner from '../Spinner'
@@ -19,7 +18,6 @@ import GraphDocs from './DocExplorer/GraphDocs'
 import { styled } from '../../styled/index'
 import TopBar from './TopBar/TopBar'
 import VariableEditor from './VariableEditor'
-import { GraphQLRequest } from 'apollo-link'
 import { createStructuredSelector } from 'reselect'
 import {
   getQueryRunning,
@@ -52,6 +50,8 @@ import {
   closeTracing,
   toggleTracing,
   setEditorFlex,
+  toggleVariables,
+  fetchSchema,
 } from '../../state/sessions/actions'
 
 /**
@@ -76,6 +76,7 @@ export interface ReduxProps {
   openTracing: (height: number) => void
   closeTracing: (height: number) => void
   toggleTracing: () => void
+  toggleVariables: () => void
   setEditorFlex: (flex: number) => void
   stopQuery: () => void
   navStack: any[]
@@ -585,7 +586,7 @@ class GraphQLEditor extends React.PureComponent<
 
     let onMouseUp: any = () => {
       if (!didMove) {
-        this.setState({ variableEditorOpen: !wasOpen } as State)
+        this.props.toggleVariables()
       }
 
       document.removeEventListener('mousemove', onMouseMove)
@@ -653,6 +654,8 @@ export default withTheme<Props>(
       closeTracing,
       toggleTracing,
       setEditorFlex,
+      toggleVariables,
+      fetchSchema,
     },
     null,
     {

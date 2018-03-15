@@ -26,8 +26,6 @@ export default function SchemaExplorer({ idl, modelName }: Props) {
       <QueryEditor
         schema={null}
         value={idl || ''}
-        readOnly={true}
-        hideLineNumbers={true}
         onClickReference={handleClickReference}
       />
     </div>

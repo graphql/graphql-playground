@@ -1,6 +1,6 @@
 import * as React from 'react'
 import { Provider } from 'react-redux'
-import createStore from '../createStore'
+import createStore from '../state/createStore'
 import MiddlewareApp from './MiddlewareApp'
 import 'isomorphic-fetch'
 import EndpointPopup from './EndpointPopup'
@@ -60,6 +60,12 @@ export default class App extends React.Component<Props, State> {
       if (loadingWrapper) {
         loadingWrapper.classList.remove('fadeOut')
       }
+
+      setTimeout(() => {
+        if (loadingWrapper) {
+          loadingWrapper.remove()
+        }
+      }, 1000)
 
       fetch('https://api.graph.cool/simple/v1/cj81hi46q03c30196uxaswrz2', {
         method: 'post',

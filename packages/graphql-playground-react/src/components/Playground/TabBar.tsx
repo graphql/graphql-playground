@@ -24,7 +24,7 @@ export interface ReduxProps {
 const white20 = '#4a555f'
 const darkBlue20 = '#c2c8cb'
 
-export const TabBar = withTheme<Props>(
+const TabBar = withTheme<Props>(
   ({
     sessions,
     localTheme,

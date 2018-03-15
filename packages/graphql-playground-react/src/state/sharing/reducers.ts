@@ -1,4 +1,4 @@
-import { Map, Record } from 'immutable'
+import { Record } from 'immutable'
 import { handleActions } from 'redux-actions'
 
 export interface SharingStateType {

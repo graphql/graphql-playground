@@ -1,10 +1,10 @@
 import { createSelector } from 'reselect'
-import { getSelectedWorkspace } from '../root/reducers'
 import { defaultSettings } from './reducers'
+import { getSelectedWorkspace } from '../workspace/reducers'
 
 const makeGeneralSelector = key =>
   createSelector([getSelectedWorkspace], state => {
-    state.general.get(key)
+    return state.general.get(key)
   })
 
 export const getFixedEndpoint = makeGeneralSelector('fixedEndpoint')

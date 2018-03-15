@@ -1,6 +1,8 @@
 import { Observable, FetchResult } from 'apollo-link'
 import { List, Map } from 'immutable'
 
+export type VariableToType = Map<string, any>
+
 export interface SessionProps {
   id: string
   endpoint: string
@@ -15,7 +17,7 @@ export interface SessionProps {
 
   // query facts
   operations: List<OperationDefinition>
-  variableToType: Map<string, any>
+  variableToType: VariableToType
 
   // additional props that are interactive in graphiql, these are not represented in graphiqls state
   queryTypes: QueryTypes
@@ -53,6 +55,7 @@ export interface SessionProps {
   nextQueryStartTime?: Date
   tracingSupported?: boolean
   docExplorerWidth: number
+  changed?: boolean
 }
 
 export interface QueryTypes {
