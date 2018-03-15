@@ -111,6 +111,8 @@ export default class MiddlewareApp extends React.Component<Props, State> {
     subscriptionEndpoint =
       this.normalizeSubscriptionUrl(endpoint, subscriptionEndpoint) || undefined
 
+    this.removeLoader()
+
     this.state = {
       endpoint: this.absolutizeUrl(endpoint),
       subscriptionEndpoint,
@@ -121,6 +123,13 @@ export default class MiddlewareApp extends React.Component<Props, State> {
       activeEnv,
       activeProjectName: projectName,
       headers,
+    }
+  }
+
+  removeLoader() {
+    const loadingWrapper = document.getElementById('loading-wrapper')
+    if (loadingWrapper) {
+      loadingWrapper.remove()
     }
   }
 
