@@ -86,7 +86,6 @@ export default class FieldDoc extends React.Component<Props, State> {
             x={level}
             y={-1}
             clickable={false}
-            sessionId={this.props.sessionId}
             lastActive={false}
           />
         </div>
@@ -149,7 +148,6 @@ export default class FieldDoc extends React.Component<Props, State> {
                 x={level}
                 y={index + implementationsOffset}
                 collapsable={true}
-                sessionId={this.props.sessionId}
                 lastActive={false}
               />
             ))}

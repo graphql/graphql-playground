@@ -23,11 +23,11 @@ export default handleActions(
   {
     OPEN_HISTORY: state => state.set('historyOpen', true),
     CLOSE_HISTORY: state => state.set('historyOpen', false),
-    SET_ENDPOINT_DISABLED: (state, { value }) =>
+    SET_ENDPOINT_DISABLED: (state, { payload: { value } }) =>
       state.set('endpointDisabled', value),
-    SET_CONFIG_STRING: (state, { configString }) =>
+    SET_CONFIG_STRING: (state, { payload: { configString } }) =>
       state.set('configString', configString),
-    SET_SETTINGS_STRING: (state, { settingsString }) =>
+    SET_SETTINGS_STRING: (state, { payload: { settingsString } }) =>
       state.set('settingsString', settingsString),
   },
   new GeneralState(),

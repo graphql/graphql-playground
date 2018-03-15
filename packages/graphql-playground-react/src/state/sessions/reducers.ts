@@ -64,14 +64,14 @@ export default handleActions(
       setOperationName,
       setSubscriptionActive,
       startQuery,
-    )]: (state, payload) => {
+    )]: (state, { payload }) => {
       const keyName = Object.keys(payload)[1]
       return state.setIn(
         ['sessions', getSelectedSessionId(state), keyName],
         payload[keyName],
       )
     },
-    CLOSE_TRACING: (state, { responseTracingHeight }) => {
+    CLOSE_TRACING: (state, { payload: { responseTracingHeight } }) => {
       return state.mergeDeepIn(
         ['sessions', getSelectedSessionId(state)],
         Map({ responseTracingHeight, responseTracingOpen: false }),
@@ -85,19 +85,19 @@ export default handleActions(
       ]
       return state.setIn(path, !state.getIn(path))
     },
-    OPEN_TRACING: (state, { responseTracingHeight }) => {
+    OPEN_TRACING: (state, { payload: { responseTracingHeight } }) => {
       return state.mergeDeepIn(
         ['sessions', getSelectedSessionId(state)],
         Map({ responseTracingHeight, responseTracingOpen: true }),
       )
     },
-    CLOSE_VARIABLES: (state, { variableEditorHeight }) => {
+    CLOSE_VARIABLES: (state, { payload: { variableEditorHeight } }) => {
       return state.mergeDeepIn(
         ['sessions', getSelectedSessionId(state)],
         Map({ variableEditorHeight, variableEditorOpen: false }),
       )
     },
-    OPEN_VARIABLES: (state, { variableEditorHeight }) => {
+    OPEN_VARIABLES: (state, { payload: { variableEditorHeight } }) => {
       return state.mergeDeepIn(
         ['sessions', getSelectedSessionId(state)],
         Map({ variableEditorHeight, variableEditorOpen: true }),
@@ -111,13 +111,13 @@ export default handleActions(
       ]
       return state.setIn(path, !state.getIn(path))
     },
-    ADD_RESPONSE: (state, { response }) => {
+    ADD_RESPONSE: (state, { payload: { response } }) => {
       return state.updateIn(
         ['sessions', getSelectedSessionId(state), 'responses'],
         responses => responses.push(Map(response)),
       )
     },
-    SET_RESPONSE: (state, { response }) => {
+    SET_RESPONSE: (state, { payload: { response } }) => {
       return state.setIn(
         ['sessions', getSelectedSessionId(state), 'responses'],
         List(Map(response)),
@@ -141,7 +141,7 @@ export default handleActions(
         false,
       )
     },
-    SCHEMA_FETCHING_SUCCESS: (state, payload) => {
+    SCHEMA_FETCHING_SUCCESS: (state, { payload }) => {
       const newSessions = state.get('sessions').map((session, sessionId) => {
         if (session.get('endpoint') === payload.endpoint) {
           return session.merge(
@@ -156,7 +156,7 @@ export default handleActions(
       })
       return state.set('sessions', newSessions)
     },
-    SCHEMA_FETCHING_ERROR: (state, payload) => {
+    SCHEMA_FETCHING_ERROR: (state, { payload }) => {
       const newSessions = state.get('sessions').map((session, sessionId) => {
         if (session.get('endpoint') === payload.endpoint) {
           return session.merge(
@@ -170,7 +170,7 @@ export default handleActions(
       })
       return state.set('sessions', newSessions)
     },
-    SET_SELECTED_SESSION_ID: (state, { sessionId }) =>
+    SET_SELECTED_SESSION_ID: (state, { payload: { sessionId } }) =>
       state.set('selectedSessionId', sessionId),
     OPEN_SETTINGS_TAB: (state: any) => {
       let newState = state
@@ -204,7 +204,7 @@ export default handleActions(
       }
       return newState.set('selectedSessionId', configTab.id)
     },
-    NEW_FILE_TAB: (state, { fileName, filePath, file }) => {
+    NEW_FILE_TAB: (state, { payload: { fileName, filePath, file } }) => {
       let newState = state
       let fileTab = state.sessions.find(
         value => value.get('name', '') === fileName,
@@ -221,7 +221,7 @@ export default handleActions(
       }
       return newState.set('selectedSessionId', fileTab.id)
     },
-    NEW_SESSION: (state, { reuseHeaders }) => {
+    NEW_SESSION: (state, { payload: { reuseHeaders } }) => {
       let session = makeSession()
       if (reuseHeaders) {
         const selectedSessionId = getSelectedSessionId(state)
@@ -230,12 +230,12 @@ export default handleActions(
       }
       return state.setIn(['sessions', session.id], session)
     },
-    DUPLICATE_SESSION: (state, { session }) => {
+    DUPLICATE_SESSION: (state, { payload: { session } }) => {
       const newSession = session.set('id', cuid())
       const newState = state.setIn(['sessions', newSession.id], newSession)
       return newState.set('selectedSessionIndex', newSession.id)
     },
-    NEW_SESSION_FROM_QUERY: (state, { query }) => {
+    NEW_SESSION_FROM_QUERY: (state, { payload: { query } }) => {
       const session = makeSession().set('query', query)
       return state.setIn(['sessions', session.id], session)
     },
@@ -263,14 +263,14 @@ export default handleActions(
       }
       return state.set('selectedSessionId', keys.get(count - 1))
     },
-    SELECT_TAB_INDEX: (state, { index }) => {
+    SELECT_TAB_INDEX: (state, { payload: { index } }) => {
       const keys = state.sessions.keySeq()
       return state.set('selectedSessionId', keys.get(index))
     },
-    SELECT_TAB: (state, { sessionId }) => {
+    SELECT_TAB: (state, { payload: { sessionId } }) => {
       return state.set('selectedSessionId', sessionId)
     },
-    CLOSE_TAB: (state, { sessionId }) => {
+    CLOSE_TAB: (state, { payload: { sessionId } }) => {
       return closeTab(state, sessionId)
     },
     EDIT_SETTINGS: state => {

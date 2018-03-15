@@ -57,7 +57,7 @@ interface ShowRootTypeProps {
   sessionId: string
 }
 
-function ShowRootType({ name, fields, offset, sessionId }: ShowRootTypeProps) {
+function ShowRootType({ name, fields, offset }: ShowRootTypeProps) {
   return (
     <div>
       <div className="doc-category-title">{name}</div>
@@ -69,7 +69,6 @@ function ShowRootType({ name, fields, offset, sessionId }: ShowRootTypeProps) {
             type={field}
             x={0}
             y={offset + index}
-            sessionId={sessionId}
             collapsable={true}
             lastActive={false}
           />

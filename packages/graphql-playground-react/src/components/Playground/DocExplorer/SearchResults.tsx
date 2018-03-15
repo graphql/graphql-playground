@@ -19,7 +19,7 @@ export default class SearchResults extends React.Component<Props, {}> {
   }
 
   render() {
-    const { level, sessionId } = this.props
+    const { level } = this.props
     const searchValue = this.props.searchValue
     const withinType = this.props.withinType
     const schema = this.props.schema
@@ -50,13 +50,7 @@ export default class SearchResults extends React.Component<Props, {}> {
       if (withinType !== type && isMatch(typeName, searchValue)) {
         matchedTypes.push(
           <div className="doc-category-item" key={typeName}>
-            <TypeLink
-              type={type}
-              x={level}
-              y={count++}
-              sessionId={sessionId}
-              lastActive={false}
-            />
+            <TypeLink type={type} x={level} y={count++} lastActive={false} />
           </div>,
         )
       }
@@ -89,7 +83,6 @@ export default class SearchResults extends React.Component<Props, {}> {
                 x={level}
                 y={count++}
                 showParentName={true}
-                sessionId={sessionId}
                 lastActive={false}
               />
             </div>

@@ -6,8 +6,13 @@ import { GraphQLList, GraphQLNonNull, isType } from 'graphql'
 import ArgumentInline from './ArgumentInline'
 import { Triangle } from '../../Icons/Triangle'
 import toJS from '../util/toJS'
-import { Map } from 'immutable'
 import { addStack } from '../../../state/docs/actions'
+import { getSessionDocsState } from '../../../state/docs/selectors'
+import {
+  // getSelectedSessionId,
+  getSelectedSessionIdFromRoot,
+} from '../../../state/sessions/selectors'
+import { createSelector } from 'reselect'
 
 interface ReduxProps {
   keyMove: boolean
@@ -31,8 +36,8 @@ export interface Props {
   onSetWidth?: (width: number) => void
   showParentName?: boolean
   collapsable?: boolean
-  sessionId: string
   lastActive: boolean
+  sessionId: string
 }
 
 interface State {
@@ -242,25 +247,30 @@ function renderType(type) {
   return <span>{type.name}</span>
 }
 
-const mapStateToProps = (state, { x, y, sessionId }) => {
-  const docs = state.docs.get(sessionId)
+const mapStateToProps = (state, { x, y }) => {
+  const docs = getSessionDocsState(state)
+  const sessionId = getSelectedSessionIdFromRoot(state)
   if (docs) {
     const nav = docs.navStack.get(x)
     if (nav) {
-      const isActive = nav.x === x && nav.y === y
-      return Map({
+      const isActive = nav.get('x') === x && nav.get('y') === y
+      return {
         isActive,
         keyMove: docs.keyMove,
         lastActive: isActive && x === docs.navStack.length - 1,
-      })
+        sessionId,
+      }
     }
   }
-  return Map({
+  return {
     isActive: false,
     keyMove: false,
     lastActive: false,
-  })
+    sessionId,
+  }
 }
+
+const selector = createSelector([mapStateToProps], s => s)
 
 const mapDispatchToProps = dispatch =>
   bindActionCreators(
@@ -271,6 +281,6 @@ const mapDispatchToProps = dispatch =>
   )
 
 export default connect<ReduxProps, DispatchFromProps, Props>(
-  mapStateToProps,
+  selector,
   mapDispatchToProps,
 )(toJS(TypeLink))

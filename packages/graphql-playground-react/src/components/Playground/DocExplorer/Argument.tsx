@@ -15,8 +15,8 @@ export default function Argument({
   showDefaultValue,
   x,
   y,
-  sessionId,
-}: Props) {
+}: // sessionId,
+Props) {
   return (
     <span className="arg">
       <style jsx={true}>{`
@@ -28,7 +28,6 @@ export default function Argument({
         type={arg}
         x={x}
         y={y}
-        sessionId={sessionId}
         lastActive={false}
         afterNode={
           arg.defaultValue !== undefined &&

@@ -43,6 +43,7 @@ export default (): Store<any> => {
     rootReducer,
     composeEnhancers.apply(null, functions),
   )
+  ;(window as any).s = store
 
   sagaMiddleware.run(rootSaga)
   return store

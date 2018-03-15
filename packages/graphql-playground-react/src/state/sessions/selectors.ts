@@ -23,6 +23,10 @@ export const getSelectedSession = createSelector([getSessionsState], state => {
 })
 
 export const getSelectedSessionId = state => state.get('selectedSessionId')
+export const getSelectedSessionIdFromRoot = createSelector(
+  [getSelectedSession],
+  state => state.get('id'),
+)
 
 const makeSessionSelector = prop => {
   return createSelector([getSelectedSession], session => session.get(prop))

@@ -25,17 +25,21 @@ export const DocsSession = Record<DocsSessionState>({
   keyMove: false,
 })
 
-const defaultState: DocsState = Map({})
+const defaultState: DocsState = Map({ '': new DocsSession() })
 
 export default handleActions(
   {
-    SET_STACKS: (state, { sessionId, stacks }) =>
-      state.setIn([sessionId, 'navStack'], stacks),
-    ADD_STACK: (state, { sessionId, field, x, y }) => {
+    SET_STACKS: (state, { payload: { sessionId, stacks } }) => {
+      let session = getSession(state, sessionId)
+      session = session.set('navStack', stacks)
+      return state.set(sessionId, session)
+    },
+    ADD_STACK: (state, { payload: { sessionId, field, x, y } }) => {
       if (!field.path) {
         field.path = field.name
       }
-      return state.updateIn([sessionId, 'navStack'], navStack => {
+      let session = getSession(state, sessionId)
+      session = session.update('navStack', navStack => {
         let newNavStack = navStack
         if (x < newNavStack.count()) {
           newNavStack = newNavStack.slice(0, x)
@@ -48,16 +52,35 @@ export default handleActions(
           }),
         )
       })
+      return state.set(sessionId, session)
     },
-    TOGGLE_DOCS: (state, { sessionId, open }) =>
-      state.setIn(
-        [sessionId, 'open'],
-        typeof open === 'undefined' ? !state.getIn([sessionId, 'open']) : open,
-      ),
-    CHANGE_WIDTH_DOCS: (state, { sessionId, width }) =>
-      state.setIn([sessionId, 'width'], width),
-    CHANGE_KEY_MOVE: (state, { sessionId, keyMove }) =>
-      state.setIn([sessionId, 'keyMove'], keyMove),
+    TOGGLE_DOCS: (state, { payload: { sessionId } }) => {
+      let session = getSession(state, sessionId)
+      session = session.set('docsOpen', !session.docsOpen)
+      return state.set(sessionId, session)
+    },
+    SET_DOCS_VISIBLE: (state, { payload: { sessionId, open } }) => {
+      let session = getSession(state, sessionId)
+      session = session.set('docsOpen', !!open)
+      return state.set(sessionId, session)
+    },
+    CHANGE_WIDTH_DOCS: (state, { payload: { sessionId, width } }) => {
+      let session = getSession(state, sessionId)
+      session = session.set('docsWidth', width)
+      return state.set(sessionId, session)
+    },
+    CHANGE_KEY_MOVE: (state, { payload: { sessionId, keyMove } }) => {
+      let session = getSession(state, sessionId)
+      session = session.set('keyMove', keyMove)
+      return state.set(sessionId, session)
+    },
   },
   defaultState,
 )
+
+function getSession(state, sessionId) {
+  if (!sessionId) {
+    throw new Error('sessionId cant be null')
+  }
+  return state.get(sessionId) || new DocsSession()
+}

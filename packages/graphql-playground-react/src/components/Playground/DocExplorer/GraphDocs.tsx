@@ -11,6 +11,7 @@ import {
   toggleDocs,
   changeWidthDocs,
   changeKeyMove,
+  setDocsVisible,
 } from '../../../state/docs/actions'
 import Spinner from '../../Spinner'
 import { columnWidth } from '../../../constants'
@@ -24,17 +25,22 @@ import {
 } from '../util/stack'
 import { GraphQLSchema } from 'graphql'
 import { getSessionDocs } from '../../../state/docs/selectors'
+import { getSelectedSessionIdFromRoot } from '../../../state/sessions/selectors'
+import { createStructuredSelector } from 'reselect'
 
 interface StateFromProps {
-  navStack: any[]
-  docsOpen: boolean
-  docsWidth: number
-  keyMove: boolean
+  docs: {
+    navStack: any[]
+    docsOpen: boolean
+    docsWidth: number
+    keyMove: boolean
+  }
 }
 
 interface DispatchFromProps {
   addStack: (sessionId: string, field: any, x: number, y: number) => any
-  toggleDocs: (sessionId: string, open?: boolean) => any
+  toggleDocs: (sessionId: string) => any
+  setDocsVisible: (sessionId: string, open: boolean) => any
   changeWidthDocs: (sessionId: string, width: number) => any
   changeKeyMove: (sessionId: string, move: boolean) => any
 }
@@ -70,8 +76,9 @@ class GraphDocs extends React.Component<
     // If user use default column size % columnWidth
     // Make the column follow the clicks
     if (
-      this.props.navStack.length !== nextProps.navStack.length ||
-      this.props.navStack.slice(-1)[0] !== nextProps.navStack.slice(-1)[0] ||
+      this.props.docs.navStack.length !== nextProps.docs.navStack.length ||
+      this.props.docs.navStack.slice(-1)[0] !==
+        nextProps.docs.navStack.slice(-1)[0] ||
       (!this.props.schema && nextProps.schema)
     ) {
       this.setWidth(nextProps)
@@ -90,7 +97,7 @@ class GraphDocs extends React.Component<
 
   getWidth(props: any = this.props) {
     const rootWidth = this.state.widthMap.root || columnWidth
-    const stackWidths = props.navStack.map(
+    const stackWidths = props.docs.navStack.map(
       stack => this.state.widthMap[stack.field.path] || columnWidth,
     )
 
@@ -102,7 +109,8 @@ class GraphDocs extends React.Component<
   }
 
   render() {
-    const { docsOpen, docsWidth, schema, navStack } = this.props
+    const { docsOpen, docsWidth, navStack } = this.props.docs
+    const { schema } = this.props
     const docsStyle = { width: docsOpen ? docsWidth : 0 }
 
     let emptySchema
@@ -255,7 +263,7 @@ class GraphDocs extends React.Component<
   }
 
   public showDocFromType = type => {
-    this.props.toggleDocs(this.props.sessionId, true)
+    this.props.setDocsVisible(this.props.sessionId, true)
     this.props.addStack(this.props.sessionId, type, 0, 0)
   }
 
@@ -268,7 +276,7 @@ class GraphDocs extends React.Component<
   }
 
   private handleToggleDocs = () => {
-    if (!this.props.docsOpen && this.refDocExplorer) {
+    if (!this.props.docs.docsOpen && this.refDocExplorer) {
       this.refDocExplorer.focus()
     }
     this.props.toggleDocs(this.props.sessionId)
@@ -289,15 +297,15 @@ class GraphDocs extends React.Component<
     e.preventDefault()
     this.props.changeKeyMove(this.props.sessionId, true)
     const lastNavStack =
-      this.props.navStack.length > 0 &&
-      this.props.navStack[this.props.navStack.length - 1]
+      this.props.docs.navStack.length > 0 &&
+      this.props.docs.navStack[this.props.docs.navStack.length - 1]
     const beforeLastNavStack =
-      this.props.navStack.length > 0 &&
-      this.props.navStack[this.props.navStack.length - 2]
+      this.props.docs.navStack.length > 0 &&
+      this.props.docs.navStack[this.props.docs.navStack.length - 2]
     const keyPressed = keycode(e)
     switch (keyPressed) {
       case 'esc':
-        this.props.toggleDocs(this.props.sessionId, false)
+        this.props.setDocsVisible(this.props.sessionId, false)
         break
       case 'left':
         if (beforeLastNavStack) {
@@ -367,7 +375,7 @@ class GraphDocs extends React.Component<
   private handleDocsResizeStart = downEvent => {
     downEvent.preventDefault()
 
-    const hadWidth = this.props.docsWidth
+    const hadWidth = this.props.docs.docsWidth
     const offset = downEvent.clientX - getLeft(downEvent.target)
 
     let onMouseMove: any = moveEvent => {
@@ -382,15 +390,15 @@ class GraphDocs extends React.Component<
       const docsSize = maxSize < newSize ? maxSize : newSize
 
       if (docsSize < 100) {
-        this.props.toggleDocs(this.props.sessionId, false)
+        this.props.setDocsVisible(this.props.sessionId, false)
       } else {
-        this.props.toggleDocs(this.props.sessionId, true)
+        this.props.setDocsVisible(this.props.sessionId, true)
         this.props.changeWidthDocs(this.props.sessionId, docsSize)
       }
     }
 
     let onMouseUp: any = () => {
-      if (!this.props.docsOpen) {
+      if (!this.props.docs.docsOpen) {
         this.props.changeWidthDocs(this.props.sessionId, hadWidth)
       }
 
@@ -408,7 +416,7 @@ class GraphDocs extends React.Component<
     this.clientX = e.clientX
     this.clientY = e.clientY
     if (
-      this.props.keyMove &&
+      this.props.docs.keyMove &&
       this.clientX !== e.clientX &&
       this.clientY !== e.clientY
     ) {
@@ -424,12 +432,18 @@ const mapDispatchToProps = dispatch =>
       toggleDocs,
       changeWidthDocs,
       changeKeyMove,
+      setDocsVisible,
     },
     dispatch,
   )
 
+const mapStateToProps = createStructuredSelector({
+  docs: getSessionDocs,
+  sessionId: getSelectedSessionIdFromRoot,
+})
+
 export default connect<StateFromProps, DispatchFromProps, Props>(
-  getSessionDocs,
+  mapStateToProps,
   mapDispatchToProps,
   null,
   { withRef: true },

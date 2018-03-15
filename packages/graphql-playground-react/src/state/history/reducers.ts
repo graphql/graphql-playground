@@ -9,9 +9,9 @@ export const defaultHistoryState: HistoryState = OrderedMap({})
 
 export default handleActions(
   {
-    TOGGLE_HISTORY_ITEM_STARRING: (state, { sessionId }) =>
+    TOGGLE_HISTORY_ITEM_STARRING: (state, { payload: { sessionId } }) =>
       state.setIn([sessionId, 'starred'], !state.getIn([sessionId, 'starred'])),
-    ADD_HISTORY_ITEM: (state, { session }) => {
+    ADD_HISTORY_ITEM: (state, { payload: { session } }) => {
       const id = cuid()
       state.set(
         id,

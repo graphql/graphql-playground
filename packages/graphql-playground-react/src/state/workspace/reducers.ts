@@ -1,6 +1,6 @@
 import { Reducer } from 'redux'
 import { combineReducers } from 'redux-immutable'
-import docs from '../docs/reducers'
+import docs, { DocsSession } from '../docs/reducers'
 import sessions, { makeSessionState } from '../sessions/reducers'
 import sharing, { SharingState } from '../sharing/reducers'
 import history from '../history/reducers'
@@ -45,7 +45,7 @@ export const rootReducer = (state = new RootState(), action) => {
     }
   }
 
-  const selectedWorkspaceId = getSelectedWorkspace(state)
+  const selectedWorkspaceId = getSelectedWorkspaceId(state)
 
   const path = ['workspaces', selectedWorkspaceId]
 
@@ -55,9 +55,12 @@ export const rootReducer = (state = new RootState(), action) => {
 }
 
 export function makeWorkspace(endpoint) {
+  const sessionState = makeSessionState(endpoint)
   const Workspace = Record({
-    docs: Map(),
-    sessions: makeSessionState(endpoint),
+    docs: Map({
+      [sessionState.selectedSessionId]: new DocsSession(),
+    }),
+    sessions: sessionState,
     sharing: new SharingState(),
     history: OrderedMap(),
     general: new GeneralState(),

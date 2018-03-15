@@ -14,7 +14,6 @@ const DocTypeSchema = ({
   fields,
   interfaces,
   level,
-  sessionId,
 }: DocTypeSchemaProps) => {
   const nonDeprecatedFields = fields.filter(data => !data.isDeprecated)
   const deprecatedFields = fields.filter(data => data.isDeprecated)
@@ -72,7 +71,6 @@ const DocTypeSchema = ({
               <span className="brace">{'{'}</span>
             ) : null
           }
-          sessionId={sessionId}
           lastActive={false}
         />
       ))}
@@ -83,7 +81,6 @@ const DocTypeSchema = ({
           x={level}
           y={index + interfaces.length}
           collapsable={true}
-          sessionId={sessionId}
           lastActive={false}
         />
       ))}
@@ -98,7 +95,6 @@ const DocTypeSchema = ({
             x={level}
             y={index + nonDeprecatedFields.length + interfaces.length}
             collapsable={true}
-            sessionId={sessionId}
             lastActive={false}
           />
         </div>

@@ -7,7 +7,7 @@ import { connect } from 'react-redux'
 import { createStructuredSelector } from 'reselect'
 import {
   getSessionsArray,
-  getSelectedSessionId,
+  getSelectedSessionIdFromRoot,
 } from '../../state/sessions/selectors'
 import { SessionProps } from '../../types'
 
@@ -203,7 +203,7 @@ const TabBar = withTheme<Props>(
 
 const mapStateToProps = createStructuredSelector({
   sessions: getSessionsArray,
-  selectedSessionId: getSelectedSessionId,
+  selectedSessionId: getSelectedSessionIdFromRoot,
 })
 
 export default connect(mapStateToProps)(TabBar)
