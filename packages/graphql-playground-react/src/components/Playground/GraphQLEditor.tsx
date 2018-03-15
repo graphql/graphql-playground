@@ -138,12 +138,12 @@ class GraphQLEditor extends React.PureComponent<
   componentDidUpdate() {
     // If this update caused DOM nodes to have changed sizes, update the
     // corresponding CodeMirror instance sizes to match.
-    const components = [
-      this.queryEditorComponent,
-      this.variableEditorComponent,
-      // this.resultComponent,
-    ]
-    this.codeMirrorSizer.updateSizes(components)
+    // const components = [
+    // this.queryEditorComponent,
+    // this.variableEditorComponent,
+    // this.resultComponent,
+    // ]
+    // this.codeMirrorSizer.updateSizes(components)
     if (this.resultComponent && Boolean(this.props.subscriptionActive)) {
       this.resultComponent.scrollTop = this.resultComponent.scrollHeight
     }

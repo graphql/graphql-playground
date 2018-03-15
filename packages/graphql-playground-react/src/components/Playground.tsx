@@ -31,7 +31,6 @@ import {
   getIsSettingsTab,
   getIsFile,
   getFile,
-  getEndpoint,
   getHeaders,
 } from '../state/sessions/selectors'
 import { getHistoryOpen } from '../state/general/selectors'
@@ -126,10 +125,7 @@ export class Playground extends React.PureComponent<Props & ReduxProps, State> {
 
   componentWillMount() {
     // init redux
-    this.props.initState(
-      this.props.endpoint,
-      this.props.configPath || this.props.endpoint,
-    )
+    this.props.initState(this.props.endpoint, this.getWorkspaceId())
   }
 
   componentDidMount() {
@@ -150,6 +146,17 @@ export class Playground extends React.PureComponent<Props & ReduxProps, State> {
     ) {
       this.getSchema()
     }
+    if (
+      this.props.endpoint !== nextProps.endpoint ||
+      this.props.configPath !== nextProps.configPath
+    ) {
+      this.props.initState(nextProps.endpoint, this.getWorkspaceId(nextProps))
+    }
+  }
+
+  getWorkspaceId(props = this.props) {
+    const configPathString = props.configPath ? `${props.configPath}~` : ''
+    return `${configPathString}${props.endpoint}`
   }
 
   async getSchema() {
@@ -249,7 +256,6 @@ const mapStateToProps = createStructuredSelector({
   isFile: getIsFile,
   historyOpen: getHistoryOpen,
   file: getFile,
-  endpoint: getEndpoint,
   headers: getHeaders,
 })
 

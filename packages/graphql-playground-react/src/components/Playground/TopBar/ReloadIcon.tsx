@@ -93,7 +93,8 @@ const Circle = withProps<Props>()(styled.circle)`
   transition: opacity 0.3s ease-in-out;
   opacity: ${p => (p.isReloadingSchema ? 1 : 0)};
   transform-origin: 9.5px 10px;
-  animation: ${refreshFrames} 2s linear infinite;
+  animation: ${refreshFrames} 2s linear ${p =>
+  p.isReloadingSchema ? 'infinite' : ''};
 `
 
 const Icon = withProps<Props>()(styled.path)`
