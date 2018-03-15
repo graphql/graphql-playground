@@ -57,7 +57,7 @@ class TopBar extends React.Component<Props, {}> {
             value={this.props.endpoint}
             onChange={this.onChange}
             onKeyDown={this.onKeyDown}
-            onBlur={this.props.fetchSchema}
+            onBlur={this.fetchSchema}
             disabled={this.props.fixedEndpoint}
             className={cx({ active: !this.props.fixedEndpoint })}
           />
@@ -69,7 +69,7 @@ class TopBar extends React.Component<Props, {}> {
           ) : (
             <ReloadIcon
               isReloadingSchema={this.props.isReloadingSchema}
-              onReloadSchema={this.props.fetchSchema}
+              onReloadSchema={this.fetchSchema}
             />
           )}
         </UrlBarWrapper>
@@ -91,8 +91,11 @@ class TopBar extends React.Component<Props, {}> {
   }
   onKeyDown = e => {
     if (e.keyCode === 13) {
-      this.props.fetchSchema()
+      this.fetchSchema()
     }
+  }
+  fetchSchema = () => {
+    this.props.fetchSchema()
   }
   openHistory = () => {
     this.props.openHistory()

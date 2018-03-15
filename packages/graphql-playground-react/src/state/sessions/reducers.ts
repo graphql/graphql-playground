@@ -32,8 +32,8 @@ export type SessionStateType = Record<SessionStateProps>
 
 export const Session = Record(getDefaultSession(''))
 
-function makeSession() {
-  return new Session().set('id', cuid())
+function makeSession(endpoint = '') {
+  return new Session({ endpoint }).set('id', cuid())
 }
 
 export function makeSessionState(endpoint) {
@@ -65,11 +65,10 @@ export default handleActions(
       setSubscriptionActive,
       startQuery,
     )]: (state, { payload }) => {
-      const keyName = Object.keys(payload)[1]
-      return state.setIn(
-        ['sessions', getSelectedSessionId(state), keyName],
-        payload[keyName],
-      )
+      const keys = Object.keys(payload)
+      const keyName = keys.length === 1 ? keys[0] : keys[1]
+      const path = ['sessions', getSelectedSessionId(state), keyName]
+      return state.setIn(path, payload[keyName])
     },
     CLOSE_TRACING: (state, { payload: { responseTracingHeight } }) => {
       return state.mergeDeepIn(
@@ -221,19 +220,22 @@ export default handleActions(
       }
       return newState.set('selectedSessionId', fileTab.id)
     },
-    NEW_SESSION: (state, { payload: { reuseHeaders } }) => {
-      let session = makeSession()
+    NEW_SESSION: (state, { payload: { reuseHeaders, endpoint } }) => {
+      let session = makeSession(endpoint)
       if (reuseHeaders) {
         const selectedSessionId = getSelectedSessionId(state)
         const currentSession = state.sessions.get(selectedSessionId)
         session = session.set('headers', currentSession)
       }
-      return state.setIn(['sessions', session.id], session)
+      return state
+        .setIn(['sessions', session.id], session)
+        .set('selectedSessionId', session.id)
     },
     DUPLICATE_SESSION: (state, { payload: { session } }) => {
       const newSession = session.set('id', cuid())
-      const newState = state.setIn(['sessions', newSession.id], newSession)
-      return newState.set('selectedSessionIndex', newSession.id)
+      return state
+        .setIn(['sessions', newSession.id], newSession)
+        .set('selectedSessionId', newSession.id)
     },
     NEW_SESSION_FROM_QUERY: (state, { payload: { query } }) => {
       const session = makeSession().set('query', query)

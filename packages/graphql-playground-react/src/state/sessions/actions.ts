@@ -138,7 +138,7 @@ export const {
   /* GraphQLEditor.handleRunQuery */
   OPEN_SETTINGS_TAB: () => ({}),
   OPEN_CONFIG_TAB: () => ({}),
-  NEW_SESSION: reuseHeaders => ({ reuseHeaders }),
+  NEW_SESSION: (endpoint, reuseHeaders) => ({ endpoint, reuseHeaders }),
   NEW_SESSION_FROM_QUERY: (query: string) => ({ query }),
   NEW_FILE_TAB: (fileName: string, filePath: string, file: string) => ({
     fileName,

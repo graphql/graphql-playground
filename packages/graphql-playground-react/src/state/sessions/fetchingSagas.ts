@@ -25,6 +25,11 @@ import {
 import { getSelectedWorkspace } from '../workspace/reducers'
 
 // tslint:disable
+let subscriptionEndpoint = ''
+
+export function setSubscriptionEndpoint(endpoint) {
+  subscriptionEndpoint = endpoint
+}
 
 export const defaultLinkCreator = (
   session: SchemaFetchProps,
@@ -50,10 +55,13 @@ export const defaultLinkCreator = (
     return httpLink
   }
 
-  const subscriptionClient = new SubscriptionClient(wsEndpoint!, {
-    timeout: 20000,
-    connectionParams,
-  })
+  const subscriptionClient = new SubscriptionClient(
+    wsEndpoint || subscriptionEndpoint,
+    {
+      timeout: 20000,
+      connectionParams,
+    },
+  )
 
   const webSocketLink = new WebSocketLink(subscriptionClient)
   return ApolloLink.split(

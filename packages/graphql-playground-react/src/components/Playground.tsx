@@ -34,7 +34,11 @@ import {
   getHeaders,
 } from '../state/sessions/selectors'
 import { getHistoryOpen } from '../state/general/selectors'
-import { setLinkCreator, schemaFetcher } from '../state/sessions/fetchingSagas'
+import {
+  setLinkCreator,
+  schemaFetcher,
+  setSubscriptionEndpoint,
+} from '../state/sessions/fetchingSagas'
 
 export interface Response {
   resultID: string
@@ -44,7 +48,7 @@ export interface Response {
 
 export interface Props {
   endpoint: string
-  subscriptionsEndpoint?: string
+  subscriptionEndpoint?: string
   projectId?: string
   adminAuthToken?: string
   onSuccess?: (graphQLParams: any, response: any) => void
@@ -78,7 +82,7 @@ export interface ReduxProps {
   selectNextTab: () => void
   selectPrevTab: () => void
   closeSelectedTab: () => void
-  newSession: (reuseHeaders: boolean) => void
+  newSession: (endpoint: string, reuseHeaders: boolean) => void
   initState: (workspaceId: string, endpoint: string) => void
   saveConfig: () => void
   saveSettings: () => void
@@ -121,6 +125,7 @@ export class Playground extends React.PureComponent<Props & ReduxProps, State> {
 
     setLinkCreator(props.createApolloLink)
     this.getSchema()
+    setSubscriptionEndpoint(props.subscriptionEndpoint)
   }
 
   componentWillMount() {
@@ -151,6 +156,9 @@ export class Playground extends React.PureComponent<Props & ReduxProps, State> {
       this.props.configPath !== nextProps.configPath
     ) {
       this.props.initState(nextProps.endpoint, this.getWorkspaceId(nextProps))
+    }
+    if (this.props.subscriptionEndpoint !== nextProps.subscriptionEndpoint) {
+      setSubscriptionEndpoint(nextProps.subscriptionEndpoint)
     }
   }
 
@@ -242,7 +250,10 @@ export class Playground extends React.PureComponent<Props & ReduxProps, State> {
   }
 
   private createSession = () => {
-    this.props.newSession(this.props.settings['editor.reuseHeaders'])
+    this.props.newSession(
+      this.props.endpoint,
+      this.props.settings['editor.reuseHeaders'],
+    )
   }
 
   get httpApiPrefix() {

@@ -278,7 +278,7 @@ export default class MiddlewareApp extends React.Component<Props, State> {
                   )}
                 <Playground
                   endpoint={this.state.endpoint}
-                  subscriptionsEndpoint={this.state.subscriptionEndpoint}
+                  subscriptionEndpoint={this.state.subscriptionEndpoint}
                   share={this.share}
                   shareUrl={this.state.shareUrl}
                   onChangeEndpoint={this.handleChangeEndpoint}
