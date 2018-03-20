@@ -148,9 +148,9 @@ function* runQuerySaga(action) {
           time: new Date(),
           resultID: cuid(),
         })
-        yield put(addResponse(response))
+        yield put(addResponse(session.id, response))
       } else {
-        yield put(addResponse(error))
+        yield put(addResponse(session.id, error))
       }
     }
   } finally {

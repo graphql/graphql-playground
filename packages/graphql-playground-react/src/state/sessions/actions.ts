@@ -98,7 +98,7 @@ export const {
   /*
     a littlebit more complex state mutations
   */
-  ADD_RESPONSE: simpleAction('response'),
+  ADD_RESPONSE: (sessionId, response) => ({ sessionId, response }),
   SET_RESPONSE: simpleAction('response'),
   CLEAR_RESPONSES: simpleAction(),
 

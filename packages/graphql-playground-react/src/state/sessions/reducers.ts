@@ -115,17 +115,13 @@ export default handleActions(
       ]
       return state.setIn(path, !state.getIn(path))
     },
-    ADD_RESPONSE: (state, { payload: { response } }) => {
-      return state.updateIn(
-        ['sessions', getSelectedSessionId(state), 'responses'],
-        responses => responses.push(response),
+    ADD_RESPONSE: (state, { payload: { response, sessionId } }) => {
+      return state.updateIn(['sessions', sessionId, 'responses'], responses =>
+        responses.push(response),
       )
     },
-    SET_RESPONSE: (state, { payload: { response } }) => {
-      return state.setIn(
-        ['sessions', getSelectedSessionId(state), 'responses'],
-        List(response),
-      )
+    SET_RESPONSE: (state, { payload: { response, sessionId } }) => {
+      return state.setIn(['sessions', sessionId, 'responses'], List(response))
     },
     CLEAR_RESPONSES: state => {
       return state.setIn(
@@ -139,11 +135,8 @@ export default handleActions(
         true,
       )
     },
-    STOP_QUERY: state => {
-      return state.setIn(
-        ['sessions', getSelectedSessionId(state), 'queryRunning'],
-        false,
-      )
+    STOP_QUERY: (state, { payload: { sessionId } }) => {
+      return state.setIn(['sessions', sessionId, 'queryRunning'], false)
     },
     SCHEMA_FETCHING_SUCCESS: (state, { payload }) => {
       const newSessions = state.get('sessions').map((session, sessionId) => {
