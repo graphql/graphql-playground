@@ -35,8 +35,8 @@ import { getQueryTypes } from '../../components/Playground/util/getQueryTypes'
 import { parse } from 'graphql'
 
 function* setQueryFacts() {
-  // debounce by 150 ms
-  yield call(delay, 150)
+  // debounce by 100 ms
+  yield call(delay, 100)
   const session: SessionProps = yield select(getSelectedSession)
 
   const schema = yield schemaFetcher.fetch(session)
