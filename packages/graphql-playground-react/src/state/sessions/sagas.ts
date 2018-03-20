@@ -20,6 +20,7 @@ import {
   fetchSchema,
   runQuery,
   setTracingSupported,
+  setQueryTypes,
 } from './actions'
 import { getRootMap, getNewStack } from '../../components/Playground/util/stack'
 import { DocsSessionState } from '../docs/reducers'
@@ -30,6 +31,8 @@ import { SessionProps } from '../../types'
 import { schemaFetcher } from './fetchingSagas'
 import { getSelectedWorkspace } from '../workspace/reducers'
 import { getSessionDocsState } from '../docs/selectors'
+import { getQueryTypes } from '../../components/Playground/util/getQueryTypes'
+import { parse } from 'graphql'
 
 function* setQueryFacts() {
   // debounce by 150 ms
@@ -37,26 +40,35 @@ function* setQueryFacts() {
   const session: SessionProps = yield select(getSelectedSession)
 
   const schema = yield schemaFetcher.fetch(session)
-  const queryFacts = getQueryFacts(schema, session.query)
+  try {
+    const ast = parse(session.query)
+    const queryFacts = getQueryFacts(schema, ast)
 
-  if (queryFacts) {
-    const immutableQueryFacts = fromJS(queryFacts)
-    const operationName = getSelectedOperationName(
-      session.operations,
-      session.operationName,
-      immutableQueryFacts.operations,
-    )
-    if (!is(immutableQueryFacts.variableToType, session.variableToType)) {
-      // set variableToType
-      yield put(setVariableToType(immutableQueryFacts.variableToType))
+    if (queryFacts) {
+      const immutableQueryFacts = fromJS(queryFacts)
+      const operationName = getSelectedOperationName(
+        session.operations,
+        session.operationName,
+        immutableQueryFacts.operations,
+      )
+      if (!is(immutableQueryFacts.variableToType, session.variableToType)) {
+        // set variableToType
+        yield put(setVariableToType(immutableQueryFacts.variableToType))
+      }
+      if (!is(immutableQueryFacts.operations, session.operations)) {
+        // set operations
+        yield put(setOperations(immutableQueryFacts.operations))
+      }
+      if (operationName !== session.operationName) {
+        yield put(setOperationName(operationName))
+      }
     }
-    if (!is(immutableQueryFacts.operations, session.operations)) {
-      // set operations
-      yield put(setOperations(immutableQueryFacts.operations))
-    }
-    if (operationName !== session.operationName) {
-      yield put(setOperationName(operationName))
-    }
+
+    const queryTypes = getQueryTypes(ast)
+    yield put(setQueryTypes(queryTypes))
+  } catch (e) {
+    const queryTypes = getQueryTypes(null)
+    yield put(setQueryTypes(queryTypes))
   }
 }
 

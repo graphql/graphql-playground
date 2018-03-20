@@ -1,22 +1,13 @@
-import { parse } from 'graphql'
 import { QueryTypes } from '../../../types'
 
-export const getQueryTypes = (query: string): QueryTypes => {
-  let ast: any = null
-  // takes around 0.02ms -  1ms
-  try {
-    ast = parse(query)
-  } catch (e) {
-    //
-  }
-
+export const getQueryTypes = (ast): QueryTypes => {
   let hasSubscription = false
   let hasQuery = false
   let hasMutation = false
   let firstOperationName = null
   // let operations: OperationDefinition[] = []
 
-  if (ast) {
+  if (ast && ast.definitions) {
     ast.definitions.forEach(definition => {
       if (!firstOperationName) {
         firstOperationName =

@@ -53,6 +53,7 @@ export const {
   querySuccess,
   queryError,
   setSubscriptionActive,
+  setQueryTypes,
 } = createActions({
   // simple property setting
   EDIT_QUERY: simpleAction('query'),
@@ -70,6 +71,7 @@ export const {
   SET_RESPONSE_TRACING_HEIGHT: simpleAction('responceTracingHeight'),
   SET_TRACING_SUPPORTED: simpleAction('tracingSupported'),
   SET_SUBSCRIPTION_ACTIVE: simpleAction('subscriptionActive'),
+  SET_QUERY_TYPES: simpleAction('queryTypes'),
 
   UPDATE_QUERY_FACTS: simpleAction(),
   PRETTIFY_QUERY: simpleAction(),

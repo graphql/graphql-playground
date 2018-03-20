@@ -6,7 +6,7 @@
  *  LICENSE file in the root directory of this source tree.
  */
 
-import { parse, typeFromAST } from 'graphql'
+import { typeFromAST, DocumentNode } from 'graphql'
 
 /**
  * Provided previous "queryFacts", a GraphQL schema, and a query document
@@ -14,18 +14,7 @@ import { parse, typeFromAST } from 'graphql'
  *
  * If the query cannot be parsed, returns undefined.
  */
-export function getQueryFacts(schema, documentStr): any {
-  if (!documentStr) {
-    return
-  }
-
-  let documentAST
-  try {
-    documentAST = parse(documentStr)
-  } catch (e) {
-    return
-  }
-
+export function getQueryFacts(schema, documentAST: DocumentNode): any {
   const variableToType = schema ? collectVariables(schema, documentAST) : null
 
   // Collect operations by their names.
