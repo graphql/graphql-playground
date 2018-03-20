@@ -16,13 +16,18 @@ import { mix, lighten } from 'polished'
 import { connect } from 'react-redux'
 import { runQuery, stopQuery } from '../../state/sessions/actions'
 import { createStructuredSelector } from 'reselect'
-import { getQueryRunning, getOperations } from '../../state/sessions/selectors'
+import {
+  getQueryRunning,
+  getOperations,
+  getSelectedSessionIdFromRoot,
+} from '../../state/sessions/selectors'
 
 export interface ReduxProps {
   runQuery: (operationName?: string) => void
-  stopQuery: () => void
+  stopQuery: (sessionId: string) => void
   queryRunning: boolean
   operations: any[]
+  sessionId: string
 }
 
 export interface State {
@@ -131,7 +136,7 @@ class ExecuteButton extends React.Component<
 
   private onClick = () => {
     if (this.props.queryRunning) {
-      this.props.stopQuery()
+      this.props.stopQuery(this.props.sessionId)
     } else {
       this.props.runQuery()
     }
@@ -179,6 +184,7 @@ class ExecuteButton extends React.Component<
 const mapStateToProps = createStructuredSelector({
   queryRunning: getQueryRunning,
   operations: getOperations,
+  sessionId: getSelectedSessionIdFromRoot,
 })
 
 export default withTheme<{}>(

@@ -1,11 +1,19 @@
 import { ApolloLink, execute } from 'apollo-link'
-import { SessionProps } from '../../types'
+import { SessionProps, ResponseRecord } from '../../types'
 import { parseHeaders } from '../../components/Playground/util/parseHeaders'
 import { SubscriptionClient } from 'subscriptions-transport-ws'
 import { HttpLink } from 'apollo-link-http'
 import { WebSocketLink } from 'apollo-link-ws'
 import { isSubscription } from '../../components/Playground/util/hasSubscription'
-import { takeLatest, ForkEffect, call, select } from 'redux-saga/effects'
+import {
+  takeLatest,
+  ForkEffect,
+  put,
+  select,
+  takeEvery,
+  take,
+} from 'redux-saga/effects'
+import { eventChannel, END } from 'redux-saga'
 import { makeOperation } from '../../components/Playground/util/makeOperation'
 import {
   setSubscriptionActive,
@@ -22,7 +30,8 @@ import {
   SchemaFetcher,
   SchemaFetchProps,
 } from '../../components/Playground/SchemaFetcher'
-import { getSelectedWorkspace } from '../workspace/reducers'
+import { getSelectedWorkspaceId } from '../workspace/reducers'
+import * as cuid from 'cuid'
 
 // tslint:disable
 let subscriptionEndpoint = ''
@@ -51,7 +60,7 @@ export const defaultLinkCreator = (
     headers,
   })
 
-  if (!wsEndpoint) {
+  if (!(wsEndpoint || subscriptionEndpoint)) {
     return httpLink
   }
 
@@ -59,6 +68,7 @@ export const defaultLinkCreator = (
     wsEndpoint || subscriptionEndpoint,
     {
       timeout: 20000,
+      lazy: true,
       connectionParams,
     },
   )
@@ -76,6 +86,7 @@ export let schemaFetcher: SchemaFetcher = new SchemaFetcher(linkCreator)
 
 export function setLinkCreator(newLinkCreator) {
   if (newLinkCreator) {
+    console.log('setting link creator', newLinkCreator)
     linkCreator = newLinkCreator
     schemaFetcher = new SchemaFetcher(newLinkCreator)
   }
@@ -94,46 +105,78 @@ function* runQuerySaga(action) {
     variables: getParsedVariables,
   }
   const operation = makeOperation(request)
-  const workspace = yield select(getSelectedWorkspace)
-  yield call(setSubscriptionActive, isSubscription(operation))
-  yield call(startQuery)
+  const workspace = yield select(getSelectedWorkspaceId)
+  yield put(setSubscriptionActive(isSubscription(operation)))
+  yield put(startQuery())
   const link = linkCreator({
     headers: session.headers || '',
     endpoint: session.endpoint,
   })
-  subscriptions[`${workspace}~${session.id}`] = execute(
-    link,
-    operation,
-  ).subscribe({
-    next: value => {
-      console.log('value', value)
-      call(addResponse, value)
-    },
-    error: e => {
-      console.log('error', e)
-      call(stopQuery)
-    },
-    complete: () => {
-      call(stopQuery)
-    },
+
+  const channel = eventChannel(emitter => {
+    const subscription = execute(link, operation).subscribe({
+      next: function(value) {
+        console.log('next', value)
+        emitter({ value })
+      },
+      error: error => {
+        console.log('error', error)
+        emitter({ error })
+        emitter(END)
+      },
+      complete: () => {
+        console.log('complete')
+        emitter(END)
+      },
+    })
+
+    const key = `${workspace}~${session.id}`
+    console.log({ key })
+    subscriptions[key] = subscription
+
+    return () => {
+      subscription.unsubscribe()
+    }
   })
+
+  try {
+    while (true) {
+      const { value, error } = yield take(channel)
+      if (value) {
+        const response = new ResponseRecord({
+          date: JSON.stringify(value, null, 2),
+          time: new Date(),
+          resultID: cuid(),
+        })
+        yield put(addResponse(response))
+      } else {
+        yield put(addResponse(error))
+      }
+    }
+  } finally {
+    yield put(stopQuery(session.id))
+  }
 }
 
 function* stopQuerySaga(action) {
   const { sessionId } = action.payload
-  const sessions = yield select(getSessionsState)
+  const { sessions } = yield select(getSessionsState)
   const session = sessions.get(sessionId)
-  const workspace = yield select(getSelectedWorkspace)
+  const workspace = yield select(getSelectedWorkspaceId)
 
-  const subscription = subscriptions[`${workspace}~${session.id}`]
+  const key = `${workspace}~${session.id}`
+  console.log({ key })
+  const subscription = subscriptions[key]
+  console.log({ subscription })
   if (subscription && subscription.unsubscribe) {
+    console.log('unsubscribing')
     subscription.unsubscribe()
   }
-  delete subscriptions[`${workspace}~${session.id}`]
+  delete subscriptions[key]
 }
 
 export const fecthingSagas = [
-  takeLatest('RUN_QUERY', runQuerySaga),
+  takeEvery('RUN_QUERY', runQuerySaga),
   takeLatest('STOP_QUERY', stopQuerySaga),
 ]
 

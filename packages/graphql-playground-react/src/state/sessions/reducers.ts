@@ -70,6 +70,11 @@ export default handleActions(
       const path = ['sessions', getSelectedSessionId(state), keyName]
       return state.setIn(path, payload[keyName])
     },
+    START_QUERY: state => {
+      return state
+        .setIn(['sessions', getSelectedSessionId(state), 'queryRunning'], true)
+        .setIn(['sessions', getSelectedSessionId(state), 'responses'], List())
+    },
     CLOSE_TRACING: (state, { payload: { responseTracingHeight } }) => {
       return state.mergeDeepIn(
         ['sessions', getSelectedSessionId(state)],
@@ -113,13 +118,13 @@ export default handleActions(
     ADD_RESPONSE: (state, { payload: { response } }) => {
       return state.updateIn(
         ['sessions', getSelectedSessionId(state), 'responses'],
-        responses => responses.push(Map(response)),
+        responses => responses.push(response),
       )
     },
     SET_RESPONSE: (state, { payload: { response } }) => {
       return state.setIn(
         ['sessions', getSelectedSessionId(state), 'responses'],
-        List(Map(response)),
+        List(response),
       )
     },
     CLEAR_RESPONSES: state => {

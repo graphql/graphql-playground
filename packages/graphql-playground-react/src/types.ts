@@ -1,5 +1,5 @@
 import { Observable, FetchResult } from 'apollo-link'
-import { List, Map } from 'immutable'
+import { List, Map, Record } from 'immutable'
 
 export type VariableToType = Map<string, any>
 
@@ -10,7 +10,7 @@ export interface SessionProps {
   query: string
   file?: string
   variables: string
-  responses?: List<Response>
+  responses?: List<ResponseRecord>
   operationName?: string
   queryRunning: boolean
   subscriptionActive: boolean
@@ -86,15 +86,26 @@ export type GraphQLClient =
   | 'curl'
 
 export type Theme = 'dark' | 'light'
-export interface Response {
-  resultID: string
-  date: string
-  time: Date
-}
 
 export interface ISettings {
   ['general.betaUpdates']: boolean
   ['editor.theme']: Theme
   ['editor.reuseHeaders']: boolean
   ['tracing.hideTracingResponse']: boolean
+}
+
+export interface ResponseType {
+  resultID: string
+  date: string
+  time: Date
+}
+
+export class ResponseRecord extends Record({
+  resultID: '',
+  date: '',
+  time: new Date(),
+}) {
+  resultID: string
+  date: string
+  time: Date
 }

@@ -37,6 +37,7 @@ import {
   getOperations,
   getOperationName,
   getHeadersCount,
+  getSelectedSessionIdFromRoot,
 } from '../../state/sessions/selectors'
 import {
   updateQueryFacts,
@@ -53,6 +54,8 @@ import {
   toggleVariables,
   fetchSchema,
 } from '../../state/sessions/actions'
+import { ResponseRecord } from '../../types'
+import { List } from 'immutable'
 
 /**
  * The top-level React component for GraphQLEditor, intended to encompass the entire
@@ -78,11 +81,11 @@ export interface ReduxProps {
   toggleTracing: () => void
   toggleVariables: () => void
   setEditorFlex: (flex: number) => void
-  stopQuery: () => void
+  stopQuery: (sessionId: string) => void
   navStack: any[]
   // sesion props
   queryRunning: boolean
-  responses: Response[]
+  responses: List<ResponseRecord>
   subscriptionActive: boolean
   variableEditorOpen: boolean
   variableEditorHeight: number
@@ -98,6 +101,7 @@ export interface ReduxProps {
   queryVariablesActive: boolean
   operationName: string
   query: string
+  sessionId: string
 }
 
 export interface SimpleProps {
@@ -255,7 +259,7 @@ class GraphQLEditor extends React.PureComponent<
               }}
             >
               <QueryEditor
-                ref={this.setQueryEditorComponent}
+                getRef={this.setQueryEditorComponent}
                 schema={this.props.schema}
                 onHintInformationRender={this.handleHintInformationRender}
                 onRunQuery={this.runQueryAtCursor}
@@ -298,7 +302,7 @@ class GraphQLEditor extends React.PureComponent<
                   </span>
                 </div>
                 <VariableEditor
-                  ref={this.setVariableEditorComponent}
+                  getRef={this.setVariableEditorComponent}
                   onHintInformationRender={
                     this.props.queryVariablesActive
                       ? this.handleHintInformationRender
@@ -312,10 +316,11 @@ class GraphQLEditor extends React.PureComponent<
             <div className="resultWrap">
               <ResultDragBar ref={this.setResponseResizer} />
               <ExecuteButton />
-              {this.props.queryRunning && <Spinner />}
+              {this.props.queryRunning &&
+                this.props.responses.size === 0 && <Spinner />}
               <Results setRef={this.setResultComponent} />
               {!this.props.responses ||
-                (this.props.responses.length === 0 && (
+                (this.props.responses.size === 0 && (
                   <div className="intro">
                     Hit the Play Button to get a response here
                   </div>
@@ -448,7 +453,7 @@ class GraphQLEditor extends React.PureComponent<
 
   private runQueryAtCursor = () => {
     if (this.props.queryRunning) {
-      this.props.stopQuery()
+      this.props.stopQuery(this.props.sessionId)
       return
     }
 
@@ -636,6 +641,7 @@ const mapStateToProps = createStructuredSelector({
   operations: getOperations,
   operationName: getOperationName,
   headersCount: getHeadersCount,
+  sessionId: getSelectedSessionIdFromRoot,
 })
 
 export default withTheme<Props>(
