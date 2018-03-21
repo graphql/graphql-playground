@@ -327,7 +327,7 @@ export default handleActions(
       if (reuseHeaders) {
         const selectedSessionId = getSelectedSessionId(state)
         const currentSession = state.sessions.get(selectedSessionId)
-        session = session.set('headers', currentSession)
+        session = session.set('headers', currentSession.headers)
       }
       return state
         .setIn(['sessions', session.id], session)

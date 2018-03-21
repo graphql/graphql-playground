@@ -301,10 +301,10 @@ class GraphQLEditor extends React.PureComponent<
                     ref={this.setHttpHeadersRef}
                     onClick={this.props.closeQueryVariables}
                   >
-                    {'HTTP Headers ' + this.props.headersCount &&
-                    this.props.headersCount > 0
-                      ? this.props.headersCount
-                      : ''}
+                    {'HTTP Headers ' +
+                      (this.props.headersCount && this.props.headersCount > 0
+                        ? this.props.headersCount
+                        : '')}
                   </span>
                 </div>
                 {this.props.queryVariablesActive ? (
