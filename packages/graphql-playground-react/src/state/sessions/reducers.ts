@@ -240,7 +240,10 @@ export default handleActions(
       )
     },
     STOP_QUERY: (state, { payload: { sessionId } }) => {
-      return state.setIn(['sessions', sessionId, 'queryRunning'], false)
+      return state.mergeIn(['sessions', sessionId], {
+        queryRunning: false,
+        subscriptionActive: false,
+      })
     },
     SCHEMA_FETCHING_SUCCESS: (state, { payload }) => {
       const newSessions = state.get('sessions').map((session, sessionId) => {
@@ -432,8 +435,9 @@ function closeTab(state, sessionId) {
   // if the session to be closed is selected, unselect it
   if (selectedSessionId === sessionId) {
     const leftNeighbour = sessionIndex - 1
+    // if its the first session on the left, take the right neighbour
     if (leftNeighbour < 0) {
-      return newState.set('selectedSessionId', keys.get(0))
+      return newState.set('selectedSessionId', keys.get(1))
     }
     return newState.set('selectedSessionId', keys.get(leftNeighbour))
   } else {
