@@ -1,6 +1,5 @@
 import * as cuid from 'cuid'
 import { getQueryTypes } from './components/Playground/util/getQueryTypes'
-import { SessionProps } from './types'
 import { List, Map } from 'immutable'
 
 export const columnWidth = 300
@@ -125,7 +124,7 @@ export const modalStyle = {
   },
 }
 
-export function getDefaultSession(endpoint: string): SessionProps {
+export function getDefaultSession(endpoint: string) {
   return {
     id: cuid(),
     query: defaultQuery,
@@ -153,5 +152,5 @@ export function getDefaultSession(endpoint: string): SessionProps {
     responseTracingHeight: 300,
     docExplorerWidth: 350,
     variableToType: Map({}),
-  }
+  } as any
 }

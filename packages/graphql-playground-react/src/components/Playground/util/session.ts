@@ -1,8 +1,6 @@
-import { SessionProps } from '../../../types'
+import { Session } from '../../../state/sessions/reducers'
 
-export function isSharingAuthorization(
-  sharableSessions: SessionProps[],
-): boolean {
+export function isSharingAuthorization(sharableSessions: Session[]): boolean {
   // If user's gonna share an Authorization header,
   // let's warn her
 

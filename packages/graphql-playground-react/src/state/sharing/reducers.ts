@@ -1,17 +1,15 @@
 import { Record } from 'immutable'
 import { handleActions } from 'redux-actions'
 
-export interface SharingStateType {
+export class SharingState extends Record({
+  history: false,
+  headers: true,
+  allTabs: true,
+}) {
   history: boolean
   headers: boolean
   allTabs: boolean
 }
-
-export const SharingState = Record({
-  history: false,
-  headers: true,
-  allTabs: true,
-})
 
 export default handleActions(
   {

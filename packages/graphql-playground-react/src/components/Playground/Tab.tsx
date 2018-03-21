@@ -1,13 +1,13 @@
 import * as React from 'react'
 import Icon from 'graphcool-styles/dist/components/Icon/Icon'
 import { $v } from 'graphcool-styles'
-import { SessionProps } from '../../types'
 import { connect } from 'react-redux'
 import { closeTab, selectTab } from '../../state/sessions/actions'
 import * as cn from 'classnames'
+import { Session } from '../../state/sessions/reducers'
 
 export interface Props {
-  session: SessionProps
+  session: Session
   localTheme?: string
   selectedSessionId: string
 }

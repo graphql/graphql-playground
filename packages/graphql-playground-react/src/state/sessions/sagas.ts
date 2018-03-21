@@ -27,17 +27,17 @@ import { DocsSessionState } from '../docs/reducers'
 import { setStacks } from '../docs/actions'
 import { HistoryState } from '../history/reducers'
 import { addHistoryItem } from '../history/actions'
-import { SessionProps } from '../../types'
 import { schemaFetcher } from './fetchingSagas'
 import { getSelectedWorkspace } from '../workspace/reducers'
 import { getSessionDocsState } from '../docs/selectors'
 import { getQueryTypes } from '../../components/Playground/util/getQueryTypes'
 import { parse } from 'graphql'
+import { Session } from './reducers'
 
 function* setQueryFacts() {
   // debounce by 100 ms
   yield call(delay, 100)
-  const session: SessionProps = yield select(getSelectedSession)
+  const session: Session = yield select(getSelectedSession)
 
   const schema = yield schemaFetcher.fetch(session)
   try {
@@ -74,7 +74,7 @@ function* setQueryFacts() {
 
 function* runQueryAtPosition(action) {
   const { position } = action.payload
-  const session: SessionProps = yield select(getSelectedSession)
+  const session: Session = yield select(getSelectedSession)
   if (session.operations) {
     let operationName
     for (const operation of session.operations as any) {
@@ -93,7 +93,7 @@ function* runQueryAtPosition(action) {
 }
 
 function* fetchSchemaSaga() {
-  const session: SessionProps = yield select(getSelectedSession)
+  const session: Session = yield select(getSelectedSession)
   yield schemaFetcher.refetch(session)
   try {
     yield put(schemaFetchingSuccess())
@@ -105,7 +105,7 @@ function* fetchSchemaSaga() {
 }
 
 function* renewStacks() {
-  const session: SessionProps = yield select(getSelectedSession)
+  const session: Session = yield select(getSelectedSession)
   const docs: DocsSessionState = yield select(getSessionDocsState)
   const { schema, tracingSupported } = yield schemaFetcher.fetch(session)
   const rootMap = getRootMap(schema)

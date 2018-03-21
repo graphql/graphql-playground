@@ -1,5 +1,4 @@
 import { ApolloLink, execute } from 'apollo-link'
-import { SessionProps, ResponseRecord } from '../../types'
 import { parseHeaders } from '../../components/Playground/util/parseHeaders'
 import { SubscriptionClient } from 'subscriptions-transport-ws'
 import { HttpLink } from 'apollo-link-http'
@@ -32,6 +31,7 @@ import {
 } from '../../components/Playground/SchemaFetcher'
 import { getSelectedWorkspaceId } from '../workspace/reducers'
 import * as cuid from 'cuid'
+import { Session, ResponseRecord } from './reducers'
 
 // tslint:disable
 let subscriptionEndpoint = ''
@@ -98,7 +98,7 @@ function* runQuerySaga(action) {
   // run the query
   console.log(`runQuery`, action)
   const { operationName } = action
-  const session: SessionProps = yield select(getSelectedSession)
+  const session: Session = yield select(getSelectedSession)
   const request = {
     query: session.query,
     operationName,

@@ -1,7 +1,7 @@
 import * as React from 'react'
 import * as Modal from 'react-modal'
 import HistoryHeader from './HistoryPopup/HistoryHeader'
-import { HistoryFilter, SessionProps } from '../types'
+import { HistoryFilter } from '../types'
 import HistoryItems from './HistoryPopup/HistoryItems'
 import { Icon } from 'graphcool-styles'
 import { modalStyle } from '../constants'
@@ -17,13 +17,14 @@ import { getHistoryOpen } from '../state/general/selectors'
 import { closeHistory, openHistory } from '../state/general/actions'
 import { duplicateSession } from '../state/sessions/actions'
 import { toggleHistoryItemStarring } from '../state/history/actions'
+import { Session } from '../state/sessions/reducers'
 
 export interface ReduxProps {
   isOpen: boolean
   closeHistory: () => void
-  historyItems: SessionProps[]
+  historyItems: Session[]
   toggleHistoryItemStarring: (sessionId: string) => void
-  duplicateSession: (session: SessionProps) => void
+  duplicateSession: (session: Session) => void
 }
 
 export interface State {

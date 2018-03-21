@@ -1,7 +1,7 @@
 import * as React from 'react'
 import GraphQLEditor from './Playground/GraphQLEditor'
 import TabBar from './Playground/TabBar'
-import { ISettings, SessionProps } from '../types'
+import { ISettings } from '../types'
 import HistoryPopup from './HistoryPopup'
 import * as cx from 'classnames'
 import { styled } from '../styled'
@@ -39,6 +39,7 @@ import {
   schemaFetcher,
   setSubscriptionEndpoint,
 } from '../state/sessions/fetchingSagas'
+import { Session } from '../state/sessions/reducers'
 
 export interface Response {
   resultID: string
@@ -74,7 +75,7 @@ export interface Props {
   fixedEndpoints: boolean
   headers?: any
   configPath?: string
-  createApolloLink?: (session: SessionProps) => ApolloLink
+  createApolloLink?: (session: Session) => ApolloLink
 }
 
 export interface ReduxProps {

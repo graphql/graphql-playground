@@ -9,7 +9,7 @@ import {
   getSessionsArray,
   getSelectedSessionIdFromRoot,
 } from '../../state/sessions/selectors'
-import { SessionProps } from '../../types'
+import { Session } from '../../state/sessions/reducers'
 
 export interface Props extends OptionalLocalThemeInterface {
   onNewSession: any
@@ -17,7 +17,7 @@ export interface Props extends OptionalLocalThemeInterface {
 }
 
 export interface ReduxProps {
-  sessions: SessionProps[]
+  sessions: Session[]
   selectedSessionId: string
 }
 

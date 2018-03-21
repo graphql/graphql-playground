@@ -156,6 +156,7 @@
     "redux-actions": "^2.2.1",
     "redux-immutable": "^4.0.0",
     "redux-localstorage": "rc",
+    "redux-localstorage-debounce": "^0.1.0",
     "redux-localstorage-filter": "^0.1.1",
     "redux-saga": "^0.16.0",
     "reselect": "^3.0.1",

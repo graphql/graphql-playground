@@ -9,10 +9,10 @@
 import * as React from 'react'
 import onHasCompletion from './onHasCompletion'
 import { connect } from 'react-redux'
-import { VariableToType } from '../../types'
 import { editVariables } from '../../state/sessions/actions'
 import { getVariables, getVariableToType } from '../../state/sessions/selectors'
 import { createStructuredSelector } from 'reselect'
+import { VariableToType } from '../../state/sessions/reducers'
 
 /* tslint:disable */
 

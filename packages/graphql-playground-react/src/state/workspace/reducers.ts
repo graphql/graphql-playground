@@ -1,11 +1,12 @@
 import { Reducer } from 'redux'
 import { combineReducers } from 'redux-immutable'
-import docs, { DocsSession } from '../docs/reducers'
-import sessions, { makeSessionState } from '../sessions/reducers'
+import docs, { DocsSession, DocsState } from '../docs/reducers'
+import sessions, { makeSessionState, SessionState } from '../sessions/reducers'
 import sharing, { SharingState } from '../sharing/reducers'
-import history from '../history/reducers'
+import history, { HistoryState } from '../history/reducers'
 import { Map, Record, OrderedMap } from 'immutable'
 import general, { GeneralState } from '../general/reducers'
+// import { fromJS, isKeyed } from 'immutable'
 
 export function getSelectedWorkspaceId(state) {
   return state.get('selectedWorkspace')
@@ -15,7 +16,21 @@ export function getSelectedWorkspace(state) {
   return state.getIn(['workspaces', getSelectedWorkspaceId(state)])
 }
 
-const RootState = Record<any>({
+export class Workspace extends Record({
+  docs: Map({}),
+  sessions: makeSessionState(''),
+  sharing: new SharingState(),
+  history: OrderedMap(),
+  general: new GeneralState(),
+}) {
+  docs: DocsState
+  sessions: SessionState
+  sharing: SharingState
+  history: HistoryState
+  general: GeneralState
+}
+
+export const RootState = Record<any>({
   workspaces: Map({ '': makeWorkspace('') }),
   selectedWorkspace: '',
 })
@@ -56,7 +71,9 @@ export const rootReducer = (state = new RootState(), action) => {
 
 export function makeWorkspace(endpoint) {
   const sessionState = makeSessionState(endpoint)
-  const Workspace = Record({
+
+  // weird typescript error
+  return new Workspace({
     docs: Map({
       [sessionState.selectedSessionId]: new DocsSession(),
     }),
@@ -64,10 +81,7 @@ export function makeWorkspace(endpoint) {
     sharing: new SharingState(),
     history: OrderedMap(),
     general: new GeneralState(),
-  })
-
-  // weird typescript error
-  return new Workspace() as any
+  }) as any
 }
 
 export default rootReducer

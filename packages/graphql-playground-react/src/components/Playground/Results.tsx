@@ -6,8 +6,8 @@ import { connect } from 'react-redux'
 import { createStructuredSelector } from 'reselect'
 import { getResponses } from '../../state/sessions/selectors'
 import { List } from 'immutable'
-import { ResponseRecord } from '../../types'
 import { styled } from '../../styled'
+import { ResponseRecord } from '../../state/sessions/reducers'
 
 export interface Props {
   setRef: (ref: any) => void

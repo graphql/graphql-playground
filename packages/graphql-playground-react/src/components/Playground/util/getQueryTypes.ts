@@ -1,4 +1,4 @@
-import { QueryTypes } from '../../../types'
+import { QueryTypes } from '../../../state/sessions/reducers'
 
 export const getQueryTypes = (ast): QueryTypes => {
   let hasSubscription = false

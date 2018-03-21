@@ -54,8 +54,8 @@ import {
   toggleVariables,
   fetchSchema,
 } from '../../state/sessions/actions'
-import { ResponseRecord } from '../../types'
 import { List } from 'immutable'
+import { ResponseRecord } from '../../state/sessions/reducers'
 
 /**
  * The top-level React component for GraphQLEditor, intended to encompass the entire

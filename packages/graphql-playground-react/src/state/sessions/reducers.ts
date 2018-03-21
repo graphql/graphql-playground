@@ -1,4 +1,4 @@
-import { OrderedMap, Map, List, Record } from 'immutable'
+import { OrderedMap, Map, List, Record, merge } from 'immutable'
 import { handleActions, combineActions } from 'redux-actions'
 import {
   editQuery,
@@ -20,31 +20,133 @@ import {
 } from './actions'
 import { getSelectedSessionId } from './selectors'
 import { getDefaultSession } from '../../constants'
-import { SessionProps } from '../../types'
 import * as cuid from 'cuid'
 
-export { SessionProps } from '../../types'
-export type SessionType = Record<SessionProps>
 export interface SessionStateProps {
-  sessions: OrderedMap<string, SessionType>
+  sessions: OrderedMap<string, Session>
   selectedSessionId: string
 }
-export type SessionStateType = Record<SessionStateProps>
+// tslint:disable
+export class Session extends Record(getDefaultSession('')) {
+  id: string
+  endpoint: string
 
-export const Session = Record(getDefaultSession(''))
+  query: string
+  file?: string
+  variables: string
+  responses?: List<ResponseRecord>
+  operationName?: string
+  queryRunning: boolean
+  subscriptionActive: boolean
+
+  // query facts
+  operations: List<OperationDefinition>
+  variableToType: VariableToType
+
+  // additional props that are interactive in graphiql, these are not represented in graphiqls state
+  queryTypes: QueryTypes
+  date: Date
+  hasMutation: boolean
+  hasSubscription: boolean
+  hasQuery: boolean
+
+  isFile?: boolean
+  starred?: boolean
+  name?: string
+  filePath?: string
+  selectedUserToken?: string
+  headers?: string
+  hasChanged?: boolean
+  absolutePath?: string
+  isSettingsTab?: boolean
+  isConfigTab?: boolean
+
+  currentQueryStartTime?: Date
+  currentQueryEndTime?: Date
+
+  isReloadingSchema: boolean
+
+  responseExtensions: any
+  queryVariablesActive: boolean
+  endpointUnreachable: boolean
+
+  // editor settings
+  editorFlex: number
+  variableEditorOpen: boolean
+  variableEditorHeight: number
+  responseTracingOpen: boolean
+  responseTracingHeight: number
+  nextQueryStartTime?: Date
+  tracingSupported?: boolean
+  docExplorerWidth: number
+  changed?: boolean
+
+  toJSON() {
+    const obj = this.toObject()
+    const override: any = {
+      queryRunning: false,
+      subscriptionActive: false,
+    }
+    // dont serialize very big responses as the localStorage size is limited
+    if (
+      obj.responses &&
+      obj.responses.size > 0 &&
+      (obj.responses.size > 20 || obj.responses.get(0).date.length > 20000)
+    ) {
+      override.responses = List()
+    }
+    return merge(obj, override)
+  }
+}
+export type VariableToType = Map<string, any>
+
+export interface QueryTypes {
+  firstOperationName: string | null
+  subscription: boolean
+  query: boolean
+  mutation: boolean
+}
+
+export interface OperationDefinition {
+  startLine: number
+  endLine: number
+  name: string
+}
+export interface ResponseType {
+  resultID: string
+  date: string
+  time: Date
+}
+
+export class ResponseRecord extends Record({
+  resultID: '',
+  date: '',
+  time: new Date(),
+}) {
+  resultID: string
+  date: string
+  time: Date
+}
 
 function makeSession(endpoint = '') {
   return new Session({ endpoint }).set('id', cuid())
 }
 
+export class SessionState extends Record({
+  sessions: OrderedMap({}),
+  selectedSessionId: '',
+}) {
+  sessions: OrderedMap<string, Session>
+  selectedSessionId: string
+}
+
 export function makeSessionState(endpoint) {
   const session = new Session({ endpoint: endpoint || '' })
-  const SessionState = Record({
+
+  return new SessionState({
     sessions: OrderedMap({ [session.id]: session }),
     selectedSessionId: session.id,
   })
-
-  return new SessionState()
 }
 
 export default handleActions(

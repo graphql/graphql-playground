@@ -1,7 +1,14 @@
 import { Record } from 'immutable'
 import { handleActions } from 'redux-actions'
 
-export interface GeneralStateType {
+export class GeneralState extends Record({
+  historyOpen: false,
+  fixedEndpoint: false,
+  endpoint: '',
+  settingsString: '',
+  configString: '',
+  envVars: {},
+}) {
   historyOpen: boolean
   fixedEndpoint: boolean
   endpoint: string
@@ -9,15 +16,6 @@ export interface GeneralStateType {
   configString: string
   envVars: any
 }
-
-export const GeneralState = Record<GeneralStateType>({
-  historyOpen: false,
-  fixedEndpoint: false,
-  endpoint: '',
-  settingsString: '',
-  configString: '',
-  envVars: {},
-})
 
 export default handleActions(
   {

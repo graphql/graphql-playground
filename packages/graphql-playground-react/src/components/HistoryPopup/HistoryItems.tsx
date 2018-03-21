@@ -1,10 +1,10 @@
 import * as React from 'react'
 import { Icon, $v } from 'graphcool-styles'
 import * as cx from 'classnames'
-import { SessionProps } from '../../types'
+import { Session } from '../../state/sessions/reducers'
 
 export interface Props {
-  items: SessionProps[]
+  items: Session[]
   selectedItemIndex: number
   onItemSelect: (index: number) => void
   onItemStarToggled: (sessionId: string) => void
