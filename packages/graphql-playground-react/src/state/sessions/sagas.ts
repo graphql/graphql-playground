@@ -98,9 +98,9 @@ function* fetchSchemaSaga() {
   const session: Session = yield select(getSelectedSession)
   yield schemaFetcher.refetch(session)
   try {
-    yield put(schemaFetchingSuccess())
+    yield put(schemaFetchingSuccess(session.endpoint))
   } catch (e) {
-    yield put(schemaFetchingError())
+    yield put(schemaFetchingError(session.endpoint))
     yield call(delay, 5000)
     yield put(fetchSchema())
   }

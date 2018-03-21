@@ -58,6 +58,7 @@ export const rootReducer = (state = new RootState(), action) => {
       )
       return newState.set('selectedWorkspace', workspaceId)
     }
+    return state.set('selectedWorkspace', workspaceId)
   }
 
   const selectedWorkspaceId = getSelectedWorkspaceId(state)

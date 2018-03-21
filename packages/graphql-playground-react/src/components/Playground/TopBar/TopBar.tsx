@@ -12,6 +12,7 @@ import { createStructuredSelector } from 'reselect'
 import {
   getEndpoint,
   getSelectedSession,
+  getIsReloadingSchema,
 } from '../../../state/sessions/selectors'
 import { connect } from 'react-redux'
 import { getFixedEndpoint } from '../../../state/general/selectors'
@@ -144,6 +145,7 @@ class TopBar extends React.Component<Props, {}> {
 const mapStateToProps = createStructuredSelector({
   endpoint: getEndpoint,
   fixedEndpoint: getFixedEndpoint,
+  isReloadingSchema: getIsReloadingSchema,
 })
 
 export default connect(mapStateToProps, {

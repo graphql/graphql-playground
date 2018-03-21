@@ -76,6 +76,7 @@ export interface Props {
   headers?: any
   configPath?: string
   createApolloLink?: (session: Session) => ApolloLink
+  workspaceName?: string
 }
 
 export interface ReduxProps {
@@ -93,6 +94,7 @@ export interface ReduxProps {
   isFile: boolean
   historyOpen: boolean
   file: string
+  sessionHeaders?: any
 }
 
 export interface State {
@@ -148,15 +150,16 @@ export class Playground extends React.PureComponent<Props & ReduxProps, State> {
     }
     if (
       nextProps.headers !== this.props.headers ||
-      nextProps.endpoint !== this.props.endpoint
+      nextProps.endpoint !== this.props.endpoint ||
+      nextProps.workspaceName !== this.props.workspaceName
     ) {
-      this.getSchema()
+      this.getSchema(nextProps)
     }
     if (
       this.props.endpoint !== nextProps.endpoint ||
       this.props.configPath !== nextProps.configPath
     ) {
-      this.props.initState(nextProps.endpoint, this.getWorkspaceId(nextProps))
+      this.props.initState(this.getWorkspaceId(nextProps), nextProps.endpoint)
     }
     if (this.props.subscriptionEndpoint !== nextProps.subscriptionEndpoint) {
       setSubscriptionEndpoint(nextProps.subscriptionEndpoint)
@@ -165,13 +168,18 @@ export class Playground extends React.PureComponent<Props & ReduxProps, State> {
 
   getWorkspaceId(props = this.props) {
     const configPathString = props.configPath ? `${props.configPath}~` : ''
-    return `${configPathString}${props.endpoint}`
+    const workspaceNameString = props.workspaceName
+      ? `${props.workspaceName}~`
+      : ''
+    return `${configPathString}${workspaceNameString}${props.endpoint}`
   }
 
-  async getSchema() {
+  async getSchema(props = this.props) {
     const schema = await schemaFetcher.fetch({
-      endpoint: this.props.endpoint,
-      headers: this.props.headers,
+      endpoint: props.endpoint,
+      headers: props.headers
+        ? JSON.stringify(props.headers)
+        : props.sessionHeaders,
     })
     if (schema) {
       this.setState({ schema: schema.schema })
@@ -268,7 +276,7 @@ const mapStateToProps = createStructuredSelector({
   isFile: getIsFile,
   historyOpen: getHistoryOpen,
   file: getFile,
-  headers: getHeaders,
+  sessionHeaders: getHeaders,
 })
 
 export default connect(mapStateToProps, {

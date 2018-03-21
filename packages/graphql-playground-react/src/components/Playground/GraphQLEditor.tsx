@@ -337,7 +337,7 @@ class GraphQLEditor extends React.PureComponent<
               {this.props.queryRunning &&
                 this.props.responses.size === 0 && <Spinner />}
               <Results setRef={this.setResultComponent} />
-              {!this.props.responses ||
+              {(!this.props.queryRunning && !this.props.responses) ||
                 (this.props.responses.size === 0 && (
                   <div className="intro">
                     Hit the Play Button to get a response here

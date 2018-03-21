@@ -2,7 +2,7 @@ import { GraphQLSchema, introspectionQuery, buildClientSchema } from 'graphql'
 import { NoSchemaError } from './util/NoSchemaError'
 import { parseHeaders } from './util/parseHeaders'
 import { ApolloLink, execute } from 'apollo-link'
-import { setIn } from 'immutable'
+import { Map } from 'immutable'
 import { makeOperation } from './util/makeOperation'
 
 export interface TracingSchemaTuple {
@@ -21,11 +21,12 @@ export class SchemaFetcher {
   cache: Map<string, TracingSchemaTuple>
   linkGetter: LinkGetter
   constructor(linkGetter: LinkGetter) {
-    this.cache = new Map()
+    this.cache = Map()
     this.linkGetter = linkGetter
   }
   async fetch(session: SchemaFetchProps) {
-    const cachedSchema = this.cache.get(this.hash(session))
+    const hash = this.hash(session)
+    const cachedSchema = this.cache.get(hash)
     return cachedSchema || this.fetchSchema(session)
   }
   refetch(session: SchemaFetchProps) {
@@ -44,9 +45,9 @@ export class SchemaFetcher {
       'X-Apollo-Tracing': '1',
     }
 
-    const newSession = setIn<SchemaFetchProps>(session, ['headers'], headers)
+    // const newSession = setIn<SchemaFetchProps>(session, ['headers'], headers)
 
-    const link = this.linkGetter(newSession)
+    const link = this.linkGetter(session)
 
     const operation = makeOperation({ query: introspectionQuery })
 
