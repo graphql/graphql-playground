@@ -41,7 +41,8 @@ function deserializeDocs(state) {
 }
 
 function deserializeNavstack(navStack) {
-  return List(navStack.map(stack => Map(stack))) as any
+  // note that stacks are plain objects. could be refactored to Map later
+  return List(navStack) as any
 }
 
 function deserializeSessionsState(state) {

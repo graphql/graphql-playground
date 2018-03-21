@@ -39,7 +39,7 @@ function* setQueryFacts() {
   yield call(delay, 100)
   const session: Session = yield select(getSelectedSession)
 
-  const schema = yield schemaFetcher.fetch(session)
+  const { schema } = yield schemaFetcher.fetch(session)
   try {
     const ast = parse(session.query)
     const queryFacts = getQueryFacts(schema, ast)
@@ -51,13 +51,15 @@ function* setQueryFacts() {
         session.operationName,
         immutableQueryFacts.operations,
       )
-      if (!is(immutableQueryFacts.variableToType, session.variableToType)) {
+      if (
+        !is(immutableQueryFacts.get('variableToType'), session.variableToType)
+      ) {
         // set variableToType
-        yield put(setVariableToType(immutableQueryFacts.variableToType))
+        yield put(setVariableToType(immutableQueryFacts.get('variableToType')))
       }
-      if (!is(immutableQueryFacts.operations, session.operations)) {
+      if (!is(immutableQueryFacts.get('operations'), session.operations)) {
         // set operations
-        yield put(setOperations(immutableQueryFacts.operations))
+        yield put(setOperations(immutableQueryFacts.get('operations')))
       }
       if (operationName !== session.operationName) {
         yield put(setOperationName(operationName))
@@ -132,7 +134,7 @@ function* addToHistory({ payload }) {
 export const sessionsSagas = [
   takeLatest('GET_QUERY_FACTS', setQueryFacts),
   takeLatest('SET_OPERATION_NAME', setQueryFacts),
-  takeLatest('EDIT_QUERY', setQueryFacts),
+  takeEvery('EDIT_QUERY', setQueryFacts),
   takeEvery('RUN_QUERY_AT_POSITION', runQueryAtPosition),
   takeLatest('FETCH_SCHEMA', fetchSchemaSaga),
   takeLatest('SCHEMA_FETCHING_SUCCESS', renewStacks),

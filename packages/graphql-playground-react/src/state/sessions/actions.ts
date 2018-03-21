@@ -65,8 +65,8 @@ export const {
   SET_OPERATIONS: simpleAction('operations'),
   SET_EDITOR_FLEX: simpleAction('editorFlex'),
 
-  OPEN_QUERY_VARIABLES: simpleAction('queryVariablesActive', true),
-  CLOSE_QUERY_VARIABLES: simpleAction('queryVariablesActive', false),
+  OPEN_QUERY_VARIABLES: () => ({ queryVariablesActive: true }),
+  CLOSE_QUERY_VARIABLES: () => ({ queryVariablesActive: false }),
   SET_VARIABLE_EDITOR_HEIGHT: simpleAction('variableEditorHeight'),
   SET_RESPONSE_TRACING_HEIGHT: simpleAction('responceTracingHeight'),
   SET_TRACING_SUPPORTED: simpleAction('tracingSupported'),

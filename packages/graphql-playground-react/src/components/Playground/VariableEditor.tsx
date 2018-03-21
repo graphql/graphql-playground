@@ -9,8 +9,12 @@
 import * as React from 'react'
 import onHasCompletion from './onHasCompletion'
 import { connect } from 'react-redux'
-import { editVariables } from '../../state/sessions/actions'
-import { getVariables, getVariableToType } from '../../state/sessions/selectors'
+import { editVariables, editHeaders } from '../../state/sessions/actions'
+import {
+  getVariables,
+  getVariableToType,
+  getHeaders,
+} from '../../state/sessions/selectors'
 import { createStructuredSelector } from 'reselect'
 import { VariableToType } from '../../state/sessions/reducers'
 
@@ -26,7 +30,7 @@ interface Props {
 interface ReduxProps {
   value: string
   variableToType: VariableToType
-  editVariables: (variable: string) => void
+  onChange: (variable: string) => void
 }
 
 /**
@@ -93,10 +97,14 @@ class VariableEditor extends React.PureComponent<Props & ReduxProps> {
         minFoldSize: 4,
       },
       lint: {
-        variableToType: this.props.variableToType,
+        variableToType: this.props.variableToType
+          ? this.props.variableToType.toJS()
+          : undefined,
       },
       hintOptions: {
-        variableToType: this.props.variableToType,
+        variableToType: this.props.variableToType
+          ? this.props.variableToType.toJS()
+          : undefined,
         closeOnUnfocus: false,
         completeSingle: false,
       },
@@ -150,7 +158,11 @@ class VariableEditor extends React.PureComponent<Props & ReduxProps> {
     this.ignoreChangeEvent = true
     if (this.props.variableToType !== prevProps.variableToType) {
       this.editor.options.lint.variableToType = this.props.variableToType
+        ? this.props.variableToType.toJS()
+        : undefined
       this.editor.options.hintOptions.variableToType = this.props.variableToType
+        ? this.props.variableToType.toJS()
+        : undefined
       CodeMirror.signal(this.editor, 'change', this.editor)
     }
     if (
@@ -211,7 +223,7 @@ class VariableEditor extends React.PureComponent<Props & ReduxProps> {
   _onEdit = () => {
     if (!this.ignoreChangeEvent) {
       this.cachedValue = this.editor.getValue()
-      this.props.editVariables(this.cachedValue)
+      this.props.onChange(this.cachedValue)
     }
   }
 
@@ -220,9 +232,19 @@ class VariableEditor extends React.PureComponent<Props & ReduxProps> {
   }
 }
 
-const mapStateToProps = createStructuredSelector({
+const mapStateToVariablesProps = createStructuredSelector({
   value: getVariables,
   variableToType: getVariableToType,
 })
 
-export default connect(mapStateToProps, { editVariables })(VariableEditor)
+export const VariableEditorComponent = connect(mapStateToVariablesProps, {
+  onChange: editVariables,
+})(VariableEditor)
+
+const mapStateToHeadersProps = createStructuredSelector({
+  value: getHeaders,
+})
+
+export const HeadersEditorComponent = connect(mapStateToHeadersProps, {
+  onChange: editHeaders,
+})(VariableEditor)

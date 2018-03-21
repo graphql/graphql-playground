@@ -17,7 +17,10 @@ import { LocalThemeInterface } from '../Theme'
 import GraphDocs from './DocExplorer/GraphDocs'
 import { styled } from '../../styled/index'
 import TopBar from './TopBar/TopBar'
-import VariableEditor from './VariableEditor'
+import {
+  VariableEditorComponent,
+  HeadersEditorComponent,
+} from './VariableEditor'
 import { createStructuredSelector } from 'reselect'
 import {
   getQueryRunning,
@@ -298,18 +301,33 @@ class GraphQLEditor extends React.PureComponent<
                     ref={this.setHttpHeadersRef}
                     onClick={this.props.closeQueryVariables}
                   >
-                    {'HTTP Headers ' + this.props.headersCount}
+                    {'HTTP Headers ' + this.props.headersCount &&
+                    this.props.headersCount > 0
+                      ? this.props.headersCount
+                      : ''}
                   </span>
                 </div>
-                <VariableEditor
-                  getRef={this.setVariableEditorComponent}
-                  onHintInformationRender={
-                    this.props.queryVariablesActive
-                      ? this.handleHintInformationRender
-                      : undefined
-                  }
-                  onRunQuery={this.runQueryAtCursor}
-                />
+                {this.props.queryVariablesActive ? (
+                  <VariableEditorComponent
+                    getRef={this.setVariableEditorComponent}
+                    onHintInformationRender={
+                      this.props.queryVariablesActive
+                        ? this.handleHintInformationRender
+                        : undefined
+                    }
+                    onRunQuery={this.runQueryAtCursor}
+                  />
+                ) : (
+                  <HeadersEditorComponent
+                    getRef={this.setVariableEditorComponent}
+                    onHintInformationRender={
+                      this.props.queryVariablesActive
+                        ? this.handleHintInformationRender
+                        : undefined
+                    }
+                    onRunQuery={this.runQueryAtCursor}
+                  />
+                )}
               </div>
               <QueryDragBar ref={this.setQueryResizer} />
             </div>

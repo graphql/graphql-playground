@@ -21,9 +21,9 @@ import {
   addResponse,
 } from './actions'
 import {
-  getParsedVariables,
   getSelectedSession,
   getSessionsState,
+  getParsedVariablesFromSession,
 } from './selectors'
 import {
   SchemaFetcher,
@@ -42,15 +42,13 @@ export function setSubscriptionEndpoint(endpoint) {
 
 export const defaultLinkCreator = (
   session: SchemaFetchProps,
-  extraHeaders?: any,
   wsEndpoint?: string,
 ): ApolloLink => {
   let connectionParams = {}
   const headers = {
     ...parseHeaders(session.headers),
-    ...extraHeaders,
   }
-  if (session.headers) {
+  if (headers) {
     connectionParams = { ...headers }
   }
 
@@ -86,7 +84,6 @@ export let schemaFetcher: SchemaFetcher = new SchemaFetcher(linkCreator)
 
 export function setLinkCreator(newLinkCreator) {
   if (newLinkCreator) {
-    console.log('setting link creator', newLinkCreator)
     linkCreator = newLinkCreator
     schemaFetcher = new SchemaFetcher(newLinkCreator)
   }
@@ -96,21 +93,20 @@ const subscriptions = {}
 
 function* runQuerySaga(action) {
   // run the query
-  console.log(`runQuery`, action)
   const { operationName } = action
   const session: Session = yield select(getSelectedSession)
   const request = {
     query: session.query,
     operationName,
-    variables: getParsedVariables,
+    variables: getParsedVariablesFromSession(session),
   }
   const operation = makeOperation(request)
   const workspace = yield select(getSelectedWorkspaceId)
   yield put(setSubscriptionActive(isSubscription(operation)))
   yield put(startQuery())
   const link = linkCreator({
-    headers: session.headers || '',
     endpoint: session.endpoint,
+    headers: session.headers,
   })
 
   const channel = eventChannel(emitter => {

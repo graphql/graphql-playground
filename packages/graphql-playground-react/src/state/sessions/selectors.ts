@@ -91,7 +91,12 @@ export const getHeadersCount = createSelector([getHeaders], headers => {
   return 0
 })
 
-export const getParsedHeaders = createSelector([getHeaders], headers => {
+export const getParsedHeaders = createSelector(
+  [getSelectedSession],
+  getParsedHeadersFromSession,
+)
+
+export function getParsedHeadersFromSession(headers) {
   try {
     const json = JSON.parse(headers)
     return json
@@ -100,9 +105,16 @@ export const getParsedHeaders = createSelector([getHeaders], headers => {
   }
 
   return {}
-})
+}
 
-export const getParsedVariables = createSelector([getVariables], variables => {
+export const getParsedVariables = createSelector(
+  [getSelectedSession],
+  getParsedVariablesFromSession,
+)
+
+export function getParsedVariablesFromSession(session) {
+  const variables = session.variables
+
   try {
     const json = JSON.parse(variables)
     return json
@@ -111,7 +123,7 @@ export const getParsedVariables = createSelector([getVariables], variables => {
   }
 
   return {}
-})
+}
 
 export const getTracing = createSelector(
   [getResponseExtensions],
