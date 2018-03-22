@@ -99,7 +99,6 @@ function* runQuerySaga(action) {
   // run the query
   const { operationName } = action
   const selectedWorkspaceId = yield select(getSelectedWorkspaceId)
-  console.log({ selectedWorkspaceId })
   const session: Session = yield select(getSelectedSession)
   const request = {
     query: session.query,
