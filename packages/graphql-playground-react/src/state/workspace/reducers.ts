@@ -61,11 +61,12 @@ export const rootReducer = (state = new RootState(), action) => {
     return state.set('selectedWorkspace', workspaceId)
   }
 
-  const selectedWorkspaceId = getSelectedWorkspaceId(state)
+  const selectedWorkspaceId =
+    action.payload && action.payload.workspaceId
+      ? action.payload.workspaceId
+      : getSelectedWorkspaceId(state)
 
   const path = ['workspaces', selectedWorkspaceId]
-
-  action.selectedWorkspaceId = selectedWorkspaceId
 
   return state.setIn(path, workspaceReducers(state.getIn(path), action))
 }

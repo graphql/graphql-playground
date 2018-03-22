@@ -355,7 +355,10 @@ export default class PlaygroundWrapper extends React.Component<
       activeEnv: env,
       endpoint,
       headers,
-      subscriptionEndpoint,
+      subscriptionEndpoint: this.normalizeSubscriptionUrl(
+        endpoint,
+        subscriptionEndpoint,
+      ),
       activeProjectName: projectName,
     })
   }

@@ -100,7 +100,11 @@ export const {
   /*
     a littlebit more complex state mutations
   */
-  ADD_RESPONSE: (sessionId, response) => ({ sessionId, response }),
+  ADD_RESPONSE: (workspaceId, sessionId, response) => ({
+    workspaceId,
+    sessionId,
+    response,
+  }),
   SET_RESPONSE: simpleAction('response'),
   CLEAR_RESPONSES: simpleAction(),
 
@@ -136,7 +140,7 @@ export const {
   QUERY_ERROR: simpleAction(),
   RUN_QUERY_AT_POSITION: position => ({ position }),
   START_QUERY: simpleAction('queryRunning', true),
-  STOP_QUERY: sessionId => ({ sessionId }),
+  STOP_QUERY: (sessionId, workspaceId) => ({ workspaceId, sessionId }),
   /* GraphQLEditor.handleRunQuery */
   OPEN_SETTINGS_TAB: () => ({}),
   OPEN_CONFIG_TAB: () => ({}),

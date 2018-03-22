@@ -98,6 +98,8 @@ const subscriptions = {}
 function* runQuerySaga(action) {
   // run the query
   const { operationName } = action
+  const selectedWorkspaceId = yield select(getSelectedWorkspaceId)
+  console.log({ selectedWorkspaceId })
   const session: Session = yield select(getSelectedSession)
   const request = {
     query: session.query,
@@ -164,10 +166,10 @@ function* runQuerySaga(action) {
         time: new Date(),
         resultID: cuid(),
       })
-      yield put(addResponse(session.id, response))
+      yield put(addResponse(selectedWorkspaceId, session.id, response))
     }
   } finally {
-    yield put(stopQuery(session.id))
+    yield put(stopQuery(session.id, selectedWorkspaceId))
   }
 }
 
@@ -188,10 +190,10 @@ function formatError(error) {
 }
 
 function* stopQuerySaga(action) {
-  const { sessionId } = action.payload
+  const { sessionId, workspaceId } = action.payload
   const { sessions } = yield select(getSessionsState)
   const session = sessions.get(sessionId)
-  const workspace = yield select(getSelectedWorkspaceId)
+  const workspace = yield workspaceId || select(getSelectedWorkspaceId)
 
   const key = `${workspace}~${session.id}`
   const subscription = subscriptions[key]
