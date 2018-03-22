@@ -109,13 +109,16 @@ function* fetchSchemaSaga() {
 function* renewStacks() {
   const session: Session = yield select(getSelectedSession)
   const docs: DocsSessionState = yield select(getSessionDocsState)
-  const { schema, tracingSupported } = yield schemaFetcher.fetch(session)
-  const rootMap = getRootMap(schema)
-  const stacks = docs.navStack
-    .map(stack => getNewStack(rootMap, schema, stack))
-    .filter(s => s)
-  yield put(setStacks(session.id, stacks))
-  yield put(setTracingSupported(tracingSupported))
+  const result = yield schemaFetcher.fetch(session)
+  const { schema, tracingSupported } = result
+  if (schema) {
+    const rootMap = getRootMap(schema)
+    const stacks = docs.navStack
+      .map(stack => getNewStack(rootMap, schema, stack))
+      .filter(s => s)
+    yield put(setStacks(session.id, stacks))
+    yield put(setTracingSupported(tracingSupported))
+  }
 }
 
 function* addToHistory({ payload }) {

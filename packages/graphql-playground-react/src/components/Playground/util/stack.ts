@@ -1,7 +1,8 @@
 import { isType, GraphQLInterfaceType, GraphQLObjectType } from 'graphql'
+import { Map } from 'immutable'
 
-export function getNewStack(root, schema, stack) {
-  const path = stack.field.path
+export function getNewStack(root, schema, stack: Map<any, any>) {
+  const path = stack.getIn(['field', 'path'])
   const splittedPath = path.split('/')
   let pointer: any = null
   let count = 0
@@ -42,11 +43,10 @@ export function getNewStack(root, schema, stack) {
   pointer.path = path
   pointer.parent = lastPointer
 
-  return {
-    ...stack,
+  return stack.merge({
     y,
     field: pointer,
-  }
+  })
 }
 
 // Return the deeper type found on object
