@@ -25,7 +25,9 @@ import * as cuid from 'cuid'
 export interface SessionStateProps {
   sessions: OrderedMap<string, Session>
   selectedSessionId: string
+  sessionCount: number
 }
+
 // tslint:disable
 export class Session extends Record(getDefaultSession('')) {
   id: string
@@ -135,9 +137,11 @@ function makeSession(endpoint = '') {
 export class SessionState extends Record({
   sessions: OrderedMap({}),
   selectedSessionId: '',
+  sessionCount: 0,
 }) {
   sessions: OrderedMap<string, Session>
   selectedSessionId: string
+  sessionCount: number
 }
 
 export function makeSessionState(endpoint) {
@@ -146,6 +150,7 @@ export function makeSessionState(endpoint) {
   return new SessionState({
     sessions: OrderedMap({ [session.id]: session }),
     selectedSessionId: session.id,
+    sessionCount: 1,
   })
 }
 
@@ -323,7 +328,9 @@ export default handleActions(
         })
         newState = newState.sessions.set(fileTab.id, fileTab)
       }
-      return newState.set('selectedSessionId', fileTab.id)
+      return newState
+        .set('selectedSessionId', fileTab.id)
+        .set('sessionCount', newState.sessions.size)
     },
     NEW_SESSION: (state, { payload: { reuseHeaders, endpoint } }) => {
       let session = makeSession(endpoint)
@@ -335,20 +342,27 @@ export default handleActions(
       return state
         .setIn(['sessions', session.id], session)
         .set('selectedSessionId', session.id)
+        .set('sessionCount', state.sessions.size + 1)
     },
     DUPLICATE_SESSION: (state, { payload: { session } }) => {
       const newSession = session.set('id', cuid())
       return state
         .setIn(['sessions', newSession.id], newSession)
         .set('selectedSessionId', newSession.id)
+        .set('sessionCount', state.sessions.size + 1)
     },
     NEW_SESSION_FROM_QUERY: (state, { payload: { query } }) => {
       const session = makeSession().set('query', query)
-      return state.setIn(['sessions', session.id], session)
+      return state
+        .setIn(['sessions', session.id], session)
+        .set('sessionCount', state.sessions.size + 1)
     },
     CLOSE_SELECTED_TAB: state => {
       const selectedSessionId = getSelectedSessionId(state)
-      return closeTab(state, selectedSessionId)
+      return closeTab(state, selectedSessionId).set(
+        'sessionCount',
+        state.sessions.size - 1,
+      )
     },
     SELECT_NEXT_TAB: state => {
       const selectedSessionId = getSelectedSessionId(state)
@@ -378,7 +392,10 @@ export default handleActions(
       return state.set('selectedSessionId', sessionId)
     },
     CLOSE_TAB: (state, { payload: { sessionId } }) => {
-      return closeTab(state, sessionId)
+      return closeTab(state, sessionId).set(
+        'sessionCount',
+        state.sessions.size - 1,
+      )
     },
     EDIT_SETTINGS: state => {
       return state.setIn(

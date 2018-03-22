@@ -271,8 +271,8 @@ export default class PlaygroundWrapper extends React.Component<
                     showNewWorkspace={Boolean(this.props.showNewWorkspace)}
                     isElectron={Boolean(this.props.isElectron)}
                     onEditConfig={this.handleStartEditConfig}
-                    getSessionCount={this.getSessionCount}
                     activeProjectName={this.state.activeProjectName}
+                    configPath={this.props.configPath}
                   />
                 )}
               <Playground
@@ -312,11 +312,6 @@ export default class PlaygroundWrapper extends React.Component<
 
   handleUpdateSessionCount = () => {
     this.forceUpdate()
-  }
-
-  getSessionCount = (endpoint: string): number => {
-    // TODO
-    return 5
   }
 
   getPlaygroundRef = ref => {

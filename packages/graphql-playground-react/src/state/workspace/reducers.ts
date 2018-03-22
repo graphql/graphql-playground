@@ -6,7 +6,8 @@ import sharing, { SharingState } from '../sharing/reducers'
 import history, { HistoryState } from '../history/reducers'
 import { Map, Record, OrderedMap } from 'immutable'
 import general, { GeneralState } from '../general/reducers'
-// import { fromJS, isKeyed } from 'immutable'
+import { immutableMemoize } from '../../components/Playground/util/immutableMemoize'
+// import { createSelector } from 'reselect'
 
 export function getSelectedWorkspaceId(state) {
   return state.get('selectedWorkspace')
@@ -87,3 +88,7 @@ export function makeWorkspace(endpoint) {
 }
 
 export default rootReducer
+
+export const getSessionCounts = immutableMemoize(state => {
+  return state.workspaces.map(w => w.sessions.sessionCount)
+})

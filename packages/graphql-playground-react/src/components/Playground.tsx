@@ -40,6 +40,7 @@ import {
   setSubscriptionEndpoint,
 } from '../state/sessions/fetchingSagas'
 import { Session } from '../state/sessions/reducers'
+import { getWorkspaceId } from './Playground/util/getWorkspaceId'
 
 export interface Response {
   resultID: string
@@ -134,7 +135,7 @@ export class Playground extends React.PureComponent<Props & ReduxProps, State> {
 
   componentWillMount() {
     // init redux
-    this.props.initState(this.getWorkspaceId(), this.props.endpoint)
+    this.props.initState(getWorkspaceId(this.props), this.props.endpoint)
   }
 
   componentDidMount() {
@@ -162,19 +163,11 @@ export class Playground extends React.PureComponent<Props & ReduxProps, State> {
       this.props.configPath !== nextProps.configPath ||
       nextProps.workspaceName !== this.props.workspaceName
     ) {
-      this.props.initState(this.getWorkspaceId(nextProps), nextProps.endpoint)
+      this.props.initState(getWorkspaceId(nextProps), nextProps.endpoint)
     }
     if (this.props.subscriptionEndpoint !== nextProps.subscriptionEndpoint) {
       setSubscriptionEndpoint(nextProps.subscriptionEndpoint)
     }
-  }
-
-  getWorkspaceId(props = this.props) {
-    const configPathString = props.configPath ? `${props.configPath}~` : ''
-    const workspaceNameString = props.workspaceName
-      ? `${props.workspaceName}~`
-      : ''
-    return `${configPathString}${workspaceNameString}${props.endpoint}`
   }
 
   async getSchema(props = this.props) {

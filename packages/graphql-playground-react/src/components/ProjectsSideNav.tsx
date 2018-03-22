@@ -6,6 +6,11 @@ import { styled } from '../styled/index'
 import * as theme from 'styled-theming'
 import { darken } from 'polished'
 import { getEndpointFromEndpointConfig } from './util'
+import { createStructuredSelector } from 'reselect'
+import { connect } from 'react-redux'
+import { getSessionCounts } from '../state/workspace/reducers'
+import { Map } from 'immutable'
+import { getWorkspaceId } from './Playground/util/getWorkspaceId'
 
 export interface Props {
   config: GraphQLConfig
@@ -17,11 +22,15 @@ export interface Props {
   showNewWorkspace: boolean
   isElectron: boolean
   onEditConfig: () => void
-  getSessionCount: (endpoint: string) => number
   activeProjectName?: string
+  configPath?: string
 }
 
-export default class ProjectsSideNav extends React.Component<Props, {}> {
+export interface ReduxProps {
+  counts: Map<string, number>
+}
+
+class ProjectsSideNav extends React.Component<Props & ReduxProps, {}> {
   render() {
     const { config, folderName, onNewWorkspace, isElectron } = this.props
     const endpoints = config.extensions && config.extensions.endpoints
@@ -85,7 +94,14 @@ export default class ProjectsSideNav extends React.Component<Props, {}> {
   ) {
     return Object.keys(endpoints).map(env => {
       const { endpoint } = getEndpointFromEndpointConfig(endpoints[env])
-      const count = this.props.getSessionCount(endpoint)
+      const count =
+        this.props.counts.get(
+          getWorkspaceId({
+            endpoint,
+            configPath: this.props.configPath,
+            workspaceName: projectName,
+          }),
+        ) || 0
       return (
         <ProjectsSideNavItem
           key={env}
@@ -101,6 +117,12 @@ export default class ProjectsSideNav extends React.Component<Props, {}> {
     })
   }
 }
+
+const mapStateToProps = createStructuredSelector({
+  counts: getSessionCounts,
+})
+
+export default connect(mapStateToProps)(ProjectsSideNav)
 
 const textColor = theme('mode', {
   light: p => p.theme.colours.white,

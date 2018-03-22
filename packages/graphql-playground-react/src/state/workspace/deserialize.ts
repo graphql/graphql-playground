@@ -46,9 +46,11 @@ function deserializeNavstack(navStack) {
 }
 
 function deserializeSessionsState(state) {
+  const sessions = deserializeSessions(state.sessions)
   return new SessionState({
     selectedSessionId: state.selectedSessionId,
-    sessions: deserializeSessions(state.sessions),
+    sessions,
+    sessionCount: sessions.size,
   })
 }
 
