@@ -99,8 +99,6 @@ export default class PlaygroundWrapper extends React.Component<
       endpoint = endpoints.endpoint
       subscriptionEndpoint = endpoints.subscriptionEndpoint
       headers = endpoints.headers
-    } else {
-      subscriptionEndpoint = this.getGraphcoolSubscriptionEndpoint(endpoint)
     }
 
     subscriptionEndpoint =
@@ -130,6 +128,25 @@ export default class PlaygroundWrapper extends React.Component<
     if (loadingWrapper) {
       loadingWrapper.remove()
     }
+  }
+
+  normalizeSubscriptionUrl(endpoint, subscriptionEndpoint) {
+    if (subscriptionEndpoint) {
+      if (subscriptionEndpoint.startsWith('/')) {
+        const secure =
+          endpoint.includes('https') || location.href.includes('https')
+            ? 's'
+            : ''
+        return `ws${secure}://${location.host}${subscriptionEndpoint}`
+      } else {
+        return subscriptionEndpoint.replace(/^http/, 'ws')
+      }
+    }
+
+    return this.getGraphcoolSubscriptionEndpoint(endpoint).replace(
+      /^http/,
+      'ws',
+    )
   }
 
   getGraphcoolSubscriptionEndpoint(endpoint) {
@@ -212,22 +229,6 @@ export default class PlaygroundWrapper extends React.Component<
     }
 
     return url
-  }
-
-  normalizeSubscriptionUrl(endpoint, subscriptionEndpoint) {
-    if (subscriptionEndpoint) {
-      if (subscriptionEndpoint.startsWith('/')) {
-        const secure =
-          endpoint.includes('https') || location.href.includes('https')
-            ? 's'
-            : ''
-        return `ws${secure}://${location.host}${subscriptionEndpoint}`
-      } else {
-        return subscriptionEndpoint.replace(/^http/, 'ws')
-      }
-    }
-
-    return endpoint.replace(/^http/, 'ws')
   }
 
   componentWillMount() {

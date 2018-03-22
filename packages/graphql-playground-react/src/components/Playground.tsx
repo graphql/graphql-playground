@@ -113,6 +113,7 @@ export class Playground extends React.PureComponent<Props & ReduxProps, State> {
   observers: { [sessionId: string]: any } = {}
   graphiqlComponents: any[] = []
   private initialIndex: number = -1
+  private mounted = false
 
   constructor(props: Props & ReduxProps) {
     super(props)
@@ -133,7 +134,7 @@ export class Playground extends React.PureComponent<Props & ReduxProps, State> {
 
   componentWillMount() {
     // init redux
-    this.props.initState(this.props.endpoint, this.getWorkspaceId())
+    this.props.initState(this.getWorkspaceId(), this.props.endpoint)
   }
 
   componentDidMount() {
@@ -142,6 +143,7 @@ export class Playground extends React.PureComponent<Props & ReduxProps, State> {
         selectedSessionIndex: this.initialIndex,
       } as State)
     }
+    this.mounted = true
   }
 
   componentWillReceiveProps(nextProps) {
@@ -157,7 +159,8 @@ export class Playground extends React.PureComponent<Props & ReduxProps, State> {
     }
     if (
       this.props.endpoint !== nextProps.endpoint ||
-      this.props.configPath !== nextProps.configPath
+      this.props.configPath !== nextProps.configPath ||
+      nextProps.workspaceName !== this.props.workspaceName
     ) {
       this.props.initState(this.getWorkspaceId(nextProps), nextProps.endpoint)
     }
@@ -175,6 +178,9 @@ export class Playground extends React.PureComponent<Props & ReduxProps, State> {
   }
 
   async getSchema(props = this.props) {
+    if (this.mounted && this.state.schema) {
+      this.setState({ schema: undefined })
+    }
     const schema = await schemaFetcher.fetch({
       endpoint: props.endpoint,
       headers: props.headers

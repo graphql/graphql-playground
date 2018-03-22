@@ -43,7 +43,7 @@ export function setSubscriptionEndpoint(endpoint) {
 export const defaultLinkCreator = (
   session: SchemaFetchProps,
   wsEndpoint?: string,
-): ApolloLink => {
+): { link: ApolloLink; subscriptionClient?: SubscriptionClient } => {
   let connectionParams = {}
   const headers = {
     ...parseHeaders(session.headers),
@@ -59,7 +59,7 @@ export const defaultLinkCreator = (
   })
 
   if (!(wsEndpoint || subscriptionEndpoint)) {
-    return httpLink
+    return { link: httpLink }
   }
 
   const subscriptionClient = new SubscriptionClient(
@@ -72,11 +72,14 @@ export const defaultLinkCreator = (
   )
 
   const webSocketLink = new WebSocketLink(subscriptionClient)
-  return ApolloLink.split(
-    operation => isSubscription(operation),
-    webSocketLink,
-    httpLink,
-  )
+  return {
+    link: ApolloLink.split(
+      operation => isSubscription(operation),
+      webSocketLink,
+      httpLink,
+    ),
+    subscriptionClient,
+  }
 }
 
 let linkCreator = defaultLinkCreator
@@ -102,57 +105,86 @@ function* runQuerySaga(action) {
     variables: getParsedVariablesFromSession(session),
   }
   const operation = makeOperation(request)
+  const operationIsSubscription = isSubscription(operation)
   const workspace = yield select(getSelectedWorkspaceId)
   yield put(setSubscriptionActive(isSubscription(operation)))
   yield put(startQuery())
-  const link = linkCreator({
+  const { link, subscriptionClient } = linkCreator({
     endpoint: session.endpoint,
     headers: session.headers,
   })
 
   const channel = eventChannel(emitter => {
+    let closed = false
+    if (subscriptionClient && operationIsSubscription) {
+      subscriptionClient.onDisconnected(() => {
+        closed = true
+        emitter({
+          error: new Error(
+            `Could not connect to websocket endpoint ${subscriptionEndpoint}. Please check if the endpoint url is correct.`,
+          ),
+        })
+        emitter(END)
+      })
+    }
     const subscription = execute(link, operation).subscribe({
       next: function(value) {
-        console.log('next', value)
         emitter({ value })
       },
       error: error => {
-        console.log('error', error)
         emitter({ error })
         emitter(END)
       },
       complete: () => {
-        console.log('complete')
         emitter(END)
       },
     })
 
-    const key = `${workspace}~${session.id}`
-    console.log({ key })
-    subscriptions[key] = subscription
-
-    return () => {
-      subscription.unsubscribe()
+    const unsubscribe = () => {
+      if (!closed) {
+        try {
+          subscription.unsubscribe()
+        } catch (e) {
+          console.error(e)
+        }
+      }
     }
+
+    const key = `${workspace}~${session.id}`
+    subscriptions[key] = { unsubscribe }
+
+    return unsubscribe
   })
 
   try {
     while (true) {
       const { value, error } = yield take(channel)
-      if (value) {
-        const response = new ResponseRecord({
-          date: JSON.stringify(value, null, 2),
-          time: new Date(),
-          resultID: cuid(),
-        })
-        yield put(addResponse(session.id, response))
-      } else {
-        yield put(addResponse(session.id, error))
-      }
+      const response = new ResponseRecord({
+        date: JSON.stringify(value ? value : formatError(error), null, 2),
+        time: new Date(),
+        resultID: cuid(),
+      })
+      yield put(addResponse(session.id, response))
     }
   } finally {
     yield put(stopQuery(session.id))
   }
+}
+
+function formatError(error) {
+  if (error instanceof Error) {
+    return {
+      error: error.message,
+    }
+  }
+
+  if (typeof error === 'string') {
+    return {
+      error,
+    }
+  }
+
+  return error
 }
 
 function* stopQuerySaga(action) {
@@ -162,11 +194,8 @@ function* stopQuerySaga(action) {
   const workspace = yield select(getSelectedWorkspaceId)
 
   const key = `${workspace}~${session.id}`
-  console.log({ key })
   const subscription = subscriptions[key]
-  console.log({ subscription })
   if (subscription && subscription.unsubscribe) {
-    console.log('unsubscribing')
     subscription.unsubscribe()
   }
   delete subscriptions[key]
