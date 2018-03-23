@@ -2,7 +2,18 @@ import * as React from 'react'
 import { remote, ipcRenderer, webFrame } from 'electron'
 import * as cx from 'classnames'
 import { Playground as IPlayground } from 'graphql-playground-react/lib/components/Playground'
-import Playground from 'graphql-playground-react'
+import Playground, {
+  openSettingsTab,
+  selectNextTab,
+  selectPrevTab,
+  closeSelectedTab,
+  fetchSchema,
+  newSession,
+  store,
+  getSessionsState,
+  saveFile,
+  newFileTab,
+} from 'graphql-playground-react'
 import {
   getGraphQLConfig,
   findGraphQLConfigFile,
@@ -19,6 +30,7 @@ import * as yaml from 'js-yaml'
 import * as findUp from 'find-up'
 import { patchEndpointsToConfigData as patchPrismaEndpointsToConfigData } from 'graphql-config-extension-prisma'
 import { patchEndpointsToConfigData } from 'graphql-config-extension-graphcool'
+import { connect } from 'react-redux'
 // import { PermissionSession } from 'graphql-playground/lib/types'
 
 const { dialog } = remote
@@ -64,7 +76,18 @@ function pushOpenUrl() {
   })
 }
 
-export default class App extends React.Component<{}, State> {
+interface ReduxProps {
+  openSettingsTab: () => void
+  selectNextTab: () => void
+  selectPrevTab: () => void
+  closeSelectedTab: () => void
+  fetchSchema: () => void
+  newSession: () => void
+  saveFile: () => void
+  newFileTab: (fileName: string, filePath: string, file: string) => void
+}
+
+class App extends React.Component<ReduxProps, State> {
   private playground: IPlayground
 
   constructor(props) {
@@ -154,41 +177,27 @@ cd ${folderPath}; graphql playground`)
   }
 
   openSettingsTab = () => {
-    if (this.playground) {
-      this.playground.openSettingsTab()
-    }
+    this.props.openSettingsTab()
   }
 
   nextTab = () => {
-    if (this.playground) {
-      this.playground.nextTab()
-    }
+    this.props.selectNextTab()
   }
 
   prevTab = () => {
-    if (this.playground) {
-      this.playground.prevTab()
-    }
+    this.props.selectPrevTab()
   }
 
   newTab = () => {
-    if (this.playground) {
-      ;(this.playground as any).handleNewSession()
-    }
+    this.props.newSession()
   }
 
   closeTab = () => {
-    if (this.playground) {
-      if (!this.playground.closeTab()) {
-        ipcRenderer.send('async', 'close')
-      }
-    }
+    this.props.closeSelectedTab()
   }
 
   reloadSchema = () => {
-    if (this.playground) {
-      this.playground.reloadSchema()
-    }
+    this.props.fetchSchema()
   }
 
   componentDidMount() {
@@ -356,7 +365,7 @@ cd ${folderPath}; graphql playground`)
       await new Promise(r => setTimeout(r, 200))
     }
     await new Promise(r => setTimeout(r, 200))
-    this.playground.newFileTab(path.basename(fileName), fileName, file)
+    this.props.newFileTab(path.basename(fileName), fileName, file)
   }
 
   showOpenDialog() {
@@ -383,9 +392,7 @@ cd ${folderPath}; graphql playground`)
       // save current tab
 
       if (this.playground) {
-        const session = this.playground.state.sessions[
-          this.playground.state.selectedSessionIndex
-        ]
+        const session = getSessionsState(store.getState())
         if (session.isConfigTab) {
           this.playground.handleSaveConfig()
         }
@@ -410,7 +417,7 @@ cd ${folderPath}; graphql playground`)
           //     resolve(fileName)
           //   },
           // )
-          this.playground.handleSaveFile(session.file)
+          this.props.saveFile()
           fs.writeFileSync(session.filePath, session.file)
         }
 
@@ -546,6 +553,7 @@ cd ${folderPath}; graphql playground`)
               platformToken={platformToken}
               configString={configString}
               config={config}
+              configPath={this.state.configPath}
               onSaveConfig={this.saveConfig}
               canSaveConfig={true}
               env={this.state.env}
@@ -563,3 +571,14 @@ cd ${folderPath}; graphql playground`)
     this.playground = ref
   }
 }
+
+export default connect(null, {
+  openSettingsTab,
+  selectNextTab,
+  selectPrevTab,
+  closeSelectedTab,
+  fetchSchema,
+  newSession,
+  saveFile,
+  newFileTab,
+})(App)

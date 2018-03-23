@@ -6,13 +6,13 @@ const path = require('path')
 const fs = require('fs')
 const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin')
 const HappyPack = require('happypack')
-const { renderPlaygroundPage } = require('graphql-playground-html');
+const { renderPlaygroundPage } = require('graphql-playground-html')
 
-const appEntrypoint = 'src/renderer/index.html' 
+const appEntrypoint = 'src/renderer/index.html'
 
 // Create the playground entry point if it doesn't exist
-if(!fs.existsSync(appEntrypoint)) {
-  fs.writeFileSync(appEntrypoint, renderPlaygroundPage({env: 'react'}));
+if (!fs.existsSync(appEntrypoint)) {
+  fs.writeFileSync(appEntrypoint, renderPlaygroundPage({ env: 'react' }))
 }
 
 module.exports = {
@@ -69,7 +69,7 @@ module.exports = {
         loader: 'file-loader',
       },
       {
-        test: /(graphics|gifs)\/.*\.(png|gif)$/,
+        test: /(graphics|gifs|node_modules)\/.*\.(png|gif)$/,
         loader: 'file-loader',
       },
     ],

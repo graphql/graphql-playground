@@ -29,21 +29,28 @@ if (process.env.NODE_ENV !== 'production') {
 
 const config = {
   projects: {
-    graphcool: {
+    app: {
+      schemaPath: 'src/schema.graphql',
       extensions: {
         endpoints: {
-          asdf: 'https://api.graph.cool/simple/v1/asdf',
-          docs: 'https://api.graph.cool/simple/v1/graphcool-docs',
+          default: 'http://localhost:4000',
         },
       },
     },
-    'tim01/test-service': {
+    database: {
+      schemaPath: 'src/generated/prisma.graphql',
       extensions: {
+        prisma: 'database/prisma.yml',
+        'prepare-binding': {
+          output: 'src/generated/prisma.ts',
+          generator: 'prisma-ts',
+        },
         endpoints: {
-          dev3: {
-            url: 'https://tim01_lol.prisma.sh/test-service/dev3',
+          dev: {
+            url: 'https://eu1.prisma.sh/lol/hall/dev',
             headers: {
-              Authorization: `Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE1MjE3MzE3NDQsIm5iZiI6MTUyMTY0NTM0NH0.rulM7fCHkCZHmYKTHgMrwroKcOlkuWnjV8aQHBNpcKs`,
+              Authorization:
+                'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjp7InNlcnZpY2UiOiJoYWxsQGRldiIsInJvbGVzIjpbImFkbWluIl19LCJpYXQiOjE1MjE4MjIwNDQsImV4cCI6MTUyMjQyNjg0NH0.rxU4v6GeBOZxzSRP9-AeJbrmkcZBNKjecH7d43OEUqc',
             },
           },
         },

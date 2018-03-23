@@ -96,7 +96,8 @@
     "graphql-config": "^1.2.1",
     "graphql-config-extension-graphcool": "1.0.6",
     "graphql-config-extension-prisma": "0.0.4",
-    "graphql-playground-react": "1.5.0-beta.1",
+    "graphql-playground-react": "1.5.0-beta.5",
+    "immutable": "4.0.0-rc.9",
     "js-yaml": "^3.10.0",
     "lodash.merge": "^4.6.0",
     "minimist": "^1.2.0",
@@ -108,6 +109,7 @@
     "redux": "^3.7.2",
     "redux-localstorage": "rc",
     "redux-localstorage-filter": "^0.1.1",
+    "reselect": "^3.0.1",
     "styled-jsx": "2.2.1",
     "styled-jsx-postcss": "git+https://github.com/timsuchanek/styled-jsx-postcss#build3",
     "validator": "^9.2.0"

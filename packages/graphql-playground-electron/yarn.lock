@@ -3667,9 +3667,9 @@ graphql-playground-html@1.5.2:
   dependencies:
     graphql-config "1.1.7"
 
-graphql-playground-react@1.5.0-beta.1:
-  version "1.5.0-beta.1"
-  resolved "https://registry.yarnpkg.com/graphql-playground-react/-/graphql-playground-react-1.5.0-beta.1.tgz#afb7ce0fc6ce3302e652420e8626dd6129e79651"
+graphql-playground-react@1.5.0-beta.5:
+  version "1.5.0-beta.5"
+  resolved "https://registry.yarnpkg.com/graphql-playground-react/-/graphql-playground-react-1.5.0-beta.5.tgz#5aba7a93eb17228b31f61af02f2e4a335867b261"
   dependencies:
     apollo-link "^1.0.7"
     apollo-link-http "^1.3.2"
@@ -7633,18 +7633,6 @@ styled-components@^3.1.6:
 "styled-jsx-postcss@git+https://github.com/timsuchanek/styled-jsx-postcss#build3":
   version "0.2.0"
   resolved "git+https://github.com/timsuchanek/styled-jsx-postcss#677ee0fb7f9138047a00e03c8c3e44adbb33cf2a"
-  dependencies:
-    babel-traverse "^6.21.0"
-    babylon "^6.14.1"
-    deasync "^0.1.9"
-    postcss "^5.2.8"
-    postcss-load-plugins "^2.2.0"
-    styled-jsx "^0.5.7"
-
-"styled-jsx-postcss@git+https://github.com/timsuchanek/styled-jsx-postcss.git#build3":
-  version "0.2.0"
-  uid "677ee0fb7f9138047a00e03c8c3e44adbb33cf2a"
-  resolved "git+https://github.com/timsuchanek/styled-jsx-postcss.git#677ee0fb7f9138047a00e03c8c3e44adbb33cf2a"
   dependencies:
     babel-traverse "^6.21.0"
     babylon "^6.14.1"

@@ -9,6 +9,7 @@ import general, { GeneralState } from '../general/reducers'
 import { immutableMemoize } from '../../components/Playground/util/immutableMemoize'
 import { createSelector } from 'reselect'
 import { deserializePersistedState } from './deserialize'
+import appHistory, { AppHistory } from '../appHistory/reducers'
 // import { createSelector } from 'reselect'
 
 export function getSelectedWorkspaceId(state) {
@@ -25,12 +26,14 @@ export class Workspace extends Record({
   sharing: new SharingState(),
   history: OrderedMap(),
   general: new GeneralState(),
+  appHistory: new AppHistory(),
 }) {
   docs: DocsState
   sessions: SessionState
   sharing: SharingState
   history: HistoryState
   general: GeneralState
+  appHistory: AppHistory
 }
 
 export const defaultSettings = {
@@ -54,6 +57,7 @@ const workspaceReducers: Reducer<any> = combineReducers({
   sharing,
   history,
   general,
+  appHistory,
 })
 
 // todo: add lru-cache later when the localStorage is full

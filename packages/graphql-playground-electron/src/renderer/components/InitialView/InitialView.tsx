@@ -5,19 +5,24 @@ import { existsSync } from 'fs'
 import { resolve } from 'path'
 import { Icon, $v } from 'graphcool-styles'
 import Modal from 'graphcool-ui/lib/Modal'
-import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import * as format from 'date-fns/format'
-import { selectHistory, History } from '../../redux/actions/history'
 import Toggle from './Toggle'
 import { examples } from './data'
+import {
+  getAppHistory,
+  selectAppHistoryItem,
+  AppHistoryItem,
+} from 'graphql-playground-react'
+import { createStructuredSelector } from 'reselect'
+import { OrderedMap } from 'immutable'
 
 interface StateFromProps {
-  history: History[]
+  history: OrderedMap<string, AppHistoryItem>
 }
 
 interface DispatchFromProps {
-  selectHistory: (history: History) => any
+  selectHistory: (history: AppHistoryItem) => any
 }
 
 interface State {
@@ -70,10 +75,12 @@ class InitialView extends React.Component<
   handleSubmit = e => {
     e.preventDefault()
     if (isURL(this.state.endpoint, { require_tld: false })) {
-      this.props.selectHistory({
-        type: 'endpoint',
-        path: this.state.endpoint,
-      })
+      this.props.selectHistory(
+        new AppHistoryItem({
+          type: 'endpoint',
+          path: this.state.endpoint,
+        }),
+      )
       this.props.onSelectEndpoint(this.state.endpoint)
     } else {
       alert('Endpoint is not a valid url')
@@ -95,10 +102,12 @@ class InitialView extends React.Component<
         alert('No .graphqlconfig found in this folder')
         return
       }
-      this.props.selectHistory({
-        type: 'local',
-        path,
-      })
+      this.props.selectHistory(
+        new AppHistoryItem({
+          type: 'local',
+          path,
+        }),
+      )
       this.setState({ endpoint: path } as State)
       this.props.onSelectFolder(path)
     }
@@ -112,7 +121,7 @@ class InitialView extends React.Component<
     this.setState({ selectedMode } as State)
   }
 
-  handleClickHistory = (history: History) => {
+  handleClickHistory = (history: AppHistoryItem) => {
     this.props.selectHistory(history)
     if (history.type === 'local') {
       this.props.onSelectFolder(history.path)
@@ -191,7 +200,7 @@ class InitialView extends React.Component<
           style={modalStyle}
         >
           <div className="initial-view-content">
-            {history.length > 0 ? (
+            {history.size > 0 ? (
               <div className="initial-view-recent">
                 <div className="initial-view-recent-header">RECENT</div>
                 <div className="initial-view-recent-list">
@@ -301,19 +310,10 @@ class InitialView extends React.Component<
   }
 }
 
-const mapStateToProps = state => ({
-  history: state.history.history,
+const mapStateToProps = createStructuredSelector({
+  history: getAppHistory,
 })
 
-const mapDispatchToProps = dispatch =>
-  bindActionCreators(
-    {
-      selectHistory,
-    },
-    dispatch,
-  )
-
-export default connect<StateFromProps, DispatchFromProps, Props>(
-  mapStateToProps,
-  mapDispatchToProps,
-)(InitialView)
+export default connect(mapStateToProps, {
+  selectHistory: selectAppHistoryItem,
+})(InitialView as any) as any

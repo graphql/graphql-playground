@@ -5,6 +5,7 @@ import { Map, OrderedMap, List } from 'immutable'
 import { GeneralState } from '../general/reducers'
 import { mapValues } from 'lodash'
 import { RootState, Workspace } from './reducers'
+import { AppHistory, AppHistoryItem } from '../appHistory/reducers'
 
 export function deserializePersistedState(state) {
   return new RootState({
@@ -23,9 +24,16 @@ function deserializeWorkspaces(workspaces) {
         sharing: deserializeSharing(workspace.sharing),
         history: deserializeHistory(workspace.history),
         general: deserializeGeneral(workspace.general),
+        appHistory: deserializeAppHistory(workspace.appHistory),
       })
     }),
   )
+}
+
+function deserializeAppHistory(state) {
+  return new AppHistory({
+    items: OrderedMap(mapValues(state.items, item => new AppHistoryItem(item))),
+  })
 }
 
 function deserializeDocs(state) {
