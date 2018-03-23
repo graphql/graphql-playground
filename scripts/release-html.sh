@@ -6,9 +6,9 @@ cd packages
 
 middlewares=(
   graphql-playground-middleware-express
-  # graphql-playground-middleware-hapi
-  # graphql-playground-middleware-koa
-  # graphql-playground-middleware-lambda
+  graphql-playground-middleware-hapi
+  graphql-playground-middleware-koa
+  graphql-playground-middleware-lambda
 )
 
 cd graphql-playground-html

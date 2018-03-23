@@ -1,10 +1,8 @@
 {
   "name": "graphql-playground-html",
-  "version": "1.5.4",
-  "homepage":
-    "https://github.com/graphcool/graphql-playground/tree/master/packages/graphql-playground-html",
-  "description":
-    "GraphQL IDE for better development workflows (GraphQL Subscriptions, interactive docs & collaboration).",
+  "version": "1.5.5",
+  "homepage": "https://github.com/graphcool/graphql-playground/tree/master/packages/graphql-playground-html",
+  "description": "GraphQL IDE for better development workflows (GraphQL Subscriptions, interactive docs & collaboration).",
   "contributors": [
     "Tim Suchanek <tim@graph.cool>",
     "Johannes Schickling <johannes@graph.cool>",
@@ -13,14 +11,21 @@
   "repository": "http://github.com/graphcool/graphql-playground.git",
   "license": "SEE LICENSE IN LICENSE",
   "main": "dist/index.js",
-  "files": ["dist"],
+  "files": [
+    "dist"
+  ],
   "scripts": {
     "build": "rimraf dist && tsc",
     "prepare": "npm run build"
   },
-  "keywords": ["graphql", "graphiql", "playground", "graphcool"],
+  "keywords": [
+    "graphql",
+    "graphiql",
+    "playground",
+    "graphcool"
+  ],
   "devDependencies": {
-    "@types/node": "9.4.0",
+    "@types/node": "9.4.6",
     "graphql-config": "1.1.7",
     "rimraf": "2.6.2",
     "typescript": "2.6.2"
@@ -30,6 +35,6 @@
     "definition": "dist/index.d.ts"
   },
   "dependencies": {
-    "graphql-config": "1.1.7"
+    "graphql-config": "2.0.0"
   }
 }
