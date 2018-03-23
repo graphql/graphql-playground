@@ -33,6 +33,7 @@ import { getSelectedWorkspaceId } from '../workspace/reducers'
 import * as cuid from 'cuid'
 import { Session, ResponseRecord } from './reducers'
 import { addHistoryItem } from '../history/actions'
+import { safely } from '../../utils'
 
 // tslint:disable
 let subscriptionEndpoint = ''
@@ -205,8 +206,8 @@ function* stopQuerySaga(action) {
 }
 
 export const fecthingSagas = [
-  takeEvery('RUN_QUERY', runQuerySaga),
-  takeLatest('STOP_QUERY', stopQuerySaga),
+  takeEvery('RUN_QUERY', safely(runQuerySaga)),
+  takeLatest('STOP_QUERY', safely(stopQuerySaga)),
 ]
 
 // needed to fix typescript

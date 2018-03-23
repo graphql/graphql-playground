@@ -33,6 +33,7 @@ import { getSessionDocsState } from '../docs/selectors'
 import { getQueryTypes } from '../../components/Playground/util/getQueryTypes'
 import { parse } from 'graphql'
 import { Session } from './reducers'
+import { safely } from '../../utils'
 
 function* setQueryFacts() {
   // debounce by 100 ms
@@ -135,11 +136,11 @@ function* addToHistory({ payload }) {
 }
 
 export const sessionsSagas = [
-  takeLatest('GET_QUERY_FACTS', setQueryFacts),
+  takeLatest('GET_QUERY_FACTS', safely(setQueryFacts)),
   takeLatest('SET_OPERATION_NAME', setQueryFacts),
   takeEvery('EDIT_QUERY', setQueryFacts),
   takeEvery('RUN_QUERY_AT_POSITION', runQueryAtPosition),
-  takeLatest('FETCH_SCHEMA', fetchSchemaSaga),
+  takeLatest('FETCH_SCHEMA', safely(fetchSchemaSaga)),
   takeLatest('SCHEMA_FETCHING_SUCCESS', renewStacks),
   takeEvery('QUERY_SUCCESS' as any, addToHistory),
 ]
