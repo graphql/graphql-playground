@@ -137,12 +137,12 @@ function* addToHistory({ payload }) {
 
 export const sessionsSagas = [
   takeLatest('GET_QUERY_FACTS', safely(setQueryFacts)),
-  takeLatest('SET_OPERATION_NAME', setQueryFacts),
-  takeEvery('EDIT_QUERY', setQueryFacts),
-  takeEvery('RUN_QUERY_AT_POSITION', runQueryAtPosition),
+  takeLatest('SET_OPERATION_NAME', safely(setQueryFacts)),
+  takeEvery('EDIT_QUERY', safely(setQueryFacts)),
+  takeEvery('RUN_QUERY_AT_POSITION', safely(runQueryAtPosition)),
   takeLatest('FETCH_SCHEMA', safely(fetchSchemaSaga)),
-  takeLatest('SCHEMA_FETCHING_SUCCESS', renewStacks),
-  takeEvery('QUERY_SUCCESS' as any, addToHistory),
+  takeLatest('SCHEMA_FETCHING_SUCCESS', safely(renewStacks)),
+  takeEvery('QUERY_SUCCESS' as any, safely(addToHistory)),
 ]
 
 // needed to fix typescript

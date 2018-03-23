@@ -22,7 +22,9 @@ import {
   saveSettings,
   saveConfig,
   setTracingSupported,
+  injectHeaders,
 } from '../state/sessions/actions'
+import { setConfigString } from '../state/general/actions'
 import { initState } from '../state/workspace/actions'
 import { GraphQLSchema } from 'graphql'
 import { createStructuredSelector } from 'reselect'
@@ -42,7 +44,6 @@ import {
 import { Session } from '../state/sessions/reducers'
 import { getWorkspaceId } from './Playground/util/getWorkspaceId'
 import { getSettings, getSettingsString } from '../state/workspace/reducers'
-import { injectHeaders, setConfigString } from '../lib'
 
 export interface Response {
   resultID: string

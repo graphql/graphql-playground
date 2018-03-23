@@ -4,6 +4,7 @@ import { setShareUrl } from './actions'
 import * as cuid from 'cuid'
 import { getSharingState } from './selectors'
 import { Map } from 'immutable'
+import { safely } from '../../utils'
 
 function* share() {
   const state = yield makeSharingState()
@@ -78,7 +79,7 @@ function* makeSharingState() {
   return state
 }
 
-export const sharingSagas = [takeEvery('SHARE', share)]
+export const sharingSagas = [takeEvery('SHARE', safely(share))]
 
 // needed to fix typescript
 export { ForkEffect }

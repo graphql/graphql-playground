@@ -355,22 +355,24 @@ export default handleActions(
       if (!headers || headers === '') {
         return state
       }
+      const headersString =
+        typeof headers === 'string' ? headers : JSON.stringify(headers, null, 2)
       const selectedSessionId = getSelectedSessionId(state)
-      let newState = state.set('headers', headers)
+      let newState = state.set('headers', headersString)
       const currentSession = state.sessions.get(selectedSessionId)
 
-      if (currentSession.headers === headers) {
+      if (currentSession.headers === headersString) {
         return newState
       }
 
       if (currentSession.query === defaultQuery) {
         return newState.setIn(
           ['sessions', selectedSessionId, 'headers'],
-          JSON.stringify(headers, null, 2),
+          headersString,
         )
       }
 
-      const session = makeSession(endpoint).set('headers', headers)
+      const session = makeSession(endpoint).set('headers', headersString)
 
       return newState
         .setIn(['sessions', session.id], session)
@@ -399,7 +401,7 @@ export default handleActions(
     },
     SELECT_NEXT_TAB: state => {
       const selectedSessionId = getSelectedSessionId(state)
-      const count = state.sessoins.size
+      const count = state.sessions.size
       const keys = state.sessions.keySeq()
       const index = keys.indexOf(selectedSessionId)
       if (index + 1 < count) {
@@ -409,7 +411,7 @@ export default handleActions(
     },
     SELECT_PREV_TAB: state => {
       const selectedSessionId = getSelectedSessionId(state)
-      const count = state.sessoins.size
+      const count = state.sessions.size
       const keys = state.sessions.keySeq()
       const index = keys.indexOf(selectedSessionId)
       if (index - 1 > 0) {

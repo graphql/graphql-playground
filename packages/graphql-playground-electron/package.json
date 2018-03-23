@@ -93,10 +93,11 @@
     "graphcool-styles": "0.2.7",
     "graphcool-tmp-ui": "^0.0.11",
     "graphcool-ui": "^0.0.14",
+    "graphql": "^0.13.2",
     "graphql-config": "^1.2.1",
     "graphql-config-extension-graphcool": "1.0.6",
     "graphql-config-extension-prisma": "0.0.4",
-    "graphql-playground-react": "1.5.0-beta.5",
+    "graphql-playground-react": "1.5.0-beta.12",
     "immutable": "4.0.0-rc.9",
     "js-yaml": "^3.10.0",
     "lodash.merge": "^4.6.0",
@@ -169,5 +170,13 @@
     "webpack-bundle-analyzer": "2.9.2",
     "webpack-dev-server": "2.11.1",
     "webpack-uglify-parallel": "0.1.4"
+  },
+  "resolutions": {
+    "**/graphql": "0.13.2",
+    "**/**/graphql": "0.13.2",
+    "**/**/**/graphql": "0.13.2",
+    "**/**/**/**/graphql": "0.13.2",
+    "**/**/**/**/**/graphql": "0.13.2",
+    "**/**/**/**/**/**/graphql": "0.13.2"
   }
 }

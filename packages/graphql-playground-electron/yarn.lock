@@ -3667,9 +3667,9 @@ graphql-playground-html@1.5.2:
   dependencies:
     graphql-config "1.1.7"
 
-graphql-playground-react@1.5.0-beta.5:
-  version "1.5.0-beta.5"
-  resolved "https://registry.yarnpkg.com/graphql-playground-react/-/graphql-playground-react-1.5.0-beta.5.tgz#5aba7a93eb17228b31f61af02f2e4a335867b261"
+graphql-playground-react@1.5.0-beta.12:
+  version "1.5.0-beta.12"
+  resolved "https://registry.yarnpkg.com/graphql-playground-react/-/graphql-playground-react-1.5.0-beta.12.tgz#a22fb33c49903ceb388751741cacc18000210172"
   dependencies:
     apollo-link "^1.0.7"
     apollo-link-http "^1.3.2"
@@ -3789,23 +3789,11 @@ graphql-tag@^2.4.2:
   version "2.6.1"
   resolved "https://registry.yarnpkg.com/graphql-tag/-/graphql-tag-2.6.1.tgz#4788d509f6e29607d947fc47a40c4e18f736d34a"
 
-graphql@^0.10.5:
-  version "0.10.5"
-  resolved "https://registry.yarnpkg.com/graphql/-/graphql-0.10.5.tgz#c9be17ca2bdfdbd134077ffd9bbaa48b8becd298"
+graphql@0.13.2, graphql@^0.10.5, graphql@^0.11.7, graphql@^0.12.3, graphql@^0.13.2:
+  version "0.13.2"
+  resolved "https://registry.yarnpkg.com/graphql/-/graphql-0.13.2.tgz#4c740ae3c222823e7004096f832e7b93b2108270"
   dependencies:
-    iterall "^1.1.0"
-
-graphql@^0.11.7:
-  version "0.11.7"
-  resolved "https://registry.yarnpkg.com/graphql/-/graphql-0.11.7.tgz#e5abaa9cb7b7cccb84e9f0836bf4370d268750c6"
-  dependencies:
-    iterall "1.1.3"
-
-graphql@^0.12.3:
-  version "0.12.3"
-  resolved "https://registry.yarnpkg.com/graphql/-/graphql-0.12.3.tgz#11668458bbe28261c0dcb6e265f515ba79f6ce07"
-  dependencies:
-    iterall "1.1.3"
+    iterall "^1.2.1"
 
 gzip-size@^3.0.0:
   version "3.0.0"
@@ -4559,9 +4547,13 @@ items@2.x.x:
   version "2.1.1"
   resolved "https://registry.yarnpkg.com/items/-/items-2.1.1.tgz#8bd16d9c83b19529de5aea321acaada78364a198"
 
-iterall@1.1.3, iterall@^1.1.0, iterall@^1.1.1:
+iterall@^1.1.1:
   version "1.1.3"
   resolved "https://registry.yarnpkg.com/iterall/-/iterall-1.1.3.tgz#1cbbff96204056dde6656e2ed2e2226d0e6d72c9"
+
+iterall@^1.2.1:
+  version "1.2.2"
+  resolved "https://registry.yarnpkg.com/iterall/-/iterall-1.2.2.tgz#92d70deb8028e0c39ff3164fdbf4d8b088130cd7"
 
 jest-get-type@^21.2.0:
   version "21.2.0"
@@ -7633,6 +7625,18 @@ styled-components@^3.1.6:
 "styled-jsx-postcss@git+https://github.com/timsuchanek/styled-jsx-postcss#build3":
   version "0.2.0"
   resolved "git+https://github.com/timsuchanek/styled-jsx-postcss#677ee0fb7f9138047a00e03c8c3e44adbb33cf2a"
+  dependencies:
+    babel-traverse "^6.21.0"
+    babylon "^6.14.1"
+    deasync "^0.1.9"
+    postcss "^5.2.8"
+    postcss-load-plugins "^2.2.0"
+    styled-jsx "^0.5.7"
+
+"styled-jsx-postcss@git+https://github.com/timsuchanek/styled-jsx-postcss.git#build3":
+  version "0.2.0"
+  uid "677ee0fb7f9138047a00e03c8c3e44adbb33cf2a"
+  resolved "git+https://github.com/timsuchanek/styled-jsx-postcss.git#677ee0fb7f9138047a00e03c8c3e44adbb33cf2a"
   dependencies:
     babel-traverse "^6.21.0"
     babylon "^6.14.1"
