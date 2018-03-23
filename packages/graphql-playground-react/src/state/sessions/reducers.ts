@@ -58,7 +58,6 @@ export class Session extends Record(getDefaultSession('')) {
   filePath?: string
   selectedUserToken?: string
   headers?: string
-  hasChanged?: boolean
   absolutePath?: string
   isSettingsTab?: boolean
   isConfigTab?: boolean
@@ -293,7 +292,7 @@ export default handleActions(
           name: 'Settings',
           changed: false,
         })
-        newState = newState.sessions.set(settingsTab.id, settingsTab)
+        newState = newState.setIn(['sessions', settingsTab.id], settingsTab)
       }
       return newState.set('selectedSessionId', settingsTab.id)
     },
@@ -309,7 +308,7 @@ export default handleActions(
           name: 'GraphQL Config',
           changed: false,
         })
-        newState = newState.sessions.set(configTab.id, configTab)
+        newState = newState.setIn(['sessions', configTab.id], configTab)
       }
       return newState.set('selectedSessionId', configTab.id)
     },
@@ -326,7 +325,7 @@ export default handleActions(
           file,
           filePath,
         })
-        newState = newState.sessions.set(fileTab.id, fileTab)
+        newState = newState.setIn(['sessions', fileTab.id], fileTab)
       }
       return newState
         .set('selectedSessionId', fileTab.id)

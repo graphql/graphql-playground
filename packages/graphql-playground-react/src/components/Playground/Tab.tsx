@@ -211,13 +211,13 @@ class Tab extends React.PureComponent<Props & ReduxProps, State> {
           className={cn('close', {
             active,
             hasCircle:
-              session.isFile && session.hasChanged && !this.state.overCross,
+              session.isFile && session.changed && !this.state.overCross,
           })}
           onClick={this.handleCloseSession}
           onMouseEnter={this.handleMouseOverCross}
           onMouseLeave={this.handleMouseOutCross}
         >
-          {session.isFile && session.hasChanged && !this.state.overCross ? (
+          {session.isFile && session.changed && !this.state.overCross ? (
             <div className="circle">⬤</div>
           ) : (
             <Icon

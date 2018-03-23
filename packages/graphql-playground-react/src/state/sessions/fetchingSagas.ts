@@ -32,6 +32,7 @@ import {
 import { getSelectedWorkspaceId } from '../workspace/reducers'
 import * as cuid from 'cuid'
 import { Session, ResponseRecord } from './reducers'
+import { addHistoryItem } from '../history/actions'
 
 // tslint:disable
 let subscriptionEndpoint = ''
@@ -166,6 +167,7 @@ function* runQuerySaga(action) {
         resultID: cuid(),
       })
       yield put(addResponse(selectedWorkspaceId, session.id, response))
+      yield put(addHistoryItem(session))
     }
   } finally {
     yield put(stopQuery(session.id, selectedWorkspaceId))

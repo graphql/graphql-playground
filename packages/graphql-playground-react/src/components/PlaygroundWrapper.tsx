@@ -14,8 +14,9 @@ import {
 import OldThemeProvider from './Theme/ThemeProvider'
 import { getActiveEndpoints } from './util'
 import { ISettings } from '../types'
-import { mapKeys } from 'lodash'
-import { defaultSettings } from '../state/general/reducers'
+import { getTheme } from '../state/general/selectors'
+import { createStructuredSelector } from 'reselect'
+import { connect } from 'react-redux'
 
 function getParameterByName(name: string): string | null {
   const url = window.location.href
@@ -49,14 +50,16 @@ export interface PlaygroundWrapperProps {
   configPath?: string
 }
 
+export interface ReduxProps {
+  theme: string
+}
+
 export interface State {
   endpoint: string
   subscriptionPrefix?: string
   subscriptionEndpoint?: string
   shareUrl?: string
   platformToken?: string
-  settingsString: string
-  settings: ISettings
   configIsYaml?: boolean
   configString?: string
   activeProjectName?: string
@@ -64,19 +67,14 @@ export interface State {
   headers?: any
 }
 
-export default class PlaygroundWrapper extends React.Component<
-  PlaygroundWrapperProps,
+class PlaygroundWrapper extends React.Component<
+  PlaygroundWrapperProps & ReduxProps,
   State
 > {
   playground: IPlayground
-  constructor(props: PlaygroundWrapperProps) {
+  constructor(props: PlaygroundWrapperProps & ReduxProps) {
     super(props)
     ;(global as any).m = this
-
-    let settingsString =
-      localStorage.getItem('settings') ||
-      JSON.stringify(defaultSettings, null, 2)
-    settingsString = this.migrateSettingsString(settingsString)
 
     const configIsYaml = props.configString
       ? this.isConfigYaml(props.configString)
@@ -113,8 +111,6 @@ export default class PlaygroundWrapper extends React.Component<
         localStorage.getItem('platform-token') ||
         undefined,
       subscriptionEndpoint,
-      settingsString,
-      settings: this.props.settings || this.getSettings(settingsString),
       configIsYaml,
       configString: props.configString,
       activeEnv,
@@ -159,27 +155,7 @@ export default class PlaygroundWrapper extends React.Component<
     return endpoint
   }
 
-  migrateSettingsString(settingsString: string): string {
-    const replacementMap = {
-      theme: 'editor.theme',
-      reuseHeaders: 'editor.reuseHeaders',
-    }
-
-    try {
-      const currentSettings = JSON.parse(settingsString)
-      const settings = {
-        ...defaultSettings,
-        ...mapKeys(currentSettings, (value, key) => replacementMap[key] || key),
-      }
-      return JSON.stringify(settings, null, 2)
-    } catch (e) {
-      //
-    }
-
-    return settingsString
-  }
-
-  componentWillReceiveProps(nextProps: PlaygroundWrapperProps) {
+  componentWillReceiveProps(nextProps: PlaygroundWrapperProps & ReduxProps) {
     if (
       nextProps.configString !== this.props.configString &&
       nextProps.configString
@@ -251,12 +227,12 @@ export default class PlaygroundWrapper extends React.Component<
         <title>{this.getTitle()}</title>
       </Helmet>
     ) : null
-    const theme = this.state.settings['editor.theme']
 
+    const { theme } = this.props
     return (
       <div>
         {title}
-        <ThemeProvider theme={{ ...styledTheme, mode: theme }}>
+        <ThemeProvider theme={{ ...styledTheme, mode: theme } as any}>
           <OldThemeProvider theme={theme}>
             <App>
               {this.props.config &&
@@ -285,10 +261,6 @@ export default class PlaygroundWrapper extends React.Component<
                   this.handleChangeSubscriptionsEndpoint
                 }
                 adminAuthToken={this.state.platformToken}
-                settings={this.normalizeSettings(this.state.settings)}
-                settingsString={this.state.settingsString}
-                onSaveSettings={this.handleSaveSettings}
-                onChangeSettings={this.handleChangeSettings}
                 getRef={this.getPlaygroundRef}
                 config={this.props.config!}
                 configString={this.state.configString!}
@@ -356,41 +328,6 @@ export default class PlaygroundWrapper extends React.Component<
       ),
       activeProjectName: projectName,
     })
-  }
-
-  private getSettings(settingsString = this.state.settingsString): ISettings {
-    try {
-      const settings = JSON.parse(settingsString)
-      return this.normalizeSettings(settings)
-    } catch (e) {
-      // ignore
-    }
-
-    return defaultSettings as any
-  }
-
-  private normalizeSettings(settings: ISettings) {
-    const theme = settings['editor.theme']
-    if (theme !== 'dark' && theme !== 'light') {
-      settings['editor.theme'] = 'dark'
-    }
-
-    return settings
-  }
-
-  private handleChangeSettings = (settingsString: string) => {
-    this.setState({ settingsString })
-  }
-
-  private handleSaveSettings = () => {
-    try {
-      const settings = JSON.parse(this.state.settingsString)
-      this.setState({ settings })
-      localStorage.setItem('settings', this.state.settingsString)
-    } catch (e) {
-      /* tslint:disable-next-line */
-      console.error(e)
-    }
   }
 
   private share = (session: any) => {
@@ -505,6 +442,12 @@ export default class PlaygroundWrapper extends React.Component<
     return endpoint.split('/').slice(-1)[0]
   }
 }
+
+const mapStateToProps = createStructuredSelector({
+  theme: getTheme,
+})
+
+export default connect(mapStateToProps)(PlaygroundWrapper)
 
 async function find(
   iterable: any[],

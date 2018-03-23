@@ -18,18 +18,19 @@ import { closeHistory, openHistory } from '../state/general/actions'
 import { duplicateSession } from '../state/sessions/actions'
 import { toggleHistoryItemStarring } from '../state/history/actions'
 import { Session } from '../state/sessions/reducers'
+import { OrderedMap } from 'immutable'
 
 export interface ReduxProps {
   isOpen: boolean
   closeHistory: () => void
-  historyItems: Session[]
+  items: OrderedMap<string, Session>
   toggleHistoryItemStarring: (sessionId: string) => void
   duplicateSession: (session: Session) => void
 }
 
 export interface State {
   selectedFilter: HistoryFilter
-  selectedItemIndex: number
+  selectedItemIndex: string
   searchTerm: string
 }
 
@@ -37,18 +38,19 @@ class HistoryPopup extends React.Component<
   ReduxProps & LocalThemeInterface,
   State
 > {
-  constructor(props) {
+  constructor(props: ReduxProps & LocalThemeInterface) {
     super(props)
+    const selectedItemIndex = props.items.keySeq().first() || ''
     this.state = {
       selectedFilter: 'HISTORY',
-      selectedItemIndex: 0,
+      selectedItemIndex,
       searchTerm: '',
     }
   }
   render() {
     const { searchTerm, selectedFilter } = this.state
     const { localTheme } = this.props
-    const items = this.props.historyItems.filter(item => {
+    const items = this.props.items.filter(item => {
       return selectedFilter === 'STARRED'
         ? item.starred
         : true &&
@@ -57,7 +59,9 @@ class HistoryPopup extends React.Component<
               : true)
     })
 
-    const selectedItem = items[this.state.selectedItemIndex]
+    const selectedItem = this.props.items.get(
+      this.state.selectedItemIndex!,
+    )!.toJS()
     let customModalStyle = modalStyle
     if (localTheme === 'light') {
       customModalStyle = {
@@ -137,22 +141,13 @@ class HistoryPopup extends React.Component<
   }
 
   private handleClickUse = () => {
-    const { searchTerm, selectedFilter } = this.state
-    // TODO refactor
-    const items = this.props.historyItems.filter(item => {
-      return selectedFilter === 'STARRED'
-        ? item.starred
-        : true &&
-            (searchTerm && searchTerm.length > 0
-              ? item.query.toLowerCase().includes(searchTerm.toLowerCase())
-              : true)
-    })
-    const selectedItem = items[this.state.selectedItemIndex]
+    const { items } = this.props
+    const selectedItem = items.get(this.state.selectedItemIndex)!
     this.props.duplicateSession(selectedItem)
     this.props.closeHistory()
   }
 
-  private handleItemSelect = (index: number) => {
+  private handleItemSelect = (index: string) => {
     this.setState({ selectedItemIndex: index } as State)
   }
 

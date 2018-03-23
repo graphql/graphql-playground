@@ -27,7 +27,7 @@ class Settings extends React.Component<Props, {}> {
   }
 }
 
-export default connect(null, { openSettingsTab })(Settings)
+export default connect(null, { onClick: openSettingsTab })(Settings)
 
 const Wrapper = styled.div`
   position: absolute;

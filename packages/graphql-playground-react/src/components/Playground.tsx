@@ -33,7 +33,11 @@ import {
   getFile,
   getHeaders,
 } from '../state/sessions/selectors'
-import { getHistoryOpen } from '../state/general/selectors'
+import {
+  getHistoryOpen,
+  getSettings,
+  getSettingsString,
+} from '../state/general/selectors'
 import {
   setLinkCreator,
   schemaFetcher,
@@ -67,8 +71,6 @@ export interface Props {
   onSaveConfig: () => void
   onChangeConfig: (configString: string) => void
   onUpdateSessionCount?: () => void
-  settings: ISettings
-  settingsString: string
   config: GraphQLConfig
   configString: string
   configIsYaml: boolean
@@ -96,6 +98,8 @@ export interface ReduxProps {
   historyOpen: boolean
   file: string
   sessionHeaders?: any
+  settings: ISettings
+  settingsString: string
 }
 
 export interface State {
@@ -276,6 +280,8 @@ const mapStateToProps = createStructuredSelector({
   historyOpen: getHistoryOpen,
   file: getFile,
   sessionHeaders: getHeaders,
+  settings: getSettings,
+  settingsString: getSettingsString,
 })
 
 export default connect(mapStateToProps, {

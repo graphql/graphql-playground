@@ -7,6 +7,7 @@ import { connect } from 'react-redux'
 import { createStructuredSelector } from 'reselect'
 import { getSettingsString, getConfigString } from '../state/general/selectors'
 import { setSettingsString, setConfigString } from '../state/general/actions'
+import { editSettings, saveSettings } from '../state/sessions/actions'
 
 export interface Props {
   value: string
@@ -62,9 +63,50 @@ const playgroundSettingsSelector = createStructuredSelector({
   value: getSettingsString,
 })
 
+interface HOCProps {
+  editSettings: () => void
+  saveSettings: () => void
+  onSave: (value: string) => void
+}
+
+// tslint:disable
+class SettingsEditorHOC extends React.Component<
+  Props & HOCProps,
+  { value: string }
+> {
+  constructor(props) {
+    super(props)
+    this.state = { value: props.value }
+  }
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.value !== this.props.value) {
+      this.setState({ value: nextProps.value })
+    }
+  }
+  render() {
+    return (
+      <SettingsEditor
+        value={this.state.value}
+        onChange={this.handleChange}
+        onSave={this.handleSave}
+      />
+    )
+  }
+  handleChange = value => {
+    this.setState({ value })
+    this.props.editSettings()
+  }
+  handleSave = () => {
+    this.props.onSave(this.state.value)
+    this.props.saveSettings()
+  }
+}
+
 export const PlaygroundSettingsEditor = connect(playgroundSettingsSelector, {
-  onChange: setSettingsString,
-})(SettingsEditor)
+  onSave: setSettingsString,
+  editSettings,
+  saveSettings,
+})(SettingsEditorHOC)
 
 const configSelector = createStructuredSelector({
   value: getConfigString,

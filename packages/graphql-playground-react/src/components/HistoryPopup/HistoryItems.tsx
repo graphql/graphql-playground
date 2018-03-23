@@ -2,11 +2,12 @@ import * as React from 'react'
 import { Icon, $v } from 'graphcool-styles'
 import * as cx from 'classnames'
 import { Session } from '../../state/sessions/reducers'
+import { OrderedMap } from 'immutable'
 
 export interface Props {
-  items: Session[]
-  selectedItemIndex: number
-  onItemSelect: (index: number) => void
+  items: OrderedMap<string, Session>
+  selectedItemIndex: string
+  onItemSelect: (index: string) => void
   onItemStarToggled: (sessionId: string) => void
   searchTerm: string
 }
@@ -71,58 +72,61 @@ const HistoryItems = ({
         @inherit: .ml6;
       }
     `}</style>
-    {items.map((item, index) => (
-      <div
-        key={item.id}
-        className={cx('item', {
-          active: selectedItemIndex === index,
-        })}
-        onClick={() => onItemSelect(index)}
-      >
-        <div className="left">
-          <div className="star" onClick={() => onItemStarToggled(item.id)}>
-            <Icon
-              src={require('../../assets/icons/star.svg')}
-              color={item.starred ? 'rgb(221,171,0)' : $v.gray30}
-              stroke={!item.starred}
-              strokeWidth={0.5}
-              width={25}
-              height={25}
-            />
-          </div>
-          <div className="operation">
-            <div className="operation-text">
-              {item.operationName ||
-                item.queryTypes.firstOperationName ||
-                'New Session'}
+    {items
+      .map((item, index) => (
+        <div
+          key={item.id}
+          className={cx('item', {
+            active: selectedItemIndex === index,
+          })}
+          onClick={() => onItemSelect(index)}
+        >
+          <div className="left">
+            <div className="star" onClick={() => onItemStarToggled(item.id)}>
+              <Icon
+                src={require('../../assets/icons/star.svg')}
+                color={item.starred ? 'rgb(221,171,0)' : $v.gray30}
+                stroke={!item.starred}
+                strokeWidth={0.5}
+                width={25}
+                height={25}
+              />
             </div>
-            {item.queryTypes.query && (
-              <div className="operation-icon query">Q</div>
-            )}
-            {item.queryTypes.mutation && (
-              <div className="operation-icon mutation">M</div>
-            )}
-            {item.queryTypes.subscription && (
-              <div className="operation-icon subscription">S</div>
-            )}
-          </div>
-        </div>
-        <div className="right">
-          {item.date && (
-            <div className="date">
-              {typeof item.date.getMonth === 'function' && (
-                <span>
-                  {item.date.getMonth() + 1}/{item.date.getDate()}/{item.date
-                    .getFullYear()
-                    .toString()
-                    .slice(2, 4)}
-                </span>
+            <div className="operation">
+              <div className="operation-text">
+                {item.operationName ||
+                  item.queryTypes.firstOperationName ||
+                  'New Session'}
+              </div>
+              {item.queryTypes.query && (
+                <div className="operation-icon query">Q</div>
+              )}
+              {item.queryTypes.mutation && (
+                <div className="operation-icon mutation">M</div>
+              )}
+              {item.queryTypes.subscription && (
+                <div className="operation-icon subscription">S</div>
               )}
             </div>
-          )}
+          </div>
+          <div className="right">
+            {item.date && (
+              <div className="date">
+                {typeof item.date.getMonth === 'function' && (
+                  <span>
+                    {item.date.getMonth() + 1}/{item.date.getDate()}/{item.date
+                      .getFullYear()
+                      .toString()
+                      .slice(2, 4)}
+                  </span>
+                )}
+              </div>
+            )}
+          </div>
         </div>
-      </div>
-    ))}
+      ))
+      .toArray()
+      .map(x => x[1])}
   </div>
 )
 

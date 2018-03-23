@@ -13,7 +13,7 @@ export default handleActions(
       state.setIn([sessionId, 'starred'], !state.getIn([sessionId, 'starred'])),
     ADD_HISTORY_ITEM: (state, { payload: { session } }) => {
       const id = cuid()
-      state.set(
+      return state.set(
         id,
         session.merge({
           id,

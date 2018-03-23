@@ -1,11 +1,19 @@
 import { Record } from 'immutable'
 import { handleActions } from 'redux-actions'
 
+export const defaultSettings = {
+  'general.betaUpdates': false,
+  'editor.theme': 'dark',
+  'editor.reuseHeaders': true,
+  'request.credentials': 'omit',
+  'tracing.hideTracingResponse': true,
+}
+
 export class GeneralState extends Record({
   historyOpen: false,
   fixedEndpoint: false,
   endpoint: '',
-  settingsString: '',
+  settingsString: JSON.stringify(defaultSettings, null, 2),
   configString: '',
   envVars: {},
 }) {
@@ -30,11 +38,3 @@ export default handleActions(
   },
   new GeneralState(),
 )
-
-export const defaultSettings = {
-  'general.betaUpdates': false,
-  'editor.theme': 'dark',
-  'editor.reuseHeaders': true,
-  'request.credentials': 'omit',
-  'tracing.hideTracingResponse': true,
-}

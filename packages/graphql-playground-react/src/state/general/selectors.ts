@@ -16,9 +16,20 @@ export const getSettings = createSelector(
   [getSettingsString],
   (settingsString: any) => {
     try {
-      return JSON.parse(settingsString)
+      return normalizeSettings(JSON.parse(settingsString))
     } catch (e) {
       return defaultSettings
     }
   },
 )
+
+function normalizeSettings(settings) {
+  const theme = settings['editor.theme']
+  if (theme !== 'dark' && theme !== 'light') {
+    settings['editor.theme'] = 'dark'
+  }
+
+  return settings
+}
+
+export const getTheme = createSelector([getSettings], s => s.theme || 'dark')

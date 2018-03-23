@@ -151,7 +151,7 @@ export const {
     filePath,
     file,
   }),
-  DUPLICATE_SESSION: simpleAction('sessionId'),
+  DUPLICATE_SESSION: simpleAction('session'),
   CLOSE_SELECTED_TAB: () => ({}),
   SELECT_NEXT_TAB: () => ({}),
   SELECT_PREV_TAB: () => ({}),
