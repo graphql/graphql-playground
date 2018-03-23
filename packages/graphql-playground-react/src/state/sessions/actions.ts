@@ -54,6 +54,7 @@ export const {
   queryError,
   setSubscriptionActive,
   setQueryTypes,
+  injectHeaders,
 } = createActions({
   // simple property setting
   EDIT_QUERY: simpleAction('query'),
@@ -75,6 +76,7 @@ export const {
 
   UPDATE_QUERY_FACTS: simpleAction(),
   PRETTIFY_QUERY: simpleAction(),
+  INJECT_HEADERS: (headers, endpoint) => ({ headers, endpoint }),
 
   // setting multiple props
   /*

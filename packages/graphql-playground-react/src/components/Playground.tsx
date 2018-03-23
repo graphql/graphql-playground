@@ -42,6 +42,7 @@ import {
 import { Session } from '../state/sessions/reducers'
 import { getWorkspaceId } from './Playground/util/getWorkspaceId'
 import { getSettings, getSettingsString } from '../state/workspace/reducers'
+import { injectHeaders } from '../lib'
 
 export interface Response {
   resultID: string
@@ -89,6 +90,7 @@ export interface ReduxProps {
   saveConfig: () => void
   saveSettings: () => void
   setTracingSupported: (value: boolean) => void
+  injectHeaders: (headers: string, endpoint: string) => void
   isConfigTab: boolean
   isSettingsTab: boolean
   isFile: boolean
@@ -137,6 +139,7 @@ export class Playground extends React.PureComponent<Props & ReduxProps, State> {
   componentWillMount() {
     // init redux
     this.props.initState(getWorkspaceId(this.props), this.props.endpoint)
+    this.props.injectHeaders(this.props.headers, this.props.endpoint)
   }
 
   componentDidMount() {
@@ -168,6 +171,9 @@ export class Playground extends React.PureComponent<Props & ReduxProps, State> {
     }
     if (this.props.subscriptionEndpoint !== nextProps.subscriptionEndpoint) {
       setSubscriptionEndpoint(nextProps.subscriptionEndpoint)
+    }
+    if (nextProps.headers !== this.props.headers) {
+      this.props.injectHeaders(nextProps.headers, nextProps.endpoint)
     }
   }
 
@@ -291,6 +297,7 @@ export default connect(mapStateToProps, {
   saveSettings,
   saveConfig,
   setTracingSupported,
+  injectHeaders,
 })(Playground)
 
 const PlaygroundWrapper = styled.div`

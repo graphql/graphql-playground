@@ -60,6 +60,7 @@ function deserializeSessionsState(state) {
     selectedSessionId: state.selectedSessionId,
     sessions,
     sessionCount: sessions.size,
+    headers: state.headers,
   })
 }
 

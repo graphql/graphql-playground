@@ -19,13 +19,14 @@ import {
   setQueryTypes,
 } from './actions'
 import { getSelectedSessionId } from './selectors'
-import { getDefaultSession } from '../../constants'
+import { getDefaultSession, defaultQuery } from '../../constants'
 import * as cuid from 'cuid'
 
 export interface SessionStateProps {
   sessions: OrderedMap<string, Session>
   selectedSessionId: string
   sessionCount: number
+  headers?: string
 }
 
 // tslint:disable
@@ -137,10 +138,12 @@ export class SessionState extends Record({
   sessions: OrderedMap({}),
   selectedSessionId: '',
   sessionCount: 0,
+  headers: '',
 }) {
   sessions: OrderedMap<string, Session>
   selectedSessionId: string
   sessionCount: number
+  headers: string
 }
 
 export function makeSessionState(endpoint) {
@@ -337,8 +340,39 @@ export default handleActions(
         const selectedSessionId = getSelectedSessionId(state)
         const currentSession = state.sessions.get(selectedSessionId)
         session = session.set('headers', currentSession.headers)
+      } else {
+        session = session.set('headers', state.headers)
       }
       return state
+        .setIn(['sessions', session.id], session)
+        .set('selectedSessionId', session.id)
+        .set('sessionCount', state.sessions.size + 1)
+    },
+    // inject headers is used for graphql config
+    // it makes sure, that there definitely is a tab open with the correct header
+    INJECT_HEADERS: (state, { payload: { headers, endpoint } }) => {
+      // if there are no headers to inject, there's nothing to do
+      if (!headers || headers === '') {
+        return state
+      }
+      const selectedSessionId = getSelectedSessionId(state)
+      let newState = state.set('headers', headers)
+      const currentSession = state.sessions.get(selectedSessionId)
+
+      if (currentSession.headers === headers) {
+        return newState
+      }
+
+      if (currentSession.query === defaultQuery) {
+        return newState.setIn(
+          ['sessions', selectedSessionId, 'headers'],
+          JSON.stringify(headers, null, 2),
+        )
+      }
+
+      const session = makeSession(endpoint).set('headers', headers)
+
+      return newState
         .setIn(['sessions', session.id], session)
         .set('selectedSessionId', session.id)
         .set('sessionCount', state.sessions.size + 1)
