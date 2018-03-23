@@ -1,6 +1,5 @@
 import * as React from 'react'
 import { remote, ipcRenderer, webFrame } from 'electron'
-import { Provider } from 'react-redux'
 import * as cx from 'classnames'
 import { Playground as IPlayground } from 'graphql-playground-react/lib/components/Playground'
 import Playground from 'graphql-playground-react'
@@ -11,7 +10,6 @@ import {
   resolveEnvsInValues,
 } from 'graphql-config'
 import { createRemoteWindow } from '../../shared/utils'
-import createStore from '../redux/createStore'
 import InitialView from './InitialView/InitialView'
 import * as minimist from 'minimist'
 import * as fs from 'fs'
@@ -25,7 +23,6 @@ import { patchEndpointsToConfigData } from 'graphql-config-extension-graphcool'
 
 const { dialog } = remote
 
-const store = createStore()
 // declare var p: IPlayground
 
 interface State {
@@ -508,59 +505,57 @@ cd ${folderPath}; graphql playground`)
     const { theme, endpoint, platformToken, configString, config } = this.state
 
     return (
-      <Provider store={store}>
-        <div className={cx('root', theme, { noConfig: !configString })}>
-          <style jsx={true} global={true}>{`
-            .app-content .left-content {
-              letter-spacing: 0.5px;
-            }
-            body .root.noConfig .tabs {
-              padding-left: 80px;
-            }
-          `}</style>
-          <style jsx={true}>{`
-            .root {
-              @p: .flex, .flexColumn, .bgDarkestBlue, .overflowHidden;
-            }
-            .root.light {
-              background-color: #dbdee0;
-            }
-            .app-content .playground {
-              @p: .flex1;
-            }
-            .light .sidenav-footer {
-              background-color: #eeeff0;
-            }
-            .sidenav-footer .button {
-              @p: .br2, .black90, .pointer, .pa10, .fw6, .flex, .itemsCenter,
-                .ml20;
-            }
-          `}</style>
-          <InitialView
-            isOpen={!endpoint && !configString}
-            onSelectFolder={this.handleSelectFolder}
-            onSelectEndpoint={this.handleSelectEndpoint}
-          />
-          {(endpoint || configString) && (
-            <div className="playground">
-              <Playground
-                getRef={this.setRef}
-                endpoint={endpoint}
-                isElectron={true}
-                platformToken={platformToken}
-                configString={configString}
-                config={config}
-                onSaveConfig={this.saveConfig}
-                canSaveConfig={true}
-                env={this.state.env}
-                folderName={this.state.folderName}
-                showNewWorkspace={true}
-                onNewWorkspace={this.handleOpenNewWindow}
-              />
-            </div>
-          )}
-        </div>
-      </Provider>
+      <div className={cx('root', theme, { noConfig: !configString })}>
+        <style jsx={true} global={true}>{`
+          .app-content .left-content {
+            letter-spacing: 0.5px;
+          }
+          body .root.noConfig .tabs {
+            padding-left: 80px;
+          }
+        `}</style>
+        <style jsx={true}>{`
+          .root {
+            @p: .flex, .flexColumn, .bgDarkestBlue, .overflowHidden;
+          }
+          .root.light {
+            background-color: #dbdee0;
+          }
+          .app-content .playground {
+            @p: .flex1;
+          }
+          .light .sidenav-footer {
+            background-color: #eeeff0;
+          }
+          .sidenav-footer .button {
+            @p: .br2, .black90, .pointer, .pa10, .fw6, .flex, .itemsCenter,
+              .ml20;
+          }
+        `}</style>
+        <InitialView
+          isOpen={!endpoint && !configString}
+          onSelectFolder={this.handleSelectFolder}
+          onSelectEndpoint={this.handleSelectEndpoint}
+        />
+        {(endpoint || configString) && (
+          <div className="playground">
+            <Playground
+              getRef={this.setRef}
+              endpoint={endpoint}
+              isElectron={true}
+              platformToken={platformToken}
+              configString={configString}
+              config={config}
+              onSaveConfig={this.saveConfig}
+              canSaveConfig={true}
+              env={this.state.env}
+              folderName={this.state.folderName}
+              showNewWorkspace={true}
+              onNewWorkspace={this.handleOpenNewWindow}
+            />
+          </div>
+        )}
+      </div>
     )
   }
 

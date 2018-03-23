@@ -101,7 +101,7 @@ class ProjectsSideNav extends React.Component<Props & ReduxProps, {}> {
             configPath: this.props.configPath,
             workspaceName: projectName,
           }),
-        ) || 0
+        ) || 1
       return (
         <ProjectsSideNavItem
           key={env}

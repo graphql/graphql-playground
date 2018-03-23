@@ -39,13 +39,17 @@ class Tooltip extends React.PureComponent<Props, {}> {
       return
     }
 
-    const domNode = ReactDOM.findDOMNode(this)
+    try {
+      const domNode = ReactDOM.findDOMNode(this as any)
 
-    if (
-      (!domNode || !domNode.contains(event.target)) &&
-      typeof this.props.onClose !== 'undefined'
-    ) {
-      this.props.onClose(event)
+      if (
+        (!domNode || !domNode.contains(event.target)) &&
+        typeof this.props.onClose !== 'undefined'
+      ) {
+        this.props.onClose(event)
+      }
+    } catch (e) {
+      //
     }
   }
 
