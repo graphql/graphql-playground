@@ -5,7 +5,9 @@ export function serializeState(store) {
   return debounce(
     () => {
       const state = store.getState()
-      localStorage.setItem('graphql-playground', JSON.stringify(state))
+      if (!state.stateInjected) {
+        localStorage.setItem('graphql-playground', JSON.stringify(state))
+      }
     },
     300,
     { trailing: true },

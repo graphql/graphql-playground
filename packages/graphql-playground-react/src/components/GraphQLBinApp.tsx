@@ -1,11 +1,12 @@
 import * as React from 'react'
-import { Provider } from 'react-redux'
+import { Provider, connect } from 'react-redux'
 import createStore from '../state/createStore'
-import MiddlewareApp from './MiddlewareApp'
 import 'isomorphic-fetch'
 import EndpointPopup from './EndpointPopup'
 import { ThemeProvider, theme as styledTheme } from '../styled'
 import { Store } from 'redux'
+import PlaygroundWrapper from './PlaygroundWrapper'
+import { injectState } from '../state/workspace/actions'
 
 export const store: Store<any> = createStore()
 
@@ -32,11 +33,14 @@ export interface State {
   subscriptionEndpoint?: string
   shareUrl?: string
   loading: boolean
-  session?: any
 }
 
-export default class App extends React.Component<Props, State> {
-  constructor(props: Props) {
+export interface ReduxProps {
+  injectState: (state: any) => void
+}
+
+class GraphQLBinApp extends React.Component<Props & ReduxProps, State> {
+  constructor(props: Props & ReduxProps) {
     super(props)
 
     this.state = {
@@ -93,8 +97,9 @@ export default class App extends React.Component<Props, State> {
           if (!res.data || res.data.session === null) {
             return this.props.history.push('/new')
           }
+          const state = JSON.parse(res.data.session.session)
+          this.props.injectState(state)
           this.setState({
-            session: JSON.parse(res.data.session.session),
             endpoint: res.data.session.endpoint,
             loading: false,
           })
@@ -113,44 +118,54 @@ export default class App extends React.Component<Props, State> {
     }
 
     return (
-      <Provider store={store}>
-        <div className={'wrapper'}>
-          <style jsx={true}>{`
-            .wrapper {
-              @p: .w100, .h100;
-            }
-            .loading {
-              @p: .f20, .white, .flex, .w100, .h100, .bgDarkBlue, .itemsCenter,
-                .justifyCenter;
-            }
-          `}</style>
+      <div className={'wrapper'}>
+        <style jsx={true}>{`
+          .wrapper {
+            @p: .w100, .h100;
+          }
+          .loading {
+            @p: .f20, .white, .flex, .w100, .h100, .bgDarkBlue, .itemsCenter,
+              .justifyCenter;
+          }
+        `}</style>
 
-          {this.state.loading ? null : !this.state.endpoint ||
-          this.state.endpoint.length === 0 ? (
-            <ThemeProvider theme={styledTheme}>
-              <EndpointPopup
-                onRequestClose={this.handleChangeEndpoint}
-                endpoint={
-                  this.state.endpoint ||
-                  localStorage.getItem('last-endpoint') ||
-                  ''
-                }
-              />
-            </ThemeProvider>
-          ) : (
-            <MiddlewareApp
-              endpoint={endpoint}
-              subscriptionEndpoint={subscriptionEndpoint}
-              session={this.state.session}
+        {this.state.loading ? null : !this.state.endpoint ||
+        this.state.endpoint.length === 0 ? (
+          <ThemeProvider theme={styledTheme}>
+            <EndpointPopup
+              onRequestClose={this.handleChangeEndpoint}
+              endpoint={
+                this.state.endpoint ||
+                localStorage.getItem('last-endpoint') ||
+                ''
+              }
             />
-          )}
-        </div>
-      </Provider>
+          </ThemeProvider>
+        ) : (
+          <PlaygroundWrapper
+            endpoint={endpoint}
+            subscriptionEndpoint={subscriptionEndpoint}
+          />
+        )}
+      </div>
     )
   }
 
   private handleChangeEndpoint = endpoint => {
     this.setState({ endpoint })
     localStorage.setItem('last-endpoint', endpoint)
+  }
+}
+
+const ConnectedGraphQLBinApp = connect(null, { injectState })(GraphQLBinApp)
+
+// tslint:disable
+export default class GraphQLBinAppHOC extends React.Component<Props> {
+  render() {
+    return (
+      <Provider store={store}>
+        <ConnectedGraphQLBinApp {...this.props} />
+      </Provider>
+    )
   }
 }

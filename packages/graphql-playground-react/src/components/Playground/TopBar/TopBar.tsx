@@ -4,7 +4,7 @@ import * as theme from 'styled-theming'
 import { darken, lighten } from 'polished'
 import * as copy from 'copy-to-clipboard'
 
-import Share, { SharingProps } from '../../Share'
+import Share from '../../Share'
 import ReloadIcon from './ReloadIcon'
 import { keyframes, StyledComponentClass } from 'styled-components'
 import * as cx from 'classnames'
@@ -29,7 +29,6 @@ export interface Props {
   endpoint: string
   fixedEndpoint?: boolean
   isReloadingSchema: boolean
-  sharing?: SharingProps
   endpointUnreachable: boolean
 
   editEndpoint: (value: string) => void
@@ -75,11 +74,9 @@ class TopBar extends React.Component<Props, {}> {
           )}
         </UrlBarWrapper>
         <Button onClick={this.copyCurlToClipboard}>Copy CURL</Button>
-        {this.props.sharing && (
-          <Share {...this.props.sharing}>
-            <Button>Share Playground</Button>
-          </Share>
-        )}
+        <Share>
+          <Button>Share Playground</Button>
+        </Share>
       </TopBarWrapper>
     )
   }

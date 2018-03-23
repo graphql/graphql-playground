@@ -7,15 +7,31 @@ import { LocalThemeInterface } from './Theme'
 import { Button } from './Button'
 import Copy from './Copy'
 import { keyframes, styled } from '../styled'
+import { connect } from 'react-redux'
+import { createStructuredSelector } from 'reselect'
+import {
+  getSharingHistory,
+  getSharingHeaders,
+  getSharingAllTabs,
+  getShareUrl,
+} from '../state/sharing/selectors'
+import {
+  toggleShareHistory,
+  toggleShareHeaders,
+  toggleShareAllTabs,
+  share,
+} from '../state/sharing/actions'
 
 export interface SharingProps extends LocalThemeInterface {
   allTabs: boolean
-  httpHeaders: boolean
+  headers: boolean
   history: boolean
-  onToggleAllTabs: () => void
-  onToggleHttpHeaders: () => void
-  onToggleHistory: () => void
-  onShare: () => void
+
+  toggleShareHistory: () => void
+  toggleShareHeaders: () => void
+  toggleShareAllTabs: () => void
+  share: () => void
+
   shareUrl?: string
   reshare: boolean
   isSharingAuthorization: boolean
@@ -26,7 +42,7 @@ export interface State {
   open: boolean
 }
 
-export default class Share extends React.Component<SharingProps, State> {
+class Share extends React.Component<SharingProps, State> {
   constructor(props) {
     super(props)
     this.state = {
@@ -35,17 +51,7 @@ export default class Share extends React.Component<SharingProps, State> {
   }
   render() {
     const { open } = this.state
-    const {
-      allTabs,
-      httpHeaders,
-      history,
-      onToggleAllTabs,
-      onToggleHistory,
-      onToggleHttpHeaders,
-      shareUrl,
-      onShare,
-      reshare,
-    } = this.props
+    const { allTabs, headers, history, shareUrl, reshare } = this.props
     return (
       <Wrapper>
         <IconWrapper>
@@ -63,30 +69,30 @@ export default class Share extends React.Component<SharingProps, State> {
               >
                 <div>
                   <Row>
-                    <TooltipText onClick={onToggleAllTabs}>
+                    <TooltipText onClick={this.props.toggleShareAllTabs}>
                       Share all tabs{' '}
                     </TooltipText>
                     <ToggleButton
                       checked={allTabs}
-                      onChange={onToggleAllTabs}
+                      onChange={this.props.toggleShareAllTabs}
                     />
                   </Row>
                   <Row>
-                    <TooltipText onClick={onToggleHttpHeaders}>
+                    <TooltipText onClick={this.props.toggleShareHeaders}>
                       HTTP headers{' '}
                     </TooltipText>
                     <ToggleButton
-                      checked={httpHeaders}
-                      onChange={onToggleHttpHeaders}
+                      checked={headers}
+                      onChange={this.props.toggleShareHeaders}
                     />
                   </Row>
                   <Row>
-                    <TooltipText onClick={onToggleHistory}>
+                    <TooltipText onClick={this.props.toggleShareHistory}>
                       History{' '}
                     </TooltipText>
                     <ToggleButton
                       checked={history}
-                      onChange={onToggleHistory}
+                      onChange={this.props.toggleShareHistory}
                     />
                   </Row>
                   {shareUrl && (
@@ -106,7 +112,7 @@ export default class Share extends React.Component<SharingProps, State> {
                   )}
                   <Row>
                     <div />
-                    <Button hideArrow={true} onClick={onShare}>
+                    <Button hideArrow={true} onClick={this.share}>
                       {reshare && shareUrl ? 'Reshare' : 'Share'}
                     </Button>
                   </Row>
@@ -117,6 +123,10 @@ export default class Share extends React.Component<SharingProps, State> {
         </IconWrapper>
       </Wrapper>
     )
+  }
+
+  private share = () => {
+    this.props.share()
   }
 
   private renderAuthSharingWarning = () => {
@@ -131,6 +141,20 @@ export default class Share extends React.Component<SharingProps, State> {
     this.setState(state => ({ open: !state.open }))
   }
 }
+
+const mapStateToProps = createStructuredSelector({
+  history: getSharingHistory,
+  headers: getSharingHeaders,
+  allTabs: getSharingAllTabs,
+  shareUrl: getShareUrl,
+})
+
+export default connect(mapStateToProps, {
+  toggleShareAllTabs,
+  toggleShareHeaders,
+  toggleShareHistory,
+  share,
+})(Share)
 
 const AuthSharingWarning = () => (
   <Message>

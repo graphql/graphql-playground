@@ -1,7 +1,6 @@
 import * as React from 'react'
 import Playground, { Playground as IPlayground } from './Playground'
 import { Helmet } from 'react-helmet'
-import * as fetch from 'isomorphic-fetch'
 import { GraphQLConfig } from '../graphqlConfig'
 import * as yaml from 'js-yaml'
 import ProjectsSideNav from './ProjectsSideNav'
@@ -14,9 +13,9 @@ import {
 import OldThemeProvider from './Theme/ThemeProvider'
 import { getActiveEndpoints } from './util'
 import { ISettings } from '../types'
-import { getTheme } from '../state/general/selectors'
 import { createStructuredSelector } from 'reselect'
 import { connect } from 'react-redux'
+import { getTheme } from '../state/workspace/reducers'
 
 function getParameterByName(name: string): string | null {
   const url = window.location.href
@@ -44,10 +43,10 @@ export interface PlaygroundWrapperProps {
   onNewWorkspace?: () => void
   getRef?: (ref: any) => void
   platformToken?: string
-  session?: any
   env?: any
   config?: GraphQLConfig
   configPath?: string
+  injectedState?: any
 }
 
 export interface ReduxProps {
@@ -254,7 +253,6 @@ class PlaygroundWrapper extends React.Component<
               <Playground
                 endpoint={this.state.endpoint}
                 subscriptionEndpoint={this.state.subscriptionEndpoint}
-                share={this.share}
                 shareUrl={this.state.shareUrl}
                 onChangeEndpoint={this.handleChangeEndpoint}
                 onChangeSubscriptionsEndpoint={
@@ -270,7 +268,6 @@ class PlaygroundWrapper extends React.Component<
                 onSaveConfig={this.handleSaveConfig}
                 onUpdateSessionCount={this.handleUpdateSessionCount}
                 fixedEndpoints={Boolean(this.state.configString)}
-                session={this.props.session}
                 headers={this.state.headers}
                 configPath={this.props.configPath}
                 workspaceName={this.state.activeProjectName}
@@ -328,42 +325,6 @@ class PlaygroundWrapper extends React.Component<
       ),
       activeProjectName: projectName,
     })
-  }
-
-  private share = (session: any) => {
-    fetch('https://api.graph.cool/simple/v1/cj81hi46q03c30196uxaswrz2', {
-      method: 'post',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        query: `
-        mutation ($session: String! $endpoint: String!) {
-          addSession(session: $session endpoint: $endpoint) {
-            id
-          }
-        }
-      `,
-        variables: {
-          session: JSON.stringify(session),
-          endpoint: this.normalizeEndpoint(this.state.endpoint),
-        },
-      }),
-    })
-      .then(res => res.json())
-      .then(res => {
-        const shareUrl = `https://graphqlbin.com/${res.data.addSession.id}`
-        // const shareUrl = `${location.origin}/${res.data.addSession.id}`
-        this.setState({ shareUrl })
-      })
-  }
-
-  private normalizeEndpoint(endpoint) {
-    if (!endpoint.match(/https?:\/\/(.*?)\//)) {
-      return location.origin + endpoint
-    } else {
-      return endpoint
-    }
   }
 
   private handleChangeEndpoint = endpoint => {

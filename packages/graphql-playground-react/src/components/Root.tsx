@@ -7,7 +7,7 @@ export default class Root extends React.Component<{}, {}> {
     return (
       <BrowserRouter>
         <Switch>
-          <Route path="/:id" component={GraphQLBinApp} />
+          <Route path="/v2/:id" component={GraphQLBinApp} />
           <Redirect from="/" to="/new" component={GraphQLBinApp} />
         </Switch>
       </BrowserRouter>

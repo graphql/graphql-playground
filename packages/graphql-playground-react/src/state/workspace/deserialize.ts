@@ -10,6 +10,7 @@ export function deserializePersistedState(state) {
   return new RootState({
     workspaces: deserializeWorkspaces(state.workspaces),
     selectedWorkspace: state.selectedWorkspace,
+    settingsString: state.settingsString,
   }) as any
 }
 

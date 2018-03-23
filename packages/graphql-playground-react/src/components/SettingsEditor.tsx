@@ -5,9 +5,10 @@ import { Button } from './Playground/TopBar/TopBar'
 import { ConfigEditor } from './Playground/ConfigEditor'
 import { connect } from 'react-redux'
 import { createStructuredSelector } from 'reselect'
-import { getSettingsString, getConfigString } from '../state/general/selectors'
+import { getConfigString } from '../state/general/selectors'
 import { setSettingsString, setConfigString } from '../state/general/actions'
 import { editSettings, saveSettings } from '../state/sessions/actions'
+import { getSettingsString } from '../state/workspace/reducers'
 
 export interface Props {
   value: string

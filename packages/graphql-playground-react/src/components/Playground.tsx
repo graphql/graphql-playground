@@ -33,11 +33,7 @@ import {
   getFile,
   getHeaders,
 } from '../state/sessions/selectors'
-import {
-  getHistoryOpen,
-  getSettings,
-  getSettingsString,
-} from '../state/general/selectors'
+import { getHistoryOpen } from '../state/general/selectors'
 import {
   setLinkCreator,
   schemaFetcher,
@@ -45,6 +41,7 @@ import {
 } from '../state/sessions/fetchingSagas'
 import { Session } from '../state/sessions/reducers'
 import { getWorkspaceId } from './Playground/util/getWorkspaceId'
+import { getSettings, getSettingsString } from '../state/workspace/reducers'
 
 export interface Response {
   resultID: string

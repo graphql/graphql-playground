@@ -7,6 +7,8 @@ import history, { HistoryState } from '../history/reducers'
 import { Map, Record, OrderedMap } from 'immutable'
 import general, { GeneralState } from '../general/reducers'
 import { immutableMemoize } from '../../components/Playground/util/immutableMemoize'
+import { createSelector } from 'reselect'
+import { deserializePersistedState } from './deserialize'
 // import { createSelector } from 'reselect'
 
 export function getSelectedWorkspaceId(state) {
@@ -31,9 +33,19 @@ export class Workspace extends Record({
   general: GeneralState
 }
 
+export const defaultSettings = {
+  'general.betaUpdates': false,
+  'editor.theme': 'dark',
+  'editor.reuseHeaders': true,
+  'request.credentials': 'omit',
+  'tracing.hideTracingResponse': true,
+}
+
 export const RootState = Record<any>({
   workspaces: Map({ '': makeWorkspace('') }),
   selectedWorkspace: '',
+  settingsString: JSON.stringify(defaultSettings, null, 2),
+  stateInjected: false,
 })
 
 const workspaceReducers: Reducer<any> = combineReducers({
@@ -50,7 +62,11 @@ export const rootReducer = (state = new RootState(), action) => {
     return state.set('selectedWorkspace', action.payload.workspace)
   }
 
-  if (action.type === 'INIT_STATE') {
+  if (action.type === 'SET_SETTINGS_STRING') {
+    return state.set('settingsString', action.payload.settingsString)
+  }
+
+  if (action.type === 'INIT_STATE' && !state.stateInjected) {
     const { workspaceId, endpoint } = action.payload
     if (!state.workspaces.get(workspaceId)) {
       const newState = state.setIn(
@@ -60,6 +76,13 @@ export const rootReducer = (state = new RootState(), action) => {
       return newState.set('selectedWorkspace', workspaceId)
     }
     return state.set('selectedWorkspace', workspaceId)
+  }
+
+  if (action.type === 'INJECT_STATE') {
+    return deserializePersistedState(action.payload.state).set(
+      'stateInjected',
+      true,
+    )
   }
 
   const selectedWorkspaceId =
@@ -92,3 +115,26 @@ export default rootReducer
 export const getSessionCounts = immutableMemoize(state => {
   return state.workspaces.map(w => w.sessions.sessionCount)
 })
+
+export const getSettingsString = state => state.settingsString
+export const getSettings = createSelector(
+  [getSettingsString],
+  (settingsString: any) => {
+    try {
+      return normalizeSettings(JSON.parse(settingsString))
+    } catch (e) {
+      return defaultSettings
+    }
+  },
+)
+
+function normalizeSettings(settings) {
+  const theme = settings['editor.theme']
+  if (theme !== 'dark' && theme !== 'light') {
+    settings['editor.theme'] = 'dark'
+  }
+
+  return settings
+}
+
+export const getTheme = createSelector([getSettings], s => s.theme || 'dark')
