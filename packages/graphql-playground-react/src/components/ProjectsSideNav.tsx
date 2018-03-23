@@ -11,6 +11,7 @@ import { connect } from 'react-redux'
 import { getSessionCounts } from '../state/workspace/reducers'
 import { Map } from 'immutable'
 import { getWorkspaceId } from './Playground/util/getWorkspaceId'
+import { openConfigTab } from '../lib'
 
 export interface Props {
   config: GraphQLConfig
@@ -21,13 +22,13 @@ export interface Props {
   onNewWorkspace?: () => void
   showNewWorkspace: boolean
   isElectron: boolean
-  onEditConfig: () => void
   activeProjectName?: string
   configPath?: string
 }
 
 export interface ReduxProps {
   counts: Map<string, number>
+  openConfigTab: () => void
 }
 
 class ProjectsSideNav extends React.Component<Props & ReduxProps, {}> {
@@ -46,7 +47,7 @@ class ProjectsSideNav extends React.Component<Props & ReduxProps, {}> {
                 src={require('graphcool-styles/icons/fill/settings.svg')}
                 width={18}
                 height={18}
-                onClick={this.props.onEditConfig}
+                onClick={this.props.openConfigTab}
                 className={'settings-icon'}
               />
             </TitleRow>
@@ -122,7 +123,7 @@ const mapStateToProps = createStructuredSelector({
   counts: getSessionCounts,
 })
 
-export default connect(mapStateToProps)(ProjectsSideNav)
+export default connect(mapStateToProps, { openConfigTab })(ProjectsSideNav)
 
 const textColor = theme('mode', {
   light: p => p.theme.colours.white,

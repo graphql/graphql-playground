@@ -115,7 +115,7 @@ const configSelector = createStructuredSelector({
 
 export const GraphQLConfigEditor = connect(configSelector, {
   onChange: setConfigString,
-})
+})(SettingsEditor)
 
 const backgroundColor = theme('mode', {
   light: p => p.theme.colours.darkBlue10,

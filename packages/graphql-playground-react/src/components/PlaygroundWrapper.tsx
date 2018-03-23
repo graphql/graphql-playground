@@ -245,7 +245,6 @@ class PlaygroundWrapper extends React.Component<
                     onNewWorkspace={this.props.onNewWorkspace}
                     showNewWorkspace={Boolean(this.props.showNewWorkspace)}
                     isElectron={Boolean(this.props.isElectron)}
-                    onEditConfig={this.handleStartEditConfig}
                     activeProjectName={this.state.activeProjectName}
                     configPath={this.props.configPath}
                   />
@@ -288,11 +287,6 @@ class PlaygroundWrapper extends React.Component<
     if (typeof this.props.getRef === 'function') {
       this.props.getRef(ref)
     }
-  }
-
-  handleStartEditConfig = () => {
-    // TODO
-    // this.playground.openConfigTab()
   }
 
   handleChangeConfig = (configString: string) => {

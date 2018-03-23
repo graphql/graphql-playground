@@ -55,6 +55,7 @@ export const {
   setSubscriptionActive,
   setQueryTypes,
   injectHeaders,
+  openConfigTab,
 } = createActions({
   // simple property setting
   EDIT_QUERY: simpleAction('query'),
