@@ -1,6 +1,6 @@
 {
   "name": "graphql-playground-react",
-  "version": "1.4.3",
+  "version": "1.5.0-beta.1",
   "main": "./lib/lib.js",
   "typings": "./lib/lib.d.ts",
   "description": "GraphQL IDE for better development workflows (GraphQL Subscriptions, interactive docs & collaboration).",
@@ -43,7 +43,7 @@
     "@types/koa": "2.0.43",
     "@types/node": "9.4.0",
     "@types/react": "16.0.36",
-    "@types/react-dom": "16.0.3",
+    "@types/react-dom": "16.0.4",
     "@types/zen-observable": "^0.5.3",
     "autoprefixer": "7.2.5",
     "babel-cli": "6.26.0",

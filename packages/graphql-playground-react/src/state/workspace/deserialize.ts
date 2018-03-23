@@ -90,7 +90,8 @@ function deserializeResponse(response) {
   })
 }
 
-function deserializeSharing(state) {
+function deserializeSharing({ shareUrl, ...state }) {
+  // dont deserialize the shareUrl
   return new SharingState(state)
 }
 

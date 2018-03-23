@@ -78,13 +78,13 @@ class GraphQLBinApp extends React.Component<Props & ReduxProps, State> {
         },
         body: JSON.stringify({
           query: `
-        query ($id: String!) {
-          session(id: $id) {
-            session
-            endpoint
-          }
-        }
-      `,
+            query ($id: String!) {
+              session(id: $id) {
+                session
+                endpoint
+              }
+            }
+          `,
           variables: { id: this.props.match.params.id },
         }),
       })
@@ -95,7 +95,7 @@ class GraphQLBinApp extends React.Component<Props & ReduxProps, State> {
           }
 
           if (!res.data || res.data.session === null) {
-            return this.props.history.push('/new')
+            return this.props.history.push('/v2/new')
           }
           const state = JSON.parse(res.data.session.session)
           this.props.injectState(state)
@@ -134,11 +134,7 @@ class GraphQLBinApp extends React.Component<Props & ReduxProps, State> {
           <ThemeProvider theme={styledTheme}>
             <EndpointPopup
               onRequestClose={this.handleChangeEndpoint}
-              endpoint={
-                this.state.endpoint ||
-                localStorage.getItem('last-endpoint') ||
-                ''
-              }
+              endpoint={this.state.endpoint || ''}
             />
           </ThemeProvider>
         ) : (

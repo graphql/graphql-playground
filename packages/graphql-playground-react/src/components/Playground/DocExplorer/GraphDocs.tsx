@@ -1,5 +1,4 @@
 import * as React from 'react'
-import * as ReactDOM from 'react-dom'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import * as keycode from 'keycode'
@@ -59,6 +58,7 @@ class GraphDocs extends React.Component<
   Props & StateFromProps & DispatchFromProps,
   State
 > {
+  ref
   private refDocExplorer: any
   private clientX: number = 0
   private clientY: number = 0
@@ -129,6 +129,7 @@ class GraphDocs extends React.Component<
       <div
         className={cn('graph-docs docExplorerWrap docs', { open: docsOpen })}
         style={docsStyle}
+        ref={this.setRef}
       >
         <style jsx={true} global={true}>{`
           .graphiql-container .doc-category-title {
@@ -264,6 +265,10 @@ class GraphDocs extends React.Component<
     )
   }
 
+  setRef = ref => {
+    this.ref = ref
+  }
+
   public showDocFromType = type => {
     this.props.setDocsVisible(this.props.sessionId, true)
     this.props.addStack(this.props.sessionId, type, 0, 0)
@@ -385,7 +390,7 @@ class GraphDocs extends React.Component<
         return onMouseUp()
       }
 
-      const app = ReactDOM.findDOMNode(this)
+      const app = this.ref
       const cursorPos = moveEvent.clientX - getLeft(app) - offset
       const newSize = app.clientWidth - cursorPos
       const maxSize = window.innerWidth - 50

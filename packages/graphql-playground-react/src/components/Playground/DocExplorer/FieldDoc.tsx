@@ -1,5 +1,4 @@
 import * as React from 'react'
-import * as ReactDOM from 'react-dom'
 import Argument from './Argument'
 import { GraphQLEnumType, GraphQLUnionType, GraphQLScalarType } from 'graphql'
 import MarkdownContent from 'graphiql/dist/components/DocExplorer/MarkdownContent'
@@ -23,6 +22,7 @@ export interface State {
 
 export default class FieldDoc extends React.Component<Props, State> {
   state = { showDeprecated: false }
+  ref
 
   componentDidMount() {
     this.scrollToRight()
@@ -37,11 +37,15 @@ export default class FieldDoc extends React.Component<Props, State> {
   }
 
   scrollToRight() {
-    const explorer = ReactDOM.findDOMNode(this)
+    const explorer = this.ref
     const explorerDoc: any =
       explorer.parentNode && explorer.parentNode.parentNode
     // TODO see browser compatibility scrollWidth && scrollLeft
     scrollToRight(explorerDoc, explorerDoc.scrollWidth, 50)
+  }
+
+  setRef = ref => {
+    this.ref = ref
   }
 
   render() {
@@ -54,7 +58,7 @@ export default class FieldDoc extends React.Component<Props, State> {
       obj.fields.length + obj.interfaces.length + obj.args.length
 
     return (
-      <div>
+      <div ref={this.setRef}>
         <style jsx={true} global={true}>{`
           .doc-header .doc-category-item {
             @p: .fw6, .f14;
