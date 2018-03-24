@@ -67,11 +67,11 @@ export class SchemaFetcher {
            * DANGER! THIS IS AN EXTREME HACK. As soon, as codemirror-graphql doesn't use getType in .hint anymore
            * this can be removed.
            */
-          const oldGetType = schema.getType
-          schema.getType = type => {
-            const getTypeResult = oldGetType.call(schema, type)
-            return getTypeResult || type
-          }
+          // const oldGetType = schema.getType
+          // schema.getType = type => {
+          //   const getTypeResult = oldGetType.call(schema, type)
+          //   return getTypeResult || type
+          // }
           const tracingSupported =
             (schemaData.extensions && Boolean(schemaData.extensions.tracing)) ||
             false

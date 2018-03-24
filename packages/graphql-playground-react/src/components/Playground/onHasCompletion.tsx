@@ -93,9 +93,10 @@ export default function onHasCompletion(cm, data, onHintInformationRender) {
     const description = ctx.description
       ? marked(ctx.description, { sanitize: true })
       : ''
-    const type = ctx.type
-      ? '<span class="infoType">' + renderType(ctx.type) + '</span>'
-      : ''
+    const type =
+      ctx.type && ctx.type !== 'undefined'
+        ? '<span class="infoType">' + renderType(ctx.type) + '</span>'
+        : ''
 
     information.innerHTML =
       '<div class="content">' +
