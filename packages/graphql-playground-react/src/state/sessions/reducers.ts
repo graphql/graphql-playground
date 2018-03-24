@@ -4,6 +4,7 @@ import {
   editQuery,
   editVariables,
   editHeaders,
+  editTabName,
   editEndpoint,
   setEditorFlex,
   openQueryVariables,
@@ -33,6 +34,7 @@ export interface SessionStateProps {
 export class Session extends Record(getDefaultSession('')) {
   id: string
   endpoint: string
+  tabName: string
 
   query: string
   file?: string
@@ -162,6 +164,7 @@ export default handleActions(
       editQuery,
       editVariables,
       editHeaders,
+      editTabName,
       editEndpoint,
       setEditorFlex,
       openQueryVariables,

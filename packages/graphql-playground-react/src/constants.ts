@@ -128,6 +128,7 @@ export function getDefaultSession(endpoint: string) {
   return {
     id: cuid(),
     query: defaultQuery,
+    tabName: undefined,
     variables: '',
     responses: List([]),
     endpoint,
