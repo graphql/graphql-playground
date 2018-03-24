@@ -13,6 +13,7 @@ import {
   getEndpoint,
   getSelectedSession,
   getIsReloadingSchema,
+  getEndpointUnreachable,
 } from '../../../state/sessions/selectors'
 import { connect } from 'react-redux'
 import { getFixedEndpoint } from '../../../state/general/selectors'
@@ -143,6 +144,7 @@ const mapStateToProps = createStructuredSelector({
   endpoint: getEndpoint,
   fixedEndpoint: getFixedEndpoint,
   isReloadingSchema: getIsReloadingSchema,
+  endpointUnreachable: getEndpointUnreachable,
 })
 
 export default connect(mapStateToProps, {

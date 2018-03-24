@@ -44,6 +44,7 @@ import {
 import { Session } from '../state/sessions/reducers'
 import { getWorkspaceId } from './Playground/util/getWorkspaceId'
 import { getSettings, getSettingsString } from '../state/workspace/reducers'
+import { schemaFetchingError, schemaFetchingSuccess } from '../lib'
 
 export interface Response {
   resultID: string
@@ -93,6 +94,8 @@ export interface ReduxProps {
   setTracingSupported: (value: boolean) => void
   injectHeaders: (headers: string, endpoint: string) => void
   setConfigString: (str: string) => void
+  schemaFetchingError: (endpoint: string) => void
+  schemaFetchingSuccess: (endpoint: string, tracingSupported: boolean) => void
   isConfigTab: boolean
   isSettingsTab: boolean
   isFile: boolean
@@ -120,6 +123,8 @@ export class Playground extends React.PureComponent<Props & ReduxProps, State> {
   graphiqlComponents: any[] = []
   private initialIndex: number = -1
   private mounted = false
+  private retries = 0
+  private maxRetries = 10
 
   constructor(props: Props & ReduxProps) {
     super(props)
@@ -187,15 +192,27 @@ export class Playground extends React.PureComponent<Props & ReduxProps, State> {
     if (this.mounted && this.state.schema) {
       this.setState({ schema: undefined })
     }
-    const schema = await schemaFetcher.fetch({
-      endpoint: props.endpoint,
-      headers: props.headers
-        ? JSON.stringify(props.headers)
-        : props.sessionHeaders,
-    })
-    if (schema) {
-      this.setState({ schema: schema.schema })
-      this.props.setTracingSupported(schema.tracingSupported)
+    try {
+      const schema = await schemaFetcher.fetch({
+        endpoint: props.endpoint,
+        headers: props.headers
+          ? JSON.stringify(props.headers)
+          : props.sessionHeaders,
+      })
+      if (schema) {
+        this.setState({ schema: schema.schema })
+        this.props.schemaFetchingSuccess(
+          props.endpoint,
+          schema.tracingSupported,
+        )
+      }
+    } catch (e) {
+      this.props.schemaFetchingError(props.endpoint)
+      if (this.retries < this.maxRetries) {
+        await new Promise(r => setTimeout(r, 5000))
+        this.retries++
+        this.getSchema(props)
+      }
     }
   }
 
@@ -305,6 +322,8 @@ export default connect(mapStateToProps, {
   setTracingSupported,
   injectHeaders,
   setConfigString,
+  schemaFetchingError,
+  schemaFetchingSuccess,
 })(Playground)
 
 const PlaygroundWrapper = styled.div`
