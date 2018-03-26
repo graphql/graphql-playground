@@ -21,12 +21,13 @@ import {
   getOperations,
   getSelectedSessionIdFromRoot,
 } from '../../state/sessions/selectors'
+import { List } from 'immutable'
 
 export interface ReduxProps {
   runQuery: (operationName?: string) => void
   stopQuery: (sessionId: string) => void
   queryRunning: boolean
-  operations: any[]
+  operations: List<any>
   sessionId: string
 }
 
@@ -59,7 +60,7 @@ class ExecuteButton extends React.Component<
   render() {
     const { operations } = this.props
     const optionsOpen = this.state.optionsOpen
-    const hasOptions = operations && operations.length > 1
+    const hasOptions = operations && operations.size > 1
 
     let options: any = null
     if (hasOptions && optionsOpen) {
@@ -158,21 +159,23 @@ class ExecuteButton extends React.Component<
       } else {
         document.removeEventListener('mouseup', onMouseUp)
         onMouseUp = null
-        const isOptionsMenuClicked =
-          // tslint:disable-next-line
-          downTarget.parentNode.compareDocumentPosition(upEvent.target) &
-          Node.DOCUMENT_POSITION_CONTAINED_BY
-        if (!isOptionsMenuClicked) {
-          // menu calls setState if it was clicked
-          this.setState({ optionsOpen: false } as State)
-        }
-        if (firstTime) {
-          this.onOptionSelected(
-            this.props.operations.find(
-              op => op.name.value === upEvent.target.textContent,
-            ) || this.props.operations[0],
-          )
-          firstTime = false
+        if (downTarget.parentNode) {
+          const isOptionsMenuClicked =
+            // tslint:disable-next-line
+            downTarget.parentNode.compareDocumentPosition(upEvent.target) &
+            Node.DOCUMENT_POSITION_CONTAINED_BY
+          if (!isOptionsMenuClicked) {
+            // menu calls setState if it was clicked
+            this.setState({ optionsOpen: false } as State)
+          }
+          if (firstTime) {
+            this.onOptionSelected(
+              this.props.operations.find(
+                op => op.name.value === upEvent.target.textContent,
+              ) || this.props.operations[0],
+            )
+            firstTime = false
+          }
         }
       }
     }
