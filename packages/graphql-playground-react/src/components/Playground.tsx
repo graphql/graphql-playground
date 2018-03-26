@@ -46,6 +46,7 @@ import {
 import { Session } from '../state/sessions/reducers'
 import { getWorkspaceId } from './Playground/util/getWorkspaceId'
 import { getSettings, getSettingsString } from '../state/workspace/reducers'
+import { Backoff } from './Playground/util/fibonacci-backoff'
 
 export interface Response {
   resultID: string
@@ -95,7 +96,7 @@ export interface ReduxProps {
   setTracingSupported: (value: boolean) => void
   injectHeaders: (headers: string, endpoint: string) => void
   setConfigString: (str: string) => void
-  schemaFetchingError: (endpoint: string) => void
+  schemaFetchingError: (endpoint: string, error: string) => void
   schemaFetchingSuccess: (endpoint: string, tracingSupported: boolean) => void
   isConfigTab: boolean
   isSettingsTab: boolean
@@ -122,10 +123,10 @@ export class Playground extends React.PureComponent<Props & ReduxProps, State> {
   apolloLinks: { [sessionId: string]: any } = {}
   observers: { [sessionId: string]: any } = {}
   graphiqlComponents: any[] = []
+  private backoff: Backoff
   private initialIndex: number = -1
   private mounted = false
-  private retries = 0
-  private maxRetries = 10
+  private fetchingSchema = false
 
   constructor(props: Props & ReduxProps) {
     super(props)
@@ -193,26 +194,38 @@ export class Playground extends React.PureComponent<Props & ReduxProps, State> {
     if (this.mounted && this.state.schema) {
       this.setState({ schema: undefined })
     }
-    try {
-      const schema = await schemaFetcher.fetch({
-        endpoint: props.endpoint,
-        headers: props.headers
-          ? JSON.stringify(props.headers)
-          : props.sessionHeaders,
-      })
-      if (schema) {
-        this.setState({ schema: schema.schema })
-        this.props.schemaFetchingSuccess(
-          props.endpoint,
-          schema.tracingSupported,
-        )
+    let first = true
+    this.backoff = new Backoff(async () => {
+      if (first) {
+        await this.schemaGetter(props)
+        first = false
+      } else {
+        await this.schemaGetter()
       }
-    } catch (e) {
-      this.props.schemaFetchingError(props.endpoint)
-      if (this.retries < this.maxRetries) {
-        await new Promise(r => setTimeout(r, 5000))
-        this.retries++
-        this.getSchema(props)
+    })
+    this.backoff.start()
+  }
+
+  async schemaGetter(props = this.props) {
+    if (!this.fetchingSchema) {
+      try {
+        const data = {
+          endpoint: props.endpoint,
+          headers: props.headers
+            ? JSON.stringify(props.headers)
+            : props.sessionHeaders,
+        }
+        const schema = await schemaFetcher.fetch(data)
+        if (schema) {
+          this.setState({ schema: schema.schema })
+          this.props.schemaFetchingSuccess(
+            props.endpoint,
+            schema.tracingSupported,
+          )
+          this.backoff.stop()
+        }
+      } catch (e) {
+        this.props.schemaFetchingError(props.endpoint, e.message)
       }
     }
   }

@@ -255,18 +255,30 @@ export default handleActions(
       })
     },
     SCHEMA_FETCHING_SUCCESS: (state, { payload }) => {
-      const newSessions = state.get('sessions').map((session, sessionId) => {
-        if (session.get('endpoint') === payload.endpoint) {
-          return session.merge(
-            Map({
+      const newSessions = state
+        .get('sessions')
+        .map((session: Session, sessionId) => {
+          if (session.endpoint === payload.endpoint) {
+            // if there was an error, clear it away
+            const data: any = {
               tracingSupported: payload.tracingSupported,
               isReloadingSchema: false,
               endpointUnreachable: false,
-            }),
-          )
-        }
-        return session
-      })
+            }
+            const response = session.responses
+              ? session.responses!.first()
+              : null
+            if (
+              response &&
+              session.responses!.size === 1 &&
+              response.date.includes('error')
+            ) {
+              data.responses = List([])
+            }
+            return session.merge(Map(data))
+          }
+          return session
+        })
       return state.set('sessions', newSessions)
     },
     SCHEMA_FETCHING_ERROR: (state, { payload }) => {
@@ -276,6 +288,13 @@ export default handleActions(
             Map({
               isReloadingSchema: false,
               endpointUnreachable: true,
+              responses: List([
+                new ResponseRecord({
+                  resultID: cuid(),
+                  date: payload.error,
+                  time: new Date(),
+                }),
+              ]),
             }),
           )
         }

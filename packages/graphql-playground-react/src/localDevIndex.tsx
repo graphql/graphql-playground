@@ -18,8 +18,8 @@ if (process.env.NODE_ENV !== 'production') {
       <MiddlewareApp
         setTitle={true}
         showNewWorkspace={false}
-        config={config}
-        configString={JSON.stringify(config, null, 2)}
+        // config={config}
+        // configString={JSON.stringify(config, null, 2)}
         {...options}
       />,
       element,
@@ -27,34 +27,34 @@ if (process.env.NODE_ENV !== 'production') {
   },
 }
 
-const config = {
-  projects: {
-    app: {
-      schemaPath: 'src/schema.graphql',
-      extensions: {
-        endpoints: {
-          default: 'http://localhost:4000',
-        },
-      },
-    },
-    database: {
-      schemaPath: 'src/generated/prisma.graphql',
-      extensions: {
-        prisma: 'database/prisma.yml',
-        'prepare-binding': {
-          output: 'src/generated/prisma.ts',
-          generator: 'prisma-ts',
-        },
-        endpoints: {
-          dev: {
-            url: 'https://eu1.prisma.sh/lol/hall/dev',
-            headers: {
-              Authorization:
-                'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjp7InNlcnZpY2UiOiJoYWxsQGRldiIsInJvbGVzIjpbImFkbWluIl19LCJpYXQiOjE1MjE4MjIwNDQsImV4cCI6MTUyMjQyNjg0NH0.rxU4v6GeBOZxzSRP9-AeJbrmkcZBNKjecH7d43OEUqc',
-            },
-          },
-        },
-      },
-    },
-  },
-}
+// const config = {
+//   projects: {
+//     app: {
+//       schemaPath: 'src/schema.graphql',
+//       extensions: {
+//         endpoints: {
+//           default: 'http://localhost:4000',
+//         },
+//       },
+//     },
+//     database: {
+//       schemaPath: 'src/generated/prisma.graphql',
+//       extensions: {
+//         prisma: 'database/prisma.yml',
+//         'prepare-binding': {
+//           output: 'src/generated/prisma.ts',
+//           generator: 'prisma-ts',
+//         },
+//         endpoints: {
+//           dev: {
+//             url: 'https://eu1.prisma.sh/lol/hall/dev',
+//             headers: {
+//               Authorization:
+//                 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjp7InNlcnZpY2UiOiJoYWxsQGRldiIsInJvbGVzIjpbImFkbWluIl19LCJpYXQiOjE1MjE4MjIwNDQsImV4cCI6MTUyMjQyNjg0NH0.rxU4v6GeBOZxzSRP9-AeJbrmkcZBNKjecH7d43OEUqc',
+//             },
+//           },
+//         },
+//       },
+//     },
+//   },
+// }

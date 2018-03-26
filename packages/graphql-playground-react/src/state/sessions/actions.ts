@@ -126,7 +126,7 @@ export const {
           + tracingSupported
         })
   */
-  SCHEMA_FETCHING_ERROR: endpoint => ({ endpoint }),
+  SCHEMA_FETCHING_ERROR: (endpoint, error) => ({ endpoint, error }),
   /*
 
       this.setState({

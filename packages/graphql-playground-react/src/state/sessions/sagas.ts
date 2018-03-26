@@ -97,7 +97,7 @@ function* runQueryAtPosition(action) {
 
 function* fetchSchemaSaga() {
   const session: Session = yield select(getSelectedSession)
-  yield schemaFetcher.refetch(session)
+  yield schemaFetcher.fetch(session)
   try {
     yield put(schemaFetchingSuccess(session.endpoint))
   } catch (e) {
