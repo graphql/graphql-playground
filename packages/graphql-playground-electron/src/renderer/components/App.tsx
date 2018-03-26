@@ -161,12 +161,14 @@ cd ${folderPath}; graphql playground`)
         'cwd',
         JSON.stringify({ cwd: configDir, id: remote.getCurrentWindow().id }),
       )
-      this.setState({
+      const state = {
         configString,
         configPath,
         config,
         folderName: path.basename(folderPath),
-      } as State)
+      }
+      this.setState(state as State)
+      this.serializeWorkspace(state)
     } catch (error) {
       alert(error)
     }
@@ -210,6 +212,12 @@ cd ${folderPath}; graphql playground`)
     window.addEventListener('keydown', this.handleKeyDown, true)
     this.consumeEvents()
     ipcRenderer.send('ready', '')
+    if (!this.state.endpoint) {
+      const workspace = this.deserializeWorkspace()
+      if (workspace) {
+        this.setState(workspace)
+      }
+    }
   }
 
   consumeEvents() {
@@ -315,7 +323,31 @@ cd ${folderPath}; graphql playground`)
       platformToken,
     }
 
+    this.serializeWorkspace(state)
+
     this.setState(state)
+  }
+
+  serializeWorkspace(state) {
+    localStorage.setItem(
+      'graphql-playground-last-workspace',
+      JSON.stringify(state),
+    )
+  }
+
+  deserializeWorkspace() {
+    try {
+      const lastWorkspace = localStorage.getItem(
+        'graphql-playground-last-workspace',
+      )
+      if (lastWorkspace) {
+        return JSON.parse(lastWorkspace)
+      }
+    } catch (e) {
+      //
+    }
+
+    return undefined
   }
 
   configContainsEndpoints(config: GraphQLConfigData): boolean {

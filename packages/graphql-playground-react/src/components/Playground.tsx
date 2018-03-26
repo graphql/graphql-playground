@@ -23,6 +23,8 @@ import {
   saveConfig,
   setTracingSupported,
   injectHeaders,
+  schemaFetchingError,
+  schemaFetchingSuccess,
 } from '../state/sessions/actions'
 import { setConfigString } from '../state/general/actions'
 import { initState } from '../state/workspace/actions'
@@ -44,7 +46,6 @@ import {
 import { Session } from '../state/sessions/reducers'
 import { getWorkspaceId } from './Playground/util/getWorkspaceId'
 import { getSettings, getSettingsString } from '../state/workspace/reducers'
-import { schemaFetchingError, schemaFetchingSuccess } from '../lib'
 
 export interface Response {
   resultID: string
