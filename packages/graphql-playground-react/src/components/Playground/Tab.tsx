@@ -5,6 +5,8 @@ import { connect } from 'react-redux'
 import { closeTab, selectTab } from '../../state/sessions/actions'
 import * as cn from 'classnames'
 import { Session } from '../../state/sessions/reducers'
+import { editName } from '../../lib'
+import AutosizeInput from 'react-input-autosize'
 
 export interface Props {
   session: Session
@@ -15,10 +17,12 @@ export interface Props {
 export interface ReduxProps {
   selectTab: (sessionId: string) => void
   closeTab: (sessionId: string) => void
+  editName: (name: string) => void
 }
 
 export interface State {
   overCross: boolean
+  editingName: boolean
 }
 
 class Tab extends React.PureComponent<Props & ReduxProps, State> {
@@ -27,6 +31,7 @@ class Tab extends React.PureComponent<Props & ReduxProps, State> {
 
     this.state = {
       overCross: false,
+      editingName: false,
     }
   }
 
@@ -35,6 +40,12 @@ class Tab extends React.PureComponent<Props & ReduxProps, State> {
     const { queryTypes } = session
 
     const active = session.id === selectedSessionId
+
+    const name =
+      session.name ||
+      session.operationName ||
+      queryTypes.firstOperationName ||
+      'New Tab'
 
     return (
       <div
@@ -59,6 +70,7 @@ class Tab extends React.PureComponent<Props & ReduxProps, State> {
               @p: .bgDarkBlue;
             }
             border-bottom: 2px solid #172a3a;
+            font-size: 14px;
           }
           .tab:first-of-type {
             margin-left: 0;
@@ -120,11 +132,21 @@ class Tab extends React.PureComponent<Props & ReduxProps, State> {
             @p: .mr10;
           }
 
-          .operation-name {
+          .tab .operation-name,
+          .tab :global(input) {
             @p: .o50;
+            background: transparent !important;
+            color: white;
+            font-size: 14px;
+            margin-left: 2px;
+            display: inline;
+            letter-spacing: 0.53px;
             &.active {
               @p: .o100;
             }
+          }
+          .tab :global(input) {
+            opacity: 1 !important;
           }
 
           .close {
@@ -201,12 +223,24 @@ class Tab extends React.PureComponent<Props & ReduxProps, State> {
             )}
           </div>
         </div>
-        <div className={cn('operation-name', { active })}>
-          {session.name ||
-            session.operationName ||
-            queryTypes.firstOperationName ||
-            'New Tab'}
-        </div>
+        {this.state.editingName ? (
+          <AutosizeInput
+            value={session.name}
+            onChange={this.handleEditName}
+            onBlur={this.stopEditName}
+            onKeyDown={this.handleKeyDown}
+            autoFocus={true}
+            className="operation-name"
+            style={{ background: 'transparent' }}
+          />
+        ) : (
+          <div
+            className={cn('operation-name', { active })}
+            onDoubleClick={this.startEditName}
+          >
+            {name}
+          </div>
+        )}
         <div
           className={cn('close', {
             active,
@@ -234,6 +268,20 @@ class Tab extends React.PureComponent<Props & ReduxProps, State> {
     )
   }
 
+  private startEditName = () => {
+    this.setState({ editingName: true })
+  }
+
+  private stopEditName = () => {
+    this.setState({ editingName: false })
+  }
+
+  private handleKeyDown = e => {
+    if (e.keyCode === 13) {
+      this.setState({ editingName: false })
+    }
+  }
+
   private handleMouseOverCross = () => {
     this.setState({ overCross: true })
   }
@@ -250,6 +298,10 @@ class Tab extends React.PureComponent<Props & ReduxProps, State> {
     e.stopPropagation()
     this.props.closeTab(this.props.session.id)
   }
+
+  private handleEditName = e => {
+    this.props.editName(e.target.value)
+  }
 }
 
-export default connect(null, { closeTab, selectTab })(Tab)
+export default connect(null, { closeTab, selectTab, editName })(Tab)

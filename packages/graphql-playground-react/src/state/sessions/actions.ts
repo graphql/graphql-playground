@@ -56,6 +56,7 @@ export const {
   setQueryTypes,
   injectHeaders,
   openConfigTab,
+  editName,
 } = createActions({
   // simple property setting
   EDIT_QUERY: simpleAction('query'),
@@ -66,6 +67,7 @@ export const {
   SET_VARIABLE_TO_TYPE: simpleAction('variableToType'),
   SET_OPERATIONS: simpleAction('operations'),
   SET_EDITOR_FLEX: simpleAction('editorFlex'),
+  EDIT_NAME: simpleAction('name'),
 
   OPEN_QUERY_VARIABLES: () => ({ queryVariablesActive: true }),
   CLOSE_QUERY_VARIABLES: () => ({ queryVariablesActive: false }),

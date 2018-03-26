@@ -17,6 +17,7 @@ import {
   setSubscriptionActive,
   startQuery,
   setQueryTypes,
+  editName,
 } from './actions'
 import { getSelectedSessionId } from './selectors'
 import { getDefaultSession, defaultQuery } from '../../constants'
@@ -175,6 +176,7 @@ export default handleActions(
       setSubscriptionActive,
       startQuery,
       setQueryTypes,
+      editName,
     )]: (state, { payload }) => {
       const keys = Object.keys(payload)
       const keyName = keys.length === 1 ? keys[0] : keys[1]
