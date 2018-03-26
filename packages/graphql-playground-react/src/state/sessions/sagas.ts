@@ -81,7 +81,11 @@ function* runQueryAtPosition(action) {
   if (session.operations) {
     let operationName
     session.operations.forEach((operation: any) => {
-      if (operation.loc.start <= position && operation.loc.end >= position) {
+      if (
+        operation.loc &&
+        operation.loc.start <= position &&
+        operation.loc.end >= position
+      ) {
         operationName = operation.name && operation.name.value
       }
     })
