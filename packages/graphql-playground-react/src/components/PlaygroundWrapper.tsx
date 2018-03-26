@@ -16,10 +16,9 @@ import { ISettings } from '../types'
 import { createStructuredSelector } from 'reselect'
 import { connect } from 'react-redux'
 import { getTheme } from '../state/workspace/reducers'
-import * as queryString from 'query-string'
 
-function getParameterByName(name: string): string | null {
-  const url = window.location.href
+function getParameterByName(name: string, uri?: string): string | null {
+  const url = uri || window.location.href
   name = name.replace(/[\[\]]/g, '\\$&')
   const regexa = new RegExp('[?&]' + name + '(=([^&#]*)|&|#|$)')
   const results = regexa.exec(url)
@@ -82,7 +81,6 @@ class PlaygroundWrapper extends React.Component<
 
     const { activeEnv, projectName } = this.getInitialActiveEnv(props.config)
 
-    let headers
     let endpoint =
       props.endpoint ||
       props.endpointUrl ||
@@ -91,7 +89,7 @@ class PlaygroundWrapper extends React.Component<
 
     const result = this.extractEndpointAndHeaders(endpoint)
     endpoint = result.endpoint
-    headers = result.headers
+    let headers = result.headers
 
     let subscriptionEndpoint: any =
       props.subscriptionEndpoint || getParameterByName('subscriptionEndpoint')
@@ -128,9 +126,11 @@ class PlaygroundWrapper extends React.Component<
     if (splitted.length === 1) {
       return { endpoint }
     }
-    const params = queryString.parse(splitted[1])
     try {
-      return { headers: JSON.parse(params.headers), endpoint: splitted[0] }
+      const headers = getParameterByName('headers', endpoint)
+      if (headers) {
+        return { headers: JSON.parse(headers), endpoint: splitted[0] }
+      }
     } catch (e) {
       //
     }
