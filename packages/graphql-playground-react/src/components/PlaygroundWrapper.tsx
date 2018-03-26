@@ -16,6 +16,7 @@ import { ISettings } from '../types'
 import { createStructuredSelector } from 'reselect'
 import { connect } from 'react-redux'
 import { getTheme } from '../state/workspace/reducers'
+import * as queryString from 'query-string'
 
 function getParameterByName(name: string): string | null {
   const url = window.location.href
@@ -88,6 +89,10 @@ class PlaygroundWrapper extends React.Component<
       getParameterByName('endpoint') ||
       location.href
 
+    const result = this.extractEndpointAndHeaders(endpoint)
+    endpoint = result.endpoint
+    headers = result.headers
+
     let subscriptionEndpoint: any =
       props.subscriptionEndpoint || getParameterByName('subscriptionEndpoint')
 
@@ -116,6 +121,20 @@ class PlaygroundWrapper extends React.Component<
       activeProjectName: projectName,
       headers,
     }
+  }
+
+  extractEndpointAndHeaders(endpoint) {
+    const splitted = endpoint.split('?')
+    if (splitted.length === 1) {
+      return { endpoint }
+    }
+    const params = queryString.parse(splitted[1])
+    try {
+      return { headers: JSON.parse(params.headers), endpoint: splitted[0] }
+    } catch (e) {
+      //
+    }
+    return { endpoint: splitted[0] }
   }
 
   removeLoader() {
