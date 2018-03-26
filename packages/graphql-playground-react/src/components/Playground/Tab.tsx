@@ -1,8 +1,9 @@
 import * as React from 'react'
+import styled from 'styled-components'
 import Icon from 'graphcool-styles/dist/components/Icon/Icon'
 import { $v } from 'graphcool-styles'
 import { connect } from 'react-redux'
-import { closeTab, selectTab } from '../../state/sessions/actions'
+import { closeTab, selectTab, editTabName } from '../../state/sessions/actions'
 import * as cn from 'classnames'
 import { Session } from '../../state/sessions/reducers'
 
@@ -15,10 +16,13 @@ export interface Props {
 export interface ReduxProps {
   selectTab: (sessionId: string) => void
   closeTab: (sessionId: string) => void
+  editTabName: (tabName: string) => void
 }
 
 export interface State {
   overCross: boolean
+  isEditingTabName: boolean
+  editedTabName: string
 }
 
 class Tab extends React.PureComponent<Props & ReduxProps, State> {
@@ -27,6 +31,8 @@ class Tab extends React.PureComponent<Props & ReduxProps, State> {
 
     this.state = {
       overCross: false,
+      isEditingTabName: false,
+      editedTabName: '',
     }
   }
 
@@ -201,11 +207,25 @@ class Tab extends React.PureComponent<Props & ReduxProps, State> {
             )}
           </div>
         </div>
-        <div className={cn('operation-name', { active })}>
-          {session.name ||
-            session.operationName ||
-            queryTypes.firstOperationName ||
-            'New Tab'}
+        <div
+          onDoubleClick={this.enableTabNameEditing}
+          className={cn('operation-name', { active })}
+        >
+          {!this.state.isEditingTabName ? (
+            this.getTabName()
+          ) : (
+            <form onSubmit={this.saveEditedTabName}>
+              <EditingTabNameInput
+                className="editing-input"
+                type="text"
+                autoFocus={true}
+                value={this.state.editedTabName}
+                innerRef={this.selectInputTabName}
+                onBlur={this.saveEditedTabName}
+                onChange={this.editTabName}
+              />
+            </form>
+          )}
         </div>
         <div
           className={cn('close', {
@@ -250,6 +270,49 @@ class Tab extends React.PureComponent<Props & ReduxProps, State> {
     e.stopPropagation()
     this.props.closeTab(this.props.session.id)
   }
+
+  private getTabName = () => {
+    const { session } = this.props
+    const { queryTypes } = session
+
+    return (
+      session.tabName ||
+      session.name ||
+      session.operationName ||
+      queryTypes.firstOperationName ||
+      'New Tab'
+    )
+  }
+
+  private enableTabNameEditing = () => {
+    this.setState({
+      isEditingTabName: true,
+      editedTabName: this.getTabName(),
+    })
+  }
+
+  private editTabName = (e: any) => {
+    this.setState({ editedTabName: e.target.value })
+  }
+
+  private selectInputTabName = (ref: any) => {
+    if (ref) {
+      ref.select()
+    }
+  }
+
+  private saveEditedTabName = (e: any) => {
+    e.preventDefault()
+    this.props.editTabName(this.state.editedTabName)
+    this.setState({ isEditingTabName: false })
+  }
 }
 
-export default connect(null, { closeTab, selectTab })(Tab)
+const EditingTabNameInput = styled.input`
+  height: 24px;
+  color: white;
+  background-color: ${$v.darkBlue40};
+  font-size: 16px;
+`
+
+export default connect(null, { closeTab, selectTab, editTabName })(Tab)
