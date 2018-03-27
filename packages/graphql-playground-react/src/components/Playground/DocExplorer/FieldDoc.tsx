@@ -1,6 +1,11 @@
 import * as React from 'react'
 import Argument from './Argument'
-import { GraphQLEnumType, GraphQLUnionType, GraphQLScalarType } from 'graphql'
+import {
+  GraphQLInterfaceType,
+  GraphQLEnumType,
+  GraphQLUnionType,
+  GraphQLScalarType,
+} from 'graphql'
 import MarkdownContent from 'graphiql/dist/components/DocExplorer/MarkdownContent'
 import TypeLink from './TypeLink'
 import DocTypeSchema from './DocTypeSchema'
@@ -57,6 +62,18 @@ export default class FieldDoc extends React.Component<Props, State> {
     const implementationsOffset =
       obj.fields.length + obj.interfaces.length + obj.args.length
 
+    let typeInstance
+
+    if (type instanceof GraphQLInterfaceType) {
+      typeInstance = 'interface'
+    } else if (type instanceof GraphQLUnionType) {
+      typeInstance = 'union'
+    } else if (type instanceof GraphQLEnumType) {
+      typeInstance = 'enum'
+    } else {
+      typeInstance = 'type'
+    }
+
     return (
       <div ref={this.setRef}>
         <style jsx={true} global={true}>{`
@@ -98,7 +115,7 @@ export default class FieldDoc extends React.Component<Props, State> {
           markdown={field.description || ''}
         />
 
-        <div className="doc-category-title">{'type details'}</div>
+        <div className="doc-category-title">{`${typeInstance} details`}</div>
         {type.description &&
           type.description.length > 0 && (
             <div className="markdown-content">
@@ -111,7 +128,12 @@ export default class FieldDoc extends React.Component<Props, State> {
         {type instanceof GraphQLScalarType && <ScalarTypeSchema type={type} />}
         {type instanceof GraphQLEnumType && <EnumTypeSchema type={type} />}
         {type instanceof GraphQLUnionType && (
-          <UnionTypeSchema type={type} schema={schema} />
+          <UnionTypeSchema
+            type={type}
+            schema={schema}
+            level={level}
+            sessionId={this.props.sessionId}
+          />
         )}
 
         {obj.fields.length > 0 && (
