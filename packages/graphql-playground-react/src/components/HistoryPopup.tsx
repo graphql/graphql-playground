@@ -179,8 +179,6 @@ const Wrapper = styled.div`
   min-height: 500px;
 
   & .graphiql-container.graphiql-container {
-    height: calc(100% - 81px) !important;
-
     & .queryWrap.queryWrap {
       border-top: none;
     }
@@ -265,7 +263,7 @@ const UseText = styled.div`
 `
 
 const Big = styled.div`
-  height: 100%;
+  height: calc(100% - 81px);
   display: flex;
   flex: 1 1 auto;
 `
