@@ -21,13 +21,13 @@ import {
   getOperations,
   getSelectedSessionIdFromRoot,
 } from '../../state/sessions/selectors'
-import { List } from 'immutable'
+import { toJS } from './util/toJS'
 
 export interface ReduxProps {
   runQuery: (operationName?: string) => void
   stopQuery: (sessionId: string) => void
   queryRunning: boolean
-  operations: List<any>
+  operations: any[]
   sessionId: string
 }
 
@@ -60,7 +60,7 @@ class ExecuteButton extends React.Component<
   render() {
     const { operations } = this.props
     const optionsOpen = this.state.optionsOpen
-    const hasOptions = operations && operations.size > 1
+    const hasOptions = operations && operations.length > 1
 
     let options: any = null
     if (hasOptions && optionsOpen) {
@@ -145,6 +145,9 @@ class ExecuteButton extends React.Component<
 
   private onOptionSelected = operation => {
     this.setState({ optionsOpen: false } as State)
+    if (!operation) {
+      return
+    }
     this.props.runQuery(operation.name && operation.name.value)
   }
 
@@ -191,7 +194,7 @@ const mapStateToProps = createStructuredSelector({
 })
 
 export default withTheme<{}>(
-  connect(mapStateToProps, { runQuery, stopQuery })(ExecuteButton),
+  connect(mapStateToProps, { runQuery, stopQuery })(toJS(ExecuteButton)),
 )
 
 const Wrapper = styled.div`

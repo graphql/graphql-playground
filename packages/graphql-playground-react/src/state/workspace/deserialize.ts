@@ -1,7 +1,7 @@
 import { DocsSession } from '../docs/reducers'
 import { Session, SessionState, ResponseRecord } from '../sessions/reducers'
 import { SharingState } from '../sharing/reducers'
-import { Map, OrderedMap, List } from 'immutable'
+import { Map, OrderedMap, List, fromJS } from 'immutable'
 import { GeneralState } from '../general/reducers'
 import { mapValues } from 'lodash'
 import { RootState, Workspace } from './reducers'
@@ -72,7 +72,7 @@ function deserializeSession(session) {
   return new Session({
     ...session,
     responses: deserializeResponses(session.responses),
-    operations: List(session.operations),
+    operations: fromJS(session.operations),
     variableToType: Map(session.variableToType),
     date: session.date ? new Date(session.date) : undefined,
     currentQueryStartTime: session.currentQueryStartTime

@@ -5,7 +5,7 @@ import { connect } from 'react-redux'
 import { GraphQLList, GraphQLNonNull, isType } from 'graphql'
 import ArgumentInline from './ArgumentInline'
 import { Triangle } from '../../Icons/Triangle'
-import toJS from '../util/toJS'
+import { toJS } from '../util/toJS'
 import { addStack } from '../../../state/docs/actions'
 import { getSessionDocsState } from '../../../state/docs/selectors'
 import {

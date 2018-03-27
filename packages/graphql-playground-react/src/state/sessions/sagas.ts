@@ -80,7 +80,8 @@ function* runQueryAtPosition(action) {
   const session: Session = yield select(getSelectedSession)
   if (session.operations) {
     let operationName
-    session.operations.forEach((operation: any) => {
+    const operations = session.operations.toJS()
+    operations.forEach((operation: any) => {
       if (
         operation.loc &&
         operation.loc.start <= position &&
