@@ -31,6 +31,8 @@ import * as findUp from 'find-up'
 import { patchEndpointsToConfigData as patchPrismaEndpointsToConfigData } from 'graphql-config-extension-prisma'
 import { patchEndpointsToConfigData } from 'graphql-config-extension-graphcool'
 import { connect } from 'react-redux'
+import { errify } from '../utils/errify'
+
 // import { PermissionSession } from 'graphql-playground/lib/types'
 
 const { dialog } = remote
@@ -132,7 +134,7 @@ class App extends React.Component<ReduxProps, State> {
 
       /* tslint:disable-next-line */
       if (configString.includes('${env:')) {
-        alert(`You opened a .graphqlconfig file that includes environment variables.
+        errify(`You opened a .graphqlconfig file that includes environment variables.
 In order to use environment variables in the Playground, please start it from the graphql cli. Install with
 npm install -g graphql-cli
 Then open the graphql config with:
@@ -170,7 +172,7 @@ cd ${folderPath}; graphql playground`)
       this.setState(state as State)
       this.serializeWorkspace(state)
     } catch (error) {
-      alert(error)
+      errify(error)
     }
   }
 
@@ -298,13 +300,13 @@ cd ${folderPath}; graphql playground`)
           const graphcoolNote = configString.includes('graphcool')
             ? 'Please make sure to add stages to your graphcool.yml'
             : ''
-          alert(
+          errify(
             `${configPath} does not include any endpoints. ${graphcoolNote}`,
           )
           return
         }
       } catch (e) {
-        console.error(e)
+        errify(e)
       }
     }
 
@@ -322,6 +324,8 @@ cd ${folderPath}; graphql playground`)
       config,
       platformToken,
     }
+
+    console.log('setting', { state })
 
     this.serializeWorkspace(state)
 

@@ -1,7 +1,9 @@
 const getLoadingMarkup = () => ({
   script: `
     const loadingWrapper = document.getElementById('loading-wrapper');
-    loadingWrapper.classList.add('fadeOut');
+    if (loadingWrapper) {
+      loadingWrapper.classList.add('fadeOut');
+    }
     `,
   container: `
 <style type="text/css">

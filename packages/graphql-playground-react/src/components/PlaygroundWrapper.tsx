@@ -237,6 +237,16 @@ class PlaygroundWrapper extends React.Component<
     if (this.state.subscriptionEndpoint === '') {
       this.updateSubscriptionsUrl()
     }
+    setTimeout(() => {
+      this.removePlaygroundInClass()
+    }, 5000)
+  }
+
+  removePlaygroundInClass() {
+    const root = document.getElementById('root')
+    if (root) {
+      root.classList.remove('playgroundIn')
+    }
   }
 
   render() {
