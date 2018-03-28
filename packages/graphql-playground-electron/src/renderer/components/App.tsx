@@ -327,7 +327,9 @@ cd ${folderPath}; graphql playground`)
 
     console.log('setting', { state })
 
-    this.serializeWorkspace(state)
+    if (endpoint) {
+      this.serializeWorkspace(state)
+    }
 
     this.setState(state)
   }

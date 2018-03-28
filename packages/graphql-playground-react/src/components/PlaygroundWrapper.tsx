@@ -180,6 +180,23 @@ class PlaygroundWrapper extends React.Component<
     ) {
       const configIsYaml = this.isConfigYaml(nextProps.configString)
       this.setState({ configIsYaml })
+      if (nextProps.config) {
+        const activeEnv = this.getInitialActiveEnv(nextProps.config)
+        const endpoints = getActiveEndpoints(
+          nextProps.config,
+          activeEnv.activeEnv!,
+          this.state.activeProjectName,
+        )
+        const endpoint = endpoints.endpoint
+        const subscriptionEndpoint = endpoints.subscriptionEndpoint
+        const headers = endpoints.headers
+        this.setState({
+          endpoint,
+          subscriptionEndpoint,
+          headers,
+          activeEnv: activeEnv.activeEnv,
+        })
+      }
     }
   }
 
