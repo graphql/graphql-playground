@@ -1842,16 +1842,8 @@ code-point-at@^1.0.0:
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/code-point-at/-/code-point-at-1.1.0.tgz#0d070b4d043a5bea33a2f1a40e2edb3d9a4ccf77"
 
-codemirror-graphql@^0.6.11, codemirror-graphql@^0.6.12:
+codemirror-graphql@^0.6.11, codemirror-graphql@^0.6.12, codemirror-graphql@timsuchanek/codemirror-graphql#details-fix:
   version "0.6.12"
-  resolved "git+ssh://git@github.com/timsuchanek/codemirror-graphql.git#801ec32683c38d6dc0f8f7bc19014a111edc9ebd"
-  dependencies:
-    graphql-language-service-interface "^1.0.18"
-    graphql-language-service-parser "^1.0.18"
-
-codemirror-graphql@timsuchanek/codemirror-graphql#details-fix:
-  version "0.6.12"
-  uid "801ec32683c38d6dc0f8f7bc19014a111edc9ebd"
   resolved "https://codeload.github.com/timsuchanek/codemirror-graphql/tar.gz/801ec32683c38d6dc0f8f7bc19014a111edc9ebd"
   dependencies:
     graphql-language-service-interface "^1.0.18"
@@ -2739,9 +2731,9 @@ electron-updater@2.21.4:
     semver "^5.5.0"
     source-map-support "^0.5.4"
 
-electron@1.8.4:
-  version "1.8.4"
-  resolved "https://registry.yarnpkg.com/electron/-/electron-1.8.4.tgz#cca8d0e6889f238f55b414ad224f03e03b226a38"
+electron@1.8.2:
+  version "1.8.2"
+  resolved "https://registry.yarnpkg.com/electron/-/electron-1.8.2.tgz#a817cd733c2972b3c7cc4f777caf6e424b88014d"
   dependencies:
     "@types/node" "^8.0.24"
     electron-download "^3.0.1"
