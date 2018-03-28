@@ -1324,6 +1324,10 @@ p:first-child,
   z-index: 100;
 }
 
+.docs-graphiql .CodeMirror-jump-token {
+  text-decoration: underline;
+}
+
 .docs-graphiql .CodeMirror-lint-mark-error,
 .CodeMirror-lint-mark-warning {
   background-position: left bottom;

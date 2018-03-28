@@ -1294,6 +1294,10 @@ span.CodeMirror-selectedtext {
   z-index: 100;
 }
 
+.CodeMirror-jump-token {
+  text-decoration: underline;
+}
+
 .CodeMirror-lint-mark-error,
 .CodeMirror-lint-mark-warning {
   background-position: left bottom;

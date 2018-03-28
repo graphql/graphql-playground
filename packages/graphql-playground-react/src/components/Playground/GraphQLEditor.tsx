@@ -414,7 +414,7 @@ class GraphQLEditor extends React.PureComponent<
   }
 
   handleClickReference = reference => {
-    //
+    this.docExplorerComponent.showDocFromType(reference.field)
   }
 
   /**
