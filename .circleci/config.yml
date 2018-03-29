@@ -38,14 +38,14 @@ jobs:
       - run: rm package.json
       - run: cd packages/graphql-playground-electron && yarn
       - run:
-        no_output_timeout: 30m
-        command: |
-          if [[ -z "$CIRCLE_PULL_REQUEST" && "$CIRCLE_BRANCH" == "master" ]]
-          then
-            cd packages/graphql-playground-electron && yarn release
-          else
-            cd packages/graphql-playground-electron && yarn build
-          fi
+          no_output_timeout: 30m
+          command: |
+            if [[ -z "$CIRCLE_PULL_REQUEST" && "$CIRCLE_BRANCH" == "master" ]]
+            then
+              cd packages/graphql-playground-electron && yarn release
+            else
+              cd packages/graphql-playground-electron && yarn build
+            fi
 
 workflows:
   version: 2
