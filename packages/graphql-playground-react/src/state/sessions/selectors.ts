@@ -22,7 +22,11 @@ export const getSelectedSession = createSelector([getSessionsState], state => {
   return session
 })
 
-export const getSelectedSessionId = state => state.get('selectedSessionId')
+export const getSelectedSessionId = state =>
+  state.selectedSessionId && state.selectedSessionId !== ''
+    ? state.selectedSessionId
+    : state.sessions.first().id
+
 export const getSelectedSessionIdFromRoot = createSelector(
   [getSelectedSession],
   state => state.get('id'),

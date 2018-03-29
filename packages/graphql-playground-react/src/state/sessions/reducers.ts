@@ -157,7 +157,7 @@ export function makeSessionState(endpoint) {
   })
 }
 
-export default handleActions(
+const reducer = handleActions(
   {
     [combineActions(
       editQuery,
@@ -494,13 +494,27 @@ export default handleActions(
   makeSessionState(''),
 )
 
+// add a self-healing wrapper to clean up broken states
+export default (state, action) => {
+  const newState: SessionState = reducer(state, action)
+  if (newState.selectedSessionId === '' && state.sessions.size > 0) {
+    return newState.set('selectedSessionId', state.sessions.first().id)
+  }
+  return newState
+}
+
 function closeTab(state, sessionId) {
   const length = state.sessions.size
   const keys = state.sessions.keySeq()
   let newState = state.removeIn(['sessions', sessionId])
+  const session = state.sessions.get(sessionId)
   // if there is only one session, delete it and replace it by a new one
+  // and keep the endpoint & headers of the last one
   if (length === 1) {
-    const newSession = makeSession()
+    const newSession = makeSession(session.endpoint).set(
+      'headers',
+      session.headers,
+    )
     newState = newState.set('selectedSessionId', newSession.id)
     return newState.setIn(['sessions', newSession.id], newSession)
   }

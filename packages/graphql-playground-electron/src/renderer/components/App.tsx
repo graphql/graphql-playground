@@ -214,7 +214,7 @@ cd ${folderPath}; graphql playground`)
     window.addEventListener('keydown', this.handleKeyDown, true)
     this.consumeEvents()
     ipcRenderer.send('ready', '')
-    if (!this.state.endpoint) {
+    if (!this.state.endpoint && !this.state.config && !this.state.configPath && !this.state.configString) {
       const workspace = this.deserializeWorkspace()
       if (workspace) {
         this.setState(workspace)
