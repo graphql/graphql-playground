@@ -37,7 +37,9 @@ jobs:
       # pending: https://github.com/electron-userland/electron-builder/issues/2222
       - run: rm package.json
       - run: cd packages/graphql-playground-electron && yarn
-      - run: |
+      - run:
+        no_output_timeout: 30m
+        command: |
           if [[ -z "$CIRCLE_PULL_REQUEST" && "$CIRCLE_BRANCH" == "master" ]]
           then
             cd packages/graphql-playground-electron && yarn release
