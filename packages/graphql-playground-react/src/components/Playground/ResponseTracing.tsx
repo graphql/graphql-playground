@@ -9,6 +9,7 @@ import {
   getCurrentQueryStartTime,
   getCurrentQueryEndTime,
   getTracingSupported,
+  getQueryRunning,
 } from '../../state/sessions/selectors'
 import { connect } from 'react-redux'
 
@@ -34,6 +35,7 @@ export interface ReduxProps {
   tracingSupported?: boolean
   startTime?: Date
   endTime?: Date
+  queryRunning: boolean
 }
 
 const textColor = theme('mode', {
@@ -107,7 +109,11 @@ class ResponseTracing extends React.PureComponent<ReduxProps> {
             />
           </TracingRows>
         ) : tracingSupported ? (
-          <ReRun>Please re-run the query to show tracing results.</ReRun>
+          <ReRun>
+            {this.props.queryRunning
+              ? 'Running query ...'
+              : 'Please re-run the query to show tracing results.'}
+          </ReRun>
         ) : (
           <NotSupported>
             This GraphQL server doesn’t support tracing. See the following page
@@ -125,6 +131,7 @@ const mapStateToProps = createStructuredSelector({
   startTime: getCurrentQueryStartTime,
   endTime: getCurrentQueryEndTime,
   tracingSupported: getTracingSupported,
+  queryRunning: getQueryRunning,
 })
 
 export default connect(mapStateToProps)(ResponseTracing)

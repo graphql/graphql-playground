@@ -193,6 +193,10 @@ const reducer = handleActions(
       return state
         .setIn(['sessions', getSelectedSessionId(state), 'queryRunning'], true)
         .setIn(['sessions', getSelectedSessionId(state), 'responses'], List())
+        .setIn(
+          ['sessions', getSelectedSessionId(state), 'responseExtensions'],
+          undefined,
+        )
     },
     CLOSE_TRACING: (state, { payload: { responseTracingHeight } }) => {
       return state.mergeDeepIn(
