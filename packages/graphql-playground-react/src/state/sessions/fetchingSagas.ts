@@ -19,21 +19,22 @@ import {
   stopQuery,
   startQuery,
   addResponse,
+  setResponseExtensions,
+  setCurrentQueryStartTime,
+  setCurrentQueryEndTime,
 } from './actions'
 import {
   getSelectedSession,
   getSessionsState,
   getParsedVariablesFromSession,
 } from './selectors'
-import {
-  SchemaFetcher,
-  SchemaFetchProps,
-} from '../../components/Playground/SchemaFetcher'
+import { SchemaFetcher } from '../../components/Playground/SchemaFetcher'
 import { getSelectedWorkspaceId } from '../workspace/reducers'
 import * as cuid from 'cuid'
 import { Session, ResponseRecord } from './reducers'
 import { addHistoryItem } from '../history/actions'
 import { safely } from '../../utils'
+import { set } from 'immutable'
 
 // tslint:disable
 let subscriptionEndpoint = ''
@@ -42,14 +43,22 @@ export function setSubscriptionEndpoint(endpoint) {
   subscriptionEndpoint = endpoint
 }
 
+export interface LinkCreatorProps {
+  endpoint: string
+  headers?: Headers
+}
+
+export interface Headers {
+  [key: string]: string | number | null
+}
+
 export const defaultLinkCreator = (
-  session: SchemaFetchProps,
+  session: LinkCreatorProps,
   wsEndpoint?: string,
 ): { link: ApolloLink; subscriptionClient?: SubscriptionClient } => {
   let connectionParams = {}
-  const headers = {
-    ...parseHeaders(session.headers),
-  }
+  const { headers } = session
+
   if (headers) {
     connectionParams = { ...headers }
   }
@@ -112,10 +121,15 @@ function* runQuerySaga(action) {
   const workspace = yield select(getSelectedWorkspaceId)
   yield put(setSubscriptionActive(isSubscription(operation)))
   yield put(startQuery())
+  let headers = parseHeaders(session.headers)
+  if (session.tracingSupported) {
+    headers = set(headers, 'X-Apollo-Tracing', '1')
+  }
   const { link, subscriptionClient } = linkCreator({
     endpoint: session.endpoint,
-    headers: session.headers,
+    headers,
   })
+  yield put(setCurrentQueryStartTime(new Date()))
 
   const channel = eventChannel(emitter => {
     let closed = false
@@ -162,6 +176,11 @@ function* runQuerySaga(action) {
   try {
     while (true) {
       const { value, error } = yield take(channel)
+      if (value.extensions) {
+        const extensions = value.extensions
+        yield put(setResponseExtensions(extensions))
+        delete value.extensiosn
+      }
       const response = new ResponseRecord({
         date: JSON.stringify(value ? value : formatError(error), null, 2),
         time: new Date(),
@@ -171,6 +190,7 @@ function* runQuerySaga(action) {
       yield put(addHistoryItem(session))
     }
   } finally {
+    yield put(setCurrentQueryEndTime(new Date()))
     yield put(stopQuery(session.id, selectedWorkspaceId))
   }
 }

@@ -18,6 +18,9 @@ import {
   startQuery,
   setQueryTypes,
   editName,
+  setResponseExtensions,
+  setCurrentQueryStartTime,
+  setCurrentQueryEndTime,
 } from './actions'
 import { getSelectedSessionId } from './selectors'
 import { getDefaultSession, defaultQuery } from '../../constants'
@@ -177,6 +180,9 @@ const reducer = handleActions(
       startQuery,
       setQueryTypes,
       editName,
+      setResponseExtensions,
+      setCurrentQueryStartTime,
+      setCurrentQueryEndTime,
     )]: (state, { payload }) => {
       const keys = Object.keys(payload)
       const keyName = keys.length === 1 ? keys[0] : keys[1]
