@@ -8,9 +8,22 @@ export default class Root extends React.Component<{}, {}> {
       <BrowserRouter>
         <Switch>
           <Route path="/v2/:id" component={GraphQLBinApp} />
-          <Redirect from="/" to="/v2/new" component={GraphQLBinApp} />
+          <Redirect
+            exact={true}
+            from="/"
+            to="/v2/new"
+            component={GraphQLBinApp}
+          />
+          <Route path="*" component={RedirectToOldPlayground} />
         </Switch>
       </BrowserRouter>
     )
   }
+}
+
+const RedirectToOldPlayground = props => {
+  location.href = `https://legacy.graphqlbin.com${location.pathname}${
+    location.search
+  }`
+  return null
 }

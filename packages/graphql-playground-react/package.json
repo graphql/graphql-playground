@@ -1,6 +1,6 @@
 {
   "name": "graphql-playground-react",
-  "version": "1.5.8",
+  "version": "1.5.9",
   "main": "./lib/lib.js",
   "typings": "./lib/lib.d.ts",
   "description": "GraphQL IDE for better development workflows (GraphQL Subscriptions, interactive docs & collaboration).",
