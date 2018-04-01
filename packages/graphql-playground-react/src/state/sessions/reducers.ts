@@ -367,7 +367,7 @@ const reducer = handleActions(
         .set('sessionCount', newState.sessions.size)
     },
     NEW_SESSION: (state, { payload: { reuseHeaders, endpoint } }) => {
-      let session = makeSession(endpoint)
+      let session = makeSession(endpoint || state.sessions.first().endpoint)
       if (reuseHeaders) {
         const selectedSessionId = getSelectedSessionId(state)
         const currentSession = state.sessions.get(selectedSessionId)
