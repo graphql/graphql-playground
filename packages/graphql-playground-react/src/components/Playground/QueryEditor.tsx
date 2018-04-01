@@ -41,7 +41,7 @@ export interface ReduxProps {
 }
 
 const md = new MD()
-const AUTO_COMPLETE_AFTER_KEY = /^[a-zA-Z0-9_@(]$/
+// const AUTO_COMPLETE_AFTER_KEY = /^[a-zA-Z0-9_@(]$/
 
 export class QueryEditor extends React.PureComponent<Props & ReduxProps, {}> {
   private cachedValue: string
@@ -208,7 +208,14 @@ export class QueryEditor extends React.PureComponent<Props & ReduxProps, {}> {
   }
 
   private onKeyUp = (_, event) => {
-    if (AUTO_COMPLETE_AFTER_KEY.test(event.key)) {
+    const code = event.keyCode
+    if (
+      (code >= 65 && code <= 90) || // letters
+      (!event.shiftKey && code >= 48 && code <= 57) || // numbers
+      (event.shiftKey && code === 189) || // underscore
+      (event.shiftKey && code === 50) || // @
+      (event.shiftKey && code === 57) // (
+    ) {
       this.editor.execCommand('autocomplete')
     }
   }
