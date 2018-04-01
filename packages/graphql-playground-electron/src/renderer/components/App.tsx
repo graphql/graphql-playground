@@ -13,6 +13,7 @@ import Playground, {
   getSessionsState,
   saveFile,
   newFileTab,
+  getEndpoint,
 } from 'graphql-playground-react'
 import {
   getGraphQLConfig,
@@ -32,6 +33,8 @@ import { patchEndpointsToConfigData as patchPrismaEndpointsToConfigData } from '
 import { patchEndpointsToConfigData } from 'graphql-config-extension-graphcool'
 import { connect } from 'react-redux'
 import { errify } from '../utils/errify'
+import { createStructuredSelector } from 'reselect'
+import * as dotenv from 'dotenv'
 
 // import { PermissionSession } from 'graphql-playground/lib/types'
 
@@ -84,9 +87,10 @@ interface ReduxProps {
   selectPrevTab: () => void
   closeSelectedTab: () => void
   fetchSchema: () => void
-  newSession: () => void
+  newSession: (endpoint: string) => void
   saveFile: () => void
   newFileTab: (fileName: string, filePath: string, file: string) => void
+  endpoint: string
 }
 
 class App extends React.Component<ReduxProps, State> {
@@ -129,17 +133,18 @@ class App extends React.Component<ReduxProps, State> {
   handleSelectFolder = async (folderPath: string) => {
     try {
       // Get config from folderPath
+      dotenv.config({ path: folderPath })
       const configPath = findGraphQLConfigFile(folderPath)
       const configString = fs.readFileSync(configPath, 'utf-8')
 
       /* tslint:disable-next-line */
-      if (configString.includes('${env:')) {
-        errify(`You opened a .graphqlconfig file that includes environment variables.
-In order to use environment variables in the Playground, please start it from the graphql cli. Install with
-npm install -g graphql-cli
-Then open the graphql config with:
-cd ${folderPath}; graphql playground`)
-      }
+      //       if (configString.includes('${env:')) {
+      //         errify(`You opened a .graphqlconfig file that includes environment variables.
+      // In order to use environment variables in the Playground, please start it from the graphql cli. Install with
+      // npm install -g graphql-cli
+      // Then open the graphql config with:
+      // cd ${folderPath}; graphql playground`)
+      //       }
 
       const configDir = path.dirname(configPath)
       let config = await patchEndpointsToConfigData(
@@ -193,7 +198,7 @@ cd ${folderPath}; graphql playground`)
   }
 
   newTab = () => {
-    this.props.newSession()
+    this.props.newSession(this.props.endpoint)
   }
 
   closeTab = () => {
@@ -214,7 +219,12 @@ cd ${folderPath}; graphql playground`)
     window.addEventListener('keydown', this.handleKeyDown, true)
     this.consumeEvents()
     ipcRenderer.send('ready', '')
-    if (!this.state.endpoint && !this.state.config && !this.state.configPath && !this.state.configString) {
+    if (
+      !this.state.endpoint &&
+      !this.state.config &&
+      !this.state.configPath &&
+      !this.state.configString
+    ) {
       const workspace = this.deserializeWorkspace()
       if (workspace) {
         this.setState(workspace)
@@ -535,7 +545,11 @@ cd ${folderPath}; graphql playground`)
         this.newTab()
         break
       case 'Close':
-        this.closeTab()
+        if (!this.state.endpoint && !this.state.config) {
+          ipcRenderer.send('CloseWindow')
+        } else {
+          this.closeTab()
+        }
         break
       case 'Settings':
         this.openSettingsTab()
@@ -610,7 +624,11 @@ cd ${folderPath}; graphql playground`)
   }
 }
 
-export default connect(null, {
+const mapStateToProps = createStructuredSelector({
+  endpoint: getEndpoint,
+})
+
+export default connect(mapStateToProps, {
   openSettingsTab,
   selectNextTab,
   selectPrevTab,
