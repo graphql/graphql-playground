@@ -62,7 +62,7 @@ export const {
   setCurrentQueryEndTime,
 } = createActions({
   // simple property setting
-  EDIT_QUERY: simpleAction('query'),
+  EDIT_QUERY: query => ({ query }),
   EDIT_HEADERS: simpleAction('headers'),
   EDIT_ENDPOINT: simpleAction('endpoint'),
   EDIT_VARIABLES: simpleAction('variables'),
