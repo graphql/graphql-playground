@@ -2,10 +2,9 @@ import * as React from 'react'
 import Icon from 'graphcool-styles/dist/components/Icon/Icon'
 import { $v } from 'graphcool-styles'
 import { connect } from 'react-redux'
-import { closeTab, selectTab } from '../../state/sessions/actions'
+import { closeTab, selectTab, editName } from '../../state/sessions/actions'
 import * as cn from 'classnames'
 import { Session } from '../../state/sessions/reducers'
-import { editName } from '../../lib'
 import AutosizeInput from 'react-input-autosize'
 
 export interface Props {
