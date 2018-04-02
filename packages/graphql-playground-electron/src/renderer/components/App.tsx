@@ -2,7 +2,7 @@ import * as React from 'react'
 import { remote, ipcRenderer, webFrame } from 'electron'
 import * as cx from 'classnames'
 import { Playground as IPlayground } from 'graphql-playground-react/lib/components/Playground'
-import { merge } from 'immutable'
+import { merge, set } from 'immutable'
 import Playground, {
   openSettingsTab,
   selectNextTab,
@@ -621,6 +621,7 @@ class App extends React.Component<ReduxProps, State> {
 
   private handleSelectItem = ({ type, ...item }) => {
     this.setState(item as any)
+    this.props.selectAppHistoryItem(set(item, 'lastOpened', new Date()) as any)
   }
 
   private setRef = ref => {
