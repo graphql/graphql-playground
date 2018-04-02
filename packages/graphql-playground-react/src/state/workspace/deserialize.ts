@@ -12,6 +12,7 @@ export function deserializePersistedState(state) {
     workspaces: deserializeWorkspaces(state.workspaces),
     selectedWorkspace: state.selectedWorkspace,
     settingsString: state.settingsString,
+    appHistory: deserializeAppHistory(state.appHistory),
   }) as any
 }
 
@@ -24,7 +25,6 @@ function deserializeWorkspaces(workspaces) {
         sharing: deserializeSharing(workspace.sharing),
         history: deserializeHistory(workspace.history),
         general: deserializeGeneral(workspace.general),
-        appHistory: deserializeAppHistory(workspace.appHistory),
       })
     }),
   )

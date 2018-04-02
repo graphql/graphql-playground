@@ -2,6 +2,7 @@ import * as React from 'react'
 import { remote, ipcRenderer, webFrame } from 'electron'
 import * as cx from 'classnames'
 import { Playground as IPlayground } from 'graphql-playground-react/lib/components/Playground'
+import { merge } from 'immutable'
 import Playground, {
   openSettingsTab,
   selectNextTab,
@@ -14,6 +15,8 @@ import Playground, {
   saveFile,
   newFileTab,
   getEndpoint,
+  selectAppHistoryItem,
+  AppHistoryItem,
 } from 'graphql-playground-react'
 import {
   getGraphQLConfig,
@@ -90,6 +93,7 @@ interface ReduxProps {
   newSession: (endpoint: string) => void
   saveFile: () => void
   newFileTab: (fileName: string, filePath: string, file: string) => void
+  selectAppHistoryItem: (item: AppHistoryItem) => void
   endpoint: string
 }
 
@@ -133,7 +137,17 @@ class App extends React.Component<ReduxProps, State> {
   handleSelectFolder = async (folderPath: string) => {
     try {
       // Get config from folderPath
-      dotenv.config({ path: folderPath })
+      const envPath = path.join(folderPath, '.env')
+      let env = process.env
+      if (fs.existsSync(envPath)) {
+        console.log('calling dotenv with ', envPath)
+        const envString = fs.readFileSync(envPath)
+        const localEnv = dotenv.parse(envString)
+        if (localEnv) {
+          console.log('merging', localEnv)
+          env = merge(env, localEnv)
+        }
+      }
       const configPath = findGraphQLConfigFile(folderPath)
       const configString = fs.readFileSync(configPath, 'utf-8')
 
@@ -150,18 +164,18 @@ class App extends React.Component<ReduxProps, State> {
       let config = await patchEndpointsToConfigData(
         resolveEnvsInValues(
           getGraphQLConfig(path.dirname(configPath)).config,
-          process.env,
+          env,
         ),
         configDir,
-        process.env,
+        env,
       )
       config = await patchPrismaEndpointsToConfigData(
         resolveEnvsInValues(
           getGraphQLConfig(path.dirname(configPath)).config,
-          process.env,
+          env,
         ),
         configDir,
-        process.env,
+        env,
       )
 
       ipcRenderer.send(
@@ -173,9 +187,13 @@ class App extends React.Component<ReduxProps, State> {
         configPath,
         config,
         folderName: path.basename(folderPath),
+        env,
       }
       this.setState(state as State)
-      this.serializeWorkspace(state)
+      this.props.selectAppHistoryItem(merge(state, {
+        type: 'local',
+        path: configPath,
+      }) as any)
     } catch (error) {
       errify(error)
     }
@@ -219,17 +237,17 @@ class App extends React.Component<ReduxProps, State> {
     window.addEventListener('keydown', this.handleKeyDown, true)
     this.consumeEvents()
     ipcRenderer.send('ready', '')
-    if (
-      !this.state.endpoint &&
-      !this.state.config &&
-      !this.state.configPath &&
-      !this.state.configString
-    ) {
-      const workspace = this.deserializeWorkspace()
-      if (workspace) {
-        this.setState(workspace)
-      }
-    }
+    // if (
+    //   !this.state.endpoint &&
+    //   !this.state.config &&
+    //   !this.state.configPath &&
+    //   !this.state.configString
+    // ) {
+    //   const workspace = this.deserializeWorkspace()
+    //   if (workspace) {
+    //     this.setState(workspace)
+    //   }
+    // }
   }
 
   consumeEvents() {
@@ -338,32 +356,13 @@ class App extends React.Component<ReduxProps, State> {
     console.log('setting', { state })
 
     if (endpoint) {
-      this.serializeWorkspace(state)
+      this.props.selectAppHistoryItem(merge(state, {
+        type: 'endpoint',
+        path: configPath,
+      }) as any)
     }
 
     this.setState(state)
-  }
-
-  serializeWorkspace(state) {
-    localStorage.setItem(
-      'graphql-playground-last-workspace',
-      JSON.stringify(state),
-    )
-  }
-
-  deserializeWorkspace() {
-    try {
-      const lastWorkspace = localStorage.getItem(
-        'graphql-playground-last-workspace',
-      )
-      if (lastWorkspace) {
-        return JSON.parse(lastWorkspace)
-      }
-    } catch (e) {
-      //
-    }
-
-    return undefined
   }
 
   configContainsEndpoints(config: GraphQLConfigData): boolean {
@@ -595,6 +594,7 @@ class App extends React.Component<ReduxProps, State> {
           isOpen={!endpoint && !configString}
           onSelectFolder={this.handleSelectFolder}
           onSelectEndpoint={this.handleSelectEndpoint}
+          selectHistory={this.handleSelectItem}
         />
         {(endpoint || configString) && (
           <div className="playground">
@@ -619,6 +619,10 @@ class App extends React.Component<ReduxProps, State> {
     )
   }
 
+  private handleSelectItem = ({ type, ...item }) => {
+    this.setState(item as any)
+  }
+
   private setRef = ref => {
     this.playground = ref
   }
@@ -637,4 +641,5 @@ export default connect(mapStateToProps, {
   newSession,
   saveFile,
   newFileTab,
+  selectAppHistoryItem,
 })(App)

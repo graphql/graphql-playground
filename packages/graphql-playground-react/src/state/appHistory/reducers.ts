@@ -1,7 +1,5 @@
 import { Record, OrderedMap } from 'immutable'
 import { handleActions } from 'redux-actions'
-import { createSelector } from 'reselect'
-import { getSelectedWorkspace } from '../workspace/reducers'
 
 // tslint:disable
 
@@ -13,23 +11,32 @@ export class AppHistory extends Record({
 
 export class AppHistoryItem extends Record({
   type: 'local',
-  path: '',
-  lastOpened: undefined,
-}) {
+  configString: undefined,
+  configPath: undefined,
+  endpoint: undefined,
+  folderName: undefined,
+  env: undefined,
+  platformToken: undefined,
+  lastOpened: new Date(),
+  config: undefined,
+} as any) {
   type: 'local' | 'endpoint'
-  path: string
-  lastOpened: any
+  configString?: string
+  configPath?: string
+  endpoint?: string
+  folderName?: string
+  env?: any
+  platformToken?: string
+  lastOpened: Date
+  config?: any
 }
 
 export default handleActions(
   {
     SELECT_APP_HISTORY_ITEM: (state, { payload }) =>
-      state.set(payload.item.path, payload.item),
+      state.setIn(['items', payload.item.path], payload.item),
   },
   new AppHistory(),
 )
 
-export const getAppHistory = key =>
-  createSelector([getSelectedWorkspace], state => {
-    return state.appHistory
-  })
+export const getAppHistory = state => state.appHistory

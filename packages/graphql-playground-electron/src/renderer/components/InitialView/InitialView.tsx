@@ -9,20 +9,12 @@ import { connect } from 'react-redux'
 import * as format from 'date-fns/format'
 import Toggle from './Toggle'
 import { examples } from './data'
-import {
-  getAppHistory,
-  selectAppHistoryItem,
-  AppHistoryItem,
-} from 'graphql-playground-react'
-import { createStructuredSelector } from 'reselect'
+import { getAppHistory, AppHistoryItem } from 'graphql-playground-react'
+import { createStructuredSelector, createSelector } from 'reselect'
 import { OrderedMap } from 'immutable'
 
 interface StateFromProps {
   history: OrderedMap<string, AppHistoryItem>
-}
-
-interface DispatchFromProps {
-  selectHistory: (history: AppHistoryItem) => any
 }
 
 interface State {
@@ -34,6 +26,7 @@ export interface Props {
   isOpen: boolean
   onSelectEndpoint: (endpoint: string) => void
   onSelectFolder: (config: string) => void
+  selectHistory: (history: AppHistoryItem) => any
 }
 
 const modalStyle = {
@@ -61,10 +54,7 @@ const modalStyle = {
   },
 }
 
-class InitialView extends React.Component<
-  Props & StateFromProps & DispatchFromProps,
-  State
-> {
+class InitialView extends React.Component<Props & StateFromProps, State> {
   state = {
     endpoint: '',
     selectedMode: 'url endpoint',
@@ -123,17 +113,13 @@ class InitialView extends React.Component<
 
   handleClickHistory = (history: AppHistoryItem) => {
     this.props.selectHistory(history)
-    if (history.type === 'local') {
-      this.props.onSelectFolder(history.path)
-    } else {
-      this.props.onSelectEndpoint(history.path)
-    }
   }
 
   render() {
     const { isOpen, history } = this.props
     const { endpoint, selectedMode } = this.state
     const choicesMode = ['local', 'url endpoint']
+    const items = history.toJS()
 
     return (
       <div>
@@ -204,35 +190,40 @@ class InitialView extends React.Component<
               <div className="initial-view-recent">
                 <div className="initial-view-recent-header">RECENT</div>
                 <div className="initial-view-recent-list">
-                  {[]
-                    .concat(history)
+                  {Object.keys(items)
                     .reverse()
-                    .map(data => (
-                      <div
-                        className="list-item"
-                        // tslint:disable-next-line
-                        onClick={() => this.handleClickHistory(data)}
-                      >
-                        <div className="list-item-name" title={data.path}>
-                          {data.path}
+                    .map(key => {
+                      const data = items[key]
+                      console.log(data)
+                      const name = data.folderName || data.endpoint || data.path
+                      return (
+                        <div
+                          className="list-item"
+                          // tslint:disable-next-line
+                          onClick={() => this.handleClickHistory(data)}
+                        >
+                          <div className="list-item-name" title={name}>
+                            {name}
+                          </div>
+                          <div className="list-item-date">
+                            <Icon
+                              src={
+                                data.type === 'local'
+                                  ? require('../../icons/folder.svg')
+                                  : require('graphcool-styles/icons/fill/world.svg')
+                              }
+                              color={$v.gray40}
+                              width={14}
+                              height={14}
+                            />
+                            <span>
+                              Last opened{' '}
+                              {format(data.lastOpened, 'DD.MM.YYYY')}
+                            </span>
+                          </div>
                         </div>
-                        <div className="list-item-date">
-                          <Icon
-                            src={
-                              data.type === 'local'
-                                ? require('../../icons/folder.svg')
-                                : require('graphcool-styles/icons/fill/world.svg')
-                            }
-                            color={$v.gray40}
-                            width={14}
-                            height={14}
-                          />
-                          <span>
-                            Last opened {format(data.lastOpened, 'DD.MM.YYYY')}
-                          </span>
-                        </div>
-                      </div>
-                    ))}
+                      )
+                    })}
                 </div>
               </div>
             ) : (
@@ -310,10 +301,10 @@ class InitialView extends React.Component<
   }
 }
 
+const itemsSelector = createSelector([getAppHistory], state => state.items)
+
 const mapStateToProps = createStructuredSelector({
-  history: getAppHistory,
+  history: itemsSelector,
 })
 
-export default connect(mapStateToProps, {
-  selectHistory: selectAppHistoryItem,
-})(InitialView as any) as any
+export default connect(mapStateToProps)(InitialView as any) as any
