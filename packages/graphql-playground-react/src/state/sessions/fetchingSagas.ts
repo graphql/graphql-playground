@@ -176,7 +176,7 @@ function* runQuerySaga(action) {
   try {
     while (true) {
       const { value, error } = yield take(channel)
-      if (value.extensions) {
+      if (value && value.extensions) {
         const extensions = value.extensions
         yield put(setResponseExtensions(extensions))
         delete value.extensiosn
@@ -195,17 +195,23 @@ function* runQuerySaga(action) {
   }
 }
 
-function formatError(error) {
+export function formatError(error, fetchingSchema: boolean = false) {
+  const message = extractMessage(error)
+  if (message === 'Failed to fetch') {
+    const schemaMessage = fetchingSchema ? ' schema' : ''
+    return { error: `${message}${schemaMessage}. Please check your connection` }
+  }
+
+  return { error: message }
+}
+
+function extractMessage(error) {
   if (error instanceof Error) {
-    return {
-      error: error.message,
-    }
+    return error.message
   }
 
   if (typeof error === 'string') {
-    return {
-      error,
-    }
+    return error
   }
 
   return error

@@ -25,6 +25,7 @@ import {
 import { getSelectedSessionId } from './selectors'
 import { getDefaultSession, defaultQuery } from '../../constants'
 import * as cuid from 'cuid'
+import { formatError } from './fetchingSagas'
 
 export interface SessionStateProps {
   sessions: OrderedMap<string, Session>
@@ -308,7 +309,11 @@ const reducer = handleActions(
               responses: List([
                 new ResponseRecord({
                   resultID: cuid(),
-                  date: payload.error,
+                  date: JSON.stringify(
+                    formatError(payload.error, true),
+                    null,
+                    2,
+                  ),
                   time: new Date(),
                 }),
               ]),
