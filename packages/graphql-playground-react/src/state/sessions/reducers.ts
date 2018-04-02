@@ -258,6 +258,12 @@ const reducer = handleActions(
         true,
       )
     },
+    REFETCH_SCHEMA: state => {
+      return state.setIn(
+        ['sessions', getSelectedSessionId(state), 'isReloadingSchema'],
+        true,
+      )
+    },
     STOP_QUERY: (state, { payload: { sessionId } }) => {
       return state.mergeIn(['sessions', sessionId], {
         queryRunning: false,

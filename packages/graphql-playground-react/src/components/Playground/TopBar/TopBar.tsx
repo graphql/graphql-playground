@@ -21,7 +21,7 @@ import * as PropTypes from 'prop-types'
 import {
   editEndpoint,
   prettifyQuery,
-  fetchSchema,
+  refetchSchema,
 } from '../../../state/sessions/actions'
 import { share } from '../../../state/sharing/actions'
 import { openHistory } from '../../../state/general/actions'
@@ -36,7 +36,7 @@ export interface Props {
   prettifyQuery: () => void
   openHistory: () => void
   share: () => void
-  fetchSchema: () => void
+  refetchSchema: () => void
 }
 
 class TopBar extends React.Component<Props, {}> {
@@ -58,7 +58,7 @@ class TopBar extends React.Component<Props, {}> {
             value={this.props.endpoint}
             onChange={this.onChange}
             onKeyDown={this.onKeyDown}
-            onBlur={this.fetchSchema}
+            onBlur={this.props.refetchSchema}
             disabled={this.props.fixedEndpoint}
             className={cx({ active: !this.props.fixedEndpoint })}
           />
@@ -70,7 +70,7 @@ class TopBar extends React.Component<Props, {}> {
           ) : (
             <ReloadIcon
               isReloadingSchema={this.props.isReloadingSchema}
-              onReloadSchema={this.fetchSchema}
+              onReloadSchema={this.props.refetchSchema}
             />
           )}
         </UrlBarWrapper>
@@ -90,11 +90,8 @@ class TopBar extends React.Component<Props, {}> {
   }
   onKeyDown = e => {
     if (e.keyCode === 13) {
-      this.fetchSchema()
+      this.props.refetchSchema()
     }
-  }
-  fetchSchema = () => {
-    this.props.fetchSchema()
   }
   openHistory = () => {
     this.props.openHistory()
@@ -152,7 +149,7 @@ export default connect(mapStateToProps, {
   prettifyQuery,
   openHistory,
   share,
-  fetchSchema,
+  refetchSchema,
 })(TopBar)
 
 const buttonColor = theme('mode', {

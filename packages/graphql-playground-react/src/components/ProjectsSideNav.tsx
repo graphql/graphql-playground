@@ -11,7 +11,7 @@ import { connect } from 'react-redux'
 import { getSessionCounts } from '../state/workspace/reducers'
 import { Map } from 'immutable'
 import { getWorkspaceId } from './Playground/util/getWorkspaceId'
-import { openConfigTab } from '../lib'
+import { openConfigTab } from '../state/sessions/actions'
 
 export interface Props {
   config: GraphQLConfig

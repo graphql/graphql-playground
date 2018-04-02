@@ -60,6 +60,7 @@ export const {
   setResponseExtensions,
   setCurrentQueryStartTime,
   setCurrentQueryEndTime,
+  refetchSchema,
 } = createActions({
   // simple property setting
   EDIT_QUERY: query => ({ query }),
@@ -120,6 +121,7 @@ export const {
   CLEAR_RESPONSES: simpleAction(),
 
   FETCH_SCHEMA: simpleAction(),
+  REFETCH_SCHEMA: simpleAction(),
   SCHEMA_FETCHING_SUCCESS: (endpoint, tracingSupported) => ({
     endpoint,
     tracingSupported,
