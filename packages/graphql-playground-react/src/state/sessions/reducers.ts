@@ -367,7 +367,9 @@ const reducer = handleActions(
         .set('sessionCount', newState.sessions.size)
     },
     NEW_SESSION: (state, { payload: { reuseHeaders, endpoint } }) => {
-      let session = makeSession(endpoint || state.sessions.first().endpoint)
+      let session = makeSession(
+        endpoint || state.sessions.first().endpoint,
+      ).set('query', '')
       if (reuseHeaders) {
         const selectedSessionId = getSelectedSessionId(state)
         const currentSession = state.sessions.get(selectedSessionId)
@@ -521,10 +523,9 @@ function closeTab(state, sessionId) {
   // if there is only one session, delete it and replace it by a new one
   // and keep the endpoint & headers of the last one
   if (length === 1) {
-    const newSession = makeSession(session.endpoint).set(
-      'headers',
-      session.headers,
-    )
+    const newSession = makeSession(session.endpoint)
+      .set('headers', session.headers)
+      .set('query', '')
     newState = newState.set('selectedSessionId', newSession.id)
     return newState.setIn(['sessions', newSession.id], newSession)
   }
