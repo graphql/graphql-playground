@@ -378,9 +378,12 @@ const reducer = handleActions(
         .set('sessionCount', newState.sessions.size)
     },
     NEW_SESSION: (state, { payload: { reuseHeaders, endpoint } }) => {
-      let session = makeSession(
-        endpoint || state.sessions.first().endpoint,
-      ).set('query', '')
+      const currentSession = state.sessions.first()
+      let session = makeSession(endpoint || currentSession.endpoint).merge({
+        query: '',
+        isReloadingSchema: currentSession.isReloadingSchema,
+        endpointUnreachable: currentSession.endpointUnreachable,
+      })
       if (reuseHeaders) {
         const selectedSessionId = getSelectedSessionId(state)
         const currentSession = state.sessions.get(selectedSessionId)

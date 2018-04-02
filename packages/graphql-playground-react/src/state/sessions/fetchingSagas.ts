@@ -179,7 +179,7 @@ function* runQuerySaga(action) {
       if (value && value.extensions) {
         const extensions = value.extensions
         yield put(setResponseExtensions(extensions))
-        delete value.extensiosn
+        delete value.extensions
       }
       const response = new ResponseRecord({
         date: JSON.stringify(value ? value : formatError(error), null, 2),

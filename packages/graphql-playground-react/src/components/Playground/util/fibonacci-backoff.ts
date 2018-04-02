@@ -21,7 +21,10 @@ export class Backoff {
       await this.cb()
       this.count++
       if (this.running && this.count < this.maxRetries) {
-        setTimeout(fn, fibonacci(this.count) * 1000)
+        setTimeout(
+          fn,
+          (this.count < 15 ? 3 : fibonacci(this.count - 12)) * 1000,
+        )
       }
     }
     fn()
