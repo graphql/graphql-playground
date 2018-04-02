@@ -93,7 +93,11 @@ ipcMain.on('cwd', (event, msg) => {
   windowContext.windowByPath.set(cwd, window)
 })
 
-ipcMain.on('CloseWindow', () => app.quit())
+ipcMain.on('CloseWindow', (event, msg) => {
+  const { id } = JSON.parse(msg)
+  const window = windowContext.windowById.get(id)
+  window.close()
+})
 
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.

@@ -57,7 +57,7 @@ const modalStyle = {
 class InitialView extends React.Component<Props & StateFromProps, State> {
   state = {
     endpoint: '',
-    selectedMode: 'url endpoint',
+    selectedMode: 'local',
   }
 
   handleRequestClose = () => null
@@ -92,12 +92,6 @@ class InitialView extends React.Component<Props & StateFromProps, State> {
         alert('No .graphqlconfig found in this folder')
         return
       }
-      this.props.selectHistory(
-        new AppHistoryItem({
-          type: 'local',
-          path,
-        }),
-      )
       this.setState({ endpoint: path } as State)
       this.props.onSelectFolder(path)
     }

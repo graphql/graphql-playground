@@ -140,11 +140,9 @@ class App extends React.Component<ReduxProps, State> {
       const envPath = path.join(folderPath, '.env')
       let env = process.env
       if (fs.existsSync(envPath)) {
-        console.log('calling dotenv with ', envPath)
         const envString = fs.readFileSync(envPath)
         const localEnv = dotenv.parse(envString)
         if (localEnv) {
-          console.log('merging', localEnv)
           env = merge(env, localEnv)
         }
       }
@@ -353,8 +351,6 @@ class App extends React.Component<ReduxProps, State> {
       platformToken,
     }
 
-    console.log('setting', { state })
-
     if (endpoint) {
       this.props.selectAppHistoryItem(merge(state, {
         type: 'endpoint',
@@ -545,7 +541,10 @@ class App extends React.Component<ReduxProps, State> {
         break
       case 'Close':
         if (!this.state.endpoint && !this.state.config) {
-          ipcRenderer.send('CloseWindow')
+          ipcRenderer.send(
+            'CloseWindow',
+            JSON.stringify({ id: remote.getCurrentWindow().id }),
+          )
         } else {
           this.closeTab()
         }
