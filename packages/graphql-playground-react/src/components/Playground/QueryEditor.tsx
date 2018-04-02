@@ -13,7 +13,10 @@ import { connect } from 'react-redux'
 import onHasCompletion from './onHasCompletion'
 import { editQuery } from '../../state/sessions/actions'
 import { createStructuredSelector } from 'reselect'
-import { getQuery } from '../../state/sessions/selectors'
+import {
+  getQuery,
+  getSelectedSessionIdFromRoot,
+} from '../../state/sessions/selectors'
 /**
  * QueryEditor
  *
@@ -38,6 +41,7 @@ export interface ReduxProps {
   showDocForReference?: (reference: any) => void
   onChange?: (query: string) => void
   value: string
+  sessionId?: string
 }
 
 const md = new MD()
@@ -177,6 +181,12 @@ export class QueryEditor extends React.PureComponent<Props & ReduxProps, {}> {
     this.ignoreChangeEvent = false
   }
 
+  componentWillReceiveProps(nextProps) {
+    if (this.props.sessionId !== nextProps.sessionId) {
+      this.closeCompletion()
+    }
+  }
+
   componentWillUnmount() {
     this.editor.off('change', this.onEdit)
     this.editor.off('keyup', this.onKeyUp)
@@ -209,6 +219,9 @@ export class QueryEditor extends React.PureComponent<Props & ReduxProps, {}> {
 
   private onKeyUp = (_, event) => {
     const code = event.keyCode
+    if (code === 86) {
+      return
+    }
     if (
       (code >= 65 && code <= 90) || // letters
       (!event.shiftKey && code >= 48 && code <= 57) || // numbers
@@ -234,10 +247,20 @@ export class QueryEditor extends React.PureComponent<Props & ReduxProps, {}> {
   private onHasCompletion = (cm, data) => {
     onHasCompletion(cm, data, this.props.onHintInformationRender)
   }
+
+  private closeCompletion = () => {
+    if (
+      this.editor.state.completionActive &&
+      typeof this.editor.state.completionActive.close === 'function'
+    ) {
+      this.editor.state.completionActive.close()
+    }
+  }
 }
 
 const mapStateToProps = createStructuredSelector({
   value: getQuery,
+  sessionId: getSelectedSessionIdFromRoot,
 })
 
 export default connect(mapStateToProps, { onChange: editQuery })(QueryEditor)
