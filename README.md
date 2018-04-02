@@ -1,14 +1,14 @@
 <p align="center"><img src="https://imgur.com/5fzMbyV.png" width="269"></p>
 
-
 [![npm version](https://badge.fury.io/js/graphql-playground-react.svg)](https://badge.fury.io/js/graphql-playground-react) [![Build Status](https://travis-ci.org/graphcool/graphql-playground.svg?branch=master)](https://travis-ci.org/graphcool/graphql-playground) [![CircleCI](https://circleci.com/gh/graphcool/graphql-playground.svg?style=shield)](https://circleci.com/gh/graphcool/graphql-playground)
 
 GraphQL IDE for better development workflows (GraphQL Subscriptions, interactive docs & collaboration). <br />
 **You can download the [desktop app](https://github.com/graphcool/graphql-playground/releases) or use the web version at graphqlbin.com: [Demo](https://www.graphqlbin.com/RVIn)**
 
-
 [![](https://i.imgur.com/AE5W6OW.png)](https://www.graphqlbin.com/RVIn)
+
 ## Installation
+
 ```sh
 $ brew cask install graphql-playground
 ```
@@ -18,7 +18,7 @@ $ brew cask install graphql-playground
 * ✨ Context-aware autocompletion & error highlighting
 * 📚 Interactive, multi-column docs (keyboard support)
 * ⚡️ Supports real-time GraphQL Subscriptions
-* ⚙  GraphQL Config support with multiple Projects & Endpoints
+* ⚙ GraphQL Config support with multiple Projects & Endpoints
 * 🚥 Apollo Tracing support
 
 ## FAQ
@@ -51,51 +51,67 @@ You can easily share your Playgrounds with others by clicking on the "Share" but
 
 > You can also find the announcement blog post [here](https://blog.graph.cool/introducing-graphql-playground-f1e0a018f05d).
 
-
 ## Usage
 
 ### Properties
+
 All interfaces, the React component `<Playground />` and all middlewares expose the same set of options:
 
-+ `properties`
-  + `endpoint` [`string`] - the GraphQL endpoint url.
-  + `subscriptionEndpoint` [`string`] - the GraphQL subscriptions endpoint url.
-  + `setTitle` [`boolean`] - reflect the current endpoint in the page title
+* `properties`
+  * `endpoint` [`string`] - the GraphQL endpoint url.
+  * `subscriptionEndpoint` [`string`] - the GraphQL subscriptions endpoint url.
+  * `setTitle` [`boolean`] - reflect the current endpoint in the page title
+
+### As HTML Page
+
+If you simply want to render the Playground HTML on your own, for example when implementing a GraphQL Server, there are 2 options for you:
+
+1.  [The bare minimum HTML needed to render the Playground](https://github.com/graphcool/graphql-playground/blob/master/packages/graphql-playground-html/minimal.html)
+2.  [The Playground HTML with full loading animation](https://github.com/graphcool/graphql-playground/blob/master/packages/graphql-playground-html/withAnimation.html)
 
 ### As React Component
 
 #### Install
+
 ```sh
 yarn add graphql-playground-react
 ```
 
 #### Use
+
 GraphQL Playground provides a React component responsible for rendering the UI and Session management.
 There are **3 dependencies** needed in order to run the `graphql-playground-react` React component.
-1. _Open Sans_ and _Source Code Pro_ fonts
-2. Including `graphql-playground-react/playground.css`
-3. Rendering the `<Playground />` component
+
+1.  _Open Sans_ and _Source Code Pro_ fonts
+2.  Including `graphql-playground-react/playground.css`
+3.  Rendering the `<Playground />` component
 
 The GraphQL Playground requires **React 16**.
 
 Including Fonts (`1.`)
+
 ```html
 <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700|Source+Code+Pro:400,700" rel="stylesheet">
 ```
 
 Including stylesheet and the component (`2., 3.`)
+
 ```js
 import React from 'react'
 import ReactDOM from 'react-dom'
 import Playground from 'graphql-playground-react'
 import 'graphql-playground-react/playground.css'
 
-ReactDOM.render(<Playground endpoint="https://api.graph.cool/simple/v1/swapi" />, document.body)
+ReactDOM.render(
+  <Playground endpoint="https://api.graph.cool/simple/v1/swapi" />,
+  document.body,
+)
 ```
 
 ### As Server Middleware
 
 #### Install
+
 ```sh
 # Pick the one that matches your server framework
 yarn add graphql-playground-middleware-express  # for Express or Connect
@@ -108,21 +124,24 @@ yarn add graphql-playground-middleware-lambda
 
 We have a full example for each of the frameworks below:
 
-- **Express:** See [packages/graphql-playground-middleware-express/examples/basic](https://github.com/graphcool/graphql-playground/tree/master/packages/graphql-playground-middleware-express/examples/basic)
+* **Express:** See [packages/graphql-playground-middleware-express/examples/basic](https://github.com/graphcool/graphql-playground/tree/master/packages/graphql-playground-middleware-express/examples/basic)
 
-- **Hapi:** See [packages/graphql-playground-middleware-hapi](https://github.com/graphcool/graphql-playground/tree/master/packages/graphql-playground-middleware-hapi)
+* **Hapi:** See [packages/graphql-playground-middleware-hapi](https://github.com/graphcool/graphql-playground/tree/master/packages/graphql-playground-middleware-hapi)
 
-- **Koa:** See [packages/graphql-playground-middleware-koa](https://github.com/graphcool/graphql-playground/tree/master/packages/graphql-playground-middleware-koa)
+* **Koa:** See [packages/graphql-playground-middleware-koa](https://github.com/graphcool/graphql-playground/tree/master/packages/graphql-playground-middleware-koa)
 
-- **Lambda (as serverless handler):** See [serverless-graphql-apollo](https://github.com/serverless/serverless-graphql-apollo) or a quick example below.
+* **Lambda (as serverless handler):** See [serverless-graphql-apollo](https://github.com/serverless/serverless-graphql-apollo) or a quick example below.
 
 ### As serverless handler
+
 #### Install
+
 ```sh
 yarn add graphql-playground-middleware-lambda
 ```
 
 #### Usage
+
 `handler.js`
 
 ```js
@@ -133,17 +152,17 @@ import lambdaPlayground from 'graphql-playground-middleware-lambda'
 exports.graphqlHandler = function graphqlHandler(event, context, callback) {
   function callbackFilter(error, output) {
     // eslint-disable-next-line no-param-reassign
-    output.headers['Access-Control-Allow-Origin'] = '*';
-    callback(error, output);
+    output.headers['Access-Control-Allow-Origin'] = '*'
+    callback(error, output)
   }
 
-  const handler = graphqlLambda({ schema: myGraphQLSchema });
-  return handler(event, context, callbackFilter);
-};
+  const handler = graphqlLambda({ schema: myGraphQLSchema })
+  return handler(event, context, callbackFilter)
+}
 
 exports.playgroundHandler = lambdaPlayground({
   endpoint: '/dev/graphql',
-});
+})
 ```
 
 `serverless.yml`
@@ -176,6 +195,7 @@ $ yarn
 $ cd packages/graphql-playground-react
 $ yarn start
 ```
+
 Open
 [localhost:3000/middleware.html?endpoint=https://api.graph.cool/simple/v1/swapi](http://localhost:3000/middleware.html?endpoint=https://api.graph.cool/simple/v1/swapi) for local development!
 
@@ -194,7 +214,6 @@ In the folder `packages` you'll find the following packages:
 * `graphql-playground-middleware-koa`: Koa middleware using `graphql-playground-html`
 * `graphql-playground-middleware-lambda`: AWS Lambda middleware using `graphql-playground-html`
 * `graphql-playground-react`: Core of GraphQL Playground built with ReactJS
-
 
 <a name="help-and-community" />
 
