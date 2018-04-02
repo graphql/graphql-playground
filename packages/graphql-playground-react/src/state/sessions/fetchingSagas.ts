@@ -22,6 +22,7 @@ import {
   setResponseExtensions,
   setCurrentQueryStartTime,
   setCurrentQueryEndTime,
+  setEndpointUnreachable,
 } from './actions'
 import {
   getSelectedSession,
@@ -186,6 +187,10 @@ function* runQuerySaga(action) {
         time: new Date(),
         resultID: cuid(),
       })
+      const errorMessage = extractMessage(error)
+      if (errorMessage === 'Failed to fetch') {
+        yield put(setEndpointUnreachable(session.endpoint))
+      }
       yield put(addResponse(selectedWorkspaceId, session.id, response))
       yield put(addHistoryItem(session))
     }

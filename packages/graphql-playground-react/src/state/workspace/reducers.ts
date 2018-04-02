@@ -25,13 +25,11 @@ export class Workspace extends Record({
   sessions: makeSessionState(''),
   sharing: new SharingState(),
   history: OrderedMap(),
-  general: new GeneralState(),
 }) {
   docs: DocsState
   sessions: SessionState
   sharing: SharingState
   history: HistoryState
-  general: GeneralState
 }
 
 export const defaultSettings = {
@@ -48,6 +46,7 @@ export const RootState = Record<any>({
   settingsString: JSON.stringify(defaultSettings, null, 2),
   stateInjected: false,
   appHistory: new AppHistory(),
+  general: new GeneralState(),
 })
 
 const workspaceReducers: Reducer<any> = combineReducers({
@@ -91,6 +90,16 @@ export const rootReducer = (state = new RootState(), action) => {
   if (action.type === 'SELECT_APP_HISTORY_ITEM') {
     return state.set('appHistory', appHistory(state.appHistory, action))
   }
+  const generalActions = {
+    OPEN_HISTORY: true,
+    CLOSE_HISTORY: true,
+    SET_ENDPOINT_DISABLED: true,
+    SET_CONFIG_STRING: true,
+  }
+
+  if (generalActions[action.type]) {
+    return state.set('general', general(state.general, action))
+  }
 
   const selectedWorkspaceId =
     action.payload && action.payload.workspaceId
@@ -113,7 +122,6 @@ export function makeWorkspace(endpoint) {
     sessions: sessionState,
     sharing: new SharingState(),
     history: OrderedMap(),
-    general: new GeneralState(),
   }) as any
 }
 

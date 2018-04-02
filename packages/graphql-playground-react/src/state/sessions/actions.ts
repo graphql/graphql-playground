@@ -26,6 +26,7 @@ export const {
   openSettingsTab,
   schemaFetchingSuccess,
   schemaFetchingError,
+  setEndpointUnreachable,
   renewStacks,
   runQuery,
   prettifyQuery,
@@ -122,6 +123,7 @@ export const {
 
   FETCH_SCHEMA: simpleAction(),
   REFETCH_SCHEMA: simpleAction(),
+  SET_ENDPOINT_UNREACHABLE: simpleAction('endpoint'),
   SCHEMA_FETCHING_SUCCESS: (endpoint, tracingSupported) => ({
     endpoint,
     tracingSupported,

@@ -299,6 +299,19 @@ const reducer = handleActions(
         })
       return state.set('sessions', newSessions)
     },
+    SET_ENDPOINT_UNREACHABLE: (state, { payload }) => {
+      const newSessions = state.get('sessions').map((session, sessionId) => {
+        if (session.get('endpoint') === payload.endpoint) {
+          return session.merge(
+            Map({
+              endpointUnreachable: true,
+            }),
+          )
+        }
+        return session
+      })
+      return state.set('sessions', newSessions)
+    },
     SCHEMA_FETCHING_ERROR: (state, { payload }) => {
       const newSessions = state.get('sessions').map((session, sessionId) => {
         if (session.get('endpoint') === payload.endpoint) {
