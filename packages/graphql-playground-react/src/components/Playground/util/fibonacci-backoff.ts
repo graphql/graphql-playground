@@ -20,6 +20,7 @@ export class Backoff {
     const fn = async () => {
       await this.cb()
       this.count++
+      // The first 15 attempts are fast, then fibonacci starts with n = 3
       if (this.running && this.count < this.maxRetries) {
         setTimeout(
           fn,
