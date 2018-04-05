@@ -233,15 +233,16 @@ class GraphDocs extends React.Component<
         >
           <div className="doc-explorer-container">
             {emptySchema && <ColumnDoc>{emptySchema}</ColumnDoc>}
-            {schema && (
-              <RootColumn
-                schema={schema}
-                width={this.state.widthMap.root || columnWidth - 1}
-                searchValue={this.state.searchValue}
-                handleSearch={this.handleSearch}
-                sessionId={this.props.sessionId}
-              />
-            )}
+            {!emptySchema &&
+              schema && (
+                <RootColumn
+                  schema={schema}
+                  width={this.state.widthMap.root || columnWidth - 1}
+                  searchValue={this.state.searchValue}
+                  handleSearch={this.handleSearch}
+                  sessionId={this.props.sessionId}
+                />
+              )}
             {navStack.map((stack, index) => (
               <ColumnDoc
                 key={index}
