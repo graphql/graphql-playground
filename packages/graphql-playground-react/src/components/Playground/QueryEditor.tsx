@@ -14,6 +14,7 @@ import onHasCompletion from './onHasCompletion'
 import { editQuery } from '../../state/sessions/actions'
 import { createStructuredSelector } from 'reselect'
 import { getQuery } from '../../state/sessions/selectors'
+import EditorWrapper from './EditorWrapper'
 /**
  * QueryEditor
  *
@@ -185,7 +186,11 @@ export class QueryEditor extends React.PureComponent<Props & ReduxProps, {}> {
   }
 
   render() {
-    return <div className="query-editor" ref={this.setRef} />
+    return (
+      <EditorWrapper>
+        <div className="query-editor" ref={this.setRef} />
+      </EditorWrapper>
+    )
   }
 
   setRef = ref => {

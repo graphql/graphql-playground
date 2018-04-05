@@ -49,6 +49,14 @@ export const colours: Colours = {
   paleGrey: '#f3f4f4', // use for bgs, borders, etc
 }
 
+export interface EditorColours {
+  property: string
+}
+
+export const editorColours: EditorColours = {
+  property: `rgb(41, 185, 115)`,
+}
+
 export interface Sizes {
   small6: string
   small10: string
@@ -94,6 +102,7 @@ export interface ThemeInterface {
   colours: Colours
   sizes: Sizes
   shorthands: Shorthands
+  editorColours: EditorColours
 }
 
 export const theme: ThemeInterface = {
@@ -101,4 +110,5 @@ export const theme: ThemeInterface = {
   colours,
   sizes,
   shorthands,
+  editorColours,
 }
