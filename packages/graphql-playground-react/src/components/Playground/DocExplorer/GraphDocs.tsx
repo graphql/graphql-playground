@@ -224,43 +224,40 @@ class GraphDocs extends React.Component<
           onMouseDown={this.handleDocsResizeStart}
         />
         <div className="doc-explorer-gradient" />
-        {docsOpen && (
-          <div
-            className="doc-explorer"
-            onKeyDown={this.handleKeyDown}
-            onMouseMove={this.handleMouseMove}
-            tabIndex={0}
-            ref={this.setDocExplorerRef}
-          >
-            <div className="doc-explorer-container">
-              {emptySchema && <ColumnDoc>{emptySchema}</ColumnDoc>}
-              {!emptySchema &&
-                schema && (
-                  <RootColumn
-                    schema={schema}
-                    width={this.state.widthMap.root || columnWidth - 1}
-                    searchValue={this.state.searchValue}
-                    handleSearch={this.handleSearch}
-                    sessionId={this.props.sessionId}
-                  />
-                )}
-              {!emptySchema &&
-                navStack.map((stack, index) => (
-                  <ColumnDoc
-                    key={index}
-                    width={this.state.widthMap[stack.field.path] || columnWidth}
-                  >
-                    <FieldDoc
-                      schema={schema}
-                      field={stack.field}
-                      level={index + 1}
-                      sessionId={this.props.sessionId}
-                    />
-                  </ColumnDoc>
-                ))}
-            </div>
+        <div
+          className="doc-explorer"
+          onKeyDown={this.handleKeyDown}
+          onMouseMove={this.handleMouseMove}
+          tabIndex={0}
+          ref={this.setDocExplorerRef}
+        >
+          <div className="doc-explorer-container">
+            {emptySchema && <ColumnDoc>{emptySchema}</ColumnDoc>}
+            {!emptySchema &&
+              schema && (
+                <RootColumn
+                  schema={schema}
+                  width={this.state.widthMap.root || columnWidth - 1}
+                  searchValue={this.state.searchValue}
+                  handleSearch={this.handleSearch}
+                  sessionId={this.props.sessionId}
+                />
+              )}
+            {navStack.map((stack, index) => (
+              <ColumnDoc
+                key={index}
+                width={this.state.widthMap[stack.field.path] || columnWidth}
+              >
+                <FieldDoc
+                  schema={schema}
+                  field={stack.field}
+                  level={index + 1}
+                  sessionId={this.props.sessionId}
+                />
+              </ColumnDoc>
+            ))}
           </div>
-        )}
+        </div>
       </div>
     )
   }
@@ -362,16 +359,17 @@ class GraphDocs extends React.Component<
           }
         } else {
           const obj = serializeRoot(this.props.schema)
+          const y = lastNavStack ? lastNavStack.y : 0
           const element = getElementRoot(
             obj,
-            keyPressed === 'up' ? lastNavStack.y - 1 : lastNavStack.y + 1,
+            keyPressed === 'up' ? y - 1 : y + 1,
           )
           if (element) {
             this.props.addStack(
               this.props.sessionId,
               element,
               0,
-              keyPressed === 'up' ? lastNavStack.y - 1 : lastNavStack.y + 1,
+              keyPressed === 'up' ? y - 1 : y + 1,
             )
           }
         }
