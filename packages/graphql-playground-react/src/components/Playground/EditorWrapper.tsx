@@ -1,6 +1,5 @@
 import * as React from 'react'
 import { styled, ThemeProvider, theme } from '../../styled'
-import { connect } from 'react-redux'
 
 const EditorWrapper = styled.div`
   .cm-property {
@@ -9,6 +8,7 @@ const EditorWrapper = styled.div`
 
   display: flex;
   flex: 1 1 0;
+  flex-flow: column;
 `
 
 const Wrapper = ({ children }) => (
@@ -17,4 +17,4 @@ const Wrapper = ({ children }) => (
   </ThemeProvider>
 )
 
-export default connect()(Wrapper)
+export default Wrapper

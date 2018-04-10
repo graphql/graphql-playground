@@ -5,6 +5,7 @@ import { QueryEditor } from './Playground/QueryEditor'
 import { createStructuredSelector } from 'reselect'
 import { getFile } from '../state/sessions/selectors'
 import { editFile } from '../state/sessions/actions'
+import EditorWrapper from './Playground/EditorWrapper'
 import { connect } from 'react-redux'
 
 export interface Props {
@@ -16,14 +17,14 @@ class FileEditor extends React.Component<Props, {}> {
   render() {
     return (
       <Wrapper className="graphiql-container">
-        <div className="editorWrap">
+        <EditorWrapper>
           <div className="queryWrap">
             <QueryEditor
               value={this.props.value}
               onChange={this.props.onChange}
             />
           </div>
-        </div>
+        </EditorWrapper>
       </Wrapper>
     )
   }
