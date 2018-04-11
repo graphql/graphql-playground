@@ -87,7 +87,7 @@ export const defaultLinkCreator = (
   return {
     link: ApolloLink.split(
       operation => isSubscription(operation),
-      webSocketLink,
+      webSocketLink as any,
       httpLink,
     ),
     subscriptionClient,
