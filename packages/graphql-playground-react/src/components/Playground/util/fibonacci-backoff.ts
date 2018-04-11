@@ -22,16 +22,15 @@ export class Backoff {
       this.count++
       // The first 15 attempts are fast, then fibonacci starts with n = 3
       if (this.running && this.count < this.maxRetries) {
-        setTimeout(
+        this.timeout = setTimeout(
           fn,
-          (this.count < 15 ? 3 : fibonacci(this.count - 12)) * 1000,
+          (this.count < 3 ? 5 : fibonacci(this.count - 12)) * 1000,
         )
       }
     }
     fn()
   }
-  stop() {
+  stop = () => {
     this.running = false
-    clearTimeout(this.timeout)
   }
 }

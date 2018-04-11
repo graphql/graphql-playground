@@ -60,7 +60,7 @@ const config = {
         },
         endpoints: {
           dev: {
-            url: 'https://eu1.prisma.sh/tim2/prisma-airbnb-example/dev',
+            url: 'https://eu1.prisma.sh/lol/asdf/dev',
             headers: {
               Authorization:
                 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjp7InNlcnZpY2UiOiJwcmlzbWEtYWlyYm5iLWV4YW1wbGVAZGV2Iiwicm9sZXMiOlsiYWRtaW4iXX0sImlhdCI6MTUyMjY4NDkzNiwiZXhwIjoxNTIzMjg5NzM2fQ.1wnkIJrAplDOznjEzLj8sQERL6dcAM0zjqxOGQBXGn0',

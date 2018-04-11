@@ -207,6 +207,13 @@ export function formatError(error, fetchingSchema: boolean = false) {
     return { error: `${message}${schemaMessage}. Please check your connection` }
   }
 
+  try {
+    const ee = JSON.parse(message)
+    return ee
+  } catch (e) {
+    //
+  }
+
   return { error: message }
 }
 
