@@ -100,6 +100,7 @@ export interface ReduxProps {
   setConfigString: (str: string) => void
   schemaFetchingError: (endpoint: string, error: string) => void
   schemaFetchingSuccess: (endpoint: string, tracingSupported: boolean) => void
+  isReloadingSchema: boolean
   isConfigTab: boolean
   isSettingsTab: boolean
   isFile: boolean
@@ -177,8 +178,10 @@ export class Playground extends React.PureComponent<Props & ReduxProps, State> {
     ) {
       this.getSchema(nextProps)
     }
-    if (nextProps.isReloadingSchema) {
-      this.getSchema(nextProps)
+    if (this.props.isReloadingSchema && !nextProps.isReloadingSchema) {
+      setTimeout(() => {
+        this.getSchema(nextProps)
+      })
     }
     if (
       this.props.endpoint !== nextProps.endpoint ||
@@ -240,6 +243,8 @@ export class Playground extends React.PureComponent<Props & ReduxProps, State> {
           this.backoff.stop()
         }
       } catch (e) {
+        // tslint:disable-next-line
+        console.error(e)
         this.props.schemaFetchingError(props.endpoint, e.message)
       }
     }
