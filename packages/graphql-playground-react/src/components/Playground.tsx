@@ -83,6 +83,7 @@ export interface Props {
   configPath?: string
   createApolloLink?: (session: Session) => ApolloLink
   workspaceName?: string
+  shouldInjectHeaders: boolean
 }
 
 export interface ReduxProps {
@@ -149,8 +150,10 @@ export class Playground extends React.PureComponent<Props & ReduxProps, State> {
   componentWillMount() {
     // init redux
     this.props.initState(getWorkspaceId(this.props), this.props.endpoint)
-    this.props.injectHeaders(this.props.headers, this.props.endpoint)
     this.props.setConfigString(this.props.configString)
+    if (this.props.shouldInjectHeaders) {
+      this.props.injectHeaders(this.props.headers, this.props.endpoint)
+    }
   }
 
   componentDidMount() {
@@ -169,7 +172,8 @@ export class Playground extends React.PureComponent<Props & ReduxProps, State> {
     if (
       nextProps.headers !== this.props.headers ||
       nextProps.endpoint !== this.props.endpoint ||
-      nextProps.workspaceName !== this.props.workspaceName
+      nextProps.workspaceName !== this.props.workspaceName ||
+      nextProps.sessionHeaders !== this.props.sessionHeaders
     ) {
       this.getSchema(nextProps)
     }
@@ -186,7 +190,10 @@ export class Playground extends React.PureComponent<Props & ReduxProps, State> {
     if (this.props.subscriptionEndpoint !== nextProps.subscriptionEndpoint) {
       setSubscriptionEndpoint(nextProps.subscriptionEndpoint)
     }
-    if (nextProps.headers !== this.props.headers) {
+    if (
+      nextProps.headers !== this.props.headers &&
+      this.props.shouldInjectHeaders
+    ) {
       this.props.injectHeaders(nextProps.headers, nextProps.endpoint)
     }
     if (nextProps.configString !== this.props.configString) {
@@ -218,9 +225,10 @@ export class Playground extends React.PureComponent<Props & ReduxProps, State> {
       try {
         const data = {
           endpoint: props.endpoint,
-          headers: props.headers
-            ? JSON.stringify(props.headers)
-            : props.sessionHeaders,
+          headers:
+            props.sessionHeaders && props.sessionHeaders.length > 0
+              ? props.sessionHeaders
+              : JSON.stringify(props.headers),
         }
         const schema = await schemaFetcher.fetch(data)
         if (schema) {
