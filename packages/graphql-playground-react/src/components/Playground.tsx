@@ -199,6 +199,9 @@ export class Playground extends React.PureComponent<Props & ReduxProps, State> {
       this.setState({ schema: undefined })
     }
     let first = true
+    if (this.backoff) {
+      this.backoff.stop()
+    }
     this.backoff = new Backoff(async () => {
       if (first) {
         await this.schemaGetter(props)
