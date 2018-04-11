@@ -36,6 +36,7 @@ import {
   getIsFile,
   getFile,
   getHeaders,
+  getIsReloadingSchema,
 } from '../state/sessions/selectors'
 import { getHistoryOpen } from '../state/general/selectors'
 import {
@@ -170,6 +171,9 @@ export class Playground extends React.PureComponent<Props & ReduxProps, State> {
       nextProps.endpoint !== this.props.endpoint ||
       nextProps.workspaceName !== this.props.workspaceName
     ) {
+      this.getSchema(nextProps)
+    }
+    if (nextProps.isReloadingSchema) {
       this.getSchema(nextProps)
     }
     if (
@@ -322,6 +326,7 @@ const mapStateToProps = createStructuredSelector({
   sessionHeaders: getHeaders,
   settings: getSettings,
   settingsString: getSettingsString,
+  isReloadingSchema: getIsReloadingSchema,
 })
 
 export default connect(mapStateToProps, {
