@@ -73,9 +73,13 @@ const TracingRows = styled.div`
   height: calc(100% + 116px);
 `
 
-class ResponseTracing extends React.PureComponent<ReduxProps> {
+interface Props {
+  open: boolean
+}
+
+class ResponseTracing extends React.PureComponent<ReduxProps & Props> {
   render() {
-    const { tracing, tracingSupported, startTime, endTime } = this.props
+    const { tracing, tracingSupported, startTime, endTime, open } = this.props
     const requestMs =
       tracing && startTime
         ? Math.abs(new Date(tracing.startTime).getTime() - startTime.getTime())
@@ -85,9 +89,10 @@ class ResponseTracing extends React.PureComponent<ReduxProps> {
         ? Math.abs(endTime.getTime() - new Date(tracing.endTime).getTime())
         : 0
     const requestDuration = 1000 * 1000 * requestMs
+
     return (
       <TracingWrapper>
-        {tracing ? (
+        {tracing && open ? (
           <TracingRows>
             <TracingRow
               path={['Request']}

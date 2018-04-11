@@ -67,7 +67,6 @@ export class ResultViewer extends React.Component<Props, {}> {
         'Alt-Left': 'goGroupLeft',
         'Alt-Right': 'goGroupRight',
       },
-      viewportMargin: Infinity,
     })
   }
 
@@ -92,9 +91,6 @@ export class ResultViewer extends React.Component<Props, {}> {
             @p: .bbox, .pl38;
             background: none;
             position: relative !important;
-          }
-          .result-codemirror :global(.CodeMirror-scroll) {
-            overflow: auto !important;
           }
         `}</style>
       </div>

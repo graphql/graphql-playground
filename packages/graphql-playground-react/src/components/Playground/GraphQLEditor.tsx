@@ -365,7 +365,7 @@ class GraphQLEditor extends React.PureComponent<
                 >
                   Tracing
                 </div>
-                <ReponseTracing />
+                <ReponseTracing open={this.props.responseTracingOpen} />
               </div>
             </div>
           </div>
