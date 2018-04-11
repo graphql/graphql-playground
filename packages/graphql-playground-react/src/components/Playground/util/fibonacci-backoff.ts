@@ -24,7 +24,7 @@ export class Backoff {
       if (this.running && this.count < this.maxRetries) {
         this.timeout = setTimeout(
           fn,
-          (this.count < 15 ? 3 : fibonacci(this.count - 12)) * 1000,
+          (this.count < 3 ? 5 : fibonacci(this.count - 12)) * 1000,
         )
       }
     }
