@@ -173,7 +173,7 @@ const inactiveFontColor = theme('mode', {
 })
 
 const fontColor = theme('mode', {
-  light: p => p.theme.colours.darkBlue60,
+  light: p => p.theme.colours.darkBlue80,
   dark: p => p.theme.colours.white60,
 })
 

@@ -75,6 +75,7 @@ class Tab extends React.PureComponent<Props & ReduxProps, State> {
             margin-left: 0;
           }
           .light.tab {
+            color: $darkBlue80;
             background-color: #e7eaec;
             &.active {
               background-color: #eeeff0;
@@ -144,6 +145,12 @@ class Tab extends React.PureComponent<Props & ReduxProps, State> {
               @p: .o100;
             }
           }
+
+          .light.tab .operation-name,
+          .light.tab :global(input) {
+            color: $darkBlue80;
+          }
+
           .tab :global(input) {
             opacity: 1 !important;
           }

@@ -242,7 +242,7 @@
 .docs-graphiql .variable-editor .cm-variable,
 .docs-graphiql .variable-editor .cm-punctuation,
 .docs-graphiql .variable-editor .cm-string {
-  color: rgb(28, 191, 50);
+  color: #328c8c;
 }
 
 .docs-graphiql .graphiql-container .codemirrorWrap {

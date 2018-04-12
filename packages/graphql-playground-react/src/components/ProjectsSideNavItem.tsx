@@ -1,6 +1,7 @@
 import * as React from 'react'
 import * as cx from 'classnames'
 import { styled } from '../styled/index'
+import * as theme from 'styled-theming'
 
 export interface Props {
   env: string
@@ -36,6 +37,16 @@ export default class ProjectsSideNavItem extends React.Component<Props, {}> {
   }
 }
 
+const textColor = theme('mode', {
+  light: p => p.theme.colours.darkBlue80,
+  dark: p => p.theme.colours.white,
+})
+
+const backgroundColor = theme('mode', {
+  light: p => p.theme.colours.lighterGrey,
+  dark: p => p.theme.colours.darkBlue,
+})
+
 const ListItem = styled.div`
   padding: 10px 10px;
   font-weight: 600;
@@ -55,7 +66,7 @@ const ListItem = styled.div`
     padding-right: 10px;
   }
   &.active {
-    background: ${p => p.theme.colours.darkBlue};
+    background: ${backgroundColor};
     position: relative;
     &:before {
       content: '';
@@ -69,9 +80,9 @@ const ListItem = styled.div`
     }
   }
   &:hover {
-    background: ${p => p.theme.colours.darkBlue};
+    background: ${backgroundColor};
     .count {
-      color: white;
+      color: ${textColor};
     }
   }
 `
@@ -90,6 +101,6 @@ const Count = styled.div`
   color: rgba(255, 255, 255, 0.3);
   transition: 0.1s linear all;
   &.active {
-    color: white;
+    color: ${textColor};
   }
 `

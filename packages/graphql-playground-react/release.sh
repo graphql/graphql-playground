@@ -2,7 +2,7 @@
 
 set -e
 
-npm publish
+#npm publish
 
 curl -X POST \
   http://purge.jsdelivr.net/ \

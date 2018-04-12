@@ -21,6 +21,8 @@ export interface Colours {
   paleGrey: string
   red: string
   purple: string
+  lightGrey: string
+  lighterGrey: string
 }
 
 export const colours: Colours = {
@@ -47,6 +49,8 @@ export const colours: Colours = {
 
   paleText: 'rgba(0, 0, 0, 0.5)',
   paleGrey: '#f3f4f4', // use for bgs, borders, etc
+  lightGrey: '#eeeff0',
+  lighterGrey: '#f6f7f7',
 }
 
 export interface Sizes {

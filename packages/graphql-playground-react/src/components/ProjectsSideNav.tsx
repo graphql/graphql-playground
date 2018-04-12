@@ -126,32 +126,34 @@ const mapStateToProps = createStructuredSelector({
 export default connect(mapStateToProps, { openConfigTab })(ProjectsSideNav)
 
 const textColor = theme('mode', {
-  light: p => p.theme.colours.white,
+  light: p => p.theme.colours.darkBlue80,
   dark: p => p.theme.colours.white,
 })
 
 const backgroundColor = theme('mode', {
-  light: p => p.theme.colours.darkBlue,
+  light: p => p.theme.colours.lightGrey,
   dark: p => p.theme.colours.darkBlue,
 })
 
 const darkerBackgroundColor = theme('mode', {
-  light: p => p.theme.colours.darkerBlue,
+  // light: p => '#dbdee0',
+  light: p => p.theme.colours.lightGrey,
   dark: p => p.theme.colours.darkerBlue,
 })
 
 const borderColor = theme('mode', {
-  light: p => p.theme.colours.darkestBlue,
+  light: p => '#dbdee0',
+  // light: p => p.theme.colours.lightGrey,
   dark: p => p.theme.colours.darkestBlue,
 })
 
 const footerBackgroundColor = theme('mode', {
-  light: p => p.theme.colours.darkBlue,
+  light: p => p.theme.colours.lighterGrey,
   dark: p => p.theme.colours.darkBlue,
 })
 
 const buttonFontColor = theme('mode', {
-  light: p => p.theme.colours.darkBlue,
+  light: p => p.theme.colours.lightGrey,
   dark: p => p.theme.colours.darkBlue,
 })
 
@@ -166,12 +168,12 @@ const buttonHoverBackgroundColor = theme('mode', {
 })
 
 const iconColor = theme('mode', {
-  light: p => p.theme.colours.white20,
+  light: p => p.theme.colours.darkBlue20,
   dark: p => p.theme.colours.white20,
 })
 
 const iconColorActive = theme('mode', {
-  light: p => p.theme.colours.white60,
+  light: p => p.theme.colours.darkBlue60,
   dark: p => p.theme.colours.white60,
 })
 
@@ -184,10 +186,7 @@ const SideNav = styled.div`
   background: ${backgroundColor};
   flex: 0 222px;
   color: ${textColor};
-
-    @p: .white, .relative, .bgDarkBlue;
-    border-right: 6px solid ${borderColor};
-  }
+  border-right: 6px solid ${borderColor};
   .left-content.light {
     @p: .bgWhite70, .black60;
   }
@@ -212,7 +211,7 @@ const List = styled.div`
 const Title = styled.div`
   font-size: 16px;
   font-weight: 600;
-  color: white;
+  color: ${textColor};
 `
 
 const TitleRow = styled.div`
@@ -241,7 +240,7 @@ const TitleRow = styled.div`
 
 const ProjectName = styled.div`
   font-size: 14px;
-  color: white;
+  color: ${textColor};
   font-weight: 600;
   letter-spacing: 0.53px;
   margin-left: 30px;

@@ -152,4 +152,7 @@ function normalizeSettings(settings) {
   return settings
 }
 
-export const getTheme = createSelector([getSettings], s => s.theme || 'dark')
+export const getTheme = createSelector(
+  [getSettings],
+  s => s['editor.theme'] || 'dark',
+)
