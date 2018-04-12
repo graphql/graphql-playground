@@ -351,12 +351,10 @@ class App extends React.Component<ReduxProps, State> {
       platformToken,
     }
 
-    if (endpoint) {
-      this.props.selectAppHistoryItem(merge(state, {
-        type: 'endpoint',
-        path: configPath,
-      }) as any)
-    }
+    this.props.selectAppHistoryItem(merge(state, {
+      type: 'endpoint',
+      path: configPath,
+    }) as any)
 
     this.setState(state)
   }

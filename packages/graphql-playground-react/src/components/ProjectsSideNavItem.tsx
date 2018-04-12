@@ -98,9 +98,10 @@ const Count = styled.div`
   font-size: 11px;
   font-weight: bold;
   background: rgba(255, 255, 255, 0.05);
-  color: rgba(255, 255, 255, 0.3);
+  color: ${textColor};
+  opacity: 0.6;
   transition: 0.1s linear all;
   &.active {
-    color: ${textColor};
+    opacity: 1;
   }
 `
