@@ -257,22 +257,22 @@ const Pulse = styled.div`
   height: 16px;
   background-color: ${spinnerColor};
   border-radius: 100%;
-  animation: ${bounceAnimation} 2s infinite ease-in-out;
-  -webkit-animation: ${bounceAnimation} 2s infinite ease-in-out;
+  /* animation: ${bounceAnimation} 2s infinite ease-in-out;
+  -webkit-animation: ${bounceAnimation} 2s infinite ease-in-out; */
 `
 
-const DelayedPulse = styled.div`
-  width: 16px;
-  height: 16px;
-  position: absolute;
-  top: 0;
-  background-color: ${spinnerColor};
-  border-radius: 100%;
-  animation: ${bounceAnimation} 2s infinite ease-in-out;
-  -webkit-animation: ${bounceAnimation} 2s infinite ease-in-out;
-  animation-delay: -1s;
-  -webkit-animation-delay: -1s;
-`
+// const DelayedPulse = styled.div`
+//   width: 16px;
+//   height: 16px;
+//   position: absolute;
+//   top: 0;
+//   background-color: ${spinnerColor};
+//   border-radius: 100%;
+//   /* animation: ${bounceAnimation} 2s infinite ease-in-out;
+//   -webkit-animation: ${bounceAnimation} 2s infinite ease-in-out;
+//   animation-delay: -1s;
+//   -webkit-animation-delay: -1s; */
+// `
 
 const SpinnerWrapper = styled.div`
   position: relative;
@@ -282,6 +282,6 @@ const SpinnerWrapper = styled.div`
 const Spinner = () => (
   <SpinnerWrapper>
     <Pulse />
-    <DelayedPulse />
+    {/* <DelayedPulse /> */}
   </SpinnerWrapper>
 )
