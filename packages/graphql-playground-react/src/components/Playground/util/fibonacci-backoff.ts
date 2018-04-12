@@ -32,5 +32,6 @@ export class Backoff {
   }
   stop = () => {
     this.running = false
+    clearTimeout(this.timeout)
   }
 }
