@@ -40,15 +40,6 @@ database:
 
 const config = {
   projects: {
-    app: {
-      schemaPath: 'src/schema.graphql',
-      includes: ['queries/{booking,queries}.graphql'],
-      extensions: {
-        endpoints: {
-          default: 'http://localhost:4000',
-        },
-      },
-    },
     prisma: {
       schemaPath: 'src/generated/prisma.graphql',
       includes: ['database/seed.graphql'],
@@ -66,6 +57,15 @@ const config = {
                 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjp7InNlcnZpY2UiOiJwcmlzbWEtYWlyYm5iLWV4YW1wbGVAZGV2Iiwicm9sZXMiOlsiYWRtaW4iXX0sImlhdCI6MTUyMjY4NDkzNiwiZXhwIjoxNTIzMjg5NzM2fQ.1wnkIJrAplDOznjEzLj8sQERL6dcAM0zjqxOGQBXGn0',
             },
           },
+        },
+      },
+    },
+    app: {
+      schemaPath: 'src/schema.graphql',
+      includes: ['queries/{booking,queries}.graphql'],
+      extensions: {
+        endpoints: {
+          default: 'http://localhost:4000',
         },
       },
     },

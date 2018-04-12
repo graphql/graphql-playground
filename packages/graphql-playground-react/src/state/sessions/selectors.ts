@@ -36,6 +36,7 @@ const makeSessionSelector = prop => {
   return createSelector([getSelectedSession], session => session.get(prop))
 }
 
+export const getScrollTop = makeSessionSelector('scrollTop')
 export const getEndpoint = makeSessionSelector('endpoint')
 export const getQuery = makeSessionSelector('query')
 export const getFile = makeSessionSelector('file')

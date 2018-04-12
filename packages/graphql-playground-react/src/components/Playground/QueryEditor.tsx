@@ -11,11 +11,12 @@ import { GraphQLSchema } from 'graphql'
 import * as MD from 'markdown-it'
 import { connect } from 'react-redux'
 import onHasCompletion from './onHasCompletion'
-import { editQuery } from '../../state/sessions/actions'
+import { editQuery, setScrollTop } from '../../state/sessions/actions'
 import { createStructuredSelector } from 'reselect'
 import {
   getQuery,
   getSelectedSessionIdFromRoot,
+  getScrollTop,
 } from '../../state/sessions/selectors'
 /**
  * QueryEditor
@@ -40,8 +41,10 @@ export interface Props {
 export interface ReduxProps {
   showDocForReference?: (reference: any) => void
   onChange?: (query: string) => void
+  setScrollTop?: (sessionId: string, value: number) => void
   value: string
   sessionId?: string
+  scrollTop?: number
 }
 
 const md = new MD()
@@ -154,6 +157,10 @@ export class QueryEditor extends React.PureComponent<Props & ReduxProps, {}> {
     this.editor.on('keyup', this.onKeyUp)
     this.editor.on('hasCompletion', this.onHasCompletion)
     ;(global as any).editor = this.editor
+
+    if (this.props.scrollTop) {
+      this.scrollTo(this.props.scrollTop)
+    }
   }
 
   componentDidUpdate(prevProps) {
@@ -179,16 +186,39 @@ export class QueryEditor extends React.PureComponent<Props & ReduxProps, {}> {
       this.editor.setValue(this.props.value)
     }
     this.ignoreChangeEvent = false
+
+    setTimeout(() => {
+      if (this.props.sessionId !== prevProps.sessionId) {
+        if (this.props.scrollTop) {
+          this.scrollTo(this.props.scrollTop)
+        }
+      }
+    })
   }
 
   componentWillReceiveProps(nextProps) {
     if (this.props.sessionId !== nextProps.sessionId) {
       this.closeCompletion()
       this.editor.focus()
+      this.updateSessionScrollTop()
+    }
+  }
+
+  scrollTo(y) {
+    this.node.querySelector('.CodeMirror-scroll').scrollTop = y
+  }
+
+  updateSessionScrollTop() {
+    if (this.props.setScrollTop && this.props.sessionId) {
+      this.props.setScrollTop(
+        this.props.sessionId!,
+        this.node.querySelector('.CodeMirror-scroll').scrollTop,
+      )
     }
   }
 
   componentWillUnmount() {
+    this.updateSessionScrollTop()
     this.editor.off('change', this.onEdit)
     this.editor.off('keyup', this.onKeyUp)
     this.editor.off('hasCompletion', this.onHasCompletion)
@@ -262,6 +292,9 @@ export class QueryEditor extends React.PureComponent<Props & ReduxProps, {}> {
 const mapStateToProps = createStructuredSelector({
   value: getQuery,
   sessionId: getSelectedSessionIdFromRoot,
+  scrollTop: getScrollTop,
 })
 
-export default connect(mapStateToProps, { onChange: editQuery })(QueryEditor)
+export default connect(mapStateToProps, { onChange: editQuery, setScrollTop })(
+  QueryEditor,
+)

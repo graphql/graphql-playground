@@ -167,5 +167,6 @@ export function getDefaultSession(endpoint: string) {
     nextQueryStartTime: undefined,
     tracingSupported: undefined,
     changed: undefined,
+    scrollTop: undefined,
   } as any
 }

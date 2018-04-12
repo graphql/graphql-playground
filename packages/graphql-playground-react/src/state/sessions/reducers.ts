@@ -88,6 +88,7 @@ export class Session extends Record(getDefaultSession('')) {
   tracingSupported?: boolean
   docExplorerWidth: number
   changed?: boolean
+  scrollTop?: number
 
   toJSON() {
     const obj = this.toObject()
@@ -275,6 +276,9 @@ const reducer = handleActions(
         queryRunning: false,
         subscriptionActive: false,
       })
+    },
+    SET_SCROLL_TOP: (state, { payload: { sessionId, scrollTop } }) => {
+      return state.setIn(['sessions', sessionId, 'scrollTop'], scrollTop)
     },
     SCHEMA_FETCHING_SUCCESS: (state, { payload }) => {
       const newSessions = state
