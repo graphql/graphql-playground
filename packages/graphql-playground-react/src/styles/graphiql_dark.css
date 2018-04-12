@@ -990,8 +990,7 @@ div.CodeMirror-dragcursors {
 }
 
 .cm-searching {
-  background: #ffa;
-  background: rgba(255, 255, 0, 0.4);
+  background: rgba(255, 255, 255, 0.15);
 }
 
 /* IE7 hack to prevent it from returning funny offsetTops on the spans */
@@ -1045,7 +1044,7 @@ span.CodeMirror-selectedtext {
 .CodeMirror-dialog input {
   background: transparent;
   border: 1px solid #d3d6db;
-  color: inherit;
+  color: rgba(255, 255, 255, 0.6);
   font-family: monospace;
   outline: none;
   width: 20em;

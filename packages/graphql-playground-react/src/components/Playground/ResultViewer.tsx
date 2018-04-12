@@ -35,6 +35,8 @@ export class ResultViewer extends React.Component<Props, {}> {
     require('codemirror/addon/fold/brace-fold')
     require('codemirror/addon/dialog/dialog')
     require('codemirror/addon/search/search')
+    require('codemirror/addon/search/searchcursor')
+    require('codemirror/addon/search/jump-to-line')
     require('codemirror/keymap/sublime')
     require('codemirror-graphql/results/mode')
 
@@ -61,6 +63,10 @@ export class ResultViewer extends React.Component<Props, {}> {
       foldGutter,
       gutters,
       extraKeys: {
+        // Persistent search box in Query Editor
+        'Cmd-F': 'findPersistent',
+        'Ctrl-F': 'findPersistent',
+
         // Editor improvements
         'Ctrl-Left': 'goSubwordLeft',
         'Ctrl-Right': 'goSubwordRight',

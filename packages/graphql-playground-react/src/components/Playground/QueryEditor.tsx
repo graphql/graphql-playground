@@ -150,6 +150,9 @@ export class QueryEditor extends React.PureComponent<Props & ReduxProps, {}> {
         'Ctrl-Right': 'goSubwordRight',
         'Alt-Left': 'goGroupLeft',
         'Alt-Right': 'goGroupRight',
+
+        'Cmd-F': 'findPersistent',
+        'Ctrl-F': 'findPersistent',
       },
     })
 
