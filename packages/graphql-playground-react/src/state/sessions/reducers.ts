@@ -487,7 +487,7 @@ const reducer = handleActions(
       const count = state.sessions.size
       const keys = state.sessions.keySeq()
       const index = keys.indexOf(selectedSessionId)
-      if (index - 1 > 0) {
+      if (index - 1 >= 0) {
         return state.set('selectedSessionId', keys.get(index - 1))
       }
       return state.set('selectedSessionId', keys.get(count - 1))
