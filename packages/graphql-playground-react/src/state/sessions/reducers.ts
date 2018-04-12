@@ -278,7 +278,10 @@ const reducer = handleActions(
       })
     },
     SET_SCROLL_TOP: (state, { payload: { sessionId, scrollTop } }) => {
-      return state.setIn(['sessions', sessionId, 'scrollTop'], scrollTop)
+      if (state.sessions.get(sessionId)) {
+        return state.setIn(['sessions', sessionId, 'scrollTop'], scrollTop)
+      }
+      return state
     },
     SCHEMA_FETCHING_SUCCESS: (state, { payload }) => {
       const newSessions = state

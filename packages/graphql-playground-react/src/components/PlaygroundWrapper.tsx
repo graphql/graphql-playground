@@ -64,7 +64,6 @@ export interface State {
   activeProjectName?: string
   activeEnv?: string
   headers?: any
-  shouldInjectHeaders: boolean
 }
 
 class PlaygroundWrapper extends React.Component<
@@ -119,7 +118,6 @@ class PlaygroundWrapper extends React.Component<
       activeEnv,
       activeProjectName: projectName,
       headers,
-      shouldInjectHeaders: false,
     }
   }
 
@@ -131,7 +129,6 @@ class PlaygroundWrapper extends React.Component<
     try {
       const headers = getParameterByName('headers', endpoint)
       if (headers) {
-        this.setState({ shouldInjectHeaders: true })
         return { headers: JSON.parse(headers), endpoint: splitted[0] }
       }
     } catch (e) {
@@ -325,7 +322,6 @@ class PlaygroundWrapper extends React.Component<
                 headers={this.state.headers}
                 configPath={this.props.configPath}
                 workspaceName={this.state.activeProjectName}
-                shouldInjectHeaders={this.state.shouldInjectHeaders}
               />
             </App>
           </OldThemeProvider>

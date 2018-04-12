@@ -83,7 +83,6 @@ export interface Props {
   configPath?: string
   createApolloLink?: (session: Session) => ApolloLink
   workspaceName?: string
-  shouldInjectHeaders: boolean
 }
 
 export interface ReduxProps {
@@ -152,9 +151,7 @@ export class Playground extends React.PureComponent<Props & ReduxProps, State> {
     // init redux
     this.props.initState(getWorkspaceId(this.props), this.props.endpoint)
     this.props.setConfigString(this.props.configString)
-    if (this.props.shouldInjectHeaders) {
-      this.props.injectHeaders(this.props.headers, this.props.endpoint)
-    }
+    this.props.injectHeaders(this.props.headers, this.props.endpoint)
   }
 
   componentDidMount() {
@@ -193,10 +190,7 @@ export class Playground extends React.PureComponent<Props & ReduxProps, State> {
     if (this.props.subscriptionEndpoint !== nextProps.subscriptionEndpoint) {
       setSubscriptionEndpoint(nextProps.subscriptionEndpoint)
     }
-    if (
-      nextProps.headers !== this.props.headers &&
-      this.props.shouldInjectHeaders
-    ) {
+    if (nextProps.headers !== this.props.headers) {
       this.props.injectHeaders(nextProps.headers, nextProps.endpoint)
     }
     if (nextProps.configString !== this.props.configString) {
