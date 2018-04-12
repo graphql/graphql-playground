@@ -28,6 +28,7 @@ import { openHistory } from '../../../state/general/actions'
 
 export interface Props {
   endpoint: string
+  shareEnabled?: boolean
   fixedEndpoint?: boolean
   isReloadingSchema: boolean
   endpointUnreachable: boolean
@@ -75,9 +76,11 @@ class TopBar extends React.Component<Props, {}> {
           )}
         </UrlBarWrapper>
         <Button onClick={this.copyCurlToClipboard}>Copy CURL</Button>
-        <Share>
-          <Button>Share Playground</Button>
-        </Share>
+        {this.props.shareEnabled && (
+          <Share>
+            <Button>Share Playground</Button>
+          </Share>
+        )}
       </TopBarWrapper>
     )
   }

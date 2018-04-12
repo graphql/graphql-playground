@@ -59,6 +59,7 @@ export interface Props {
   endpoint: string
   subscriptionEndpoint?: string
   projectId?: string
+  shareEnabled?: boolean
   adminAuthToken?: string
   onSuccess?: (graphQLParams: any, response: any) => void
   isEndpoint?: boolean
@@ -123,6 +124,10 @@ export interface CursorPosition {
 export { GraphQLEditor }
 
 export class Playground extends React.PureComponent<Props & ReduxProps, State> {
+  static defaultProps = {
+    shareEnabled: true,
+  }
+
   apolloLinks: { [sessionId: string]: any } = {}
   observers: { [sessionId: string]: any } = {}
   graphiqlComponents: any[] = []
@@ -277,7 +282,10 @@ export class Playground extends React.PureComponent<Props & ReduxProps, State> {
             ) : this.props.isFile && this.props.file ? (
               <FileEditor />
             ) : (
-              <GraphQLEditor schema={this.state.schema} />
+              <GraphQLEditor
+                shareEnabled={this.props.shareEnabled}
+                schema={this.state.schema}
+              />
             )}
           </GraphiqlWrapper>
         </GraphiqlsContainer>
