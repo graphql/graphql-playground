@@ -67,6 +67,7 @@ import { ResponseRecord } from '../../state/sessions/reducers'
 
 export interface Props {
   onRef?: any
+  shareEnabled?: boolean
   schema?: GraphQLSchema
 }
 
@@ -248,7 +249,7 @@ class GraphQLEditor extends React.PureComponent<
           }
         `}</style>
         <div className="editorWrap">
-          <TopBar />
+          <TopBar shareEnabled={this.props.shareEnabled} />
           <div
             ref={this.setEditorBarComponent}
             className="editorBar"
