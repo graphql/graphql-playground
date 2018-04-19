@@ -17,7 +17,7 @@
   width: 100%;
 }
 
-.graphiql-container .editorWrap {
+/* .graphiql-container .editorWrap {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -28,9 +28,9 @@
   -webkit-box-flex: 1;
   -ms-flex: 1;
   flex: 1;
-}
+} */
 
-.graphiql-container .editorBar {
+/* .graphiql-container .editorBar {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -41,7 +41,7 @@
   -webkit-box-flex: 1;
   -ms-flex: 1;
   flex: 1;
-}
+} */
 
 .graphiql-container .queryWrap {
   display: -webkit-box;
@@ -56,7 +56,7 @@
   flex: 1;
 }
 
-.graphiql-container .resultWrap {
+/* .graphiql-container .resultWrap {
   border-left: none;
   display: -webkit-box;
   display: -ms-flexbox;
@@ -70,16 +70,16 @@
   flex: 1;
   position: relative;
   background-color: rgb(23, 42, 58);
-}
+} */
 
-.graphiql-container .docExplorerWrap {
+/* .graphiql-container .docExplorerWrap {
   background: white;
   box-shadow: 0 0 8px rgba(0, 0, 0, 0.15);
   position: relative;
   z-index: 3;
-}
+} */
 
-.graphiql-container .docExplorerResizer {
+/* .graphiql-container .docExplorerResizer {
   cursor: col-resize;
   height: 100%;
   left: -5px;
@@ -87,14 +87,14 @@
   top: 0;
   width: 10px;
   z-index: 10;
-}
+} */
 
-.graphiql-container .docExplorerHide {
+/* .graphiql-container .docExplorerHide {
   cursor: pointer;
   font-size: 18px;
   margin: -7px -8px -6px 0;
   padding: 18px 16px 15px 12px;
-}
+} */
 
 .graphiql-container .query-editor {
   -webkit-box-flex: 1;
@@ -1140,7 +1140,7 @@ span.CodeMirror-selectedtext {
   font-size: 13px;
 }
 
-.graphiql-container .search-box-outer {
+/* .graphiql-container .search-box-outer {
   border: 1px solid #d3d6db;
   box-sizing: border-box;
   display: inline-block;
@@ -1150,18 +1150,18 @@ span.CodeMirror-selectedtext {
   padding: 3px 8px 5px;
   vertical-align: middle;
   width: 100%;
-}
+} */
 
-.graphiql-container .search-box-input {
+/* .graphiql-container .search-box-input {
   border: 0;
   font-size: 12px;
   margin: 0;
   outline: 0;
   padding: 0;
   width: 100%;
-}
+} */
 
-.graphiql-container .error-container {
+/* .graphiql-container .error-container {
   font-weight: bold;
   left: 0;
   letter-spacing: 1px;
@@ -1173,7 +1173,7 @@ span.CodeMirror-selectedtext {
   top: 50%;
   -webkit-transform: translate(0, -50%);
   transform: translate(0, -50%);
-}
+} */
 
 .CodeMirror-foldmarker {
   color: blue;

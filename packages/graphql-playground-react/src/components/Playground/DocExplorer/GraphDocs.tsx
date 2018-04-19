@@ -26,6 +26,7 @@ import { GraphQLSchema } from 'graphql'
 import { getSessionDocs } from '../../../state/docs/selectors'
 import { getSelectedSessionIdFromRoot } from '../../../state/sessions/selectors'
 import { createStructuredSelector } from 'reselect'
+import { styled } from '../../../styled'
 
 interface StateFromProps {
   docs: {
@@ -120,16 +121,14 @@ class GraphDocs extends React.Component<
     } else if (schema === null) {
       // Schema is null when it explicitly does not exist, typically due to
       // an error during introspection.
-      emptySchema = (
-        <div className="error-container">{'No Schema Available'}</div>
-      )
+      emptySchema = <ErrorContainer>{'No Schema Available'}</ErrorContainer>
     }
 
     return (
-      <div
+      <Docs
         className={cn('graph-docs docExplorerWrap docs', { open: docsOpen })}
         style={docsStyle}
-        ref={this.setRef}
+        innerRef={this.setRef}
       >
         <style jsx={true} global={true}>{`
           .graphiql-container .doc-category-title {
@@ -158,13 +157,6 @@ class GraphDocs extends React.Component<
             @p: .mono, .br2;
             padding: 1px 2px;
             background: rgba(0, 0, 0, 0.06);
-          }
-          .graph-docs {
-            @p: .absolute, .h100;
-            right: -2px;
-          }
-          .graph-docs.open {
-            z-index: 2000;
           }
           .docs-button {
             @p: .absolute, .white, .bgGreen, .pv6, .z2, .ttu, .fw6, .f12, .ph10,
@@ -208,21 +200,11 @@ class GraphDocs extends React.Component<
               rgba(255, 255, 255, 0)
             );
           }
-          .docExplorerResizer {
-            @p: .top0, .bottom0, .absolute, .z5;
-            cursor: col-resize;
-            left: -7px;
-            content: '';
-            width: 20px;
-          }
         `}</style>
         <div className="docs-button" onClick={this.handleToggleDocs}>
           Schema
         </div>
-        <div
-          className="docExplorerResizer"
-          onMouseDown={this.handleDocsResizeStart}
-        />
+        <DocsResizer onMouseDown={this.handleDocsResizeStart} />
         <div className="doc-explorer-gradient" />
         {docsOpen && (
           <div
@@ -261,7 +243,7 @@ class GraphDocs extends React.Component<
             </div>
           </div>
         )}
-      </div>
+      </Docs>
     )
   }
 
@@ -455,3 +437,40 @@ export default connect<StateFromProps, DispatchFromProps, Props>(
   null,
   { withRef: true },
 )(GraphDocs)
+
+const Docs = styled.div`
+  background: white;
+  box-shadow: 0 0 8px rgba(0, 0, 0, 0.15);
+  position: absolute;
+  right: -2px;
+  z-index: 3;
+  height: 100%;
+
+  &.open {
+    z-index: 2000;
+  }
+`
+
+const DocsResizer = styled.div`
+  cursor: col-resize;
+  height: 100%;
+  left: -5px;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 10px;
+  z-index: 10;
+`
+
+const ErrorContainer = styled.div`
+  font-weight: bold;
+  left: 0;
+  letter-spacing: 1px;
+  opacity: 0.5;
+  position: absolute;
+  right: 0;
+  text-align: center;
+  text-transform: uppercase;
+  top: 50%;
+  transform: translate(0, -50%);
+`

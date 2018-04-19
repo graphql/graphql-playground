@@ -4,6 +4,7 @@ import { isNamedType, GraphQLSchema } from 'graphql'
 import * as cn from 'classnames'
 import ExecuteButton from './ExecuteButton'
 import QueryEditor from './QueryEditor'
+import EditorWrapper from './EditorWrapper'
 import CodeMirrorSizer from 'graphiql/dist/utility/CodeMirrorSizer'
 import { fillLeafs } from 'graphiql/dist/utility/fillLeafs'
 import { getLeft, getTop } from 'graphiql/dist/utility/elementPosition'
@@ -159,7 +160,7 @@ class GraphQLEditor extends React.PureComponent<
   render() {
     return (
       <div className={cn('graphiql-container')}>
-        <style jsx={true}>{`
+        <style jsx={true} global={true}>{`
           .graphiql-container {
             font-family: Open Sans, sans-serif;
           }
@@ -247,11 +248,10 @@ class GraphQLEditor extends React.PureComponent<
             transition: opacity 300ms ease-in;
           }
         `}</style>
-        <div className="editorWrap">
+        <EditorWrapper>
           <TopBar />
-          <div
+          <EditorBar
             ref={this.setEditorBarComponent}
-            className="editorBar"
             onMouseDown={this.handleResizeStart}
           >
             <div
@@ -331,7 +331,7 @@ class GraphQLEditor extends React.PureComponent<
               </div>
               <QueryDragBar ref={this.setQueryResizer} />
             </div>
-            <div className="resultWrap">
+            <ResultWrap>
               <ResultDragBar ref={this.setResponseResizer} />
               <ExecuteButton />
               {this.props.queryRunning &&
@@ -367,9 +367,9 @@ class GraphQLEditor extends React.PureComponent<
                 </div>
                 <ReponseTracing />
               </div>
-            </div>
-          </div>
-        </div>
+            </ResultWrap>
+          </EditorBar>
+        </EditorWrapper>
         <GraphDocs ref={this.setDocExplorerRef} schema={this.props.schema} />
       </div>
     )
@@ -687,6 +687,20 @@ export default withTheme<Props>(
     },
   )(GraphQLEditor),
 )
+
+const EditorBar = styled.div`
+  display: flex;
+  flex-direction: row;
+  flex: 1;
+`
+
+const ResultWrap = styled.div`
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  position: relative;
+  border-left: none;
+`
 
 const DragBar = styled.div`
   width: 15px;
