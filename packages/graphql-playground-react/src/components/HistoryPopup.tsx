@@ -59,9 +59,11 @@ class HistoryPopup extends React.Component<
               : true)
     })
 
-    const selectedItem = this.props.items.get(
+    let selectedItem = this.props.items.get(
       this.state.selectedItemIndex!,
-    )!.toJS()
+    ) as any
+    selectedItem =
+      selectedItem && selectedItem.toJS ? selectedItem.toJS() : undefined
     let customModalStyle = modalStyle
     if (localTheme === 'light') {
       customModalStyle = {

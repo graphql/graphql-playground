@@ -50,7 +50,7 @@ const config = {
           generator: 'prisma-ts',
         },
         endpoints: {
-          dev: {
+          dev2: {
             url: 'https://eu1.prisma.sh/lol/asdf/dev',
             headers: {
               Authorization:
