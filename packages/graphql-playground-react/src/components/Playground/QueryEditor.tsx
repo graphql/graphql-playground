@@ -15,6 +15,8 @@ import { editQuery } from '../../state/sessions/actions'
 import { createStructuredSelector } from 'reselect'
 import { getQuery } from '../../state/sessions/selectors'
 import EditorWrapper from './EditorWrapper'
+import { styled } from '../../styled'
+
 /**
  * QueryEditor
  *
@@ -188,7 +190,7 @@ export class QueryEditor extends React.PureComponent<Props & ReduxProps, {}> {
   render() {
     return (
       <EditorWrapper>
-        <div className="query-editor" ref={this.setRef} />
+        <Editor innerRef={this.setRef} />
       </EditorWrapper>
     )
   }
@@ -239,3 +241,19 @@ const mapStateToProps = createStructuredSelector({
 })
 
 export default connect(mapStateToProps, { onChange: editQuery })(QueryEditor)
+
+const Editor = styled.div`
+  flex: 1;
+  position: relative;
+
+  .CodeMirror-gutters {
+    border-right: none;
+    background-color: rgb(15, 32, 45);
+  }
+
+  .CodeMirror {
+    padding-left: 12px;
+    width: calc(100% - 12px);
+    background-color: rgb(15, 32, 45);
+  }
+`

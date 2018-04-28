@@ -96,23 +96,23 @@
   padding: 18px 16px 15px 12px;
 } */
 
-.graphiql-container .query-editor {
+/* .graphiql-container .query-editor {
   -webkit-box-flex: 1;
   -ms-flex: 1;
   flex: 1;
   position: relative;
-}
+} */
 
-.graphiql-container .query-editor .CodeMirror-gutters {
+/* .graphiql-container .query-editor .CodeMirror-gutters {
   border-right: none;
   background-color: rgb(15, 32, 45);
-}
-
+} */
+/* 
 .graphiql-container .query-editor .CodeMirror {
   padding-left: 12px;
   width: calc(100% - 12px);
   background-color: rgb(15, 32, 45);
-}
+} */
 
 .graphiql-container .variable-editor,
 .graphiql-container .response-tracing {
@@ -191,7 +191,7 @@
   max-height: calc(100vh - 101px);
 }
 
-.graphiql-container .footer {
+/* .graphiql-container .footer {
   background: #f6f7f8;
   border-left: 1px solid #e0e0e0;
   border-top: 1px solid #e0e0e0;
@@ -207,7 +207,7 @@
   position: absolute;
   top: -1px;
   width: 12px;
-}
+} */
 
 .graphiql-container .result-window .CodeMirror-gutters {
   background-color: transparent;
@@ -251,7 +251,7 @@
   background: linear-gradient(#fdf3f3, #e6d6d7);
   color: #b00;
 }
-.graphiql-container .execute-options {
+/* .graphiql-container .execute-options {
   background: #fff;
   box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.1), 0 2px 4px rgba(0, 0, 0, 0.25);
   left: -1px;
@@ -283,13 +283,13 @@
 .graphiql-container .execute-options li.selected {
   background: rgb(39, 174, 96);
   color: white;
-}
+} */
 
-.graphiql-container .CodeMirror-scroll {
+/* .graphiql-container .CodeMirror-scroll {
   overflow-scrolling: touch;
-}
+} */
 
-.graphiql-container .CodeMirror {
+/* .graphiql-container .CodeMirror {
   color: rgba(255, 255, 255, 0.3);
   font-family: 'Source Code Pro', 'Consolas', 'Inconsolata', 'Droid Sans Mono',
     'Monaco', monospace;
@@ -299,11 +299,11 @@
   position: absolute;
   top: 0;
   width: 100%;
-}
+} */
 
-.graphiql-container .CodeMirror-lines {
+/* .graphiql-container .CodeMirror-lines {
   padding: 20px 0;
-}
+} */
 
 .autoInsertedLeaf.cm-property {
   -webkit-animation-duration: 6s;
@@ -417,9 +417,9 @@ div.CodeMirror-lint-message-warning {
 }
 
 /* FieldName */
-.cm-property {
+/* .cm-property {
   color: rgb(41, 185, 115);
-}
+} */
 
 .result-window .cm-property {
   color: rgb(51, 147, 220);
@@ -972,6 +972,8 @@ span.CodeMirror-selectedtext {
 .CodeMirror-dialog button {
   font-size: 70%;
 }
+
+/* TODO: MORE STUFF!!! */
 .graphiql-container .doc-explorer {
   background: white;
 }
@@ -1373,7 +1375,7 @@ li.CodeMirror-hint-active {
   border-top: none;
 }
 
-.result-codemirror .CodeMirror-scroll {
+/* .result-codemirror .CodeMirror-scroll {
   max-width: 50vw;
   margin-right: 10px;
-}
+} */

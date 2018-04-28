@@ -7,6 +7,7 @@
  */
 
 import * as React from 'react'
+import { styled } from '../../styled'
 
 export interface Props {
   value: string
@@ -85,20 +86,7 @@ export class ResultViewer extends React.Component<Props, {}> {
   }
 
   render() {
-    return (
-      <div className="result-codemirror" ref={this.setRef}>
-        <style jsx={true}>{`
-          .result-codemirror :global(.CodeMirror) {
-            @p: .bbox, .pl38;
-            background: none;
-            position: relative !important;
-          }
-          .result-codemirror :global(.CodeMirror-scroll) {
-            overflow: auto !important;
-          }
-        `}</style>
-      </div>
-    )
+    return <Result innerRef={this.setRef} />
   }
 
   setRef = ref => {
@@ -120,3 +108,20 @@ export class ResultViewer extends React.Component<Props, {}> {
     return this.node && this.node.clientHeight
   }
 }
+
+const Result = styled.div`
+  .CodeMirror {
+    position: relative !important;
+    box-sizing: border-box;
+    background: none;
+    padding-left: 38px;
+  }
+  .CodeMirror-scroll {
+    overflow: auto !important;
+    max-width: 50vw;
+    margin-right: 10px;
+  }
+  .cm-string {
+    color: ${p => p.theme.editorColours.property} !important;
+  }
+`
