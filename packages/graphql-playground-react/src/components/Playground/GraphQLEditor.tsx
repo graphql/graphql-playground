@@ -16,7 +16,7 @@ import ReponseTracing from './ResponseTracing'
 import withTheme from '../Theme/withTheme'
 import { LocalThemeInterface } from '../Theme'
 import GraphDocs from './DocExplorer/GraphDocs'
-import { styled } from '../../styled/index'
+import { withProps, styled } from '../../styled/index'
 import TopBar from './TopBar/TopBar'
 import {
   VariableEditorComponent,
@@ -268,45 +268,33 @@ class GraphQLEditor extends React.PureComponent<
                 onRunQuery={this.runQueryAtCursor}
                 onClickReference={this.handleClickReference}
               />
-              <div
+              <VariableEditor
                 className="variable-editor"
-                style={{
-                  height: this.props.variableEditorOpen
-                    ? this.props.variableEditorHeight
-                    : null,
-                }}
+                isOpen={this.props.variableEditorOpen}
+                height={this.props.variableEditorHeight}
               >
-                <div
-                  className="variable-editor-title"
-                  style={{
-                    cursor: this.props.variableEditorOpen
-                      ? 'row-resize'
-                      : 'n-resize',
-                  }}
+                <VariableEditorTitle
+                  isOpen={this.props.variableEditorOpen}
                   onMouseDown={this.handleVariableResizeStart}
                 >
-                  <span
-                    className={cn('subtitle', {
-                      active: this.props.queryVariablesActive,
-                    })}
-                    ref={this.setQueryVariablesRef}
+                  <VariableEditorSubtitle
+                    isOpen={this.props.queryVariablesActive}
+                    innerRef={this.setQueryVariablesRef}
                     onClick={this.props.openQueryVariables}
                   >
                     {'Query Variables'}
-                  </span>
-                  <span
-                    className={cn('subtitle', {
-                      active: !this.props.queryVariablesActive,
-                    })}
-                    ref={this.setHttpHeadersRef}
+                  </VariableEditorSubtitle>
+                  <VariableEditorSubtitle
+                    isOpen={!this.props.queryVariablesActive}
+                    innerRef={this.setHttpHeadersRef}
                     onClick={this.props.closeQueryVariables}
                   >
                     {'HTTP Headers ' +
                       (this.props.headersCount && this.props.headersCount > 0
                         ? this.props.headersCount
                         : '')}
-                  </span>
-                </div>
+                  </VariableEditorSubtitle>
+                </VariableEditorTitle>
                 {this.props.queryVariablesActive ? (
                   <VariableEditorComponent
                     getRef={this.setVariableEditorComponent}
@@ -328,7 +316,7 @@ class GraphQLEditor extends React.PureComponent<
                     onRunQuery={this.runQueryAtCursor}
                   />
                 )}
-              </div>
+              </VariableEditor>
               <QueryDragBar ref={this.setQueryResizer} />
             </div>
             <ResultWrap>
@@ -346,27 +334,24 @@ class GraphQLEditor extends React.PureComponent<
               {this.props.subscriptionActive && (
                 <div className="listening">Listening &hellip;</div>
               )}
-              <div
-                className="response-tracing"
-                style={{
-                  height: this.props.responseTracingOpen
-                    ? this.props.responseTracingHeight
-                    : null,
-                }}
+              <ResponseTracking
+                isOpen={this.props.responseTracingOpen}
+                height={this.props.responseTracingHeight}
               >
-                <div
-                  className="response-tracing-title"
-                  style={{
-                    cursor: this.props.responseTracingOpen
-                      ? 'row-resize'
-                      : 'n-resize',
-                  }}
+                <ResponseTrackingTitle
+                  isOpen={this.props.responseTracingOpen}
+                  // className="response-tracing-title"
+                  // style={{
+                  //   cursor: this.props.responseTracingOpen
+                  //     ? 'row-resize'
+                  //     : 'n-resize'
+                  // }}
                   onMouseDown={this.handleTracingResizeStart}
                 >
                   Tracing
-                </div>
+                </ResponseTrackingTitle>
                 <ReponseTracing />
-              </div>
+              </ResponseTracking>
             </ResultWrap>
           </EditorBar>
         </EditorWrapper>
@@ -717,4 +702,66 @@ const QueryDragBar = styled(DragBar)`
 const ResultDragBar = styled(DragBar)`
   left: 0px;
   z-index: 1;
+`
+
+interface DrawerProps {
+  isOpen: boolean
+  height: number
+}
+
+const BottomDrawer = withProps<DrawerProps>()(styled.div)`
+  display: flex;
+  background: #0b1924;
+  flex-direction: column;
+  position: relative;
+  height: ${props => (props.isOpen ? '43px' : `${props.height}px`)};
+`
+interface TitleProps {
+  isOpen: boolean
+}
+
+const BottomDrawerTitle = styled.div`
+  background: #0b1924;
+  color: rgba(255, 255, 255, 0.3);
+  text-transform: uppercase;
+  font-weight: 600;
+  letter-spacing: 0.53px;
+  line-height: 14px;
+  font-size: 14px;
+  padding: 14px 14px 5px 21px;
+  user-select: none;
+`
+
+const VariableEditor = styled(BottomDrawer)`
+  .CodeMirror {
+    padding-left: 12px;
+    width: calc(100% - 12px);
+    background: #0b1924;
+  }
+  .CodeMirror-gutters {
+    background: #0b1924;
+    border: none;
+  }
+`
+
+const VariableEditorTitle = withProps<TitleProps>()(styled(BottomDrawerTitle))`
+  cursor: ${props => (props.isOpen ? 'n-resize' : 'row-resize')};
+`
+
+const VariableEditorSubtitle = withProps<TitleProps>()(styled.span)`
+  margin-right: 10px;
+  cursor: pointer;
+  color: ${props => (props.isOpen ? 'rgba(255, 255, 255, 0.6)' : 'inherit')};
+`
+
+const ResponseTracking = styled(BottomDrawer)`
+  height: ${props => (props.isOpen ? '43px' : `${props.height}px`)};
+`
+
+const ResponseTrackingTitle = withProps<TitleProps>()(
+  styled(BottomDrawerTitle),
+)`
+  text-align: right;
+  background: #0b1924;
+  cursor: ${props => (props.isOpen ? 'n-resize' : 's-resize')};
 `
