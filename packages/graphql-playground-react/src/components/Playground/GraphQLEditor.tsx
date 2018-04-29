@@ -269,7 +269,6 @@ class GraphQLEditor extends React.PureComponent<
                 onClickReference={this.handleClickReference}
               />
               <VariableEditor
-                className="variable-editor"
                 isOpen={this.props.variableEditorOpen}
                 height={this.props.variableEditorHeight}
               >
@@ -282,7 +281,7 @@ class GraphQLEditor extends React.PureComponent<
                     innerRef={this.setQueryVariablesRef}
                     onClick={this.props.openQueryVariables}
                   >
-                    {'Query Variables'}
+                    Query Variables
                   </VariableEditorSubtitle>
                   <VariableEditorSubtitle
                     isOpen={!this.props.queryVariablesActive}
@@ -714,8 +713,9 @@ const BottomDrawer = withProps<DrawerProps>()(styled.div)`
   background: #0b1924;
   flex-direction: column;
   position: relative;
-  height: ${props => (props.isOpen ? '43px' : `${props.height}px`)};
-`
+  height: ${props => (props.isOpen ? `${props.height}px` : '43px')};
+  `
+
 interface TitleProps {
   isOpen: boolean
 }
@@ -745,7 +745,7 @@ const VariableEditor = styled(BottomDrawer)`
 `
 
 const VariableEditorTitle = withProps<TitleProps>()(styled(BottomDrawerTitle))`
-  cursor: ${props => (props.isOpen ? 'n-resize' : 'row-resize')};
+  cursor: ${props => (props.isOpen ? 'row-resize' : 'n-resize')};
 `
 
 const VariableEditorSubtitle = withProps<TitleProps>()(styled.span)`
@@ -754,14 +754,12 @@ const VariableEditorSubtitle = withProps<TitleProps>()(styled.span)`
   color: ${props => (props.isOpen ? 'rgba(255, 255, 255, 0.6)' : 'inherit')};
 `
 
-const ResponseTracking = styled(BottomDrawer)`
-  height: ${props => (props.isOpen ? '43px' : `${props.height}px`)};
-`
+const ResponseTracking = styled(BottomDrawer)``
 
 const ResponseTrackingTitle = withProps<TitleProps>()(
   styled(BottomDrawerTitle),
 )`
   text-align: right;
   background: #0b1924;
-  cursor: ${props => (props.isOpen ? 'n-resize' : 's-resize')};
+  cursor: ${props => (props.isOpen ? 's-resize' : 'n-resize')};
 `

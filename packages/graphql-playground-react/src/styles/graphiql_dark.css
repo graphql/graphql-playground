@@ -181,7 +181,7 @@
   position: relative;
 }
 
-.graphiql-container .result-window {
+/* .graphiql-container .result-window {
   -webkit-box-flex: 1;
   -ms-flex: 1;
   flex: 1;
@@ -189,7 +189,7 @@
   position: relative;
   overflow: scroll;
   max-height: calc(100vh - 101px);
-}
+} */
 
 /* .graphiql-container .footer {
   background: #f6f7f8;
@@ -209,19 +209,19 @@
   width: 12px;
 } */
 
-.graphiql-container .result-window .CodeMirror-gutters {
+/* .graphiql-container .result-window .CodeMirror-gutters {
   background-color: transparent;
   border: none;
   cursor: col-resize;
 }
 
-.graphiql-container .result-window .CodeMirror-foldgutter,
-.graphiql-container .result-window .CodeMirror-foldgutter-open:after,
-.graphiql-container .result-window .CodeMirror-foldgutter-folded:after {
+.CodeMirror-foldgutter,
+.CodeMirror-foldgutter-open:after,
+.CodeMirror-foldgutter-folded:after {
   padding-left: 3px;
-}
+} */
 
-.graphiql-container .toolbar-button {
+/* .toolbar-button {
   background: #fdfdfd;
   background: -webkit-linear-gradient(#fbfbfb, #f8f8f8);
   background: linear-gradient(#fbfbfb, #f8f8f8);
@@ -237,20 +237,18 @@
   padding: 2px 8px 4px;
   text-decoration: none;
 }
-
-.graphiql-container .toolbar-button:active {
+ .toolbar-button:active {
   background: -webkit-linear-gradient(#ececec, #d8d8d8);
   background: linear-gradient(#ececec, #d8d8d8);
   border-color: #cacaca #c9c9c9 #b0b0b0;
   box-shadow: 0 1px 0 #fff, inset 0 1px rgba(255, 255, 255, 0.2),
     inset 0 1px 1px rgba(0, 0, 0, 0.08);
 }
-
-.graphiql-container .toolbar-button.error {
+.toolbar-button.error {
   background: -webkit-linear-gradient(#fdf3f3, #e6d6d7);
   background: linear-gradient(#fdf3f3, #e6d6d7);
   color: #b00;
-}
+} */
 /* .graphiql-container .execute-options {
   background: #fff;
   box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.1), 0 2px 4px rgba(0, 0, 0, 0.25);
@@ -412,18 +410,18 @@ div.CodeMirror-lint-message-warning {
   color: rgb(56, 189, 193);
 }
 
-.result-window .cm-def {
+/* .result-window .cm-def {
   color: rgb(241, 143, 1);
-}
+} */
 
 /* FieldName */
 /* .cm-property {
   color: rgb(41, 185, 115);
 } */
-
+/* 
 .result-window .cm-property {
   color: rgb(51, 147, 220);
-}
+} */
 
 /* FieldAlias */
 .cm-qualifier {
@@ -445,9 +443,9 @@ div.CodeMirror-lint-message-warning {
   color: #d64292;
 }
 
-.result-window .cm-string {
+/* .result-window .cm-string {
   color: rgb(41, 185, 115);
-}
+} */
 
 /* Boolean */
 .cm-builtin {
