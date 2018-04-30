@@ -4,7 +4,7 @@ jobs:
 
   playground-build:
     docker:
-      - image: circleci/node:8
+      - image: circleci/node:8@sha256:dd5267d9681d1dc0edc603e1c768ff27cc8ea9034394244d5027b1824edabe21
     steps:
       - checkout
       - run: yarn show-versions
