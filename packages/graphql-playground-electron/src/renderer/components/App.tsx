@@ -8,7 +8,7 @@ import Playground, {
   selectNextTab,
   selectPrevTab,
   closeSelectedTab,
-  fetchSchema,
+  refetchSchema,
   newSession,
   store,
   getSessionsState,
@@ -92,7 +92,7 @@ interface ReduxProps {
   selectNextTab: () => void
   selectPrevTab: () => void
   closeSelectedTab: () => void
-  fetchSchema: () => void
+  refetchSchema: () => void
   newSession: (endpoint: string) => void
   saveFile: () => void
   newFileTab: (fileName: string, filePath: string, file: string) => void
@@ -228,7 +228,7 @@ class App extends React.Component<ReduxProps, State> {
   }
 
   reloadSchema = () => {
-    this.props.fetchSchema()
+    this.props.refetchSchema()
   }
 
   componentDidMount() {
@@ -653,7 +653,7 @@ export default connect(mapStateToProps, {
   selectNextTab,
   selectPrevTab,
   closeSelectedTab,
-  fetchSchema,
+  refetchSchema,
   newSession,
   saveFile,
   newFileTab,
