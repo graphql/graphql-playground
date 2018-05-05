@@ -32,7 +32,10 @@ import * as path from 'path'
 import * as os from 'os'
 import * as yaml from 'js-yaml'
 import * as findUp from 'find-up'
-import { patchEndpointsToConfigData as patchPrismaEndpointsToConfigData } from 'graphql-config-extension-prisma'
+import {
+  patchEndpointsToConfigData as patchPrismaEndpointsToConfigData,
+  makeConfigFromPath,
+} from 'graphql-config-extension-prisma'
 import { patchEndpointsToConfigData } from 'graphql-config-extension-graphcool'
 import { connect } from 'react-redux'
 import { errify } from '../utils/errify'
@@ -159,22 +162,25 @@ class App extends React.Component<ReduxProps, State> {
       //       }
 
       const configDir = path.dirname(configPath)
-      let config = await patchEndpointsToConfigData(
-        resolveEnvsInValues(
-          getGraphQLConfig(path.dirname(configPath)).config,
+      let config
+      try {
+        config = await patchEndpointsToConfigData(
+          resolveEnvsInValues(getGraphQLConfig(configDir).config, env),
+          configDir,
           env,
-        ),
-        configDir,
-        env,
-      )
-      config = await patchPrismaEndpointsToConfigData(
-        resolveEnvsInValues(
-          getGraphQLConfig(path.dirname(configPath)).config,
+        )
+        config = await patchPrismaEndpointsToConfigData(
+          resolveEnvsInValues(getGraphQLConfig(configDir).config, env),
+          configDir,
           env,
-        ),
-        configDir,
-        env,
-      )
+        )
+      } catch (e) {
+        const ymlPath = path.join(configDir, 'prisma.yml')
+        if (!fs.existsSync(ymlPath)) {
+          throw e
+        }
+        config = await makeConfigFromPath(configDir)
+      }
 
       ipcRenderer.send(
         'cwd',
@@ -309,18 +315,29 @@ class App extends React.Component<ReduxProps, State> {
         folderName = configPath
           ? path.basename(path.dirname(configPath))
           : undefined
-        const rawConfig = getGraphQLConfig(input.cwd).config
-        const resolvedConfig = resolveEnvsInValues(rawConfig, input.env)
-        config = await patchEndpointsToConfigData(
-          resolvedConfig,
-          input.cwd,
-          input.env,
-        )
-        config = await patchPrismaEndpointsToConfigData(
-          resolvedConfig,
-          input.cwd,
-          input.env,
-        )
+        try {
+          const rawConfig = getGraphQLConfig(input.cwd).config
+          const resolvedConfig = resolveEnvsInValues(rawConfig, input.env)
+          config = await patchEndpointsToConfigData(
+            resolvedConfig,
+            input.cwd,
+            input.env,
+          )
+          config = await patchPrismaEndpointsToConfigData(
+            resolvedConfig,
+            input.cwd,
+            input.env,
+          )
+        } catch (e) {
+          const ymlPath = path.join(input.cwd, 'prisma.yml')
+          if (!fs.existsSync(ymlPath)) {
+            throw e
+          }
+          config = (await makeConfigFromPath(input.cwd, input.env)).config
+          configPath = ymlPath
+          folderName = path.basename(input.cwd)
+          configString = JSON.stringify(config)
+        }
 
         if (!this.configContainsEndpoints(config)) {
           const graphcoolNote = configString.includes('graphcool')
@@ -332,6 +349,7 @@ class App extends React.Component<ReduxProps, State> {
           return
         }
       } catch (e) {
+        console.error(e)
         errify(e)
       }
     }

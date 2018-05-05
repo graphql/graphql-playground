@@ -1848,7 +1848,7 @@ code-point-at@^1.0.0:
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/code-point-at/-/code-point-at-1.1.0.tgz#0d070b4d043a5bea33a2f1a40e2edb3d9a4ccf77"
 
-codemirror-graphql@^0.6.11, codemirror-graphql@^0.6.12, "codemirror-graphql@github:timsuchanek/codemirror-graphql#details-fix":
+codemirror-graphql@^0.6.11, codemirror-graphql@^0.6.12, codemirror-graphql@timsuchanek/codemirror-graphql#details-fix:
   version "0.6.12"
   resolved "https://codeload.github.com/timsuchanek/codemirror-graphql/tar.gz/801ec32683c38d6dc0f8f7bc19014a111edc9ebd"
   dependencies:
@@ -3632,12 +3632,12 @@ graphql-config-extension-graphcool@1.0.8:
     graphcool-yml "0.4.15"
     graphql-config "^2.0.1"
 
-graphql-config-extension-prisma@0.0.10:
-  version "0.0.10"
-  resolved "https://registry.yarnpkg.com/graphql-config-extension-prisma/-/graphql-config-extension-prisma-0.0.10.tgz#cb7ef8c7102b57bc10b10d9f2848c821441cf466"
+graphql-config-extension-prisma@^0.0.12:
+  version "0.0.12"
+  resolved "https://registry.yarnpkg.com/graphql-config-extension-prisma/-/graphql-config-extension-prisma-0.0.12.tgz#c591a2dd3d45eb4b039a39b5d4a6ea7ca7d8e05a"
   dependencies:
     graphql-config "^2.0.1"
-    prisma-yml "1.0.47"
+    prisma-yml "1.0.50"
 
 graphql-config@1.1.4:
   version "1.1.4"
@@ -6374,9 +6374,9 @@ prisma-json-schema@0.0.4:
   version "0.0.4"
   resolved "https://registry.yarnpkg.com/prisma-json-schema/-/prisma-json-schema-0.0.4.tgz#4ecee29c351e382fb833dad83a38c62961380458"
 
-prisma-yml@1.0.47:
-  version "1.0.47"
-  resolved "https://registry.yarnpkg.com/prisma-yml/-/prisma-yml-1.0.47.tgz#e7ae47eaf6c53a690471eec4d1edabea63386c06"
+prisma-yml@1.0.50:
+  version "1.0.50"
+  resolved "https://registry.yarnpkg.com/prisma-yml/-/prisma-yml-1.0.50.tgz#c85de8fa55efc6cac59083496bc038278be04076"
   dependencies:
     ajv "5"
     bluebird "^3.5.1"
@@ -7798,9 +7798,8 @@ styled-components@^3.1.6:
     postcss-load-plugins "^2.2.0"
     styled-jsx "^0.5.7"
 
-"styled-jsx-postcss@github:timsuchanek/styled-jsx-postcss#build3":
+styled-jsx-postcss@timsuchanek/styled-jsx-postcss#build3:
   version "0.2.0"
-  uid "677ee0fb7f9138047a00e03c8c3e44adbb33cf2a"
   resolved "https://codeload.github.com/timsuchanek/styled-jsx-postcss/tar.gz/677ee0fb7f9138047a00e03c8c3e44adbb33cf2a"
   dependencies:
     babel-traverse "^6.21.0"
