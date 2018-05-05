@@ -233,6 +233,11 @@ export class Playground extends React.PureComponent<Props & ReduxProps, State> {
               : JSON.stringify(props.headers),
         }
         const schema = await schemaFetcher.fetch(data)
+        schemaFetcher.subscribe(data, newSchema => {
+          if (data.endpoint === this.props.endpoint) {
+            this.setState({ schema: newSchema })
+          }
+        })
         if (schema) {
           this.setState({ schema: schema.schema })
           this.props.schemaFetchingSuccess(
