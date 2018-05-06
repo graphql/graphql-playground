@@ -51,10 +51,38 @@ export const colours: Colours = {
 
 export interface EditorColours {
   property: string
+  comment: string
+  punctuation: string
+  keyword: string
+  def: string
+  qualifier: string
+  attribute: string
+  number: string
+  string: string
+  builtin: string
+  string2: string
+  variable: string
+  meta: string
+  atom: string
+  ws: string
 }
 
 export const editorColours: EditorColours = {
-  property: `rgb(41, 185, 115)`,
+  property: 'rgb(41, 185, 115)',
+  comment: 'rgba(255, 255, 255, 0.3)',
+  punctuation: 'rgba(255, 255, 255, 0.4)',
+  keyword: 'rgb(42, 126, 211)',
+  def: 'rgb(56, 189, 193)',
+  qualifier: '#1c92a9',
+  attribute: 'rgb(247, 116, 102)',
+  number: '#2882f9',
+  string: '#d64292',
+  builtin: '#d47509',
+  string2: '#0b7fc7',
+  variable: 'rgb(181, 34, 130)',
+  meta: '#b33086',
+  atom: 'rgb(249, 233, 34)',
+  ws: 'rgba(255, 255, 255, 0.4)',
 }
 
 export interface Sizes {
