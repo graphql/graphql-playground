@@ -339,12 +339,6 @@ class GraphQLEditor extends React.PureComponent<
               >
                 <ResponseTrackingTitle
                   isOpen={this.props.responseTracingOpen}
-                  // className="response-tracing-title"
-                  // style={{
-                  //   cursor: this.props.responseTracingOpen
-                  //     ? 'row-resize'
-                  //     : 'n-resize'
-                  // }}
                   onMouseDown={this.handleTracingResizeStart}
                 >
                   Tracing
