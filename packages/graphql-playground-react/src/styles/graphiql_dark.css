@@ -920,12 +920,12 @@ div.CodeMirror-dragcursors {
   padding-right: 0.1px;
 } */
 
-@media print {
-  /* Hide the cursor when printing */
-  /* .CodeMirror div.CodeMirror-cursors {
+/* @media print { */
+/* Hide the cursor when printing */
+/* .CodeMirror div.CodeMirror-cursors {
     visibility: hidden;
   } */
-}
+/* } */
 
 /* See issue #2901 */
 /* .cm-tab-wrap-hack:after {
@@ -972,11 +972,11 @@ div.CodeMirror-dragcursors {
 } */
 
 /* TODO: MORE STUFF!!! */
-.graphiql-container .doc-explorer {
+/* .graphiql-container .doc-explorer {
   background: white;
-}
+} */
 
-.graphiql-container .doc-explorer-title-bar {
+/* .graphiql-container .doc-explorer-title-bar {
   cursor: default;
   display: -webkit-box;
   display: -ms-flexbox;
@@ -990,9 +990,9 @@ div.CodeMirror-dragcursors {
   -ms-user-select: none;
   user-select: none;
   background-color: rgba(0, 0, 0, 0.02);
-}
+} */
 
-.graphiql-container .doc-explorer-title {
+/* .graphiql-container .doc-explorer-title {
   -webkit-box-flex: 1;
   -ms-flex: 1;
   flex: 1;
@@ -1002,9 +1002,9 @@ div.CodeMirror-dragcursors {
   text-align: center;
   text-overflow: ellipsis;
   white-space: nowrap;
-}
+} */
 
-.graphiql-container .doc-explorer-back {
+/* .graphiql-container .doc-explorer-back {
   color: #3b5998;
   cursor: pointer;
   margin: -7px 0 -6px -8px;
@@ -1029,13 +1029,13 @@ div.CodeMirror-dragcursors {
   -webkit-transform: rotate(-45deg);
   transform: rotate(-45deg);
   width: 9px;
-}
+} */
 
-.graphiql-container .doc-explorer-rhs {
+/* .graphiql-container .doc-explorer-rhs {
   position: relative;
-}
+} */
 
-.graphiql-container .doc-explorer-contents {
+/* .graphiql-container .doc-explorer-contents {
   background-color: #ffffff;
   bottom: 0;
   left: 0;
@@ -1044,9 +1044,9 @@ div.CodeMirror-dragcursors {
   padding: 20px 15px;
   right: 0;
   top: 47px;
-}
+} */
 
-.graphiql-container .doc-type-description {
+/* .graphiql-container .doc-type-description {
   padding: 0 25px 38px 25px;
   background-color: rgba(0, 0, 0, 0.02);
   color: rgba(0, 0, 0, 0.5);
@@ -1104,9 +1104,9 @@ div.CodeMirror-dragcursors {
 .graphiql-container .doc-category-item {
   margin: 12px 0;
   color: #555;
-}
+} */
 
-.graphiql-container .keyword {
+/* .graphiql-container .keyword {
   color: rgb(242, 92, 84);
 }
 
@@ -1124,9 +1124,9 @@ div.CodeMirror-dragcursors {
 
 .graphiql-container .arg-name {
   color: #8b2bb9;
-}
+} */
 
-.graphiql-container .arg:after {
+/* .graphiql-container .arg:after {
   content: ', ';
 }
 
@@ -1138,7 +1138,7 @@ div.CodeMirror-dragcursors {
   color: #f00f00;
   font-family: 'Consolas', 'Inconsolata', 'Droid Sans Mono', 'Monaco', monospace;
   font-size: 13px;
-}
+} */
 
 /* .graphiql-container .search-box-outer {
   border: 1px solid #d3d6db;
@@ -1365,12 +1365,12 @@ li.CodeMirror-hint-active {
   margin-right: 0.5em;
 } */
 
-.history-popup .graphiql-container {
+/* .history-popup .graphiql-container {
   height: calc(100% - 81px) !important;
 }
 .history-popup .graphiql-container .queryWrap {
   border-top: none;
-}
+} */
 
 /* .result-codemirror .CodeMirror-scroll {
   max-width: 50vw;

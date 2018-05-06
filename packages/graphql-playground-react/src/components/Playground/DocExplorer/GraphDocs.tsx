@@ -171,12 +171,6 @@ class GraphDocs extends React.Component<
             border-top-left-radius: 2px;
             border-top-right-radius: 2px;
           }
-          .doc-explorer {
-            @p: .flex, .relative, .h100;
-            letter-spacing: 0.3px;
-            outline: none;
-            box-shadow: -1px 1px 6px 0 rgba(0, 0, 0, 0.3);
-          }
           .doc-explorer-container {
             @p: .flex, .relative, .h100, .w100;
             overflow-x: auto;
@@ -450,6 +444,16 @@ const Docs = styled.div`
     z-index: 2000;
   }
 `
+
+// const DocsExplorer = styled.div`
+//   background: white;
+//   display: flex;
+//   position: relative;
+//   height: 100%;
+//   letter-spacing: 0.3px;
+//   outline: none;
+//   box-shadow: -1px 1px 6px 0 rgba(0, 0, 0, 0.3);
+// `
 
 const DocsResizer = styled.div`
   cursor: col-resize;

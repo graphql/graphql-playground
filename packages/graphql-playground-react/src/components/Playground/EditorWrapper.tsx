@@ -627,14 +627,6 @@ const EditorWrapper = styled.div`
     font-size: 70%;
   }
 
-  .CodeMirror-foldmarker {
-    color: blue;
-    cursor: pointer;
-    font-family: arial;
-    line-height: 0.3;
-    text-shadow: #b9f 1px 1px 2px, #b9f -1px -1px 2px, #b9f 1px -1px 2px,
-      #b9f -1px 1px 2px;
-  }
   .CodeMirror-foldgutter {
     width: 0.7em;
   }
@@ -643,10 +635,10 @@ const EditorWrapper = styled.div`
     cursor: pointer;
   }
   .CodeMirror-foldgutter-open:after {
-    content: '\25BE';
+    content: '▾';
   }
   .CodeMirror-foldgutter-folded:after {
-    content: '\25B8';
+    content: '▸';
   }
   /* The lint marker gutter */
   .CodeMirror-lint-markers {
