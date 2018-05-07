@@ -5,7 +5,7 @@ import { QueryEditor } from './Playground/QueryEditor'
 import { createStructuredSelector } from 'reselect'
 import { getFile } from '../state/sessions/selectors'
 import { editFile } from '../state/sessions/actions'
-import EditorWrapper from './Playground/EditorWrapper'
+import EditorWrapper, { Container } from './Playground/EditorWrapper'
 import { connect } from 'react-redux'
 
 export interface Props {
@@ -16,16 +16,18 @@ export interface Props {
 class FileEditor extends React.Component<Props, {}> {
   render() {
     return (
-      <Wrapper className="graphiql-container">
-        <EditorWrapper>
-          <div className="queryWrap">
-            <QueryEditor
-              value={this.props.value}
-              onChange={this.props.onChange}
-            />
-          </div>
-        </EditorWrapper>
-      </Wrapper>
+      <Container>
+        <Wrapper>
+          <EditorWrapper>
+            <QueryWrap>
+              <QueryEditor
+                value={this.props.value}
+                onChange={this.props.onChange}
+              />
+            </QueryWrap>
+          </EditorWrapper>
+        </Wrapper>
+      </Container>
     )
   }
 }
@@ -59,4 +61,10 @@ const Wrapper = styled.div`
   .CodeMirror-gutters {
     background: none !important;
   }
+`
+
+const QueryWrap = styled.div`
+  display: flex;
+  flex-direction: column;
+  flex: 1;
 `

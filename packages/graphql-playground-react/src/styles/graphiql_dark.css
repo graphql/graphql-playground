@@ -1,4 +1,4 @@
-.graphiql-container {
+/* .graphiql-container {
   color: #141823;
   display: -webkit-box;
   display: -ms-flexbox;
@@ -15,7 +15,7 @@
   margin: 0;
   overflow: hidden;
   width: 100%;
-}
+} */
 
 /* .graphiql-container .editorWrap {
   display: -webkit-box;
@@ -43,7 +43,7 @@
   flex: 1;
 } */
 
-.graphiql-container .queryWrap {
+/* .graphiql-container .queryWrap {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -54,7 +54,7 @@
   -webkit-box-flex: 1;
   -ms-flex: 1;
   flex: 1;
-}
+} */
 
 /* .graphiql-container .resultWrap {
   border-left: none;

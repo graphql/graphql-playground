@@ -9,7 +9,7 @@ import { getConfigString } from '../state/general/selectors'
 import { setSettingsString, setConfigString } from '../state/general/actions'
 import { editSettings, saveSettings } from '../state/sessions/actions'
 import { getSettingsString } from '../state/workspace/reducers'
-import EditorWrapper from './Playground/EditorWrapper'
+import EditorWrapper, { Container } from './Playground/EditorWrapper'
 
 export interface Props {
   value: string
@@ -30,27 +30,29 @@ export class SettingsEditor extends React.Component<Props, {}> {
   render() {
     const { isConfig } = this.props
     return (
-      <Wrapper className="graphiql-container">
-        <EditorWrapper>
-          <div className="variable-editor">
-            <ConfigEditor
-              value={this.props.value}
-              onEdit={this.props.onChange}
-              onRunQuery={this.props.onSave}
-              isYaml={this.props.isYaml}
-              readOnly={this.props.readOnly}
-            />
-            <PlaygroundVersion>{window.version}</PlaygroundVersion>
-          </div>
-        </EditorWrapper>
-        {!this.props.readOnly && (
-          <ButtonWrapper>
-            <Button onClick={this.props.onSave}>
-              Save {isConfig ? `Config` : `Settings`}
-            </Button>
-          </ButtonWrapper>
-        )}
-      </Wrapper>
+      <Container>
+        <Wrapper>
+          <EditorWrapper>
+            <div className="variable-editor">
+              <ConfigEditor
+                value={this.props.value}
+                onEdit={this.props.onChange}
+                onRunQuery={this.props.onSave}
+                isYaml={this.props.isYaml}
+                readOnly={this.props.readOnly}
+              />
+              <PlaygroundVersion>{window.version}</PlaygroundVersion>
+            </div>
+          </EditorWrapper>
+          {!this.props.readOnly && (
+            <ButtonWrapper>
+              <Button onClick={this.props.onSave}>
+                Save {isConfig ? `Config` : `Settings`}
+              </Button>
+            </ButtonWrapper>
+          )}
+        </Wrapper>
+      </Container>
     )
   }
 

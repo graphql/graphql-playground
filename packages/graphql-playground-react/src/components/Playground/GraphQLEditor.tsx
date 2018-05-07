@@ -1,10 +1,9 @@
 import * as React from 'react'
 import * as ReactDOM from 'react-dom'
 import { isNamedType, GraphQLSchema } from 'graphql'
-import * as cn from 'classnames'
 import ExecuteButton from './ExecuteButton'
 import QueryEditor from './QueryEditor'
-import EditorWrapper from './EditorWrapper'
+import EditorWrapper, { Container } from './EditorWrapper'
 import CodeMirrorSizer from 'graphiql/dist/utility/CodeMirrorSizer'
 import { fillLeafs } from 'graphiql/dist/utility/fillLeafs'
 import { getLeft, getTop } from 'graphiql/dist/utility/elementPosition'
@@ -159,12 +158,8 @@ class GraphQLEditor extends React.PureComponent<
 
   render() {
     return (
-      <div className={cn('graphiql-container')}>
+      <Container>
         <style jsx={true} global={true}>{`
-          .graphiql-container {
-            font-family: Open Sans, sans-serif;
-          }
-
           .docs-button,
           .schema-button {
             @p: .absolute, .white, .bgGreen, .pa6, .br2, .z2, .ttu, .fw6, .f14,
@@ -254,13 +249,7 @@ class GraphQLEditor extends React.PureComponent<
             ref={this.setEditorBarComponent}
             onMouseDown={this.handleResizeStart}
           >
-            <div
-              className={cn('queryWrap', this.props.localTheme)}
-              style={{
-                WebkitFlex: this.props.editorFlex,
-                flex: this.props.editorFlex,
-              }}
-            >
+            <QueryWrap flex={this.props.editorFlex}>
               <QueryEditor
                 getRef={this.setQueryEditorComponent}
                 schema={this.props.schema}
@@ -317,7 +306,7 @@ class GraphQLEditor extends React.PureComponent<
                 )}
               </VariableEditor>
               <QueryDragBar ref={this.setQueryResizer} />
-            </div>
+            </QueryWrap>
             <ResultWrap>
               <ResultDragBar ref={this.setResponseResizer} />
               <ExecuteButton />
@@ -349,7 +338,7 @@ class GraphQLEditor extends React.PureComponent<
           </EditorBar>
         </EditorWrapper>
         <GraphDocs ref={this.setDocExplorerRef} schema={this.props.schema} />
-      </div>
+      </Container>
     )
   }
 
@@ -756,4 +745,16 @@ const ResponseTrackingTitle = withProps<TitleProps>()(
   text-align: right;
   background: #0b1924;
   cursor: ${props => (props.isOpen ? 's-resize' : 'n-resize')};
+`
+
+interface QueryProps {
+  flex: number
+}
+
+const QueryWrap = withProps<QueryProps>()(styled.div)`
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  flex: ${props => props.flex} 1 0%;
+  border-top: 8px solid ${props => props.theme.colours.darkBlue};
 `

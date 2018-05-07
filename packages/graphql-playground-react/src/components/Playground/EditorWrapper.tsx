@@ -334,14 +334,6 @@ const EditorWrapper = styled.div`
   .CodeMirror-composing {
     border-bottom: 2px solid;
   }
-
-  /* Default styles for common addons */
-  div.CodeMirror span.CodeMirror-matchingbracket {
-    color: #0f0;
-  }
-  div.CodeMirror span.CodeMirror-nonmatchingbracket {
-    color: #f22;
-  }
   .CodeMirror-matchingtag {
     background: rgba(255, 150, 0, 0.3);
   }
@@ -812,5 +804,23 @@ const EditorWrapper = styled.div`
 `
 
 const Wrapper = ({ children }) => <EditorWrapper>{children}</EditorWrapper>
+
+const GraphqlContainer = styled.div`
+  color: #141823;
+  display: flex;
+  flex-direction: row;
+  font-family: system, -apple-system, 'San Francisco', '.SFNSDisplay-Regular',
+    'Segoe UI', Segoe, 'Segoe WP', 'Helvetica Neue', helvetica, 'Lucida Grande',
+    arial, sans-serif;
+  font-size: 14px;
+  height: 100%;
+  margin: 0;
+  overflow: hidden;
+  width: 100%;
+`
+
+export const Container = ({ children }) => (
+  <GraphqlContainer>{children}</GraphqlContainer>
+)
 
 export default Wrapper
