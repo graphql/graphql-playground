@@ -18,10 +18,15 @@ import {
   startQuery,
   setQueryTypes,
   editName,
+  setResponseExtensions,
+  setCurrentQueryStartTime,
+  setCurrentQueryEndTime,
 } from './actions'
 import { getSelectedSessionId } from './selectors'
 import { getDefaultSession, defaultQuery } from '../../constants'
 import * as cuid from 'cuid'
+import { formatError } from './fetchingSagas'
+import { prettify } from '../../utils'
 
 export interface SessionStateProps {
   sessions: OrderedMap<string, Session>
@@ -83,6 +88,7 @@ export class Session extends Record(getDefaultSession('')) {
   tracingSupported?: boolean
   docExplorerWidth: number
   changed?: boolean
+  scrollTop?: number
 
   toJSON() {
     const obj = this.toObject()
@@ -157,7 +163,7 @@ export function makeSessionState(endpoint) {
   })
 }
 
-export default handleActions(
+const reducer = handleActions(
   {
     [combineActions(
       editQuery,
@@ -177,6 +183,9 @@ export default handleActions(
       startQuery,
       setQueryTypes,
       editName,
+      setResponseExtensions,
+      setCurrentQueryStartTime,
+      setCurrentQueryEndTime,
     )]: (state, { payload }) => {
       const keys = Object.keys(payload)
       const keyName = keys.length === 1 ? keys[0] : keys[1]
@@ -187,6 +196,10 @@ export default handleActions(
       return state
         .setIn(['sessions', getSelectedSessionId(state), 'queryRunning'], true)
         .setIn(['sessions', getSelectedSessionId(state), 'responses'], List())
+        .setIn(
+          ['sessions', getSelectedSessionId(state), 'responseExtensions'],
+          undefined,
+        )
     },
     CLOSE_TRACING: (state, { payload: { responseTracingHeight } }) => {
       return state.mergeDeepIn(
@@ -201,6 +214,10 @@ export default handleActions(
         'responseTracingOpen',
       ]
       return state.setIn(path, !state.getIn(path))
+    },
+    PRETTIFY_QUERY: state => {
+      const path = ['sessions', getSelectedSessionId(state), 'query']
+      return state.setIn(path, prettify(state.getIn(path)))
     },
     OPEN_TRACING: (state, { payload: { responseTracingHeight } }) => {
       return state.mergeDeepIn(
@@ -248,11 +265,23 @@ export default handleActions(
         true,
       )
     },
+    REFETCH_SCHEMA: state => {
+      return state.setIn(
+        ['sessions', getSelectedSessionId(state), 'isReloadingSchema'],
+        true,
+      )
+    },
     STOP_QUERY: (state, { payload: { sessionId } }) => {
       return state.mergeIn(['sessions', sessionId], {
         queryRunning: false,
         subscriptionActive: false,
       })
+    },
+    SET_SCROLL_TOP: (state, { payload: { sessionId, scrollTop } }) => {
+      if (state.sessions.get(sessionId)) {
+        return state.setIn(['sessions', sessionId, 'scrollTop'], scrollTop)
+      }
+      return state
     },
     SCHEMA_FETCHING_SUCCESS: (state, { payload }) => {
       const newSessions = state
@@ -282,6 +311,19 @@ export default handleActions(
         })
       return state.set('sessions', newSessions)
     },
+    SET_ENDPOINT_UNREACHABLE: (state, { payload }) => {
+      const newSessions = state.get('sessions').map((session, sessionId) => {
+        if (session.get('endpoint') === payload.endpoint) {
+          return session.merge(
+            Map({
+              endpointUnreachable: true,
+            }),
+          )
+        }
+        return session
+      })
+      return state.set('sessions', newSessions)
+    },
     SCHEMA_FETCHING_ERROR: (state, { payload }) => {
       const newSessions = state.get('sessions').map((session, sessionId) => {
         if (session.get('endpoint') === payload.endpoint) {
@@ -292,7 +334,11 @@ export default handleActions(
               responses: List([
                 new ResponseRecord({
                   resultID: cuid(),
-                  date: payload.error,
+                  date: JSON.stringify(
+                    formatError(payload.error, true),
+                    null,
+                    2,
+                  ),
                   time: new Date(),
                 }),
               ]),
@@ -357,7 +403,12 @@ export default handleActions(
         .set('sessionCount', newState.sessions.size)
     },
     NEW_SESSION: (state, { payload: { reuseHeaders, endpoint } }) => {
-      let session = makeSession(endpoint)
+      const currentSession = state.sessions.first()
+      let session = makeSession(endpoint || currentSession.endpoint).merge({
+        query: '',
+        isReloadingSchema: currentSession.isReloadingSchema,
+        endpointUnreachable: currentSession.endpointUnreachable,
+      })
       if (reuseHeaders) {
         const selectedSessionId = getSelectedSessionId(state)
         const currentSession = state.sessions.get(selectedSessionId)
@@ -436,7 +487,7 @@ export default handleActions(
       const count = state.sessions.size
       const keys = state.sessions.keySeq()
       const index = keys.indexOf(selectedSessionId)
-      if (index - 1 > 0) {
+      if (index - 1 >= 0) {
         return state.set('selectedSessionId', keys.get(index - 1))
       }
       return state.set('selectedSessionId', keys.get(count - 1))
@@ -494,13 +545,26 @@ export default handleActions(
   makeSessionState(''),
 )
 
+// add a self-healing wrapper to clean up broken states
+export default (state, action) => {
+  const newState: SessionState = reducer(state, action)
+  if (newState.selectedSessionId === '' && state.sessions.size > 0) {
+    return newState.set('selectedSessionId', state.sessions.first().id)
+  }
+  return newState
+}
+
 function closeTab(state, sessionId) {
   const length = state.sessions.size
   const keys = state.sessions.keySeq()
   let newState = state.removeIn(['sessions', sessionId])
+  const session = state.sessions.get(sessionId)
   // if there is only one session, delete it and replace it by a new one
+  // and keep the endpoint & headers of the last one
   if (length === 1) {
-    const newSession = makeSession()
+    const newSession = makeSession(session.endpoint)
+      .set('headers', session.headers)
+      .set('query', '')
     newState = newState.set('selectedSessionId', newSession.id)
     return newState.setIn(['sessions', newSession.id], newSession)
   }

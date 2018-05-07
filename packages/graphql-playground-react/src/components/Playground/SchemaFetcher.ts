@@ -1,9 +1,10 @@
 import { GraphQLSchema, introspectionQuery, buildClientSchema } from 'graphql'
 import { NoSchemaError } from './util/NoSchemaError'
-import { parseHeaders } from './util/parseHeaders'
 import { ApolloLink, execute } from 'apollo-link'
 import { Map, set } from 'immutable'
 import { makeOperation } from './util/makeOperation'
+import { parseHeaders } from './util/parseHeaders'
+import { LinkCreatorProps } from '../../state/sessions/fetchingSagas'
 
 export interface TracingSchemaTuple {
   schema: GraphQLSchema
@@ -15,7 +16,7 @@ export interface SchemaFetchProps {
   headers?: string
 }
 
-export type LinkGetter = (session: SchemaFetchProps) => { link: ApolloLink }
+export type LinkGetter = (session: LinkCreatorProps) => { link: ApolloLink }
 
 export class SchemaFetcher {
   cache: Map<string, TracingSchemaTuple>
@@ -50,12 +51,12 @@ export class SchemaFetcher {
     session: SchemaFetchProps,
   ): Promise<{ schema: GraphQLSchema; tracingSupported: boolean } | null> {
     const { endpoint } = session
-    const headers = JSON.stringify({
+    const headers = {
       ...parseHeaders(session.headers),
       'X-Apollo-Tracing': '1',
-    })
+    }
 
-    const { link } = this.linkGetter(set(session, 'headers', headers))
+    const { link } = this.linkGetter(set(session, 'headers', headers) as any)
 
     const operation = makeOperation({ query: introspectionQuery })
 

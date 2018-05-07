@@ -12,6 +12,8 @@ export function deserializePersistedState(state) {
     workspaces: deserializeWorkspaces(state.workspaces),
     selectedWorkspace: state.selectedWorkspace,
     settingsString: state.settingsString,
+    appHistory: deserializeAppHistory(state.appHistory),
+    general: deserializeGeneral(state.general),
   }) as any
 }
 
@@ -23,8 +25,6 @@ function deserializeWorkspaces(workspaces) {
         sessions: deserializeSessionsState(workspace.sessions),
         sharing: deserializeSharing(workspace.sharing),
         history: deserializeHistory(workspace.history),
-        general: deserializeGeneral(workspace.general),
-        appHistory: deserializeAppHistory(workspace.appHistory),
       })
     }),
   )
@@ -56,8 +56,12 @@ function deserializeNavstack(navStack) {
 
 function deserializeSessionsState(state) {
   const sessions = deserializeSessions(state.sessions)
+  const selectedSessionId =
+    state.selectedSessionId && state.selectedSessionId !== ''
+      ? state.selectedSessionId
+      : sessions.first()!.id
   return new SessionState({
-    selectedSessionId: state.selectedSessionId,
+    selectedSessionId,
     sessions,
     sessionCount: sessions.size,
     headers: state.headers,

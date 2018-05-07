@@ -180,23 +180,7 @@ class PlaygroundWrapper extends React.Component<
     ) {
       const configIsYaml = this.isConfigYaml(nextProps.configString)
       this.setState({ configIsYaml })
-      if (nextProps.config) {
-        const activeEnv = this.getInitialActiveEnv(nextProps.config)
-        const endpoints = getActiveEndpoints(
-          nextProps.config,
-          activeEnv.activeEnv!,
-          this.state.activeProjectName,
-        )
-        const endpoint = endpoints.endpoint
-        const subscriptionEndpoint = endpoints.subscriptionEndpoint
-        const headers = endpoints.headers
-        this.setState({
-          endpoint,
-          subscriptionEndpoint,
-          headers,
-          activeEnv: activeEnv.activeEnv,
-        })
-      }
+      this.setInitialWorkspace(nextProps)
     }
   }
 
@@ -257,6 +241,28 @@ class PlaygroundWrapper extends React.Component<
     setTimeout(() => {
       this.removePlaygroundInClass()
     }, 5000)
+    this.setInitialWorkspace()
+  }
+
+  setInitialWorkspace(props = this.props) {
+    if (props.config) {
+      const activeEnv = this.getInitialActiveEnv(props.config)
+      const endpoints = getActiveEndpoints(
+        props.config,
+        activeEnv.activeEnv!,
+        activeEnv.projectName,
+      )
+      const endpoint = endpoints.endpoint
+      const subscriptionEndpoint = endpoints.subscriptionEndpoint
+      const headers = endpoints.headers
+      this.setState({
+        endpoint,
+        subscriptionEndpoint,
+        headers,
+        activeEnv: activeEnv.activeEnv,
+        activeProjectName: activeEnv.projectName,
+      })
+    }
   }
 
   removePlaygroundInClass() {

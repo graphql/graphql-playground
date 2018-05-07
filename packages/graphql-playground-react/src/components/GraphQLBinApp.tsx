@@ -95,7 +95,7 @@ class GraphQLBinApp extends React.Component<Props & ReduxProps, State> {
           }
 
           if (!res.data || res.data.session === null) {
-            return this.props.history.push('/v2/new')
+            location.href = `${location.origin}/v2/new`
           }
           const state = JSON.parse(res.data.session.session)
           this.props.injectState(state)

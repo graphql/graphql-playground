@@ -16,5 +16,8 @@
     "hapi": "16.6.2",
     "koa": "2.4.1",
     "rimraf": "2.6.2"
+  },
+  "dependencies": {
+    "dotenv": "^5.0.1"
   }
 }

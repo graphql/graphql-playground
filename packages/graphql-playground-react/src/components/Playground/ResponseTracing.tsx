@@ -9,6 +9,7 @@ import {
   getCurrentQueryStartTime,
   getCurrentQueryEndTime,
   getTracingSupported,
+  getQueryRunning,
 } from '../../state/sessions/selectors'
 import { connect } from 'react-redux'
 
@@ -34,6 +35,7 @@ export interface ReduxProps {
   tracingSupported?: boolean
   startTime?: Date
   endTime?: Date
+  queryRunning: boolean
 }
 
 const textColor = theme('mode', {
@@ -71,9 +73,13 @@ const TracingRows = styled.div`
   height: calc(100% + 116px);
 `
 
-class ResponseTracing extends React.PureComponent<ReduxProps> {
+interface Props {
+  open: boolean
+}
+
+class ResponseTracing extends React.PureComponent<ReduxProps & Props> {
   render() {
-    const { tracing, tracingSupported, startTime, endTime } = this.props
+    const { tracing, tracingSupported, startTime, endTime, open } = this.props
     const requestMs =
       tracing && startTime
         ? Math.abs(new Date(tracing.startTime).getTime() - startTime.getTime())
@@ -83,9 +89,10 @@ class ResponseTracing extends React.PureComponent<ReduxProps> {
         ? Math.abs(endTime.getTime() - new Date(tracing.endTime).getTime())
         : 0
     const requestDuration = 1000 * 1000 * requestMs
+
     return (
       <TracingWrapper>
-        {tracing ? (
+        {tracing && open ? (
           <TracingRows>
             <TracingRow
               path={['Request']}
@@ -107,7 +114,11 @@ class ResponseTracing extends React.PureComponent<ReduxProps> {
             />
           </TracingRows>
         ) : tracingSupported ? (
-          <ReRun>Please re-run the query to show tracing results.</ReRun>
+          <ReRun>
+            {this.props.queryRunning
+              ? 'Running query ...'
+              : 'Please re-run the query to show tracing results.'}
+          </ReRun>
         ) : (
           <NotSupported>
             This GraphQL server doesn’t support tracing. See the following page
@@ -125,6 +136,7 @@ const mapStateToProps = createStructuredSelector({
   startTime: getCurrentQueryStartTime,
   endTime: getCurrentQueryEndTime,
   tracingSupported: getTracingSupported,
+  queryRunning: getQueryRunning,
 })
 
 export default connect(mapStateToProps)(ResponseTracing)

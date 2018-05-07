@@ -84,7 +84,7 @@ module.exports = {
         loader: 'file-loader',
       },
       {
-        test: /(graphics|gifs|node_modules)\/.*\.(png|gif)$/,
+        test: /.*\.(png|gif)$/,
         loader: 'file-loader',
       },
     ],

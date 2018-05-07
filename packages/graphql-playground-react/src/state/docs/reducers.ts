@@ -1,5 +1,5 @@
 import { GraphQLField } from 'graphql'
-import { Map, List, Record } from 'immutable'
+import { Map, List, Record, set } from 'immutable'
 import { handleActions } from 'redux-actions'
 import { columnWidth } from '../../constants'
 
@@ -18,12 +18,18 @@ export interface DocsSessionState {
   readonly keyMove: boolean
 }
 
-export const DocsSession = Record<DocsSessionState>({
+export class DocsSession extends Record({
   navStack: List([]),
   docsOpen: false,
   docsWidth: columnWidth,
   keyMove: false,
-})
+}) {
+  toJSON() {
+    const obj = this.toObject()
+    // don't serialize navStack, as it could contain circular references in the type definitions
+    return set(obj, 'navStack', List([]))
+  }
+}
 
 const defaultState: DocsState = Map({ '': new DocsSession() })
 

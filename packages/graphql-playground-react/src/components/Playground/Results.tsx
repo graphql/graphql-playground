@@ -20,7 +20,13 @@ const Results: React.SFC<Props & ReduxProps> = ({ setRef, responses }) => {
   return (
     <ResultWindow innerRef={setRef}>
       {responses.map(response => (
-        <Response key={response.resultID || String(response.time)}>
+        <Response
+          key={
+            responses.size === 1
+              ? 'first'
+              : response.resultID || String(response.time)
+          }
+        >
           {responses.size > 1 &&
             response.time && (
               <SubscriptionTime>

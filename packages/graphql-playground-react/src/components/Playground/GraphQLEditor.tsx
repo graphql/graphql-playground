@@ -279,7 +279,7 @@ class GraphQLEditor extends React.PureComponent<
                   >
                     {'HTTP Headers ' +
                       (this.props.headersCount && this.props.headersCount > 0
-                        ? this.props.headersCount
+                        ? `(${this.props.headersCount})`
                         : '')}
                   </VariableEditorSubtitle>
                 </VariableEditorTitle>

@@ -22,7 +22,11 @@ export const getSelectedSession = createSelector([getSessionsState], state => {
   return session
 })
 
-export const getSelectedSessionId = state => state.get('selectedSessionId')
+export const getSelectedSessionId = state =>
+  state.selectedSessionId && state.selectedSessionId !== ''
+    ? state.selectedSessionId
+    : state.sessions.first().id
+
 export const getSelectedSessionIdFromRoot = createSelector(
   [getSelectedSession],
   state => state.get('id'),
@@ -32,6 +36,7 @@ const makeSessionSelector = prop => {
   return createSelector([getSelectedSession], session => session.get(prop))
 }
 
+export const getScrollTop = makeSessionSelector('scrollTop')
 export const getEndpoint = makeSessionSelector('endpoint')
 export const getQuery = makeSessionSelector('query')
 export const getFile = makeSessionSelector('file')

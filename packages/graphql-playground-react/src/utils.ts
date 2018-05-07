@@ -1,3 +1,5 @@
+import { print, parse } from 'graphql'
+
 // tslint:disable
 
 export function safely(cb: any) {
@@ -8,4 +10,8 @@ export function safely(cb: any) {
       console.error(e)
     }
   }
+}
+
+export function prettify(query) {
+  return print(parse(query))
 }

@@ -2,6 +2,7 @@ import * as React from 'react'
 import { remote, ipcRenderer, webFrame } from 'electron'
 import * as cx from 'classnames'
 import { Playground as IPlayground } from 'graphql-playground-react/lib/components/Playground'
+import { merge, set } from 'immutable'
 import Playground, {
   openSettingsTab,
   selectNextTab,
@@ -13,6 +14,9 @@ import Playground, {
   getSessionsState,
   saveFile,
   newFileTab,
+  getEndpoint,
+  selectAppHistoryItem,
+  AppHistoryItem,
 } from 'graphql-playground-react'
 import {
   getGraphQLConfig,
@@ -32,6 +36,8 @@ import { patchEndpointsToConfigData as patchPrismaEndpointsToConfigData } from '
 import { patchEndpointsToConfigData } from 'graphql-config-extension-graphcool'
 import { connect } from 'react-redux'
 import { errify } from '../utils/errify'
+import { createStructuredSelector } from 'reselect'
+import * as dotenv from 'dotenv'
 
 // import { PermissionSession } from 'graphql-playground/lib/types'
 
@@ -84,9 +90,11 @@ interface ReduxProps {
   selectPrevTab: () => void
   closeSelectedTab: () => void
   fetchSchema: () => void
-  newSession: () => void
+  newSession: (endpoint: string) => void
   saveFile: () => void
   newFileTab: (fileName: string, filePath: string, file: string) => void
+  selectAppHistoryItem: (item: AppHistoryItem) => void
+  endpoint: string
 }
 
 class App extends React.Component<ReduxProps, State> {
@@ -129,34 +137,43 @@ class App extends React.Component<ReduxProps, State> {
   handleSelectFolder = async (folderPath: string) => {
     try {
       // Get config from folderPath
+      const envPath = path.join(folderPath, '.env')
+      let env = process.env
+      if (fs.existsSync(envPath)) {
+        const envString = fs.readFileSync(envPath)
+        const localEnv = dotenv.parse(envString)
+        if (localEnv) {
+          env = merge(env, localEnv)
+        }
+      }
       const configPath = findGraphQLConfigFile(folderPath)
       const configString = fs.readFileSync(configPath, 'utf-8')
 
       /* tslint:disable-next-line */
-      if (configString.includes('${env:')) {
-        errify(`You opened a .graphqlconfig file that includes environment variables.
-In order to use environment variables in the Playground, please start it from the graphql cli. Install with
-npm install -g graphql-cli
-Then open the graphql config with:
-cd ${folderPath}; graphql playground`)
-      }
+      //       if (configString.includes('${env:')) {
+      //         errify(`You opened a .graphqlconfig file that includes environment variables.
+      // In order to use environment variables in the Playground, please start it from the graphql cli. Install with
+      // npm install -g graphql-cli
+      // Then open the graphql config with:
+      // cd ${folderPath}; graphql playground`)
+      //       }
 
       const configDir = path.dirname(configPath)
       let config = await patchEndpointsToConfigData(
         resolveEnvsInValues(
           getGraphQLConfig(path.dirname(configPath)).config,
-          process.env,
+          env,
         ),
         configDir,
-        process.env,
+        env,
       )
       config = await patchPrismaEndpointsToConfigData(
         resolveEnvsInValues(
           getGraphQLConfig(path.dirname(configPath)).config,
-          process.env,
+          env,
         ),
         configDir,
-        process.env,
+        env,
       )
 
       ipcRenderer.send(
@@ -168,9 +185,13 @@ cd ${folderPath}; graphql playground`)
         configPath,
         config,
         folderName: path.basename(folderPath),
+        env,
       }
       this.setState(state as State)
-      this.serializeWorkspace(state)
+      this.props.selectAppHistoryItem(merge(state, {
+        type: 'local',
+        path: configPath,
+      }) as any)
     } catch (error) {
       errify(error)
     }
@@ -193,7 +214,7 @@ cd ${folderPath}; graphql playground`)
   }
 
   newTab = () => {
-    this.props.newSession()
+    this.props.newSession(this.props.endpoint)
   }
 
   closeTab = () => {
@@ -214,12 +235,17 @@ cd ${folderPath}; graphql playground`)
     window.addEventListener('keydown', this.handleKeyDown, true)
     this.consumeEvents()
     ipcRenderer.send('ready', '')
-    if (!this.state.endpoint) {
-      const workspace = this.deserializeWorkspace()
-      if (workspace) {
-        this.setState(workspace)
-      }
-    }
+    // if (
+    //   !this.state.endpoint &&
+    //   !this.state.config &&
+    //   !this.state.configPath &&
+    //   !this.state.configString
+    // ) {
+    //   const workspace = this.deserializeWorkspace()
+    //   if (workspace) {
+    //     this.setState(workspace)
+    //   }
+    // }
   }
 
   consumeEvents() {
@@ -325,35 +351,12 @@ cd ${folderPath}; graphql playground`)
       platformToken,
     }
 
-    console.log('setting', { state })
-
-    if (endpoint) {
-      this.serializeWorkspace(state)
-    }
+    this.props.selectAppHistoryItem(merge(state, {
+      type: 'endpoint',
+      path: configPath,
+    }) as any)
 
     this.setState(state)
-  }
-
-  serializeWorkspace(state) {
-    localStorage.setItem(
-      'graphql-playground-last-workspace',
-      JSON.stringify(state),
-    )
-  }
-
-  deserializeWorkspace() {
-    try {
-      const lastWorkspace = localStorage.getItem(
-        'graphql-playground-last-workspace',
-      )
-      if (lastWorkspace) {
-        return JSON.parse(lastWorkspace)
-      }
-    } catch (e) {
-      //
-    }
-
-    return undefined
   }
 
   configContainsEndpoints(config: GraphQLConfigData): boolean {
@@ -535,7 +538,14 @@ cd ${folderPath}; graphql playground`)
         this.newTab()
         break
       case 'Close':
-        this.closeTab()
+        if (!this.state.endpoint && !this.state.config) {
+          ipcRenderer.send(
+            'CloseWindow',
+            JSON.stringify({ id: remote.getCurrentWindow().id }),
+          )
+        } else {
+          this.closeTab()
+        }
         break
       case 'Settings':
         this.openSettingsTab()
@@ -581,6 +591,7 @@ cd ${folderPath}; graphql playground`)
           isOpen={!endpoint && !configString}
           onSelectFolder={this.handleSelectFolder}
           onSelectEndpoint={this.handleSelectEndpoint}
+          selectHistory={this.handleSelectItem}
         />
         {(endpoint || configString) && (
           <div className="playground">
@@ -605,12 +616,21 @@ cd ${folderPath}; graphql playground`)
     )
   }
 
+  private handleSelectItem = ({ type, ...item }) => {
+    this.setState(item as any)
+    this.props.selectAppHistoryItem(set(item, 'lastOpened', new Date()) as any)
+  }
+
   private setRef = ref => {
     this.playground = ref
   }
 }
 
-export default connect(null, {
+const mapStateToProps = createStructuredSelector({
+  endpoint: getEndpoint,
+})
+
+export default connect(mapStateToProps, {
   openSettingsTab,
   selectNextTab,
   selectPrevTab,
@@ -619,4 +639,5 @@ export default connect(null, {
   newSession,
   saveFile,
   newFileTab,
+  selectAppHistoryItem,
 })(App)

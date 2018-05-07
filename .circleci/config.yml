@@ -7,7 +7,6 @@ jobs:
       - image: circleci/node:8
     steps:
       - checkout
-      - run: sudo npm i -g yarn
       - run: yarn show-versions
       - run: yarn install
       - run: cd packages/graphql-playground-react && yarn && yarn build
@@ -17,7 +16,6 @@ jobs:
       xcode: "9.0"
     steps:
       - checkout
-      - run: sudo npm i -g yarn
       - run: |
           if [[ -z "$CIRCLE_PULL_REQUEST" && "$CIRCLE_BRANCH" == "master" ]]
           then
@@ -29,7 +27,6 @@ jobs:
             # needed for signing in CI environments (don't ask...)
             security set-key-partition-list -S apple-tool:,apple: -s -k travis build.keychain
           fi
-      - run: sudo npm i -g yarn
       # needed for release process
       - run: brew install gettext
       # - run: yarn install

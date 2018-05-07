@@ -26,6 +26,7 @@ export const {
   openSettingsTab,
   schemaFetchingSuccess,
   schemaFetchingError,
+  setEndpointUnreachable,
   renewStacks,
   runQuery,
   prettifyQuery,
@@ -57,9 +58,14 @@ export const {
   injectHeaders,
   openConfigTab,
   editName,
+  setResponseExtensions,
+  setCurrentQueryStartTime,
+  setCurrentQueryEndTime,
+  refetchSchema,
+  setScrollTop,
 } = createActions({
   // simple property setting
-  EDIT_QUERY: simpleAction('query'),
+  EDIT_QUERY: query => ({ query }),
   EDIT_HEADERS: simpleAction('headers'),
   EDIT_ENDPOINT: simpleAction('endpoint'),
   EDIT_VARIABLES: simpleAction('variables'),
@@ -76,6 +82,9 @@ export const {
   SET_TRACING_SUPPORTED: simpleAction('tracingSupported'),
   SET_SUBSCRIPTION_ACTIVE: simpleAction('subscriptionActive'),
   SET_QUERY_TYPES: simpleAction('queryTypes'),
+  SET_RESPONSE_EXTENSIONS: simpleAction('responseExtensions'),
+  SET_CURRENT_QUERY_START_TIME: simpleAction('currentQueryStartTime'),
+  SET_CURRENT_QUERY_END_TIME: simpleAction('currentQueryEndTime'),
 
   UPDATE_QUERY_FACTS: simpleAction(),
   PRETTIFY_QUERY: simpleAction(),
@@ -114,6 +123,9 @@ export const {
   CLEAR_RESPONSES: simpleAction(),
 
   FETCH_SCHEMA: simpleAction(),
+  REFETCH_SCHEMA: simpleAction(),
+  SET_ENDPOINT_UNREACHABLE: simpleAction('endpoint'),
+  SET_SCROLL_TOP: (sessionId, scrollTop) => ({ sessionId, scrollTop }),
   SCHEMA_FETCHING_SUCCESS: (endpoint, tracingSupported) => ({
     endpoint,
     tracingSupported,

@@ -1,4 +1,4 @@
-.docs-graphiql .graphiql-container {
+.graphiql-container {
   color: #141823;
   display: -webkit-box;
   display: -ms-flexbox;
@@ -10,16 +10,14 @@
   font-family: system, -apple-system, 'San Francisco', '.SFNSDisplay-Regular',
     'Segoe UI', Segoe, 'Segoe WP', 'Helvetica Neue', helvetica, 'Lucida Grande',
     arial, sans-serif;
-  font-weight: 500;
   font-size: 14px;
   height: 100%;
   margin: 0;
-  overflow: visible;
+  overflow: hidden;
   width: 100%;
-  min-width: unset !important;
 }
 
-.docs-graphiql .graphiql-container .editorWrap {
+.graphiql-container .editorWrap {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -30,19 +28,18 @@
   -webkit-box-flex: 1;
   -ms-flex: 1;
   flex: 1;
-  background-color: #f6f7f7 !important;
 }
 
-.docs-graphiql .graphiql-container .title {
+.graphiql-container .title {
   font-size: 18px;
 }
 
-.docs-graphiql .graphiql-container .title em {
+.graphiql-container .title em {
   font-family: georgia;
   font-size: 19px;
 }
 
-.docs-graphiql .graphiql-container .topBarWrap {
+.graphiql-container .topBarWrap {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -52,7 +49,7 @@
   flex-direction: row;
 }
 
-.docs-graphiql .graphiql-container .topBar {
+.graphiql-container .topBar {
   -webkit-box-align: center;
   -ms-flex-align: center;
   align-items: center;
@@ -78,11 +75,11 @@
   user-select: none;
 }
 
-.docs-graphiql .graphiql-container .toolbar {
+.graphiql-container .toolbar {
   overflow-x: auto;
 }
 
-.docs-graphiql .graphiql-container .docExplorerShow {
+.graphiql-container .docExplorerShow {
   background: -webkit-linear-gradient(#f7f7f7, #e2e2e2);
   background: linear-gradient(#f7f7f7, #e2e2e2);
   border-bottom: 1px solid #d0d0d0;
@@ -97,7 +94,7 @@
   padding: 2px 20px 0 18px;
 }
 
-.docs-graphiql .graphiql-container .docExplorerShow:before {
+.graphiql-container .docExplorerShow:before {
   border-left: 2px solid #3b5998;
   border-top: 2px solid #3b5998;
   content: '';
@@ -110,7 +107,7 @@
   width: 9px;
 }
 
-.docs-graphiql .graphiql-container .editorBar {
+.graphiql-container .editorBar {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -123,7 +120,7 @@
   flex: 1;
 }
 
-.docs-graphiql .graphiql-container .queryWrap {
+.graphiql-container .queryWrap {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -134,12 +131,9 @@
   -webkit-box-flex: 1;
   -ms-flex: 1;
   flex: 1;
-  overflow: hidden;
-  border-bottom-left-radius: 3px;
-  border-top-left-radius: 3px;
 }
 
-.docs-graphiql .graphiql-container .resultWrap {
+.graphiql-container .resultWrap {
   border-left: none;
   display: -webkit-box;
   display: -ms-flexbox;
@@ -152,14 +146,17 @@
   -ms-flex: 1;
   flex: 1;
   position: relative;
-  background: rgba(23, 42, 58, 0.02) !important;
+  background-color: rgb(23, 42, 58);
 }
 
-.docs-graphiql .graphiql-container .docExplorerWrap {
+.graphiql-container .docExplorerWrap {
   background: white;
+  box-shadow: 0 0 8px rgba(0, 0, 0, 0.15);
+  position: relative;
+  z-index: 3;
 }
 
-.docs-graphiql .graphiql-container .docExplorerResizer {
+.graphiql-container .docExplorerResizer {
   cursor: col-resize;
   height: 100%;
   left: -5px;
@@ -169,83 +166,91 @@
   z-index: 10;
 }
 
-.docs-graphiql .graphiql-container .docExplorerHide {
+.graphiql-container .docExplorerHide {
   cursor: pointer;
   font-size: 18px;
   margin: -7px -8px -6px 0;
   padding: 18px 16px 15px 12px;
 }
 
-.docs-graphiql .graphiql-container .query-editor {
+.graphiql-container .query-editor {
   -webkit-box-flex: 1;
   -ms-flex: 1;
   flex: 1;
   position: relative;
 }
 
-.docs-graphiql .graphiql-container .query-editor .CodeMirror-gutters {
+.graphiql-container .query-editor .CodeMirror-gutters {
   border-right: none;
-  background-color: transparent;
+  background-color: rgb(15, 32, 45);
 }
 
-.docs-graphiql .graphiql-container .query-editor .CodeMirror {
-  background: none;
+.graphiql-container .query-editor .CodeMirror {
+  padding-left: 12px;
+  width: calc(100% - 12px);
+  background-color: rgb(15, 32, 45);
 }
 
-.docs-graphiql .graphiql-container .query-header {
-  background-color: #f6f7f7 !important;
+.graphiql-container .variable-editor,
+.graphiql-container .response-tracing {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+  -ms-flex-direction: column;
+  flex-direction: column;
+  height: 43px;
+  position: relative;
 }
 
-.docs-graphiql .graphiql-container .variable-editor .CodeMirror {
-  background: transparent !important;
+.graphiql-container .variable-editor .CodeMirror {
+  padding-left: 12px;
+  width: calc(100% - 12px);
+  background: #0b1924;
 }
 
-.docs-graphiql .graphiql-container .variable-editor .CodeMirror-gutters {
-  background: transparent;
+.graphiql-container .variable-editor .CodeMirror-gutters {
+  background: #0b1924;
   border: none;
 }
 
-.docs-graphiql .graphiql-container .variable-editor-title,
+.graphiql-container .variable-editor-title,
+.graphiql-container .response-tracing-title,
 .graphiql-container .editor-title {
-  border: none;
-  color: rgba(0, 0, 0, 0.2);
+  background: #0b1924;
+  color: rgba(255, 255, 255, 0.3);
   text-transform: uppercase;
-  font-weight: bold;
-  letter-spacing: 1px;
+  font-weight: 600;
+  letter-spacing: 0.53px;
   line-height: 14px;
-  padding: 16px;
+  font-size: 14px;
+  padding: 14px 14px 5px 21px;
   -webkit-user-select: none;
   -moz-user-select: none;
   -ms-user-select: none;
   user-select: none;
 }
 
-.docs-graphiql .variable-editor {
-  background: rgba(0, 0, 0, 0.05);
-  height: 44px;
+.graphiql-container .variable-editor-title .subtitle {
+  margin-right: 10px;
+  cursor: pointer;
 }
 
-.docs-graphiql .graphiql-container .response-tracing {
-  background: rgba(0, 0, 0, 0.05);
+.graphiql-container .variable-editor-title .subtitle.active {
+  color: rgba(255, 255, 255, 0.6);
 }
 
-.docs-graphiql .graphiql-container .variable-editor-title,
-.docs-graphiql .graphiql-container .response-tracing-title {
-  background: none;
-  color: rgba(0, 0, 0, 0.3);
+.graphiql-container .response-tracing {
+  background: #0b1924;
 }
 
-.docs-graphiql .graphiql-container .variable-editor-title .subtitle.active {
-  color: rgba(0, 0, 0, 0.7);
+.graphiql-container .response-tracing-title {
+  text-align: right;
+  background: #0b1924;
 }
 
-.docs-graphiql .variable-editor .cm-variable,
-.docs-graphiql .variable-editor .cm-punctuation,
-.docs-graphiql .variable-editor .cm-string {
-  color: #328c8c;
-}
-
-.docs-graphiql .graphiql-container .codemirrorWrap {
+.graphiql-container .codemirrorWrap {
   -webkit-box-flex: 1;
   -ms-flex: 1;
   flex: 1;
@@ -253,33 +258,17 @@
   position: relative;
 }
 
-.docs-graphiql .graphiql-container .result-window {
+.graphiql-container .result-window {
   -webkit-box-flex: 1;
   -ms-flex: 1;
   flex: 1;
   height: 100%;
   position: relative;
-  overflow: auto;
-  border-bottom-right-radius: 2px;
-  background: none !important;
-  padding-top: 0;
+  overflow: scroll;
+  max-height: calc(100vh - 101px);
 }
 
-.docs-graphiql .result-window > div,
-.docs-graphiql .result-window > div > .result-codemirror,
-.docs-graphiql .result-window > div > .result-codemirror .CodeMirror {
-  height: 100%;
-}
-
-.docs-graphiql .resultWrap .intro {
-  color: rgba(0, 0, 0, 0.4);
-}
-
-.result-header.subscription:after {
-  display: none !important;
-}
-
-.docs-graphiql .graphiql-container .footer {
+.graphiql-container .footer {
   background: #f6f7f8;
   border-left: 1px solid #e0e0e0;
   border-top: 1px solid #e0e0e0;
@@ -287,7 +276,7 @@
   position: relative;
 }
 
-.docs-graphiql .graphiql-container .footer:before {
+.graphiql-container .footer:before {
   background: #eeeeee;
   bottom: 0;
   content: ' ';
@@ -297,47 +286,19 @@
   width: 12px;
 }
 
-.docs-graphiql .graphiql-container .result-window .CodeMirror-gutters {
+.graphiql-container .result-window .CodeMirror-gutters {
   background-color: transparent;
-  border-right: none;
+  border: none;
   cursor: col-resize;
-  top: 4px;
-}
-
-.docs-graphiql .docs-button {
-  box-shadow: -1px -3px 5px rgba(0, 0, 0, 0.05);
-}
-
-.docs-graphiql .docs-button.inactive {
-  background: white;
-  color: rgb(168, 168, 168);
-  box-shadow: -1px 0 3px rgba(0, 0, 0, 0.15);
-}
-
-.docs-graphiql .result-header {
-  padding: 0 !important;
-  padding-left: 16px !important;
-  background-color: #f6f7f7 !important;
-  border-top-right-radius: 2px;
-}
-
-.docs-graphiql .result-header .editor-title {
-  margin-left: 3px;
-}
-.docs-graphiql .editor-title {
-  background: none !important;
 }
 
 .graphiql-container .result-window .CodeMirror-foldgutter,
 .graphiql-container .result-window .CodeMirror-foldgutter-open:after,
-.docs-graphiql
-  .graphiql-container
-  .result-window
-  .CodeMirror-foldgutter-folded:after {
+.graphiql-container .result-window .CodeMirror-foldgutter-folded:after {
   padding-left: 3px;
 }
 
-.docs-graphiql .graphiql-container .toolbar-button {
+.graphiql-container .toolbar-button {
   background: #fdfdfd;
   background: -webkit-linear-gradient(#fbfbfb, #f8f8f8);
   background: linear-gradient(#fbfbfb, #f8f8f8);
@@ -354,7 +315,7 @@
   text-decoration: none;
 }
 
-.docs-graphiql .graphiql-container .toolbar-button:active {
+.graphiql-container .toolbar-button:active {
   background: -webkit-linear-gradient(#ececec, #d8d8d8);
   background: linear-gradient(#ececec, #d8d8d8);
   border-color: #cacaca #c9c9c9 #b0b0b0;
@@ -362,62 +323,67 @@
     inset 0 1px 1px rgba(0, 0, 0, 0.08);
 }
 
-.docs-graphiql .graphiql-container .toolbar-button.error {
+.graphiql-container .toolbar-button.error {
   background: -webkit-linear-gradient(#fdf3f3, #e6d6d7);
   background: linear-gradient(#fdf3f3, #e6d6d7);
   color: #b00;
 }
-.docs-graphiql .graphiql-container .execute-options {
+.graphiql-container .execute-options {
   background: #fff;
   box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.1), 0 2px 4px rgba(0, 0, 0, 0.25);
   left: -1px;
   margin: 0;
   padding: 8px 0;
   position: absolute;
-  top: 37px;
+  top: 78px;
   z-index: 100;
 }
 
-.docs-graphiql .graphiql-container .execute-options li {
+.graphiql-container .execute-options:before {
+  position: absolute;
+  background: white;
+  content: '';
+  top: -4px;
+  left: 34px;
+  transform: rotate(45deg);
+  width: 8px;
+  height: 8px;
+}
+
+.graphiql-container .execute-options li {
   cursor: pointer;
   list-style: none;
   min-width: 100px;
   padding: 2px 30px 4px 10px;
 }
 
-.docs-graphiql .graphiql-container .execute-options li.selected {
-  background: #e10098;
+.graphiql-container .execute-options li.selected {
+  background: rgb(39, 174, 96);
   color: white;
 }
 
-.docs-graphiql .graphiql-container .CodeMirror-scroll {
+.graphiql-container .CodeMirror-scroll {
   overflow-scrolling: touch;
 }
 
-.docs-graphiql .graphiql-container .CodeMirror {
+.graphiql-container .CodeMirror {
   color: rgba(255, 255, 255, 0.3);
+  font-family: 'Source Code Pro', 'Consolas', 'Inconsolata', 'Droid Sans Mono',
+    'Monaco', monospace;
+  font-size: 14px;
+  font-weight: 500;
+  height: 100%;
+  left: 0;
+  position: absolute;
+  top: 0;
+  width: 100%;
 }
 
-.docs-graphiql .CodeMirror-hint-information .content {
-  color: #141823;
+.graphiql-container .CodeMirror-lines {
+  padding: 20px 0;
 }
 
-.docs-graphiql .CodeMirror-hint-information .content p:first-child {
-  margin-top: 0;
-}
-
-.docs-graphiql .CodeMirror-hint-information .content p:last-child {
-  margin-bottom: 0;
-}
-
-.docs-graphiql .CodeMirror-hint-information .infoType {
-  color: #30a;
-  cursor: pointer;
-  display: inline;
-  margin-right: 0.5em;
-}
-
-.docs-graphiql .autoInsertedLeaf.cm-property {
+.autoInsertedLeaf.cm-property {
   -webkit-animation-duration: 6s;
   animation-duration: 6s;
   -webkit-animation-name: insertionFade;
@@ -429,13 +395,13 @@
 }
 
 @-webkit-keyframes insertionFade {
-  .docs-graphiql from,
+  from,
   to {
     background: rgba(255, 255, 255, 0);
     border-color: rgba(255, 255, 255, 0);
   }
 
-  .docs-graphiql 15%,
+  15%,
   85% {
     background: #fbffc9;
     border-color: #f0f3c0;
@@ -443,20 +409,20 @@
 }
 
 @keyframes insertionFade {
-  .docs-graphiql from,
+  from,
   to {
     background: rgba(255, 255, 255, 0);
     border-color: rgba(255, 255, 255, 0);
   }
 
-  .docs-graphiql 15%,
+  15%,
   85% {
     background: #fbffc9;
     border-color: #f0f3c0;
   }
 }
 
-.docs-graphiql div.CodeMirror-lint-tooltip {
+div.CodeMirror-lint-tooltip {
   background-color: white;
   border-radius: 2px;
   border: 0;
@@ -473,14 +439,14 @@
   transition: opacity 0.15s;
 }
 
-.docs-graphiql div.CodeMirror-lint-message-error,
+div.CodeMirror-lint-message-error,
 div.CodeMirror-lint-message-warning {
   padding-left: 23px;
 }
 
 /* COLORS */
 
-.docs-graphiql .graphiql-container .CodeMirror-foldmarker {
+.graphiql-container .CodeMirror-foldmarker {
   border-radius: 4px;
   background: #08f;
   background: -webkit-linear-gradient(#43a8ff, #0f83e8);
@@ -495,310 +461,313 @@ div.CodeMirror-lint-message-warning {
   text-shadow: 0 -1px rgba(0, 0, 0, 0.1);
 }
 
-.docs-graphiql
-  .graphiql-container
-  div.CodeMirror
-  span.CodeMirror-matchingbracket {
+.graphiql-container div.CodeMirror span.CodeMirror-matchingbracket {
   color: rgba(255, 255, 255, 0.4);
   text-decoration: underline;
 }
 
-.docs-graphiql
-  .graphiql-container
-  div.CodeMirror
-  span.CodeMirror-nonmatchingbracket {
+.graphiql-container div.CodeMirror span.CodeMirror-nonmatchingbracket {
   color: rgb(242, 92, 84);
 }
 
 /* Comment */
-.docs-graphiql .cm-comment {
-  color: rgba(0, 0, 0, 0.3);
+.cm-comment {
+  color: rgba(255, 255, 255, 0.3);
 }
 
 /* Punctuation */
-.docs-graphiql .cm-punctuation,
-.docs-graphiql .cm-ws {
-  color: rgba(23, 42, 58, 0.8);
+.cm-punctuation {
+  color: rgba(255, 255, 255, 0.4);
 }
 
 /* Keyword */
-.docs-graphiql .cm-keyword {
-  color: #366b6b;
+.cm-keyword {
+  color: rgb(42, 126, 211);
 }
 
 /* OperationName, FragmentName */
-.docs-graphiql .cm-def {
+.cm-def {
   color: rgb(56, 189, 193);
 }
 
+.result-window .cm-def {
+  color: rgb(241, 143, 1);
+}
+
 /* FieldName */
-.docs-graphiql .cm-property {
-  color: #328c8c;
+.cm-property {
+  color: rgb(41, 185, 115);
+}
+
+.result-window .cm-property {
+  color: rgb(51, 147, 220);
 }
 
 /* FieldAlias */
-.docs-graphiql .cm-qualifier {
+.cm-qualifier {
   color: #1c92a9;
 }
 
 /* ArgumentName and ObjectFieldName */
-.docs-graphiql .cm-attribute {
-  color: #b56531;
+.cm-attribute {
+  color: rgb(247, 116, 102);
 }
 
 /* Number */
-.docs-graphiql .cm-number {
-  color: #1f6ed6;
+.cm-number {
+  color: #2882f9;
 }
 
 /* String */
-.docs-graphiql .cm-string {
+.cm-string {
   color: #d64292;
 }
 
+.result-window .cm-string {
+  color: rgb(41, 185, 115);
+}
+
 /* Boolean */
-.docs-graphiql .cm-builtin {
+.cm-builtin {
   color: #d47509;
 }
 
 /* EnumValue */
-.docs-graphiql .cm-string-2 {
+.cm-string-2 {
   color: #0b7fc7;
 }
 
 /* Variable */
-.docs-graphiql .cm-variable {
-  color: rgb(236, 95, 103);
+.cm-variable {
+  color: rgb(181, 34, 130);
 }
 
 /* Directive */
-.docs-graphiql .cm-meta {
+.cm-meta {
   color: #b33086;
 }
 
 /* Type */
-.docs-graphiql .cm-atom {
-  color: rgb(245, 160, 0);
+.cm-atom {
+  color: rgb(249, 233, 34);
 }
 
-.docs-graphiql .result-window .cm-property,
-.docs-graphiql .result-window .cm-def,
-.docs-graphiql .result-window .cm-punctuation {
-  color: rgba(23, 42, 58, 0.8);
-}
-.docs-graphiql .result-window .cm-string {
-  color: #d64292;
-}
-/* BASICS */
-
-.docs-graphiql .CodeMirror {
-  /* Set height, width, borders, and global font properties here */
-  color: black;
-  font-family: monospace;
-  height: auto;
+/* Comma */
+.cm-ws {
+  color: rgba(255, 255, 255, 0.4);
 }
 
-.docs-graphiql .CodeMirror-scrollbar-filler,
+/* PADDING */
+
+.CodeMirror-lines {
+  padding: 4px 0; /* Vertical padding around content */
+}
+.CodeMirror pre {
+  padding: 0 4px; /* Horizontal padding of content */
+}
+
+.CodeMirror-scrollbar-filler,
 .CodeMirror-gutter-filler {
   background-color: white; /* The little square between H and V scrollbars */
 }
 
 /* GUTTER */
 
-.docs-graphiql .CodeMirror-gutters {
+.CodeMirror-gutters {
   border-right: 1px solid #ddd;
   background-color: #f7f7f7;
   white-space: nowrap;
 }
-.docs-graphiql .CodeMirror-linenumbers {
+.CodeMirror-linenumbers {
 }
-.docs-graphiql .CodeMirror-linenumber {
+.CodeMirror-linenumber {
   font-family: Open Sans, sans-serif;
   font-weight: 600;
   font-size: 12px;
-  color: rgba(0, 0, 0, 0.1);
+  color: rgba(255, 255, 255, 0.2);
   min-width: 20px;
   padding: 0 3px 0 5px;
   text-align: right;
   white-space: nowrap;
 }
 
-.docs-graphiql .CodeMirror-guttermarker {
+.CodeMirror-guttermarker {
   color: black;
 }
-.docs-graphiql .CodeMirror-guttermarker-subtle {
+.CodeMirror-guttermarker-subtle {
   color: #999;
 }
 
 /* CURSOR */
 
-.docs-graphiql .CodeMirror div.CodeMirror-cursor {
-  border-left: 1px solid rgba(0, 0, 0, 0.4);
+.CodeMirror div.CodeMirror-cursor {
+  border-left: 1px solid rgba(255, 255, 255, 0.4);
 }
 /* Shown when moving in bi-directional text */
-.docs-graphiql .CodeMirror div.CodeMirror-secondarycursor {
+.CodeMirror div.CodeMirror-secondarycursor {
   border-left: 1px solid silver;
 }
-.docs-graphiql .CodeMirror.cm-fat-cursor div.CodeMirror-cursor {
-  background: rgba(23, 42, 48, 0.3);
+.CodeMirror.cm-fat-cursor div.CodeMirror-cursor {
+  background: rgba(255, 255, 255, 0.6);
+  color: white;
   border: 0;
   width: auto;
 }
-.docs-graphiql .CodeMirror.cm-fat-cursor div.CodeMirror-cursors {
+.CodeMirror.cm-fat-cursor div.CodeMirror-cursors {
   z-index: 1;
 }
 
-.docs-graphiql .cm-animate-fat-cursor {
+.cm-animate-fat-cursor {
   -webkit-animation: blink 1.06s steps(1) infinite;
   animation: blink 1.06s steps(1) infinite;
   border: 0;
   width: auto;
 }
 @-webkit-keyframes blink {
-  .docs-graphiql 0% {
+  0% {
     background: #7e7;
   }
-  .docs-graphiql 50% {
+  50% {
     background: none;
   }
-  .docs-graphiql 100% {
+  100% {
     background: #7e7;
   }
 }
 @keyframes blink {
-  .docs-graphiql 0% {
+  0% {
     background: #7e7;
   }
-  .docs-graphiql 50% {
+  50% {
     background: none;
   }
-  .docs-graphiql 100% {
+  100% {
     background: #7e7;
   }
 }
 
 /* Can style cursor different in overwrite (non-insert) mode */
-.docs-graphiql div.CodeMirror-overwrite div.CodeMirror-cursor {
+div.CodeMirror-overwrite div.CodeMirror-cursor {
 }
 
-.docs-graphiql .cm-tab {
+.cm-tab {
   display: inline-block;
   text-decoration: inherit;
 }
 
-.docs-graphiql .CodeMirror-ruler {
+.CodeMirror-ruler {
   border-left: 1px solid #ccc;
   position: absolute;
 }
 
 /* DEFAULT THEME */
 
-.docs-graphiql .cm-s-default .cm-keyword {
+.cm-s-default .cm-keyword {
   color: #708;
 }
-.docs-graphiql .cm-s-default .cm-atom {
+.cm-s-default .cm-atom {
   color: #219;
 }
-.docs-graphiql .cm-s-default .cm-number {
+.cm-s-default .cm-number {
   color: #164;
 }
-.docs-graphiql .cm-s-default .cm-def {
+.cm-s-default .cm-def {
   color: #00f;
 }
 .cm-s-default .cm-variable,
 .cm-s-default .cm-punctuation,
 .cm-s-default .cm-property,
-.docs-graphiql .cm-s-default .cm-operator {
+.cm-s-default .cm-operator {
 }
-.docs-graphiql .cm-s-default .cm-variable-2 {
+.cm-s-default .cm-variable-2 {
   color: #05a;
 }
-.docs-graphiql .cm-s-default .cm-variable-3 {
+.cm-s-default .cm-variable-3 {
   color: #085;
 }
-.docs-graphiql .cm-s-default .cm-comment {
+.cm-s-default .cm-comment {
   color: #a50;
 }
-.docs-graphiql .cm-s-default .cm-string {
+.cm-s-default .cm-string {
   color: #a11;
 }
-.docs-graphiql .cm-s-default .cm-string-2 {
+.cm-s-default .cm-string-2 {
   color: #f50;
 }
-.docs-graphiql .cm-s-default .cm-meta {
+.cm-s-default .cm-meta {
   color: #555;
 }
-.docs-graphiql .cm-s-default .cm-qualifier {
+.cm-s-default .cm-qualifier {
   color: #555;
 }
-.docs-graphiql .cm-s-default .cm-builtin {
+.cm-s-default .cm-builtin {
   color: #30a;
 }
-.docs-graphiql .cm-s-default .cm-bracket {
+.cm-s-default .cm-bracket {
   color: #997;
 }
-.docs-graphiql .cm-s-default .cm-tag {
+.cm-s-default .cm-tag {
   color: #170;
 }
-.docs-graphiql .cm-s-default .cm-attribute {
+.cm-s-default .cm-attribute {
   color: #00c;
 }
-.docs-graphiql .cm-s-default .cm-header {
+.cm-s-default .cm-header {
   color: blue;
 }
-.docs-graphiql .cm-s-default .cm-quote {
+.cm-s-default .cm-quote {
   color: #090;
 }
-.docs-graphiql .cm-s-default .cm-hr {
+.cm-s-default .cm-hr {
   color: #999;
 }
-.docs-graphiql .cm-s-default .cm-link {
+.cm-s-default .cm-link {
   color: #00c;
 }
 
-.docs-graphiql .cm-negative {
+.cm-negative {
   color: #d44;
 }
-.docs-graphiql .cm-positive {
+.cm-positive {
   color: #292;
 }
-.docs-graphiql .cm-header,
+.cm-header,
 .cm-strong {
   font-weight: bold;
 }
-.docs-graphiql .cm-em {
+.cm-em {
   font-style: italic;
 }
-.docs-graphiql .cm-link {
+.cm-link {
   text-decoration: underline;
 }
-.docs-graphiql .cm-strikethrough {
+.cm-strikethrough {
   text-decoration: line-through;
 }
 
-.docs-graphiql .cm-s-default .cm-error {
+.cm-s-default .cm-error {
   color: #f00;
 }
-.docs-graphiql .cm-invalidchar {
+.cm-invalidchar {
   color: #f00;
 }
 
-.docs-graphiql .CodeMirror-composing {
+.CodeMirror-composing {
   border-bottom: 2px solid;
 }
 
 /* Default styles for common addons */
 
-.docs-graphiql div.CodeMirror span.CodeMirror-matchingbracket {
-  color: rgba(23, 42, 58, 0.8) !important;
+div.CodeMirror span.CodeMirror-matchingbracket {
+  color: #0f0;
 }
-.docs-graphiql div.CodeMirror span.CodeMirror-nonmatchingbracket {
+div.CodeMirror span.CodeMirror-nonmatchingbracket {
   color: #f22;
 }
-.docs-graphiql .CodeMirror-matchingtag {
+.CodeMirror-matchingtag {
   background: rgba(255, 150, 0, 0.3);
 }
-.docs-graphiql .CodeMirror-activeline-background {
+.CodeMirror-activeline-background {
   background: #e8f2ff;
 }
 
@@ -807,25 +776,30 @@ div.CodeMirror-lint-message-warning {
 /* The rest of this file contains styles related to the mechanics of
    the editor. You probably shouldn't touch them. */
 
-.docs-graphiql .CodeMirror {
+.CodeMirror {
   background: white;
   overflow: hidden;
   position: relative;
   line-height: 24px;
 }
 
-.docs-graphiql .CodeMirror-scroll {
+.CodeMirror-scroll {
   height: 100%;
   /* 30px is the magic margin used to hide the element's real scrollbars */
   /* See overflow: hidden in .CodeMirror */
   margin-bottom: -30px;
-  margin-right: -30px;
+  margin-right: 20px;
   outline: none; /* Prevent dragging from highlighting the element */
-  overflow: scroll !important; /* Things will break if this is overridden */
   padding-bottom: 30px;
   position: relative;
+  overflow: hidden !important; /* Things will break if this is overridden */
 }
-.docs-graphiql .CodeMirror-sizer {
+
+.CodeMirror-scroll:hover {
+  overflow: scroll !important; /* Things will break if this is overridden */
+}
+
+.CodeMirror-sizer {
   border-right: 30px solid transparent;
   position: relative;
 }
@@ -833,43 +807,43 @@ div.CodeMirror-lint-message-warning {
 /* The fake, visible scrollbars. Used to force redraw during scrolling
    before actual scrolling happens, thus preventing shaking and
    flickering artifacts. */
-.docs-graphiql .CodeMirror-vscrollbar,
+.CodeMirror-vscrollbar,
 .CodeMirror-hscrollbar,
 .CodeMirror-scrollbar-filler,
 .CodeMirror-gutter-filler {
-  display: none;
+  display: none !important;
   position: absolute;
   z-index: 6;
 }
-.docs-graphiql .CodeMirror-vscrollbar {
+.CodeMirror-vscrollbar {
   overflow-x: hidden;
   overflow-y: scroll;
   right: 0;
   top: 0;
 }
-.docs-graphiql .CodeMirror-hscrollbar {
+.CodeMirror-hscrollbar {
   bottom: 0;
   left: 0;
   overflow-x: scroll;
   overflow-y: hidden;
 }
-.docs-graphiql .CodeMirror-scrollbar-filler {
+.CodeMirror-scrollbar-filler {
   right: 0;
   bottom: 0;
 }
-.docs-graphiql .CodeMirror-gutter-filler {
+.CodeMirror-gutter-filler {
   left: 0;
   bottom: 0;
 }
 
-.docs-graphiql .CodeMirror-gutters {
+.CodeMirror-gutters {
   min-height: 100%;
   position: absolute;
   left: 0;
   top: 0;
   z-index: 3;
 }
-.docs-graphiql .CodeMirror-gutter {
+.CodeMirror-gutter {
   display: inline-block;
   height: 100%;
   margin-bottom: -30px;
@@ -879,35 +853,35 @@ div.CodeMirror-lint-message-warning {
   *zoom: 1;
   *display: inline;
 }
-.docs-graphiql .CodeMirror-gutter-wrapper {
+.CodeMirror-gutter-wrapper {
   background: none !important;
   border: none !important;
   position: absolute;
   z-index: 4;
 }
-.docs-graphiql .CodeMirror-gutter-background {
+.CodeMirror-gutter-background {
   position: absolute;
   top: 0;
   bottom: 0;
   z-index: 4;
 }
-.docs-graphiql .CodeMirror-gutter-elt {
+.CodeMirror-gutter-elt {
   cursor: default;
   position: absolute;
   z-index: 4;
 }
-.docs-graphiql .CodeMirror-gutter-wrapper {
+.CodeMirror-gutter-wrapper {
   -webkit-user-select: none;
   -moz-user-select: none;
   -ms-user-select: none;
   user-select: none;
 }
 
-.docs-graphiql .CodeMirror-lines {
+.CodeMirror-lines {
   cursor: text;
   min-height: 1px; /* prevents collapsing before first draw */
 }
-.docs-graphiql .CodeMirror pre {
+.CodeMirror pre {
   -webkit-tap-highlight-color: transparent;
   /* Reset some styles that the rest of the page might have set */
   background: transparent;
@@ -926,13 +900,13 @@ div.CodeMirror-lint-message-warning {
   word-wrap: normal;
   z-index: 2;
 }
-.docs-graphiql .CodeMirror-wrap pre {
+.CodeMirror-wrap pre {
   word-wrap: break-word;
   white-space: pre-wrap;
   word-break: normal;
 }
 
-.docs-graphiql .CodeMirror-linebackground {
+.CodeMirror-linebackground {
   position: absolute;
   left: 0;
   right: 0;
@@ -941,16 +915,16 @@ div.CodeMirror-lint-message-warning {
   z-index: 0;
 }
 
-.docs-graphiql .CodeMirror-linewidget {
+.CodeMirror-linewidget {
   overflow: auto;
   position: relative;
   z-index: 2;
 }
 
-.docs-graphiql .CodeMirror-widget {
+.CodeMirror-widget {
 }
 
-.docs-graphiql .CodeMirror-code {
+.CodeMirror-code {
   outline: none;
 }
 
@@ -959,11 +933,11 @@ div.CodeMirror-lint-message-warning {
 .CodeMirror-sizer,
 .CodeMirror-gutter,
 .CodeMirror-gutters,
-.docs-graphiql .CodeMirror-linenumber {
+.CodeMirror-linenumber {
   box-sizing: content-box;
 }
 
-.docs-graphiql .CodeMirror-measure {
+.CodeMirror-measure {
   height: 0;
   overflow: hidden;
   position: absolute;
@@ -971,84 +945,83 @@ div.CodeMirror-lint-message-warning {
   width: 100%;
 }
 
-.docs-graphiql .CodeMirror-cursor {
+.CodeMirror-cursor {
   position: absolute;
 }
-.docs-graphiql .CodeMirror-measure pre {
+.CodeMirror-measure pre {
   position: static;
 }
 
-.docs-graphiql div.CodeMirror-cursors {
+div.CodeMirror-cursors {
   position: relative;
   visibility: hidden;
   z-index: 3;
 }
-.docs-graphiql div.CodeMirror-dragcursors {
+div.CodeMirror-dragcursors {
   visibility: visible;
 }
 
-.docs-graphiql .CodeMirror-focused div.CodeMirror-cursors {
+.CodeMirror-focused div.CodeMirror-cursors {
   visibility: visible;
 }
 
-.docs-graphiql .CodeMirror-selected {
-  background: #d1e9fd;
+.CodeMirror-selected {
+  background: rgba(255, 255, 255, 0.1);
 }
-.docs-graphiql .CodeMirror-focused .CodeMirror-selected {
-  background: #d1e9fd;
+.CodeMirror-focused .CodeMirror-selected {
+  background: rgba(255, 255, 255, 0.1);
 }
-.docs-graphiql .CodeMirror-crosshair {
+.CodeMirror-crosshair {
   cursor: crosshair;
 }
-.docs-graphiql .CodeMirror-line::-moz-selection,
+.CodeMirror-line::-moz-selection,
 .CodeMirror-line > span::-moz-selection,
 .CodeMirror-line > span > span::-moz-selection {
-  background: #d1e9fd;
+  background: rgba(255, 255, 255, 0.1);
 }
-.docs-graphiql .CodeMirror-line::selection,
+.CodeMirror-line::selection,
 .CodeMirror-line > span::selection,
 .CodeMirror-line > span > span::selection {
-  background: #d1e9fd;
+  background: rgba(255, 255, 255, 0.1);
 }
-.docs-graphiql .CodeMirror-line::-moz-selection,
+.CodeMirror-line::-moz-selection,
 .CodeMirror-line > span::-moz-selection,
 .CodeMirror-line > span > span::-moz-selection {
-  background: #d1e9fd;
+  background: rgba(255, 255, 255, 0.1);
 }
 
-.docs-graphiql .cm-searching {
-  background: #ffa;
-  background: rgba(255, 255, 0, 0.4);
+.cm-searching {
+  background: rgba(255, 255, 255, 0.15);
 }
 
 /* IE7 hack to prevent it from returning funny offsetTops on the spans */
-.docs-graphiql .CodeMirror span {
+.CodeMirror span {
   *vertical-align: text-bottom;
 }
 
 /* Used to force a border model for a node */
-.docs-graphiql .cm-force-border {
+.cm-force-border {
   padding-right: 0.1px;
 }
 
-.docs-graphiql @media print {
+@media print {
   /* Hide the cursor when printing */
-  .docs-graphiql .CodeMirror div.CodeMirror-cursors {
+  .CodeMirror div.CodeMirror-cursors {
     visibility: hidden;
   }
 }
 
 /* See issue #2901 */
-.docs-graphiql .cm-tab-wrap-hack:after {
+.cm-tab-wrap-hack:after {
   content: '';
 }
 
 /* Help users use markselection to safely style text background */
-.docs-graphiql span.CodeMirror-selectedtext {
+span.CodeMirror-selectedtext {
   background: none;
 }
 
-.docs-graphiql .CodeMirror-dialog {
+.CodeMirror-dialog {
   background: inherit;
   color: inherit;
   left: 0;
@@ -1059,38 +1032,38 @@ div.CodeMirror-lint-message-warning {
   z-index: 15;
 }
 
-.docs-graphiql .CodeMirror-dialog-top {
+.CodeMirror-dialog-top {
   border-bottom: 1px solid #eee;
   top: 0;
 }
 
-.docs-graphiql .CodeMirror-dialog-bottom {
+.CodeMirror-dialog-bottom {
   border-top: 1px solid #eee;
   bottom: 0;
 }
 
-.docs-graphiql .CodeMirror-dialog input {
+.CodeMirror-dialog input {
   background: transparent;
   border: 1px solid #d3d6db;
-  color: inherit;
+  color: rgba(255, 255, 255, 0.6);
   font-family: monospace;
   outline: none;
   width: 20em;
 }
 
-.docs-graphiql .CodeMirror-dialog button {
+.CodeMirror-dialog button {
   font-size: 70%;
 }
-.doc-explorer {
+.graphiql-container .doc-explorer {
   background: white;
 }
 
-.doc-explorer-title-bar {
+.graphiql-container .doc-explorer-title-bar {
   cursor: default;
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
-  height: 34px;
+  height: 44px;
   line-height: 14px;
   padding: 8px 8px 5px;
   position: relative;
@@ -1098,9 +1071,10 @@ div.CodeMirror-lint-message-warning {
   -moz-user-select: none;
   -ms-user-select: none;
   user-select: none;
+  background-color: rgba(0, 0, 0, 0.02);
 }
 
-.doc-explorer-title {
+.graphiql-container .doc-explorer-title {
   -webkit-box-flex: 1;
   -ms-flex: 1;
   flex: 1;
@@ -1112,7 +1086,7 @@ div.CodeMirror-lint-message-warning {
   white-space: nowrap;
 }
 
-.doc-explorer-back {
+.graphiql-container .doc-explorer-back {
   color: #3b5998;
   cursor: pointer;
   margin: -7px 0 -6px -8px;
@@ -1126,7 +1100,7 @@ div.CodeMirror-lint-message-warning {
   width: 0;
 }
 
-.doc-explorer-back:before {
+.graphiql-container .doc-explorer-back:before {
   border-left: 2px solid #3b5998;
   border-top: 2px solid #3b5998;
   content: '';
@@ -1139,115 +1113,116 @@ div.CodeMirror-lint-message-warning {
   width: 9px;
 }
 
-.doc-explorer-rhs {
+.graphiql-container .doc-explorer-rhs {
   position: relative;
 }
 
-.doc-explorer-contents {
-  right: -4px;
-  top: -4px;
-  bottom: -4px;
+.graphiql-container .doc-explorer-contents {
+  background-color: #ffffff;
+  bottom: 0;
   left: 0;
-  min-width: 270px;
+  min-width: 300px;
   overflow-y: auto;
-  position: absolute;
-  box-shadow: 0 0 8px rgba(0, 0, 0, 0.15);
-  border-radius: 2px;
-  border-top: none;
+  padding: 20px 15px;
+  right: 0;
+  top: 47px;
 }
 
-.doc-explorer-contents .header {
-  border-top-right-radius: 2px;
-}
-
-.doc-type-description {
+.graphiql-container .doc-type-description {
+  padding: 0 25px 38px 25px;
   background-color: rgba(0, 0, 0, 0.02);
   color: rgba(0, 0, 0, 0.5);
+  font-size: 16px;
+  border-color: rgba(0, 0, 0, 0.1);
+  border-bottom-style: solid;
+  border-bottom-width: 1px;
 }
 
-.show-title .doc-type-description {
+.graphiql-container .show-title .doc-type-description {
   padding-top: 20px;
 }
 
-p:first-child,
-.doc-type-description blockquote:first-child {
+.graphiql-container .doc-type-description p:first-child,
+.graphiql-container .doc-type-description blockquote:first-child {
   margin-top: 0;
 }
 
-.doc-explorer-contents a {
+.graphiql-container .doc-explorer-contents a {
   cursor: pointer;
   text-decoration: none;
 }
 
-.doc-explorer-contents a:hover {
+.graphiql-container .doc-explorer-contents a:hover {
   text-decoration: underline;
 }
 
-.doc-value-description {
+.graphiql-container .doc-value-description {
   padding: 4px 0 8px 12px;
 }
 
-.doc-category {
-  margin-top: 0;
+.graphiql-container .doc-category {
   margin-bottom: 20px;
   margin-left: 25px;
   margin-right: 25px;
 }
 
-.doc-category-title {
+.graphiql-container .doc-category-title {
+  border-top: 1px solid #e0e0e0;
   color: rgba(0, 0, 0, 0.3);
   cursor: default;
   font-size: 14px;
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 1px;
+  margin: 0 -25px;
+  padding: 15px 25px;
   padding-top: 20px;
   -webkit-user-select: none;
   -moz-user-select: none;
   -ms-user-select: none;
   user-select: none;
-  border-bottom: none;
 }
 
-.docs .doc-category-item {
+.graphiql-container .doc-category-item {
+  margin: 12px 0;
   color: #555;
 }
 
-.docs .keyword {
+.graphiql-container .keyword {
   color: rgb(242, 92, 84);
 }
 
-.docs .type-name {
+.graphiql-container .type-name {
   color: rgb(245, 160, 0);
 }
 
-.docs .field-name {
+.graphiql-container .field-name {
   color: #1f61a0;
 }
 
-.docs .value-name {
+.graphiql-container .value-name {
   color: #0b7fc7;
 }
 
-.docs .arg-name {
-  color: #1f61a9;
+.graphiql-container .arg-name {
+  color: #8b2bb9;
 }
 
-.docs .arg:after {
+.graphiql-container .arg:after {
   content: ', ';
 }
 
-.docs .arg:last-child:after {
+.graphiql-container .arg:last-child:after {
   content: '';
 }
 
-.docs .doc-alert-text {
+.graphiql-container .doc-alert-text {
   color: #f00f00;
   font-family: 'Consolas', 'Inconsolata', 'Droid Sans Mono', 'Monaco', monospace;
   font-size: 13px;
 }
 
-.search-box-outer {
+.graphiql-container .search-box-outer {
   border: 1px solid #d3d6db;
   box-sizing: border-box;
   display: inline-block;
@@ -1259,7 +1234,7 @@ p:first-child,
   width: 100%;
 }
 
-.search-box-input {
+.graphiql-container .search-box-input {
   border: 0;
   font-size: 12px;
   margin: 0;
@@ -1268,7 +1243,7 @@ p:first-child,
   width: 100%;
 }
 
-.error-container {
+.graphiql-container .error-container {
   font-weight: bold;
   left: 0;
   letter-spacing: 1px;
@@ -1281,7 +1256,7 @@ p:first-child,
   -webkit-transform: translate(0, -50%);
   transform: translate(0, -50%);
 }
-.docs-graphiql .CodeMirror-foldmarker {
+.CodeMirror-foldmarker {
   color: blue;
   cursor: pointer;
   font-family: arial;
@@ -1289,25 +1264,25 @@ p:first-child,
   text-shadow: #b9f 1px 1px 2px, #b9f -1px -1px 2px, #b9f 1px -1px 2px,
     #b9f -1px 1px 2px;
 }
-.docs-graphiql .CodeMirror-foldgutter {
+.CodeMirror-foldgutter {
   width: 0.7em;
 }
 .CodeMirror-foldgutter-open,
-.docs-graphiql .CodeMirror-foldgutter-folded {
+.CodeMirror-foldgutter-folded {
   cursor: pointer;
 }
-.docs-graphiql .CodeMirror-foldgutter-open:after {
+.CodeMirror-foldgutter-open:after {
   content: '\25BE';
 }
-.docs-graphiql .CodeMirror-foldgutter-folded:after {
+.CodeMirror-foldgutter-folded:after {
   content: '\25B8';
 }
 /* The lint marker gutter */
-.docs-graphiql .CodeMirror-lint-markers {
+.CodeMirror-lint-markers {
   width: 16px;
 }
 
-.docs-graphiql .CodeMirror-lint-tooltip {
+.CodeMirror-lint-tooltip {
   background-color: infobackground;
   border-radius: 4px 4px 4px 4px;
   border: 1px solid black;
@@ -1324,25 +1299,25 @@ p:first-child,
   z-index: 100;
 }
 
-.docs-graphiql .CodeMirror-jump-token {
+.CodeMirror-jump-token {
   text-decoration: underline;
 }
 
-.docs-graphiql .CodeMirror-lint-mark-error,
+.CodeMirror-lint-mark-error,
 .CodeMirror-lint-mark-warning {
   background-position: left bottom;
   background-repeat: repeat-x;
 }
 
-.docs-graphiql .CodeMirror-lint-mark-error {
+.CodeMirror-lint-mark-error {
   background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAQAAAADCAYAAAC09K7GAAAAAXNSR0IArs4c6QAAAAZiS0dEAP8A/wD/oL2nkwAAAAlwSFlzAAALEwAACxMBAJqcGAAAAAd0SU1FB9sJDw4cOCW1/KIAAAAZdEVYdENvbW1lbnQAQ3JlYXRlZCB3aXRoIEdJTVBXgQ4XAAAAHElEQVQI12NggIL/DAz/GdA5/xkY/qPKMDAwAADLZwf5rvm+LQAAAABJRU5ErkJggg==');
 }
 
-.docs-graphiql .CodeMirror-lint-mark-warning {
+.CodeMirror-lint-mark-warning {
   background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAQAAAADCAYAAAC09K7GAAAAAXNSR0IArs4c6QAAAAZiS0dEAP8A/wD/oL2nkwAAAAlwSFlzAAALEwAACxMBAJqcGAAAAAd0SU1FB9sJFhQXEbhTg7YAAAAZdEVYdENvbW1lbnQAQ3JlYXRlZCB3aXRoIEdJTVBXgQ4XAAAAMklEQVQI12NkgIIvJ3QXMjAwdDN+OaEbysDA4MPAwNDNwMCwiOHLCd1zX07o6kBVGQEAKBANtobskNMAAAAASUVORK5CYII=');
 }
 
-.docs-graphiql .CodeMirror-lint-marker-error,
+.CodeMirror-lint-marker-error,
 .CodeMirror-lint-marker-warning {
   background-position: center center;
   background-repeat: no-repeat;
@@ -1354,39 +1329,132 @@ p:first-child,
   width: 16px;
 }
 
-.docs-graphiql .CodeMirror-lint-message-error,
+.CodeMirror-lint-message-error,
 .CodeMirror-lint-message-warning {
   background-position: top left;
   background-repeat: no-repeat;
   padding-left: 18px;
 }
 
-.docs-graphiql .CodeMirror-lint-marker-error,
+.CodeMirror-lint-marker-error,
 .CodeMirror-lint-message-error {
   background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAMAAAAoLQ9TAAAAHlBMVEW7AAC7AACxAAC7AAC7AAAAAAC4AAC5AAD///+7AAAUdclpAAAABnRSTlMXnORSiwCK0ZKSAAAATUlEQVR42mWPOQ7AQAgDuQLx/z8csYRmPRIFIwRGnosRrpamvkKi0FTIiMASR3hhKW+hAN6/tIWhu9PDWiTGNEkTtIOucA5Oyr9ckPgAWm0GPBog6v4AAAAASUVORK5CYII=');
 }
 
-.docs-graphiql .CodeMirror-lint-marker-warning,
+.CodeMirror-lint-marker-warning,
 .CodeMirror-lint-message-warning {
   background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAMAAAAoLQ9TAAAANlBMVEX/uwDvrwD/uwD/uwD/uwD/uwD/uwD/uwD/uwD6twD/uwAAAADurwD2tQD7uAD+ugAAAAD/uwDhmeTRAAAADHRSTlMJ8mN1EYcbmiixgACm7WbuAAAAVklEQVR42n3PUQqAIBBFUU1LLc3u/jdbOJoW1P08DA9Gba8+YWJ6gNJoNYIBzAA2chBth5kLmG9YUoG0NHAUwFXwO9LuBQL1giCQb8gC9Oro2vp5rncCIY8L8uEx5ZkAAAAASUVORK5CYII=');
 }
 
-.docs-graphiql .CodeMirror-lint-marker-multiple {
+.CodeMirror-lint-marker-multiple {
   background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAcAAAAHCAMAAADzjKfhAAAACVBMVEUAAAAAAAC/v7914kyHAAAAAXRSTlMAQObYZgAAACNJREFUeNo1ioEJAAAIwmz/H90iFFSGJgFMe3gaLZ0od+9/AQZ0ADosbYraAAAAAElFTkSuQmCC');
   background-position: right bottom;
   background-repeat: no-repeat;
   width: 100%;
   height: 100%;
 }
-
-.graphiql-button,
-body .docs-graphiql .download-button {
-  letter-spacing: 0.53px !important;
+.CodeMirror-hints {
+  background: white;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.15);
+  font-size: 14px;
+  list-style: none;
+  margin-left: -6px;
+  margin: 0;
+  max-height: 20em;
+  overflow-y: auto;
+  overflow: hidden;
+  padding: 0;
+  position: absolute;
+  z-index: 10;
+  border-radius: 2px;
+  top: 0 !important;
+  left: 0 !important;
 }
 
-.docs-graphiql .graphiql-button,
-body .docs-graphiql .download-button {
-  margin-top: 5px;
-  background: #e9eaeb !important;
-  color: rgba(15, 32, 45, 0.4) !important;
+.CodeMirror-hints-wrapper {
+  font-family: 'Open Sans', sans-serif;
+  background: white;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.45);
+  margin-left: -6px;
+  position: absolute;
+  z-index: 10;
+}
+
+.CodeMirror-hints-wrapper .CodeMirror-hints {
+  box-shadow: none;
+  margin-left: 0;
+  position: relative;
+  z-index: 0;
+}
+
+.CodeMirror-hint {
+  color: rgba(15, 32, 45, 0.6);
+  cursor: pointer;
+  margin: 0;
+  max-width: 300px;
+  overflow: hidden;
+  padding: 6px 12px;
+  white-space: pre;
+}
+
+li.CodeMirror-hint-active {
+  background-color: #2a7ed3;
+  border-top-color: white;
+  color: white;
+}
+
+.CodeMirror-hint-information {
+  border-top: solid 1px rgba(0, 0, 0, 0.1);
+  max-width: 300px;
+  padding: 10px 12px;
+  position: relative;
+  z-index: 1;
+  background-color: rgba(15, 32, 45, 0.03);
+  font-size: 14px;
+}
+
+.CodeMirror-hint-information:first-child {
+  border-bottom: solid 1px #c0c0c0;
+  border-top: none;
+  margin-bottom: -1px;
+}
+
+.CodeMirror-hint-information .content {
+  color: rgba(15, 32, 45, 0.6);
+  box-orient: vertical;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  line-clamp: 3;
+  line-height: 1.36;
+  max-height: 59px;
+  overflow: hidden;
+  text-overflow: -o-ellipsis-lastline;
+}
+
+.CodeMirror-hint-information .content p:first-child {
+  margin-top: 0;
+}
+
+.CodeMirror-hint-information .content p:last-child {
+  margin-bottom: 0;
+}
+
+.CodeMirror-hint-information .infoType {
+  color: rgb(241, 143, 1);
+  cursor: pointer;
+  display: inline;
+  margin-right: 0.5em;
+}
+
+.history-popup .graphiql-container {
+  height: calc(100% - 81px) !important;
+}
+.history-popup .graphiql-container .queryWrap {
+  border-top: none;
+}
+
+.result-codemirror .CodeMirror-scroll {
+  max-width: 50vw;
+  margin-right: 10px;
 }

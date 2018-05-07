@@ -112,6 +112,18 @@ function* fetchSchemaSaga() {
   }
 }
 
+function* refetchSchemaSaga() {
+  const session: Session = yield select(getSelectedSession)
+  yield schemaFetcher.refetch(session)
+  try {
+    yield put(schemaFetchingSuccess(session.endpoint))
+  } catch (e) {
+    yield put(schemaFetchingError(session.endpoint))
+    yield call(delay, 5000)
+    yield put(fetchSchema())
+  }
+}
+
 function* renewStacks() {
   const session: Session = yield select(getSelectedSession)
   const docs: DocsSessionState = yield select(getSessionDocsState)
@@ -146,6 +158,7 @@ export const sessionsSagas = [
   takeEvery('EDIT_QUERY', safely(setQueryFacts)),
   takeEvery('RUN_QUERY_AT_POSITION', safely(runQueryAtPosition)),
   takeLatest('FETCH_SCHEMA', safely(fetchSchemaSaga)),
+  takeLatest('REFETCH_SCHEMA', safely(refetchSchemaSaga)),
   takeLatest('SCHEMA_FETCHING_SUCCESS', safely(renewStacks)),
   takeEvery('QUERY_SUCCESS' as any, safely(addToHistory)),
 ]
