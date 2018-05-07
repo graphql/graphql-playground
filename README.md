@@ -187,12 +187,9 @@ functions:
 
 ## Development
 
-This is a mono-repo setup containing packages for the `graphql-playground-react` and `graphql-playground-electron`.
-
 ```sh
-# installs all dependencies for all packages
-$ yarn
 $ cd packages/graphql-playground-react
+$ yarn
 $ yarn start
 ```
 

@@ -188,7 +188,6 @@ class InitialView extends React.Component<Props & StateFromProps, State> {
                     .reverse()
                     .map(key => {
                       const data = items[key]
-                      console.log(data)
                       const name = data.folderName || data.endpoint || data.path
                       return (
                         <div

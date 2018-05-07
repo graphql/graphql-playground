@@ -594,7 +594,9 @@ div.CodeMirror-lint-message-warning {
 .docs-graphiql .CodeMirror {
   /* Set height, width, borders, and global font properties here */
   color: black;
-  font-family: monospace;
+  font-family: 'Source Code Pro', 'Consolas', 'Inconsolata', 'Droid Sans Mono',
+    'Monaco', monospace;
+  font-weight: 500;
   height: auto;
 }
 

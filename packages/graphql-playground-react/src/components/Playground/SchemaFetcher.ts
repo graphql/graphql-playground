@@ -22,6 +22,7 @@ export class SchemaFetcher {
   cache: Map<string, TracingSchemaTuple>
   linkGetter: LinkGetter
   fetching: Map<string, Promise<any>>
+  subscriptions: Map<string, (schema: GraphQLSchema) => void> = Map()
   constructor(linkGetter: LinkGetter) {
     this.cache = Map()
     this.fetching = Map()
@@ -41,15 +42,20 @@ export class SchemaFetcher {
     this.fetching = this.fetching.set(hash, promise)
     return promise
   }
+  subscribe(session: SchemaFetchProps, cb: (schema: GraphQLSchema) => void) {
+    const hash = this.hash(session)
+    this.subscriptions = this.subscriptions.set(hash, cb)
+  }
   refetch(session: SchemaFetchProps) {
     return this.fetchSchema(session)
   }
   hash(session: SchemaFetchProps) {
-    return `${session.endpoint}~${session.headers}`
+    return `${session.endpoint}~${session.headers || ''}`
   }
   private fetchSchema(
     session: SchemaFetchProps,
   ): Promise<{ schema: GraphQLSchema; tracingSupported: boolean } | null> {
+    const hash = this.hash(session)
     const { endpoint } = session
     const headers = {
       ...parseHeaders(session.headers),
@@ -81,7 +87,11 @@ export class SchemaFetcher {
           }
           this.cache = this.cache.set(this.hash(session), result)
           resolve(result)
-          this.fetching = this.fetching.remove(this.hash(session))
+          this.fetching = this.fetching.remove(hash)
+          const subscription = this.subscriptions.get(hash)
+          if (subscription) {
+            subscription(result.schema)
+          }
         },
         error: err => {
           reject(err)
