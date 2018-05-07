@@ -271,7 +271,6 @@ const EditorWrapper = styled.div`
   /* GUTTER */
 
   .CodeMirror-gutters {
-    border-right: 1px solid #ddd;
     background-color: #f7f7f7;
     white-space: nowrap;
   }

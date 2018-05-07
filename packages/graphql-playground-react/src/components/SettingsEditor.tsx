@@ -33,16 +33,14 @@ export class SettingsEditor extends React.Component<Props, {}> {
       <Container>
         <Wrapper>
           <EditorWrapper>
-            <div className="variable-editor">
-              <ConfigEditor
-                value={this.props.value}
-                onEdit={this.props.onChange}
-                onRunQuery={this.props.onSave}
-                isYaml={this.props.isYaml}
-                readOnly={this.props.readOnly}
-              />
-              <PlaygroundVersion>{window.version}</PlaygroundVersion>
-            </div>
+            <ConfigEditor
+              value={this.props.value}
+              onEdit={this.props.onChange}
+              onRunQuery={this.props.onSave}
+              isYaml={this.props.isYaml}
+              readOnly={this.props.readOnly}
+            />
+            <PlaygroundVersion>{window.version}</PlaygroundVersion>
           </EditorWrapper>
           {!this.props.readOnly && (
             <ButtonWrapper>
@@ -128,9 +126,10 @@ const backgroundColor = theme('mode', {
 const Wrapper = styled.div`
   background: ${backgroundColor};
   position: relative;
-  .variable-editor {
-    height: 100% !important;
-  }
+  display: flex;
+  flex-flow: column;
+  flex: 1 1 0;
+
   .CodeMirror {
     background: none !important;
     .CodeMirror-code {
