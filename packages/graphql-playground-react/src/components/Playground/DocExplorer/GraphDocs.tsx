@@ -131,7 +131,7 @@ class GraphDocs extends React.Component<
         innerRef={this.setRef}
       >
         <style jsx={true} global={true}>{`
-          .graphiql-container .doc-category-title {
+          .graph-docs .doc-category-title {
             @p: .mh0, .ph16;
             border: none;
           }
@@ -176,12 +176,6 @@ class GraphDocs extends React.Component<
             overflow-x: auto;
             overflow-y: hidden;
           }
-          .doc-explorer:before {
-            @p: .top0, .bottom0, .bgGreen, .absolute, .z3;
-            left: 0px;
-            content: '';
-            width: 6px;
-          }
           .doc-explorer-gradient {
             @p: .z1, .absolute, .top0, .bottom0;
             pointer-events: none;
@@ -200,12 +194,11 @@ class GraphDocs extends React.Component<
         </div>
         <DocsResizer onMouseDown={this.handleDocsResizeStart} />
         <div className="doc-explorer-gradient" />
-        <div
-          className="doc-explorer"
+        <DocsExplorer
           onKeyDown={this.handleKeyDown}
           onMouseMove={this.handleMouseMove}
           tabIndex={0}
-          ref={this.setDocExplorerRef}
+          innerRef={this.setDocExplorerRef}
         >
           <div className="doc-explorer-container">
             {emptySchema && <ColumnDoc>{emptySchema}</ColumnDoc>}
@@ -233,8 +226,7 @@ class GraphDocs extends React.Component<
               </ColumnDoc>
             ))}
           </div>
-          )}
-        </div>
+        </DocsExplorer>
       </Docs>
     )
   }
@@ -438,21 +430,51 @@ const Docs = styled.div`
   right: -2px;
   z-index: 3;
   height: 100%;
+  font-family: 'Open Sans', sans-serif;
+  -webkit-font-smoothing: antialiased;
 
   &.open {
     z-index: 2000;
   }
+
+  .field-name {
+    color: #1f61a0;
+  }
+  .type-name {
+    color: rgb(245, 160, 0);
+  }
+  .arg-name {
+    color: #1f61a9;
+  }
+
+  code {
+    font-family: 'Source Code Pro', monospace;
+    border-radius: 2px;
+    padding: 1px 2px;
+    background: rgba(0, 0, 0, 0.06);
+  }
 `
 
-// const DocsExplorer = styled.div`
-//   background: white;
-//   display: flex;
-//   position: relative;
-//   height: 100%;
-//   letter-spacing: 0.3px;
-//   outline: none;
-//   box-shadow: -1px 1px 6px 0 rgba(0, 0, 0, 0.3);
-// `
+const DocsExplorer = styled.div`
+  background: white;
+  display: flex;
+  position: relative;
+  height: 100%;
+  letter-spacing: 0.3px;
+  outline: none;
+  box-shadow: -1px 1px 6px 0 rgba(0, 0, 0, 0.3);
+
+  &::before {
+    top: 0;
+    bottom: 0;
+    background: ${props => props.theme.colours.green};
+    position: absolute;
+    z-index: 3;
+    left: 0px;
+    content: '';
+    width: 6px;
+  }
+`
 
 const DocsResizer = styled.div`
   cursor: col-resize;

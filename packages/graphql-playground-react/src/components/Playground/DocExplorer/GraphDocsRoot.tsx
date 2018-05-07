@@ -1,6 +1,7 @@
 import * as React from 'react'
 import TypeLink from './TypeLink'
 import { serializeRoot } from '../util/stack'
+import { CategoryTitle } from './DocsStyles'
 
 export interface Props {
   schema: any
@@ -60,7 +61,7 @@ interface ShowRootTypeProps {
 function ShowRootType({ name, fields, offset }: ShowRootTypeProps) {
   return (
     <div>
-      <div className="doc-category-title">{name}</div>
+      <CategoryTitle>{name}</CategoryTitle>
       {fields
         .filter(field => !field.isDeprecated)
         .map((field, index) => (
