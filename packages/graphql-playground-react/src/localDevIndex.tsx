@@ -1,8 +1,6 @@
 import * as React from 'react'
 import * as ReactDOM from 'react-dom'
 import MiddlewareApp from './components/MiddlewareApp'
-import './styles/graphiql_dark.css'
-import './styles/graphiql_light.css'
 import './index.css'
 
 if (process.env.NODE_ENV !== 'production') {
