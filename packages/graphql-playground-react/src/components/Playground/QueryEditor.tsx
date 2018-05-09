@@ -31,6 +31,7 @@ import {
  *
  */
 export interface Props {
+  query?: string
   schema?: GraphQLSchema | null
   onHintInformationRender?: (elem: any) => void
   onRunQuery?: () => void
@@ -97,7 +98,7 @@ export class QueryEditor extends React.PureComponent<Props & ReduxProps, {}> {
 
     this.editor = CodeMirror(this.node, {
       autofocus: true,
-      value: this.props.value || '',
+      value: this.props.query || this.props.value || '',
       lineNumbers: true,
       tabSize: 2,
       mode: 'graphql',

@@ -30,6 +30,7 @@ function getParameterByName(name: string, uri?: string): string | null {
 
 export interface PlaygroundWrapperProps {
   endpoint?: string
+  query?: string
   endpointUrl?: string
   subscriptionEndpoint?: string
   setTitle?: boolean
@@ -64,6 +65,7 @@ export interface State {
   activeProjectName?: string
   activeEnv?: string
   headers?: any
+  query?: string
 }
 
 class PlaygroundWrapper extends React.Component<
@@ -86,6 +88,8 @@ class PlaygroundWrapper extends React.Component<
       props.endpointUrl ||
       getParameterByName('endpoint') ||
       location.href
+
+    const query = props.query
 
     const result = this.extractEndpointAndHeaders(endpoint)
     endpoint = result.endpoint
@@ -118,6 +122,7 @@ class PlaygroundWrapper extends React.Component<
       activeEnv,
       activeProjectName: projectName,
       headers,
+      query,
     }
   }
 
@@ -312,6 +317,7 @@ class PlaygroundWrapper extends React.Component<
                 adminAuthToken={this.state.platformToken}
                 getRef={this.getPlaygroundRef}
                 config={this.props.config!}
+                query={this.state.query}
                 configString={this.state.configString!}
                 configIsYaml={this.state.configIsYaml!}
                 canSaveConfig={Boolean(this.props.canSaveConfig)}
