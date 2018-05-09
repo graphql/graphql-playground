@@ -153,7 +153,6 @@ export class Playground extends React.PureComponent<Props & ReduxProps, State> {
 
     setLinkCreator(props.createApolloLink)
     this.getSchema()
-    this.getQuery()
     setSubscriptionEndpoint(props.subscriptionEndpoint)
   }
 
@@ -206,13 +205,6 @@ export class Playground extends React.PureComponent<Props & ReduxProps, State> {
     if (nextProps.configString !== this.props.configString) {
       this.props.setConfigString(nextProps.configString)
     }
-  }
-
-  getQuery(props = this.props) {
-    if (this.mounted && this.state.query) {
-      this.setState({ query: undefined })
-    }
-    this.setState({ query: props.query })
   }
 
   async getSchema(props = this.props) {
