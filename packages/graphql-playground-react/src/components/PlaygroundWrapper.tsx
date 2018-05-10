@@ -170,7 +170,7 @@ class PlaygroundWrapper extends React.Component<
       }`
     }
 
-    return endpoint
+    return endpoint.replace(/^http/, 'ws')
   }
 
   componentWillReceiveProps(nextProps: PlaygroundWrapperProps & ReduxProps) {
@@ -253,7 +253,9 @@ class PlaygroundWrapper extends React.Component<
         activeEnv.projectName,
       )
       const endpoint = endpoints.endpoint
-      const subscriptionEndpoint = endpoints.subscriptionEndpoint
+      const subscriptionEndpoint =
+        endpoints.subscriptionEndpoint ||
+        this.normalizeSubscriptionUrl(endpoint, endpoints.subscriptionEndpoint)
       const headers = endpoints.headers
       this.setState({
         endpoint,

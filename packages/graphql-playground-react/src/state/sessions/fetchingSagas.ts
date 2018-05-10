@@ -74,8 +74,10 @@ export const defaultLinkCreator = (
     return { link: httpLink }
   }
 
+  const finalSubscriptionsEndpoint = wsEndpoint || subscriptionEndpoint
+
   const subscriptionClient = new SubscriptionClient(
-    wsEndpoint || subscriptionEndpoint,
+    finalSubscriptionsEndpoint,
     {
       timeout: 20000,
       lazy: true,
