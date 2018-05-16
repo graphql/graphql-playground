@@ -30,7 +30,7 @@ import {
   getParsedVariablesFromSession,
 } from './selectors'
 import { SchemaFetcher } from '../../components/Playground/SchemaFetcher'
-import { getSelectedWorkspaceId } from '../workspace/reducers'
+import { getSelectedWorkspaceId, getSettings } from '../workspace/reducers'
 import * as cuid from 'cuid'
 import { Session, ResponseRecord } from './reducers'
 import { addHistoryItem } from '../history/actions'
@@ -47,6 +47,7 @@ export function setSubscriptionEndpoint(endpoint) {
 export interface LinkCreatorProps {
   endpoint: string
   headers?: Headers
+  credentials?: string
 }
 
 export interface Headers {
@@ -58,7 +59,7 @@ export const defaultLinkCreator = (
   wsEndpoint?: string,
 ): { link: ApolloLink; subscriptionClient?: SubscriptionClient } => {
   let connectionParams = {}
-  const { headers } = session
+  const { headers, credentials } = session
 
   if (headers) {
     connectionParams = { ...headers }
@@ -68,14 +69,17 @@ export const defaultLinkCreator = (
     uri: session.endpoint,
     fetch,
     headers,
+    credentials,
   })
 
   if (!(wsEndpoint || subscriptionEndpoint)) {
     return { link: httpLink }
   }
 
+  const finalSubscriptionsEndpoint = wsEndpoint || subscriptionEndpoint
+
   const subscriptionClient = new SubscriptionClient(
-    wsEndpoint || subscriptionEndpoint,
+    finalSubscriptionsEndpoint,
     {
       timeout: 20000,
       lazy: true,
@@ -120,6 +124,7 @@ function* runQuerySaga(action) {
   const operation = makeOperation(request)
   const operationIsSubscription = isSubscription(operation)
   const workspace = yield select(getSelectedWorkspaceId)
+  const settings = yield select(getSettings)
   yield put(setSubscriptionActive(isSubscription(operation)))
   yield put(startQuery())
   let headers = parseHeaders(session.headers)
@@ -129,6 +134,7 @@ function* runQuerySaga(action) {
   const { link, subscriptionClient } = linkCreator({
     endpoint: session.endpoint,
     headers,
+    credentials: settings['request.credentials'],
   })
   yield put(setCurrentQueryStartTime(new Date()))
 
