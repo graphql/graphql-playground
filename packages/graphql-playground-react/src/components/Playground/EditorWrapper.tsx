@@ -1,5 +1,6 @@
 import * as React from 'react'
 import { styled } from '../../styled'
+import { injectGlobal } from 'styled-components'
 
 const EditorWrapper = styled.div`
   /* Comment */
@@ -707,6 +708,11 @@ const EditorWrapper = styled.div`
     width: 100%;
     height: 100%;
   }
+`
+
+// Styling of portal for hints
+// tslint:disable-next-line
+injectGlobal`
   .CodeMirror-hints {
     background: white;
     box-shadow: 0 1px 4px rgba(0, 0, 0, 0.15);

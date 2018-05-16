@@ -19,5 +19,5 @@ export interface ISettings {
   ['editor.theme']: Theme
   ['editor.reuseHeaders']: boolean
   ['tracing.hideTracingResponse']: boolean
-  ['request.credentials']: "omit" | "include" | "same-origin"
+  ['request.credentials']: 'omit' | 'include' | 'same-origin'
 }
