@@ -27,19 +27,19 @@
     "koa"
   ],
   "peerDependencies": {
-    "koa": "^2.3.0"
+    "koa": "^2"
   },
   "devDependencies": {
     "@types/node": "9.4.0",
     "rimraf": "2.6.2",
-    "typescript": "2.6.2"
+    "typescript": "2.6.2",
+    "koa": "^2.5.1"
   },
   "typings": "dist/index.d.ts",
   "typescript": {
     "definition": "dist/index.d.ts"
   },
   "dependencies": {
-    "graphql-playground-html": "1.5.4",
-    "koa": "^2.4.1"
+    "graphql-playground-html": "1.5.4"
   }
 }
