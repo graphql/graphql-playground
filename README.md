@@ -47,7 +47,9 @@ The desktop app is the same as the web version but includes these additional fea
 
 You can easily share your Playgrounds with others by clicking on the "Share" button and sharing the generated link. You can think about GraphQL Bin like Pastebin for your GraphQL queries including the context (endpoint, HTTP headers, open tabs etc).
 
-![](https://imgur.com/H1n64lL.png)
+<a href="https://graphqlbin.com/OksD" target="_blank">
+ <img src="https://camo.githubusercontent.com/daf8c64dbde3097fdbe782c0645552550d530a73/68747470733a2f2f696d6775722e636f6d2f48316e36346c4c2e706e67" alt="" data-canonical-src="https://imgur.com/H1n64lL.png" style="max-width:100%;">
+</a>
 
 > You can also find the announcement blog post [here](https://blog.graph.cool/introducing-graphql-playground-f1e0a018f05d).
 
