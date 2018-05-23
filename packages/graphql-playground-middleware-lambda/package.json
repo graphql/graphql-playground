@@ -1,6 +1,6 @@
 {
   "name": "graphql-playground-middleware-lambda",
-  "version": "1.5.1",
+  "version": "1.6.0",
   "homepage": "https://github.com/graphcool/graphql-playground/tree/master/packages/graphql-playground-middleware-lambada",
   "description": "GraphQL IDE for better development workflows (GraphQL Subscriptions, interactive docs & collaboration).",
   "contributors": [
@@ -14,7 +14,7 @@
   "files": [
     "dist"
   ],
-  "playgroundVersion": "1.5.13",
+  "playgroundVersion": "1.6.6",
   "scripts": {
     "build": "rimraf dist && tsc",
     "prepare": "npm run build"
