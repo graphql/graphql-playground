@@ -37,6 +37,7 @@ import {
   getFile,
   getHeaders,
   getIsReloadingSchema,
+  getEndpoint,
 } from '../state/sessions/selectors'
 import { getHistoryOpen } from '../state/general/selectors'
 import {
@@ -48,6 +49,7 @@ import { Session } from '../state/sessions/reducers'
 import { getWorkspaceId } from './Playground/util/getWorkspaceId'
 import { getSettings, getSettingsString } from '../state/workspace/reducers'
 import { Backoff } from './Playground/util/fibonacci-backoff'
+import { debounce } from 'lodash'
 
 export interface Response {
   resultID: string
@@ -57,6 +59,7 @@ export interface Response {
 
 export interface Props {
   endpoint: string
+  sessionEndpoint: string
   subscriptionEndpoint?: string
   projectId?: string
   shareEnabled?: boolean
@@ -130,10 +133,34 @@ export class Playground extends React.PureComponent<Props & ReduxProps, State> {
   apolloLinks: { [sessionId: string]: any } = {}
   observers: { [sessionId: string]: any } = {}
   graphiqlComponents: any[] = []
+
+  // debounce as we call this on each http header or endpoint edit
+  getSchema = debounce(
+    async (props: Props & ReduxProps = this.props) => {
+      if (this.mounted && this.state.schema) {
+        this.setState({ schema: undefined })
+      }
+      let first = true
+      if (this.backoff) {
+        this.backoff.stop()
+      }
+      this.backoff = new Backoff(async () => {
+        if (first) {
+          await this.schemaGetter(props)
+          first = false
+        } else {
+          await this.schemaGetter()
+        }
+      })
+      this.backoff.start()
+    },
+    300,
+    { trailing: true }, // important to not miss the last call
+  ) as any
+
   private backoff: Backoff
   private initialIndex: number = -1
   private mounted = false
-  private fetchingSchema = false
 
   constructor(props: Props & ReduxProps) {
     super(props)
@@ -168,7 +195,7 @@ export class Playground extends React.PureComponent<Props & ReduxProps, State> {
     this.mounted = true
   }
 
-  componentWillReceiveProps(nextProps) {
+  componentWillReceiveProps(nextProps: Props & ReduxProps) {
     if (this.props.createApolloLink !== nextProps.createApolloLink) {
       setLinkCreator(nextProps.createApolloLink)
     }
@@ -176,7 +203,8 @@ export class Playground extends React.PureComponent<Props & ReduxProps, State> {
       nextProps.headers !== this.props.headers ||
       nextProps.endpoint !== this.props.endpoint ||
       nextProps.workspaceName !== this.props.workspaceName ||
-      nextProps.sessionHeaders !== this.props.sessionHeaders
+      nextProps.sessionHeaders !== this.props.sessionHeaders ||
+      nextProps.sessionEndpoint !== this.props.sessionEndpoint
     ) {
       this.getSchema(nextProps)
     }
@@ -203,54 +231,35 @@ export class Playground extends React.PureComponent<Props & ReduxProps, State> {
     }
   }
 
-  async getSchema(props = this.props) {
-    if (this.mounted && this.state.schema) {
-      this.setState({ schema: undefined })
-    }
-    let first = true
-    if (this.backoff) {
-      this.backoff.stop()
-    }
-    this.backoff = new Backoff(async () => {
-      if (first) {
-        await this.schemaGetter(props)
-        first = false
-      } else {
-        await this.schemaGetter()
+  async schemaGetter(propsInput?: Props & ReduxProps) {
+    const props = this.props || propsInput
+    const endpoint = props.sessionEndpoint || props.endpoint
+    try {
+      const data = {
+        endpoint,
+        headers:
+          props.sessionHeaders && props.sessionHeaders.length > 0
+            ? props.sessionHeaders
+            : JSON.stringify(props.headers),
       }
-    })
-    this.backoff.start()
-  }
-
-  async schemaGetter(props = this.props) {
-    if (!this.fetchingSchema) {
-      try {
-        const data = {
-          endpoint: props.endpoint,
-          headers:
-            props.sessionHeaders && props.sessionHeaders.length > 0
-              ? props.sessionHeaders
-              : JSON.stringify(props.headers),
+      const schema = await schemaFetcher.fetch(data)
+      schemaFetcher.subscribe(data, newSchema => {
+        if (
+          data.endpoint === this.props.endpoint ||
+          data.endpoint === this.props.sessionEndpoint
+        ) {
+          this.setState({ schema: newSchema })
         }
-        const schema = await schemaFetcher.fetch(data)
-        schemaFetcher.subscribe(data, newSchema => {
-          if (data.endpoint === this.props.endpoint) {
-            this.setState({ schema: newSchema })
-          }
-        })
-        if (schema) {
-          this.setState({ schema: schema.schema })
-          this.props.schemaFetchingSuccess(
-            props.endpoint,
-            schema.tracingSupported,
-          )
-          this.backoff.stop()
-        }
-      } catch (e) {
-        // tslint:disable-next-line
-        console.error(e)
-        this.props.schemaFetchingError(props.endpoint, e.message)
+      })
+      if (schema) {
+        this.setState({ schema: schema.schema })
+        this.props.schemaFetchingSuccess(data.endpoint, schema.tracingSupported)
+        this.backoff.stop()
       }
+    } catch (e) {
+      // tslint:disable-next-line
+      console.error(e)
+      this.props.schemaFetchingError(endpoint, e.message)
     }
   }
 
@@ -350,6 +359,7 @@ const mapStateToProps = createStructuredSelector({
   settings: getSettings,
   settingsString: getSettingsString,
   isReloadingSchema: getIsReloadingSchema,
+  sessionEndpoint: getEndpoint,
 })
 
 export default connect(mapStateToProps, {
