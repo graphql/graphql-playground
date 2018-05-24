@@ -95,12 +95,13 @@ export class Session extends Record(getDefaultSession('')) {
     const override: any = {
       queryRunning: false,
       subscriptionActive: false,
+      responseExtensions: {},
     }
     // dont serialize very big responses as the localStorage size is limited
     if (
       obj.responses &&
       obj.responses.size > 0 &&
-      (obj.responses.size > 20 || obj.responses.get(0).date.length > 20000)
+      (obj.responses.size > 20 || obj.responses.get(0).date.length > 2000)
     ) {
       override.responses = List()
     }
@@ -195,7 +196,6 @@ const reducer = handleActions(
     START_QUERY: state => {
       return state
         .setIn(['sessions', getSelectedSessionId(state), 'queryRunning'], true)
-        .setIn(['sessions', getSelectedSessionId(state), 'responses'], List())
         .setIn(
           ['sessions', getSelectedSessionId(state), 'responseExtensions'],
           undefined,

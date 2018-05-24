@@ -130,7 +130,7 @@ function* runQuerySaga(action) {
   yield put(setSubscriptionActive(isSubscription(operation)))
   yield put(startQuery())
   let headers = parseHeaders(session.headers)
-  if (session.tracingSupported) {
+  if (session.tracingSupported && session.responseTracingOpen) {
     headers = set(headers, 'X-Apollo-Tracing', '1')
   }
   const { link, subscriptionClient } = linkCreator({

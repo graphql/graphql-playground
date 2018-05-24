@@ -1458,3 +1458,29 @@ li.CodeMirror-hint-active {
   max-width: 50vw;
   margin-right: 10px;
 }
+
+/** NEW STYLES - @huv1k please merge into the dynamic styles branch **/
+
+.graphiql-container .resultWrap .result-window {
+  overflow: visible;
+  max-height: none !important;
+}
+
+.graphiql-container .resultWrap .result-window > div {
+  display: flex;
+  flex: 1;
+  height: 100%;
+}
+
+.graphiql-container .resultWrap .result-viewer-wrapper,
+.graphiql-container .resultWrap .result-viewer-wrapper .result-codemirror {
+  position: relative;
+  display: flex;
+  flex: 1;
+  height: 100%;
+}
+
+.graphiql-container .resultWrap .CodeMirror {
+  height: 100%;
+  position: absolute !important;
+}

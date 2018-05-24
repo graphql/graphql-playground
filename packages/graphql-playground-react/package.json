@@ -119,7 +119,7 @@
     "apollo-link-ws": "1.0.4",
     "calculate-size": "^1.1.1",
     "classnames": "^2.2.5",
-    "codemirror": "^5.36.0",
+    "codemirror": "^5.38.0",
     "codemirror-graphql": "timsuchanek/codemirror-graphql#details-fix",
     "copy-to-clipboard": "^3.0.8",
     "cuid": "^1.3.8",

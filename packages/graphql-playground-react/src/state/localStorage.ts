@@ -9,7 +9,7 @@ export function serializeState(store) {
         localStorage.setItem('graphql-playground', JSON.stringify(state))
       }
     },
-    300,
+    1000,
     { trailing: true },
   ) as any
 }

@@ -58,7 +58,6 @@ class CodeGenerationPopupCode extends React.Component<
               options={{
                 height: 'auto',
                 mode: 'shell',
-                viewportMargin: Infinity,
                 theme: codeTheme,
               }}
             />
@@ -70,7 +69,6 @@ class CodeGenerationPopupCode extends React.Component<
           value={code}
           options={{
             height: 'auto',
-            viewportMargin: Infinity,
             mode,
             theme: codeTheme,
           }}

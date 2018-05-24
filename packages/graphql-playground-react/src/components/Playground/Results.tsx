@@ -17,7 +17,14 @@ export interface ReduxProps {
   responses: List<ResponseRecord>
 }
 
+const defaultResponseRecord = new ResponseRecord({
+  date: '',
+  time: new Date(),
+  resultID: 'default-id',
+})
+
 const Results: React.SFC<Props & ReduxProps> = ({ setRef, responses }) => {
+  const response1 = responses.get(0) || defaultResponseRecord
   return (
     <div
       className={cn('result-window', {
@@ -61,27 +68,37 @@ const Results: React.SFC<Props & ReduxProps> = ({ setRef, responses }) => {
           position: relative;
         }
       `}</style>
-      {responses.map(response => (
-        <Response
-          key={
-            responses.size === 1
-              ? 'first'
-              : response.resultID || String(response.time)
-          }
-        >
+      {responses.size <= 1 ? (
+        <Response key={'first'}>
           {responses.size > 1 &&
-            response.time && (
+            response1.time && (
               <div className="subscription-time">
                 <div className="subscription-time-text">
-                  {ageOfDate(response.time)}
+                  {ageOfDate(response1.time)}
                 </div>
               </div>
             )}
           <div className="result-viewer-wrapper">
-            <ResultViewer value={response.date} />
+            <ResultViewer value={response1.date} />
           </div>
         </Response>
-      ))}
+      ) : (
+        responses.map(response => (
+          <Response key={response.resultID || String(response.time)}>
+            {responses.size > 1 &&
+              response.time && (
+                <div className="subscription-time">
+                  <div className="subscription-time-text">
+                    {ageOfDate(response.time)}
+                  </div>
+                </div>
+              )}
+            <div className="result-viewer-wrapper">
+              <ResultViewer value={response.date} />
+            </div>
+          </Response>
+        ))
+      )}
     </div>
   )
 }

@@ -154,7 +154,7 @@ export class Playground extends React.PureComponent<Props & ReduxProps, State> {
       })
       this.backoff.start()
     },
-    300,
+    600,
     { trailing: true }, // important to not miss the last call
   ) as any
 

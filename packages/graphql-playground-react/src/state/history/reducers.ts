@@ -1,4 +1,4 @@
-import { OrderedMap } from 'immutable'
+import { OrderedMap, List } from 'immutable'
 import { handleActions } from 'redux-actions'
 import * as cuid from 'cuid'
 import { SessionStateProps } from '../sessions/reducers'
@@ -13,11 +13,12 @@ export default handleActions(
       state.setIn([sessionId, 'starred'], !state.getIn([sessionId, 'starred'])),
     ADD_HISTORY_ITEM: (state, { payload: { session } }) => {
       const id = cuid()
-      return state.set(
+      return state.slice(-40).set(
         id,
         session.merge({
           id,
           date: new Date(),
+          responses: List(),
         }),
       )
     },
