@@ -139,9 +139,6 @@ const Wrapper = styled.div`
       color: rgba(42, 126, 210, 1);
     }
   }
-  .CodeMirror-gutters {
-    background: none !important;
-  }
 `
 
 const ButtonWrapper = styled.div`

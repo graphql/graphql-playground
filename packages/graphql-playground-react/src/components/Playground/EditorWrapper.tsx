@@ -272,7 +272,8 @@ const EditorWrapper = styled.div`
   /* GUTTER */
 
   .CodeMirror-gutters {
-    background-color: #f7f7f7;
+    background-color: transparent;
+    border: none;
     white-space: nowrap;
   }
   .CodeMirror-linenumbers {

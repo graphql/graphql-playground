@@ -313,14 +313,9 @@ const Editor = styled.div`
   flex: 1;
   position: relative;
 
-  .CodeMirror-gutters {
-    border-right: none;
-    background-color: rgb(15, 32, 45);
-  }
-
   .CodeMirror {
     padding-left: 12px;
     width: calc(100% - 12px);
-    background-color: rgb(15, 32, 45);
+    background: ${p => p.theme.colours.editorBackground};
   }
 `

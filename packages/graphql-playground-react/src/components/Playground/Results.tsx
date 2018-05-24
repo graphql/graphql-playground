@@ -74,9 +74,10 @@ const ResultWindow = styled.div`
     display: none;
   }
 
+  .CodeMirror {
+    background: ${p => p.theme.colours.resultBackground};
+  }
   .CodeMirror-gutters {
-    background-color: transparent;
-    border: none;
     cursor: col-resize;
   }
   .CodeMirror-foldgutter,

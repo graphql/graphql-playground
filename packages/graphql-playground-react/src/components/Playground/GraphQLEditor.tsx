@@ -720,16 +720,13 @@ const VariableEditor = styled(BottomDrawer)`
   .CodeMirror {
     padding-left: 12px;
     width: calc(100% - 12px);
-    background: #0b1924;
-  }
-  .CodeMirror-gutters {
-    background: #0b1924;
-    border: none;
+    background: ${p => p.theme.colours.leftDrawerBackground};
   }
 `
 
 const VariableEditorTitle = withProps<TitleProps>()(styled(BottomDrawerTitle))`
   cursor: ${props => (props.isOpen ? 'row-resize' : 'n-resize')};
+  background: ${p => p.theme.colours.leftDrawerBackground};
 `
 
 const VariableEditorSubtitle = withProps<TitleProps>()(styled.span)`
@@ -738,13 +735,15 @@ const VariableEditorSubtitle = withProps<TitleProps>()(styled.span)`
   color: ${props => (props.isOpen ? 'rgba(255, 255, 255, 0.6)' : 'inherit')};
 `
 
-const ResponseTracking = styled(BottomDrawer)``
+const ResponseTracking = styled(BottomDrawer)`
+  background: ${p => p.theme.colours.rightDrawerBackground};
+`
 
 const ResponseTrackingTitle = withProps<TitleProps>()(
   styled(BottomDrawerTitle),
 )`
   text-align: right;
-  background: #0b1924;
+  background: ${p => p.theme.colours.rightDrawerBackground};
   cursor: ${props => (props.isOpen ? 's-resize' : 'n-resize')};
 `
 
@@ -757,5 +756,5 @@ const QueryWrap = withProps<QueryProps>()(styled.div)`
   display: flex;
   flex-direction: column;
   flex: ${props => props.flex} 1 0%;
-  border-top: 8px solid ${props => props.theme.colours.darkBlue};
+  border-top: 8px solid ${props => props.theme.colours.resultBackground};
 `
