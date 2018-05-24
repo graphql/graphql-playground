@@ -251,7 +251,7 @@ const reducer = handleActions(
       )
     },
     SET_RESPONSE: (state, { payload: { response, sessionId } }) => {
-      return state.setIn(['sessions', sessionId, 'responses'], List(response))
+      return state.setIn(['sessions', sessionId, 'responses'], List([response]))
     },
     CLEAR_RESPONSES: state => {
       return state.setIn(

@@ -23,6 +23,8 @@ import {
   setCurrentQueryStartTime,
   setCurrentQueryEndTime,
   setEndpointUnreachable,
+  clearResponses,
+  setResponse,
 } from './actions'
 import {
   getSelectedSession,
@@ -138,6 +140,7 @@ function* runQuerySaga(action) {
   })
   yield put(setCurrentQueryStartTime(new Date()))
 
+  let firstResponse = false
   const channel = eventChannel(emitter => {
     let closed = false
     if (subscriptionClient && operationIsSubscription) {
@@ -197,7 +200,15 @@ function* runQuerySaga(action) {
       if (errorMessage === 'Failed to fetch') {
         yield put(setEndpointUnreachable(session.endpoint))
       }
-      yield put(addResponse(selectedWorkspaceId, session.id, response))
+      if (operationIsSubscription) {
+        if (firstResponse) {
+          yield put(clearResponses())
+          firstResponse = false
+        }
+        yield put(addResponse(selectedWorkspaceId, session.id, response))
+      } else {
+        yield put(setResponse(selectedWorkspaceId, session.id, response))
+      }
       yield put(addHistoryItem(session))
     }
   } finally {
