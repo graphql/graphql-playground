@@ -1461,26 +1461,56 @@ li.CodeMirror-hint-active {
 
 /** NEW STYLES - @huv1k please merge into the dynamic styles branch **/
 
+/* Styles for better performance in queries (no forced relayout) */
+
 .graphiql-container .resultWrap .result-window {
   overflow: visible;
   max-height: none !important;
 }
 
 .graphiql-container .resultWrap .result-window > div {
-  display: flex;
-  flex: 1;
-  height: 100%;
+  flex-direction: column;
 }
 
-.graphiql-container .resultWrap .result-viewer-wrapper,
-.graphiql-container .resultWrap .result-viewer-wrapper .result-codemirror {
+.graphiql-container .resultWrap .result-window > div,
+.graphiql-container .resultWrap .result-window .result-viewer-wrapper,
+.graphiql-container
+  .resultWrap
+  .result-window
+  .result-viewer-wrapper
+  .result-codemirror {
   position: relative;
   display: flex;
   flex: 1;
   height: 100%;
 }
 
-.graphiql-container .resultWrap .CodeMirror {
+.graphiql-container .resultWrap .result-window .CodeMirror {
   height: 100%;
   position: absolute !important;
+}
+
+/* Styles for subscriptions (still slow with repaint) */
+
+.graphiql-container .resultWrap .result-window.isSubscription {
+  height: auto;
+  overflow: auto;
+}
+
+.graphiql-container .resultWrap .result-window.isSubscription > div,
+.graphiql-container
+  .resultWrap
+  .result-window.isSubscription
+  .result-viewer-wrapper,
+.graphiql-container
+  .resultWrap
+  .result-window.isSubscription
+  .result-viewer-wrapper
+  .result-codemirror {
+  height: auto;
+}
+
+.graphiql-container .resultWrap .result-window.isSubscription .CodeMirror {
+  height: auto;
+  position: relative !important;
 }
