@@ -1848,7 +1848,7 @@ code-point-at@^1.0.0:
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/code-point-at/-/code-point-at-1.1.0.tgz#0d070b4d043a5bea33a2f1a40e2edb3d9a4ccf77"
 
-codemirror-graphql@^0.6.11, codemirror-graphql@^0.6.12, "codemirror-graphql@github:timsuchanek/codemirror-graphql#details-fix":
+codemirror-graphql@^0.6.11, codemirror-graphql@^0.6.12, codemirror-graphql@timsuchanek/codemirror-graphql#details-fix:
   version "0.6.12"
   resolved "https://codeload.github.com/timsuchanek/codemirror-graphql/tar.gz/801ec32683c38d6dc0f8f7bc19014a111edc9ebd"
   dependencies:
@@ -7798,9 +7798,8 @@ styled-components@^3.1.6:
     postcss-load-plugins "^2.2.0"
     styled-jsx "^0.5.7"
 
-"styled-jsx-postcss@github:timsuchanek/styled-jsx-postcss#build3":
+styled-jsx-postcss@timsuchanek/styled-jsx-postcss#build3:
   version "0.2.0"
-  uid "677ee0fb7f9138047a00e03c8c3e44adbb33cf2a"
   resolved "https://codeload.github.com/timsuchanek/styled-jsx-postcss/tar.gz/677ee0fb7f9138047a00e03c8c3e44adbb33cf2a"
   dependencies:
     babel-traverse "^6.21.0"
