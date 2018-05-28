@@ -69,6 +69,7 @@ export interface Props {
   onRef?: any
   shareEnabled?: boolean
   schema?: GraphQLSchema
+  query?: string
 }
 
 export interface ReduxProps {
@@ -268,6 +269,7 @@ class GraphQLEditor extends React.PureComponent<
                 onHintInformationRender={this.handleHintInformationRender}
                 onRunQuery={this.runQueryAtCursor}
                 onClickReference={this.handleClickReference}
+                query={this.props.query}
               />
               <div
                 className="variable-editor"

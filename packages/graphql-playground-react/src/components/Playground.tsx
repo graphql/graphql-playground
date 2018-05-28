@@ -70,6 +70,7 @@ export interface Props {
   onChangeEndpoint?: (endpoint: string) => void
   share: (state: any) => void
   shareUrl?: string
+  query?: string
   onChangeSubscriptionsEndpoint?: (endpoint: string) => void
   getRef?: (ref: Playground) => void
   graphqlConfig?: any
@@ -116,6 +117,7 @@ export interface ReduxProps {
 
 export interface State {
   schema?: GraphQLSchema
+  query?: string
 }
 
 export interface CursorPosition {
@@ -127,7 +129,8 @@ export { GraphQLEditor }
 
 export class Playground extends React.PureComponent<Props & ReduxProps, State> {
   static defaultProps = {
-    shareEnabled: true,
+    shareEnabled: false,
+    query: undefined,
   }
 
   apolloLinks: { [sessionId: string]: any } = {}
@@ -167,6 +170,7 @@ export class Playground extends React.PureComponent<Props & ReduxProps, State> {
 
     this.state = {
       schema: undefined,
+      query: props.query,
     }
     ;(global as any).p = this
 
@@ -293,6 +297,7 @@ export class Playground extends React.PureComponent<Props & ReduxProps, State> {
               <GraphQLEditor
                 shareEnabled={this.props.shareEnabled}
                 schema={this.state.schema}
+                query={this.state.query}
               />
             )}
           </GraphiqlWrapper>

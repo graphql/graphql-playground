@@ -31,6 +31,7 @@ export interface Props {
 export interface State {
   endpoint?: string
   subscriptionEndpoint?: string
+  query?: string
   shareUrl?: string
   loading: boolean
 }
@@ -108,8 +109,11 @@ class GraphQLBinApp extends React.Component<Props & ReduxProps, State> {
   }
 
   render() {
-    let { endpoint, subscriptionEndpoint } = this.state
+    let { endpoint, subscriptionEndpoint, query } = this.state
     // If no  endpoint passed tries to get one from url
+    if (!query) {
+      query = getParameterByName('query')
+    }
     if (!endpoint) {
       endpoint = getParameterByName('endpoint')
     }
@@ -141,6 +145,7 @@ class GraphQLBinApp extends React.Component<Props & ReduxProps, State> {
           <PlaygroundWrapper
             endpoint={endpoint}
             subscriptionEndpoint={subscriptionEndpoint}
+            query={query}
           />
         )}
       </div>
