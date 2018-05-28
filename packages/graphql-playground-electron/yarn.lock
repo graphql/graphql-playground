@@ -82,15 +82,11 @@
     "@types/react" "*"
     redux "^3.6.0"
 
-"@types/react@*":
+"@types/react@*", "@types/react@16.3.14":
   version "16.3.14"
   resolved "https://registry.yarnpkg.com/@types/react/-/react-16.3.14.tgz#f90ac6834de172e13ecca430dcb6814744225d36"
   dependencies:
     csstype "^2.2.0"
-
-"@types/react@16.0.34":
-  version "16.0.34"
-  resolved "https://registry.yarnpkg.com/@types/react/-/react-16.0.34.tgz#7a8f795afd8a404a9c4af9539b24c75d3996914e"
 
 abab@^1.0.4:
   version "1.0.4"
