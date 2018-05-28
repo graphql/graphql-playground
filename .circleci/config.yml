@@ -6,15 +6,31 @@ jobs:
     docker:
       - image: circleci/node:8
     steps:
+      - restore_cache:
+          keys:
+            - playground-{{ .Branch }}-{{ .Revision }}
+            - playground-{{ .Branch }}-
+            - playground-
       - checkout
       - run: yarn show-versions
       - run: yarn install
       - run: cd packages/graphql-playground-react && yarn && yarn build
+      - save_cache:
+          key: playground-{{ .Branch }}-{{ .Revision }}
+          paths:
+            - "node_modules"
+            - "$HOME/.cache/electron"
+            - "$HOME/.cache/electron-builder"
 
   electron-build:
     macos:
       xcode: "9.0"
     steps:
+      - restore_cache:
+          keys:
+            - electron-build-{{ .Branch }}-{{ .Revision }}
+            - electron-build-{{ .Branch }}-
+            - electron-build-
       - checkout
       - run: |
           if [[ -z "$CIRCLE_PULL_REQUEST" && "$CIRCLE_BRANCH" == "master" ]]
@@ -43,6 +59,12 @@ jobs:
             else
               cd packages/graphql-playground-electron && yarn build
             fi
+      - save_cache:
+          key: electron-build-{{ .Branch }}-{{ .Revision }}
+          paths:
+            - "node_modules"
+            - "$HOME/.cache/electron"
+            - "$HOME/.cache/electron-builder"
 
 workflows:
   version: 2
