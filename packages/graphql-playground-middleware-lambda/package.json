@@ -39,6 +39,6 @@
     "definition": "dist/index.d.ts"
   },
   "dependencies": {
-    "graphql-playground-html": "1.5.5"
+    "graphql-playground-html": "1.5.6"
   }
 }
