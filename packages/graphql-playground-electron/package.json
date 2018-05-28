@@ -111,9 +111,8 @@
     "redux-localstorage-filter": "^0.1.1",
     "reselect": "^3.0.1",
     "semver": "^5.5.0",
-    "styled-jsx": "2.2.1",
-    "styled-jsx-postcss":
-      "git+https://github.com/timsuchanek/styled-jsx-postcss#build3",
+    "styled-jsx": "2.2.6",
+    "styled-jsx-postcss": "git+https://github.com/timsuchanek/styled-jsx-postcss#build3",
     "sweetalert2": "^7.21.0",
     "validator": "^9.2.0"
   },
