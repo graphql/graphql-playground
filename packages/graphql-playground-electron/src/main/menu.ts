@@ -35,13 +35,13 @@ export const buildTemplate = (
       { type: 'separator' },
       {
         label: 'Settings',
-        accelerator: 'Command+,',
+        accelerator: 'CmdOrCtrl+,',
         click: () => send('Tab', 'Settings'),
       },
       { type: 'separator' },
       {
         label: 'Quit',
-        accelerator: 'Command+Q',
+        accelerator: 'CmdOrCtrl+Q',
         click: () => app.quit(),
       },
     ],
@@ -51,40 +51,40 @@ export const buildTemplate = (
     submenu: [
       {
         label: 'New Workspace',
-        accelerator: 'Cmd+N',
+        accelerator: 'CmdOrCtrl+N',
         click: () => {
           createWindow(windowContext)
         },
       },
       {
         label: 'New Tab',
-        accelerator: 'Cmd+T',
+        accelerator: 'CmdOrCtrl+T',
         click: () => send('Tab', 'New'),
       },
       { type: 'separator' },
       {
         label: 'Close Workspace',
-        accelerator: 'Cmd+Shift+W',
+        accelerator: 'CmdOrCtrl+Shift+W',
         role: 'close',
       },
       {
         label: 'Close Tab',
-        accelerator: 'Cmd+W',
+        accelerator: 'CmdOrCtrl+W',
         click: () => send('Tab', 'Close'),
       },
       {
         label: 'Open File',
-        accelerator: 'Cmd+O',
+        accelerator: 'CmdOrCtrl+O',
         click: () => send('File', 'Open'),
       },
       {
         label: 'Save File',
-        accelerator: 'Cmd+S',
+        accelerator: 'CmdOrCtrl+S',
         click: () => send('File', 'Save'),
       },
       {
         label: 'Reload Schema',
-        accelerator: 'Cmd+R',
+        accelerator: 'CmdOrCtrl+R',
         click: () => send('Tab', 'ReloadSchema'),
       },
     ],
@@ -130,17 +130,17 @@ export const buildTemplate = (
     submenu: [
       {
         label: 'Next Tab',
-        accelerator: 'Cmd+Alt+Right',
+        accelerator: 'CmdOrCtrl+Alt+Right',
         click: () => send('Tab', 'Next'),
       },
       {
         label: 'Previous Tab',
-        accelerator: 'Cmd+Alt+Left',
+        accelerator: 'CmdOrCtrl+Alt+Left',
         click: () => send('Tab', 'Next'),
       },
       {
         label: 'Minimize',
-        accelerator: 'Cmd+M',
+        accelerator: 'CmdOrCtrl+M',
         click: () => {
           const focusedWindow = BrowserWindow.getFocusedWindow()
           if (focusedWindow) {
