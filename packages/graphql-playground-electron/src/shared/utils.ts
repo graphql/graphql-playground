@@ -6,7 +6,7 @@ export const newWindowConfig: Electron.BrowserWindowConstructorOptions = {
   title: 'GraphQL Playground',
   width: 1200,
   height: 800,
-  titleBarStyle: 'hidden-inset',
+  titleBarStyle: 'hiddenInset',
   icon: path.join(__dirname, '../static/icons/icon.icns'),
   backgroundColor: '#0F202D',
 }
