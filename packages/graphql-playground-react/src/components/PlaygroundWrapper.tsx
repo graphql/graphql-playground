@@ -16,6 +16,8 @@ import { ISettings } from '../types'
 import { createStructuredSelector } from 'reselect'
 import { connect } from 'react-redux'
 import { getTheme } from '../state/workspace/reducers'
+import { Session } from '../state/sessions/reducers'
+import { ApolloLink } from 'apollo-link'
 
 function getParameterByName(name: string, uri?: string): string | null {
   const url = uri || window.location.href
@@ -47,6 +49,7 @@ export interface PlaygroundWrapperProps {
   config?: GraphQLConfig
   configPath?: string
   injectedState?: any
+  createApolloLink?: (session: Session) => ApolloLink
 }
 
 export interface ReduxProps {
@@ -324,6 +327,7 @@ class PlaygroundWrapper extends React.Component<
                 headers={this.state.headers}
                 configPath={this.props.configPath}
                 workspaceName={this.state.activeProjectName}
+                createApolloLink={this.props.createApolloLink}
               />
             </App>
           </OldThemeProvider>

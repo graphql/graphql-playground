@@ -362,21 +362,24 @@ const mapStateToProps = createStructuredSelector({
   sessionEndpoint: getEndpoint,
 })
 
-export default connect(mapStateToProps, {
-  selectTabIndex,
-  selectNextTab,
-  selectPrevTab,
-  newSession,
-  closeSelectedTab,
-  initState,
-  saveSettings,
-  saveConfig,
-  setTracingSupported,
-  injectHeaders,
-  setConfigString,
-  schemaFetchingError,
-  schemaFetchingSuccess,
-})(Playground)
+export default connect(
+  mapStateToProps,
+  {
+    selectTabIndex,
+    selectNextTab,
+    selectPrevTab,
+    newSession,
+    closeSelectedTab,
+    initState,
+    saveSettings,
+    saveConfig,
+    setTracingSupported,
+    injectHeaders,
+    setConfigString,
+    schemaFetchingError,
+    schemaFetchingSuccess,
+  },
+)(Playground)
 
 const PlaygroundWrapper = styled.div`
   flex: 1;

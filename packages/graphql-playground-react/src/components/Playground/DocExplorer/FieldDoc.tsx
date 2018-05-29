@@ -189,7 +189,7 @@ const scrollToRight = (element: Element, to: number, duration: number) => {
     return
   }
   const difference = to - element.scrollLeft
-  const perTick = difference / duration * 10
+  const perTick = (difference / duration) * 10
   setTimeout(() => {
     element.scrollLeft = element.scrollLeft + perTick
     if (element.scrollLeft === to) {

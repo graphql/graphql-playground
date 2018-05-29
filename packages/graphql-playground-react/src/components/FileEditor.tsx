@@ -33,7 +33,10 @@ const mapStateToProps = createStructuredSelector({
   value: getFile,
 })
 
-export default connect(mapStateToProps, { onChange: editFile })(FileEditor)
+export default connect(
+  mapStateToProps,
+  { onChange: editFile },
+)(FileEditor)
 
 const backgroundColor = theme('mode', {
   light: p => p.theme.colours.darkBlue10,

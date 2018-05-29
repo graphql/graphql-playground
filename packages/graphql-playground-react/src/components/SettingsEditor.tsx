@@ -103,19 +103,25 @@ class SettingsEditorHOC extends React.Component<
   }
 }
 
-export const PlaygroundSettingsEditor = connect(playgroundSettingsSelector, {
-  onSave: setSettingsString,
-  editSettings,
-  saveSettings,
-})(SettingsEditorHOC)
+export const PlaygroundSettingsEditor = connect(
+  playgroundSettingsSelector,
+  {
+    onSave: setSettingsString,
+    editSettings,
+    saveSettings,
+  },
+)(SettingsEditorHOC)
 
 const configSelector = createStructuredSelector({
   value: getConfigString,
 })
 
-export const GraphQLConfigEditor = connect(configSelector, {
-  onChange: setConfigString,
-})(SettingsEditor)
+export const GraphQLConfigEditor = connect(
+  configSelector,
+  {
+    onChange: setConfigString,
+  },
+)(SettingsEditor)
 
 const backgroundColor = theme('mode', {
   light: p => p.theme.colours.darkBlue10,

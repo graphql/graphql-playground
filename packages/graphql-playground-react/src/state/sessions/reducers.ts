@@ -404,11 +404,17 @@ const reducer = handleActions(
     },
     NEW_SESSION: (state, { payload: { reuseHeaders, endpoint } }) => {
       const currentSession = state.sessions.first()
-      let session = makeSession(endpoint || currentSession.endpoint).merge({
+      const newSession: any = {
         query: '',
         isReloadingSchema: currentSession.isReloadingSchema,
         endpointUnreachable: currentSession.endpointUnreachable,
-      })
+      }
+      if (currentSession.endpointUnreachable) {
+        newSession.responses = currentSession.responses
+      }
+      let session = makeSession(endpoint || currentSession.endpoint).merge(
+        newSession,
+      )
       if (reuseHeaders) {
         const selectedSessionId = getSelectedSessionId(state)
         const currentSession = state.sessions.get(selectedSessionId)
@@ -562,9 +568,16 @@ function closeTab(state, sessionId) {
   // if there is only one session, delete it and replace it by a new one
   // and keep the endpoint & headers of the last one
   if (length === 1) {
-    const newSession = makeSession(session.endpoint)
-      .set('headers', session.headers)
-      .set('query', '')
+    const newSessionData: any = {
+      query: '',
+      headers: session.headers,
+      isReloadingSchema: session.isReloadingSchema,
+      endpointUnreachable: session.endpointUnreachable,
+    }
+    if (session.endpointUnreachable) {
+      newSessionData.responses = session.responses
+    }
+    const newSession = makeSession(session.endpoint).merge(newSessionData)
     newState = newState.set('selectedSessionId', newSession.id)
     return newState.setIn(['sessions', newSession.id], newSession)
   }

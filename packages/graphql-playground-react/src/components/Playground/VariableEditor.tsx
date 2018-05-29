@@ -237,14 +237,20 @@ const mapStateToVariablesProps = createStructuredSelector({
   variableToType: getVariableToType,
 })
 
-export const VariableEditorComponent = connect(mapStateToVariablesProps, {
-  onChange: editVariables,
-})(VariableEditor)
+export const VariableEditorComponent = connect(
+  mapStateToVariablesProps,
+  {
+    onChange: editVariables,
+  },
+)(VariableEditor)
 
 const mapStateToHeadersProps = createStructuredSelector({
   value: getHeaders,
 })
 
-export const HeadersEditorComponent = connect(mapStateToHeadersProps, {
-  onChange: editHeaders,
-})(VariableEditor)
+export const HeadersEditorComponent = connect(
+  mapStateToHeadersProps,
+  {
+    onChange: editHeaders,
+  },
+)(VariableEditor)

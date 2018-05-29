@@ -153,7 +153,10 @@ class GraphQLBinApp extends React.Component<Props & ReduxProps, State> {
   }
 }
 
-const ConnectedGraphQLBinApp = connect(null, { injectState })(GraphQLBinApp)
+const ConnectedGraphQLBinApp = connect(
+  null,
+  { injectState },
+)(GraphQLBinApp)
 
 // tslint:disable
 export default class GraphQLBinAppHOC extends React.Component<Props> {

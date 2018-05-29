@@ -149,12 +149,15 @@ const mapStateToProps = createStructuredSelector({
   shareUrl: getShareUrl,
 })
 
-export default connect(mapStateToProps, {
-  toggleShareAllTabs,
-  toggleShareHeaders,
-  toggleShareHistory,
-  share,
-})(Share)
+export default connect(
+  mapStateToProps,
+  {
+    toggleShareAllTabs,
+    toggleShareHeaders,
+    toggleShareHistory,
+    share,
+  },
+)(Share)
 
 const AuthSharingWarning = () => (
   <Message>

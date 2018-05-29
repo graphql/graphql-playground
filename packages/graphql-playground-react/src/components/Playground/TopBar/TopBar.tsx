@@ -147,13 +147,16 @@ const mapStateToProps = createStructuredSelector({
   endpointUnreachable: getEndpointUnreachable,
 })
 
-export default connect(mapStateToProps, {
-  editEndpoint,
-  prettifyQuery,
-  openHistory,
-  share,
-  refetchSchema,
-})(TopBar)
+export default connect(
+  mapStateToProps,
+  {
+    editEndpoint,
+    prettifyQuery,
+    openHistory,
+    share,
+    refetchSchema,
+  },
+)(TopBar)
 
 const buttonColor = theme('mode', {
   light: p => p.theme.colours.darkBlue10,
