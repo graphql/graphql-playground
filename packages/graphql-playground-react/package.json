@@ -47,7 +47,7 @@
     "@types/zen-observable": "^0.5.3",
     "autoprefixer": "7.2.5",
     "babel-cli": "6.26.0",
-    "babel-core": "6.26.0",
+    "babel-core": "6.26.3",
     "babel-loader": "7.1.2",
     "babel-plugin-polished": "1.1.0",
     "babel-plugin-styled-components": "1.5.0",
