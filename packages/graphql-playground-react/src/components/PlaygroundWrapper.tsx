@@ -19,7 +19,7 @@ import { getTheme } from '../state/workspace/reducers'
 import { Session, Tab } from '../state/sessions/reducers'
 import { ApolloLink } from 'apollo-link'
 import { injectTabs } from '../state/workspace/actions'
-import { buildClientSchema, GraphQLSchema } from 'graphql'
+import { buildSchema, buildClientSchema, GraphQLSchema } from 'graphql'
 
 function getParameterByName(name: string, uri?: string): string | null {
   const url = uri || window.location.href
@@ -272,7 +272,13 @@ class PlaygroundWrapper extends React.Component<
     }
 
     if (this.props.schema) {
-      this.setState({ schema: buildClientSchema(this.props.schema) })
+      // in this case it's sdl
+      if (typeof this.props.schema === 'string') {
+        this.setState({ schema: buildSchema(this.props.schema) })
+        // if it's an object, it must be an introspection query
+      } else {
+        this.setState({ schema: buildClientSchema(this.props.schema) })
+      }
     }
   }
 

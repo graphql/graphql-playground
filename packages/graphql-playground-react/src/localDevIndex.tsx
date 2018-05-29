@@ -4,6 +4,7 @@ import MiddlewareApp from './components/MiddlewareApp'
 import './styles/graphiql_dark.css'
 import './styles/graphiql_light.css'
 import './index.css'
+import { exampleSdl } from './fixtures/sdl'
 // import { Tab } from './state/sessions/reducers'
 // import { LinkCreatorProps } from './state/sessions/fetchingSagas'
 // import { ApolloLink } from 'apollo-link'
@@ -26,6 +27,7 @@ if (process.env.NODE_ENV !== 'production') {
         {...options}
         config={config}
         configString={configString}
+        schema={exampleSdl}
         // tabs={tabs}
         // createApolloLink={customLinkCreator}
         // schema={exampleSchema}
