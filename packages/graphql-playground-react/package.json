@@ -56,7 +56,7 @@
     "babel-preset-react": "6.24.1",
     "babel-preset-stage-3": "6.24.1",
     "case-sensitive-paths-webpack-plugin": "2.1.1",
-    "chalk": "2.3.0",
+    "chalk": "2.4.1",
     "connect-history-api-fallback": "1.5.0",
     "cross-spawn": "6.0.4",
     "css-loader": "0.28.9",
