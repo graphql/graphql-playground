@@ -4,7 +4,7 @@ import MiddlewareApp from './components/MiddlewareApp'
 import './styles/graphiql_dark.css'
 import './styles/graphiql_light.css'
 import './index.css'
-import { Tab } from './state/sessions/reducers'
+// import { Tab } from './state/sessions/reducers'
 import { LinkCreatorProps } from './state/sessions/fetchingSagas'
 import { ApolloLink } from 'apollo-link'
 import { HttpLink } from 'apollo-link-http'
@@ -25,7 +25,7 @@ if (process.env.NODE_ENV !== 'production') {
         {...options}
         // config={config}
         // configString={configString}
-        tabs={tabs}
+        // tabs={tabs}
         createApolloLink={customLinkCreator}
       />,
       element,
@@ -78,17 +78,17 @@ if (process.env.NODE_ENV !== 'production') {
 //   },
 // }
 
-const tabs: Tab[] = [
-  {
-    query: '{ users { id } }',
-    endpoint: 'https://eu1.prisma.sh/public-asdf/session65/dev',
-    responses: ['{}'],
-  },
-  {
-    query: '{ users { id } }',
-    endpoint: 'https://eu1.prisma.sh/public-asdf/session65/dev',
-  },
-]
+// const tabs: Tab[] = [
+//   {
+//     query: '{ users { id } }',
+//     endpoint: 'https://eu1.prisma.sh/public-asdf/session65/dev',
+//     responses: ['{}'],
+//   },
+//   {
+//     query: '{ users { id } }',
+//     endpoint: 'https://eu1.prisma.sh/public-asdf/session65/dev',
+//   },
+// ]
 
 const customLinkCreator = (
   session: LinkCreatorProps,

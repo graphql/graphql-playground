@@ -34,6 +34,7 @@ import { getQueryTypes } from '../../components/Playground/util/getQueryTypes'
 import { parse } from 'graphql'
 import { Session } from './reducers'
 import { safely } from '../../utils'
+import * as queryString from 'query-string'
 
 function* setQueryFacts() {
   // debounce by 100 ms
@@ -72,6 +73,28 @@ function* setQueryFacts() {
   } catch (e) {
     const queryTypes = getQueryTypes(null)
     yield put(setQueryTypes(queryTypes))
+  }
+}
+
+function* reflectQueryToUrl({ payload }) {
+  // debounce by 100 ms
+  yield call(delay, 100)
+  if (!location.search.includes('query')) {
+    return
+  }
+
+  const params = queryString.parse(location.search)
+  if (typeof params.query !== 'undefined') {
+    const newSearch = queryString.stringify({
+      ...params,
+      query: payload.query,
+    })
+    const url = `${location.origin}${location.pathname}?${newSearch}`
+    window.history.replaceState(
+      {},
+      document.getElementsByTagName('title')[0].innerHTML,
+      url,
+    )
   }
 }
 
@@ -156,6 +179,7 @@ export const sessionsSagas = [
   takeLatest('GET_QUERY_FACTS', safely(setQueryFacts)),
   takeLatest('SET_OPERATION_NAME', safely(setQueryFacts)),
   takeEvery('EDIT_QUERY', safely(setQueryFacts)),
+  takeEvery('EDIT_QUERY', safely(reflectQueryToUrl)),
   takeEvery('RUN_QUERY_AT_POSITION', safely(runQueryAtPosition)),
   takeLatest('FETCH_SCHEMA', safely(fetchSchemaSaga)),
   takeLatest('REFETCH_SCHEMA', safely(refetchSchemaSaga)),

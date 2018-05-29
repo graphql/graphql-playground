@@ -250,6 +250,22 @@ class PlaygroundWrapper extends React.Component<
     this.setInitialWorkspace()
     if (this.props.tabs) {
       this.props.injectTabs(this.props.tabs)
+    } else {
+      const query = getParameterByName('query')
+      if (query) {
+        const endpoint = getParameterByName('endpoint') || this.state.endpoint
+        this.props.injectTabs([{ query, endpoint }])
+      } else {
+        const tabsString = getParameterByName('tabs')
+        if (tabsString) {
+          try {
+            const tabs = JSON.parse(tabsString)
+            this.props.injectTabs(tabs)
+          } catch (e) {
+            //
+          }
+        }
+      }
     }
   }
 
