@@ -785,9 +785,9 @@ babel-plugin-precompile-charcodes@^1.0.0:
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/babel-plugin-precompile-charcodes/-/babel-plugin-precompile-charcodes-1.1.0.tgz#8ac6bacb196c001146296467700df3e8e6079714"
 
-babel-plugin-styled-components@1.5.0:
-  version "1.5.0"
-  resolved "https://registry.yarnpkg.com/babel-plugin-styled-components/-/babel-plugin-styled-components-1.5.0.tgz#4549f28a19fb05170aa9ee429b4de0eac2d2401d"
+babel-plugin-styled-components@1.5.1:
+  version "1.5.1"
+  resolved "https://registry.yarnpkg.com/babel-plugin-styled-components/-/babel-plugin-styled-components-1.5.1.tgz#31dbeb696d1354d1585e60d66c7905f5e474afcd"
   dependencies:
     "@babel/helper-annotate-as-pure" "^7.0.0-beta.37"
     babel-types "^6.26.0"
