@@ -16,8 +16,9 @@ import { ISettings } from '../types'
 import { createStructuredSelector } from 'reselect'
 import { connect } from 'react-redux'
 import { getTheme } from '../state/workspace/reducers'
-import { Session } from '../state/sessions/reducers'
+import { Session, Tab } from '../state/sessions/reducers'
 import { ApolloLink } from 'apollo-link'
+import { injectTabs } from '../state/workspace/actions'
 
 function getParameterByName(name: string, uri?: string): string | null {
   const url = uri || window.location.href
@@ -50,10 +51,12 @@ export interface PlaygroundWrapperProps {
   configPath?: string
   injectedState?: any
   createApolloLink?: (session: Session) => ApolloLink
+  tabs?: Tab[]
 }
 
 export interface ReduxProps {
   theme: string
+  injectTabs: (tabs: Tab[]) => void
 }
 
 export interface State {
@@ -245,6 +248,9 @@ class PlaygroundWrapper extends React.Component<
       this.removePlaygroundInClass()
     }, 5000)
     this.setInitialWorkspace()
+    if (this.props.tabs) {
+      this.props.injectTabs(this.props.tabs)
+    }
   }
 
   setInitialWorkspace(props = this.props) {
@@ -460,7 +466,10 @@ const mapStateToProps = createStructuredSelector({
   theme: getTheme,
 })
 
-export default connect(mapStateToProps)(PlaygroundWrapper)
+export default connect(
+  mapStateToProps,
+  { injectTabs },
+)(PlaygroundWrapper)
 
 async function find(
   iterable: any[],

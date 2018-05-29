@@ -35,6 +35,14 @@ export interface SessionStateProps {
   headers?: string
 }
 
+export interface Tab {
+  endpoint: string
+  query: string
+  variables?: string
+  responses?: string[]
+  headers?: { [key: string]: string }
+}
+
 // tslint:disable
 export class Session extends Record(getDefaultSession('')) {
   id: string
@@ -140,6 +148,17 @@ export class ResponseRecord extends Record({
 
 function makeSession(endpoint = '') {
   return new Session({ endpoint }).set('id', cuid())
+}
+
+export function sessionFromTab(tab: Tab): Session {
+  return new Session({
+    ...tab,
+    headers: tab.headers ? JSON.stringify(tab.headers, null, 2) : '',
+    responses:
+      tab.responses && tab.responses.length > 0
+        ? List(tab.responses.map(r => new ResponseRecord({ date: r })))
+        : List(),
+  }).set('id', cuid())
 }
 
 export class SessionState extends Record({

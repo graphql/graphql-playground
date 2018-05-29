@@ -1,7 +1,13 @@
 import { Reducer } from 'redux'
 import { combineReducers } from 'redux-immutable'
 import docs, { DocsSession, DocsState } from '../docs/reducers'
-import sessions, { makeSessionState, SessionState } from '../sessions/reducers'
+import sessions, {
+  makeSessionState,
+  SessionState,
+  Tab,
+  sessionFromTab,
+  Session,
+} from '../sessions/reducers'
 import sharing, { SharingState } from '../sharing/reducers'
 import history, { HistoryState } from '../history/reducers'
 import { Map, Record, OrderedMap } from 'immutable'
@@ -40,14 +46,22 @@ export const defaultSettings = {
   'tracing.hideTracingResponse': true,
 }
 
-export const RootState = Record<any>({
+// tslint:disable-next-line:max-classes-per-file
+export class RootState extends Record({
   workspaces: Map({ '': makeWorkspace('') }),
   selectedWorkspace: '',
   settingsString: JSON.stringify(defaultSettings, null, 2),
   stateInjected: false,
   appHistory: new AppHistory(),
   general: new GeneralState(),
-})
+}) {
+  workspaces: Map<string, Workspace>
+  selectedWorkspace: string
+  settingsString: string
+  stateInjected: false
+  appHistory: AppHistory
+  general: GeneralState
+}
 
 const workspaceReducers: Reducer<any> = combineReducers({
   docs,
@@ -87,9 +101,14 @@ export const rootReducer = (state = new RootState(), action) => {
     )
   }
 
+  if (action.type === 'INJECT_TABS') {
+    return makeStateFromTabs(action.payload.tabs)
+  }
+
   if (action.type === 'SELECT_APP_HISTORY_ITEM') {
     return state.set('appHistory', appHistory(state.appHistory, action))
   }
+
   const generalActions = {
     OPEN_HISTORY: true,
     CLOSE_HISTORY: true,
@@ -109,6 +128,25 @@ export const rootReducer = (state = new RootState(), action) => {
   const path = ['workspaces', selectedWorkspaceId]
 
   return state.setIn(path, workspaceReducers(state.getIn(path), action))
+}
+
+function makeStateFromTabs(tabs: Tab[]): RootState {
+  const endpoint = tabs[0].endpoint
+  const tabSessions = OrderedMap(
+    tabs.map(sessionFromTab).reduce(
+      (acc, curr) => {
+        return { ...acc, [curr.id]: curr }
+      },
+      {} as OrderedMap<string, Session>,
+    ),
+  )
+  const selectedSessionId = tabSessions.first()!.id
+  const workspace = makeWorkspace(endpoint)
+    .setIn(['sessions', 'sessions'], tabSessions)
+    .setIn(['sessions', 'selectedSessionId'], selectedSessionId)
+  return new RootState()
+    .setIn(['workspaces', endpoint], workspace)
+    .set('selectedWorkspace', endpoint)
 }
 
 export function makeWorkspace(endpoint) {
