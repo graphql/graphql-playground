@@ -12,7 +12,7 @@
   "devDependencies": {
     "@types/node": "9.4.0",
     "aws-lambda": "0.1.2",
-    "express": "4.16.2",
+    "express": "4.16.3",
     "hapi": "16.6.2",
     "koa": "2.4.1",
     "rimraf": "2.6.2"
