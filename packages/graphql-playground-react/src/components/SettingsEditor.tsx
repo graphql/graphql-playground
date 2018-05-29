@@ -104,19 +104,25 @@ class SettingsEditorHOC extends React.Component<
   }
 }
 
-export const PlaygroundSettingsEditor = connect(playgroundSettingsSelector, {
-  onSave: setSettingsString,
-  editSettings,
-  saveSettings,
-})(SettingsEditorHOC)
+export const PlaygroundSettingsEditor = connect(
+  playgroundSettingsSelector,
+  {
+    onSave: setSettingsString,
+    editSettings,
+    saveSettings,
+  },
+)(SettingsEditorHOC)
 
 const configSelector = createStructuredSelector({
   value: getConfigString,
 })
 
-export const GraphQLConfigEditor = connect(configSelector, {
-  onChange: setConfigString,
-})(SettingsEditor)
+export const GraphQLConfigEditor = connect(
+  configSelector,
+  {
+    onChange: setConfigString,
+  },
+)(SettingsEditor)
 
 const backgroundColor = theme('mode', {
   light: p => p.theme.colours.darkBlue10,
@@ -131,7 +137,7 @@ const Wrapper = styled.div`
   flex: 1 1 0;
 
   .CodeMirror {
-    background: none !important;
+    background: ${p => p.theme.colours.resultBackground};
     .CodeMirror-code {
       color: rgba(255, 255, 255, 0.7);
     }

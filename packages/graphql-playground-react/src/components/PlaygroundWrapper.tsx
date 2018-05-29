@@ -299,6 +299,7 @@ class PlaygroundWrapper extends React.Component<
               colours: theme === 'dark' ? darkColours : lightColours,
               editorColours:
                 theme === 'dark' ? darkEditorColours : lightEditorColours,
+              config: this.props.config!,
             } as any
           }
         >

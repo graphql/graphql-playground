@@ -12,6 +12,8 @@ import { deserializePersistedState } from './deserialize'
 import appHistory, { AppHistory } from '../appHistory/reducers'
 // import { createSelector } from 'reselect'
 
+import { ISettings } from '../../types'
+
 export function getSelectedWorkspaceId(state) {
   return state.get('selectedWorkspace')
 }
@@ -32,8 +34,12 @@ export class Workspace extends Record({
   history: HistoryState
 }
 
-export const defaultSettings = {
+export const defaultSettings: ISettings = {
   'general.betaUpdates': false,
+  'editor.cursorColor': 'rgba(255, 255, 255, 0.4)',
+  'editor.cursorShape': 'line',
+  'editor.fontSize': 14,
+  'editor.fontFamily': `'Source Code Pro', 'Consolas', 'Inconsolata', 'Droid Sans Mono', 'Monaco', monospace`,
   'editor.theme': 'dark',
   'editor.reuseHeaders': true,
   'request.credentials': 'omit',

@@ -84,9 +84,8 @@ const EditorWrapper = styled.div`
 
   .CodeMirror {
     color: rgba(255, 255, 255, 0.3);
-    font-family: 'Source Code Pro', 'Consolas', 'Inconsolata', 'Droid Sans Mono',
-      'Monaco', monospace;
-    font-size: 14px;
+    font-family: ${p => p.theme.settings['editor.fontFamily']};
+    font-size: ${p => `${p.theme.settings['editor.fontSize']}px`};
     height: 100%;
     left: 0;
     position: absolute;
@@ -102,10 +101,25 @@ const EditorWrapper = styled.div`
     border-right: none;
   }
 
+  .CodeMirror span[role='presentation'] {
+    color: ${p => p.theme.colours.text};
+  }
+
   /* CURSOR */
 
   .CodeMirror div.CodeMirror-cursor {
-    border-left: 1px solid rgba(255, 255, 255, 0.4);
+    background: ${p =>
+      p.theme.settings['editor.cursorShape'] === 'block'
+        ? p.theme.settings['editor.cursorColor']
+        : 'transparent'};
+    border-left: ${p =>
+      p.theme.settings['editor.cursorShape'] === 'line'
+        ? `1px solid ${p.theme.settings['editor.cursorColor']}`
+        : 0};
+    border-bottom: ${p =>
+      p.theme.settings['editor.cursorShape'] === 'underline'
+        ? `1px solid ${p.theme.settings['editor.cursorColor']}`
+        : 0};
   }
   /* Shown when moving in bi-directional text */
   .CodeMirror div.CodeMirror-secondarycursor {
@@ -165,7 +179,7 @@ const EditorWrapper = styled.div`
   }
 
   div.CodeMirror span.CodeMirror-matchingbracket {
-    color: rgba(255, 255, 255, 0.4);
+    /* color: rgba(255, 255, 255, 0.4); */
     text-decoration: underline;
   }
 
@@ -238,28 +252,6 @@ const EditorWrapper = styled.div`
     }
   }
 
-  div.CodeMirror-lint-tooltip {
-    background-color: white;
-    border-radius: 2px;
-    border: 0;
-    color: #141823;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.45);
-    font-family: system, -apple-system, 'San Francisco', '.SFNSDisplay-Regular',
-      'Segoe UI', Segoe, 'Segoe WP', 'Helvetica Neue', helvetica,
-      'Lucida Grande', arial, sans-serif;
-    font-size: 13px;
-    line-height: 16px;
-    opacity: 0;
-    padding: 6px 10px;
-    -webkit-transition: opacity 0.15s;
-    transition: opacity 0.15s;
-  }
-
-  div.CodeMirror-lint-message-error,
-  div.CodeMirror-lint-message-warning {
-    padding-left: 23px;
-  }
-
   .CodeMirror pre {
     padding: 0 4px; /* Horizontal padding of content */
   }
@@ -281,8 +273,8 @@ const EditorWrapper = styled.div`
   .CodeMirror-linenumber {
     font-family: Open Sans, sans-serif;
     font-weight: 600;
-    font-size: 12px;
-    color: rgba(255, 255, 255, 0.2);
+    font-size: ${p => `${p.theme.settings['editor.fontSize'] - 2}px`};
+    color: ${p => p.theme.colours.textInactive};
     min-width: 20px;
     padding: 0 3px 0 5px;
     text-align: right;
@@ -349,7 +341,7 @@ const EditorWrapper = styled.div`
     background: white;
     overflow: hidden;
     position: relative;
-    line-height: 24px;
+    line-height: 1.6;
   }
 
   .CodeMirror-scroll {
@@ -530,10 +522,10 @@ const EditorWrapper = styled.div`
   }
 
   .CodeMirror-selected {
-    background: rgba(255, 255, 255, 0.1);
+    background: ${p => p.theme.editorColours.selection};
   }
   .CodeMirror-focused .CodeMirror-selected {
-    background: rgba(255, 255, 255, 0.1);
+    background: ${p => p.theme.editorColours.selection};
   }
   .CodeMirror-crosshair {
     cursor: crosshair;
@@ -541,17 +533,17 @@ const EditorWrapper = styled.div`
   .CodeMirror-line::-moz-selection,
   .CodeMirror-line > span::-moz-selection,
   .CodeMirror-line > span > span::-moz-selection {
-    background: rgba(255, 255, 255, 0.1);
+    background: ${p => p.theme.editorColours.selection};
   }
   .CodeMirror-line::selection,
   .CodeMirror-line > span::selection,
   .CodeMirror-line > span > span::selection {
-    background: rgba(255, 255, 255, 0.1);
+    background: ${p => p.theme.editorColours.selection};
   }
   .CodeMirror-line::-moz-selection,
   .CodeMirror-line > span::-moz-selection,
   .CodeMirror-line > span > span::-moz-selection {
-    background: rgba(255, 255, 255, 0.1);
+    background: ${p => p.theme.editorColours.selection};
   }
 
   .cm-searching {
@@ -638,8 +630,17 @@ const EditorWrapper = styled.div`
     width: 16px;
   }
 
+  .CodeMirror-jump-token {
+    text-decoration: underline;
+  }
+`
+
+// Styling of portal for hints
+// .CodeMirror-info info for types breaks stack trace
+// tslint:disable-next-line
+injectGlobal`
   .CodeMirror-lint-tooltip {
-    background-color: infobackground;
+    background-color: white;
     border-radius: 4px 4px 4px 4px;
     border: 1px solid black;
     color: infotext;
@@ -655,8 +656,9 @@ const EditorWrapper = styled.div`
     z-index: 100;
   }
 
-  .CodeMirror-jump-token {
-    text-decoration: underline;
+  .CodeMirror-lint-message-error,
+  .CodeMirror-lint-message-warning {
+    padding-left: 23px;
   }
 
   .CodeMirror-lint-mark-error,
@@ -709,11 +711,7 @@ const EditorWrapper = styled.div`
     width: 100%;
     height: 100%;
   }
-`
 
-// Styling of portal for hints
-// tslint:disable-next-line
-injectGlobal`
   .CodeMirror-hints {
     background: white;
     box-shadow: 0 1px 4px rgba(0, 0, 0, 0.15);

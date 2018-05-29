@@ -196,22 +196,6 @@ class GraphQLEditor extends React.PureComponent<
             right: 38px;
             z-index: 2;
           }
-          .intro {
-            @p: .absolute, .tlCenter, .top50, .left50, .white20, .f16, .tc;
-            font-family: 'Source Code Pro', 'Consolas', 'Inconsolata',
-              'Droid Sans Mono', 'Monaco', monospace;
-            letter-spacing: 0.6px;
-            width: 235px;
-          }
-
-          .listening {
-            @p: .f16, .white40, .absolute, .bottom0, .bgDarkBlue;
-            font-family: 'Source Code Pro', 'Consolas', 'Inconsolata',
-              'Droid Sans Mono', 'Monaco', monospace;
-            letter-spacing: 0.6px;
-            padding-left: 24px;
-            padding-bottom: 60px;
-          }
 
           .onboarding-hint {
             @p: .absolute, .br2, .z999;
@@ -316,12 +300,10 @@ class GraphQLEditor extends React.PureComponent<
               <Results setRef={this.setResultComponent} />
               {!this.props.queryRunning &&
                 (!this.props.responses || this.props.responses.size === 0) && (
-                  <div className="intro">
-                    Hit the Play Button to get a response here
-                  </div>
+                  <Intro>Hit the Play Button to get a response here</Intro>
                 )}
               {this.props.subscriptionActive && (
-                <div className="listening">Listening &hellip;</div>
+                <Listening>Listening &hellip;</Listening>
               )}
               <ResponseTracking
                 isOpen={this.props.responseTracingOpen}
@@ -668,6 +650,7 @@ const ResultWrap = styled.div`
   flex: 1;
   position: relative;
   border-left: none;
+  background: ${p => p.theme.colours.resultBackground};
 `
 
 const DragBar = styled.div`
@@ -706,7 +689,6 @@ interface TitleProps {
 
 const BottomDrawerTitle = styled.div`
   background: #0b1924;
-  color: rgba(255, 255, 255, 0.3);
   text-transform: uppercase;
   font-weight: 600;
   letter-spacing: 0.53px;
@@ -725,14 +707,15 @@ const VariableEditor = styled(BottomDrawer)`
 `
 
 const VariableEditorTitle = withProps<TitleProps>()(styled(BottomDrawerTitle))`
-  cursor: ${props => (props.isOpen ? 'row-resize' : 'n-resize')};
+  cursor: ${p => (p.isOpen ? 'row-resize' : 'n-resize')};
   background: ${p => p.theme.colours.leftDrawerBackground};
 `
 
 const VariableEditorSubtitle = withProps<TitleProps>()(styled.span)`
   margin-right: 10px;
   cursor: pointer;
-  color: ${props => (props.isOpen ? 'rgba(255, 255, 255, 0.6)' : 'inherit')};
+  color: ${p =>
+    p.isOpen ? p.theme.colours.text : p.theme.colours.textInactive};
 `
 
 const ResponseTracking = styled(BottomDrawer)`
@@ -745,6 +728,7 @@ const ResponseTrackingTitle = withProps<TitleProps>()(
   text-align: right;
   background: ${p => p.theme.colours.rightDrawerBackground};
   cursor: ${props => (props.isOpen ? 's-resize' : 'n-resize')};
+  color: ${p => p.theme.colours.textInactive};
 `
 
 interface QueryProps {
@@ -757,4 +741,29 @@ const QueryWrap = withProps<QueryProps>()(styled.div)`
   flex-direction: column;
   flex: ${props => props.flex} 1 0%;
   border-top: 8px solid ${props => props.theme.colours.resultBackground};
+`
+
+const Intro = styled.div`
+  width: 235px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: ${p => p.theme.colours.textInactive};
+  font-size: ${p => p.theme.sizes.small16};
+  font-family: 'Source Code Pro', 'Consolas', 'Inconsolata', 'Droid Sans Mono',
+    'Monaco', monospace;
+  text-align: center;
+  letter-spacing: 0.6px;
+`
+
+const Listening = styled.div`
+  position: absolute;
+  bottom: 0;
+  background: ${p => p.theme.colours.resultBackground};
+  font-size: ${p => p.theme.sizes.small16};
+  font-family: ${p => p.theme.settings['editor.fontFamily']};
+  letter-spacing: 0.6px;
+  padding-left: 24px;
+  padding-bottom: 60px;
 `

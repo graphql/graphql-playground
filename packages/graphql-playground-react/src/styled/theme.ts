@@ -1,3 +1,6 @@
+import { ISettings } from '../types'
+import { defaultSettings } from '../state/workspace/reducers'
+
 export interface Colours {
   green: string
   darkBlue: string
@@ -28,6 +31,8 @@ export interface Colours {
   resultBackground: string
   leftDrawerBackground: string
   rightDrawerBackground: string
+  text: string
+  textInactive: string
 }
 
 export const darkColours: Colours = {
@@ -61,6 +66,8 @@ export const darkColours: Colours = {
   resultBackground: 'rgb(23, 43, 58)',
   leftDrawerBackground: '#0b1924',
   rightDrawerBackground: '#0b1924',
+  text: 'rgba(255,255,255,0.6)',
+  textInactive: '#555e66',
 }
 
 export const lightColours: Colours = {
@@ -94,6 +101,8 @@ export const lightColours: Colours = {
   resultBackground: '#eeeff0',
   leftDrawerBackground: '#e9eaea',
   rightDrawerBackground: '#e5e7e7',
+  text: 'rgba(0,0,0,.7)',
+  textInactive: 'rgba(0,0,0,.3)',
 }
 
 export interface EditorColours {
@@ -112,6 +121,7 @@ export interface EditorColours {
   meta: string
   atom: string
   ws: string
+  selection: string
 }
 
 export const darkEditorColours: EditorColours = {
@@ -130,12 +140,13 @@ export const darkEditorColours: EditorColours = {
   meta: '#b33086',
   atom: 'rgb(249, 233, 34)',
   ws: 'rgba(255, 255, 255, 0.4)',
+  selection: 'rgba(255, 255, 255, 0.1)',
 }
 
 export const lightEditorColours: EditorColours = {
   property: '#328c8c', //
   comment: 'rgba(0, 0, 0, 0.3)', //
-  punctuation: 'rgba(23, 42, 58, 0.8)', //
+  punctuation: 'rgba(23,42,58,.8)', //
   keyword: '#366b6b', //
   def: 'rgb(56, 189, 193)', //
   qualifier: '#1c92a9', //
@@ -148,6 +159,7 @@ export const lightEditorColours: EditorColours = {
   meta: '#b33086', //
   atom: 'rgb(245, 160, 0)', //
   ws: 'rgba(23, 42, 58, 0.8)', //
+  selection: '#d1e9fd',
 }
 
 export interface Sizes {
@@ -196,6 +208,7 @@ export interface ThemeInterface {
   sizes: Sizes
   shorthands: Shorthands
   editorColours: EditorColours
+  settings: ISettings
 }
 
 export const theme: ThemeInterface = {
@@ -204,4 +217,5 @@ export const theme: ThemeInterface = {
   sizes,
   shorthands,
   editorColours: darkEditorColours,
+  settings: defaultSettings,
 }
