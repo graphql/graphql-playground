@@ -53,6 +53,20 @@ You can easily share your Playgrounds with others by clicking on the "Share" but
 
 > You can also find the announcement blog post [here](https://blog.graph.cool/introducing-graphql-playground-f1e0a018f05d).
 
+## Settings
+
+In the top right corner of the Playground window you can click on the settings icon.
+These are the settings currently available:
+```js
+{
+  "general.betaUpdates": false,
+  "editor.theme": "dark",
+  "editor.reuseHeaders": true,
+  "request.credentials": "omit",
+  "tracing.hideTracingResponse": true
+}
+```
+
 ## Usage
 
 ### Properties
