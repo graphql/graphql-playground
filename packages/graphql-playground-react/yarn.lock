@@ -41,9 +41,9 @@
   version "4.3.9"
   resolved "https://registry.yarnpkg.com/@types/boom/-/boom-4.3.9.tgz#6f9adc1074e81cbf01b8d1ed5878aa1ee89bb22d"
 
-"@types/catbox@*":
-  version "7.1.5"
-  resolved "https://registry.yarnpkg.com/@types/catbox/-/catbox-7.1.5.tgz#d14e4e132a628da850a042aec1b37f088f89ecae"
+"@types/catbox@^7":
+  version "7.1.6"
+  resolved "https://registry.yarnpkg.com/@types/catbox/-/catbox-7.1.6.tgz#be44e3cf3137b4c7997998ec60628709d5db904a"
   dependencies:
     "@types/boom" "^4"
 
@@ -88,12 +88,12 @@
   version "0.11.7"
   resolved "https://registry.yarnpkg.com/@types/graphql/-/graphql-0.11.7.tgz#da39a2f7c74e793e32e2bb7b3b68da1691532dd5"
 
-"@types/hapi@16.1.12":
-  version "16.1.12"
-  resolved "https://registry.yarnpkg.com/@types/hapi/-/hapi-16.1.12.tgz#d51a5834321c71fe9bbd4a51800e83798e9a9f9c"
+"@types/hapi@16.1.14":
+  version "16.1.14"
+  resolved "https://registry.yarnpkg.com/@types/hapi/-/hapi-16.1.14.tgz#cdda84296fc08c02526301f88964fa74ab9090a6"
   dependencies:
     "@types/boom" "^4"
-    "@types/catbox" "*"
+    "@types/catbox" "^7"
     "@types/events" "*"
     "@types/joi" "*"
     "@types/mimos" "*"
