@@ -87,6 +87,7 @@ export interface Props {
   configPath?: string
   createApolloLink?: (session: Session) => ApolloLink
   workspaceName?: string
+  schema?: GraphQLSchema
 }
 
 export interface ReduxProps {
@@ -137,6 +138,9 @@ export class Playground extends React.PureComponent<Props & ReduxProps, State> {
   // debounce as we call this on each http header or endpoint edit
   getSchema = debounce(
     async (props: Props & ReduxProps = this.props) => {
+      if (props.schema) {
+        return
+      }
       if (this.mounted && this.state.schema) {
         this.setState({ schema: undefined })
       }
@@ -166,7 +170,7 @@ export class Playground extends React.PureComponent<Props & ReduxProps, State> {
     super(props)
 
     this.state = {
-      schema: undefined,
+      schema: props.schema,
     }
     ;(global as any).p = this
 
@@ -228,6 +232,9 @@ export class Playground extends React.PureComponent<Props & ReduxProps, State> {
     }
     if (nextProps.configString !== this.props.configString) {
       this.props.setConfigString(nextProps.configString)
+    }
+    if (nextProps.schema !== this.props.schema) {
+      this.setState({ schema: nextProps.schema })
     }
   }
 

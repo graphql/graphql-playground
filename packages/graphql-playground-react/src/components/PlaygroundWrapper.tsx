@@ -19,6 +19,7 @@ import { getTheme } from '../state/workspace/reducers'
 import { Session, Tab } from '../state/sessions/reducers'
 import { ApolloLink } from 'apollo-link'
 import { injectTabs } from '../state/workspace/actions'
+import { buildClientSchema, GraphQLSchema } from 'graphql'
 
 function getParameterByName(name: string, uri?: string): string | null {
   const url = uri || window.location.href
@@ -52,6 +53,7 @@ export interface PlaygroundWrapperProps {
   injectedState?: any
   createApolloLink?: (session: Session) => ApolloLink
   tabs?: Tab[]
+  schema?: { __schema: any } // introspection result
 }
 
 export interface ReduxProps {
@@ -70,6 +72,7 @@ export interface State {
   activeProjectName?: string
   activeEnv?: string
   headers?: any
+  schema?: GraphQLSchema
 }
 
 class PlaygroundWrapper extends React.Component<
@@ -267,6 +270,10 @@ class PlaygroundWrapper extends React.Component<
         }
       }
     }
+
+    if (this.props.schema) {
+      this.setState({ schema: buildClientSchema(this.props.schema) })
+    }
   }
 
   setInitialWorkspace(props = this.props) {
@@ -350,6 +357,7 @@ class PlaygroundWrapper extends React.Component<
                 configPath={this.props.configPath}
                 workspaceName={this.state.activeProjectName}
                 createApolloLink={this.props.createApolloLink}
+                schema={this.state.schema}
               />
             </App>
           </OldThemeProvider>
