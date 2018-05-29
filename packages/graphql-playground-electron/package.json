@@ -3,8 +3,7 @@
   "productName": "GraphQL Playground",
   "homepage": "https://github.com/graphcool/graphql-playground",
   "repository": "graphcool/graphql-playground",
-  "description":
-    "GraphQL IDE for better development workflows (GraphQL Subscriptions, interactive docs & collaboration)",
+  "description": "GraphQL IDE for better development workflows (GraphQL Subscriptions, interactive docs & collaboration)",
   "version": "1.5.10",
   "author": {
     "name": "Graphcool",
@@ -23,7 +22,11 @@
     },
     "linux": {
       "category": "Development",
-      "target": ["AppImage", "snap", "deb"]
+      "target": [
+        "AppImage",
+        "snap",
+        "deb"
+      ]
     },
     "nsis": {
       "oneClick": false,
@@ -32,7 +35,9 @@
       "allowToChangeInstallationDirectory": true,
       "runAfterFinish": false
     },
-    "files": ["lib/**/!(*.map)"],
+    "files": [
+      "lib/**/!(*.map)"
+    ],
     "directories": {
       "output": "build-electron"
     },
@@ -43,33 +48,28 @@
     },
     "protocols": {
       "name": "graphql-playground-protocol",
-      "schemes": ["graphql-playground"]
+      "schemes": [
+        "graphql-playground"
+      ]
     }
   },
   "scripts": {
     "build:ts": "rimraf lib && tsc",
-    "build:webpack":
-      "rimraf ./dist && NODE_ENV=production GRAPHQL_ENDPOINT=$BACKEND_ADDR/system webpack --config webpack.config.build.js && cp -r static/* dist",
-    "build":
-      "npm run build:ts && npm run build:webpack && cp -r dist lib && rimraf ./build:electron",
+    "build:webpack": "rimraf ./dist && NODE_ENV=production GRAPHQL_ENDPOINT=$BACKEND_ADDR/system webpack --config webpack.config.build.js && cp -r static/* dist",
+    "build": "npm run build:ts && npm run build:webpack && cp -r dist lib && rimraf ./build:electron",
     "release": "npm run build && electron-builder -lmw",
     "release:mac": "npm run build && electron-builder -m",
     "release:win": "npm run build && electron-builder -w",
     "release:linux": "npm run build && electron-builder -l",
-    "library":
-      "rimraf .happypack && NODE_ENV=production webpack --config webpack.library.js -p",
+    "library": "rimraf .happypack && NODE_ENV=production webpack --config webpack.library.js -p",
     "lint": "tslint \"src/**/*.ts{,x}\" && lint-staged",
-    "start":
-      "yarn build:ts && concurrently \"yarn start:react\" \"wait-on http://localhost:4040/ && yarn start:electron\"",
-    "start:react":
-      "webpack-dev-server --hot --profile --history-api-fallback --host 0.0.0.0 --port 4040",
+    "start": "yarn build:ts && concurrently \"yarn start:react\" \"wait-on http://localhost:4040/ && yarn start:electron\"",
+    "start:react": "webpack-dev-server --hot --profile --history-api-fallback --host 0.0.0.0 --port 4040",
     "start:electron": "electron lib/main",
-    "stats":
-      "NODE_ENV=production webpack --config webpack.library.js  --profile --json > stats.json",
+    "stats": "NODE_ENV=production webpack --config webpack.library.js  --profile --json > stats.json",
     "test": "npm run lint",
     "precommit": "lint-staged",
-    "prettier":
-      "prettier --single-quote --no-semi --trailing-comma all --write '*.{js,ts,tsx}' 'src/**/*.{js,ts,tsx}'"
+    "prettier": "prettier --single-quote --no-semi --trailing-comma all --write '*.{js,ts,tsx}' 'src/**/*.{js,ts,tsx}'"
   },
   "lint-staged": {
     "*.{ts,tsx}": [
@@ -78,7 +78,9 @@
       "git add"
     ]
   },
-  "pre-push": ["test-quick"],
+  "pre-push": [
+    "test-quick"
+  ],
   "dependencies": {
     "@types/ms": "^0.7.30",
     "classnames": "^2.2.5",
@@ -95,6 +97,7 @@
     "graphql-config": "^2.0.1",
     "graphql-config-extension-graphcool": "1.0.8",
     "graphql-config-extension-prisma": "^0.0.12",
+    "graphql-playground-html": "^1.5.6",
     "graphql-playground-react": "1.6.8",
     "immutable": "4.0.0-rc.9",
     "js-yaml": "^3.11.0",
@@ -147,8 +150,7 @@
     "lint-staged": "7.1.2",
     "node-noop": "1.0.0",
     "polished": "1.9.2",
-    "postcss-inherit":
-      "git+https://github.com/timsuchanek/postcss-inherit#build3",
+    "postcss-inherit": "git+https://github.com/timsuchanek/postcss-inherit#build3",
     "postcss-loader": "0.9.1",
     "postcss-simple-vars": "3.1.0",
     "prettier": "1.13.0",
