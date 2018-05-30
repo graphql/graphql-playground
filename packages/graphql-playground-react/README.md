@@ -7,9 +7,9 @@ GraphQL IDE for better development workflows (GraphQL Subscriptions, interactive
 
 ## Features
 
-* ✨ Context-aware autocompletion & error highlighting
-* 📚 Interactive, multi-column docs (keyboard support)
-* ⚡️ Supports real-time GraphQL Subscriptions
+- ✨ Context-aware autocompletion & error highlighting
+- 📚 Interactive, multi-column docs (keyboard support)
+- ⚡️ Supports real-time GraphQL Subscriptions
 
 ## FAQ
 
@@ -17,12 +17,12 @@ GraphQL IDE for better development workflows (GraphQL Subscriptions, interactive
 
 GraphQL Playground uses components of GraphiQL under the hood but is meant as a more powerful GraphQL IDE enabling better (local) development workflows. Compared to GraphiQL, the GraphQL Playground ships with the following additional features:
 
-* Interactive, multi-column schema documentation
-* Automatic schema reloading
-* Support for GraphQL Subscriptions
-* Query history
-* Configuration of HTTP headers
-* Tabs
+- Interactive, multi-column schema documentation
+- Automatic schema reloading
+- Support for GraphQL Subscriptions
+- Query history
+- Configuration of HTTP headers
+- Tabs
 
 See the following question for more additonal features.
 
@@ -30,8 +30,8 @@ See the following question for more additonal features.
 
 The desktop app is the same as the web version but includes these additional features:
 
-* Support for [graphql-config](https://github.com/graphcool/graphql-config) enabling features like multi-environment setups.
-* Double click on `*.graphql` files.
+- Support for [graphql-config](https://github.com/graphcool/graphql-config) enabling features like multi-environment setups.
+- Double click on `*.graphql` files.
 
 ### How does GraphQL Bin work?
 
@@ -47,10 +47,10 @@ You can easily share your Playgrounds with others by clicking on the "Share" but
 
 All interfaces, the React component `<Playground />` and all middlewares expose the same set of options:
 
-* `properties`
-  * `endpoint` [`string`] - the GraphQL endpoint url.
-  * `subscriptionEndpoint` [`string`] - the GraphQL subscriptions endpoint url.
-  * `setTitle` [`boolean`] - reflect the current endpoint in the page title
+- `properties`
+  - `endpoint` [`string`] - the GraphQL endpoint url.
+  - `subscriptionEndpoint` [`string`] - the GraphQL subscriptions endpoint url.
+  - `setTitle` [`boolean`] - reflect the current endpoint in the page title
 
 ### As React Component
 
@@ -65,9 +65,8 @@ yarn add graphql-playground
 GraphQL Playground provides a React component responsible for rendering the UI and Session management.
 There are **3 dependencies** needed in order to run the `graphql-playground` React component.
 
-1. _Open Sans_ and _Source Code Pro_ fonts
-2. Including `graphql-playground/playground.css`
-3. Rendering the `<Playground />` component
+1.  _Open Sans_ and _Source Code Pro_ fonts
+2.  Rendering the `<Playground />` component
 
 The GraphQL Playground requires **React 16**.
 
@@ -83,7 +82,6 @@ Including stylesheet and the component (`2., 3.`)
 import React from 'react'
 import ReactDOM from 'react-dom'
 import Playground from 'graphql-playground'
-import 'graphql-playground/playground.css'
 
 ReactDOM.render(
   <Playground endpoint="https://api.graph.cool/simple/v1/swapi" />,
@@ -107,13 +105,13 @@ yarn add graphql-playground-middleware-lambda
 
 We have a full example for each of the frameworks below:
 
-* **Express:** See [packages/graphql-playground-middleware-express/examples/basic](https://github.com/graphcool/graphql-playground/tree/master/packages/graphql-playground-middleware-express/examples/basic)
+- **Express:** See [packages/graphql-playground-middleware-express/examples/basic](https://github.com/graphcool/graphql-playground/tree/master/packages/graphql-playground-middleware-express/examples/basic)
 
-* **Hapi:** See [packages/graphql-playground-middleware/examples/hapi](https://github.com/graphcool/graphql-playground/tree/master/packages/graphql-playground-middleware/examples/hapi)
+- **Hapi:** See [packages/graphql-playground-middleware/examples/hapi](https://github.com/graphcool/graphql-playground/tree/master/packages/graphql-playground-middleware/examples/hapi)
 
-* **Koa:** See [packages/graphql-playground-middleware/examples/koa](https://github.com/graphcool/graphql-playground/tree/master/packages/graphql-playground-middleware/examples/koa)
+- **Koa:** See [packages/graphql-playground-middleware/examples/koa](https://github.com/graphcool/graphql-playground/tree/master/packages/graphql-playground-middleware/examples/koa)
 
-* **Lambda (as serverless handler):** See [serverless-graphql-apollo](https://github.com/serverless/serverless-graphql-apollo) or a quick example below.
+- **Lambda (as serverless handler):** See [serverless-graphql-apollo](https://github.com/serverless/serverless-graphql-apollo) or a quick example below.
 
 ### As serverless handler
 

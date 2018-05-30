@@ -1,9 +1,10 @@
 {
   "name": "graphql-playground-react",
-  "version": "1.6.8",
+  "version": "1.7.0-beta.1",
   "main": "./lib/lib.js",
   "typings": "./lib/lib.d.ts",
-  "description": "GraphQL IDE for better development workflows (GraphQL Subscriptions, interactive docs & collaboration).",
+  "description":
+    "GraphQL IDE for better development workflows (GraphQL Subscriptions, interactive docs & collaboration).",
   "contributors": [
     "Tim Suchanek <tim@graph.cool>",
     "Johannes Schickling <johannes@graph.cool>"
@@ -18,23 +19,20 @@
     "start:analyze": "ANALYZE_BUNDLE=true node scripts/start.js",
     "start:graphql-bin": "ACTIVE_APP=graphqlbin node scripts/start.js",
     "prepublishOnly": "yarn build",
-    "copy-styles": "cat src/styles/*.css > playground.css",
-    "build": "rimraf dist build dist && yarn build-app && yarn build-package && yarn copy-styles",
+    "build": "rimraf dist build dist && yarn build-app && yarn build-package",
     "tsc": "tsc -p tsconfig.build.json",
-    "build-package": "rimraf lib build/dist && npm run tsc && babel lib -d lib && cp -r ./src/assets/ ./lib/assets/ && cd lib && rimraf *.jsx;",
+    "build-package":
+      "rimraf lib build/dist && npm run tsc && babel lib -d lib && cp -r ./src/assets/ ./lib/assets/ && cd lib && rimraf *.jsx;",
     "build-app": "node scripts/build.js",
     "test": "node scripts/test.js --env=jsdom",
     "bump": "npm version patch --no-git-tag-version && git add package.json",
     "graphql-faker": "graphql-faker ./tests/schema.faker.graphql",
     "lint": "tslint \"src/**/*.ts{,x}\"",
     "precommit": "lint-staged",
-    "prettier": "prettier --single-quote --no-semi --trailing-comma all --write *.{ts,tsx} 'src/**/*.{ts,tsx}'"
+    "prettier":
+      "prettier --single-quote --no-semi --trailing-comma all --write *.{ts,tsx} 'src/**/*.{ts,tsx}'"
   },
-  "files": [
-    "build",
-    "lib",
-    "playground.css"
-  ],
+  "files": ["build", "lib", "playground.css"],
   "devDependencies": {
     "@types/deasync": "0.1.0",
     "@types/jest": "22.2.3",
@@ -104,9 +102,7 @@
     "why-did-you-update": "0.1.1"
   },
   "babel": {
-    "plugins": [
-      "styled-jsx-postcss/babel"
-    ]
+    "plugins": ["styled-jsx-postcss/babel"]
   },
   "dependencies": {
     "apollo-link": "^1.0.7",
@@ -177,12 +173,8 @@
     "gitDir": "../../"
   },
   "jest": {
-    "collectCoverageFrom": [
-      "src/**/*.{ts,tsx}"
-    ],
-    "setupFiles": [
-      "<rootDir>/config/polyfills.js"
-    ],
+    "collectCoverageFrom": ["src/**/*.{ts,tsx}"],
+    "setupFiles": ["<rootDir>/config/polyfills.js"],
     "testPathIgnorePatterns": [
       "<rootDir>[/\\\\](build|docs|node_modules)[/\\\\]"
     ],
@@ -193,17 +185,11 @@
       "^.+\\.tsx?$": "<rootDir>/config/jest/typescriptTransform.js",
       "^(?!.*\\.(css|json)$)": "<rootDir>/config/jest/fileTransform.js"
     },
-    "transformIgnorePatterns": [
-      "[/\\\\]node_modules[/\\\\].+\\.(js|jsx)$"
-    ],
+    "transformIgnorePatterns": ["[/\\\\]node_modules[/\\\\].+\\.(js|jsx)$"],
     "moduleNameMapper": {
       "^react-native$": "react-native-web"
     },
-    "moduleFileExtensions": [
-      "ts",
-      "tsx",
-      "js"
-    ],
+    "moduleFileExtensions": ["ts", "tsx", "js"],
     "testRegex": "(/__tests__/.*|\\.(test|spec))\\.(ts|tsx|js)$"
   }
 }
