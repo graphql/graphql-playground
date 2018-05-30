@@ -21,7 +21,7 @@ import { getActiveEndpoints } from './util'
 import { ISettings } from '../types'
 import { createStructuredSelector } from 'reselect'
 import { connect } from 'react-redux'
-import { getTheme } from '../state/workspace/reducers'
+import { getTheme, getSettings } from '../state/workspace/reducers'
 import { Session, Tab } from '../state/sessions/reducers'
 import { ApolloLink } from 'apollo-link'
 import { injectTabs } from '../state/workspace/actions'
@@ -337,7 +337,7 @@ class PlaygroundWrapper extends React.Component<
               colours: theme === 'dark' ? darkColours : lightColours,
               editorColours:
                 theme === 'dark' ? darkEditorColours : lightEditorColours,
-              config: this.props.config!,
+              settings: this.props.settings,
             } as any
           }
         >
@@ -511,6 +511,7 @@ class PlaygroundWrapper extends React.Component<
 
 const mapStateToProps = createStructuredSelector({
   theme: getTheme,
+  settings: getSettings,
 })
 
 export default connect(
