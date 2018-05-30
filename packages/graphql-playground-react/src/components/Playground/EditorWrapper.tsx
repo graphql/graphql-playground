@@ -638,7 +638,7 @@ const EditorWrapper = styled.div`
 // .CodeMirror-info info for types breaks stack trace
 // tslint:disable-next-line
 injectGlobal`
-  .CodeMirror-lint-tooltip {
+  .CodeMirror-lint-tooltip, .CodeMirror-info {
     background-color: white;
     border-radius: 4px 4px 4px 4px;
     border: 1px solid black;
