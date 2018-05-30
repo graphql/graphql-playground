@@ -3,25 +3,41 @@ import { GraphQLConfigData } from 'graphql-config'
 
 export interface MiddlewareOptions {
   endpoint?: string
-  subscriptionsEndpoint?: string
-  htmlTitle?: string
+  subscriptionEndpoint?: string
   workspaceName?: string
   env?: any
   config?: GraphQLConfigData
   settings?: ISettings
+  schema?: IntrospectionResult
+  tabs?: Tab[]
 }
 
 export type Theme = 'dark' | 'light'
 export interface ISettings {
-  ['general.betaUpdates']: boolean
-  ['editor.theme']: Theme
-  ['editor.reuseHeaders']: boolean
-  ['tracing.hideTracingResponse']: boolean
+  'general.betaUpdates': boolean
+  'editor.theme': Theme
+  'editor.reuseHeaders': boolean
+  'tracing.hideTracingResponse': boolean
+  'editor.fontSize': number
+  'editor.fontFamily': string
+  'request.credentials': string
+}
+
+export interface IntrospectionResult {
+  __schema: any
 }
 
 export interface RenderPageOptions extends MiddlewareOptions {
   version: string
   env?: any
+}
+
+export interface Tab {
+  endpoint: string
+  query: string
+  variables?: string
+  responses?: string[]
+  headers?: { [key: string]: string }
 }
 
 const loading = getLoadingMarkup()
@@ -43,11 +59,9 @@ export function renderPlaygroundPage(options: RenderPageOptions) {
     ...options,
     canSaveConfig: false,
   }
-  if (options.htmlTitle) {
-    extendedOptions.title = options.htmlTitle
-  }
-  if (options.subscriptionsEndpoint) {
-    extendedOptions.subscriptionEndpoint = options.subscriptionsEndpoint
+  // for compatibility
+  if ((options as any).subscriptionsEndpoint) {
+    extendedOptions.subscriptionEndpoint = (options as any).subscriptionsEndpoint
   }
   if (options.config) {
     extendedOptions.configString = JSON.stringify(options.config, null, 2)

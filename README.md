@@ -51,19 +51,23 @@ You can easily share your Playgrounds with others by clicking on the "Share" but
  <img src="https://camo.githubusercontent.com/daf8c64dbde3097fdbe782c0645552550d530a73/68747470733a2f2f696d6775722e636f6d2f48316e36346c4c2e706e67" alt="" data-canonical-src="https://imgur.com/H1n64lL.png" style="max-width:100%;">
 </a>
 
-> You can also find the announcement blog post [here](https://blog.graph.cool/introducing-graphql-playground-f1e0a018f05d).
+> You can also find the announcement blog post [here(https://blog.graph.cool/introducing-graphql-playground-f1e0a018f05d).
 
 ## Settings
 
 In the top right corner of the Playground window you can click on the settings icon.
 These are the settings currently available:
+
 ```js
 {
-  "general.betaUpdates": false,
-  "editor.theme": "dark",
-  "editor.reuseHeaders": true,
-  "request.credentials": "omit",
-  "tracing.hideTracingResponse": true
+  'general.betaUpdates': false,
+  'editor.cursorShape': 'line', // possible values: 'line', 'block', 'underline'
+  'editor.fontSize': 14,
+  'editor.fontFamily': `'Source Code Pro', 'Consolas', 'Inconsolata', 'Droid Sans Mono', 'Monaco', monospace`,
+  'editor.theme': 'dark',
+  'editor.reuseHeaders': true,
+  'request.credentials': 'omit',
+  'tracing.hideTracingResponse': true,
 }
 ```
 
@@ -71,12 +75,46 @@ These are the settings currently available:
 
 ### Properties
 
-All interfaces, the React component `<Playground />` and all middlewares expose the same set of options:
+The React component `<Playground />` and all middlewares expose the following options:
 
-* `properties`
-  * `endpoint` [`string`] - the GraphQL endpoint url.
-  * `subscriptionEndpoint` [`string`] - the GraphQL subscriptions endpoint url.
-  * `setTitle` [`boolean`] - reflect the current endpoint in the page title
+* `props` (Middlewares & React Component)
+  * `endpoint` [`string`](optional) - the GraphQL endpoint url.
+  * `subscriptionEndpoint` [`string`](optional) - the GraphQL subscriptions endpoint url.
+  * `workspaceName` [`string`](optional) - in case you provide a GraphQL Config, you can name your workspace here
+  * `config` [`string`](optional) - the JSON of a GraphQL Config. See an example [here](https://github.com/prismagraphql/graphql-playground/blob/master/packages/graphql-playground-react/src/localDevIndex.tsx#L47)
+  * `settings` [`ISettings`](optional) - Editor settings in json format as [described here](https://github.com/prismagraphql/graphql-playground#settings)
+
+```ts
+interface ISettings {
+  'general.betaUpdates': boolean
+  'editor.theme': Theme
+  'editor.reuseHeaders': boolean
+  'tracing.hideTracingResponse': boolean
+  'editor.fontSize': number
+  'editor.fontFamily': string
+  'request.credentials': string
+}
+```
+
+* `schema` [`IntrospectionResult`](optional) - The result of an introspection query (an object of this form: `{__schema: {...}}`) The playground automatically fetches the schema from the endpoint. This is only needed when you want to override the schema.
+* `tabs` [`Tab[]`](optional) - An array of tabs to inject. **Note: When using this feature, tabs will be resetted each time the page is reloaded**
+
+```ts
+interface Tab {
+  endpoint: string
+  query: string
+  variables?: string
+  responses?: string[]
+  headers?: { [key: string]: string }
+}
+```
+
+In addition to this, the React app provides some more properties:
+
+* `props` (React Component)
+* `createApolloLink` [`(session: Session) => ApolloLink`] - this is the equivalent to the `fetcher` of GraphiQL. For each query that is being executed, this function will be called
+
+`createApolloLink` is only available in the React Component and not the middlewares, because the content must be serializable as it is being printed into a HTML template.
 
 ### As HTML Page
 
@@ -99,8 +137,7 @@ GraphQL Playground provides a React component responsible for rendering the UI a
 There are **3 dependencies** needed in order to run the `graphql-playground-react` React component.
 
 1.  _Open Sans_ and _Source Code Pro_ fonts
-2.  Including `graphql-playground-react/playground.css`
-3.  Rendering the `<Playground />` component
+2.  Rendering the `<Playground />` component
 
 The GraphQL Playground requires **React 16**.
 
@@ -116,7 +153,6 @@ Including stylesheet and the component (`2., 3.`)
 import React from 'react'
 import ReactDOM from 'react-dom'
 import Playground from 'graphql-playground-react'
-import 'graphql-playground-react/playground.css'
 
 ReactDOM.render(
   <Playground endpoint="https://api.graph.cool/simple/v1/swapi" />,
