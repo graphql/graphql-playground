@@ -177,13 +177,7 @@ export const getSessionCounts = immutableMemoize(state => {
 export const getSettingsString = state => state.settingsString
 export const getSettings = createSelector(
   [getSettingsString],
-  (settingsString: any) => {
-    try {
-      return normalizeSettings(JSON.parse(settingsString))
-    } catch (e) {
-      return defaultSettings
-    }
-  },
+  parseSettingsString,
 )
 
 function normalizeSettings(settings) {
@@ -192,7 +186,22 @@ function normalizeSettings(settings) {
     settings['editor.theme'] = 'dark'
   }
 
-  return settings
+  return {
+    ...defaultSettings,
+    ...settings,
+  }
+}
+
+function parseSettingsString(settingsString) {
+  try {
+    return normalizeSettings(JSON.parse(settingsString))
+  } catch (e) {
+    return defaultSettings
+  }
+}
+
+export function normalizeSettingsString(settingsString) {
+  return JSON.stringify(parseSettingsString(settingsString), null, 2)
 }
 
 export const getTheme = createSelector(
