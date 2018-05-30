@@ -1,6 +1,6 @@
 <p align="center"><img src="https://imgur.com/5fzMbyV.png" width="269"></p>
 
-[![npm version](https://badge.fury.io/js/graphql-playground-react.svg)](https://badge.fury.io/js/graphql-playground-react) [![Build Status](https://travis-ci.org/graphcool/graphql-playground.svg?branch=master)](https://travis-ci.org/graphcool/graphql-playground) [![CircleCI](https://circleci.com/gh/graphcool/graphql-playground.svg?style=shield)](https://circleci.com/gh/graphcool/graphql-playground)
+[![npm version](https://badge.fury.io/js/graphql-playground-react.svg)](https://badge.fury.io/js/graphql-playground-react) [![Build Status](https://travis-ci.org/prismagraphql/graphql-playground.svg?branch=master)](https://travis-ci.org/prismagraphql/graphql-playground) [![CircleCI](https://circleci.com/gh/prismagraphql/graphql-playground.svg?style=shield)](https://circleci.com/gh/prismagraphql/graphql-playground)
 
 GraphQL IDE for better development workflows (GraphQL Subscriptions, interactive docs & collaboration). <br />
 **You can download the [desktop app](https://github.com/graphcool/graphql-playground/releases) or use the web version at graphqlbin.com: [Demo](https://www.graphqlbin.com/RVIn)**
@@ -47,9 +47,25 @@ The desktop app is the same as the web version but includes these additional fea
 
 You can easily share your Playgrounds with others by clicking on the "Share" button and sharing the generated link. You can think about GraphQL Bin like Pastebin for your GraphQL queries including the context (endpoint, HTTP headers, open tabs etc).
 
-![](https://imgur.com/H1n64lL.png)
+<a href="https://graphqlbin.com/OksD" target="_blank">
+ <img src="https://camo.githubusercontent.com/daf8c64dbde3097fdbe782c0645552550d530a73/68747470733a2f2f696d6775722e636f6d2f48316e36346c4c2e706e67" alt="" data-canonical-src="https://imgur.com/H1n64lL.png" style="max-width:100%;">
+</a>
 
 > You can also find the announcement blog post [here](https://blog.graph.cool/introducing-graphql-playground-f1e0a018f05d).
+
+## Settings
+
+In the top right corner of the Playground window you can click on the settings icon.
+These are the settings currently available:
+```js
+{
+  "general.betaUpdates": false,
+  "editor.theme": "dark",
+  "editor.reuseHeaders": true,
+  "request.credentials": "omit",
+  "tracing.hideTracingResponse": true
+}
+```
 
 ## Usage
 
@@ -218,4 +234,4 @@ In the folder `packages` you'll find the following packages:
 
 Join our [Slack community](http://slack.graph.cool/) if you run into issues or have questions. We love talking to you!
 
-[![](http://i.imgur.com/5RHR6Ku.png)](https://www.graph.cool/)
+<p align="center"><a href="https://oss.prisma.io"><img src="https://imgur.com/IMU2ERq.png" alt="Prisma" height="170px"></a></p>

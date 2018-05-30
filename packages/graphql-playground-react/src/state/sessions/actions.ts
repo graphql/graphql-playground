@@ -119,7 +119,11 @@ export const {
     sessionId,
     response,
   }),
-  SET_RESPONSE: simpleAction('response'),
+  SET_RESPONSE: (workspaceId, sessionId, response) => ({
+    workspaceId,
+    sessionId,
+    response,
+  }),
   CLEAR_RESPONSES: simpleAction(),
 
   FETCH_SCHEMA: simpleAction(),

@@ -16,30 +16,57 @@ export interface ReduxProps {
   responses: List<ResponseRecord>
 }
 
+const defaultResponseRecord = new ResponseRecord({
+  date: '',
+  time: new Date(),
+  resultID: 'default-id',
+})
+
 const Results: React.SFC<Props & ReduxProps> = ({ setRef, responses }) => {
+  const response1 = responses.get(0) || defaultResponseRecord
+  const isSubscription = responses.size > 1
   return (
-    <ResultWindow innerRef={setRef}>
-      {responses.map(response => (
-        <Response
-          key={
-            responses.size === 1
-              ? 'first'
-              : response.resultID || String(response.time)
-          }
-        >
+    <ResultWindow innerRef={setRef} isSubscription={isSubscription}>
+      {responses.size <= 1 ? (
+        <Response key={'first'} isSubscription={isSubscription}>
           {responses.size > 1 &&
-            response.time && (
+            response1.time && (
               <SubscriptionTime>
                 <SubscriptionTimeText>
-                  {ageOfDate(response.time)}
+                  {ageOfDate(response1.time)}
                 </SubscriptionTimeText>
               </SubscriptionTime>
             )}
-          <ResultWrapper isSubscription={responses.size > 1}>
-            <ResultViewer value={response.date} />
+          <ResultWrapper isSubscription={isSubscription}>
+            <ResultViewer
+              value={response1.date}
+              isSubscription={isSubscription}
+            />
           </ResultWrapper>
         </Response>
-      ))}
+      ) : (
+        responses.map(response => (
+          <Response
+            key={response.resultID || String(response.time)}
+            isSubscription={isSubscription}
+          >
+            {responses.size > 1 &&
+              response.time && (
+                <SubscriptionTime>
+                  <SubscriptionTimeText>
+                    {ageOfDate(response.time)}
+                  </SubscriptionTimeText>
+                </SubscriptionTime>
+              )}
+            <ResultWrapper isSubscription={responses.size > 1}>
+              <ResultViewer
+                value={response.date}
+                isSubscription={isSubscription}
+              />
+            </ResultWrapper>
+          </Response>
+        ))
+      )}
     </ResultWindow>
   )
 }
@@ -50,11 +77,11 @@ const mapStateToProps = createStructuredSelector({
 
 export default connect(mapStateToProps)(Results)
 
-const ResultWindow = styled.div`
+const ResultWindow = withProps<ResultWrapperProps>()(styled.div)`
   flex: 1;
-  height: 100%;
+  height: ${props => (props.isSubscription ? 'auto' : '100%')};
   position: relative;
-  overflow: visible;
+  overflow: ${props => (props.isSubscription ? 'auto' : 'visible')};
   max-height: none !important;
 
   .cm-string {
@@ -86,11 +113,11 @@ const ResultWindow = styled.div`
   }
 `
 
-const Response = styled.div`
+const Response = withProps<ResultWrapperProps>()(styled.div)`
   position: relative;
   display: flex;
   flex: 1;
-  height: 100%;
+  height: ${props => (props.isSubscription ? `auto` : '100%')};
   flex-direction: column;
   &:not(:first-child):last-of-type {
     margin-bottom: 48px;
@@ -108,7 +135,7 @@ const SubscriptionTime = styled.div`
     content: '';
     top: 9px;
     left: 95px;
-    border-top: 1px solid $white20;
+    border-top: 1px solid ${p => p.theme.colours.white20};
   }
 `
 
@@ -126,6 +153,6 @@ interface ResultWrapperProps {
 const ResultWrapper = withProps<ResultWrapperProps>()(styled.div)`
   display: flex;
   flex: 1;
-  height: 100%;
+  height: ${props => (props.isSubscription ? `auto` : '100%')};
   position: ${props => (props.isSubscription ? `relative` : 'static')};
 `

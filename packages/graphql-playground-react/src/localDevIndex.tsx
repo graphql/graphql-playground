@@ -2,6 +2,11 @@ import * as React from 'react'
 import * as ReactDOM from 'react-dom'
 import MiddlewareApp from './components/MiddlewareApp'
 import './index.css'
+// import { Tab } from './state/sessions/reducers'
+// import { LinkCreatorProps } from './state/sessions/fetchingSagas'
+// import { ApolloLink } from 'apollo-link'
+// import { HttpLink } from 'apollo-link-http'
+// import { exampleSchema } from './fixtures/exampleSchema'
 
 if (process.env.NODE_ENV !== 'production') {
   /* tslint:disable-next-line */
@@ -19,6 +24,9 @@ if (process.env.NODE_ENV !== 'production') {
         {...options}
         config={config}
         configString={configString}
+        // tabs={tabs}
+        // createApolloLink={customLinkCreator}
+        // schema={exampleSchema}
       />,
       element,
     )
@@ -69,3 +77,31 @@ const config = {
     },
   },
 }
+
+// const tabs: Tab[] = [
+//   {
+//     query: '{ users { id } }',
+//     endpoint: 'https://eu1.prisma.sh/public-asdf/session65/dev',
+//     responses: ['{}'],
+//   },
+//   {
+//     query: '{ users { id } }',
+//     endpoint: 'https://eu1.prisma.sh/public-asdf/session65/dev',
+//   },
+// ]
+
+// const customLinkCreator = (
+//   session: LinkCreatorProps,
+//   wsEndpoint?: string,
+// ): { link: ApolloLink } => {
+//   const { headers, credentials } = session
+
+//   const link = new HttpLink({
+//     uri: session.endpoint,
+//     fetch,
+//     headers,
+//     credentials,
+//   })
+
+//   return { link }
+// }

@@ -25,7 +25,7 @@ const setUpdateURL = async () => {
 
   const channel = betaUpdates ? 'kygnjrcroc' : 'ppbimurjwk'
   const server = `https://hazel-server-${channel}.now.sh/update`
-  autoUpdater.setFeedURL(`${server}/${process.platform}/${app.getVersion()}`)
+  autoUpdater.setFeedURL({url: `${server}/${process.platform}/${app.getVersion()}`})
 }
 
 const checkForUpdates = async () => {

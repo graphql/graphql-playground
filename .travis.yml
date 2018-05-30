@@ -10,6 +10,9 @@ cache:
   - $HOME/.cache/electron
   - $HOME/.cache/electron-builder
 
+git:
+  depth: 5
+
 install:
   - |
     security create-keychain -p travis build.keychain

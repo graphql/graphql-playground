@@ -7,10 +7,11 @@
  */
 
 import * as React from 'react'
-import { styled } from '../../styled'
+import { styled, withProps } from '../../styled'
 
 export interface Props {
   value: string
+  isSubscription: boolean
   hideGutters?: boolean
 }
 
@@ -29,8 +30,6 @@ export class ResultViewer extends React.Component<Props, {}> {
   private viewer: any
 
   componentDidMount() {
-    // Lazily require to ensure requiring GraphiQL outside of a Browser context
-    // does not produce an error.
     const CodeMirror = require('codemirror')
     require('codemirror/addon/fold/foldgutter')
     require('codemirror/addon/fold/brace-fold')
@@ -91,7 +90,12 @@ export class ResultViewer extends React.Component<Props, {}> {
   }
 
   render() {
-    return <Result innerRef={this.setRef} />
+    return (
+      <Result
+        innerRef={this.setRef}
+        isSubscription={this.props.isSubscription}
+      />
+    )
   }
 
   setRef = ref => {
@@ -114,14 +118,18 @@ export class ResultViewer extends React.Component<Props, {}> {
   }
 }
 
-const Result = styled.div`
+interface ResultProps {
+  isSubscription: boolean
+}
+
+const Result = withProps<ResultProps>()(styled.div)`
   position: relative;
   display: flex;
   flex: 1;
-  height: 100%;
+  height: ${props => (props.isSubscription ? 'auto' : '100%')};
   .CodeMirror {
-    height: 100%;
-    position: absolute !important;
+    height: ${props => (props.isSubscription ? 'auto' : '100%')};
+    position: ${props => (props.isSubscription ? 'relative' : 'absolute%')};
     box-sizing: border-box;
     background: none;
     padding-left: 38px;

@@ -22,6 +22,10 @@ import { ISettings } from '../types'
 import { createStructuredSelector } from 'reselect'
 import { connect } from 'react-redux'
 import { getTheme } from '../state/workspace/reducers'
+import { Session, Tab } from '../state/sessions/reducers'
+import { ApolloLink } from 'apollo-link'
+import { injectTabs } from '../state/workspace/actions'
+import { buildClientSchema, GraphQLSchema } from 'graphql'
 
 function getParameterByName(name: string, uri?: string): string | null {
   const url = uri || window.location.href
@@ -53,10 +57,14 @@ export interface PlaygroundWrapperProps {
   config?: GraphQLConfig
   configPath?: string
   injectedState?: any
+  createApolloLink?: (session: Session) => ApolloLink
+  tabs?: Tab[]
+  schema?: { __schema: any } // introspection result
 }
 
 export interface ReduxProps {
   theme: string
+  injectTabs: (tabs: Tab[]) => void
 }
 
 export interface State {
@@ -70,6 +78,7 @@ export interface State {
   activeProjectName?: string
   activeEnv?: string
   headers?: any
+  schema?: GraphQLSchema
 }
 
 class PlaygroundWrapper extends React.Component<
@@ -248,6 +257,29 @@ class PlaygroundWrapper extends React.Component<
       this.removePlaygroundInClass()
     }, 5000)
     this.setInitialWorkspace()
+    if (this.props.tabs) {
+      this.props.injectTabs(this.props.tabs)
+    } else {
+      const query = getParameterByName('query')
+      if (query) {
+        const endpoint = getParameterByName('endpoint') || this.state.endpoint
+        this.props.injectTabs([{ query, endpoint }])
+      } else {
+        const tabsString = getParameterByName('tabs')
+        if (tabsString) {
+          try {
+            const tabs = JSON.parse(tabsString)
+            this.props.injectTabs(tabs)
+          } catch (e) {
+            //
+          }
+        }
+      }
+    }
+
+    if (this.props.schema) {
+      this.setState({ schema: buildClientSchema(this.props.schema) })
+    }
   }
 
   setInitialWorkspace(props = this.props) {
@@ -341,6 +373,8 @@ class PlaygroundWrapper extends React.Component<
                 headers={this.state.headers}
                 configPath={this.props.configPath}
                 workspaceName={this.state.activeProjectName}
+                createApolloLink={this.props.createApolloLink}
+                schema={this.state.schema}
               />
             </App>
           </OldThemeProvider>
@@ -473,7 +507,10 @@ const mapStateToProps = createStructuredSelector({
   theme: getTheme,
 })
 
-export default connect(mapStateToProps)(PlaygroundWrapper)
+export default connect(
+  mapStateToProps,
+  { injectTabs },
+)(PlaygroundWrapper)
 
 async function find(
   iterable: any[],
