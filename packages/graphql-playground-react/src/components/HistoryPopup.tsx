@@ -19,6 +19,7 @@ import { duplicateSession } from '../state/sessions/actions'
 import { toggleHistoryItemStarring } from '../state/history/actions'
 import { Session } from '../state/sessions/reducers'
 import { OrderedMap } from 'immutable'
+import { Container } from './Playground/EditorWrapper'
 
 export interface ReduxProps {
   isOpen: boolean
@@ -122,11 +123,11 @@ class HistoryPopup extends React.Component<
                     'graphiql-wrapper': localTheme === 'light',
                   })}
                 >
-                  <div className="graphiql-container">
-                    <div className="queryWrap">
+                  <Container>
+                    <QueryWrap>
                       <QueryEditor value={selectedItem.query} />
-                    </div>
-                  </div>
+                    </QueryWrap>
+                  </Container>
                 </GraphiqlWrapper>
               </Big>
             </Right>
@@ -182,12 +183,6 @@ export default withTheme<{}>(
 const Wrapper = styled.div`
   display: flex;
   min-height: 500px;
-
-  & .graphiql-container.graphiql-container {
-    & .queryWrap.queryWrap {
-      border-top: none;
-    }
-  }
 `
 
 const Left = styled.div`
@@ -279,4 +274,10 @@ const GraphiqlWrapper = Big.extend`
   position: relative;
   display: flex;
   flex: 1 1 auto;
+`
+
+const QueryWrap = styled.div`
+  display: flex;
+  flex-direction: column;
+  flex: 1;
 `

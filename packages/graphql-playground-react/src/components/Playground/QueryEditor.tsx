@@ -18,6 +18,9 @@ import {
   getSelectedSessionIdFromRoot,
   getScrollTop,
 } from '../../state/sessions/selectors'
+import EditorWrapper from './EditorWrapper'
+import { styled } from '../../styled'
+
 /**
  * QueryEditor
  *
@@ -229,7 +232,11 @@ export class QueryEditor extends React.PureComponent<Props & ReduxProps, {}> {
   }
 
   render() {
-    return <div className="query-editor" ref={this.setRef} />
+    return (
+      <EditorWrapper>
+        <Editor innerRef={this.setRef} />
+      </EditorWrapper>
+    )
   }
 
   setRef = ref => {
@@ -302,3 +309,14 @@ export default connect(
   mapStateToProps,
   { onChange: editQuery, setScrollTop },
 )(QueryEditor)
+
+const Editor = styled.div`
+  flex: 1 1 0%;
+  position: relative;
+
+  .CodeMirror {
+    padding-left: 12px;
+    width: calc(100% - 12px);
+    background: ${p => p.theme.colours.editorBackground};
+  }
+`

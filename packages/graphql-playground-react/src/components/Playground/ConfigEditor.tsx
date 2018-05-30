@@ -1,4 +1,6 @@
 import * as React from 'react'
+import EditorWrapper from './EditorWrapper'
+import { styled } from '../../styled'
 
 export interface Props {
   value?: string
@@ -123,7 +125,11 @@ export class ConfigEditor extends React.Component<Props, {}> {
   }
 
   render() {
-    return <div className="codemirrorWrap" ref={this.setNode} />
+    return (
+      <EditorWrapper>
+        <Editor innerRef={this.setNode} />
+      </EditorWrapper>
+    )
   }
 
   setNode = node => {
@@ -166,3 +172,9 @@ export class ConfigEditor extends React.Component<Props, {}> {
     }
   }
 }
+
+const Editor = styled.div`
+  flex: 1;
+  height: 100%;
+  position: relative;
+`

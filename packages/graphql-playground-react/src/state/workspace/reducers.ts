@@ -18,6 +18,8 @@ import { deserializePersistedState } from './deserialize'
 import appHistory, { AppHistory } from '../appHistory/reducers'
 // import { createSelector } from 'reselect'
 
+import { ISettings } from '../../types'
+
 export function getSelectedWorkspaceId(state) {
   return state.get('selectedWorkspace')
 }
@@ -38,8 +40,11 @@ export class Workspace extends Record({
   history: HistoryState
 }
 
-export const defaultSettings = {
+export const defaultSettings: ISettings = {
   'general.betaUpdates': false,
+  'editor.cursorShape': 'line',
+  'editor.fontSize': 14,
+  'editor.fontFamily': `'Source Code Pro', 'Consolas', 'Inconsolata', 'Droid Sans Mono', 'Monaco', monospace`,
   'editor.theme': 'dark',
   'editor.reuseHeaders': true,
   'request.credentials': 'omit',
@@ -172,13 +177,7 @@ export const getSessionCounts = immutableMemoize(state => {
 export const getSettingsString = state => state.settingsString
 export const getSettings = createSelector(
   [getSettingsString],
-  (settingsString: any) => {
-    try {
-      return normalizeSettings(JSON.parse(settingsString))
-    } catch (e) {
-      return defaultSettings
-    }
-  },
+  parseSettingsString,
 )
 
 function normalizeSettings(settings) {
@@ -187,7 +186,22 @@ function normalizeSettings(settings) {
     settings['editor.theme'] = 'dark'
   }
 
-  return settings
+  return {
+    ...defaultSettings,
+    ...settings,
+  }
+}
+
+function parseSettingsString(settingsString) {
+  try {
+    return normalizeSettings(JSON.parse(settingsString))
+  } catch (e) {
+    return defaultSettings
+  }
+}
+
+export function normalizeSettingsString(settingsString) {
+  return JSON.stringify(parseSettingsString(settingsString), null, 2)
 }
 
 export const getTheme = createSelector(

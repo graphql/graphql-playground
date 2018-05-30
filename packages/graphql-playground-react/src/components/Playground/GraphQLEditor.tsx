@@ -1,9 +1,9 @@
 import * as React from 'react'
 import * as ReactDOM from 'react-dom'
 import { isNamedType, GraphQLSchema } from 'graphql'
-import * as cn from 'classnames'
 import ExecuteButton from './ExecuteButton'
 import QueryEditor from './QueryEditor'
+import EditorWrapper, { Container } from './EditorWrapper'
 import CodeMirrorSizer from 'graphiql/dist/utility/CodeMirrorSizer'
 import { fillLeafs } from 'graphiql/dist/utility/fillLeafs'
 import { getLeft, getTop } from 'graphiql/dist/utility/elementPosition'
@@ -15,7 +15,7 @@ import ReponseTracing from './ResponseTracing'
 import withTheme from '../Theme/withTheme'
 import { LocalThemeInterface } from '../Theme'
 import GraphDocs from './DocExplorer/GraphDocs'
-import { styled } from '../../styled/index'
+import { withProps, styled } from '../../styled/index'
 import TopBar from './TopBar/TopBar'
 import {
   VariableEditorComponent,
@@ -159,12 +159,8 @@ class GraphQLEditor extends React.PureComponent<
 
   render() {
     return (
-      <div className={cn('graphiql-container')}>
-        <style jsx={true}>{`
-          .graphiql-container {
-            font-family: Open Sans, sans-serif;
-          }
-
+      <Container>
+        <style jsx={true} global={true}>{`
           .docs-button,
           .schema-button {
             @p: .absolute, .white, .bgGreen, .pa6, .br2, .z2, .ttu, .fw6, .f14,
@@ -200,22 +196,6 @@ class GraphQLEditor extends React.PureComponent<
             right: 38px;
             z-index: 2;
           }
-          .intro {
-            @p: .absolute, .tlCenter, .top50, .left50, .white20, .f16, .tc;
-            font-family: 'Source Code Pro', 'Consolas', 'Inconsolata',
-              'Droid Sans Mono', 'Monaco', monospace;
-            letter-spacing: 0.6px;
-            width: 235px;
-          }
-
-          .listening {
-            @p: .f16, .white40, .absolute, .bottom0, .bgDarkBlue;
-            font-family: 'Source Code Pro', 'Consolas', 'Inconsolata',
-              'Droid Sans Mono', 'Monaco', monospace;
-            letter-spacing: 0.6px;
-            padding-left: 24px;
-            padding-bottom: 60px;
-          }
 
           .onboarding-hint {
             @p: .absolute, .br2, .z999;
@@ -248,20 +228,13 @@ class GraphQLEditor extends React.PureComponent<
             transition: opacity 300ms ease-in;
           }
         `}</style>
-        <div className="editorWrap">
+        <EditorWrapper>
           <TopBar shareEnabled={this.props.shareEnabled} />
-          <div
+          <EditorBar
             ref={this.setEditorBarComponent}
-            className="editorBar"
             onMouseDown={this.handleResizeStart}
           >
-            <div
-              className={cn('queryWrap', this.props.localTheme)}
-              style={{
-                WebkitFlex: this.props.editorFlex,
-                flex: this.props.editorFlex,
-              }}
-            >
+            <QueryWrap flex={this.props.editorFlex}>
               <QueryEditor
                 getRef={this.setQueryEditorComponent}
                 schema={this.props.schema}
@@ -269,45 +242,32 @@ class GraphQLEditor extends React.PureComponent<
                 onRunQuery={this.runQueryAtCursor}
                 onClickReference={this.handleClickReference}
               />
-              <div
-                className="variable-editor"
-                style={{
-                  height: this.props.variableEditorOpen
-                    ? this.props.variableEditorHeight
-                    : null,
-                }}
+              <VariableEditor
+                isOpen={this.props.variableEditorOpen}
+                height={this.props.variableEditorHeight}
               >
-                <div
-                  className="variable-editor-title"
-                  style={{
-                    cursor: this.props.variableEditorOpen
-                      ? 'row-resize'
-                      : 'n-resize',
-                  }}
+                <VariableEditorTitle
+                  isOpen={this.props.variableEditorOpen}
                   onMouseDown={this.handleVariableResizeStart}
                 >
-                  <span
-                    className={cn('subtitle', {
-                      active: this.props.queryVariablesActive,
-                    })}
-                    ref={this.setQueryVariablesRef}
+                  <VariableEditorSubtitle
+                    isOpen={this.props.queryVariablesActive}
+                    innerRef={this.setQueryVariablesRef}
                     onClick={this.props.openQueryVariables}
                   >
-                    {'Query Variables'}
-                  </span>
-                  <span
-                    className={cn('subtitle', {
-                      active: !this.props.queryVariablesActive,
-                    })}
-                    ref={this.setHttpHeadersRef}
+                    Query Variables
+                  </VariableEditorSubtitle>
+                  <VariableEditorSubtitle
+                    isOpen={!this.props.queryVariablesActive}
+                    innerRef={this.setHttpHeadersRef}
                     onClick={this.props.closeQueryVariables}
                   >
                     {'HTTP Headers ' +
                       (this.props.headersCount && this.props.headersCount > 0
                         ? `(${this.props.headersCount})`
                         : '')}
-                  </span>
-                </div>
+                  </VariableEditorSubtitle>
+                </VariableEditorTitle>
                 {this.props.queryVariablesActive ? (
                   <VariableEditorComponent
                     getRef={this.setVariableEditorComponent}
@@ -329,10 +289,10 @@ class GraphQLEditor extends React.PureComponent<
                     onRunQuery={this.runQueryAtCursor}
                   />
                 )}
-              </div>
+              </VariableEditor>
               <QueryDragBar ref={this.setQueryResizer} />
-            </div>
-            <div className="resultWrap">
+            </QueryWrap>
+            <ResultWrap>
               <ResultDragBar ref={this.setResponseResizer} />
               <ExecuteButton />
               {this.props.queryRunning &&
@@ -340,39 +300,28 @@ class GraphQLEditor extends React.PureComponent<
               <Results setRef={this.setResultComponent} />
               {!this.props.queryRunning &&
                 (!this.props.responses || this.props.responses.size === 0) && (
-                  <div className="intro">
-                    Hit the Play Button to get a response here
-                  </div>
+                  <Intro>Hit the Play Button to get a response here</Intro>
                 )}
               {this.props.subscriptionActive && (
-                <div className="listening">Listening &hellip;</div>
+                <Listening>Listening &hellip;</Listening>
               )}
-              <div
-                className="response-tracing"
-                style={{
-                  height: this.props.responseTracingOpen
-                    ? this.props.responseTracingHeight
-                    : null,
-                }}
+              <ResponseTracking
+                isOpen={this.props.responseTracingOpen}
+                height={this.props.responseTracingHeight}
               >
-                <div
-                  className="response-tracing-title"
-                  style={{
-                    cursor: this.props.responseTracingOpen
-                      ? 'row-resize'
-                      : 'n-resize',
-                  }}
+                <ResponseTrackingTitle
+                  isOpen={this.props.responseTracingOpen}
                   onMouseDown={this.handleTracingResizeStart}
                 >
                   Tracing
-                </div>
-                <ReponseTracing open={this.props.responseTracingOpen} />
-              </div>
-            </div>
-          </div>
-        </div>
+                </ResponseTrackingTitle>
+                <ReponseTracing />
+              </ResponseTracking>
+            </ResultWrap>
+          </EditorBar>
+        </EditorWrapper>
         <GraphDocs ref={this.setDocExplorerRef} schema={this.props.schema} />
-      </div>
+      </Container>
     )
   }
 
@@ -689,6 +638,21 @@ export default withTheme<Props>(
   )(GraphQLEditor),
 )
 
+const EditorBar = styled.div`
+  display: flex;
+  flex-direction: row;
+  flex: 1;
+`
+
+const ResultWrap = styled.div`
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  position: relative;
+  border-left: none;
+  background: ${p => p.theme.colours.resultBackground};
+`
+
 const DragBar = styled.div`
   width: 15px;
   position: absolute;
@@ -704,4 +668,103 @@ const QueryDragBar = styled(DragBar)`
 const ResultDragBar = styled(DragBar)`
   left: 0px;
   z-index: 1;
+`
+
+interface DrawerProps {
+  isOpen: boolean
+  height: number
+}
+
+const BottomDrawer = withProps<DrawerProps>()(styled.div)`
+  display: flex;
+  background: #0b1924;
+  flex-direction: column;
+  position: relative;
+  height: ${props => (props.isOpen ? `${props.height}px` : '43px')};
+  `
+
+interface TitleProps {
+  isOpen: boolean
+}
+
+const BottomDrawerTitle = styled.div`
+  background: #0b1924;
+  text-transform: uppercase;
+  font-weight: 600;
+  letter-spacing: 0.53px;
+  line-height: 14px;
+  font-size: 14px;
+  padding: 14px 14px 5px 21px;
+  user-select: none;
+`
+
+const VariableEditor = styled(BottomDrawer)`
+  .CodeMirror {
+    padding-left: 12px;
+    width: calc(100% - 12px);
+    background: ${p => p.theme.colours.leftDrawerBackground};
+  }
+`
+
+const VariableEditorTitle = withProps<TitleProps>()(styled(BottomDrawerTitle))`
+  cursor: ${p => (p.isOpen ? 'row-resize' : 'n-resize')};
+  background: ${p => p.theme.colours.leftDrawerBackground};
+`
+
+const VariableEditorSubtitle = withProps<TitleProps>()(styled.span)`
+  margin-right: 10px;
+  cursor: pointer;
+  color: ${p =>
+    p.isOpen ? p.theme.colours.text : p.theme.colours.textInactive};
+`
+
+const ResponseTracking = styled(BottomDrawer)`
+  background: ${p => p.theme.colours.rightDrawerBackground};
+`
+
+const ResponseTrackingTitle = withProps<TitleProps>()(
+  styled(BottomDrawerTitle),
+)`
+  text-align: right;
+  background: ${p => p.theme.colours.rightDrawerBackground};
+  cursor: ${props => (props.isOpen ? 's-resize' : 'n-resize')};
+  color: ${p => p.theme.colours.textInactive};
+`
+
+interface QueryProps {
+  flex: number
+}
+
+const QueryWrap = withProps<QueryProps>()(styled.div)`
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  flex: ${props => props.flex} 1 0%;
+  border-top: 8px solid ${props => props.theme.colours.resultBackground};
+`
+
+const Intro = styled.div`
+  width: 235px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: ${p => p.theme.colours.textInactive};
+  font-size: ${p => p.theme.sizes.small16};
+  font-family: 'Source Code Pro', 'Consolas', 'Inconsolata', 'Droid Sans Mono',
+    'Monaco', monospace;
+  text-align: center;
+  letter-spacing: 0.6px;
+`
+
+const Listening = styled.div`
+  position: absolute;
+  bottom: 0;
+  color: ${p => p.theme.colours.text};
+  background: ${p => p.theme.colours.resultBackground};
+  font-size: ${p => p.theme.sizes.small16};
+  font-family: ${p => p.theme.settings['editor.fontFamily']};
+  letter-spacing: 0.6px;
+  padding-left: 24px;
+  padding-bottom: 60px;
 `

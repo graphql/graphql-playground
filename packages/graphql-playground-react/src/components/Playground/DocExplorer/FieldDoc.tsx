@@ -13,6 +13,7 @@ import ScalarTypeSchema from './DocsTypes/ScalarType'
 import EnumTypeSchema from './DocsTypes/EnumTypeSchema'
 import UnionTypeSchema from './DocsTypes/UnionTypeSchema'
 import { getDeeperType, serialize } from '../util/stack'
+import { CategoryTitle } from './DocsStyles'
 
 export interface Props {
   schema: any
@@ -115,7 +116,7 @@ export default class FieldDoc extends React.Component<Props, State> {
           markdown={field.description || ''}
         />
 
-        <div className="doc-category-title">{`${typeInstance} details`}</div>
+        <CategoryTitle>{`${typeInstance} details`}</CategoryTitle>
         {type.description &&
           type.description.length > 0 && (
             <div className="markdown-content">
@@ -148,7 +149,7 @@ export default class FieldDoc extends React.Component<Props, State> {
 
         {obj.args.length > 0 && (
           <div>
-            <div className="doc-category-title">arguments</div>
+            <CategoryTitle>arguments</CategoryTitle>
             {obj.args.map((arg, index) => (
               <div key={arg.name}>
                 <div>
@@ -166,7 +167,7 @@ export default class FieldDoc extends React.Component<Props, State> {
 
         {obj.implementations.length > 0 && (
           <div>
-            <div className="doc-category-title">implementations</div>
+            <CategoryTitle>implementations</CategoryTitle>
             {obj.implementations.map((data, index) => (
               <TypeLink
                 key={data.name}

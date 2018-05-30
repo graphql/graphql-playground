@@ -10,6 +10,12 @@ import {
   theme as styledTheme,
   keyframes,
 } from '../styled'
+import {
+  darkColours,
+  lightColours,
+  darkEditorColours,
+  lightEditorColours,
+} from '../styled/theme'
 import OldThemeProvider from './Theme/ThemeProvider'
 import { getActiveEndpoints } from './util'
 import { ISettings } from '../types'
@@ -323,7 +329,18 @@ class PlaygroundWrapper extends React.Component<
     return (
       <div>
         {title}
-        <ThemeProvider theme={{ ...styledTheme, mode: theme } as any}>
+        <ThemeProvider
+          theme={
+            {
+              ...styledTheme,
+              mode: theme,
+              colours: theme === 'dark' ? darkColours : lightColours,
+              editorColours:
+                theme === 'dark' ? darkEditorColours : lightEditorColours,
+              config: this.props.config!,
+            } as any
+          }
+        >
           <OldThemeProvider theme={theme}>
             <App>
               {this.props.config &&

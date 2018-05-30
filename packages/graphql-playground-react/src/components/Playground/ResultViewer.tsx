@@ -7,9 +7,11 @@
  */
 
 import * as React from 'react'
+import { styled, withProps } from '../../styled'
 
 export interface Props {
   value: string
+  isSubscription: boolean
   hideGutters?: boolean
 }
 
@@ -89,14 +91,10 @@ export class ResultViewer extends React.Component<Props, {}> {
 
   render() {
     return (
-      <div className="result-codemirror" ref={this.setRef}>
-        <style jsx={true}>{`
-          .result-codemirror :global(.CodeMirror) {
-            @p: .bbox, .pl38;
-            background: none;
-          }
-        `}</style>
-      </div>
+      <Result
+        innerRef={this.setRef}
+        isSubscription={this.props.isSubscription}
+      />
     )
   }
 
@@ -119,3 +117,29 @@ export class ResultViewer extends React.Component<Props, {}> {
     return this.node && this.node.clientHeight
   }
 }
+
+interface ResultProps {
+  isSubscription: boolean
+}
+
+const Result = withProps<ResultProps>()(styled.div)`
+  position: relative;
+  display: flex;
+  flex: 1;
+  height: ${props => (props.isSubscription ? 'auto' : '100%')};
+  .CodeMirror {
+    height: ${props => (props.isSubscription ? 'auto' : '100%')};
+    position: ${props => (props.isSubscription ? 'relative' : 'absolute%')};
+    box-sizing: border-box;
+    background: none;
+    padding-left: 38px;
+  }
+  .CodeMirror-scroll {
+    overflow: auto !important;
+    max-width: 50vw;
+    margin-right: 10px;
+  }
+  .cm-string {
+    color: ${p => p.theme.editorColours.property} !important;
+  }
+`

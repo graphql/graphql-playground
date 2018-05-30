@@ -1256,6 +1256,7 @@ span.CodeMirror-selectedtext {
   -webkit-transform: translate(0, -50%);
   transform: translate(0, -50%);
 }
+
 .CodeMirror-foldmarker {
   color: blue;
   cursor: pointer;

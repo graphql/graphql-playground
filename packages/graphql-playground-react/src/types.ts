@@ -14,8 +14,13 @@ export type GraphQLClient =
 
 export type Theme = 'dark' | 'light'
 
+export type CursorShape = 'line' | 'block' | 'underline'
+
 export interface ISettings {
   ['general.betaUpdates']: boolean
+  ['editor.cursorShape']: CursorShape
+  ['editor.fontFamily']: string
+  ['editor.fontSize']: number
   ['editor.theme']: Theme
   ['editor.reuseHeaders']: boolean
   ['tracing.hideTracingResponse']: boolean

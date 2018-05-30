@@ -26,6 +26,7 @@ import { GraphQLSchema } from 'graphql'
 import { getSessionDocs } from '../../../state/docs/selectors'
 import { getSelectedSessionIdFromRoot } from '../../../state/sessions/selectors'
 import { createStructuredSelector } from 'reselect'
+import { styled } from '../../../styled'
 
 interface StateFromProps {
   docs: {
@@ -120,19 +121,17 @@ class GraphDocs extends React.Component<
     } else if (schema === null) {
       // Schema is null when it explicitly does not exist, typically due to
       // an error during introspection.
-      emptySchema = (
-        <div className="error-container">{'No Schema Available'}</div>
-      )
+      emptySchema = <ErrorContainer>{'No Schema Available'}</ErrorContainer>
     }
 
     return (
-      <div
+      <Docs
         className={cn('graph-docs docExplorerWrap docs', { open: docsOpen })}
         style={docsStyle}
-        ref={this.setRef}
+        innerRef={this.setRef}
       >
         <style jsx={true} global={true}>{`
-          .graphiql-container .doc-category-title {
+          .graph-docs .doc-category-title {
             @p: .mh0, .ph16;
             border: none;
           }
@@ -159,13 +158,6 @@ class GraphDocs extends React.Component<
             padding: 1px 2px;
             background: rgba(0, 0, 0, 0.06);
           }
-          .graph-docs {
-            @p: .absolute, .h100;
-            right: -2px;
-          }
-          .graph-docs.open {
-            z-index: 2000;
-          }
           .docs-button {
             @p: .absolute, .white, .bgGreen, .pv6, .z2, .ttu, .fw6, .f12, .ph10,
               .pointer;
@@ -179,22 +171,10 @@ class GraphDocs extends React.Component<
             border-top-left-radius: 2px;
             border-top-right-radius: 2px;
           }
-          .doc-explorer {
-            @p: .flex, .relative, .h100;
-            letter-spacing: 0.3px;
-            outline: none;
-            box-shadow: -1px 1px 6px 0 rgba(0, 0, 0, 0.3);
-          }
           .doc-explorer-container {
             @p: .flex, .relative, .h100, .w100;
             overflow-x: auto;
             overflow-y: hidden;
-          }
-          .doc-explorer:before {
-            @p: .top0, .bottom0, .bgGreen, .absolute, .z3;
-            left: 0px;
-            content: '';
-            width: 6px;
           }
           .doc-explorer-gradient {
             @p: .z1, .absolute, .top0, .bottom0;
@@ -208,28 +188,17 @@ class GraphDocs extends React.Component<
               rgba(255, 255, 255, 0)
             );
           }
-          .docExplorerResizer {
-            @p: .top0, .bottom0, .absolute, .z5;
-            cursor: col-resize;
-            left: -7px;
-            content: '';
-            width: 20px;
-          }
         `}</style>
         <div className="docs-button" onClick={this.handleToggleDocs}>
           Schema
         </div>
-        <div
-          className="docExplorerResizer"
-          onMouseDown={this.handleDocsResizeStart}
-        />
+        <DocsResizer onMouseDown={this.handleDocsResizeStart} />
         <div className="doc-explorer-gradient" />
-        <div
-          className="doc-explorer"
+        <DocsExplorer
           onKeyDown={this.handleKeyDown}
           onMouseMove={this.handleMouseMove}
           tabIndex={0}
-          ref={this.setDocExplorerRef}
+          innerRef={this.setDocExplorerRef}
         >
           <div className="doc-explorer-container">
             {emptySchema && <ColumnDoc>{emptySchema}</ColumnDoc>}
@@ -257,8 +226,8 @@ class GraphDocs extends React.Component<
               </ColumnDoc>
             ))}
           </div>
-        </div>
-      </div>
+        </DocsExplorer>
+      </Docs>
     )
   }
 
@@ -453,3 +422,80 @@ export default connect<StateFromProps, DispatchFromProps, Props>(
   null,
   { withRef: true },
 )(GraphDocs)
+
+const Docs = styled.div`
+  background: white;
+  box-shadow: 0 0 8px rgba(0, 0, 0, 0.15);
+  position: absolute;
+  right: -2px;
+  z-index: 3;
+  height: 100%;
+  font-family: 'Open Sans', sans-serif;
+  -webkit-font-smoothing: antialiased;
+
+  &.open {
+    z-index: 2000;
+  }
+
+  .field-name {
+    color: #1f61a0;
+  }
+  .type-name {
+    color: rgb(245, 160, 0);
+  }
+  .arg-name {
+    color: #1f61a9;
+  }
+
+  code {
+    font-family: 'Source Code Pro', monospace;
+    border-radius: 2px;
+    padding: 1px 2px;
+    background: rgba(0, 0, 0, 0.06);
+  }
+`
+
+const DocsExplorer = styled.div`
+  background: white;
+  display: flex;
+  position: relative;
+  height: 100%;
+  letter-spacing: 0.3px;
+  outline: none;
+  box-shadow: -1px 1px 6px 0 rgba(0, 0, 0, 0.3);
+
+  &::before {
+    top: 0;
+    bottom: 0;
+    background: ${props => props.theme.colours.green};
+    position: absolute;
+    z-index: 3;
+    left: 0px;
+    content: '';
+    width: 6px;
+  }
+`
+
+const DocsResizer = styled.div`
+  cursor: col-resize;
+  height: 100%;
+  left: -5px;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 10px;
+  z-index: 10;
+`
+
+const ErrorContainer = styled.div`
+  font-weight: bold;
+  left: 0;
+  letter-spacing: 1px;
+  opacity: 0.5;
+  position: absolute;
+  right: 0;
+  text-align: center;
+  text-transform: uppercase;
+  top: 50%;
+  transform: translate(0, -50%);
+`

@@ -66,7 +66,7 @@ class ExecuteButton extends React.Component<
     if (hasOptions && optionsOpen) {
       const highlight = this.state.highlight
       options = (
-        <ul className="execute-options">
+        <ExecuteOptions>
           {operations.map(operation => (
             <ExecuteButtonOperation
               operation={operation}
@@ -77,7 +77,7 @@ class ExecuteButton extends React.Component<
               key={operation.name ? operation.name.value : '*'}
             />
           ))}
-        </ul>
+        </ExecuteOptions>
       )
     }
 
@@ -259,5 +259,39 @@ const Button = withProps<ButtonProps>()(styled.div)`
 
   &:hover {
     background-color: ${buttonBackgroundHover};
+  }
+`
+
+const ExecuteOptions = styled.ul`
+  background: #fff;
+  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.1), 0 2px 4px rgba(0, 0, 0, 0.25);
+  left: -1px;
+  margin: 0;
+  padding: 8px 0;
+  position: absolute;
+  top: 78px;
+  z-index: 100;
+
+  &:before {
+    position: absolute;
+    background: white;
+    content: '';
+    top: -4px;
+    left: 34px;
+    transform: rotate(45deg);
+    width: 8px;
+    height: 8px;
+  }
+
+  li {
+    cursor: pointer;
+    list-style: none;
+    min-width: 100px;
+    padding: 2px 30px 4px 10px;
+  }
+
+  li.selected {
+    background: rgb(39, 174, 96);
+    color: white;
   }
 `

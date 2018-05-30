@@ -1,3 +1,6 @@
+import { ISettings } from '../types'
+import { defaultSettings } from '../state/workspace/reducers'
+
 export interface Colours {
   green: string
   darkBlue: string
@@ -23,9 +26,16 @@ export interface Colours {
   purple: string
   lightGrey: string
   lighterGrey: string
+  // New dynamic styles
+  editorBackground: string
+  resultBackground: string
+  leftDrawerBackground: string
+  rightDrawerBackground: string
+  text: string
+  textInactive: string
 }
 
-export const colours: Colours = {
+export const darkColours: Colours = {
   green: '#27ae60',
   darkBlue: 'rgb(23, 42, 58)',
   darkBlue50: 'rgba(23, 42, 58, 0.5)',
@@ -51,6 +61,108 @@ export const colours: Colours = {
   paleGrey: '#f3f4f4', // use for bgs, borders, etc
   lightGrey: '#eeeff0',
   lighterGrey: '#f6f7f7',
+  // New colors
+  editorBackground: '#0f202d',
+  resultBackground: 'rgb(23, 43, 58)',
+  leftDrawerBackground: '#0b1924',
+  rightDrawerBackground: '#0b1924',
+  text: 'rgba(255,255,255,0.6)',
+  textInactive: '#555e66',
+}
+
+export const lightColours: Colours = {
+  green: '#27ae60',
+  darkBlue: 'rgb(23, 42, 58)',
+  darkBlue50: 'rgba(23, 42, 58, 0.5)',
+  darkBlue80: 'rgba(23, 42, 58, 0.8)',
+  darkBlue60: 'rgba(23, 42, 58, 0.6)',
+  darkBlue30: 'rgba(23, 42, 58, 0.3)',
+  darkBlue20: 'rgba(23, 42, 58, 0.2)',
+  darkBlue10: 'rgba(23, 42, 58, 0.1)',
+  darkerBlue: '#0F202D',
+  darkestBlue: 'rgb(11,20,28)',
+  white10: 'rgba(255, 255, 255, 0.1)',
+  white20: 'rgba(255, 255, 255, 0.2)',
+  white30: 'rgba(255, 255, 255, 0.3)',
+  white60: 'rgba(255, 255, 255, 0.6)',
+  white70: 'rgba(255, 255, 255, 0.7)',
+  white80: 'rgba(255, 255, 255, 0.8)',
+  white: 'rgba(255, 255, 255, 1)',
+  black40: 'rgba(0, 0, 0, 0.4)',
+  red: '#f25c54',
+  purple: 'rgb(164, 3, 111)',
+
+  paleText: 'rgba(0, 0, 0, 0.5)',
+  paleGrey: '#f3f4f4', // use for bgs, borders, etc
+  lightGrey: '#eeeff0',
+  lighterGrey: '#f6f7f7',
+  // New colors
+  editorBackground: '#f6f7f7',
+  resultBackground: '#eeeff0',
+  leftDrawerBackground: '#e9eaea',
+  rightDrawerBackground: '#e5e7e7',
+  text: 'rgba(0,0,0,.7)',
+  textInactive: 'rgba(0,0,0,.3)',
+}
+
+export interface EditorColours {
+  property: string
+  comment: string
+  punctuation: string
+  keyword: string
+  def: string
+  qualifier: string
+  attribute: string
+  number: string
+  string: string
+  builtin: string
+  string2: string
+  variable: string
+  meta: string
+  atom: string
+  ws: string
+  selection: string
+  cursorColor: string
+}
+
+export const darkEditorColours: EditorColours = {
+  property: 'rgb(41, 185, 115)',
+  comment: 'rgba(255, 255, 255, 0.3)',
+  punctuation: 'rgba(255, 255, 255, 0.4)',
+  keyword: 'rgb(42, 126, 211)',
+  def: 'rgb(56, 189, 193)',
+  qualifier: '#1c92a9',
+  attribute: 'rgb(247, 116, 102)',
+  number: '#2882f9',
+  string: '#d64292',
+  builtin: '#d47509',
+  string2: '#0b7fc7',
+  variable: 'rgb(181, 34, 130)',
+  meta: '#b33086',
+  atom: 'rgb(249, 233, 34)',
+  ws: 'rgba(255, 255, 255, 0.4)',
+  selection: 'rgba(255, 255, 255, 0.1)',
+  cursorColor: 'rgba(255, 255, 255, 0.4)',
+}
+
+export const lightEditorColours: EditorColours = {
+  property: '#328c8c', //
+  comment: 'rgba(0, 0, 0, 0.3)', //
+  punctuation: 'rgba(23,42,58,.8)', //
+  keyword: '#366b6b', //
+  def: 'rgb(56, 189, 193)', //
+  qualifier: '#1c92a9', //
+  attribute: '#b56531', //
+  number: '#1f6ed6;', //
+  string: '#d64292', //
+  builtin: '#d47509', //
+  string2: '#0b7fc7', //
+  variable: 'rgb(236, 95, 103)', //
+  meta: '#b33086', //
+  atom: 'rgb(245, 160, 0)', //
+  ws: 'rgba(23, 42, 58, 0.8)', //
+  selection: '#d1e9fd',
+  cursorColor: 'rgba(0, 0, 0, 0.4)',
 }
 
 export interface Sizes {
@@ -98,11 +210,15 @@ export interface ThemeInterface {
   colours: Colours
   sizes: Sizes
   shorthands: Shorthands
+  editorColours: EditorColours
+  settings: ISettings
 }
 
 export const theme: ThemeInterface = {
   mode: 'dark',
-  colours,
+  colours: darkColours,
   sizes,
   shorthands,
+  editorColours: darkEditorColours,
+  settings: defaultSettings,
 }
