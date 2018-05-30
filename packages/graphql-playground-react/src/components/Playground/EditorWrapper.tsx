@@ -77,9 +77,9 @@ const EditorWrapper = styled.div`
   .cm-ws {
     color: ${p => p.theme.editorColours.ws};
   }
-
+  position: relative;
   display: flex;
-  flex: 1 1 0;
+  flex: 1 1 0%;
   flex-flow: column;
 
   .CodeMirror {
@@ -110,15 +110,15 @@ const EditorWrapper = styled.div`
   .CodeMirror div.CodeMirror-cursor {
     background: ${p =>
       p.theme.settings['editor.cursorShape'] === 'block'
-        ? p.theme.settings['editor.cursorColor']
+        ? p.theme.editorColours.cursorColor
         : 'transparent'};
     border-left: ${p =>
       p.theme.settings['editor.cursorShape'] === 'line'
-        ? `1px solid ${p.theme.settings['editor.cursorColor']}`
+        ? `1px solid ${p.theme.editorColours.cursorColor}`
         : 0};
     border-bottom: ${p =>
       p.theme.settings['editor.cursorShape'] === 'underline'
-        ? `1px solid ${p.theme.settings['editor.cursorColor']}`
+        ? `1px solid ${p.theme.editorColours.cursorColor}`
         : 0};
   }
   /* Shown when moving in bi-directional text */
@@ -340,7 +340,6 @@ const EditorWrapper = styled.div`
   .CodeMirror {
     background: white;
     overflow: hidden;
-    position: relative;
     line-height: 1.6;
   }
 

@@ -122,6 +122,7 @@ export interface EditorColours {
   atom: string
   ws: string
   selection: string
+  cursorColor: string
 }
 
 export const darkEditorColours: EditorColours = {
@@ -141,6 +142,7 @@ export const darkEditorColours: EditorColours = {
   atom: 'rgb(249, 233, 34)',
   ws: 'rgba(255, 255, 255, 0.4)',
   selection: 'rgba(255, 255, 255, 0.1)',
+  cursorColor: 'rgba(255, 255, 255, 0.4)',
 }
 
 export const lightEditorColours: EditorColours = {
@@ -160,6 +162,7 @@ export const lightEditorColours: EditorColours = {
   atom: 'rgb(245, 160, 0)', //
   ws: 'rgba(23, 42, 58, 0.8)', //
   selection: '#d1e9fd',
+  cursorColor: 'rgba(0, 0, 0, 0.4)',
 }
 
 export interface Sizes {

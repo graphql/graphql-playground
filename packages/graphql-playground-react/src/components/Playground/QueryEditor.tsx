@@ -311,7 +311,7 @@ export default connect(
 )(QueryEditor)
 
 const Editor = styled.div`
-  flex: 1;
+  flex: 1 1 0%;
   position: relative;
 
   .CodeMirror {

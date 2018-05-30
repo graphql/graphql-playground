@@ -18,7 +18,6 @@ export type CursorShape = 'line' | 'block' | 'underline'
 
 export interface ISettings {
   ['general.betaUpdates']: boolean
-  ['editor.cursorColor']: string
   ['editor.cursorShape']: CursorShape
   ['editor.fontFamily']: string
   ['editor.fontSize']: number

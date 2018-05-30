@@ -42,7 +42,6 @@ export class Workspace extends Record({
 
 export const defaultSettings: ISettings = {
   'general.betaUpdates': false,
-  'editor.cursorColor': 'rgba(255, 255, 255, 0.4)',
   'editor.cursorShape': 'line',
   'editor.fontSize': 14,
   'editor.fontFamily': `'Source Code Pro', 'Consolas', 'Inconsolata', 'Droid Sans Mono', 'Monaco', monospace`,
