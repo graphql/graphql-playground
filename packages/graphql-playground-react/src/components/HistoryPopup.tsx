@@ -169,12 +169,15 @@ const mapStateToProps = createStructuredSelector({
 })
 
 export default withTheme<{}>(
-  connect(mapStateToProps, {
-    closeHistory,
-    openHistory,
-    duplicateSession,
-    toggleHistoryItemStarring,
-  })(HistoryPopup),
+  connect(
+    mapStateToProps,
+    {
+      closeHistory,
+      openHistory,
+      duplicateSession,
+      toggleHistoryItemStarring,
+    },
+  )(HistoryPopup),
 )
 
 const Wrapper = styled.div`

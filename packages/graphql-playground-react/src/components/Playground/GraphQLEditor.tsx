@@ -760,6 +760,7 @@ const Intro = styled.div`
 const Listening = styled.div`
   position: absolute;
   bottom: 0;
+  color: ${p => p.theme.colours.text};
   background: ${p => p.theme.colours.resultBackground};
   font-size: ${p => p.theme.sizes.small16};
   font-family: ${p => p.theme.settings['editor.fontFamily']};

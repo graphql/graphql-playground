@@ -305,9 +305,10 @@ const mapStateToProps = createStructuredSelector({
   scrollTop: getScrollTop,
 })
 
-export default connect(mapStateToProps, { onChange: editQuery, setScrollTop })(
-  QueryEditor,
-)
+export default connect(
+  mapStateToProps,
+  { onChange: editQuery, setScrollTop },
+)(QueryEditor)
 
 const Editor = styled.div`
   flex: 1;

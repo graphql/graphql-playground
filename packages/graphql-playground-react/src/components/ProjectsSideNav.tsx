@@ -123,7 +123,10 @@ const mapStateToProps = createStructuredSelector({
   counts: getSessionCounts,
 })
 
-export default connect(mapStateToProps, { openConfigTab })(ProjectsSideNav)
+export default connect(
+  mapStateToProps,
+  { openConfigTab },
+)(ProjectsSideNav)
 
 const textColor = theme('mode', {
   light: p => p.theme.colours.darkBlue80,

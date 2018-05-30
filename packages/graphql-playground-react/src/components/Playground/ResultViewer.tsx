@@ -115,8 +115,13 @@ export class ResultViewer extends React.Component<Props, {}> {
 }
 
 const Result = styled.div`
+  position: relative;
+  display: flex;
+  flex: 1;
+  height: 100%;
   .CodeMirror {
-    position: relative !important;
+    height: 100%;
+    position: absolute !important;
     box-sizing: border-box;
     background: none;
     padding-left: 38px;

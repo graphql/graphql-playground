@@ -54,9 +54,8 @@ const ResultWindow = styled.div`
   flex: 1;
   height: 100%;
   position: relative;
-  overflow: scroll;
-  -ms-overflow-style: none;
-  max-height: calc(100vh - 101px);
+  overflow: visible;
+  max-height: none !important;
 
   .cm-string {
     color: rgb(41, 185, 115);
@@ -88,6 +87,11 @@ const ResultWindow = styled.div`
 `
 
 const Response = styled.div`
+  position: relative;
+  display: flex;
+  flex: 1;
+  height: 100%;
+  flex-direction: column;
   &:not(:first-child):last-of-type {
     margin-bottom: 48px;
   }
@@ -120,5 +124,8 @@ interface ResultWrapperProps {
 }
 
 const ResultWrapper = withProps<ResultWrapperProps>()(styled.div)`
+  display: flex;
+  flex: 1;
+  height: 100%;
   position: ${props => (props.isSubscription ? `relative` : 'static')};
 `

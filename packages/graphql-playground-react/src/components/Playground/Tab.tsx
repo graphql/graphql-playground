@@ -310,4 +310,7 @@ class Tab extends React.PureComponent<Props & ReduxProps, State> {
   }
 }
 
-export default connect(null, { closeTab, selectTab, editName })(Tab)
+export default connect(
+  null,
+  { closeTab, selectTab, editName },
+)(Tab)
