@@ -69,7 +69,6 @@ export const defaultLinkCreator = (
 
   const httpLink = new HttpLink({
     uri: session.endpoint,
-    fetch,
     headers,
     credentials,
   })
@@ -133,11 +132,13 @@ function* runQuerySaga(action) {
   if (session.tracingSupported && session.responseTracingOpen) {
     headers = set(headers, 'X-Apollo-Tracing', '1')
   }
-  const { link, subscriptionClient } = linkCreator({
+  const lol = {
     endpoint: session.endpoint,
     headers,
     credentials: settings['request.credentials'],
-  })
+  }
+  console.log({ lol })
+  const { link, subscriptionClient } = linkCreator(lol)
   yield put(setCurrentQueryStartTime(new Date()))
 
   let firstResponse = false

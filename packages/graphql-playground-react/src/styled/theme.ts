@@ -218,7 +218,7 @@ export interface ThemeInterface {
 
 export const theme: any = {
   mode: 'dark',
-  // colours: darkColours,
+  colours: darkColours,
   sizes,
   shorthands,
   editorColours: darkEditorColours,

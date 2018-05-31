@@ -24,7 +24,7 @@ if (process.env.NODE_ENV !== 'production') {
         {...options}
         config={config}
         configString={configString}
-        codeTheme={lightEditorColours}
+        // codeTheme={lightEditorColours}
         // tabs={tabs}
         // createApolloLink={customLinkCreator}
         // schema={exampleSchema}
@@ -107,27 +107,27 @@ const config = {
 //   return { link }
 // }
 
-const lightEditorColours = {
-  property: '#328c8c',
-  comment: 'rgba(0, 0, 0, 0.3)',
-  punctuation: 'rgba(23,42,58,.8)',
-  keyword: '#366b6b',
-  def: 'rgb(56, 189, 193)',
-  qualifier: '#1c92a9',
-  attribute: '#b56531',
-  number: '#1f6ed6;',
-  string: '#d64292',
-  builtin: '#d47509',
-  string2: '#0b7fc7',
-  variable: 'rgb(236, 95, 103)',
-  meta: '#b33086',
-  atom: 'rgb(245, 160, 0)',
-  ws: 'rgba(23, 42, 58, 0.8)',
-  selection: '#d1e9fd',
-  cursorColor: 'rgba(0, 0, 0, 0.4)',
+// const lightEditorColours = {
+//   property: '#328c8c',
+//   comment: 'rgba(0, 0, 0, 0.3)',
+//   punctuation: 'rgba(23,42,58,.8)',
+//   keyword: '#366b6b',
+//   def: 'rgb(56, 189, 193)',
+//   qualifier: '#1c92a9',
+//   attribute: '#b56531',
+//   number: '#1f6ed6;',
+//   string: '#d64292',
+//   builtin: '#d47509',
+//   string2: '#0b7fc7',
+//   variable: 'rgb(236, 95, 103)',
+//   meta: '#b33086',
+//   atom: 'rgb(245, 160, 0)',
+//   ws: 'rgba(23, 42, 58, 0.8)',
+//   selection: '#d1e9fd',
+//   cursorColor: 'rgba(0, 0, 0, 0.4)',
 
-  editorBackground: '#f6f7f7',
-  resultBackground: '#eeeff0',
-  leftDrawerBackground: '#e9eaea',
-  rightDrawerBackground: '#e5e7e7',
-}
+//   editorBackground: '#f6f7f7',
+//   resultBackground: '#eeeff0',
+//   leftDrawerBackground: '#e9eaea',
+//   rightDrawerBackground: '#e5e7e7',
+// }

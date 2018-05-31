@@ -136,7 +136,7 @@ class GraphQLEditor extends React.PureComponent<
   componentDidMount() {
     // Ensure a form of a schema exists (including `null`) and
     // if not, fetch one using an introspection query.
-    this.props.fetchSchema()
+    // this.props.fetchSchema()
 
     // Utility for keeping CodeMirror correctly sized.
     this.codeMirrorSizer = new CodeMirrorSizer()

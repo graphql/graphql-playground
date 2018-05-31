@@ -28,7 +28,7 @@ import { setStacks } from '../docs/actions'
 import { HistoryState } from '../history/reducers'
 import { addHistoryItem } from '../history/actions'
 import { schemaFetcher } from './fetchingSagas'
-import { getSelectedWorkspace } from '../workspace/reducers'
+import { getSelectedWorkspace, getSettings } from '../workspace/reducers'
 import { getSessionDocsState } from '../docs/selectors'
 import { getQueryTypes } from '../../components/Playground/util/getQueryTypes'
 import { parse } from 'graphql'
@@ -123,8 +123,19 @@ function* runQueryAtPosition(action) {
   }
 }
 
+function* getSessionWithCredentials() {
+  const session = yield select(getSelectedSession)
+  const settings = yield select(getSettings)
+
+  return {
+    endpoint: session.endpoint,
+    headers: session.headers,
+    credentials: settings['request.credentials'],
+  }
+}
+
 function* fetchSchemaSaga() {
-  const session: Session = yield select(getSelectedSession)
+  const session: Session = yield getSessionWithCredentials()
   yield schemaFetcher.fetch(session)
   try {
     yield put(schemaFetchingSuccess(session.endpoint))
@@ -136,7 +147,7 @@ function* fetchSchemaSaga() {
 }
 
 function* refetchSchemaSaga() {
-  const session: Session = yield select(getSelectedSession)
+  const session: Session = yield getSessionWithCredentials()
   yield schemaFetcher.refetch(session)
   try {
     yield put(schemaFetchingSuccess(session.endpoint))
@@ -149,8 +160,9 @@ function* refetchSchemaSaga() {
 
 function* renewStacks() {
   const session: Session = yield select(getSelectedSession)
+  const fetchSession = yield getSessionWithCredentials()
   const docs: DocsSessionState = yield select(getSessionDocsState)
-  const result = yield schemaFetcher.fetch(session)
+  const result = yield schemaFetcher.fetch(fetchSession)
   const { schema, tracingSupported } = result
   if (schema) {
     const rootMap = getRootMap(schema)

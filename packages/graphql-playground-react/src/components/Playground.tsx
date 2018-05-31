@@ -248,6 +248,7 @@ export class Playground extends React.PureComponent<Props & ReduxProps, State> {
           props.sessionHeaders && props.sessionHeaders.length > 0
             ? props.sessionHeaders
             : JSON.stringify(props.headers),
+        credentials: props.settings['request.credentials'],
       }
       const schema = await schemaFetcher.fetch(data)
       schemaFetcher.subscribe(data, newSchema => {
@@ -277,7 +278,7 @@ export class Playground extends React.PureComponent<Props & ReduxProps, State> {
     window.version = version
 
     return (
-      <PlaygroundWrapper className="playground">
+      <PlaygroundContainer className="playground">
         <TabBar onNewSession={this.createSession} isApp={this.props.isApp} />
         <GraphiqlsContainer
           className={cx('graphiqls-container', {
@@ -306,7 +307,7 @@ export class Playground extends React.PureComponent<Props & ReduxProps, State> {
         </GraphiqlsContainer>
         <Settings />
         {this.props.historyOpen && this.renderHistoryPopup()}
-      </PlaygroundWrapper>
+      </PlaygroundContainer>
     )
   }
 
@@ -388,7 +389,7 @@ export default connect(
   },
 )(Playground)
 
-const PlaygroundWrapper = styled.div`
+const PlaygroundContainer = styled.div`
   flex: 1;
   display: flex;
   flex-direction: column;

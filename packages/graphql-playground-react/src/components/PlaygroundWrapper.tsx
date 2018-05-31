@@ -332,17 +332,15 @@ class PlaygroundWrapper extends React.Component<
       <div>
         {title}
         <ThemeProvider
-          theme={
-            {
-              ...styledTheme,
-              mode: theme,
-              colours: theme === 'dark' ? darkColours : lightColours,
-              editorColours:
-                this.props.codeTheme ||
-                (theme === 'dark' ? darkEditorColours : lightEditorColours),
-              settings: this.props.settings,
-            } as any
-          }
+          theme={{
+            ...styledTheme,
+            mode: theme,
+            colours: theme === 'dark' ? darkColours : lightColours,
+            editorColours:
+              this.props.codeTheme ||
+              (theme === 'dark' ? darkEditorColours : lightEditorColours),
+            settings: this.props.settings,
+          }}
         >
           <OldThemeProvider theme={theme}>
             <App>
