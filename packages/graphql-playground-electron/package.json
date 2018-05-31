@@ -98,7 +98,7 @@
     "graphql-config-extension-graphcool": "1.0.8",
     "graphql-config-extension-prisma": "^0.0.12",
     "graphql-playground-html": "^1.5.6",
-    "graphql-playground-react": "1.7.0-beta.2",
+    "graphql-playground-react": "1.7.0",
     "immutable": "4.0.0-rc.9",
     "js-yaml": "^3.11.0",
     "lodash.merge": "^4.6.1",
