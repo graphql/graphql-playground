@@ -10,6 +10,7 @@ export interface MiddlewareOptions {
   settings?: ISettings
   schema?: IntrospectionResult
   tabs?: Tab[]
+  codeTheme?: EditorColours
 }
 
 export type Theme = 'dark' | 'light'
@@ -21,6 +22,30 @@ export interface ISettings {
   'editor.fontSize': number
   'editor.fontFamily': string
   'request.credentials': string
+}
+
+export interface EditorColours {
+  property: string
+  comment: string
+  punctuation: string
+  keyword: string
+  def: string
+  qualifier: string
+  attribute: string
+  number: string
+  string: string
+  builtin: string
+  string2: string
+  variable: string
+  meta: string
+  atom: string
+  ws: string
+  selection: string
+  cursorColor: string
+  editorBackground: string
+  resultBackground: string
+  leftDrawerBackground: string
+  rightDrawerBackground: string
 }
 
 export interface IntrospectionResult {
