@@ -137,7 +137,7 @@ const Wrapper = styled.div`
   flex: 1 1 0;
 
   .CodeMirror {
-    background: ${p => p.theme.colours.resultBackground};
+    background: ${p => p.theme.editorColours.resultBackground};
     .CodeMirror-code {
       color: rgba(255, 255, 255, 0.7);
     }

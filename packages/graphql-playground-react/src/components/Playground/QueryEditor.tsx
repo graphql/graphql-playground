@@ -317,6 +317,6 @@ const Editor = styled.div`
   .CodeMirror {
     padding-left: 12px;
     width: calc(100% - 12px);
-    background: ${p => p.theme.colours.editorBackground};
+    background: ${p => p.theme.editorColours.editorBackground};
   }
 `

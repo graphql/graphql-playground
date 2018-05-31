@@ -27,12 +27,32 @@ export interface Colours {
   lightGrey: string
   lighterGrey: string
   // New dynamic styles
+  text: string
+  textInactive: string
+}
+
+export interface EditorColours {
+  property: string
+  comment: string
+  punctuation: string
+  keyword: string
+  def: string
+  qualifier: string
+  attribute: string
+  number: string
+  string: string
+  builtin: string
+  string2: string
+  variable: string
+  meta: string
+  atom: string
+  ws: string
+  selection: string
+  cursorColor: string
   editorBackground: string
   resultBackground: string
   leftDrawerBackground: string
   rightDrawerBackground: string
-  text: string
-  textInactive: string
 }
 
 export const darkColours: Colours = {
@@ -62,10 +82,6 @@ export const darkColours: Colours = {
   lightGrey: '#eeeff0',
   lighterGrey: '#f6f7f7',
   // New colors
-  editorBackground: '#0f202d',
-  resultBackground: 'rgb(23, 43, 58)',
-  leftDrawerBackground: '#0b1924',
-  rightDrawerBackground: '#0b1924',
   text: 'rgba(255,255,255,0.6)',
   textInactive: '#555e66',
 }
@@ -97,32 +113,8 @@ export const lightColours: Colours = {
   lightGrey: '#eeeff0',
   lighterGrey: '#f6f7f7',
   // New colors
-  editorBackground: '#f6f7f7',
-  resultBackground: '#eeeff0',
-  leftDrawerBackground: '#e9eaea',
-  rightDrawerBackground: '#e5e7e7',
   text: 'rgba(0,0,0,.7)',
   textInactive: 'rgba(0,0,0,.3)',
-}
-
-export interface EditorColours {
-  property: string
-  comment: string
-  punctuation: string
-  keyword: string
-  def: string
-  qualifier: string
-  attribute: string
-  number: string
-  string: string
-  builtin: string
-  string2: string
-  variable: string
-  meta: string
-  atom: string
-  ws: string
-  selection: string
-  cursorColor: string
 }
 
 export const darkEditorColours: EditorColours = {
@@ -143,6 +135,11 @@ export const darkEditorColours: EditorColours = {
   ws: 'rgba(255, 255, 255, 0.4)',
   selection: 'rgba(255, 255, 255, 0.1)',
   cursorColor: 'rgba(255, 255, 255, 0.4)',
+
+  editorBackground: '#0f202d',
+  resultBackground: 'rgb(23, 43, 58)',
+  leftDrawerBackground: '#0b1924',
+  rightDrawerBackground: '#0b1924',
 }
 
 export const lightEditorColours: EditorColours = {
@@ -163,6 +160,11 @@ export const lightEditorColours: EditorColours = {
   ws: 'rgba(23, 42, 58, 0.8)', //
   selection: '#d1e9fd',
   cursorColor: 'rgba(0, 0, 0, 0.4)',
+
+  editorBackground: '#f6f7f7',
+  resultBackground: '#eeeff0',
+  leftDrawerBackground: '#e9eaea',
+  rightDrawerBackground: '#e5e7e7',
 }
 
 export interface Sizes {
@@ -214,9 +216,9 @@ export interface ThemeInterface {
   settings: ISettings
 }
 
-export const theme: ThemeInterface = {
+export const theme: any = {
   mode: 'dark',
-  colours: darkColours,
+  // colours: darkColours,
   sizes,
   shorthands,
   editorColours: darkEditorColours,

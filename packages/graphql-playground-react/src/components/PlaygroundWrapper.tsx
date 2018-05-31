@@ -15,6 +15,7 @@ import {
   lightColours,
   darkEditorColours,
   lightEditorColours,
+  EditorColours,
 } from '../styled/theme'
 import OldThemeProvider from './Theme/ThemeProvider'
 import { getActiveEndpoints } from './util'
@@ -60,6 +61,7 @@ export interface PlaygroundWrapperProps {
   createApolloLink?: (session: Session) => ApolloLink
   tabs?: Tab[]
   schema?: { __schema: any } // introspection result
+  codeTheme?: EditorColours
 }
 
 export interface ReduxProps {
@@ -336,7 +338,8 @@ class PlaygroundWrapper extends React.Component<
               mode: theme,
               colours: theme === 'dark' ? darkColours : lightColours,
               editorColours:
-                theme === 'dark' ? darkEditorColours : lightEditorColours,
+                this.props.codeTheme ||
+                (theme === 'dark' ? darkEditorColours : lightEditorColours),
               settings: this.props.settings,
             } as any
           }

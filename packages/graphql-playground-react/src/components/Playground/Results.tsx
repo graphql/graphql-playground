@@ -101,7 +101,7 @@ const ResultWindow = withProps<ResultWrapperProps>()(styled.div)`
   }
 
   .CodeMirror {
-    background: ${p => p.theme.colours.resultBackground};
+    background: ${p => p.theme.editorColours.resultBackground};
   }
   .CodeMirror-gutters {
     cursor: col-resize;

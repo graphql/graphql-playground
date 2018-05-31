@@ -650,7 +650,7 @@ const ResultWrap = styled.div`
   flex: 1;
   position: relative;
   border-left: none;
-  background: ${p => p.theme.colours.resultBackground};
+  background: ${p => p.theme.editorColours.resultBackground};
 `
 
 const DragBar = styled.div`
@@ -702,13 +702,13 @@ const VariableEditor = styled(BottomDrawer)`
   .CodeMirror {
     padding-left: 12px;
     width: calc(100% - 12px);
-    background: ${p => p.theme.colours.leftDrawerBackground};
+    background: ${p => p.theme.editorColours.leftDrawerBackground};
   }
 `
 
 const VariableEditorTitle = withProps<TitleProps>()(styled(BottomDrawerTitle))`
   cursor: ${p => (p.isOpen ? 'row-resize' : 'n-resize')};
-  background: ${p => p.theme.colours.leftDrawerBackground};
+  background: ${p => p.theme.editorColours.leftDrawerBackground};
 `
 
 const VariableEditorSubtitle = withProps<TitleProps>()(styled.span)`
@@ -719,14 +719,14 @@ const VariableEditorSubtitle = withProps<TitleProps>()(styled.span)`
 `
 
 const ResponseTracking = styled(BottomDrawer)`
-  background: ${p => p.theme.colours.rightDrawerBackground};
+  background: ${p => p.theme.editorColours.rightDrawerBackground};
 `
 
 const ResponseTrackingTitle = withProps<TitleProps>()(
   styled(BottomDrawerTitle),
 )`
   text-align: right;
-  background: ${p => p.theme.colours.rightDrawerBackground};
+  background: ${p => p.theme.editorColours.rightDrawerBackground};
   cursor: ${props => (props.isOpen ? 's-resize' : 'n-resize')};
   color: ${p => p.theme.colours.textInactive};
 `
@@ -740,7 +740,7 @@ const QueryWrap = withProps<QueryProps>()(styled.div)`
   display: flex;
   flex-direction: column;
   flex: ${props => props.flex} 1 0%;
-  border-top: 8px solid ${props => props.theme.colours.resultBackground};
+  border-top: 8px solid ${props => props.theme.editorColours.resultBackground};
 `
 
 const Intro = styled.div`
@@ -761,7 +761,7 @@ const Listening = styled.div`
   position: absolute;
   bottom: 0;
   color: ${p => p.theme.colours.text};
-  background: ${p => p.theme.colours.resultBackground};
+  background: ${p => p.theme.editorColours.resultBackground};
   font-size: ${p => p.theme.sizes.small16};
   font-family: ${p => p.theme.settings['editor.fontFamily']};
   letter-spacing: 0.6px;
