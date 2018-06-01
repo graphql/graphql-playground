@@ -152,10 +152,13 @@ Including stylesheet and the component (`2., 3.`)
 ```js
 import React from 'react'
 import ReactDOM from 'react-dom'
-import Playground from 'graphql-playground-react'
+import { Provider } from 'react-redux'
+import { Playground, store } from 'graphql-playground-react'
 
 ReactDOM.render(
-  <Playground endpoint="https://api.graph.cool/simple/v1/swapi" />,
+  <Provider store={store}>
+    <Playground endpoint="https://api.graph.cool/simple/v1/swapi" />
+  </Provider>,
   document.body,
 )
 ```
