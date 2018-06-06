@@ -12,6 +12,10 @@ export function safely(cb: any) {
   }
 }
 
-export function prettify(query) {
-  return prettier.format(query, { parser: 'graphql', plugins: [graphql] })
+export function prettify(query: string, printWidth: number) {
+  return prettier.format(query, {
+    parser: 'graphql',
+    printWidth,
+    plugins: [graphql],
+  })
 }

@@ -23,6 +23,7 @@ export interface ISettings {
   ['editor.fontSize']: number
   ['editor.theme']: Theme
   ['editor.reuseHeaders']: boolean
+  ['prettier.printWidth']: number
   ['tracing.hideTracingResponse']: boolean
   ['request.credentials']: 'omit' | 'include' | 'same-origin'
 }

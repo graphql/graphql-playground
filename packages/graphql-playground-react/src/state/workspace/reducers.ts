@@ -47,6 +47,7 @@ export const defaultSettings: ISettings = {
   'editor.fontFamily': `'Source Code Pro', 'Consolas', 'Inconsolata', 'Droid Sans Mono', 'Monaco', monospace`,
   'editor.theme': 'dark',
   'editor.reuseHeaders': true,
+  'prettier.printWidth': 80,
   'request.credentials': 'omit',
   'tracing.hideTracingResponse': true,
 }
@@ -84,6 +85,7 @@ export const rootReducer = (state = new RootState(), action) => {
   }
 
   if (action.type === 'SET_SETTINGS_STRING') {
+    // console.log(action.payload.settingsString)
     return state.set('settingsString', action.payload.settingsString)
   }
 
