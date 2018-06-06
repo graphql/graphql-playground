@@ -167,6 +167,21 @@ export const lightEditorColours: EditorColours = {
   rightDrawerBackground: '#e5e7e7',
 }
 
+// tslint:disable-next-line
+export const editorColors = {
+  background: '',
+  editorBackground: '',
+  resultBackground: '',
+  leftDrawerBackground: '',
+  rightDrawerBackground: '',
+  executeButton: '',
+  text: '',
+  icons: '',
+  iconsHover: '',
+  button: '',
+  buttonHover: '',
+}
+
 export interface Sizes {
   small6: string
   small10: string
