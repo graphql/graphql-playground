@@ -40,7 +40,7 @@ See the following question for more additonal features.
 
 The desktop app is the same as the web version but includes these additional features:
 
-* Support for [graphql-config](https://github.com/graphcool/graphql-config) enabling features like multi-environment setups.
+* Support for [graphql-config](https://github.com/prismagraphql/graphql-config) enabling features like multi-environment setups.
 * Double click on `*.graphql` files.
 
 ### How does GraphQL Bin work?
@@ -120,8 +120,8 @@ In addition to this, the React app provides some more properties:
 
 If you simply want to render the Playground HTML on your own, for example when implementing a GraphQL Server, there are 2 options for you:
 
-1.  [The bare minimum HTML needed to render the Playground](https://github.com/graphcool/graphql-playground/blob/master/packages/graphql-playground-html/minimal.html)
-2.  [The Playground HTML with full loading animation](https://github.com/graphcool/graphql-playground/blob/master/packages/graphql-playground-html/withAnimation.html)
+1.  [The bare minimum HTML needed to render the Playground](https://github.com/prismagraphql/graphql-playground/blob/master/packages/graphql-playground-html/minimal.html)
+2.  [The Playground HTML with full loading animation](https://github.com/prismagraphql/graphql-playground/blob/master/packages/graphql-playground-html/withAnimation.html)
 
 ### As React Component
 
@@ -179,11 +179,11 @@ yarn add graphql-playground-middleware-lambda
 
 We have a full example for each of the frameworks below:
 
-* **Express:** See [packages/graphql-playground-middleware-express/examples/basic](https://github.com/graphcool/graphql-playground/tree/master/packages/graphql-playground-middleware-express/examples/basic)
+* **Express:** See [packages/graphql-playground-middleware-express/examples/basic](https://github.com/prismagraphql/graphql-playground/tree/master/packages/graphql-playground-middleware-express/examples/basic)
 
-* **Hapi:** See [packages/graphql-playground-middleware-hapi](https://github.com/graphcool/graphql-playground/tree/master/packages/graphql-playground-middleware-hapi)
+* **Hapi:** See [packages/graphql-playground-middleware-hapi](https://github.com/prismagraphql/graphql-playground/tree/master/packages/graphql-playground-middleware-hapi)
 
-* **Koa:** See [packages/graphql-playground-middleware-koa](https://github.com/graphcool/graphql-playground/tree/master/packages/graphql-playground-middleware-koa)
+* **Koa:** See [packages/graphql-playground-middleware-koa](https://github.com/prismagraphql/graphql-playground/tree/master/packages/graphql-playground-middleware-koa)
 
 * **Lambda (as serverless handler):** See [serverless-graphql-apollo](https://github.com/serverless/serverless-graphql-apollo) or a quick example below.
 
@@ -299,7 +299,7 @@ In the folder `packages` you'll find the following packages:
 
 <a name="help-and-community" />
 
-## Help & Community [![Slack Status](https://slack.graph.cool/badge.svg)](https://slack.graph.cool)
+## Help & Community [![Slack Status](https://slack.prisma.io/badge.svg)](https://slack.prisma.io)
 
 Join our [Slack community](http://slack.graph.cool/) if you run into issues or have questions. We love talking to you!
 
