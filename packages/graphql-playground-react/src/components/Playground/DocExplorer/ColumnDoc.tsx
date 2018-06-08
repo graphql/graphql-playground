@@ -26,7 +26,7 @@ const ColumnDoc = ({
         }
         .overflow {
           overflow-x: hidden;
-          overflow-y: scroll;
+          overflow-y: auto;
         }
       `}</style>
       {children}
