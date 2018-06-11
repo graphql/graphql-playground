@@ -49,10 +49,35 @@ export interface EditorColours {
   ws: string
   selection: string
   cursorColor: string
+
+  text: string
+  textInactive: string
+  background: string
+  sidebarTop: string
+  sidebar: string
+  sidebarBottom: string
+  sidebarItemActive: string
+  sidebarItemSide: string
+  sidebarItemSessions: string
+  tab: string
+  tabActive: string
+  navigationBar: string
+  navigationBarText: string
   editorBackground: string
   resultBackground: string
   leftDrawerBackground: string
   rightDrawerBackground: string
+  drawerText: string
+  drawerTextActive: string
+  executeButton: string
+  icon: string
+  iconHover: string
+  button: string
+  buttonHover: string
+  buttonText: string
+  buttonWorkspace: string
+  buttonWorkspaceHover: string
+  buttonWorkspaceText: string
 }
 
 export const darkColours: Colours = {
@@ -136,10 +161,34 @@ export const darkEditorColours: EditorColours = {
   selection: 'rgba(255, 255, 255, 0.1)',
   cursorColor: 'rgba(255, 255, 255, 0.4)',
 
+  text: '#fff',
+  textInactive: '',
+  background: '#09141c',
+  sidebarTop: '#0f202d',
+  sidebar: '#172b3a',
+  sidebarBottom: '#172b3a',
+  sidebarItemActive: 'rgb(23, 42, 58)',
+  sidebarItemSide: '#27ae60',
+  sidebarItemSessions: 'rgba(255, 255, 255, 0.05)',
+  tab: '#172b3a',
+  tabActive: '',
+  navigationBar: '#172b3a',
+  navigationBarText: 'rgba(255, 255, 255, 0.6)',
   editorBackground: '#0f202d',
-  resultBackground: 'rgb(23, 43, 58)',
+  resultBackground: '#172b3a',
   leftDrawerBackground: '#0b1924',
   rightDrawerBackground: '#0b1924',
+  drawerText: '',
+  drawerTextActive: '',
+  executeButton: '',
+  icon: 'rgba(255, 255, 255, 0.2)',
+  iconHover: 'rgba(255, 255, 255, 0.6)',
+  button: '#0F202D',
+  buttonHover: '#122535',
+  buttonText: 'rgba(255,255,255,0.6)',
+  buttonWorkspace: '#b9bfc4',
+  buttonWorkspaceHover: '#a4acb2',
+  buttonWorkspaceText: 'rgb(23, 42, 58)',
 }
 
 export const lightEditorColours: EditorColours = {
@@ -161,25 +210,34 @@ export const lightEditorColours: EditorColours = {
   selection: '#d1e9fd',
   cursorColor: 'rgba(0, 0, 0, 0.4)',
 
+  text: '',
+  textInactive: '',
+  background: '#dbdee0',
+  sidebarTop: '#eeeff0',
+  sidebar: '#eeeff0',
+  sidebarBottom: '#f6f7f7',
+  sidebarItemActive: '',
+  sidebarItemSide: '',
+  sidebarItemSessions: '',
+  tab: '',
+  tabActive: '',
+  navigationBar: '#eeeff0',
+  navigationBarText: 'rgba(255, 255, 255, 0.6)',
   editorBackground: '#f6f7f7',
   resultBackground: '#eeeff0',
   leftDrawerBackground: '#e9eaea',
   rightDrawerBackground: '#e5e7e7',
-}
-
-// tslint:disable-next-line
-export const editorColors = {
-  background: '',
-  editorBackground: '',
-  resultBackground: '',
-  leftDrawerBackground: '',
-  rightDrawerBackground: '',
+  drawerText: '',
+  drawerTextActive: '',
   executeButton: '',
-  text: '',
-  icons: '',
-  iconsHover: '',
+  icon: '',
+  iconHover: '',
   button: '',
   buttonHover: '',
+  buttonText: '',
+  buttonWorkspace: '',
+  buttonWorkspaceHover: '',
+  buttonWorkspaceText: '',
 }
 
 export interface Sizes {

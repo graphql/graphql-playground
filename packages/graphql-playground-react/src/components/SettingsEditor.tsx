@@ -1,6 +1,5 @@
 import * as React from 'react'
 import { styled } from '../styled'
-import * as theme from 'styled-theming'
 import { Button } from './Playground/TopBar/TopBar'
 import { ConfigEditor } from './Playground/ConfigEditor'
 import { connect } from 'react-redux'
@@ -124,13 +123,8 @@ export const GraphQLConfigEditor = connect(
   },
 )(SettingsEditor)
 
-const backgroundColor = theme('mode', {
-  light: p => p.theme.colours.darkBlue10,
-  dark: p => p.theme.colours.darkBlue,
-})
-
 const Wrapper = styled.div`
-  background: ${backgroundColor};
+  background: ${p => p.theme.editorColours.resultBackground};
   position: relative;
   display: flex;
   flex-flow: column;
@@ -154,16 +148,11 @@ const ButtonWrapper = styled.div`
   z-index: 2;
 `
 
-const versionColor = theme('mode', {
-  light: p => p.theme.colours.darkBlue20,
-  dark: p => p.theme.colours.white20,
-})
-
 const PlaygroundVersion = styled.span`
   position: absolute;
   right: 20px;
   bottom: 17px;
-  color: ${versionColor};
+  color: ${p => p.theme.editorColours.textInactive};
   font-weight: 700;
   margin-right: 14px;
 `

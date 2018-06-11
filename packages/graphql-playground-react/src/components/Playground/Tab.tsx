@@ -4,6 +4,7 @@ import { $v } from 'graphcool-styles'
 import { connect } from 'react-redux'
 import { closeTab, selectTab, editName } from '../../state/sessions/actions'
 import * as cn from 'classnames'
+import { styled, withProps } from '../../styled'
 import { Session } from '../../state/sessions/reducers'
 import AutosizeInput from 'react-input-autosize'
 
@@ -47,44 +48,8 @@ class Tab extends React.PureComponent<Props & ReduxProps, State> {
       'New Tab'
 
     return (
-      <div
-        className={cn('tab', localTheme, { active })}
-        onClick={this.handleSelectSession}
-      >
+      <TabItem onClick={this.handleSelectSession}>
         <style jsx={true}>{`
-          .tab {
-            @p: .flex,
-              .itemsCenter,
-              .bgDarkerBlue,
-              .br2,
-              .brTop,
-              .ml10,
-              .bbox,
-              .pointer,
-              .nowrap;
-            height: 43px;
-            padding: 10px;
-            padding-top: 9px;
-            &.active {
-              @p: .bgDarkBlue;
-            }
-            border-bottom: 2px solid #172a3a;
-            font-size: 14px;
-          }
-          .tab:first-of-type {
-            margin-left: 0;
-          }
-          .light.tab {
-            color: $darkBlue80;
-            background-color: #e7eaec;
-            &.active {
-              background-color: #eeeff0;
-            }
-            border-bottom: 2px solid #eeeff0;
-          }
-          .tab:hover {
-            @p: .bgDarkBlue;
-          }
           .tab:hover :global(.close) {
             opacity: 1;
           }
@@ -97,39 +62,6 @@ class Tab extends React.PureComponent<Props & ReduxProps, State> {
             &.active {
               @p: .o100;
             }
-          }
-
-          .red-dot {
-            @p: .br100, .bgrRed, .mr10;
-            width: 7px;
-            height: 7px;
-          }
-
-          .query-type {
-            @p: .br2, .flex, .itemsCenter, .justifyCenter, .mr4, .fw7, .f12;
-            height: 21px;
-            width: 21px;
-            margin-right: 2px;
-          }
-
-          .light .query-type {
-            @p: .white;
-          }
-
-          .subscription {
-            @p: .bgPurple;
-          }
-
-          .query {
-            @p: .bgBlue;
-          }
-
-          .mutation {
-            @p: .bgLightOrange;
-          }
-
-          .viewer {
-            @p: .mr10;
           }
 
           .tab .operation-name,
@@ -203,31 +135,24 @@ class Tab extends React.PureComponent<Props & ReduxProps, State> {
           .light .circle {
             @p: .darkBlue40;
           }
-          .query-types {
-            @p: .flex;
-          }
         `}</style>
         <div className={cn('icons', { active })}>
-          {session.subscriptionActive && <div className="red-dot" />}
-          <div className="query-types">
-            {queryTypes.query && <div className="query-type query">Q</div>}
+          {session.subscriptionActive && <RedDot />}
+          <QueryTypes>
+            {queryTypes.query && <Query>Q</Query>}
             {(session.isSettingsTab || session.isConfigTab) && (
-              <div className="query-type query">
+              <Query>
                 <Icon
                   src={require('graphcool-styles/icons/fill/settings.svg')}
                   width={12}
                   height={12}
                   color="white"
                 />
-              </div>
+              </Query>
             )}
-            {queryTypes.mutation && (
-              <div className="query-type mutation">M</div>
-            )}
-            {queryTypes.subscription && (
-              <div className="query-type subscription">S</div>
-            )}
-          </div>
+            {queryTypes.mutation && <Mutation>M</Mutation>}
+            {queryTypes.subscription && <Subscription>S</Subscription>}
+          </QueryTypes>
         </div>
         {this.state.editingName ? (
           <AutosizeInput
@@ -270,7 +195,8 @@ class Tab extends React.PureComponent<Props & ReduxProps, State> {
             />
           )}
         </div>
-      </div>
+        <A active={true} />
+      </TabItem>
     )
   }
 
@@ -314,3 +240,62 @@ export default connect(
   null,
   { closeTab, selectTab, editName },
 )(Tab)
+
+interface TabItemProps {
+  active: boolean
+}
+
+const A = withProps<TabItemProps>()(styled.div)``
+
+const TabItem = styled.div`
+  display: flex;
+  align-items: center;
+  height: 43px;
+  padding: 10px;
+  padding-top: 9px;
+  margin-left: 10px;
+  font-size: 14px;
+  border-radius: 2px;
+  box-sizing: border-box;
+  cursor: pointer;
+  background: ${p => p.theme.editorColours.tab};
+  &:first-child {
+    margin-left: 0;
+  }
+`
+
+const QueryTypes = styled.div`
+  display: flex;
+`
+
+const QueryType = styled.div`
+  height: 21px;
+  width: 21px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 4px;
+  font-size: 12px;
+  font-weight: 700;
+  border-radius: 2px;
+`
+
+const Query = styled(QueryType)`
+  background: rgba(42, 126, 210, 1);
+`
+
+const Mutation = styled(QueryType)`
+  background: rgba(241, 143, 1, 1);
+`
+
+const Subscription = styled(QueryType)`
+  background: rgba(164, 3, 111, 1);
+`
+
+const RedDot = styled.div`
+  width: 7px;
+  height: 7px;
+  background: rgba(242, 92, 84, 1);
+  border-radius: 100%;
+  margin-right: 10px;
+`

@@ -75,14 +75,6 @@ export default class TracingRow extends React.Component<
     return (
       <Row style={{ transform: `translateX(${offsetLeft}px)` }}>
         <NameWrapper>
-          {/*
-          <Icon
-            width={8}
-            height={8}
-            color="white"
-            src={require('../../assets/icons/smallArrowBottom.svg')}
-          />
-          */}
           <Name>
             {path.slice(-2).map((p, index) => (
               <span
