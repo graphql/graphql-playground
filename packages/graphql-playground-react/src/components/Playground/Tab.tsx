@@ -57,13 +57,6 @@ class Tab extends React.PureComponent<Props & ReduxProps, State> {
             background-color: #eeeff0;
           }
 
-          .icons {
-            @p: .flex, .itemsCenter, .o50;
-            &.active {
-              @p: .o100;
-            }
-          }
-
           .tab .operation-name,
           .tab :global(input) {
             @p: .o50;
@@ -103,29 +96,6 @@ class Tab extends React.PureComponent<Props & ReduxProps, State> {
               opacity: 1;
             }
           }
-
-          .plus {
-            @p: .flex, .justifyCenter, .itemsCenter;
-            width: 43px;
-          }
-
-          .history {
-            @p: .pointer, .absolute;
-            top: 15px;
-            right: 56px;
-          }
-
-          .change-theme {
-            @p: .absolute, .pointer;
-            top: 200px;
-            right: 200px;
-          }
-          .border-bottom {
-            height: 8px;
-            background-color: #eeeff0;
-            width: 100%;
-          }
-
           .circle {
             @p: .white40, .relative;
             font-size: 9px;
@@ -136,7 +106,7 @@ class Tab extends React.PureComponent<Props & ReduxProps, State> {
             @p: .darkBlue40;
           }
         `}</style>
-        <div className={cn('icons', { active })}>
+        <Icons active={active}>
           {session.subscriptionActive && <RedDot />}
           <QueryTypes>
             {queryTypes.query && <Query>Q</Query>}
@@ -153,7 +123,7 @@ class Tab extends React.PureComponent<Props & ReduxProps, State> {
             {queryTypes.mutation && <Mutation>M</Mutation>}
             {queryTypes.subscription && <Subscription>S</Subscription>}
           </QueryTypes>
-        </div>
+        </Icons>
         {this.state.editingName ? (
           <AutosizeInput
             value={session.name}
@@ -264,13 +234,19 @@ const TabItem = styled.div`
   }
 `
 
+const Icons = withProps<TabItemProps>()(styled.div)`
+  display: flex;
+  align-items: center;
+  opacity: ${p => (p.active ? 1 : 0.5)};
+`
+
 const QueryTypes = styled.div`
   display: flex;
 `
 
 const QueryType = styled.div`
-  height: 21px;
-  width: 21px;
+  height: 22px;
+  width: 22px;
   display: flex;
   align-items: center;
   justify-content: center;
