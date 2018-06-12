@@ -1,7 +1,5 @@
 import * as React from 'react'
-import { $v } from 'graphcool-styles'
 import TracingRow from './TracingRow'
-import * as theme from 'styled-theming'
 import styled from '../../styled/styled'
 import { createStructuredSelector } from 'reselect'
 import {
@@ -38,16 +36,11 @@ export interface ReduxProps {
   queryRunning: boolean
 }
 
-const textColor = theme('mode', {
-  light: p => p.theme.colours.darkBlue60,
-  dark: p => p.theme.colours.white,
-})
-
 const TracingWrapper = styled.div`
   padding-top: 16px;
   padding-left: 25px;
   padding-right: 25px;
-  color: ${textColor};
+  color: ${p => p.theme.editorColours.text};
   overflow: auto;
   position: relative;
   height: 100%;
@@ -58,7 +51,7 @@ const ReRun = styled.div`
 `
 const NotSupported = styled.div`
   font-size: 14px;
-  color: ${$v.lightOrange};
+  color: rgba(241, 143, 1, 1);
 `
 
 const TracingRows = styled.div`

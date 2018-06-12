@@ -1,16 +1,13 @@
 import * as React from 'react'
 import Icon from 'graphcool-styles/dist/components/Icon/Icon'
-import { $v } from 'graphcool-styles'
 import { connect } from 'react-redux'
 import { closeTab, selectTab, editName } from '../../state/sessions/actions'
-import * as cn from 'classnames'
 import { styled, withProps } from '../../styled'
 import { Session } from '../../state/sessions/reducers'
 import AutosizeInput from 'react-input-autosize'
 
 export interface Props {
   session: Session
-  localTheme?: string
   selectedSessionId: string
 }
 
@@ -36,7 +33,7 @@ class Tab extends React.PureComponent<Props & ReduxProps, State> {
   }
 
   render() {
-    const { session, selectedSessionId, localTheme } = this.props
+    const { session, selectedSessionId } = this.props
     const { queryTypes } = session
 
     const active = session.id === selectedSessionId
@@ -48,64 +45,7 @@ class Tab extends React.PureComponent<Props & ReduxProps, State> {
       'New Tab'
 
     return (
-      <TabItem onClick={this.handleSelectSession}>
-        <style jsx={true}>{`
-          .tab:hover :global(.close) {
-            opacity: 1;
-          }
-          .light.tab:hover {
-            background-color: #eeeff0;
-          }
-
-          .tab .operation-name,
-          .tab :global(input) {
-            @p: .o50;
-            background: transparent !important;
-            color: white;
-            font-size: 14px;
-            margin-left: 2px;
-            display: inline;
-            letter-spacing: 0.53px;
-            &.active {
-              @p: .o100;
-            }
-          }
-
-          .light.tab .operation-name,
-          .light.tab :global(input) {
-            color: $darkBlue80;
-          }
-
-          .tab :global(input) {
-            opacity: 1 !important;
-          }
-
-          .close {
-            @p: .ml10, .relative;
-            top: 1px;
-            height: 13px;
-            width: 13px;
-            opacity: 0;
-
-            &.active {
-              @p: .o100;
-              opacity: 1;
-            }
-
-            &.hasCircle {
-              opacity: 1;
-            }
-          }
-          .circle {
-            @p: .white40, .relative;
-            font-size: 9px;
-            top: -2px;
-          }
-
-          .light .circle {
-            @p: .darkBlue40;
-          }
-        `}</style>
+      <TabItem active={active} onClick={this.handleSelectSession}>
         <Icons active={active}>
           {session.subscriptionActive && <RedDot />}
           <QueryTypes>
@@ -125,47 +65,38 @@ class Tab extends React.PureComponent<Props & ReduxProps, State> {
           </QueryTypes>
         </Icons>
         {this.state.editingName ? (
-          <AutosizeInput
+          <OperationNameInput
             value={session.name}
             onChange={this.handleEditName}
             onBlur={this.stopEditName}
             onKeyDown={this.handleKeyDown}
             autoFocus={true}
-            className="operation-name"
-            style={{ background: 'transparent' }}
           />
         ) : (
-          <div
-            className={cn('operation-name', { active })}
-            onDoubleClick={this.startEditName}
-          >
+          <OperationName active={active} onDoubleClick={this.startEditName}>
             {name}
-          </div>
+          </OperationName>
         )}
-        <div
-          className={cn('close', {
-            active,
-            hasCircle:
-              session.isFile && session.changed && !this.state.overCross,
-          })}
+        <Close
+          className="close"
+          active={active}
+          hasCircle={session.isFile && session.changed && !this.state.overCross}
           onClick={this.handleCloseSession}
           onMouseEnter={this.handleMouseOverCross}
           onMouseLeave={this.handleMouseOutCross}
         >
           {session.isFile && session.changed && !this.state.overCross ? (
-            <div className="circle">⬤</div>
+            <Circle>⬤</Circle>
           ) : (
             <Icon
               src={require('graphcool-styles/icons/stroke/cross.svg')}
               stroke={true}
-              color={localTheme === 'dark' ? 'rgb(74, 85, 95)' : $v.darkBlue40}
               width={12}
               height={11}
               strokeWidth={7}
             />
           )}
-        </div>
-        <A active={true} />
+        </Close>
       </TabItem>
     )
   }
@@ -213,11 +144,10 @@ export default connect(
 
 interface TabItemProps {
   active: boolean
+  hasCircle?: boolean
 }
 
-const A = withProps<TabItemProps>()(styled.div)``
-
-const TabItem = styled.div`
+const TabItem = withProps<TabItemProps>()(styled.div)`
   display: flex;
   align-items: center;
   height: 43px;
@@ -226,11 +156,40 @@ const TabItem = styled.div`
   margin-left: 10px;
   font-size: 14px;
   border-radius: 2px;
+  border-bottom: 2px solid ${p => p.theme.editorColours.navigationBar};
   box-sizing: border-box;
   cursor: pointer;
-  background: ${p => p.theme.editorColours.tab};
+  background: ${p =>
+    p.active ? p.theme.editorColours.tab : p.theme.editorColours.tabInactive};
   &:first-child {
     margin-left: 0;
+  }
+  &:hover {
+    background: ${p => p.theme.editorColours.tab};
+    .close {
+      opacity: 1;
+    }
+  }
+`
+
+const OperationName = withProps<TabItemProps>()(styled.div)`
+  opacity: ${p => (p.active ? 1 : 0.5)};
+  background: transparent;
+  color: ${p => p.theme.editorColours.tabText};
+  font-size: 14px;
+  margin-left: 2px;
+  display: inline;
+  letter-spacing: 0.53px;
+`
+
+const OperationNameInput = styled(AutosizeInput)`
+  input {
+    background: transparent;
+    color: ${p => p.theme.editorColours.tabText};
+    font-size: 14px;
+    margin-left: 2px;
+    display: inline;
+    letter-spacing: 0.53px;
   }
 `
 
@@ -274,4 +233,23 @@ const RedDot = styled.div`
   background: rgba(242, 92, 84, 1);
   border-radius: 100%;
   margin-right: 10px;
+`
+
+const Circle = styled.div`
+  position: relative;
+  top: -2px;
+  font-size: 9px;
+  background: ${p => p.theme.editorColours.circle};
+`
+
+const Close = withProps<TabItemProps>()(styled.div)`
+  position: relative;
+  margin-left: 10px;
+  top: 1px;
+  height: 13px;
+  width: 13px;
+  opacity: ${p => (p.active || p.hasCircle ? 1 : 0)};
+  svg {
+    stroke: ${p => p.theme.editorColours.icon};
+  }
 `

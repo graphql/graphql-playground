@@ -715,7 +715,9 @@ const VariableEditorSubtitle = withProps<TitleProps>()(styled.span)`
   margin-right: 10px;
   cursor: pointer;
   color: ${p =>
-    p.isOpen ? p.theme.colours.text : p.theme.colours.textInactive};
+    p.isOpen
+      ? p.theme.editorColours.drawerText
+      : p.theme.editorColours.drawerTextInactive};
 `
 
 const ResponseTracking = styled(BottomDrawer)`
@@ -728,7 +730,7 @@ const ResponseTrackingTitle = withProps<TitleProps>()(
   text-align: right;
   background: ${p => p.theme.editorColours.rightDrawerBackground};
   cursor: ${props => (props.isOpen ? 's-resize' : 'n-resize')};
-  color: ${p => p.theme.colours.textInactive};
+  color: ${p => p.theme.editorColours.drawerTextInactive};
 `
 
 interface QueryProps {
@@ -760,7 +762,7 @@ const Intro = styled.div`
 const Listening = styled.div`
   position: absolute;
   bottom: 0;
-  color: ${p => p.theme.colours.text};
+  color: ${p => p.theme.editorColours.text};
   background: ${p => p.theme.editorColours.resultBackground};
   font-size: ${p => p.theme.sizes.small16};
   font-family: ${p => p.theme.settings['editor.fontFamily']};
