@@ -22,7 +22,7 @@
     "tsc": "tsc -p tsconfig.build.json",
     "build-package": "rimraf lib build/dist && npm run tsc && babel lib -d lib && cp -r ./src/assets/ ./lib/assets/ && cd lib && rimraf *.jsx;",
     "build-app": "node scripts/build.js",
-    "test": "node scripts/test.js --env=jsdom",
+    "test": "bundlesize",
     "bump": "npm version patch --no-git-tag-version && git add package.json",
     "graphql-faker": "graphql-faker ./tests/schema.faker.graphql",
     "lint": "tslint \"src/**/*.ts{,x}\"",
@@ -33,6 +33,12 @@
     "build",
     "lib",
     "playground.css"
+  ],
+  "bundlesize": [
+    {
+      "path": "build/static/js/index.js",
+      "maxSize": "674 kB"
+    }
   ],
   "devDependencies": {
     "@types/deasync": "0.1.0",
@@ -50,6 +56,7 @@
     "babel-preset-es2016": "6.24.1",
     "babel-preset-react": "6.24.1",
     "babel-preset-stage-3": "6.24.1",
+    "bundlesize": "^0.17.0",
     "case-sensitive-paths-webpack-plugin": "2.1.2",
     "chalk": "2.4.1",
     "connect-history-api-fallback": "1.5.0",
