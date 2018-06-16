@@ -26,8 +26,6 @@ import { getSelectedSessionId } from './selectors'
 import { getDefaultSession, defaultQuery } from '../../constants'
 import * as cuid from 'cuid'
 import { formatError } from './fetchingSagas'
-import { prettify } from '../../utils'
-import { getSettings } from '../workspace/reducers'
 
 export interface SessionStateProps {
   sessions: OrderedMap<string, Session>
@@ -234,15 +232,6 @@ const reducer = handleActions(
         'responseTracingOpen',
       ]
       return state.setIn(path, !state.getIn(path))
-    },
-    PRETTIFY_QUERY: state => {
-      const settings = getSettings(state)
-      console.log(settings)
-      const path = ['sessions', getSelectedSessionId(state), 'query']
-      return state.setIn(
-        path,
-        prettify(state.getIn(path), settings['prettier.printWidth']),
-      )
     },
     OPEN_TRACING: (state, { payload: { responseTracingHeight } }) => {
       return state.mergeDeepIn(
