@@ -189,9 +189,9 @@ function* addToHistory({ payload }) {
 }
 
 function* prettifyQuery() {
-  const session = yield select(getSelectedSession)
+  const { query } = yield select(getSelectedSession)
   const settings = yield select(getSettings)
-  const prettyQuery = prettify(session.query, settings['prettier.printWidth'])
+  const prettyQuery = prettify(query, settings['prettier.printWidth'])
   yield put(editQuery(prettyQuery))
 }
 

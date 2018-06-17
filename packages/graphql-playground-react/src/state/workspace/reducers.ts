@@ -85,7 +85,6 @@ export const rootReducer = (state = new RootState(), action) => {
   }
 
   if (action.type === 'SET_SETTINGS_STRING') {
-    // console.log(action.payload.settingsString)
     return state.set('settingsString', action.payload.settingsString)
   }
 
