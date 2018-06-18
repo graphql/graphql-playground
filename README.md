@@ -64,9 +64,9 @@ These are the settings currently available:
   'editor.cursorShape': 'line', // possible values: 'line', 'block', 'underline'
   'editor.fontSize': 14,
   'editor.fontFamily': `'Source Code Pro', 'Consolas', 'Inconsolata', 'Droid Sans Mono', 'Monaco', monospace`,
-  'editor.theme': 'dark',
+  'editor.theme': 'dark', // possible values: 'dark', 'light'
   'editor.reuseHeaders': true,
-  'request.credentials': 'omit',
+  'request.credentials': 'omit', // possible values: 'omit', 'include', 'same-origin'
   'tracing.hideTracingResponse': true,
 }
 ```
