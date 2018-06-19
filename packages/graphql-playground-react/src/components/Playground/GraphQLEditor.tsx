@@ -11,7 +11,7 @@ import { connect } from 'react-redux'
 
 import Spinner from '../Spinner'
 import Results from './Results'
-import ReponseTracing from './ResponseTracing'
+import ResponseTracing from './ResponseTracing'
 import withTheme from '../Theme/withTheme'
 import { LocalThemeInterface } from '../Theme'
 import GraphDocs from './DocExplorer/GraphDocs'
@@ -315,7 +315,7 @@ class GraphQLEditor extends React.PureComponent<
                 >
                   Tracing
                 </ResponseTrackingTitle>
-                <ReponseTracing />
+                <ResponseTracing open={this.props.responseTracingOpen} />
               </ResponseTracking>
             </ResultWrap>
           </EditorBar>
