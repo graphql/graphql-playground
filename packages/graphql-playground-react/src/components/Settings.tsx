@@ -1,7 +1,6 @@
 import * as React from 'react'
 import Icon from 'graphcool-styles/dist/components/Icon/Icon'
 import { styled } from '../styled'
-import * as theme from 'styled-theming'
 import { openSettingsTab } from '../state/sessions/actions'
 import { connect } from 'react-redux'
 
@@ -38,29 +37,19 @@ const Wrapper = styled.div`
   right: 20px;
   top: 17px;
 `
-const iconColor = theme('mode', {
-  light: p => p.theme.colours.darkBlue20,
-  dark: p => p.theme.colours.white20,
-})
 
-const iconColorActive = theme('mode', {
-  light: p => p.theme.colours.darkBlue60,
-  dark: p => p.theme.colours.white60,
-})
-
-// prettier-ignore
 const IconWrapper = styled.div`
   position: relative;
   cursor: pointer;
 
   .settings-icon svg {
-    fill: ${iconColor};
+    fill: ${p => p.theme.editorColours.icon};
     transition: 0.1s linear fill;
   }
 
   &:hover {
     .settings-icon svg {
-      fill: ${iconColorActive};
+      fill: ${p => p.theme.editorColours.iconHover};
     }
   }
 `

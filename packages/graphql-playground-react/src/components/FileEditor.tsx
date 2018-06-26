@@ -1,6 +1,5 @@
 import * as React from 'react'
 import { styled } from '../styled'
-import * as theme from 'styled-theming'
 import { QueryEditor } from './Playground/QueryEditor'
 import { createStructuredSelector } from 'reselect'
 import { getFile } from '../state/sessions/selectors'
@@ -41,13 +40,8 @@ export default connect(
   { onChange: editFile },
 )(FileEditor)
 
-const backgroundColor = theme('mode', {
-  light: p => p.theme.colours.darkBlue10,
-  dark: p => p.theme.colours.darkBlue,
-})
-
 const Wrapper = styled.div`
-  background: ${backgroundColor};
+  background: ${p => p.theme.editorColours.resultBackground};
   position: relative;
   .variable-editor {
     height: 100% !important;

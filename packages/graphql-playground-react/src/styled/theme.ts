@@ -49,10 +49,41 @@ export interface EditorColours {
   ws: string
   selection: string
   cursorColor: string
+
+  text: string
+  textInactive: string
+  background: string
+  sidebarTop: string
+  sidebar: string
+  sidebarBottom: string
+  sidebarItemActive: string
+  sidebarItemSide: string
+  sidebarItemSessions: string
+  tab: string
+  tabInactive: string
+  tabText: string
+  navigationBar: string
+  navigationBarText: string
   editorBackground: string
   resultBackground: string
   leftDrawerBackground: string
   rightDrawerBackground: string
+  drawerText: string
+  drawerTextInactive: string
+  executeButton: string
+  executeButtonBorder: string
+  executeButtonHover: string
+  executeButtonSubscription: string
+  executeButtonSubscriptionHover: string
+  icon: string
+  iconHover: string
+  button: string
+  buttonHover: string
+  buttonText: string
+  buttonWorkspace: string
+  buttonWorkspaceHover: string
+  buttonWorkspaceText: string
+  circle: string
 }
 
 export const darkColours: Colours = {
@@ -136,10 +167,40 @@ export const darkEditorColours: EditorColours = {
   selection: 'rgba(255, 255, 255, 0.1)',
   cursorColor: 'rgba(255, 255, 255, 0.4)',
 
+  text: '#fff',
+  textInactive: 'rgba(255, 255, 255, 0.6)',
+  background: '#09141c',
+  sidebarTop: '#0f202d',
+  sidebar: '#172b3a',
+  sidebarBottom: '#172b3a',
+  sidebarItemActive: 'rgb(23, 42, 58)',
+  sidebarItemSide: '#27ae60',
+  sidebarItemSessions: 'rgba(255, 255, 255, 0.05)',
+  tab: '#172b3a',
+  tabInactive: '#0f202d',
+  tabText: '#fff',
+  navigationBar: '#172b3a',
+  navigationBarText: 'rgba(255, 255, 255, 0.6)',
   editorBackground: '#0f202d',
-  resultBackground: 'rgb(23, 43, 58)',
+  resultBackground: '#172b3a',
   leftDrawerBackground: '#0b1924',
   rightDrawerBackground: '#0b1924',
+  drawerText: 'rgba(255,255,255,0.6)',
+  drawerTextInactive: '#555e66',
+  executeButton: 'rgb(185, 191, 196)',
+  executeButtonBorder: 'rgb(11, 20, 28)',
+  executeButtonHover: 'rgb(195, 201, 206)',
+  executeButtonSubscription: '#f25c54',
+  executeButtonSubscriptionHover: '#f36c65',
+  icon: 'rgb(74, 85, 95)',
+  iconHover: 'rgba(255, 255, 255, 0.6)',
+  button: '#0F202D',
+  buttonHover: '#122535',
+  buttonText: 'rgba(255,255,255,0.6)',
+  buttonWorkspace: '#b9bfc4',
+  buttonWorkspaceHover: '#a4acb2',
+  buttonWorkspaceText: 'rgb(23, 42, 58)',
+  circle: 'rgba(255, 255, 255, 0.4)',
 }
 
 export const lightEditorColours: EditorColours = {
@@ -161,10 +222,40 @@ export const lightEditorColours: EditorColours = {
   selection: '#d1e9fd',
   cursorColor: 'rgba(0, 0, 0, 0.4)',
 
+  text: 'rgba(0, 0, 0, 0.7)',
+  textInactive: 'rgba(0, 0, 0, 0.3)',
+  background: '#dbdee0',
+  sidebarTop: '#eeeff0',
+  sidebar: '#eeeff0',
+  sidebarBottom: '#f6f7f7',
+  sidebarItemActive: '#f6f7f7',
+  sidebarItemSide: '#27ae60',
+  sidebarItemSessions: '#dbdee0',
+  tab: '#eeeff0',
+  tabInactive: '#e7eaec',
+  tabText: 'rgba(23, 42, 58, .8)',
+  navigationBar: '#eeeff0',
+  navigationBarText: 'rgba(23, 42, 58, 0.8)',
   editorBackground: '#f6f7f7',
   resultBackground: '#eeeff0',
   leftDrawerBackground: '#e9eaea',
   rightDrawerBackground: '#e5e7e7',
+  drawerText: 'rgba(0, 0, 0, 0.7)',
+  drawerTextInactive: 'rgba(0, 0, 0, 0.3)',
+  executeButton: 'rgb(115, 127, 136)',
+  executeButtonBorder: '#eeeff0',
+  executeButtonHover: '',
+  executeButtonSubscription: '#f25c54',
+  executeButtonSubscriptionHover: '#f36c65',
+  icon: 'rgb(194, 200, 203)',
+  iconHover: 'rgba(23, 42, 58, 0.6)',
+  button: '#d8dbde',
+  buttonHover: 'rgba(20, 37, 51, 0.2)',
+  buttonText: 'rgba(23, 42, 58, 0.8)',
+  buttonWorkspace: 'rgb(185, 191, 196)',
+  buttonWorkspaceHover: 'rgb(157, 166, 173)',
+  buttonWorkspaceText: 'rgb(238, 239, 240)',
+  circle: 'rgba(23,42,58,.4)',
 }
 
 export interface Sizes {
