@@ -58,7 +58,7 @@
   dependencies:
     csstype "^2.2.0"
 
-"@types/zen-observable@^0.5.3":
+"@types/zen-observable@0.5.3":
   version "0.5.3"
   resolved "https://registry.yarnpkg.com/@types/zen-observable/-/zen-observable-0.5.3.tgz#91b728599544efbb7386d8b6633693a3c2e7ade5"
 
@@ -1472,7 +1472,7 @@ builtin-status-codes@^3.0.0:
   version "3.0.0"
   resolved "https://registry.yarnpkg.com/builtin-status-codes/-/builtin-status-codes-3.0.0.tgz#85982878e21b98e1c66425e03d0174788f569ee8"
 
-bundlesize@^0.17.0:
+bundlesize@0.17.0:
   version "0.17.0"
   resolved "https://registry.yarnpkg.com/bundlesize/-/bundlesize-0.17.0.tgz#212ae5731ab0554d2acd509d23e1de18640b2008"
   dependencies:
