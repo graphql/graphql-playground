@@ -1,9 +1,9 @@
 import * as React from 'react'
-import { mount } from 'enzyme'
+import { shallow } from 'enzyme'
 import MiddlewareApp from './components/MiddlewareApp'
 
 test('test middleware app', () => {
-  const wrapper = mount(
+  const wrapper = shallow(
     <MiddlewareApp setTitle={true} showNewWorkspace={false} />,
   )
   expect(wrapper).toMatchSnapshot()
