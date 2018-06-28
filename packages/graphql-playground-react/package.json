@@ -22,8 +22,7 @@
     "tsc": "tsc -p tsconfig.build.json",
     "build-package": "rimraf lib build/dist && npm run tsc && babel lib -d lib && cp -r ./src/assets/ ./lib/assets/ && cd lib && rimraf *.jsx;",
     "build-app": "node scripts/build.js",
-    "test": "jest",
-    "bundlesize": "bundlesize",
+    "test": "bundlesize",
     "bump": "npm version patch --no-git-tag-version && git add package.json",
     "graphql-faker": "graphql-faker ./tests/schema.faker.graphql",
     "lint": "tslint \"src/**/*.ts{,x}\"",
@@ -43,6 +42,7 @@
   ],
   "devDependencies": {
     "@types/deasync": "0.1.0",
+    "@types/jest": "22.2.3",
     "@types/node": "10.1.4",
     "@types/react": "16.3.14",
     "@types/zen-observable": "^0.5.3",
@@ -63,9 +63,6 @@
     "css-loader": "0.28.11",
     "detect-port": "1.2.3",
     "dotenv": "5.0.1",
-    "enzyme": "^3.3.0",
-    "enzyme-adapter-react-16": "^1.1.1",
-    "enzyme-to-json": "^3.3.4",
     "extract-text-webpack-plugin": "3.0.2",
     "file-loader": "1.1.11",
     "filesize": "3.6.1",
@@ -75,9 +72,7 @@
     "html-webpack-plugin": "2.30.1",
     "http-proxy-middleware": "0.17.4",
     "husky": "0.14.3",
-    "jest": "^23.2.0",
-    "jest-localstorage-mock": "^2.2.0",
-    "jsdom": "^11.11.0",
+    "jest": "22.1.4",
     "json-loader": "0.5.7",
     "lint-staged": "6.1.0",
     "node-noop": "1.0.0",
@@ -93,7 +88,6 @@
     "promise": "8.0.1",
     "raw-loader": "0.5.1",
     "react-dev-utils": "5.0.1",
-    "react-test-renderer": "^16.4.1",
     "recursive-readdir": "2.2.2",
     "rimraf": "2.6.2",
     "source-map-loader": "0.2.3",
@@ -183,5 +177,35 @@
       "git add"
     ],
     "gitDir": "../../"
+  },
+  "jest": {
+    "collectCoverageFrom": [
+      "src/**/*.{ts,tsx}"
+    ],
+    "setupFiles": [
+      "<rootDir>/config/polyfills.js"
+    ],
+    "testPathIgnorePatterns": [
+      "<rootDir>[/\\\\](build|docs|node_modules)[/\\\\]"
+    ],
+    "testEnvironment": "node",
+    "testURL": "http://localhost",
+    "transform": {
+      "^.+\\.css$": "<rootDir>/config/jest/cssTransform.js",
+      "^.+\\.tsx?$": "<rootDir>/config/jest/typescriptTransform.js",
+      "^(?!.*\\.(css|json)$)": "<rootDir>/config/jest/fileTransform.js"
+    },
+    "transformIgnorePatterns": [
+      "[/\\\\]node_modules[/\\\\].+\\.(js|jsx)$"
+    ],
+    "moduleNameMapper": {
+      "^react-native$": "react-native-web"
+    },
+    "moduleFileExtensions": [
+      "ts",
+      "tsx",
+      "js"
+    ],
+    "testRegex": "(/__tests__/.*|\\.(test|spec))\\.(ts|tsx|js)$"
   }
 }
