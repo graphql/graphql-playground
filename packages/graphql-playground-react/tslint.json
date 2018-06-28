@@ -7,6 +7,7 @@
     "no-submodule-imports": false,
     "prefer-conditional-expression": false,
     "no-implicit-dependencies": false,
-    "no-empty": false
+    "no-empty": false,
+    "no-shadowed-variable": false
   }
 }
