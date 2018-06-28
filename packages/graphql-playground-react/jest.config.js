@@ -12,7 +12,7 @@ module.exports = {
   testEnvironment: 'jsdom',
   moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx', 'json', 'node'],
   snapshotSerializers: ['enzyme-to-json/serializer'],
-  setupTestFrameworkScriptFile: '<rootDir>/config/setupEnzyme.ts',
+  setupTestFrameworkScriptFile: '<rootDir>/src/setupEnzyme.ts',
   globals: {
     'ts-jest': {
       tsConfigFile: 'tsconfig.jest.json',
