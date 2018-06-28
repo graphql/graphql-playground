@@ -1,0 +1,1360 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`test middleware app 1`] = `
+<MiddlewareApp
+  setTitle={true}
+  showNewWorkspace={false}
+>
+  <Provider
+    store={
+      Object {
+        "dispatch": [Function],
+        "getState": [Function],
+        "replaceReducer": [Function],
+        "subscribe": [Function],
+        Symbol(observable): [Function],
+      }
+    }
+  >
+    <Connect(PlaygroundWrapper)
+      setTitle={true}
+      showNewWorkspace={false}
+    >
+      <PlaygroundWrapper
+        injectTabs={[Function]}
+        setTitle={true}
+        settings={
+          Object {
+            "editor.cursorShape": "line",
+            "editor.fontFamily": "'Source Code Pro', 'Consolas', 'Inconsolata', 'Droid Sans Mono', 'Monaco', monospace",
+            "editor.fontSize": 14,
+            "editor.reuseHeaders": true,
+            "editor.theme": "dark",
+            "general.betaUpdates": false,
+            "prettier.printWidth": 80,
+            "request.credentials": "omit",
+            "tracing.hideTracingResponse": true,
+          }
+        }
+        showNewWorkspace={false}
+        theme="dark"
+      >
+        <div>
+          <HelmetWrapper
+            defer={true}
+            encodeSpecialCharacters={true}
+          >
+            <SideEffect(NullComponent)
+              defer={true}
+              encodeSpecialCharacters={true}
+              title="Playground - about:blank"
+              titleAttributes={Object {}}
+            >
+              <NullComponent
+                defer={true}
+                encodeSpecialCharacters={true}
+                title="Playground - about:blank"
+                titleAttributes={Object {}}
+              />
+            </SideEffect(NullComponent)>
+          </HelmetWrapper>
+          <ThemeProvider
+            theme={
+              Object {
+                "colours": Object {
+                  "black40": "rgba(0, 0, 0, 0.4)",
+                  "darkBlue": "rgb(23, 42, 58)",
+                  "darkBlue10": "rgba(23, 42, 58, 0.1)",
+                  "darkBlue20": "rgba(23, 42, 58, 0.2)",
+                  "darkBlue30": "rgba(23, 42, 58, 0.3)",
+                  "darkBlue50": "rgba(23, 42, 58, 0.5)",
+                  "darkBlue60": "rgba(23, 42, 58, 0.6)",
+                  "darkBlue80": "rgba(23, 42, 58, 0.8)",
+                  "darkerBlue": "#0F202D",
+                  "darkestBlue": "rgb(11,20,28)",
+                  "green": "#27ae60",
+                  "lightGrey": "#eeeff0",
+                  "lighterGrey": "#f6f7f7",
+                  "paleGrey": "#f3f4f4",
+                  "paleText": "rgba(0, 0, 0, 0.5)",
+                  "purple": "rgb(164, 3, 111)",
+                  "red": "#f25c54",
+                  "text": "rgba(255,255,255,0.6)",
+                  "textInactive": "#555e66",
+                  "white": "rgba(255, 255, 255, 1)",
+                  "white10": "rgba(255, 255, 255, 0.1)",
+                  "white20": "rgba(255, 255, 255, 0.2)",
+                  "white30": "rgba(255, 255, 255, 0.3)",
+                  "white60": "rgba(255, 255, 255, 0.6)",
+                  "white70": "rgba(255, 255, 255, 0.7)",
+                  "white80": "rgba(255, 255, 255, 0.8)",
+                },
+                "editorColours": Object {
+                  "atom": "rgb(249, 233, 34)",
+                  "attribute": "rgb(247, 116, 102)",
+                  "background": "#09141c",
+                  "builtin": "#d47509",
+                  "button": "#0F202D",
+                  "buttonHover": "#122535",
+                  "buttonText": "rgba(255,255,255,0.6)",
+                  "buttonWorkspace": "#b9bfc4",
+                  "buttonWorkspaceHover": "#a4acb2",
+                  "buttonWorkspaceText": "rgb(23, 42, 58)",
+                  "circle": "rgba(255, 255, 255, 0.4)",
+                  "comment": "rgba(255, 255, 255, 0.3)",
+                  "cursorColor": "rgba(255, 255, 255, 0.4)",
+                  "def": "rgb(56, 189, 193)",
+                  "drawerText": "rgba(255,255,255,0.6)",
+                  "drawerTextInactive": "#555e66",
+                  "editorBackground": "#0f202d",
+                  "executeButton": "rgb(185, 191, 196)",
+                  "executeButtonBorder": "rgb(11, 20, 28)",
+                  "executeButtonHover": "rgb(195, 201, 206)",
+                  "executeButtonSubscription": "#f25c54",
+                  "executeButtonSubscriptionHover": "#f36c65",
+                  "icon": "rgb(74, 85, 95)",
+                  "iconHover": "rgba(255, 255, 255, 0.6)",
+                  "keyword": "rgb(42, 126, 211)",
+                  "leftDrawerBackground": "#0b1924",
+                  "meta": "#b33086",
+                  "navigationBar": "#172b3a",
+                  "navigationBarText": "rgba(255, 255, 255, 0.6)",
+                  "number": "#2882f9",
+                  "property": "rgb(41, 185, 115)",
+                  "punctuation": "rgba(255, 255, 255, 0.4)",
+                  "qualifier": "#1c92a9",
+                  "resultBackground": "#172b3a",
+                  "rightDrawerBackground": "#0b1924",
+                  "selection": "rgba(255, 255, 255, 0.1)",
+                  "sidebar": "#172b3a",
+                  "sidebarBottom": "#172b3a",
+                  "sidebarItemActive": "rgb(23, 42, 58)",
+                  "sidebarItemSessions": "rgba(255, 255, 255, 0.05)",
+                  "sidebarItemSide": "#27ae60",
+                  "sidebarTop": "#0f202d",
+                  "string": "#d64292",
+                  "string2": "#0b7fc7",
+                  "tab": "#172b3a",
+                  "tabInactive": "#0f202d",
+                  "tabText": "#fff",
+                  "text": "#fff",
+                  "textInactive": "rgba(255, 255, 255, 0.6)",
+                  "variable": "rgb(181, 34, 130)",
+                  "ws": "rgba(255, 255, 255, 0.4)",
+                },
+                "mode": "dark",
+                "settings": Object {
+                  "editor.cursorShape": "line",
+                  "editor.fontFamily": "'Source Code Pro', 'Consolas', 'Inconsolata', 'Droid Sans Mono', 'Monaco', monospace",
+                  "editor.fontSize": 14,
+                  "editor.reuseHeaders": true,
+                  "editor.theme": "dark",
+                  "general.betaUpdates": false,
+                  "prettier.printWidth": 80,
+                  "request.credentials": "omit",
+                  "tracing.hideTracingResponse": true,
+                },
+                "shorthands": Object {},
+                "sizes": Object {
+                  "fontLight": "300",
+                  "fontMedium": "20px",
+                  "fontSemiBold": "600",
+                  "fontSmall": "14px",
+                  "fontTiny": "12px",
+                  "medium25": "25px",
+                  "small10": "10px",
+                  "small12": "12px",
+                  "small16": "16px",
+                  "small6": "6px",
+                  "smallRadius": "2px",
+                },
+              }
+            }
+          >
+            <ThemeProvider
+              theme="dark"
+            >
+              <styled.div>
+                <div
+                  className="sc-bMVAic bUjTvZ"
+                >
+                  <Connect(Playground)
+                    canSaveConfig={false}
+                    configIsYaml={false}
+                    endpoint="about:blank"
+                    fixedEndpoints={false}
+                    getRef={[Function]}
+                    onChangeConfig={[Function]}
+                    onChangeEndpoint={[Function]}
+                    onChangeSubscriptionsEndpoint={[Function]}
+                    onSaveConfig={[Function]}
+                    onUpdateSessionCount={[Function]}
+                    subscriptionEndpoint="about:blank"
+                  >
+                    <Playground
+                      canSaveConfig={false}
+                      closeSelectedTab={[Function]}
+                      configIsYaml={false}
+                      endpoint="about:blank"
+                      fixedEndpoints={false}
+                      getRef={[Function]}
+                      historyOpen={false}
+                      initState={[Function]}
+                      injectHeaders={[Function]}
+                      isFile={false}
+                      isReloadingSchema={false}
+                      newSession={[Function]}
+                      onChangeConfig={[Function]}
+                      onChangeEndpoint={[Function]}
+                      onChangeSubscriptionsEndpoint={[Function]}
+                      onSaveConfig={[Function]}
+                      onUpdateSessionCount={[Function]}
+                      saveConfig={[Function]}
+                      saveSettings={[Function]}
+                      schemaFetchingError={[Function]}
+                      schemaFetchingSuccess={[Function]}
+                      selectNextTab={[Function]}
+                      selectPrevTab={[Function]}
+                      selectTabIndex={[Function]}
+                      sessionEndpoint="about:blank"
+                      sessionHeaders=""
+                      setConfigString={[Function]}
+                      setTracingSupported={[Function]}
+                      settings={
+                        Object {
+                          "editor.cursorShape": "line",
+                          "editor.fontFamily": "'Source Code Pro', 'Consolas', 'Inconsolata', 'Droid Sans Mono', 'Monaco', monospace",
+                          "editor.fontSize": 14,
+                          "editor.reuseHeaders": true,
+                          "editor.theme": "dark",
+                          "general.betaUpdates": false,
+                          "prettier.printWidth": 80,
+                          "request.credentials": "omit",
+                          "tracing.hideTracingResponse": true,
+                        }
+                      }
+                      settingsString="{
+  \\"general.betaUpdates\\": false,
+  \\"editor.cursorShape\\": \\"line\\",
+  \\"editor.fontSize\\": 14,
+  \\"editor.fontFamily\\": \\"'Source Code Pro', 'Consolas', 'Inconsolata', 'Droid Sans Mono', 'Monaco', monospace\\",
+  \\"editor.theme\\": \\"dark\\",
+  \\"editor.reuseHeaders\\": true,
+  \\"prettier.printWidth\\": 80,
+  \\"request.credentials\\": \\"omit\\",
+  \\"tracing.hideTracingResponse\\": true
+}"
+                      shareEnabled={true}
+                      subscriptionEndpoint="about:blank"
+                    >
+                      <styled.div
+                        className="playground"
+                      >
+                        <div
+                          className="playground sc-gwVKww fjmhfX"
+                        >
+                          <Connect(TabBar)
+                            onNewSession={[Function]}
+                          >
+                            <TabBar
+                              dispatch={[Function]}
+                              onNewSession={[Function]}
+                              selectedSessionId="cjiyk11kt0000p4c3u43uuzpx"
+                              sessions={
+                                Array [
+                                  Immutable.Record {
+                                    "id": "cjiyk11kt0000p4c3u43uuzpx",
+                                    "query": "# Try to write your query here
+",
+                                    "variables": "",
+                                    "responses": Immutable.List [],
+                                    "endpoint": "about:blank",
+                                    "operationName": undefined,
+                                    "hasMutation": false,
+                                    "hasSubscription": false,
+                                    "hasQuery": false,
+                                    "queryTypes": Object {
+                                      "firstOperationName": null,
+                                      "mutation": false,
+                                      "query": false,
+                                      "subscription": false,
+                                    },
+                                    "subscriptionActive": false,
+                                    "date": 2018-06-28T12:58:10.878Z,
+                                    "starred": false,
+                                    "queryRunning": false,
+                                    "operations": Immutable.List [],
+                                    "isReloadingSchema": false,
+                                    "responseExtensions": Object {},
+                                    "queryVariablesActive": false,
+                                    "endpointUnreachable": false,
+                                    "editorFlex": 1,
+                                    "variableEditorOpen": false,
+                                    "variableEditorHeight": 200,
+                                    "responseTracingOpen": false,
+                                    "responseTracingHeight": 300,
+                                    "docExplorerWidth": 350,
+                                    "variableToType": Immutable.Map {},
+                                    "headers": "",
+                                    "file": undefined,
+                                    "isFile": false,
+                                    "name": undefined,
+                                    "filePath": undefined,
+                                    "selectedUserToken": undefined,
+                                    "hasChanged": undefined,
+                                    "absolutePath": undefined,
+                                    "isSettingsTab": undefined,
+                                    "isConfigTab": undefined,
+                                    "currentQueryStartTime": undefined,
+                                    "currentQueryEndTime": undefined,
+                                    "nextQueryStartTime": undefined,
+                                    "tracingSupported": undefined,
+                                    "changed": undefined,
+                                    "scrollTop": undefined,
+                                  },
+                                ]
+                              }
+                            >
+                              <styled.div>
+                                <div
+                                  className="sc-btzYZH gjuUJX"
+                                >
+                                  <styled.div>
+                                    <div
+                                      className="sc-lhVmIH gceoJJ"
+                                    >
+                                      <Connect(Tab)
+                                        key="cjiyk11kt0000p4c3u43uuzpx"
+                                        selectedSessionId="cjiyk11kt0000p4c3u43uuzpx"
+                                        session={
+                                          Immutable.Record {
+                                            "id": "cjiyk11kt0000p4c3u43uuzpx",
+                                            "query": "# Try to write your query here
+",
+                                            "variables": "",
+                                            "responses": Immutable.List [],
+                                            "endpoint": "about:blank",
+                                            "operationName": undefined,
+                                            "hasMutation": false,
+                                            "hasSubscription": false,
+                                            "hasQuery": false,
+                                            "queryTypes": Object {
+                                              "firstOperationName": null,
+                                              "mutation": false,
+                                              "query": false,
+                                              "subscription": false,
+                                            },
+                                            "subscriptionActive": false,
+                                            "date": 2018-06-28T12:58:10.878Z,
+                                            "starred": false,
+                                            "queryRunning": false,
+                                            "operations": Immutable.List [],
+                                            "isReloadingSchema": false,
+                                            "responseExtensions": Object {},
+                                            "queryVariablesActive": false,
+                                            "endpointUnreachable": false,
+                                            "editorFlex": 1,
+                                            "variableEditorOpen": false,
+                                            "variableEditorHeight": 200,
+                                            "responseTracingOpen": false,
+                                            "responseTracingHeight": 300,
+                                            "docExplorerWidth": 350,
+                                            "variableToType": Immutable.Map {},
+                                            "headers": "",
+                                            "file": undefined,
+                                            "isFile": false,
+                                            "name": undefined,
+                                            "filePath": undefined,
+                                            "selectedUserToken": undefined,
+                                            "hasChanged": undefined,
+                                            "absolutePath": undefined,
+                                            "isSettingsTab": undefined,
+                                            "isConfigTab": undefined,
+                                            "currentQueryStartTime": undefined,
+                                            "currentQueryEndTime": undefined,
+                                            "nextQueryStartTime": undefined,
+                                            "tracingSupported": undefined,
+                                            "changed": undefined,
+                                            "scrollTop": undefined,
+                                          }
+                                        }
+                                      >
+                                        <Tab
+                                          closeTab={[Function]}
+                                          editName={[Function]}
+                                          selectTab={[Function]}
+                                          selectedSessionId="cjiyk11kt0000p4c3u43uuzpx"
+                                          session={
+                                            Immutable.Record {
+                                              "id": "cjiyk11kt0000p4c3u43uuzpx",
+                                              "query": "# Try to write your query here
+",
+                                              "variables": "",
+                                              "responses": Immutable.List [],
+                                              "endpoint": "about:blank",
+                                              "operationName": undefined,
+                                              "hasMutation": false,
+                                              "hasSubscription": false,
+                                              "hasQuery": false,
+                                              "queryTypes": Object {
+                                                "firstOperationName": null,
+                                                "mutation": false,
+                                                "query": false,
+                                                "subscription": false,
+                                              },
+                                              "subscriptionActive": false,
+                                              "date": 2018-06-28T12:58:10.878Z,
+                                              "starred": false,
+                                              "queryRunning": false,
+                                              "operations": Immutable.List [],
+                                              "isReloadingSchema": false,
+                                              "responseExtensions": Object {},
+                                              "queryVariablesActive": false,
+                                              "endpointUnreachable": false,
+                                              "editorFlex": 1,
+                                              "variableEditorOpen": false,
+                                              "variableEditorHeight": 200,
+                                              "responseTracingOpen": false,
+                                              "responseTracingHeight": 300,
+                                              "docExplorerWidth": 350,
+                                              "variableToType": Immutable.Map {},
+                                              "headers": "",
+                                              "file": undefined,
+                                              "isFile": false,
+                                              "name": undefined,
+                                              "filePath": undefined,
+                                              "selectedUserToken": undefined,
+                                              "hasChanged": undefined,
+                                              "absolutePath": undefined,
+                                              "isSettingsTab": undefined,
+                                              "isConfigTab": undefined,
+                                              "currentQueryStartTime": undefined,
+                                              "currentQueryEndTime": undefined,
+                                              "nextQueryStartTime": undefined,
+                                              "tracingSupported": undefined,
+                                              "changed": undefined,
+                                              "scrollTop": undefined,
+                                            }
+                                          }
+                                        >
+                                          <styled.div
+                                            active={true}
+                                            onClick={[Function]}
+                                          >
+                                            <div
+                                              className="sc-gGBfsJ jzfwvs"
+                                              onClick={[Function]}
+                                            >
+                                              <styled.div
+                                                active={true}
+                                              >
+                                                <div
+                                                  className="sc-tilXH eopbMp"
+                                                >
+                                                  <styled.div>
+                                                    <div
+                                                      className="sc-hEsumM imgWrU"
+                                                    />
+                                                  </styled.div>
+                                                </div>
+                                              </styled.div>
+                                              <styled.div
+                                                active={true}
+                                                onDoubleClick={[Function]}
+                                              >
+                                                <div
+                                                  className="sc-jnlKLf lcOfJK"
+                                                  onDoubleClick={[Function]}
+                                                >
+                                                  New Tab
+                                                </div>
+                                              </styled.div>
+                                              <styled.div
+                                                active={true}
+                                                className="close"
+                                                hasCircle={false}
+                                                onClick={[Function]}
+                                                onMouseEnter={[Function]}
+                                                onMouseLeave={[Function]}
+                                              >
+                                                <div
+                                                  className="close sc-jwKygS kXXdpA"
+                                                  onClick={[Function]}
+                                                  onMouseEnter={[Function]}
+                                                  onMouseLeave={[Function]}
+                                                >
+                                                  <Icon
+                                                    height={11}
+                                                    src="cross.svg"
+                                                    stroke={true}
+                                                    strokeWidth={7}
+                                                    width={12}
+                                                  />
+                                                </div>
+                                              </styled.div>
+                                            </div>
+                                          </styled.div>
+                                        </Tab>
+                                      </Connect(Tab)>
+                                      <styled.div
+                                        onClick={[Function]}
+                                      >
+                                        <div
+                                          className="sc-bYSBpT ikmtjk"
+                                          onClick={[Function]}
+                                        >
+                                          <Icon
+                                            height={34}
+                                            src="add.svg"
+                                            stroke={true}
+                                            strokeWidth={4}
+                                            width={34}
+                                          />
+                                        </div>
+                                      </styled.div>
+                                    </div>
+                                  </styled.div>
+                                </div>
+                              </styled.div>
+                            </TabBar>
+                          </Connect(TabBar)>
+                          <styled.div
+                            className="graphiqls-container"
+                          >
+                            <div
+                              className="graphiqls-container sc-hXRMBi cmqJEq"
+                            >
+                              <styled.div
+                                className="graphiql-wrapper active"
+                              >
+                                <div
+                                  className="graphiql-wrapper active sc-epnACN fjUyqz"
+                                >
+                                  <WithTheme
+                                    shareEnabled={true}
+                                  >
+                                    <Connect(GraphQLEditor)
+                                      localTheme="dark"
+                                      shareEnabled={true}
+                                    >
+                                      <GraphQLEditor
+                                        closeQueryVariables={[Function]}
+                                        closeTracing={[Function]}
+                                        closeVariables={[Function]}
+                                        editorFlex={1}
+                                        fetchSchema={[Function]}
+                                        headers=""
+                                        headersCount={0}
+                                        localTheme="dark"
+                                        openQueryVariables={[Function]}
+                                        openTracing={[Function]}
+                                        openVariables={[Function]}
+                                        operations={Immutable.List []}
+                                        queryRunning={false}
+                                        queryVariablesActive={false}
+                                        responseExtensions={Object {}}
+                                        responseTracingHeight={300}
+                                        responseTracingOpen={false}
+                                        responses={Immutable.List []}
+                                        runQueryAtPosition={[Function]}
+                                        sessionId="cjiyk11kt0000p4c3u43uuzpx"
+                                        setEditorFlex={[Function]}
+                                        shareEnabled={true}
+                                        stopQuery={[Function]}
+                                        subscriptionActive={false}
+                                        toggleTracing={[Function]}
+                                        toggleVariables={[Function]}
+                                        updateQueryFacts={[Function]}
+                                        variableEditorHeight={200}
+                                        variableEditorOpen={false}
+                                      >
+                                        <Component>
+                                          <styled.div>
+                                            <div
+                                              className="sc-ifAKCX hSorDx"
+                                            >
+                                              <style
+                                                global={true}
+                                                jsx={true}
+                                              >
+                                                
+          .docs-button,
+          .schema-button {
+            @p: .absolute, .white, .bgGreen, .pa6, .br2, .z2, .ttu, .fw6, .f14,
+              .ph10, .pointer;
+            padding-bottom: 8px;
+            transform: rotate(-90deg);
+            left: -44px;
+            top: 195px;
+          }
+
+          div.schema-button {
+            @p: .bgLightOrange;
+            left: -53px;
+            top: 120px;
+          }
+
+          .queryWrap {
+            @p: .relative;
+            border-top: 8px solid $darkBlue;
+          }
+          .queryWrap.light {
+            border-top: 8px solid #eeeff0;
+          }
+
+          .graphiql-button {
+            @p: .white50, .bgDarkBlue, .ttu, .f14, .fw6, .br2, .pointer;
+            padding: 5px 9px 6px 9px;
+            letter-spacing: 0.53px;
+          }
+          .graphiql-button.prettify {
+            @p: .absolute;
+            top: -57px;
+            right: 38px;
+            z-index: 2;
+          }
+
+          .onboarding-hint {
+            @p: .absolute, .br2, .z999;
+          }
+          .onboarding-hint.step1 {
+            top: 207px;
+            left: 90px;
+          }
+          .onboarding-hint.step2 {
+            top: 207px;
+            left: 90px;
+          }
+        
+                                              </style>
+                                              <style
+                                                global={true}
+                                                jsx={true}
+                                              >
+                                                
+          .query-header-enter {
+            opacity: 0.01;
+          }
+
+          .query-header-enter.query-header-enter-active {
+            opacity: 1;
+            transition: opacity 500ms ease-in;
+          }
+
+          .query-header-leave {
+            opacity: 1;
+          }
+
+          .query-header-leave.query-header-leave-active {
+            opacity: 0.01;
+            transition: opacity 300ms ease-in;
+          }
+        
+                                              </style>
+                                              <Wrapper>
+                                                <styled.div>
+                                                  <div
+                                                    className="sc-bxivhb cSHbqu"
+                                                  >
+                                                    <Connect(TopBar)
+                                                      shareEnabled={true}
+                                                    >
+                                                      <TopBar
+                                                        editEndpoint={[Function]}
+                                                        endpoint="about:blank"
+                                                        endpointUnreachable={false}
+                                                        fixedEndpoint={false}
+                                                        isReloadingSchema={false}
+                                                        openHistory={[Function]}
+                                                        prettifyQuery={[Function]}
+                                                        refetchSchema={[Function]}
+                                                        share={[Function]}
+                                                        shareEnabled={true}
+                                                      >
+                                                        <styled.div>
+                                                          <div
+                                                            className="sc-fBuWsC ZNWmR"
+                                                          >
+                                                            <styled.button
+                                                              onClick={[Function]}
+                                                            >
+                                                              <button
+                                                                className="sc-jhAzac iQTNgc"
+                                                                onClick={[Function]}
+                                                              >
+                                                                Prettify
+                                                              </button>
+                                                            </styled.button>
+                                                            <styled.button
+                                                              onClick={[Function]}
+                                                            >
+                                                              <button
+                                                                className="sc-jhAzac iQTNgc"
+                                                                onClick={[Function]}
+                                                              >
+                                                                History
+                                                              </button>
+                                                            </styled.button>
+                                                            <styled.div>
+                                                              <div
+                                                                className="sc-dVhcbM empwHB"
+                                                              >
+                                                                <styled.input
+                                                                  active={true}
+                                                                  disabled={false}
+                                                                  onBlur={[Function]}
+                                                                  onChange={[Function]}
+                                                                  onKeyDown={[Function]}
+                                                                  value="about:blank"
+                                                                >
+                                                                  <input
+                                                                    className="sc-fMiknA jxOjZz"
+                                                                    disabled={false}
+                                                                    onBlur={[Function]}
+                                                                    onChange={[Function]}
+                                                                    onKeyDown={[Function]}
+                                                                    value="about:blank"
+                                                                  />
+                                                                </styled.input>
+                                                                <ReloadIcon
+                                                                  isReloadingSchema={false}
+                                                                  onReloadSchema={[Function]}
+                                                                >
+                                                                  <styled.div
+                                                                    onClick={[Function]}
+                                                                  >
+                                                                    <div
+                                                                      className="sc-csuQGl WHwwm"
+                                                                      onClick={[Function]}
+                                                                    >
+                                                                      <styled.svg
+                                                                        viewBox="0 0 20 20"
+                                                                      >
+                                                                        <svg
+                                                                          className="sc-Rmtcm gMicmQ"
+                                                                          viewBox="0 0 20 20"
+                                                                        >
+                                                                          <styled.circle
+                                                                            cx="9.5"
+                                                                            cy="10"
+                                                                            fill="none"
+                                                                            isReloadingSchema={false}
+                                                                            r="6"
+                                                                            strokeLinecap="round"
+                                                                            strokeWidth="1.5"
+                                                                          >
+                                                                            <circle
+                                                                              className="sc-bRBYWo fJBPZy"
+                                                                              cx="9.5"
+                                                                              cy="10"
+                                                                              fill="none"
+                                                                              r="6"
+                                                                              strokeLinecap="round"
+                                                                              strokeWidth="1.5"
+                                                                            />
+                                                                          </styled.circle>
+                                                                          <styled.path
+                                                                            d="M4.83 4.86a6.92 6.92 0 0 1 11.3 2.97l.41-1.23c.13-.4.56-.6.95-.47.4.13.6.56.47.95l-1.13 3.33a.76.76 0 0 1-.7.5.72.72 0 0 1-.43-.12l-2.88-1.92a.76.76 0 0 1-.2-1.04.75.75 0 0 1 1.03-.2l1.06.7A5.34 5.34 0 0 0 9.75 4.5a5.44 5.44 0 0 0-5.64 5.22 5.42 5.42 0 0 0 5.24 5.62c.41 0 .74.36.72.78a.75.75 0 0 1-.75.72H9.3a6.9 6.9 0 0 1-6.68-7.18 6.88 6.88 0 0 1 2.22-4.81z"
+                                                                            isReloadingSchema={false}
+                                                                          >
+                                                                            <path
+                                                                              className="sc-hzDkRC kwVHNl"
+                                                                              d="M4.83 4.86a6.92 6.92 0 0 1 11.3 2.97l.41-1.23c.13-.4.56-.6.95-.47.4.13.6.56.47.95l-1.13 3.33a.76.76 0 0 1-.7.5.72.72 0 0 1-.43-.12l-2.88-1.92a.76.76 0 0 1-.2-1.04.75.75 0 0 1 1.03-.2l1.06.7A5.34 5.34 0 0 0 9.75 4.5a5.44 5.44 0 0 0-5.64 5.22 5.42 5.42 0 0 0 5.24 5.62c.41 0 .74.36.72.78a.75.75 0 0 1-.75.72H9.3a6.9 6.9 0 0 1-6.68-7.18 6.88 6.88 0 0 1 2.22-4.81z"
+                                                                            />
+                                                                          </styled.path>
+                                                                        </svg>
+                                                                      </styled.svg>
+                                                                    </div>
+                                                                  </styled.div>
+                                                                </ReloadIcon>
+                                                              </div>
+                                                            </styled.div>
+                                                            <styled.button
+                                                              onClick={[Function]}
+                                                            >
+                                                              <button
+                                                                className="sc-jhAzac iQTNgc"
+                                                                onClick={[Function]}
+                                                              >
+                                                                Copy CURL
+                                                              </button>
+                                                            </styled.button>
+                                                            <Connect(Share)>
+                                                              <Share
+                                                                allTabs={true}
+                                                                headers={true}
+                                                                history={false}
+                                                                share={[Function]}
+                                                                shareUrl={null}
+                                                                toggleShareAllTabs={[Function]}
+                                                                toggleShareHeaders={[Function]}
+                                                                toggleShareHistory={[Function]}
+                                                              >
+                                                                <styled.div>
+                                                                  <div
+                                                                    className="sc-cMljjf UdVJG"
+                                                                  >
+                                                                    <styled.div>
+                                                                      <div
+                                                                        className="sc-jDwBTQ jzYUAi"
+                                                                      >
+                                                                        <div
+                                                                          onClick={[Function]}
+                                                                        >
+                                                                          <styled.button>
+                                                                            <button
+                                                                              className="sc-jhAzac iQTNgc"
+                                                                            >
+                                                                              Share Playground
+                                                                            </button>
+                                                                          </styled.button>
+                                                                        </div>
+                                                                      </div>
+                                                                    </styled.div>
+                                                                  </div>
+                                                                </styled.div>
+                                                              </Share>
+                                                            </Connect(Share)>
+                                                          </div>
+                                                        </styled.div>
+                                                      </TopBar>
+                                                    </Connect(TopBar)>
+                                                    <styled.div
+                                                      onMouseDown={[Function]}
+                                                    >
+                                                      <div
+                                                        className="sc-kjoXOD gqoYfp"
+                                                        onMouseDown={[Function]}
+                                                      >
+                                                        <styled.div
+                                                          flex={1}
+                                                        >
+                                                          <div
+                                                            className="sc-jqCOkK Xczwm"
+                                                          >
+                                                            <Connect(QueryEditor)
+                                                              getRef={[Function]}
+                                                              onClickReference={[Function]}
+                                                              onHintInformationRender={[Function]}
+                                                              onRunQuery={[Function]}
+                                                            >
+                                                              <QueryEditor
+                                                                getRef={[Function]}
+                                                                onChange={[Function]}
+                                                                onClickReference={[Function]}
+                                                                onHintInformationRender={[Function]}
+                                                                onRunQuery={[Function]}
+                                                                sessionId="cjiyk11kt0000p4c3u43uuzpx"
+                                                                setScrollTop={[Function]}
+                                                                value="# Try to write your query here
+"
+                                                              >
+                                                                <Wrapper>
+                                                                  <styled.div>
+                                                                    <div
+                                                                      className="sc-bxivhb cSHbqu"
+                                                                    >
+                                                                      <styled.div
+                                                                        innerRef={[Function]}
+                                                                      >
+                                                                        <div
+                                                                          className="sc-EHOje cFfLgL"
+                                                                        />
+                                                                      </styled.div>
+                                                                    </div>
+                                                                  </styled.div>
+                                                                </Wrapper>
+                                                              </QueryEditor>
+                                                            </Connect(QueryEditor)>
+                                                            <Styled(styled.div)
+                                                              height={200}
+                                                              isOpen={false}
+                                                            >
+                                                              <styled.div
+                                                                className="sc-frDJqD gltkeK"
+                                                                height={200}
+                                                                isOpen={false}
+                                                              >
+                                                                <div
+                                                                  className="sc-frDJqD gltkeK sc-ksYbfQ dvtHmk"
+                                                                  height={200}
+                                                                >
+                                                                  <Styled(styled.div)
+                                                                    isOpen={false}
+                                                                    onMouseDown={[Function]}
+                                                                  >
+                                                                    <styled.div
+                                                                      className="sc-kvZOFW ishkgm"
+                                                                      isOpen={false}
+                                                                      onMouseDown={[Function]}
+                                                                    >
+                                                                      <div
+                                                                        className="sc-kvZOFW ishkgm sc-hmzhuo jlrOeJ"
+                                                                        onMouseDown={[Function]}
+                                                                      >
+                                                                        <styled.span
+                                                                          innerRef={[Function]}
+                                                                          isOpen={false}
+                                                                          onClick={[Function]}
+                                                                        >
+                                                                          <span
+                                                                            className="sc-hqyNC cpGMZo"
+                                                                            onClick={[Function]}
+                                                                          >
+                                                                            Query Variables
+                                                                          </span>
+                                                                        </styled.span>
+                                                                        <styled.span
+                                                                          innerRef={[Function]}
+                                                                          isOpen={true}
+                                                                          onClick={[Function]}
+                                                                        >
+                                                                          <span
+                                                                            className="sc-hqyNC jQhkci"
+                                                                            onClick={[Function]}
+                                                                          >
+                                                                            HTTP Headers 
+                                                                          </span>
+                                                                        </styled.span>
+                                                                      </div>
+                                                                    </styled.div>
+                                                                  </Styled(styled.div)>
+                                                                  <Connect(VariableEditor)
+                                                                    getRef={[Function]}
+                                                                    onRunQuery={[Function]}
+                                                                  >
+                                                                    <VariableEditor
+                                                                      getRef={[Function]}
+                                                                      onChange={[Function]}
+                                                                      onRunQuery={[Function]}
+                                                                      value=""
+                                                                    >
+                                                                      <styled.div
+                                                                        innerRef={[Function]}
+                                                                      >
+                                                                        <div
+                                                                          className="sc-gisBJw eBRpMn"
+                                                                        />
+                                                                      </styled.div>
+                                                                    </VariableEditor>
+                                                                  </Connect(VariableEditor)>
+                                                                </div>
+                                                              </styled.div>
+                                                            </Styled(styled.div)>
+                                                            <Styled(styled.div)>
+                                                              <styled.div
+                                                                className="sc-kgAjT frYSpF"
+                                                              >
+                                                                <div
+                                                                  className="sc-kgAjT frYSpF sc-TOsTZ dPEkXa"
+                                                                />
+                                                              </styled.div>
+                                                            </Styled(styled.div)>
+                                                          </div>
+                                                        </styled.div>
+                                                        <styled.div>
+                                                          <div
+                                                            className="sc-cHGsZl eSKmpv"
+                                                          >
+                                                            <Styled(styled.div)>
+                                                              <styled.div
+                                                                className="sc-cJSrbW epemlL"
+                                                              >
+                                                                <div
+                                                                  className="sc-cJSrbW epemlL sc-TOsTZ dPEkXa"
+                                                                />
+                                                              </styled.div>
+                                                            </Styled(styled.div)>
+                                                            <Connect(Component)>
+                                                              <Component
+                                                                operations={Immutable.List []}
+                                                                queryRunning={false}
+                                                                runQuery={[Function]}
+                                                                sessionId="cjiyk11kt0000p4c3u43uuzpx"
+                                                                stopQuery={[Function]}
+                                                              >
+                                                                <ExecuteButton
+                                                                  operations={Array []}
+                                                                  queryRunning={false}
+                                                                  runQuery={[Function]}
+                                                                  sessionId="cjiyk11kt0000p4c3u43uuzpx"
+                                                                  stopQuery={[Function]}
+                                                                >
+                                                                  <styled.div>
+                                                                    <div
+                                                                      className="sc-bdVaJa bFURGJ"
+                                                                    >
+                                                                      <styled.div
+                                                                        isRunning={false}
+                                                                        onClick={[Function]}
+                                                                        title="Execute Query (Ctrl-Enter)"
+                                                                      >
+                                                                        <div
+                                                                          className="sc-bwzfXH iNzYbQ"
+                                                                          onClick={[Function]}
+                                                                          title="Execute Query (Ctrl-Enter)"
+                                                                        >
+                                                                          <svg
+                                                                            height="35"
+                                                                            viewBox="3.5,4.5,24,24"
+                                                                            width="35"
+                                                                          >
+                                                                            <path
+                                                                              d="M 11 9 L 24 16 L 11 23 z"
+                                                                            />
+                                                                          </svg>
+                                                                        </div>
+                                                                      </styled.div>
+                                                                    </div>
+                                                                  </styled.div>
+                                                                </ExecuteButton>
+                                                              </Component>
+                                                            </Connect(Component)>
+                                                            <Connect(Results)
+                                                              setRef={[Function]}
+                                                            >
+                                                              <Results
+                                                                dispatch={[Function]}
+                                                                responses={Immutable.List []}
+                                                                setRef={[Function]}
+                                                              >
+                                                                <styled.div
+                                                                  innerRef={[Function]}
+                                                                  isSubscription={false}
+                                                                >
+                                                                  <div
+                                                                    className="sc-dnqmqq glHaJN"
+                                                                  >
+                                                                    <styled.div
+                                                                      isSubscription={false}
+                                                                      key="first"
+                                                                    >
+                                                                      <div
+                                                                        className="sc-iwsKbI eLjmCv"
+                                                                      >
+                                                                        <styled.div
+                                                                          isSubscription={false}
+                                                                        >
+                                                                          <div
+                                                                            className="sc-VigVT gJoWAv"
+                                                                          >
+                                                                            <ResultViewer
+                                                                              isSubscription={false}
+                                                                              value=""
+                                                                            >
+                                                                              <styled.div
+                                                                                innerRef={[Function]}
+                                                                                isSubscription={false}
+                                                                              >
+                                                                                <div
+                                                                                  className="sc-htoDjs iWZbiD"
+                                                                                />
+                                                                              </styled.div>
+                                                                            </ResultViewer>
+                                                                          </div>
+                                                                        </styled.div>
+                                                                      </div>
+                                                                    </styled.div>
+                                                                  </div>
+                                                                </styled.div>
+                                                              </Results>
+                                                            </Connect(Results)>
+                                                            <styled.div>
+                                                              <div
+                                                                className="sc-uJMKN gpVNBQ"
+                                                              >
+                                                                Hit the Play Button to get a response here
+                                                              </div>
+                                                            </styled.div>
+                                                            <Styled(styled.div)
+                                                              height={300}
+                                                              isOpen={false}
+                                                            >
+                                                              <styled.div
+                                                                className="sc-jbKcbu jkOLOQ"
+                                                                height={300}
+                                                                isOpen={false}
+                                                              >
+                                                                <div
+                                                                  className="sc-jbKcbu jkOLOQ sc-ksYbfQ dvtHmk"
+                                                                  height={300}
+                                                                >
+                                                                  <Styled(styled.div)
+                                                                    isOpen={false}
+                                                                    onMouseDown={[Function]}
+                                                                  >
+                                                                    <styled.div
+                                                                      className="sc-dNLxif hpHnat"
+                                                                      isOpen={false}
+                                                                      onMouseDown={[Function]}
+                                                                    >
+                                                                      <div
+                                                                        className="sc-dNLxif hpHnat sc-hmzhuo jlrOeJ"
+                                                                        onMouseDown={[Function]}
+                                                                      >
+                                                                        Tracing
+                                                                      </div>
+                                                                    </styled.div>
+                                                                  </Styled(styled.div)>
+                                                                  <Connect(ResponseTracing)
+                                                                    open={false}
+                                                                  >
+                                                                    <ResponseTracing
+                                                                      dispatch={[Function]}
+                                                                      open={false}
+                                                                      queryRunning={false}
+                                                                    >
+                                                                      <styled.div>
+                                                                        <div
+                                                                          className="sc-chPdSV egsZhV"
+                                                                        >
+                                                                          <styled.div>
+                                                                            <div
+                                                                              className="sc-kGXeez zSNfc"
+                                                                            >
+                                                                              This GraphQL server doesn’t support tracing. See the following page for instructions:
+                                                                              <br />
+                                                                              https://github.com/apollographql/apollo-tracing
+                                                                            </div>
+                                                                          </styled.div>
+                                                                        </div>
+                                                                      </styled.div>
+                                                                    </ResponseTracing>
+                                                                  </Connect(ResponseTracing)>
+                                                                </div>
+                                                              </styled.div>
+                                                            </Styled(styled.div)>
+                                                          </div>
+                                                        </styled.div>
+                                                      </div>
+                                                    </styled.div>
+                                                  </div>
+                                                </styled.div>
+                                              </Wrapper>
+                                              <Connect(GraphDocs)>
+                                                <GraphDocs
+                                                  addStack={[Function]}
+                                                  changeKeyMove={[Function]}
+                                                  changeWidthDocs={[Function]}
+                                                  docs={
+                                                    Object {
+                                                      "docsOpen": false,
+                                                      "docsWidth": 300,
+                                                      "keyMove": false,
+                                                      "navStack": Array [],
+                                                    }
+                                                  }
+                                                  sessionId="cjiyk11kt0000p4c3u43uuzpx"
+                                                  setDocsVisible={[Function]}
+                                                  toggleDocs={[Function]}
+                                                >
+                                                  <styled.div
+                                                    className="graph-docs docExplorerWrap docs"
+                                                    innerRef={[Function]}
+                                                    style={
+                                                      Object {
+                                                        "width": 0,
+                                                      }
+                                                    }
+                                                  >
+                                                    <div
+                                                      className="graph-docs docExplorerWrap docs sc-ckVGcZ gTAROz"
+                                                      style={
+                                                        Object {
+                                                          "width": 0,
+                                                        }
+                                                      }
+                                                    >
+                                                      <style
+                                                        global={true}
+                                                        jsx={true}
+                                                      >
+                                                        
+          .graph-docs .doc-category-title {
+            @p: .mh0, .ph16;
+            border: none;
+          }
+          .doc-type-description p {
+            @p: .pa16, .f14;
+          }
+          .graphiql-container .doc-type-description {
+            @p: .mh0, .ph16, .f14;
+          }
+          .doc-header .doc-category-item {
+            @p: .f16;
+            word-wrap: break-word;
+          }
+          .doc-description p {
+            @p: .f14;
+          }
+        
+                                                      </style>
+                                                      <style
+                                                        jsx={true}
+                                                      >
+                                                        
+          .docs :global(.doc-category-title) {
+            @p: .pa16, .f14;
+          }
+          .graph-docs :global(code) {
+            @p: .mono, .br2;
+            padding: 1px 2px;
+            background: rgba(0, 0, 0, 0.06);
+          }
+          .docs-button {
+            @p: .absolute, .white, .bgGreen, .pv6, .z2, .ttu, .fw6, .f12, .ph10,
+              .pointer;
+            box-shadow: -1px 1px 6px 0 rgba(0, 0, 0, 0.3);
+            line-height: 17px;
+            letter-spacing: 0.45px;
+            padding-bottom: 8px;
+            transform: rotate(-90deg);
+            left: -50px;
+            top: 129px;
+            border-top-left-radius: 2px;
+            border-top-right-radius: 2px;
+          }
+          .doc-explorer-container {
+            @p: .flex, .relative, .h100, .w100;
+            overflow-x: auto;
+            overflow-y: hidden;
+          }
+          .doc-explorer-gradient {
+            @p: .z1, .absolute, .top0, .bottom0;
+            pointer-events: none;
+            content: '';
+            width: 20px;
+            left: 0px;
+            background: linear-gradient(
+              to right,
+              rgba(255, 255, 255, 1) 30%,
+              rgba(255, 255, 255, 0)
+            );
+          }
+        
+                                                      </style>
+                                                      <div
+                                                        className="docs-button"
+                                                        onClick={[Function]}
+                                                      >
+                                                        Schema
+                                                      </div>
+                                                      <styled.div
+                                                        onMouseDown={[Function]}
+                                                      >
+                                                        <div
+                                                          className="sc-eNQAEJ bnCHKQ"
+                                                          onMouseDown={[Function]}
+                                                        />
+                                                      </styled.div>
+                                                      <div
+                                                        className="doc-explorer-gradient"
+                                                      />
+                                                      <styled.div
+                                                        innerRef={[Function]}
+                                                        onKeyDown={[Function]}
+                                                        onMouseMove={[Function]}
+                                                        tabIndex={0}
+                                                      >
+                                                        <div
+                                                          className="sc-jKJlTe iEsLJA"
+                                                          onKeyDown={[Function]}
+                                                          onMouseMove={[Function]}
+                                                          tabIndex={0}
+                                                        >
+                                                          <div
+                                                            className="doc-explorer-container"
+                                                          >
+                                                            <ColumnDoc>
+                                                              <div
+                                                                className="graph-docs-column overflow"
+                                                                style={
+                                                                  Object {
+                                                                    "width": 300,
+                                                                  }
+                                                                }
+                                                              >
+                                                                <style
+                                                                  jsx={true}
+                                                                >
+                                                                  
+        .graph-docs-column {
+          @p: .flexFixed, .pb20, .br, .bBlack10, .flex, .flexColumn;
+        }
+        .overflow {
+          overflow-x: hidden;
+          overflow-y: scroll;
+        }
+      
+                                                                </style>
+                                                                <Spinner>
+                                                                  <styled.div>
+                                                                    <div
+                                                                      className="sc-bZQynM kkBsVS"
+                                                                    >
+                                                                      <styled.div>
+                                                                        <div
+                                                                          className="sc-gzVnrw fwQvxW"
+                                                                        />
+                                                                      </styled.div>
+                                                                    </div>
+                                                                  </styled.div>
+                                                                </Spinner>
+                                                              </div>
+                                                            </ColumnDoc>
+                                                          </div>
+                                                        </div>
+                                                      </styled.div>
+                                                    </div>
+                                                  </styled.div>
+                                                </GraphDocs>
+                                              </Connect(GraphDocs)>
+                                            </div>
+                                          </styled.div>
+                                        </Component>
+                                      </GraphQLEditor>
+                                    </Connect(GraphQLEditor)>
+                                  </WithTheme>
+                                </div>
+                              </styled.div>
+                            </div>
+                          </styled.div>
+                          <Connect(Settings)>
+                            <Settings
+                              onClick={[Function]}
+                            >
+                              <styled.div>
+                                <div
+                                  className="sc-kIPQKe dFoBip"
+                                >
+                                  <styled.div>
+                                    <div
+                                      className="sc-eXEjpC ixbGWH"
+                                    >
+                                      <Icon
+                                        className="settings-icon"
+                                        height={23}
+                                        onClick={[Function]}
+                                        src="settings.svg"
+                                        width={23}
+                                      />
+                                    </div>
+                                  </styled.div>
+                                </div>
+                              </styled.div>
+                            </Settings>
+                          </Connect(Settings)>
+                        </div>
+                      </styled.div>
+                    </Playground>
+                  </Connect(Playground)>
+                </div>
+              </styled.div>
+            </ThemeProvider>
+          </ThemeProvider>
+        </div>
+      </PlaygroundWrapper>
+    </Connect(PlaygroundWrapper)>
+  </Provider>
+</MiddlewareApp>
+`;
