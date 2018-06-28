@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`test middleware app with tabs 1`] = `
+exports[`test MiddleWareApp with tabs 1`] = `
 <div>
   <div
     class="sc-bMVAic bUjTvZ"
@@ -273,7 +273,7 @@ exports[`test middleware app with tabs 1`] = `
 </div>
 `;
 
-exports[`test middleware app without tabs 1`] = `
+exports[`test MiddleWareApp without tabs 1`] = `
 <div>
   <div
     class="sc-bMVAic bUjTvZ"

@@ -21,11 +21,6 @@ const tabs: Tab[] = [
     endpoint: 'https://eu1.prisma.sh/public-asdf/session65/dev',
     responses: ['{}'],
   },
-  {
-    name: 'Tab 2',
-    query: '{ users { id } }',
-    endpoint: 'https://eu1.prisma.sh/public-asdf/session65/dev',
-  },
 ]
 
 /* tslint:disable-next-line */
