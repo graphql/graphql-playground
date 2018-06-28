@@ -63,6 +63,8 @@
     "css-loader": "0.28.11",
     "detect-port": "1.2.3",
     "dotenv": "5.0.1",
+    "enzyme": "^3.3.0",
+    "enzyme-adapter-react-16": "^1.1.1",
     "extract-text-webpack-plugin": "3.0.2",
     "file-loader": "1.1.11",
     "filesize": "3.6.1",
