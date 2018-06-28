@@ -104,7 +104,6 @@
     "style-loader": "0.20.1",
     "svg-inline-loader": "0.8.0",
     "sw-precache-webpack-plugin": "0.11.5",
-    "ts-jest": "^22.4.6",
     "ts-loader": "3.4.0",
     "tslint": "5.10.0",
     "tslint-graphcool-frontend": "0.0.3",

@@ -259,11 +259,11 @@ exports[`test middleware app 1`] = `
                             <TabBar
                               dispatch={[Function]}
                               onNewSession={[Function]}
-                              selectedSessionId="cjiyk11kt0000p4c3u43uuzpx"
+                              selectedSessionId="cjiym7zai0000jac3ivr8vs77"
                               sessions={
                                 Array [
                                   Immutable.Record {
-                                    "id": "cjiyk11kt0000p4c3u43uuzpx",
+                                    "id": "cjiym7zai0000jac3ivr8vs77",
                                     "query": "# Try to write your query here
 ",
                                     "variables": "",
@@ -280,7 +280,7 @@ exports[`test middleware app 1`] = `
                                       "subscription": false,
                                     },
                                     "subscriptionActive": false,
-                                    "date": 2018-06-28T12:58:10.878Z,
+                                    "date": 2018-06-28T13:59:33.739Z,
                                     "starred": false,
                                     "queryRunning": false,
                                     "operations": Immutable.List [],
@@ -324,11 +324,11 @@ exports[`test middleware app 1`] = `
                                       className="sc-lhVmIH gceoJJ"
                                     >
                                       <Connect(Tab)
-                                        key="cjiyk11kt0000p4c3u43uuzpx"
-                                        selectedSessionId="cjiyk11kt0000p4c3u43uuzpx"
+                                        key="cjiym7zai0000jac3ivr8vs77"
+                                        selectedSessionId="cjiym7zai0000jac3ivr8vs77"
                                         session={
                                           Immutable.Record {
-                                            "id": "cjiyk11kt0000p4c3u43uuzpx",
+                                            "id": "cjiym7zai0000jac3ivr8vs77",
                                             "query": "# Try to write your query here
 ",
                                             "variables": "",
@@ -345,7 +345,7 @@ exports[`test middleware app 1`] = `
                                               "subscription": false,
                                             },
                                             "subscriptionActive": false,
-                                            "date": 2018-06-28T12:58:10.878Z,
+                                            "date": 2018-06-28T13:59:33.739Z,
                                             "starred": false,
                                             "queryRunning": false,
                                             "operations": Immutable.List [],
@@ -383,10 +383,10 @@ exports[`test middleware app 1`] = `
                                           closeTab={[Function]}
                                           editName={[Function]}
                                           selectTab={[Function]}
-                                          selectedSessionId="cjiyk11kt0000p4c3u43uuzpx"
+                                          selectedSessionId="cjiym7zai0000jac3ivr8vs77"
                                           session={
                                             Immutable.Record {
-                                              "id": "cjiyk11kt0000p4c3u43uuzpx",
+                                              "id": "cjiym7zai0000jac3ivr8vs77",
                                               "query": "# Try to write your query here
 ",
                                               "variables": "",
@@ -403,7 +403,7 @@ exports[`test middleware app 1`] = `
                                                 "subscription": false,
                                               },
                                               "subscriptionActive": false,
-                                              "date": 2018-06-28T12:58:10.878Z,
+                                              "date": 2018-06-28T13:59:33.739Z,
                                               "starred": false,
                                               "queryRunning": false,
                                               "operations": Immutable.List [],
@@ -557,7 +557,7 @@ exports[`test middleware app 1`] = `
                                         responseTracingOpen={false}
                                         responses={Immutable.List []}
                                         runQueryAtPosition={[Function]}
-                                        sessionId="cjiyk11kt0000p4c3u43uuzpx"
+                                        sessionId="cjiym7zai0000jac3ivr8vs77"
                                         setEditorFlex={[Function]}
                                         shareEnabled={true}
                                         stopQuery={[Function]}
@@ -844,7 +844,7 @@ exports[`test middleware app 1`] = `
                                                                 onClickReference={[Function]}
                                                                 onHintInformationRender={[Function]}
                                                                 onRunQuery={[Function]}
-                                                                sessionId="cjiyk11kt0000p4c3u43uuzpx"
+                                                                sessionId="cjiym7zai0000jac3ivr8vs77"
                                                                 setScrollTop={[Function]}
                                                                 value="# Try to write your query here
 "
@@ -970,14 +970,14 @@ exports[`test middleware app 1`] = `
                                                                 operations={Immutable.List []}
                                                                 queryRunning={false}
                                                                 runQuery={[Function]}
-                                                                sessionId="cjiyk11kt0000p4c3u43uuzpx"
+                                                                sessionId="cjiym7zai0000jac3ivr8vs77"
                                                                 stopQuery={[Function]}
                                                               >
                                                                 <ExecuteButton
                                                                   operations={Array []}
                                                                   queryRunning={false}
                                                                   runQuery={[Function]}
-                                                                  sessionId="cjiyk11kt0000p4c3u43uuzpx"
+                                                                  sessionId="cjiym7zai0000jac3ivr8vs77"
                                                                   stopQuery={[Function]}
                                                                 >
                                                                   <styled.div>
@@ -1144,7 +1144,7 @@ exports[`test middleware app 1`] = `
                                                       "navStack": Array [],
                                                     }
                                                   }
-                                                  sessionId="cjiyk11kt0000p4c3u43uuzpx"
+                                                  sessionId="cjiym7zai0000jac3ivr8vs77"
                                                   setDocsVisible={[Function]}
                                                   toggleDocs={[Function]}
                                                 >
