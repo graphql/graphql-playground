@@ -137,7 +137,7 @@ function* runQuerySaga(action) {
     headers,
     credentials: settings['request.credentials'],
   }
-  console.log({ lol })
+  
   const { link, subscriptionClient } = linkCreator(lol)
   yield put(setCurrentQueryStartTime(new Date()))
 
