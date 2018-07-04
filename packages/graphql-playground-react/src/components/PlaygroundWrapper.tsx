@@ -511,10 +511,11 @@ class PlaygroundWrapper extends React.Component<
   }
 }
 
-const mapStateToProps = createStructuredSelector({
-  theme: getTheme,
-  settings: getSettings,
-})
+const mapStateToProps = (state, ownProps) => {
+  const theme = ownProps.theme || getTheme(state)
+  const settings = ownProps.settings || getSettings(state)
+  return { theme, settings }
+}
 
 export default connect(
   mapStateToProps,
