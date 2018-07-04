@@ -20,7 +20,6 @@ import {
 import OldThemeProvider from './Theme/ThemeProvider'
 import { getActiveEndpoints } from './util'
 import { ISettings } from '../types'
-import { createStructuredSelector } from 'reselect'
 import { connect } from 'react-redux'
 import { getTheme, getSettings } from '../state/workspace/reducers'
 import { Session, Tab } from '../state/sessions/reducers'
