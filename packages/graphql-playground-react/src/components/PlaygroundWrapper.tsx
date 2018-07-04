@@ -512,7 +512,7 @@ class PlaygroundWrapper extends React.Component<
 }
 
 const mapStateToProps = (state, ownProps) => {
-  const theme = ownProps.theme || getTheme(state)
+  const theme = ownProps.theme || getTheme(state, ownProps.settings)
   const settings = ownProps.settings || getSettings(state)
   return { theme, settings }
 }
