@@ -205,7 +205,7 @@ export function normalizeSettingsString(settingsString) {
   return JSON.stringify(parseSettingsString(settingsString), null, 2)
 }
 
-export const getTheme = createSelector(
-  [getSettings],
-  s => s['editor.theme'] || 'dark',
-)
+export const getTheme = (state, customSettings) => {
+  const settings = customSettings || getSettings(state)
+  return settings['editor.theme'] || 'dark'
+}
