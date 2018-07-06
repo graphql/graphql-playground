@@ -1,6 +1,6 @@
 {
   "name": "graphql-playground-middleware-express",
-  "version": "1.7.1",
+  "version": "1.7.2",
   "homepage": "https://github.com/graphcool/graphql-playground/tree/master/packages/graphql-playground-middleware-express",
   "description": "GraphQL IDE for better development workflows (GraphQL Subscriptions, interactive docs & collaboration).",
   "contributors": [
@@ -14,7 +14,7 @@
   "files": [
     "dist"
   ],
-  "playgroundVersion": "1.7.1",
+  "playgroundVersion": "1.7.2",
   "scripts": {
     "build": "rimraf dist && tsc",
     "prepare": "npm run build"
