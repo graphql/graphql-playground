@@ -47,6 +47,7 @@ export const defaultSettings: ISettings = {
   'editor.fontFamily': `'Source Code Pro', 'Consolas', 'Inconsolata', 'Droid Sans Mono', 'Monaco', monospace`,
   'editor.theme': 'dark',
   'editor.reuseHeaders': true,
+  'prettier.printWidth': 80,
   'request.credentials': 'omit',
   'tracing.hideTracingResponse': true,
 }
@@ -204,7 +205,7 @@ export function normalizeSettingsString(settingsString) {
   return JSON.stringify(parseSettingsString(settingsString), null, 2)
 }
 
-export const getTheme = createSelector(
-  [getSettings],
-  s => s['editor.theme'] || 'dark',
-)
+export const getTheme = (state, customSettings) => {
+  const settings = customSettings || getSettings(state)
+  return settings['editor.theme'] || 'dark'
+}

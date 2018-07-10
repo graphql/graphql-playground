@@ -137,7 +137,7 @@ function* runQuerySaga(action) {
     headers,
     credentials: settings['request.credentials'],
   }
-  console.log({ lol })
+  
   const { link, subscriptionClient } = linkCreator(lol)
   yield put(setCurrentQueryStartTime(new Date()))
 
@@ -237,6 +237,11 @@ export function formatError(error, fetchingSchema: boolean = false) {
 
 function extractMessage(error) {
   if (error instanceof Error) {
+    // Errors from apollo-link-http may include a "result" object, which is a JSON response from
+    // the server. We should surface that to the client
+    if (!!error['result'] && typeof error['result'] === 'object') {
+      return (error as any).result
+    }
     return error.message
   }
 

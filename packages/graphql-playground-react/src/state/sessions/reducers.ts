@@ -26,7 +26,6 @@ import { getSelectedSessionId } from './selectors'
 import { getDefaultSession, defaultQuery } from '../../constants'
 import * as cuid from 'cuid'
 import { formatError } from './fetchingSagas'
-import { prettify } from '../../utils'
 
 export interface SessionStateProps {
   sessions: OrderedMap<string, Session>
@@ -38,6 +37,7 @@ export interface SessionStateProps {
 export interface Tab {
   endpoint: string
   query: string
+  name?: string
   variables?: string
   responses?: string[]
   headers?: { [key: string]: string }
@@ -233,10 +233,6 @@ const reducer = handleActions(
         'responseTracingOpen',
       ]
       return state.setIn(path, !state.getIn(path))
-    },
-    PRETTIFY_QUERY: state => {
-      const path = ['sessions', getSelectedSessionId(state), 'query']
-      return state.setIn(path, prettify(state.getIn(path)))
     },
     OPEN_TRACING: (state, { payload: { responseTracingHeight } }) => {
       return state.mergeDeepIn(

@@ -20,7 +20,6 @@ import {
 import OldThemeProvider from './Theme/ThemeProvider'
 import { getActiveEndpoints } from './util'
 import { ISettings } from '../types'
-import { createStructuredSelector } from 'reselect'
 import { connect } from 'react-redux'
 import { getTheme, getSettings } from '../state/workspace/reducers'
 import { Session, Tab } from '../state/sessions/reducers'
@@ -511,10 +510,11 @@ class PlaygroundWrapper extends React.Component<
   }
 }
 
-const mapStateToProps = createStructuredSelector({
-  theme: getTheme,
-  settings: getSettings,
-})
+const mapStateToProps = (state, ownProps) => {
+  const theme = ownProps.theme || getTheme(state, ownProps.settings)
+  const settings = ownProps.settings || getSettings(state)
+  return { theme, settings }
+}
 
 export default connect(
   mapStateToProps,

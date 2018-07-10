@@ -1,13 +1,9 @@
 import * as React from 'react'
-import { styled } from '../../../styled/index'
-import * as theme from 'styled-theming'
-import { darken, lighten } from 'polished'
+import { styled, withProps } from '../../../styled/index'
 import * as copy from 'copy-to-clipboard'
 
 import Share from '../../Share'
 import ReloadIcon from './ReloadIcon'
-import { keyframes, StyledComponentClass } from 'styled-components'
-import * as cx from 'classnames'
 import { createStructuredSelector } from 'reselect'
 import {
   getEndpoint,
@@ -61,7 +57,7 @@ class TopBar extends React.Component<Props, {}> {
             onKeyDown={this.onKeyDown}
             onBlur={this.props.refetchSchema}
             disabled={this.props.fixedEndpoint}
-            className={cx({ active: !this.props.fixedEndpoint })}
+            active={!this.props.fixedEndpoint}
           />
           {endpointUnreachable ? (
             <ReachError>
@@ -158,46 +154,11 @@ export default connect(
   },
 )(TopBar)
 
-const buttonColor = theme('mode', {
-  light: p => p.theme.colours.darkBlue10,
-  dark: p => p.theme.colours.darkerBlue,
-})
-
-const buttonHoverColor = theme('mode', {
-  light: p => darken(0.02, p.theme.colours.darkBlue20),
-  dark: p => lighten(0.02, p.theme.colours.darkerBlue),
-})
-
-const backgroundColor = theme('mode', {
-  light: p => '#eeeff0',
-  dark: p => p.theme.colours.darkBlue,
-})
-
-const inactiveFontColor = theme('mode', {
-  light: p => p.theme.colours.darkBlue30,
-  dark: p => p.theme.colours.white30,
-})
-
-const fontColor = theme('mode', {
-  light: p => p.theme.colours.darkBlue80,
-  dark: p => p.theme.colours.white60,
-})
-
-const barBorder = theme('mode', {
-  light: p => p.theme.colours.darkBlue20,
-  dark: p => '#09141c',
-})
-
-const spinnerColor = theme('mode', {
-  light: p => p.theme.colours.black40,
-  dark: p => p.theme.colours.white30,
-})
-
-export const Button: StyledComponentClass<any, any, any> = styled.button`
+export const Button = styled.button`
   text-transform: uppercase;
   font-weight: 600;
-  color: ${fontColor};
-  background: ${buttonColor};
+  color: ${p => p.theme.editorColours.buttonText};
+  background: ${p => p.theme.editorColours.button};
   border-radius: 2px;
   flex: 0 0 auto;
   letter-spacing: 0.53px;
@@ -209,28 +170,32 @@ export const Button: StyledComponentClass<any, any, any> = styled.button`
   cursor: pointer;
   transition: 0.1s linear background-color;
   &:hover {
-    background-color: ${buttonHoverColor};
+    background-color: ${p => p.theme.editorColours.buttonHover};
   }
-`
+` as any
 
 const TopBarWrapper = styled.div`
   display: flex;
-  background: ${backgroundColor};
+  background: ${p => p.theme.editorColours.navigationBar};
   padding: 10px 10px 4px;
   align-items: center;
 `
 
-const UrlBar = styled.input`
-  background: ${buttonColor};
+interface UrlBarProps {
+  active: boolean
+}
+
+const UrlBar = withProps<UrlBarProps>()(styled.input)`
+  background: ${p => p.theme.editorColours.button};
   border-radius: 4px;
-  color: ${inactiveFontColor};
-  border: 1px solid ${barBorder};
+  color: ${p =>
+    p.active
+      ? p.theme.editorColours.navigationBarText
+      : p.theme.editorColours.textInactive};
+  border: 1px solid ${p => p.theme.editorColours.background};
   padding: 6px 12px;
   font-size: 13px;
   flex: 1;
-  &.active {
-    color: ${fontColor};
-  }
 `
 
 const UrlBarWrapper = styled.div`
@@ -249,36 +214,12 @@ const ReachError = styled.div`
   color: #f25c54;
 `
 
-const bounceAnimation = keyframes`
-  0%, 100% {
-    transform: scale(0);
-  }
-  50% {
-    transform: scale(1);
-  }
-`
-
 const Pulse = styled.div`
   width: 16px;
   height: 16px;
-  background-color: ${spinnerColor};
+  background-color: ${p => p.theme.editorColours.icon};
   border-radius: 100%;
-  /* animation: ${bounceAnimation} 2s infinite ease-in-out;
-  -webkit-animation: ${bounceAnimation} 2s infinite ease-in-out; */
 `
-
-// const DelayedPulse = styled.div`
-//   width: 16px;
-//   height: 16px;
-//   position: absolute;
-//   top: 0;
-//   background-color: ${spinnerColor};
-//   border-radius: 100%;
-//   /* animation: ${bounceAnimation} 2s infinite ease-in-out;
-//   -webkit-animation: ${bounceAnimation} 2s infinite ease-in-out;
-//   animation-delay: -1s;
-//   -webkit-animation-delay: -1s; */
-// `
 
 const SpinnerWrapper = styled.div`
   position: relative;
@@ -288,6 +229,5 @@ const SpinnerWrapper = styled.div`
 const Spinner = () => (
   <SpinnerWrapper>
     <Pulse />
-    {/* <DelayedPulse /> */}
   </SpinnerWrapper>
 )

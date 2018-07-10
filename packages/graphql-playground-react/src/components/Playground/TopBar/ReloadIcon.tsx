@@ -1,6 +1,5 @@
 import * as React from 'react'
 import { styled, keyframes, withProps } from '../../../styled/index'
-import * as theme from 'styled-theming'
 
 export interface Props {
   isReloadingSchema: boolean
@@ -28,16 +27,6 @@ const ReloadIcon: React.SFC<Props> = props => (
 )
 
 export default ReloadIcon
-
-const iconColor = theme('mode', {
-  light: p => p.theme.colours.darkBlue20,
-  dark: p => p.theme.colours.white20,
-})
-
-const iconColorHover = theme('mode', {
-  light: p => p.theme.colours.darkBlue60,
-  dark: p => p.theme.colours.white60,
-})
 
 const refreshFrames = keyframes`
 0% {
@@ -78,17 +67,17 @@ const Positioner = styled.div`
 `
 
 const Svg = styled.svg`
-  fill: ${iconColor};
+  fill: ${p => p.theme.editorColours.icon};
   transition: 0.1s linear all;
 
   &:hover {
-    fill: ${iconColorHover};
+    fill: ${p => p.theme.editorColours.iconHover};
   }
 `
 
 const Circle = withProps<Props>()(styled.circle)`
   fill: none;
-  stroke: ${iconColor};
+  stroke: ${p => p.theme.editorColours.icon};
   stroke-dasharray: 37.68;
   transition: opacity 0.3s ease-in-out;
   opacity: ${p => (p.isReloadingSchema ? 1 : 0)};

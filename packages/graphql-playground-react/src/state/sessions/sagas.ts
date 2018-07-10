@@ -12,6 +12,7 @@ import getSelectedOperationName from '../../components/Playground/util/getSelect
 import { getQueryFacts } from '../../components/Playground/util/getQueryFacts'
 import { fromJS, is } from 'immutable'
 import {
+  editQuery,
   setVariableToType,
   setOperations,
   setOperationName,
@@ -33,7 +34,7 @@ import { getSessionDocsState } from '../docs/selectors'
 import { getQueryTypes } from '../../components/Playground/util/getQueryTypes'
 import { parse } from 'graphql'
 import { Session } from './reducers'
-import { safely } from '../../utils'
+import { safely, prettify } from '../../utils'
 import * as queryString from 'query-string'
 
 function* setQueryFacts() {
@@ -187,6 +188,13 @@ function* addToHistory({ payload }) {
   }
 }
 
+function* prettifyQuery() {
+  const { query } = yield select(getSelectedSession)
+  const settings = yield select(getSettings)
+  const prettyQuery = prettify(query, settings['prettier.printWidth'])
+  yield put(editQuery(prettyQuery))
+}
+
 export const sessionsSagas = [
   takeLatest('GET_QUERY_FACTS', safely(setQueryFacts)),
   takeLatest('SET_OPERATION_NAME', safely(setQueryFacts)),
@@ -197,6 +205,7 @@ export const sessionsSagas = [
   takeLatest('REFETCH_SCHEMA', safely(refetchSchemaSaga)),
   takeLatest('SCHEMA_FETCHING_SUCCESS', safely(renewStacks)),
   takeEvery('QUERY_SUCCESS' as any, safely(addToHistory)),
+  takeLatest('PRETTIFY_QUERY', safely(prettifyQuery)),
 ]
 
 // needed to fix typescript

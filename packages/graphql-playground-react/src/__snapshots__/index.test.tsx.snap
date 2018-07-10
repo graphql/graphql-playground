@@ -1,0 +1,547 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`test MiddleWareApp with tabs 1`] = `
+<div>
+  <div
+    class="sc-bMVAic bUjTvZ"
+  >
+    <div
+      class="playground sc-gwVKww fjmhfX"
+    >
+      <div
+        class="sc-btzYZH gjuUJX"
+      >
+        <div
+          class="sc-lhVmIH gceoJJ"
+        >
+          <div
+            class="sc-gGBfsJ jzfwvs"
+          >
+            <div
+              class="sc-tilXH eopbMp"
+            >
+              <div
+                class="sc-hEsumM imgWrU"
+              />
+            </div>
+            <div
+              class="sc-jnlKLf lcOfJK"
+            >
+              New Tab
+            </div>
+            <div
+              class="close sc-jwKygS kXXdpA"
+            />
+          </div>
+          <div
+            class="sc-bYSBpT ikmtjk"
+          />
+        </div>
+      </div>
+      <div
+        class="graphiqls-container sc-hXRMBi cmqJEq"
+      >
+        <div
+          class="graphiql-wrapper active sc-epnACN fjUyqz"
+        >
+          <div
+            class="sc-ifAKCX hSorDx"
+          >
+            <div
+              class="sc-bxivhb cSHbqu"
+            >
+              <div
+                class="sc-fBuWsC ZNWmR"
+              >
+                <button
+                  class="sc-jhAzac iQTNgc"
+                >
+                  Prettify
+                </button>
+                <button
+                  class="sc-jhAzac iQTNgc"
+                >
+                  History
+                </button>
+                <div
+                  class="sc-dVhcbM empwHB"
+                >
+                  <input
+                    class="sc-fMiknA jxOjZz"
+                    value="about:blank"
+                  />
+                  <div
+                    class="sc-csuQGl WHwwm"
+                  >
+                    <svg
+                      class="sc-Rmtcm gMicmQ"
+                      viewBox="0 0 20 20"
+                    >
+                      <circle
+                        class="sc-bRBYWo fJBPZy"
+                        cx="9.5"
+                        cy="10"
+                        fill="none"
+                        r="6"
+                        stroke-linecap="round"
+                        stroke-width="1.5"
+                      />
+                      <path
+                        class="sc-hzDkRC kwVHNl"
+                        d="M4.83 4.86a6.92 6.92 0 0 1 11.3 2.97l.41-1.23c.13-.4.56-.6.95-.47.4.13.6.56.47.95l-1.13 3.33a.76.76 0 0 1-.7.5.72.72 0 0 1-.43-.12l-2.88-1.92a.76.76 0 0 1-.2-1.04.75.75 0 0 1 1.03-.2l1.06.7A5.34 5.34 0 0 0 9.75 4.5a5.44 5.44 0 0 0-5.64 5.22 5.42 5.42 0 0 0 5.24 5.62c.41 0 .74.36.72.78a.75.75 0 0 1-.75.72H9.3a6.9 6.9 0 0 1-6.68-7.18 6.88 6.88 0 0 1 2.22-4.81z"
+                      />
+                    </svg>
+                  </div>
+                </div>
+                <button
+                  class="sc-jhAzac iQTNgc"
+                >
+                  Copy CURL
+                </button>
+                <div
+                  class="sc-cMljjf UdVJG"
+                >
+                  <div
+                    class="sc-jDwBTQ jzYUAi"
+                  >
+                    <div>
+                      <button
+                        class="sc-jhAzac iQTNgc"
+                      >
+                        Share Playground
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div
+                class="sc-kjoXOD gqoYfp"
+              >
+                <div
+                  class="sc-jqCOkK Xczwm"
+                >
+                  <div
+                    class="sc-bxivhb cSHbqu"
+                  >
+                    <div
+                      class="sc-EHOje cFfLgL"
+                    />
+                  </div>
+                  <div
+                    class="sc-frDJqD gltkeK sc-ksYbfQ dvtHmk"
+                    height="200"
+                  >
+                    <div
+                      class="sc-kvZOFW ishkgm sc-hmzhuo jlrOeJ"
+                    >
+                      <span
+                        class="sc-hqyNC cpGMZo"
+                      >
+                        Query Variables
+                      </span>
+                      <span
+                        class="sc-hqyNC jQhkci"
+                      >
+                        HTTP Headers 
+                      </span>
+                    </div>
+                    <div
+                      class="sc-gisBJw eBRpMn"
+                    />
+                  </div>
+                  <div
+                    class="sc-kgAjT frYSpF sc-TOsTZ dPEkXa"
+                  />
+                </div>
+                <div
+                  class="sc-cHGsZl eSKmpv"
+                >
+                  <div
+                    class="sc-cJSrbW epemlL sc-TOsTZ dPEkXa"
+                  />
+                  <div
+                    class="sc-bdVaJa bFURGJ"
+                  >
+                    <div
+                      class="sc-bwzfXH iNzYbQ"
+                      title="Execute Query (Ctrl-Enter)"
+                    >
+                      <svg
+                        height="35"
+                        viewBox="3.5,4.5,24,24"
+                        width="35"
+                      >
+                        <path
+                          d="M 11 9 L 24 16 L 11 23 z"
+                        />
+                      </svg>
+                    </div>
+                  </div>
+                  <div
+                    class="sc-dnqmqq glHaJN"
+                  >
+                    <div
+                      class="sc-iwsKbI eLjmCv"
+                    >
+                      <div
+                        class="sc-VigVT gJoWAv"
+                      >
+                        <div
+                          class="sc-htoDjs iWZbiD"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                  <div
+                    class="sc-uJMKN gpVNBQ"
+                  >
+                    Hit the Play Button to get a response here
+                  </div>
+                  <div
+                    class="sc-jbKcbu jkOLOQ sc-ksYbfQ dvtHmk"
+                    height="300"
+                  >
+                    <div
+                      class="sc-dNLxif hpHnat sc-hmzhuo jlrOeJ"
+                    >
+                      Tracing
+                    </div>
+                    <div
+                      class="sc-chPdSV egsZhV"
+                    >
+                      <div
+                        class="sc-kGXeez zSNfc"
+                      >
+                        This GraphQL server doesn’t support tracing. See the following page for instructions:
+                        <br />
+                        https://github.com/apollographql/apollo-tracing
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div
+              class="graph-docs docExplorerWrap docs sc-ckVGcZ gTAROz"
+              style="width:0"
+            >
+              <div
+                class="docs-button"
+              >
+                Schema
+              </div>
+              <div
+                class="sc-eNQAEJ bnCHKQ"
+              />
+              <div
+                class="doc-explorer-gradient"
+              />
+              <div
+                class="sc-jKJlTe iEsLJA"
+                tabindex="0"
+              >
+                <div
+                  class="doc-explorer-container"
+                >
+                  <div
+                    class="graph-docs-column overflow"
+                    style="width:300px"
+                  >
+                    <div
+                      class="sc-bZQynM kkBsVS"
+                    >
+                      <div
+                        class="sc-gzVnrw fwQvxW"
+                      />
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div
+        class="sc-kIPQKe dFoBip"
+      >
+        <div
+          class="sc-eXEjpC ixbGWH"
+        />
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`test MiddleWareApp without tabs 1`] = `
+<div>
+  <div
+    class="sc-bMVAic bUjTvZ"
+  >
+    <div
+      class="playground sc-gwVKww fjmhfX"
+    >
+      <div
+        class="sc-btzYZH gjuUJX"
+      >
+        <div
+          class="sc-lhVmIH gceoJJ"
+        >
+          <div
+            class="sc-gGBfsJ jzfwvs"
+          >
+            <div
+              class="sc-tilXH eopbMp"
+            >
+              <div
+                class="sc-hEsumM imgWrU"
+              />
+            </div>
+            <div
+              class="sc-jnlKLf lcOfJK"
+            >
+              New Tab
+            </div>
+            <div
+              class="close sc-jwKygS kXXdpA"
+            />
+          </div>
+          <div
+            class="sc-bYSBpT ikmtjk"
+          />
+        </div>
+      </div>
+      <div
+        class="graphiqls-container sc-hXRMBi cmqJEq"
+      >
+        <div
+          class="graphiql-wrapper active sc-epnACN fjUyqz"
+        >
+          <div
+            class="sc-ifAKCX hSorDx"
+          >
+            <div
+              class="sc-bxivhb cSHbqu"
+            >
+              <div
+                class="sc-fBuWsC ZNWmR"
+              >
+                <button
+                  class="sc-jhAzac iQTNgc"
+                >
+                  Prettify
+                </button>
+                <button
+                  class="sc-jhAzac iQTNgc"
+                >
+                  History
+                </button>
+                <div
+                  class="sc-dVhcbM empwHB"
+                >
+                  <input
+                    class="sc-fMiknA jxOjZz"
+                    value="about:blank"
+                  />
+                  <div
+                    class="sc-csuQGl WHwwm"
+                  >
+                    <svg
+                      class="sc-Rmtcm gMicmQ"
+                      viewBox="0 0 20 20"
+                    >
+                      <circle
+                        class="sc-bRBYWo fJBPZy"
+                        cx="9.5"
+                        cy="10"
+                        fill="none"
+                        r="6"
+                        stroke-linecap="round"
+                        stroke-width="1.5"
+                      />
+                      <path
+                        class="sc-hzDkRC kwVHNl"
+                        d="M4.83 4.86a6.92 6.92 0 0 1 11.3 2.97l.41-1.23c.13-.4.56-.6.95-.47.4.13.6.56.47.95l-1.13 3.33a.76.76 0 0 1-.7.5.72.72 0 0 1-.43-.12l-2.88-1.92a.76.76 0 0 1-.2-1.04.75.75 0 0 1 1.03-.2l1.06.7A5.34 5.34 0 0 0 9.75 4.5a5.44 5.44 0 0 0-5.64 5.22 5.42 5.42 0 0 0 5.24 5.62c.41 0 .74.36.72.78a.75.75 0 0 1-.75.72H9.3a6.9 6.9 0 0 1-6.68-7.18 6.88 6.88 0 0 1 2.22-4.81z"
+                      />
+                    </svg>
+                  </div>
+                </div>
+                <button
+                  class="sc-jhAzac iQTNgc"
+                >
+                  Copy CURL
+                </button>
+                <div
+                  class="sc-cMljjf UdVJG"
+                >
+                  <div
+                    class="sc-jDwBTQ jzYUAi"
+                  >
+                    <div>
+                      <button
+                        class="sc-jhAzac iQTNgc"
+                      >
+                        Share Playground
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div
+                class="sc-kjoXOD gqoYfp"
+              >
+                <div
+                  class="sc-jqCOkK Xczwm"
+                >
+                  <div
+                    class="sc-bxivhb cSHbqu"
+                  >
+                    <div
+                      class="sc-EHOje cFfLgL"
+                    />
+                  </div>
+                  <div
+                    class="sc-frDJqD gltkeK sc-ksYbfQ dvtHmk"
+                    height="200"
+                  >
+                    <div
+                      class="sc-kvZOFW ishkgm sc-hmzhuo jlrOeJ"
+                    >
+                      <span
+                        class="sc-hqyNC cpGMZo"
+                      >
+                        Query Variables
+                      </span>
+                      <span
+                        class="sc-hqyNC jQhkci"
+                      >
+                        HTTP Headers 
+                      </span>
+                    </div>
+                    <div
+                      class="sc-gisBJw eBRpMn"
+                    />
+                  </div>
+                  <div
+                    class="sc-kgAjT frYSpF sc-TOsTZ dPEkXa"
+                  />
+                </div>
+                <div
+                  class="sc-cHGsZl eSKmpv"
+                >
+                  <div
+                    class="sc-cJSrbW epemlL sc-TOsTZ dPEkXa"
+                  />
+                  <div
+                    class="sc-bdVaJa bFURGJ"
+                  >
+                    <div
+                      class="sc-bwzfXH iNzYbQ"
+                      title="Execute Query (Ctrl-Enter)"
+                    >
+                      <svg
+                        height="35"
+                        viewBox="3.5,4.5,24,24"
+                        width="35"
+                      >
+                        <path
+                          d="M 11 9 L 24 16 L 11 23 z"
+                        />
+                      </svg>
+                    </div>
+                  </div>
+                  <div
+                    class="sc-dnqmqq glHaJN"
+                  >
+                    <div
+                      class="sc-iwsKbI eLjmCv"
+                    >
+                      <div
+                        class="sc-VigVT gJoWAv"
+                      >
+                        <div
+                          class="sc-htoDjs iWZbiD"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                  <div
+                    class="sc-uJMKN gpVNBQ"
+                  >
+                    Hit the Play Button to get a response here
+                  </div>
+                  <div
+                    class="sc-jbKcbu jkOLOQ sc-ksYbfQ dvtHmk"
+                    height="300"
+                  >
+                    <div
+                      class="sc-dNLxif hpHnat sc-hmzhuo jlrOeJ"
+                    >
+                      Tracing
+                    </div>
+                    <div
+                      class="sc-chPdSV egsZhV"
+                    >
+                      <div
+                        class="sc-kGXeez zSNfc"
+                      >
+                        This GraphQL server doesn’t support tracing. See the following page for instructions:
+                        <br />
+                        https://github.com/apollographql/apollo-tracing
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div
+              class="graph-docs docExplorerWrap docs sc-ckVGcZ gTAROz"
+              style="width:0"
+            >
+              <div
+                class="docs-button"
+              >
+                Schema
+              </div>
+              <div
+                class="sc-eNQAEJ bnCHKQ"
+              />
+              <div
+                class="doc-explorer-gradient"
+              />
+              <div
+                class="sc-jKJlTe iEsLJA"
+                tabindex="0"
+              >
+                <div
+                  class="doc-explorer-container"
+                >
+                  <div
+                    class="graph-docs-column overflow"
+                    style="width:300px"
+                  >
+                    <div
+                      class="sc-bZQynM kkBsVS"
+                    >
+                      <div
+                        class="sc-gzVnrw fwQvxW"
+                      />
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div
+        class="sc-kIPQKe dFoBip"
+      >
+        <div
+          class="sc-eXEjpC ixbGWH"
+        />
+      </div>
+    </div>
+  </div>
+</div>
+`;

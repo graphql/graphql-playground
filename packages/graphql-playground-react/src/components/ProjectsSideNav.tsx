@@ -1,10 +1,8 @@
 import * as React from 'react'
 import { GraphQLConfig, GraphQLConfigEnpointsMapData } from '../graphqlConfig'
 import ProjectsSideNavItem from './ProjectsSideNavItem'
-import { Icon, $v } from 'graphcool-styles'
+import { Icon } from 'graphcool-styles'
 import { styled } from '../styled/index'
-import * as theme from 'styled-theming'
-import { darken } from 'polished'
 import { getEndpointFromEndpointConfig } from './util'
 import { createStructuredSelector } from 'reselect'
 import { connect } from 'react-redux'
@@ -70,13 +68,13 @@ class ProjectsSideNav extends React.Component<Props & ReduxProps, {}> {
               })}
           </div>
         </List>
-        {this.props.showNewWorkspace && (
+        {/* this.props.showNewWorkspace  */}
+        {true && (
           <Footer>
             <WorkspaceButton onClick={onNewWorkspace}>
               <Icon
                 src={require('graphcool-styles/icons/stroke/addFull.svg')}
                 stroke={true}
-                color={$v.darkBlue}
                 width={14}
                 height={14}
                 strokeWidth={6}
@@ -128,93 +126,37 @@ export default connect(
   { openConfigTab },
 )(ProjectsSideNav)
 
-const textColor = theme('mode', {
-  light: p => p.theme.colours.darkBlue80,
-  dark: p => p.theme.colours.white,
-})
-
-const backgroundColor = theme('mode', {
-  light: p => p.theme.colours.lightGrey,
-  dark: p => p.theme.colours.darkBlue,
-})
-
-const darkerBackgroundColor = theme('mode', {
-  // light: p => '#dbdee0',
-  light: p => p.theme.colours.lightGrey,
-  dark: p => p.theme.colours.darkerBlue,
-})
-
-const borderColor = theme('mode', {
-  light: p => '#dbdee0',
-  // light: p => p.theme.colours.lightGrey,
-  dark: p => p.theme.colours.darkestBlue,
-})
-
-const footerBackgroundColor = theme('mode', {
-  light: p => p.theme.colours.lighterGrey,
-  dark: p => p.theme.colours.darkBlue,
-})
-
-const buttonFontColor = theme('mode', {
-  light: p => p.theme.colours.lightGrey,
-  dark: p => p.theme.colours.darkBlue,
-})
-
-const buttonBackgroundColor = theme('mode', {
-  light: p => '#B9BFC4',
-  dark: p => '#B9BFC4',
-})
-
-const buttonHoverBackgroundColor = theme('mode', {
-  light: p => darken(0.1, '#B9BFC4'),
-  dark: p => darken(0.1, '#B9BFC4'),
-})
-
-const iconColor = theme('mode', {
-  light: p => p.theme.colours.darkBlue20,
-  dark: p => p.theme.colours.white20,
-})
-
-const iconColorActive = theme('mode', {
-  light: p => p.theme.colours.darkBlue60,
-  dark: p => p.theme.colours.white60,
-})
-
 const Project = styled.div`
   margin-bottom: 12px;
 `
 
 const SideNav = styled.div`
   position: relative;
-  background: ${backgroundColor};
+  background: ${p => p.theme.editorColours.sidebar};
   flex: 0 222px;
-  color: ${textColor};
-  border-right: 6px solid ${borderColor};
-  .left-content.light {
-    @p: .bgWhite70, .black60;
-  }
+  color: ${p => p.theme.editorColours.text};
+  border-right: 6px solid ${p => p.theme.editorColours.background};
 `
 
 const DraggableHeader = styled.div`
   padding-top: ${(p: any) => (p.isElectron ? 48 : 20)}px;
-  background: ${darkerBackgroundColor};
+  background: ${p => p.theme.editorColours.sidebarTop};
   -webkit-app-region: drag;
   max-width: 222px;
   overflow: hidden;
 ` as any
 
-// TODO fix typing
 const List = styled.div`
   padding-bottom: 32px;
   max-width: 222px;
   overflow: hidden;
-  background: ${darkerBackgroundColor};
+  background: ${p => p.theme.editorColours.sidebarTop};
 `
 
 const Title = styled.div`
   font-size: 16px;
   font-weight: 600;
-  color: ${textColor};
+  color: ${p => p.theme.editorColours.text};
 `
 
 const TitleRow = styled.div`
@@ -230,20 +172,20 @@ const TitleRow = styled.div`
   }
 
   .settings-icon svg {
-    fill: ${iconColor};
+    fill: ${p => p.theme.editorColours.icon};
     transition: 0.1s linear fill;
   }
 
   &:hover {
     .settings-icon svg {
-      fill: ${iconColorActive};
+      fill: ${p => p.theme.editorColours.iconHover};
     }
   }
 `
 
 const ProjectName = styled.div`
   font-size: 14px;
-  color: ${textColor};
+  color: ${p => p.theme.editorColours.text};
   font-weight: 600;
   letter-spacing: 0.53px;
   margin-left: 30px;
@@ -259,7 +201,7 @@ const Footer = styled.div`
   align-items: center;
   justify-content: space-between;
   padding: 20px;
-  background: ${footerBackgroundColor};
+  background: ${p => p.theme.editorColours.sidebarBottom};
 `
 
 const WorkspaceButton = styled.button`
@@ -271,16 +213,16 @@ const WorkspaceButton = styled.button`
   font-size: 14px;
   font-weight: 600;
   letter-spacing: 0.53px;
-  color: ${buttonFontColor};
-  background-color: ${buttonBackgroundColor};
+  color: ${p => p.theme.editorColours.buttonWorkspaceText};
+  background-color: ${p => p.theme.editorColours.buttonWorkspace};
   transition: 0.1s linear all;
   &:hover {
-    background-color: ${buttonHoverBackgroundColor};
+    background-color: ${p => p.theme.editorColours.buttonWorkspaceHover};
   }
   i {
     margin-right: 6px;
   }
   svg {
-    stroke: ${buttonFontColor};
+    stroke: ${p => p.theme.editorColours.buttonWorkspaceText};
   }
 `

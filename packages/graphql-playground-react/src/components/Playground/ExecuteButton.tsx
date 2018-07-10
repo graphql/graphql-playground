@@ -7,12 +7,8 @@
  */
 
 import * as React from 'react'
-import * as cx from 'classnames'
-import { withTheme, LocalThemeInterface } from '../Theme'
 import ExecuteButtonOperation from './ExecuteButtonOperation'
 import { withProps, styled } from '../../styled'
-import * as theme from 'styled-theming'
-import { mix, lighten } from 'polished'
 import { connect } from 'react-redux'
 import { runQuery, stopQuery } from '../../state/sessions/actions'
 import { createStructuredSelector } from 'reselect'
@@ -44,10 +40,7 @@ let firstTime = true
  * What a nice round shiny button. Shows a drop-down when there are multiple
  * queries to run.
  */
-class ExecuteButton extends React.Component<
-  LocalThemeInterface & ReduxProps,
-  State
-> {
+class ExecuteButton extends React.Component<ReduxProps, State> {
   constructor(props) {
     super(props)
 
@@ -102,10 +95,9 @@ class ExecuteButton extends React.Component<
     )
 
     return (
-      <Wrapper className={this.props.localTheme}>
+      <Wrapper>
         <Button
-          className={cx(this.props.localTheme)}
-          isRunning={String(this.props.queryRunning)}
+          isRunning={this.props.queryRunning}
           onMouseDown={onMouseDown}
           onClick={onClick}
           title="Execute Query (Ctrl-Enter)"
@@ -193,12 +185,10 @@ const mapStateToProps = createStructuredSelector({
   sessionId: getSelectedSessionIdFromRoot,
 })
 
-export default withTheme<{}>(
-  connect(
-    mapStateToProps,
-    { runQuery, stopQuery },
-  )(toJS(ExecuteButton)),
-)
+export default connect(
+  mapStateToProps,
+  { runQuery, stopQuery },
+)(toJS(ExecuteButton))
 
 const Wrapper = styled.div`
   position: absolute;
@@ -208,35 +198,8 @@ const Wrapper = styled.div`
   margin: 0 14px 0 28px;
 `
 
-const buttonBackground = theme.variants('mode', 'isRunning', {
-  true: {
-    light: p => p.theme.colours.red,
-    dark: p => p.theme.colours.red,
-  },
-  false: {
-    dark: 'rgb(185, 191, 196)',
-    light: p => mix(0.6, p.theme.colours.darkBlue, 'white'),
-  },
-})
-
-const buttonBackgroundHover = theme.variants('mode', 'isRunning', {
-  true: {
-    light: p => lighten(0.1, p.theme.colours.red),
-    dark: p => lighten(0.1, p.theme.colours.red),
-  },
-  false: {
-    dark: 'rgb(195, 201, 206)',
-    light: p => mix(0.8, p.theme.colours.darkBlue, 'white'),
-  },
-})
-
-const buttonBorderColor = theme('mode', {
-  light: '#eeeff0',
-  dark: 'rgb(11, 20, 28)',
-})
-
 interface ButtonProps {
-  isRunning: string
+  isRunning: boolean
 }
 
 const Button = withProps<ButtonProps>()(styled.div)`
@@ -249,8 +212,11 @@ const Button = withProps<ButtonProps>()(styled.div)`
 
   border-radius: 100%;
   transition: background-color 100ms;
-  background-color: ${buttonBackground};
-  border: 6px solid ${buttonBorderColor};
+  background-color: ${p =>
+    p.isRunning
+      ? p.theme.editorColours.executeButtonSubscription
+      : p.theme.editorColours.executeButton};
+  border: 6px solid ${p => p.theme.editorColours.executeButtonBorder};
   cursor: pointer;
 
   svg {
@@ -258,7 +224,10 @@ const Button = withProps<ButtonProps>()(styled.div)`
   }
 
   &:hover {
-    background-color: ${buttonBackgroundHover};
+    background-color:${p =>
+      p.isRunning
+        ? p.theme.editorColours.executeButtonSubscriptionHover
+        : p.theme.editorColours.executeButtonHover};
   }
 `
 
