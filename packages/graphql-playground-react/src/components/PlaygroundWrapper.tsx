@@ -61,6 +61,7 @@ export interface PlaygroundWrapperProps {
   tabs?: Tab[]
   schema?: { __schema: any } // introspection result
   codeTheme?: EditorColours
+  workspaceName?: string
 }
 
 export interface ReduxProps {
@@ -379,7 +380,9 @@ class PlaygroundWrapper extends React.Component<
                 fixedEndpoints={Boolean(this.state.configString)}
                 headers={this.state.headers}
                 configPath={this.props.configPath}
-                workspaceName={this.state.activeProjectName}
+                workspaceName={
+                  this.state.activeProjectName || this.props.workspaceName
+                }
                 createApolloLink={this.props.createApolloLink}
                 schema={this.state.schema}
               />
