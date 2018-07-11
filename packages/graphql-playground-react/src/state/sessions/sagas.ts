@@ -191,8 +191,14 @@ function* addToHistory({ payload }) {
 function* prettifyQuery() {
   const { query } = yield select(getSelectedSession)
   const settings = yield select(getSettings)
-  const prettyQuery = prettify(query, settings['prettier.printWidth'])
-  yield put(editQuery(prettyQuery))
+  try {
+    const prettyQuery = prettify(query, settings['prettier.printWidth'])
+    yield put(editQuery(prettyQuery))
+  } catch (e) {
+    // TODO show erros somewhere
+    // tslint:disable-next-line
+    console.log(e)
+  }
 }
 
 export const sessionsSagas = [
