@@ -204,14 +204,6 @@ class PlaygroundWrapper extends React.Component<
       nextProps.config !== this.props.config
     ) {
       this.setState(this.mapPropsToState(nextProps))
-    }
-
-    if (
-      nextProps.configString !== this.props.configString &&
-      nextProps.configString
-    ) {
-      const configIsYaml = this.isConfigYaml(nextProps.configString)
-      this.setState({ configIsYaml })
       this.setInitialWorkspace(nextProps)
     }
   }
