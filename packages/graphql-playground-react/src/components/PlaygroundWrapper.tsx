@@ -92,6 +92,11 @@ class PlaygroundWrapper extends React.Component<
     super(props)
     ;(global as any).m = this
 
+    this.state = this.mapPropsToState(props)
+    this.removeLoader()
+  }
+
+  mapPropsToState(props: PlaygroundWrapperProps): State {
     const configIsYaml = props.configString
       ? this.isConfigYaml(props.configString)
       : false
@@ -121,9 +126,7 @@ class PlaygroundWrapper extends React.Component<
     subscriptionEndpoint =
       this.normalizeSubscriptionUrl(endpoint, subscriptionEndpoint) || undefined
 
-    this.removeLoader()
-
-    this.state = {
+    return {
       endpoint: this.absolutizeUrl(endpoint),
       platformToken:
         props.platformToken ||
@@ -191,6 +194,18 @@ class PlaygroundWrapper extends React.Component<
   }
 
   componentWillReceiveProps(nextProps: PlaygroundWrapperProps & ReduxProps) {
+    // Reactive props (props that cause a state change upon being changed)
+    if (
+      nextProps.endpoint !== this.props.endpoint ||
+      nextProps.endpointUrl !== this.props.endpointUrl ||
+      nextProps.subscriptionEndpoint !== this.props.subscriptionEndpoint ||
+      nextProps.configString !== this.props.configString ||
+      nextProps.platformToken !== this.props.platformToken ||
+      nextProps.config !== this.props.config
+    ) {
+      this.setState(this.mapPropsToState(nextProps))
+    }
+
     if (
       nextProps.configString !== this.props.configString &&
       nextProps.configString
