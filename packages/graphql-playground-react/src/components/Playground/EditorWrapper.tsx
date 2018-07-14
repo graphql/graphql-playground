@@ -751,7 +751,6 @@ injectGlobal`
     margin-left: -6px;
     margin: 0;
     max-height: 20em;
-    overflow-y: auto;
     overflow: hidden;
     padding: 0;
     position: absolute;
@@ -759,6 +758,9 @@ injectGlobal`
     border-radius: 2px;
     top: 0 !important;
     left: 0 !important;
+    &:hover {
+      overflow-y: overlay;
+    }
   }
 
   .CodeMirror-hints-wrapper {
@@ -774,7 +776,7 @@ injectGlobal`
     box-shadow: none;
     margin-left: 0;
     position: relative;
-    z-index: 0;
+    z-index: 0; 
   }
 
   .CodeMirror-hint {
