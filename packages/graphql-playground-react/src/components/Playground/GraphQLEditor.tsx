@@ -704,6 +704,9 @@ const VariableEditor = styled(BottomDrawer)`
     width: calc(100% - 12px);
     background: ${p => p.theme.editorColours.leftDrawerBackground};
   }
+  .CodeMirror-linenumbers {
+    background: ${p => p.theme.editorColours.leftDrawerBackground};
+  }
 `
 
 const VariableEditorTitle = withProps<TitleProps>()(styled(BottomDrawerTitle))`
