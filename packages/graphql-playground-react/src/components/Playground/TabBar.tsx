@@ -59,7 +59,11 @@ const StyledTabBar = styled.div`
   color: white;
   height: 57px;
   background: ${p => p.theme.editorColours.background};
+  overflow: hidden;
   -webkit-app-region: drag;
+  &:hover {
+    overflow-x: overlay;
+  }
 `
 
 interface TabsProps {
