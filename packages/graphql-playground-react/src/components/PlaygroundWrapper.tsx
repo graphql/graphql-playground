@@ -388,7 +388,7 @@ class PlaygroundWrapper extends React.Component<
                 headers={this.state.headers}
                 configPath={this.props.configPath}
                 workspaceName={
-                  this.state.activeProjectName || this.props.workspaceName
+                  this.props.workspaceName || this.state.activeProjectName
                 }
                 createApolloLink={this.props.createApolloLink}
                 schema={this.state.schema}
