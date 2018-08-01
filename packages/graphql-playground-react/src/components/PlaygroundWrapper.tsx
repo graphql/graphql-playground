@@ -61,6 +61,7 @@ export interface PlaygroundWrapperProps {
   tabs?: Tab[]
   schema?: { __schema: any } // introspection result
   codeTheme?: EditorColours
+  workspaceName?: string
 }
 
 export interface ReduxProps {
@@ -91,6 +92,11 @@ class PlaygroundWrapper extends React.Component<
     super(props)
     ;(global as any).m = this
 
+    this.state = this.mapPropsToState(props)
+    this.removeLoader()
+  }
+
+  mapPropsToState(props: PlaygroundWrapperProps): State {
     const configIsYaml = props.configString
       ? this.isConfigYaml(props.configString)
       : false
@@ -120,9 +126,7 @@ class PlaygroundWrapper extends React.Component<
     subscriptionEndpoint =
       this.normalizeSubscriptionUrl(endpoint, subscriptionEndpoint) || undefined
 
-    this.removeLoader()
-
-    this.state = {
+    return {
       endpoint: this.absolutizeUrl(endpoint),
       platformToken:
         props.platformToken ||
@@ -190,12 +194,16 @@ class PlaygroundWrapper extends React.Component<
   }
 
   componentWillReceiveProps(nextProps: PlaygroundWrapperProps & ReduxProps) {
+    // Reactive props (props that cause a state change upon being changed)
     if (
-      nextProps.configString !== this.props.configString &&
-      nextProps.configString
+      nextProps.endpoint !== this.props.endpoint ||
+      nextProps.endpointUrl !== this.props.endpointUrl ||
+      nextProps.subscriptionEndpoint !== this.props.subscriptionEndpoint ||
+      nextProps.configString !== this.props.configString ||
+      nextProps.platformToken !== this.props.platformToken ||
+      nextProps.config !== this.props.config
     ) {
-      const configIsYaml = this.isConfigYaml(nextProps.configString)
-      this.setState({ configIsYaml })
+      this.setState(this.mapPropsToState(nextProps))
       this.setInitialWorkspace(nextProps)
     }
   }
@@ -379,7 +387,9 @@ class PlaygroundWrapper extends React.Component<
                 fixedEndpoints={Boolean(this.state.configString)}
                 headers={this.state.headers}
                 configPath={this.props.configPath}
-                workspaceName={this.state.activeProjectName}
+                workspaceName={
+                  this.props.workspaceName || this.state.activeProjectName
+                }
                 createApolloLink={this.props.createApolloLink}
                 schema={this.state.schema}
               />
