@@ -313,7 +313,9 @@ class GraphQLEditor extends React.PureComponent<
                   isOpen={this.props.responseTracingOpen}
                   onMouseDown={this.handleTracingResizeStart}
                 >
-                  Tracing
+                  <VariableEditorSubtitle isOpen={false}>
+                    Tracing
+                  </VariableEditorSubtitle>
                 </ResponseTrackingTitle>
                 <ResponseTracing open={this.props.responseTracingOpen} />
               </ResponseTracking>
@@ -694,7 +696,7 @@ const BottomDrawerTitle = styled.div`
   letter-spacing: 0.53px;
   line-height: 14px;
   font-size: 14px;
-  padding: 14px 14px 5px 21px;
+  padding: 14px 14px 15px 21px;
   user-select: none;
 `
 
@@ -702,6 +704,12 @@ const VariableEditor = styled(BottomDrawer)`
   .CodeMirror {
     padding-left: 12px;
     width: calc(100% - 12px);
+    background: ${p => p.theme.editorColours.leftDrawerBackground};
+  }
+  .CodeMirror-lines {
+    padding: 10px 0 20px 0;
+  }
+  .CodeMirror-linenumbers {
     background: ${p => p.theme.editorColours.leftDrawerBackground};
   }
 `
@@ -718,6 +726,9 @@ const VariableEditorSubtitle = withProps<TitleProps>()(styled.span)`
     p.isOpen
       ? p.theme.editorColours.drawerText
       : p.theme.editorColours.drawerTextInactive};
+  &:last-child {
+    margin-right: 0;
+  }
 `
 
 const ResponseTracking = styled(BottomDrawer)`

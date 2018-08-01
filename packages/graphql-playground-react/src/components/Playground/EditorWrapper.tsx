@@ -269,6 +269,7 @@ const EditorWrapper = styled.div`
     white-space: nowrap;
   }
   .CodeMirror-linenumbers {
+    background: ${p => p.theme.editorColours.editorBackground};
   }
   .CodeMirror-linenumber {
     font-family: Open Sans, sans-serif;
@@ -347,12 +348,15 @@ const EditorWrapper = styled.div`
     height: 100%;
     /* 30px is the magic margin used to hide the element's real scrollbars */
     /* See overflow: hidden in .CodeMirror */
-    margin-bottom: -30px;
-    margin-right: -30px;
+    /* margin-bottom: -30px;
+    margin-right: -30px; */
     outline: none; /* Prevent dragging from highlighting the element */
-    overflow: scroll !important; /* Things will break if this is overridden */
-    padding-bottom: 30px;
+    overflow: hidden;
+    /* padding-bottom: 30px; */
     position: relative;
+    &:hover {
+      overflow: scroll !important; /* Things will break if this is overridden */
+    }
   }
   .CodeMirror-sizer {
     border-right: 30px solid transparent;
@@ -630,6 +634,7 @@ const EditorWrapper = styled.div`
   }
 
   .CodeMirror-jump-token {
+    cursor: pointer;
     text-decoration: underline;
   }
 `
@@ -638,6 +643,33 @@ const EditorWrapper = styled.div`
 // .CodeMirror-info info for types breaks stack trace
 // tslint:disable-next-line
 injectGlobal`
+  *::-webkit-scrollbar {
+    -webkit-appearance: none;
+    width: 7px;
+    height: 7px;
+  }
+  *::-webkit-scrollbar-track-piece {
+    background-color: rgba(255, 255, 255, 0);
+  }
+  *::-webkit-scrollbar-track {
+    background-color: inherit;
+  }
+  *::-webkit-scrollbar-thumb {
+    max-height: 100px;
+    border-radius: 3px;
+    background-color: rgba(1, 1, 1, 0.23);
+  }
+  *::-webkit-scrollbar-thumb:hover {
+    background-color: rgba(1, 1, 1, 0.35);
+  }
+  *::-webkit-scrollbar-thumb:active {
+    background-color: rgba(1, 1, 1, 0.48);
+  }
+  *::-webkit-scrollbar-corner {
+    background: rgba(0,0,0,0);
+  }
+
+
   .CodeMirror-lint-tooltip, .CodeMirror-info {
     background-color: white;
     border-radius: 4px 4px 4px 4px;
@@ -719,7 +751,6 @@ injectGlobal`
     margin-left: -6px;
     margin: 0;
     max-height: 20em;
-    overflow-y: auto;
     overflow: hidden;
     padding: 0;
     position: absolute;
@@ -727,6 +758,9 @@ injectGlobal`
     border-radius: 2px;
     top: 0 !important;
     left: 0 !important;
+    &:hover {
+      overflow-y: overlay;
+    }
   }
 
   .CodeMirror-hints-wrapper {
@@ -742,7 +776,7 @@ injectGlobal`
     box-shadow: none;
     margin-left: 0;
     position: relative;
-    z-index: 0;
+    z-index: 0; 
   }
 
   .CodeMirror-hint {

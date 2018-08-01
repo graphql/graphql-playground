@@ -37,7 +37,7 @@ export interface ReduxProps {
 }
 
 const TracingWrapper = styled.div`
-  padding-top: 16px;
+  padding-top: 6px;
   padding-left: 25px;
   padding-right: 25px;
   color: ${p => p.theme.editorColours.text};

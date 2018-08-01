@@ -148,6 +148,7 @@ interface TabItemProps {
 }
 
 const TabItem = withProps<TabItemProps>()(styled.div)`
+  flex: 0 0 auto;
   display: flex;
   align-items: center;
   height: 43px;
