@@ -127,7 +127,7 @@
     "codemirror-graphql": "timsuchanek/codemirror-graphql#details-fix",
     "copy-to-clipboard": "^3.0.8",
     "cuid": "^1.3.8",
-    "graphcool-styles": "0.2.7",
+    "graphcool-styles": "0.2.9",
     "graphcool-tmp-ui": "^0.0.11",
     "graphcool-ui": "0.0.14",
     "graphiql": "^0.11.2",
