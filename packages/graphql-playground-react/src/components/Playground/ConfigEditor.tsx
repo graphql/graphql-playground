@@ -177,4 +177,7 @@ const Editor = styled.div`
   flex: 1;
   height: 100%;
   position: relative;
+  .CodeMirror-linenumbers {
+    background: ${p => p.theme.editorColours.resultBackground};
+  }
 `
