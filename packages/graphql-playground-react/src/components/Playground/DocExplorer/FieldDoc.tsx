@@ -87,6 +87,9 @@ export default class FieldDoc extends React.Component<Props, State> {
           .doc-description {
             @p: .ph16, .black50;
           }
+          .doc-type-description {
+            @p: .black50;
+          }
         `}</style>
         <style jsx={true}>{`
           .doc-header {
