@@ -119,7 +119,8 @@
   },
   "dependencies": {
     "apollo-link": "^1.0.7",
-    "apollo-link-http": "^1.3.2",
+    "apollo-link-http": "alpha",
+    "apollo-link-patch": "alpha",
     "apollo-link-ws": "1.0.8",
     "calculate-size": "^1.1.1",
     "classnames": "^2.2.5",
