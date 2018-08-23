@@ -190,7 +190,12 @@ function* runQuerySaga(action) {
       if (value && value.extensions) {
         const extensions = value.extensions
         yield put(setResponseExtensions(extensions))
-        delete value.extensions
+        if (
+          value.extensions.tracing &&
+          settings['tracing.hideTracingResponse']
+        ) {
+          delete value.extensions.tracing
+        }
       }
       const response = new ResponseRecord({
         date: JSON.stringify(value ? value : formatError(error), null, 2),
