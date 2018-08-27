@@ -56,3 +56,14 @@ test('test MiddleWareApp with one tab and click execute', () => {
   const executeButton = wrapper.wrap(executeButtonElement)
   expect(executeButton.length).toBe(1)
 })
+
+test('test MiddleWareApp passed default headers', () => {
+  const wrapper = render(
+    <MiddlewareApp
+      setTitle={true}
+      showNewWorkspace={false}
+      headers={{ test: 'test' }}
+    />,
+  )
+  expect(wrapper).toMatchSnapshot()
+})
