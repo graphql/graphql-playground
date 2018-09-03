@@ -1,6 +1,8 @@
 import * as React from 'react'
 import Playground, { Playground as IPlayground } from './Playground'
 import { Helmet } from 'react-helmet'
+import createHistory from 'history/createBrowserHistory'
+
 import { GraphQLConfig } from '../graphqlConfig'
 import * as yaml from 'js-yaml'
 import ProjectsSideNav from './ProjectsSideNav'
@@ -26,6 +28,8 @@ import { Session, Tab } from '../state/sessions/reducers'
 import { ApolloLink } from 'apollo-link'
 import { injectTabs } from '../state/workspace/actions'
 import { buildSchema, buildClientSchema, GraphQLSchema } from 'graphql'
+
+const history = createHistory()
 
 function getParameterByName(name: string, uri?: string): string | null {
   const url = uri || window.location.href
@@ -139,6 +143,29 @@ class PlaygroundWrapper extends React.Component<
       activeProjectName: projectName,
       headers,
     }
+  }
+
+  updateURL(params) {
+    history.replace({
+      ...history.location,
+      search: params.toString(),
+    })
+  }
+
+  onEditQuery(params, query) {
+    if (!query) {
+      return
+    }
+    params.set('query', query)
+    this.updateURL(params)
+  }
+
+  onEditVariables(params, variables) {
+    if (!variables) {
+      return
+    }
+    params.set('variables', variables)
+    this.updateURL(params)
   }
 
   extractEndpointAndHeaders(endpoint) {
@@ -328,6 +355,8 @@ class PlaygroundWrapper extends React.Component<
   }
 
   render() {
+    const params = new URLSearchParams(history.location.search)
+
     const title = this.props.setTitle ? (
       <Helmet>
         <title>{this.getTitle()}</title>
@@ -375,6 +404,8 @@ class PlaygroundWrapper extends React.Component<
                 onChangeSubscriptionsEndpoint={
                   this.handleChangeSubscriptionsEndpoint
                 }
+                onEditQuery={this.onEditQuery.bind(this, params)}
+                onEditVariables={this.onEditVariables.bind(this, params)}
                 adminAuthToken={this.state.platformToken}
                 getRef={this.getPlaygroundRef}
                 config={this.props.config!}

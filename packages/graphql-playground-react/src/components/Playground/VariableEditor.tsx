@@ -26,6 +26,7 @@ interface Props {
   onRunQuery: () => void
   prettifyQuery: () => void
   getRef?: (editor: VariableEditor) => void
+  onEdit?: (string: string) => void
 }
 
 interface ReduxProps {
@@ -224,6 +225,10 @@ class VariableEditor extends React.PureComponent<Props & ReduxProps> {
     if (!this.ignoreChangeEvent) {
       this.cachedValue = this.editor.getValue()
       this.props.onChange(this.cachedValue)
+
+      if (this.props.onEdit) {
+        this.props.onEdit(this.cachedValue)
+      }
     }
   }
 

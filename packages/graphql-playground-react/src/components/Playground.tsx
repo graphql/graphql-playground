@@ -77,6 +77,8 @@ export interface Props {
   onChangeSettings: (settingsString: string) => void
   onSaveConfig: () => void
   onChangeConfig: (configString: string) => void
+  onEditQuery?: (queryString: string) => void
+  onEditVariables?: (variablesString: string) => void
   onUpdateSessionCount?: () => void
   config: GraphQLConfig
   configString: string
@@ -299,6 +301,8 @@ export class Playground extends React.PureComponent<Props & ReduxProps, State> {
               <FileEditor />
             ) : (
               <GraphQLEditor
+                onEditQuery={this.props.onEditQuery}
+                onEditVariables={this.props.onEditVariables}
                 shareEnabled={this.props.shareEnabled}
                 schema={this.state.schema}
               />

@@ -8,6 +8,7 @@ import CodeMirrorSizer from 'graphiql/dist/utility/CodeMirrorSizer'
 import { fillLeafs } from 'graphiql/dist/utility/fillLeafs'
 import { getLeft, getTop } from 'graphiql/dist/utility/elementPosition'
 import { connect } from 'react-redux'
+import { debounce } from 'lodash'
 
 import Spinner from '../Spinner'
 import Results from './Results'
@@ -69,6 +70,8 @@ export interface Props {
   onRef?: any
   shareEnabled?: boolean
   schema?: GraphQLSchema
+  onEditQuery?: (queryString: string) => void
+  onEditVariables?: (variablesString: string) => void
 }
 
 export interface ReduxProps {
@@ -133,6 +136,22 @@ class GraphQLEditor extends React.PureComponent<
   private queryVariablesRef
   private httpHeadersRef
 
+  // codemirror editor instance
+  private queryEditor: any
+  private variableEditor: any
+
+  private handleEditQuery = debounce(() => {
+    if (this.props.onEditQuery) {
+      return this.props.onEditQuery(this.queryEditor.getValue())
+    }
+  }, 100)
+
+  private handleEditVariables = debounce(value => {
+    if (this.props.onEditVariables) {
+      return this.props.onEditVariables(value)
+    }
+  }, 100)
+
   componentDidMount() {
     // Ensure a form of a schema exists (including `null`) and
     // if not, fetch one using an introspection query.
@@ -141,8 +160,18 @@ class GraphQLEditor extends React.PureComponent<
     // Utility for keeping CodeMirror correctly sized.
     this.codeMirrorSizer = new CodeMirrorSizer()
     ;(global as any).g = this
+
+    // set listener
+    this.queryEditor = this.queryEditorComponent.getCodeMirror()
+    this.variableEditor = this.variableEditorComponent.getCodeMirror()
+    this.queryEditor.on('change', this.handleEditQuery)
+    this.variableEditor.on('change', this.handleEditVariables)
   }
 
+  componentWillUnmount() {
+    this.queryEditor.off('change', this.handleEditQuery)
+    this.variableEditor.off('change', this.handleEditQuery)
+  }
   componentDidUpdate() {
     // If this update caused DOM nodes to have changed sizes, update the
     // corresponding CodeMirror instance sizes to match.
@@ -277,6 +306,11 @@ class GraphQLEditor extends React.PureComponent<
                         : undefined
                     }
                     onRunQuery={this.runQueryAtCursor}
+                    onEdit={
+                      this.props.queryVariablesActive
+                        ? this.handleEditVariables
+                        : undefined
+                    }
                   />
                 ) : (
                   <HeadersEditorComponent
