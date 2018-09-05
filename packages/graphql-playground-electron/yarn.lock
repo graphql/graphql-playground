@@ -3631,6 +3631,16 @@ graphcool-styles@0.2.7:
     object-assign "^4.1.0"
     webpack-dev-server "^1.16.2"
 
+graphcool-styles@0.2.9:
+  version "0.2.9"
+  resolved "https://registry.yarnpkg.com/graphcool-styles/-/graphcool-styles-0.2.9.tgz#addef08ecbe44f35281a177394fe30da2f83c615"
+  dependencies:
+    html-webpack-plugin "^2.24.1"
+    interactive "^0.1.9"
+    isomorphic-fetch "^2.2.1"
+    object-assign "^4.1.0"
+    webpack-dev-server "^1.16.2"
+
 graphcool-styles@^0.1.31:
   version "0.1.43"
   resolved "https://registry.yarnpkg.com/graphcool-styles/-/graphcool-styles-0.1.43.tgz#da6b72118c890923ef5c4a964405aa3e4541dc82"
@@ -3690,12 +3700,12 @@ graphql-config-extension-graphcool@1.0.8:
     graphcool-yml "0.4.15"
     graphql-config "^2.0.1"
 
-graphql-config-extension-prisma@^0.0.12:
-  version "0.0.12"
-  resolved "https://registry.yarnpkg.com/graphql-config-extension-prisma/-/graphql-config-extension-prisma-0.0.12.tgz#c591a2dd3d45eb4b039a39b5d4a6ea7ca7d8e05a"
+graphql-config-extension-prisma@^0.2.0:
+  version "0.2.0"
+  resolved "https://registry.yarnpkg.com/graphql-config-extension-prisma/-/graphql-config-extension-prisma-0.2.0.tgz#6cbc82b55db7070e48bb65f4691aac0c2f4297ba"
   dependencies:
     graphql-config "^2.0.1"
-    prisma-yml "1.0.50"
+    prisma-yml "1.0.92"
 
 graphql-config@1.1.4:
   version "1.1.4"
@@ -3721,6 +3731,16 @@ graphql-config@2.0.0:
 graphql-config@^2.0.1:
   version "2.0.1"
   resolved "https://registry.yarnpkg.com/graphql-config/-/graphql-config-2.0.1.tgz#d34a9bdf1d7360af7b01db9b20260a342ddc7390"
+  dependencies:
+    graphql-import "^0.4.4"
+    graphql-request "^1.5.0"
+    js-yaml "^3.10.0"
+    lodash "^4.17.4"
+    minimatch "^3.0.4"
+
+graphql-config@^2.1.0:
+  version "2.1.0"
+  resolved "https://registry.yarnpkg.com/graphql-config/-/graphql-config-2.1.0.tgz#f07107ac44b661282d2002497de588f01aa92c9d"
   dependencies:
     graphql-import "^0.4.4"
     graphql-request "^1.5.0"
@@ -3772,15 +3792,15 @@ graphql-language-service-utils@^1.1.0:
     graphql-config "1.1.4"
     graphql-language-service-types "^1.1.0"
 
-graphql-playground-html@^1.5.6:
-  version "1.5.6"
-  resolved "https://registry.yarnpkg.com/graphql-playground-html/-/graphql-playground-html-1.5.6.tgz#b5185a3b6e744e40dd8c5263bb5b5f6a2cff40b0"
+graphql-playground-html@^1.6.0:
+  version "1.6.0"
+  resolved "https://registry.yarnpkg.com/graphql-playground-html/-/graphql-playground-html-1.6.0.tgz#6ec4d54325ab2e5352506fdb89eb37c3fc718bf8"
   dependencies:
     graphql-config "2.0.0"
 
-graphql-playground-react@1.7.2:
-  version "1.7.2"
-  resolved "https://registry.yarnpkg.com/graphql-playground-react/-/graphql-playground-react-1.7.2.tgz#6640c19a3c44c4a7d6d86469158ec7dd078895dd"
+graphql-playground-react@1.7.4:
+  version "1.7.4"
+  resolved "https://registry.yarnpkg.com/graphql-playground-react/-/graphql-playground-react-1.7.4.tgz#e975cd19ca26cf539c3d9da20335dee70e13ab1f"
   dependencies:
     apollo-link "^1.0.7"
     apollo-link-http "^1.3.2"
@@ -3791,7 +3811,7 @@ graphql-playground-react@1.7.2:
     codemirror-graphql timsuchanek/codemirror-graphql#details-fix
     copy-to-clipboard "^3.0.8"
     cuid "^1.3.8"
-    graphcool-styles "0.2.7"
+    graphcool-styles "0.2.9"
     graphcool-tmp-ui "^0.0.11"
     graphcool-ui "0.0.14"
     graphiql "^0.11.2"
@@ -6504,13 +6524,13 @@ pretty-format@^22.4.0, pretty-format@^22.4.3:
     ansi-regex "^3.0.0"
     ansi-styles "^3.2.0"
 
-prisma-json-schema@0.0.4:
-  version "0.0.4"
-  resolved "https://registry.yarnpkg.com/prisma-json-schema/-/prisma-json-schema-0.0.4.tgz#4ecee29c351e382fb833dad83a38c62961380458"
+prisma-json-schema@0.1.0:
+  version "0.1.0"
+  resolved "https://registry.yarnpkg.com/prisma-json-schema/-/prisma-json-schema-0.1.0.tgz#0e53346421dc09241fe7240e5479f9673e5fbd10"
 
-prisma-yml@1.0.50:
-  version "1.0.50"
-  resolved "https://registry.yarnpkg.com/prisma-yml/-/prisma-yml-1.0.50.tgz#c85de8fa55efc6cac59083496bc038278be04076"
+prisma-yml@1.0.92:
+  version "1.0.92"
+  resolved "https://registry.yarnpkg.com/prisma-yml/-/prisma-yml-1.0.92.tgz#33b25974ebd89153e2291a9831635fd0fbf08cf1"
   dependencies:
     ajv "5"
     bluebird "^3.5.1"
@@ -6526,7 +6546,7 @@ prisma-yml@1.0.50:
     json-stable-stringify "^1.0.1"
     jsonwebtoken "^8.1.0"
     lodash "^4.17.4"
-    prisma-json-schema "0.0.4"
+    prisma-json-schema "0.1.0"
     replaceall "^0.1.6"
     scuid "^1.0.2"
     yaml-ast-parser "^0.0.40"
