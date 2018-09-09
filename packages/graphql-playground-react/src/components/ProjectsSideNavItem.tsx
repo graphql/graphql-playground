@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { styled, withProps } from '../styled/index'
+import { styled } from '../styled/index'
 
 export interface Props {
   env: string
@@ -41,7 +41,7 @@ interface SidebarItemProps {
   deep?: boolean
 }
 
-const ListItem = withProps<SidebarItemProps>()(styled.div)`
+const ListItem = styled<SidebarItemProps, 'div'>('div')`
   position: relative;
   padding: 10px 10px;
   font-weight: 600;
@@ -68,13 +68,13 @@ const ListItem = withProps<SidebarItemProps>()(styled.div)`
     left: -2px;
     width: 6px;
   }
-  
+
   &:hover {
     background: ${p => p.theme.editorColours.sidebarItemActive};
   }
 `
 
-const Count = withProps<SidebarItemProps>()(styled.div)`
+const Count = styled<SidebarItemProps, 'div'>('div')`
   border-radius: 6px;
   width: 18px;
   height: 18px;
@@ -86,6 +86,6 @@ const Count = withProps<SidebarItemProps>()(styled.div)`
   font-weight: bold;
   background: ${p => p.theme.editorColours.sidebarItemSessions};
   color: ${p => p.theme.editorColours.text};
-  opacity: ${p => (p.active ? '1' : '0.6')};
+  opacity: ${p => (p.active ? 1 : 0.6)};
   transition: 0.1s linear all;
 ` as any
