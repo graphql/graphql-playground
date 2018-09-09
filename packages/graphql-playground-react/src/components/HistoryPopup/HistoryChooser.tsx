@@ -1,80 +1,82 @@
 import * as React from 'react'
-import { Icon, $v } from 'graphcool-styles'
 import { HistoryFilter } from '../../types'
-import * as cx from 'classnames'
+import { styled, withTheme, ThemeInterface } from '../../styled'
+import { Star, History } from '../Playground/Icons'
 
-export interface Props {
+interface Props {
+  theme: ThemeInterface
   selectedFilter: HistoryFilter
   onSelectFilter: (filter: any) => void
 }
 
 /* tslint:disable */
 
-const HistoryChooser = ({ selectedFilter, onSelectFilter }: Props) => (
-  <div>
-    <style jsx={true}>{`
-      .chooser {
-        @inherit: .flex, .itemsCenter;
-      }
-
-      .filter {
-        @inherit: .br2,
-          .relative,
-          .pointer,
-          .ttu,
-          .flex,
-          .itemsCenter,
-          .black30,
-          .fw6,
-          .f14,
-          .bgBlack07,
-          .cbox;
-        padding: 5px 13px 6px 13px;
-        margin: 0 -2px;
-        height: 24px;
-        &.active {
-          @inherit: .z2, .white, .bgGreen;
-          padding: 7px 9px 8px 9px;
+const HistoryChooser = ({ selectedFilter, onSelectFilter, theme }: Props) => (
+  <Chooser>
+    <Filter
+      active={selectedFilter === 'HISTORY'}
+      onClick={() => onSelectFilter('HISTORY')}
+    >
+      <History
+        color={
+          selectedFilter === 'HISTORY'
+            ? theme.colours.white
+            : theme.colours.black30
         }
-      }
-
-      .filter-text {
-        @inherit: .ml6;
-      }
-    `}</style>
-    <div className="chooser">
-      <div
-        className={cx('filter', {
-          active: selectedFilter === 'HISTORY',
-        })}
-        onClick={() => onSelectFilter('HISTORY')}
-      >
-        <Icon
-          src={require('graphcool-styles/icons/stroke/history.svg')}
-          color={selectedFilter === 'HISTORY' ? $v.white : $v.gray30}
-          stroke={true}
-          strokeWidth={3}
-          width={25}
-          height={25}
-        />
-        <div className="filter-text">History</div>
-      </div>
-      <div
-        className={cx('filter', {
-          active: selectedFilter === 'STARRED',
-        })}
-        onClick={() => onSelectFilter('STARRED')}
-      >
-        <Icon
-          src={require('../../assets/icons/star.svg')}
-          color={selectedFilter === 'STARRED' ? $v.white : $v.gray30}
-          width={16}
-          height={16}
-        />
-        <div className="filter-text">Starred</div>
-      </div>
-    </div>
-  </div>
+        strokeWidth={3}
+        width={25}
+        height={25}
+      />
+      <FilterText>History</FilterText>
+    </Filter>
+    <Filter
+      active={selectedFilter === 'STARRED'}
+      onClick={() => onSelectFilter('STARRED')}
+    >
+      <Star
+        color={
+          selectedFilter === 'STARRED'
+            ? theme.colours.white
+            : theme.colours.black30
+        }
+        width={16}
+        height={16}
+      />
+      <FilterText>Starred</FilterText>
+    </Filter>
+  </Chooser>
 )
 
-export default HistoryChooser
+export default withTheme(HistoryChooser)
+
+const Chooser = styled.div`
+  display: flex;
+  align-items: center;
+`
+
+interface FilterProps {
+  active: boolean
+}
+
+const Filter = styled<FilterProps, 'div'>('div')`
+  box-sizing: content-box;
+  height: 24px;
+  z-index: ${p => (p.active ? 2 : 0)};
+  display: flex;
+  align-items: center;
+  margin: 0 -2px;
+  padding: ${p => (p.active ? '7px 9px 8px 9px' : '5px 13px 6px 13px')};
+  background: ${p =>
+    p.active ? p.theme.colours.green : p.theme.colours.black07};
+
+  color: ${p => (p.active ? p.theme.colours.white : p.theme.colours.black30)};
+  font-size: 14px;
+  font-weight: 600;
+  text-transform: uppercase;
+  border-radius: 2px;
+  cursor: pointer;
+`
+
+const FilterText = styled.p`
+  margin-left: 6px;
+`

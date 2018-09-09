@@ -1,6 +1,6 @@
 import * as React from 'react'
-import { styled, withProps } from '../../styled'
-import { Icon } from 'graphcool-styles'
+import { styled } from '../../styled'
+import { AddIcon } from './Icons'
 import Tab from './Tab'
 import { connect } from 'react-redux'
 import { createStructuredSelector } from 'reselect'
@@ -36,13 +36,7 @@ const TabBar = ({
         />
       ))}
       <Plus onClick={onNewSession}>
-        <Icon
-          src={require('graphcool-styles/icons/stroke/add.svg')}
-          width={34}
-          height={34}
-          stroke={true}
-          strokeWidth={4}
-        />
+        <AddIcon width={34} height={34} strokeWidth={4} />
       </Plus>
     </Tabs>
   </StyledTabBar>
@@ -70,7 +64,7 @@ interface TabsProps {
   isApp?: boolean
 }
 
-const Tabs = withProps<TabsProps>()(styled.div)`
+const Tabs = styled<TabsProps, 'div'>('div')`
   display: flex;
   align-items: center;
   margin-top: 16px;

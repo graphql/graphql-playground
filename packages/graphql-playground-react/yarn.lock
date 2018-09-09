@@ -3482,24 +3482,6 @@ graphcool-styles@0.2.9:
     object-assign "^4.1.0"
     webpack-dev-server "^1.16.2"
 
-graphcool-styles@^0.1.31:
-  version "0.1.43"
-  resolved "https://registry.yarnpkg.com/graphcool-styles/-/graphcool-styles-0.1.43.tgz#da6b72118c890923ef5c4a964405aa3e4541dc82"
-  dependencies:
-    html-webpack-plugin "^2.24.1"
-    interactive "^0.1.9"
-    object-assign "^4.1.0"
-    react-dom "^15.3.2"
-    webpack-dev-server "^1.16.2"
-
-graphcool-tmp-ui@^0.0.11:
-  version "0.0.11"
-  resolved "https://registry.yarnpkg.com/graphcool-tmp-ui/-/graphcool-tmp-ui-0.0.11.tgz#86cfaf0754394419642cc2542a2b5f8a48245659"
-  dependencies:
-    classnames "^2.2.5"
-    graphcool-styles "^0.1.31"
-    react-modal "^1.6.5"
-
 graphcool-ui@0.0.14:
   version "0.0.14"
   resolved "https://registry.yarnpkg.com/graphcool-ui/-/graphcool-ui-0.0.14.tgz#f3c83f4fef2c862ee899618cb6654af2c8f638b6"
@@ -7151,15 +7133,6 @@ react-dom-factories@^1.0.0:
   version "1.0.2"
   resolved "https://registry.yarnpkg.com/react-dom-factories/-/react-dom-factories-1.0.2.tgz#eb7705c4db36fb501b3aa38ff759616aa0ff96e0"
 
-react-dom@^15.3.2:
-  version "15.6.2"
-  resolved "https://registry.yarnpkg.com/react-dom/-/react-dom-15.6.2.tgz#41cfadf693b757faf2708443a1d1fd5a02bef730"
-  dependencies:
-    fbjs "^0.8.9"
-    loose-envify "^1.1.0"
-    object-assign "^4.1.0"
-    prop-types "^15.5.10"
-
 react-dom@^16.3.1:
   version "16.4.0"
   resolved "https://registry.yarnpkg.com/react-dom/-/react-dom-16.4.0.tgz#099f067dd5827ce36a29eaf9a6cdc7cbf6216b1e"
@@ -8361,15 +8334,14 @@ style-loader@0.20.1:
     loader-utils "^1.1.0"
     schema-utils "^0.4.3"
 
-styled-components@^3.3.2:
-  version "3.3.2"
-  resolved "https://registry.yarnpkg.com/styled-components/-/styled-components-3.3.2.tgz#087b96830ee3d60d9a8b5ef17c132b4f29cc71df"
+styled-components@^3.4.5:
+  version "3.4.5"
+  resolved "https://registry.yarnpkg.com/styled-components/-/styled-components-3.4.5.tgz#6cbfde7c9189c868b9fd01fee40f5330dbd0cc8d"
   dependencies:
     buffer "^5.0.3"
     css-to-react-native "^2.0.3"
     fbjs "^0.8.16"
     hoist-non-react-statics "^2.5.0"
-    is-plain-object "^2.0.1"
     prop-types "^15.5.4"
     react-is "^16.3.1"
     stylis "^3.5.0"
@@ -8840,9 +8812,9 @@ typescript-template-language-service-decorator@^1.1.0:
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/typescript-template-language-service-decorator/-/typescript-template-language-service-decorator-1.1.0.tgz#0b3dacebc1442fea1e8288b0952ec01ba6bfa595"
 
-typescript@2.8.3:
-  version "2.8.3"
-  resolved "https://registry.yarnpkg.com/typescript/-/typescript-2.8.3.tgz#5d817f9b6f31bb871835f4edf0089f21abe6c170"
+typescript@^3.0.1:
+  version "3.0.1"
+  resolved "https://registry.yarnpkg.com/typescript/-/typescript-3.0.1.tgz#43738f29585d3a87575520a4b93ab6026ef11fdb"
 
 ua-parser-js@^0.7.9:
   version "0.7.18"

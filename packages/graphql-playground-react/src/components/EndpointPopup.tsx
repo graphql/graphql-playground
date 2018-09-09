@@ -3,7 +3,7 @@ import * as fetch from 'isomorphic-fetch'
 import Popup from './Popup'
 import { throttle } from 'lodash'
 import { Button } from './Button'
-import { styled, css, withProps } from '../styled'
+import { styled, css } from '../styled'
 
 export interface Props {
   onRequestClose: (endpoint: string) => void
@@ -124,10 +124,10 @@ interface InputProps {
 }
 
 // prettier-ignore
-const Input = withProps<InputProps>()(styled.input)`
+const Input = styled<InputProps, 'input'>('input')`
   background: ${p => p.theme.colours.white10};
   border-radius: ${p => p.theme.sizes.smallRadius};
-  padding: ${p => p.theme.sizes.small16} ${p => p.theme.sizes.medium25};
+  padding: ${p => `${p.theme.sizes.small16} ${p.theme.sizes.medium25}`};
   font-weight: ${p => p.theme.sizes.fontSemiBold};
   color: white;
   font-size: 16px;

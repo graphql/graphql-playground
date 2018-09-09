@@ -1,7 +1,7 @@
 import * as React from 'react'
 import { GraphQLConfig, GraphQLConfigEnpointsMapData } from '../graphqlConfig'
 import ProjectsSideNavItem from './ProjectsSideNavItem'
-import { Icon } from 'graphcool-styles'
+import { SettingsIcon, AddFullIcon } from './Playground/Icons'
 import { styled } from '../styled/index'
 import { getEndpointFromEndpointConfig } from './util'
 import { createStructuredSelector } from 'reselect'
@@ -41,12 +41,10 @@ class ProjectsSideNav extends React.Component<Props & ReduxProps, {}> {
           <div>
             <TitleRow>
               <Title>{folderName}</Title>
-              <Icon
-                src={require('graphcool-styles/icons/fill/settings.svg')}
+              <SettingsIcon
                 width={18}
                 height={18}
                 onClick={this.props.openConfigTab}
-                className={'settings-icon'}
               />
             </TitleRow>
             {endpoints && this.renderEndpoints(endpoints)}
@@ -68,17 +66,10 @@ class ProjectsSideNav extends React.Component<Props & ReduxProps, {}> {
               })}
           </div>
         </List>
-        {/* this.props.showNewWorkspace  */}
         {true && (
           <Footer>
             <WorkspaceButton onClick={onNewWorkspace}>
-              <Icon
-                src={require('graphcool-styles/icons/stroke/addFull.svg')}
-                stroke={true}
-                width={14}
-                height={14}
-                strokeWidth={6}
-              />
+              <AddFullIcon width={14} height={14} strokeWidth={6} />
               NEW WORKSPACE
             </WorkspaceButton>
           </Footer>
@@ -167,17 +158,17 @@ const TitleRow = styled.div`
   padding-bottom: 20px;
   justify-content: space-between;
 
-  .settings-icon {
+  svg {
     cursor: pointer;
   }
 
-  .settings-icon svg {
+  svg {
     fill: ${p => p.theme.editorColours.icon};
     transition: 0.1s linear fill;
   }
 
   &:hover {
-    .settings-icon svg {
+    svg {
       fill: ${p => p.theme.editorColours.iconHover};
     }
   }

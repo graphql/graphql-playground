@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { styled, keyframes, withProps } from '../../../styled/index'
+import { styled, keyframes } from '../../../styled/index'
 
 export interface Props {
   isReloadingSchema: boolean
@@ -75,18 +75,18 @@ const Svg = styled.svg`
   }
 `
 
-const Circle = withProps<Props>()(styled.circle)`
+const Circle = styled<Props, 'circle'>('circle')`
   fill: none;
   stroke: ${p => p.theme.editorColours.icon};
   stroke-dasharray: 37.68;
   transition: opacity 0.3s ease-in-out;
   opacity: ${p => (p.isReloadingSchema ? 1 : 0)};
   transform-origin: 9.5px 10px;
-  animation: ${refreshFrames} 2s linear ${p =>
-  p.isReloadingSchema ? 'infinite' : ''};
+  animation: ${refreshFrames} 2s linear
+    ${p => (p.isReloadingSchema ? 'infinite' : '')};
 `
 
-const Icon = withProps<Props>()(styled.path)`
+const Icon = styled<Props, 'path'>('path')`
   transition: opacity 0.3s ease-in-out;
   opacity: ${p => (p.isReloadingSchema ? 0 : 1)};
   transform-origin: 9.5px 10px;

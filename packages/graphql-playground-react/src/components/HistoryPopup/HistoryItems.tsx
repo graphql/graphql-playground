@@ -1,8 +1,8 @@
 import * as React from 'react'
 import { Icon, $v } from 'graphcool-styles'
-import * as cx from 'classnames'
 import { Session } from '../../state/sessions/reducers'
 import { OrderedMap } from 'immutable'
+import { styled } from '../../styled'
 
 export interface Props {
   items: OrderedMap<string, Session>
@@ -13,18 +13,14 @@ export interface Props {
 }
 
 /* tslint:disable */
-const HistoryItems = ({
+export default ({
   items,
   onItemSelect,
   selectedItemIndex,
   onItemStarToggled,
 }: Props) => (
-  <div className="history-items">
+  <HistoryItems>
     <style jsx={true}>{`
-      .history-items {
-        @inherit: .overflowYScroll;
-        max-height: calc(100vh - 121px);
-      }
       .item {
         @inherit: .flex,
           .itemsCenter,
@@ -39,7 +35,6 @@ const HistoryItems = ({
       }
       .operation,
       .star,
-      .viewer,
       .left,
       .right {
         @inherit: .flex, .itemsCenter;
@@ -68,17 +63,12 @@ const HistoryItems = ({
       .date {
         @inherit: .f14, .black50, .ml16;
       }
-      .viewer {
-        @inherit: .ml6;
-      }
     `}</style>
     {items
       .map((item, index) => (
-        <div
+        <HistoryItem
           key={item.id}
-          className={cx('item', {
-            active: selectedItemIndex === index,
-          })}
+          active={selectedItemIndex === index}
           onClick={() => onItemSelect(index)}
         >
           <div className="left">
@@ -123,11 +113,23 @@ const HistoryItems = ({
               </div>
             )}
           </div>
-        </div>
+        </HistoryItem>
       ))
       .toArray()
       .map(x => x[1])}
-  </div>
+  </HistoryItems>
 )
 
-export default HistoryItems
+const HistoryItems = styled.div`
+  overflow-y: scroll;
+  max-height: calc(100vh - 121px);
+`
+
+interface ItemProps {
+  active: boolean
+}
+
+const HistoryItem = styled<ItemProps, 'div'>('div')`
+  display: flex;
+  padding: 25px 20px;
+`

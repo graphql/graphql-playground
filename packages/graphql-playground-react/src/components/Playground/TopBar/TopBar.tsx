@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { styled, withProps } from '../../../styled/index'
+import { styled } from '../../../styled/index'
 import * as copy from 'copy-to-clipboard'
 
 import Share from '../../Share'
@@ -185,7 +185,7 @@ interface UrlBarProps {
   active: boolean
 }
 
-const UrlBar = withProps<UrlBarProps>()(styled.input)`
+const UrlBar = styled<UrlBarProps, 'input'>('input')`
   background: ${p => p.theme.editorColours.button};
   border-radius: 4px;
   color: ${p =>

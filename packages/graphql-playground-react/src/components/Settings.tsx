@@ -1,5 +1,5 @@
 import * as React from 'react'
-import Icon from 'graphcool-styles/dist/components/Icon/Icon'
+import { SettingsIcon } from './Playground/Icons'
 import { styled } from '../styled'
 import { openSettingsTab } from '../state/sessions/actions'
 import { connect } from 'react-redux'
@@ -13,13 +13,7 @@ class Settings extends React.Component<Props, {}> {
     return (
       <Wrapper>
         <IconWrapper>
-          <Icon
-            src={require('graphcool-styles/icons/fill/settings.svg')}
-            width={23}
-            height={23}
-            onClick={this.props.onClick}
-            className={'settings-icon'}
-          />
+          <SettingsIcon width={23} height={23} onClick={this.props.onClick} />
         </IconWrapper>
       </Wrapper>
     )
@@ -42,13 +36,13 @@ const IconWrapper = styled.div`
   position: relative;
   cursor: pointer;
 
-  .settings-icon svg {
+  svg {
     fill: ${p => p.theme.editorColours.icon};
     transition: 0.1s linear fill;
   }
 
   &:hover {
-    .settings-icon svg {
+    svg {
       fill: ${p => p.theme.editorColours.iconHover};
     }
   }

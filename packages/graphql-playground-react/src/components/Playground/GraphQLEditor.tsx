@@ -15,7 +15,7 @@ import ResponseTracing from './ResponseTracing'
 import withTheme from '../Theme/withTheme'
 import { LocalThemeInterface } from '../Theme'
 import GraphDocs from './DocExplorer/GraphDocs'
-import { withProps, styled } from '../../styled/index'
+import { styled } from '../../styled/index'
 import TopBar from './TopBar/TopBar'
 import {
   VariableEditorComponent,
@@ -677,16 +677,19 @@ interface DrawerProps {
   height: number
 }
 
-const BottomDrawer = withProps<DrawerProps>()(styled.div)`
+const BottomDrawer = styled<DrawerProps, 'div'>('div')`
   display: flex;
   background: #0b1924;
   flex-direction: column;
   position: relative;
   height: ${props => (props.isOpen ? `${props.height}px` : '43px')};
-  `
+`
 
 interface TitleProps {
   isOpen: boolean
+  onMouseDown?: any
+  onClick?: any
+  innerRef?: any
 }
 
 const BottomDrawerTitle = styled.div`
@@ -714,12 +717,14 @@ const VariableEditor = styled(BottomDrawer)`
   }
 `
 
-const VariableEditorTitle = withProps<TitleProps>()(styled(BottomDrawerTitle))`
+const VariableEditorTitle = styled<TitleProps>(({ isOpen, ...rest }) => (
+  <BottomDrawerTitle {...rest} />
+))`
   cursor: ${p => (p.isOpen ? 'row-resize' : 'n-resize')};
   background: ${p => p.theme.editorColours.leftDrawerBackground};
 `
 
-const VariableEditorSubtitle = withProps<TitleProps>()(styled.span)`
+const VariableEditorSubtitle = styled<TitleProps, 'span'>('span')`
   margin-right: 10px;
   cursor: pointer;
   color: ${p =>
@@ -735,9 +740,9 @@ const ResponseTracking = styled(BottomDrawer)`
   background: ${p => p.theme.editorColours.rightDrawerBackground};
 `
 
-const ResponseTrackingTitle = withProps<TitleProps>()(
-  styled(BottomDrawerTitle),
-)`
+const ResponseTrackingTitle = styled<TitleProps>(({ isOpen, ...rest }) => (
+  <BottomDrawerTitle {...rest} />
+))`
   text-align: right;
   background: ${p => p.theme.editorColours.rightDrawerBackground};
   cursor: ${props => (props.isOpen ? 's-resize' : 'n-resize')};
@@ -748,7 +753,7 @@ interface QueryProps {
   flex: number
 }
 
-const QueryWrap = withProps<QueryProps>()(styled.div)`
+const QueryWrap = styled<QueryProps, 'div'>('div')`
   position: relative;
   display: flex;
   flex-direction: column;
