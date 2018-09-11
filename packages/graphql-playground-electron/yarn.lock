@@ -1853,7 +1853,7 @@ code-point-at@^1.0.0:
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/code-point-at/-/code-point-at-1.1.0.tgz#0d070b4d043a5bea33a2f1a40e2edb3d9a4ccf77"
 
-codemirror-graphql@^0.6.11, "codemirror-graphql@github:timsuchanek/codemirror-graphql#details-fix":
+codemirror-graphql@^0.6.11, codemirror-graphql@timsuchanek/codemirror-graphql#details-fix:
   version "0.6.12"
   resolved "https://codeload.github.com/timsuchanek/codemirror-graphql/tar.gz/801ec32683c38d6dc0f8f7bc19014a111edc9ebd"
   dependencies:
@@ -3700,12 +3700,12 @@ graphql-config-extension-graphcool@1.0.8:
     graphcool-yml "0.4.15"
     graphql-config "^2.0.1"
 
-graphql-config-extension-prisma@^0.2.0:
-  version "0.2.0"
-  resolved "https://registry.yarnpkg.com/graphql-config-extension-prisma/-/graphql-config-extension-prisma-0.2.0.tgz#6cbc82b55db7070e48bb65f4691aac0c2f4297ba"
+graphql-config-extension-prisma@^0.2.2:
+  version "0.2.2"
+  resolved "https://registry.yarnpkg.com/graphql-config-extension-prisma/-/graphql-config-extension-prisma-0.2.2.tgz#88d6b741279ceb4330be465e5272c0dc4736a3e5"
   dependencies:
     graphql-config "^2.0.1"
-    prisma-yml "1.0.92"
+    prisma-yml "1.0.95"
 
 graphql-config@1.1.4:
   version "1.1.4"
@@ -6524,13 +6524,13 @@ pretty-format@^22.4.0, pretty-format@^22.4.3:
     ansi-regex "^3.0.0"
     ansi-styles "^3.2.0"
 
-prisma-json-schema@0.1.0:
-  version "0.1.0"
-  resolved "https://registry.yarnpkg.com/prisma-json-schema/-/prisma-json-schema-0.1.0.tgz#0e53346421dc09241fe7240e5479f9673e5fbd10"
+prisma-json-schema@0.1.2:
+  version "0.1.2"
+  resolved "https://registry.yarnpkg.com/prisma-json-schema/-/prisma-json-schema-0.1.2.tgz#2ad1cad7858d42bb8b32d3a31e9d3d9a7318d2e0"
 
-prisma-yml@1.0.92:
-  version "1.0.92"
-  resolved "https://registry.yarnpkg.com/prisma-yml/-/prisma-yml-1.0.92.tgz#33b25974ebd89153e2291a9831635fd0fbf08cf1"
+prisma-yml@1.0.95:
+  version "1.0.95"
+  resolved "https://registry.yarnpkg.com/prisma-yml/-/prisma-yml-1.0.95.tgz#0b025336b068eb029d25fc1357a39994fe26b89f"
   dependencies:
     ajv "5"
     bluebird "^3.5.1"
@@ -6546,7 +6546,7 @@ prisma-yml@1.0.92:
     json-stable-stringify "^1.0.1"
     jsonwebtoken "^8.1.0"
     lodash "^4.17.4"
-    prisma-json-schema "0.1.0"
+    prisma-json-schema "0.1.2"
     replaceall "^0.1.6"
     scuid "^1.0.2"
     yaml-ast-parser "^0.0.40"
@@ -7907,9 +7907,8 @@ styled-components@^3.3.2:
     postcss-load-plugins "^2.2.0"
     styled-jsx "^0.5.7"
 
-"styled-jsx-postcss@github:timsuchanek/styled-jsx-postcss#build3":
+styled-jsx-postcss@timsuchanek/styled-jsx-postcss#build3:
   version "0.2.0"
-  uid "677ee0fb7f9138047a00e03c8c3e44adbb33cf2a"
   resolved "https://codeload.github.com/timsuchanek/styled-jsx-postcss/tar.gz/677ee0fb7f9138047a00e03c8c3e44adbb33cf2a"
   dependencies:
     babel-traverse "^6.21.0"
