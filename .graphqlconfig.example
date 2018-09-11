@@ -1,0 +1,43 @@
+{
+    "projects": {
+        "MovieDatabase": {
+            "schemaPath": "schema.graphql",
+            "extensions":{
+                "endpoints": {
+                    "dev": {
+                        "url": "https://api.graph.cool/simple/v1/cixos23120m0n0173veiiwrjr"
+                    }
+                    "prod": {
+                        "url": "https://api.graph.cool/simple/v1/cixos23120m0n0173veiiwrjr"
+                    }
+                }
+            }
+        },
+        "Instagram": {
+            "schemaPath": "schema.graphql",
+            "extensions":{
+                "endpoints": {
+                    "dev": {
+                        "url": "https://api.graph.cool/simple/v1/cixne4sn40c7m0122h8fabni1"
+                    }
+                    "prod": {
+                        "url": "https://api.graph.cool/simple/v1/cixne4sn40c7m0122h8fabni1"
+                    }
+                }
+            }
+        },
+        "Pokemon": {
+            "schemaPath": "schema.graphql",
+            "extensions":{
+                "endpoints": {
+                    "dev": {
+                        "url": "https://graphql-pokemon.now.sh"
+                    }
+                    "prod": {
+                        "url": "https://graphql-pokemon.now.sh"
+                    }
+                }
+            }
+        }
+    }
+}
