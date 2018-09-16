@@ -17,6 +17,7 @@ interface Props {
   color?: string
   width?: number
   height?: number
+  stroke?: boolean
   strokeWidth?: number
   className?: string
   onClick?: () => void
@@ -124,8 +125,23 @@ export const History = ({ width, height, color, strokeWidth }: Props) => (
   </svg>
 )
 
-export const Star = ({ height, width, color }: Props) => (
-  <svg width={width} height={height} fill={color} viewBox="118 12 16 16">
+export const Star = ({
+  height,
+  width,
+  color,
+  stroke,
+  strokeWidth,
+  onClick,
+}: Props) => (
+  <svg
+    width={width}
+    height={height}
+    fill={!stroke ? color : 'none'}
+    stroke={stroke ? color : 'none'}
+    strokeWidth={strokeWidth}
+    viewBox="118 12 16 16"
+    onClick={onClick}
+  >
     <polygon points="126 24 121.297718 26.472136 122.195774 21.236068 118.391548 17.527864 123.648859 16.763932 126 12 128.351141 16.763932 133.608452 17.527864 129.804226 21.236068 130.702282 26.472136" />
   </svg>
 )

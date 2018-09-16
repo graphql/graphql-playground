@@ -206,15 +206,15 @@ const QueryType = styled.div`
 `
 
 const Query = styled(QueryType)`
-  background: rgba(42, 126, 210, 1);
+  background: ${p => p.theme.colours.blue};
 `
 
 const Mutation = styled(QueryType)`
-  background: rgba(241, 143, 1, 1);
+  background: ${p => p.theme.colours.orange};
 `
 
 const Subscription = styled(QueryType)`
-  background: rgba(164, 3, 111, 1);
+  background: ${p => p.theme.colours.purple};
 `
 
 const RedDot = styled.div`
