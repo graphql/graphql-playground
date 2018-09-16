@@ -20,12 +20,16 @@ export interface Colours {
   white10: string
   white: string
   black02: string
+  black04: string
   black07: string
+  black10: string
   black30: string
   black40: string
   paleText: string
   paleGrey: string
   red: string
+  blue: string
+  orange: string
   purple: string
   lightGrey: string
   lighterGrey: string
@@ -109,9 +113,13 @@ export const darkColours: Colours = {
   white: 'rgba(255, 255, 255, 1)',
   black02: 'rgba(0, 0, 0, 0.02)',
   black07: 'rgba(0, 0, 0, 0.07)',
+  black04: 'rgba(0, 0, 0, 0.04)',
+  black10: 'rgba(0, 0, 0, 0.1)',
   black30: 'rgba(0, 0, 0, 0.3)',
   black40: 'rgba(0, 0, 0, 0.4)',
   red: '#f25c54',
+  orange: 'rgba(241, 143, 1, 1)',
+  blue: 'rgba(42, 126, 210, 1)',
   purple: 'rgb(164, 3, 111)',
 
   paleText: 'rgba(0, 0, 0, 0.5)',
@@ -142,11 +150,15 @@ export const lightColours: Colours = {
   white80: 'rgba(255, 255, 255, 0.8)',
   white: 'rgba(255, 255, 255, 1)',
   black02: 'rgba(0, 0, 0, 0.02)',
+  black04: 'rgba(0, 0, 0, 0.04)',
+  black10: 'rgba(0, 0, 0, 0.1)',
   black07: 'rgba(0, 0, 0, 0.07)',
   black30: 'rgba(0, 0, 0, 0.3)',
 
   black40: 'rgba(0, 0, 0, 0.4)',
   red: '#f25c54',
+  orange: 'rgba(241, 143, 1, 1)',
+  blue: 'rgba(42, 126, 210, 1)',
   purple: 'rgb(164, 3, 111)',
 
   paleText: 'rgba(0, 0, 0, 0.5)',
