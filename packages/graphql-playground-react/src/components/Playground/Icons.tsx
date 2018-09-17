@@ -2,9 +2,8 @@ import * as React from 'react'
 // /*
 // fill/fullArrowRight.svg
 // arrowRight.svg
-// stroke/history.svg
 // star.svg DONE
-// stroke/search.svg
+// stroke/search.svg DONE
 // Triangle
 // stroke/cross.svg DONE
 // fill/settings.svg DONE
@@ -48,6 +47,12 @@ export const AddFullIcon = ({ width, height, strokeWidth }: Props) => (
     <line x1="44.73" y1="28" x2="3.27" y2="28" />
   </svg>
 )
+
+// export const ArrowRight = ({ width, height, color }: Props) => (
+//   <svg width="30px" height="50px" viewBox="0 0 30 50" stroke={color}>
+//     <polyline points="5,5 25,25 5,45 " />
+//   </svg>
+// )
 
 export const SettingsIcon = ({
   color,
@@ -97,12 +102,27 @@ export const CrossIcon = ({
   </svg>
 )
 
-export const ArrowRight = () => (
-  <svg width="14px" height="11px" viewBox="0 0 14 11">
+export const ArrowRight = ({ width, height, color }: Props) => (
+  <svg width="14px" height="11px" viewBox="-1 -1 14 11">
     <path
-      d="M13.32,4.97L8.99,0.64c-0.29-0.29-0.77-0.29-1.06,0s-0.29,0.77,0,1.06l2.97,2.97H1.21
-	C0.8,4.67,0.46,5,0.46,5.42S0.8,6.17,1.21,6.17h9.85L7.93,9.3c-0.29,0.29-0.29,0.77,0,1.06c0.15,0.15,0.34,0.22,0.53,0.22
-	s0.38-0.07,0.53-0.22l4.33-4.33C13.61,5.74,13.61,5.26,13.32,4.97z"
+      d="M5,8.79825579 L5,-1.79402089"
+      id="Stroke-3"
+      stroke="#FFFFFF"
+      stroke-width="1.5"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+      fill="none"
+      transform="translate(5.750000, 3.502117) rotate(-90.000000) translate(-5.750000, -3.502117) "
+    />
+    <polyline
+      id="Stroke-5"
+      stroke="#FFFFFF"
+      stroke-width="1.5"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+      fill="none"
+      transform="translate(9.868295, 4.333992) rotate(-90.000000) translate(-9.868295, -4.333992) "
+      points="14.2022868 2.16699605 9.86829475 6.50098814 5.53430265 2.16699605"
     />
   </svg>
 )
@@ -143,5 +163,19 @@ export const Star = ({
     onClick={onClick}
   >
     <polygon points="126 24 121.297718 26.472136 122.195774 21.236068 118.391548 17.527864 123.648859 16.763932 126 12 128.351141 16.763932 133.608452 17.527864 129.804226 21.236068 130.702282 26.472136" />
+  </svg>
+)
+
+export const Search = ({ height, width, strokeWidth, color }: Props) => (
+  <svg
+    width={width}
+    height={height}
+    viewBox="0 0 50 50"
+    strokeWidth={strokeWidth}
+    stroke={color}
+    fill="none"
+  >
+    <circle cx="17.82" cy="18.11" r="16.21" />
+    <line x1="29.28" y1="29.57" x2="48.21" y2="48.5" />
   </svg>
 )
