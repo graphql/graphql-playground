@@ -20,7 +20,6 @@ export default (props: Props) => (
       placeholder="Search the history..."
       onSearch={props.onSearch}
       clean={true}
-      isShown={true}
     />
   </HistoryHeader>
 )
