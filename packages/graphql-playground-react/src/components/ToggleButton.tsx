@@ -1,6 +1,5 @@
-/* tslint:disable */
 import * as React from 'react'
-import { css, styled } from '../styled'
+import { styled } from '../styled'
 
 export interface Props {
   checked: boolean
@@ -35,7 +34,7 @@ interface SliderProps {
   checked: boolean
 }
 
-const Slider = styled.div`
+const Slider = styled<SliderProps, 'div'>('div')`
   position: absolute;
   top: 0;
   left: 0;
@@ -61,11 +60,6 @@ const Slider = styled.div`
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.25);
     transition: transform 70ms linear;
 
-    ${(p: SliderProps) =>
-      p.checked
-        ? css`
-            transform: translateX(19px);
-          `
-        : ''};
+    transform: ${p => (p.checked ? 'translateX(19px)' : '')};
   }
 `

@@ -1,7 +1,6 @@
 import * as React from 'react'
-import { $v } from 'graphcool-styles'
+import { styled } from '../styled'
 import * as CopyToClipboard from 'react-copy-to-clipboard'
-import * as cn from 'classnames'
 
 export interface Props {
   text: string
@@ -29,48 +28,14 @@ export default class Copy extends React.Component<Props, State> {
   }
 
   render() {
-    const { text, className } = this.props
-    let { color } = this.props
-
-    color = color || $v.blue
+    const { text, color } = this.props
 
     return (
       <CopyToClipboard text={text} onCopy={this.onCopy}>
-        <div className={cn('copy', className)}>
-          <style jsx={true}>{`
-            .copy {
-              @p: .relative;
-            }
-            @keyframes copying {
-              0% {
-                opacity: 0;
-                transform: translate(-50%, 0);
-              }
-
-              50% {
-                opacity: 1;
-              }
-
-              100% {
-                opacity: 0;
-                transform: translate(-50%, -50px);
-              }
-            }
-            .indicator {
-              @p: .absolute;
-              top: -20px;
-              left: 50%;
-              transform: translate(-50%, 0);
-              animation: copying 700ms linear;
-            }
-          `}</style>
-          {this.state.copied && (
-            <div className="indicator" style={{ color }}>
-              Copied
-            </div>
-          )}
+        <CopyBox>
+          {this.state.copied && <Indicator color={color}>Copied</Indicator>}
           {this.props.children}
-        </div>
+        </CopyBox>
       </CopyToClipboard>
     )
   }
@@ -83,3 +48,32 @@ export default class Copy extends React.Component<Props, State> {
     )
   }
 }
+
+const CopyBox = styled.div`
+  position: relative;
+`
+
+const Indicator = styled.div`
+  position: absolute;
+  top: -20px;
+  left: 50%;
+  transform: translate(-50%, 0);
+  animation: copying 700ms linear;
+  color: ${p => (p.color ? p.color : p.theme.colours.darkBlue30)};
+
+  @keyframes copying {
+    0% {
+      opacity: 0;
+      transform: translate(-50%, 0);
+    }
+
+    50% {
+      opacity: 1;
+    }
+
+    100% {
+      opacity: 0;
+      transform: translate(-50%, -50px);
+    }
+  }
+`

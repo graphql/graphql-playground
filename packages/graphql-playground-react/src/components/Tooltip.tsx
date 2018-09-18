@@ -164,7 +164,7 @@ const Content = styled.div`
   display: flex;
   align-items: center;
 
-  padding: ${p => p.theme.sizes.small12} ${p => p.theme.sizes.small16};
+  padding: ${p => `${p.theme.sizes.small12} ${p => p.theme.sizes.small16}`};
   white-space: nowrap;
 
   box-shadow: 0 1px 6px 0 rgba(0, 0, 0, 0.15);
