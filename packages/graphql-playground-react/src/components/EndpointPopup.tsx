@@ -75,7 +75,11 @@ export default class EndpointPopup extends React.Component<Props, State> {
               autoFocus={true}
             />
 
-            {valid && <Button onClick={this.close}>Use Endpoint</Button>}
+            {valid && (
+              <Button purple={true} onClick={this.close}>
+                Use Endpoint
+              </Button>
+            )}
           </Form>
         </Wrapper>
       </Popup>
