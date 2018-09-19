@@ -3,7 +3,7 @@ import { Provider, connect } from 'react-redux'
 import createStore from '../state/createStore'
 import 'isomorphic-fetch'
 import EndpointPopup from './EndpointPopup'
-import { ThemeProvider, theme as styledTheme } from '../styled'
+import { styled, ThemeProvider, theme as styledTheme } from '../styled'
 import { Store } from 'redux'
 import PlaygroundWrapper from './PlaygroundWrapper'
 import { injectState } from '../state/workspace/actions'
@@ -118,17 +118,7 @@ class GraphQLBinApp extends React.Component<Props & ReduxProps, State> {
     }
 
     return (
-      <div className={'wrapper'}>
-        <style jsx={true}>{`
-          .wrapper {
-            @p: .w100, .h100;
-          }
-          .loading {
-            @p: .f20, .white, .flex, .w100, .h100, .bgDarkBlue, .itemsCenter,
-              .justifyCenter;
-          }
-        `}</style>
-
+      <Wrapper>
         {this.state.loading ? null : !this.state.endpoint ||
         this.state.endpoint.length === 0 ? (
           <ThemeProvider theme={styledTheme}>
@@ -143,7 +133,7 @@ class GraphQLBinApp extends React.Component<Props & ReduxProps, State> {
             subscriptionEndpoint={subscriptionEndpoint}
           />
         )}
-      </div>
+      </Wrapper>
     )
   }
 
@@ -168,3 +158,8 @@ export default class GraphQLBinAppHOC extends React.Component<Props> {
     )
   }
 }
+
+const Wrapper = styled.div`
+  width: 100%;
+  height: 100%;
+`
