@@ -3,7 +3,6 @@ import GraphQLEditor from './Playground/GraphQLEditor'
 import TabBar from './Playground/TabBar'
 import { ISettings } from '../types'
 import HistoryPopup from './HistoryPopup'
-import * as cx from 'classnames'
 import { styled } from '../styled'
 import Settings from './Settings'
 import { PlaygroundSettingsEditor, GraphQLConfigEditor } from './SettingsEditor'
@@ -272,7 +271,6 @@ export class Playground extends React.PureComponent<Props & ReduxProps, State> {
   }
 
   render() {
-    const theme = this.props.settings['editor.theme']
     const { version }: any = app
 
     window.version = version
@@ -280,11 +278,7 @@ export class Playground extends React.PureComponent<Props & ReduxProps, State> {
     return (
       <PlaygroundContainer className="playground">
         <TabBar onNewSession={this.createSession} isApp={this.props.isApp} />
-        <GraphiqlsContainer
-          className={cx('graphiqls-container', {
-            'docs-graphiql': theme === 'light',
-          })}
-        >
+        <GraphiqlsContainer>
           <GraphiqlWrapper className="graphiql-wrapper active">
             {this.props.isConfigTab ? (
               <GraphQLConfigEditor

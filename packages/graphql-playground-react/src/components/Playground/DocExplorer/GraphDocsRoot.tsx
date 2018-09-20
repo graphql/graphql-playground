@@ -2,6 +2,7 @@ import * as React from 'react'
 import TypeLink from './TypeLink'
 import { serializeRoot } from '../util/stack'
 import { CategoryTitle } from './DocsStyles'
+import { styled } from '../../../styled'
 
 export interface Props {
   schema: any
@@ -13,17 +14,7 @@ export default class GraphDocsRoot extends React.PureComponent<Props, {}> {
     const { schema, sessionId } = this.props
     const obj = serializeRoot(schema)
     return (
-      <div className="doc-root">
-        <style jsx={true}>{`
-          .doc-root {
-            padding-left: 6px;
-          }
-        `}</style>
-        <style jsx={true} global={true}>{`
-          .doc-root .doc-category-item .field-name {
-            color: #f25c54;
-          }
-        `}</style>
+      <DocsRoot className="doc-root">
         <ShowRootType
           name="Queries"
           fields={obj.queries}
@@ -46,7 +37,7 @@ export default class GraphDocsRoot extends React.PureComponent<Props, {}> {
             sessionId={sessionId}
           />
         )}
-      </div>
+      </DocsRoot>
     )
   }
 }
@@ -77,3 +68,11 @@ function ShowRootType({ name, fields, offset }: ShowRootTypeProps) {
     </div>
   )
 }
+
+const DocsRoot = styled.div`
+  padding-left: 6px;
+
+  .doc-category-item .field-name {
+    color: #f25c54;
+  }
+`

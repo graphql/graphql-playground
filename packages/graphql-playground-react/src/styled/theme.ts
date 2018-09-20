@@ -25,6 +25,7 @@ export interface Colours {
   black10: string
   black30: string
   black40: string
+  black50: string
   paleText: string
   paleGrey: string
   red: string
@@ -117,6 +118,7 @@ export const darkColours: Colours = {
   black10: 'rgba(0, 0, 0, 0.1)',
   black30: 'rgba(0, 0, 0, 0.3)',
   black40: 'rgba(0, 0, 0, 0.4)',
+  black50: 'rgba(0, 0, 0, 0.5)',
   red: '#f25c54',
   orange: 'rgba(241, 143, 1, 1)',
   blue: 'rgba(42, 126, 210, 1)',
@@ -154,8 +156,8 @@ export const lightColours: Colours = {
   black10: 'rgba(0, 0, 0, 0.1)',
   black07: 'rgba(0, 0, 0, 0.07)',
   black30: 'rgba(0, 0, 0, 0.3)',
-
   black40: 'rgba(0, 0, 0, 0.4)',
+  black50: 'rgba(0, 0, 0, 0.5)',
   red: '#f25c54',
   orange: 'rgba(241, 143, 1, 1)',
   blue: 'rgba(42, 126, 210, 1)',

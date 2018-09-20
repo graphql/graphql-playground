@@ -145,9 +145,6 @@ class GraphDocs extends React.Component<
             @p: .f16;
             word-wrap: break-word;
           }
-          .doc-description p {
-            @p: .f14;
-          }
         `}</style>
         <style jsx={true}>{`
           .docs :global(.doc-category-title) {
@@ -158,49 +155,17 @@ class GraphDocs extends React.Component<
             padding: 1px 2px;
             background: rgba(0, 0, 0, 0.06);
           }
-          .docs-button {
-            @p: .absolute, .white, .bgGreen, .pv6, .z2, .ttu, .fw6, .f12, .ph10,
-              .pointer;
-            box-shadow: -1px 1px 6px 0 rgba(0, 0, 0, 0.3);
-            line-height: 17px;
-            letter-spacing: 0.45px;
-            padding-bottom: 8px;
-            transform: rotate(-90deg);
-            left: -50px;
-            top: 129px;
-            border-top-left-radius: 2px;
-            border-top-right-radius: 2px;
-          }
-          .doc-explorer-container {
-            @p: .flex, .relative, .h100, .w100;
-            overflow-x: auto;
-            overflow-y: hidden;
-          }
-          .doc-explorer-gradient {
-            @p: .z1, .absolute, .top0, .bottom0;
-            pointer-events: none;
-            content: '';
-            width: 20px;
-            left: 0px;
-            background: linear-gradient(
-              to right,
-              rgba(255, 255, 255, 1) 30%,
-              rgba(255, 255, 255, 0)
-            );
-          }
         `}</style>
-        <div className="docs-button" onClick={this.handleToggleDocs}>
-          Schema
-        </div>
+        <DocsButton onClick={this.handleToggleDocs}>Schema</DocsButton>
         <DocsResizer onMouseDown={this.handleDocsResizeStart} />
-        <div className="doc-explorer-gradient" />
+        <DocsGradient />
         <DocsExplorer
           onKeyDown={this.handleKeyDown}
           onMouseMove={this.handleMouseMove}
           tabIndex={0}
           innerRef={this.setDocExplorerRef}
         >
-          <div className="doc-explorer-container">
+          <DocsExplorerContainer>
             {emptySchema && <ColumnDoc>{emptySchema}</ColumnDoc>}
             {!emptySchema &&
               schema && (
@@ -225,7 +190,7 @@ class GraphDocs extends React.Component<
                 />
               </ColumnDoc>
             ))}
-          </div>
+          </DocsExplorerContainer>
         </DocsExplorer>
       </Docs>
     )
@@ -476,6 +441,15 @@ const DocsExplorer = styled.div`
   }
 `
 
+const DocsExplorerContainer = styled.div`
+  display: flex;
+  position: relative;
+  height: 100%;
+  width: 100%;
+  overflow-x: auto;
+  overflow-y: hidden;
+`
+
 const DocsResizer = styled.div`
   cursor: col-resize;
   height: 100%;
@@ -498,4 +472,40 @@ const ErrorContainer = styled.div`
   text-transform: uppercase;
   top: 50%;
   transform: translate(0, -50%);
+`
+
+const DocsButton = styled.div`
+  position: absolute;
+  z-index: 2;
+  left: -50px;
+  top: 129px;
+  padding: 6px 10px;
+  transform: rotate(-90deg);
+  border-top-left-radius: 2px;
+  border-top-right-radius: 2px;
+  color: ${p => p.theme.colours.white};
+  background: ${p => p.theme.colours.green};
+  box-shadow: -1px 1px 6px 0 rgba(0, 0, 0, 0.3);
+  text-transform: uppercase;
+  font-weight: 600;
+  font-size: 12px;
+  line-height: 17px;
+  letter-spacing: 0.45px;
+  cursor: pointer;
+`
+
+const DocsGradient = styled.div`
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  width: 20px;
+  z-index: 1;
+  pointer-events: none;
+  content: '';
+  background: linear-gradient(
+    to right,
+    rgba(255, 255, 255, 1) 30%,
+    rgba(255, 255, 255, 0)
+  );
 `
