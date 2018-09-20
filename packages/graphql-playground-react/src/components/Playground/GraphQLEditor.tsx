@@ -12,8 +12,6 @@ import { connect } from 'react-redux'
 import Spinner from '../Spinner'
 import Results from './Results'
 import ResponseTracing from './ResponseTracing'
-import withTheme from '../Theme/withTheme'
-import { LocalThemeInterface } from '../Theme'
 import GraphDocs from './DocExplorer/GraphDocs'
 import { styled } from '../../styled/index'
 import TopBar from './TopBar/TopBar'
@@ -118,9 +116,7 @@ export interface ToolbarButtonProps extends SimpleProps {
   label: string
 }
 
-class GraphQLEditor extends React.PureComponent<
-  Props & LocalThemeInterface & ReduxProps
-> {
+class GraphQLEditor extends React.PureComponent<Props & ReduxProps> {
   public codeMirrorSizer
   public queryEditorComponent
   public variableEditorComponent
@@ -546,31 +542,29 @@ const mapStateToProps = createStructuredSelector({
   sessionId: getSelectedSessionIdFromRoot,
 })
 
-export default withTheme<Props>(
-  // TODO fix redux types
-  connect<any, any, any>(
-    mapStateToProps,
-    {
-      updateQueryFacts,
-      stopQuery,
-      runQueryAtPosition,
-      openQueryVariables,
-      closeQueryVariables,
-      openVariables,
-      closeVariables,
-      openTracing,
-      closeTracing,
-      toggleTracing,
-      setEditorFlex,
-      toggleVariables,
-      fetchSchema,
-    },
-    null,
-    {
-      withRef: true,
-    },
-  )(GraphQLEditor),
-)
+export default // TODO fix redux types
+connect<any, any, any>(
+  mapStateToProps,
+  {
+    updateQueryFacts,
+    stopQuery,
+    runQueryAtPosition,
+    openQueryVariables,
+    closeQueryVariables,
+    openVariables,
+    closeVariables,
+    openTracing,
+    closeTracing,
+    toggleTracing,
+    setEditorFlex,
+    toggleVariables,
+    fetchSchema,
+  },
+  null,
+  {
+    withRef: true,
+  },
+)(GraphQLEditor)
 
 const EditorBar = styled.div`
   display: flex;
