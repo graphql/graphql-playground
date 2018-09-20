@@ -14,6 +14,7 @@ import EnumTypeSchema from './DocsTypes/EnumTypeSchema'
 import UnionTypeSchema from './DocsTypes/UnionTypeSchema'
 import { getDeeperType, serialize } from '../util/stack'
 import { CategoryTitle } from './DocsStyles'
+import { styled } from '../../../styled'
 
 export interface Props {
   schema: any
@@ -84,28 +85,19 @@ export default class FieldDoc extends React.Component<Props, State> {
           .doc-header .doc-category-item .field-name {
             color: #f25c54;
           }
-          .doc-description {
-            @p: .ph16, .black50;
-          }
           .doc-type-description {
             @p: .black50;
           }
         `}</style>
         <style jsx={true}>{`
-          .doc-header {
-            @p: .bgBlack02, .pb10, .pt20;
-          }
           .doc-type-description {
             @p: .pb16;
-          }
-          .doc-deprecation {
-            @p: .ph16, .black50;
           }
           .markdown-content {
             @p: .pb20;
           }
         `}</style>
-        <div className="doc-header">
+        <DocsHeader className="doc-header">
           <TypeLink
             type={field}
             x={level}
@@ -113,7 +105,7 @@ export default class FieldDoc extends React.Component<Props, State> {
             clickable={false}
             lastActive={false}
           />
-        </div>
+        </DocsHeader>
         <MarkdownContent
           className="doc-type-description"
           markdown={field.description || ''}
@@ -123,10 +115,7 @@ export default class FieldDoc extends React.Component<Props, State> {
         {type.description &&
           type.description.length > 0 && (
             <div className="markdown-content">
-              <MarkdownContent
-                className="doc-description"
-                markdown={type.description || ''}
-              />
+              <DocsDescription markdown={type.description || ''} />
             </div>
           )}
         {type instanceof GraphQLScalarType && <ScalarTypeSchema type={type} />}
@@ -202,3 +191,15 @@ const scrollToRight = (element: Element, to: number, duration: number) => {
     scrollToRight(element, to, duration - 10)
   }, 10)
 }
+
+const DocsHeader = styled.div`
+  background: ${p => p.theme.colours.black02};
+  padding-top: 20px;
+  padding-bottom: 10px;
+`
+
+const DocsDescription = styled(MarkdownContent)`
+  font-size: 14px;
+  padding: 0 16px;
+  color: rgba(0, 0, 0, 0.5);
+`

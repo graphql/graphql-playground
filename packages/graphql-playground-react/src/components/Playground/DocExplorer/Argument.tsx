@@ -18,12 +18,7 @@ export default function Argument({
 }: // sessionId,
 Props) {
   return (
-    <span className="arg">
-      <style jsx={true}>{`
-        .arg:after {
-          content: '';
-        }
-      `}</style>
+    <span>
       <TypeLink
         type={arg}
         x={x}

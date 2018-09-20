@@ -1,5 +1,5 @@
 import * as React from 'react'
-
+import { styled } from '../../../styled'
 import TypeLink from './TypeLink'
 
 export interface Props {
@@ -101,16 +101,7 @@ export default class SearchResults extends React.Component<Props, {}> {
       matchedWithin.length + matchedTypes.length + matchedFields.length ===
       0
     ) {
-      return (
-        <span className="doc-alert-text">
-          <style jsx={true}>{`
-            .doc-alert-text {
-              @p: .ml25, .mt16, .db;
-            }
-          `}</style>
-          {'No results found.'}
-        </span>
-      )
+      return <NoResult>No results found.</NoResult>
     }
 
     if (withinType && matchedTypes.length + matchedFields.length > 0) {
@@ -144,3 +135,9 @@ function isMatch(sourceText, searchValue) {
     return sourceText.toLowerCase().indexOf(searchValue.toLowerCase()) !== -1
   }
 }
+
+const NoResult = styled.span`
+  display: block;
+  margin-top: 16px;
+  margin-left: 16px;
+`
