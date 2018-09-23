@@ -1,6 +1,7 @@
 import { GraphQLInterfaceType } from 'graphql'
 import * as React from 'react'
 import TypeLink from './TypeLink'
+import { styled } from '../../../styled'
 
 export interface DocTypeSchemaProps {
   type: any
@@ -10,12 +11,7 @@ export interface DocTypeSchemaProps {
   sessionId: string
 }
 
-const DocTypeSchema = ({
-  type,
-  fields,
-  interfaces,
-  level,
-}: DocTypeSchemaProps) => {
+export default ({ type, fields, interfaces, level }: DocTypeSchemaProps) => {
   const nonDeprecatedFields = fields.filter(data => !data.isDeprecated)
   const deprecatedFields = fields.filter(data => data.isDeprecated)
 
@@ -23,58 +19,22 @@ const DocTypeSchema = ({
     type instanceof GraphQLInterfaceType ? 'interface ' : 'type'
 
   return (
-    <div className="doc-type-schema">
-      <style jsx={true} global={true}>{`
-        .doc-type-schema .doc-category-item {
-          padding-left: 32px;
-        }
-        .doc-type-interface .field-name {
-          color: rgb(245, 160, 0);
-        }
-        .doc-type-interface .type-name {
-          color: #f25c54;
-        }
-      `}</style>
-      <style jsx={true}>{`
-        .doc-type-schema {
-          @p: .overflowAuto, .f14;
-        }
-        .doc-type-schema-line {
-          @p: .ph16, .pv6;
-          white-space: nowrap;
-        }
-        .doc-value-comment {
-          @p: .pr16, .black50;
-          padding-left: 32px;
-        }
-        .doc-type-interface {
-          @p: .pl16;
-        }
-        .type-line .type-name {
-          color: #f25c54;
-        }
-        .brace {
-          @p: .darkBlue50, .fw6;
-        }
-      `}</style>
-      <div className="doc-type-schema-line type-line">
+    <DocTypeSchema>
+      <DocTypeLine>
         <span className="field-name">{typeInstance}</span>{' '}
-        <span className="type-name">{type.name}</span>{' '}
-        {interfaces.length === 0 && <span className="brace">{`{`}</span>}
-      </div>
+        <DocsTypeName>{type.name}</DocsTypeName>{' '}
+        {interfaces.length === 0 && <Brace>{`{`}</Brace>}
+      </DocTypeLine>
       {interfaces.map((data, index) => (
-        <TypeLink
+        <DocsTypeInferface
           key={data.name}
           type={data}
           x={level}
           y={index}
           collapsable={true}
-          className="doc-type-interface"
           beforeNode={<span className="field-name">implements</span>}
           afterNode={
-            index === interfaces.length - 1 ? (
-              <span className="brace">{'{'}</span>
-            ) : null
+            index === interfaces.length - 1 ? <Brace>{'{'}</Brace> : null
           }
           lastActive={false}
         />
@@ -92,9 +52,9 @@ const DocTypeSchema = ({
       {deprecatedFields.length > 0 && <br />}
       {deprecatedFields.map((data, index) => (
         <div key={data.name}>
-          <span className="doc-value-comment">
+          <DocsValueComment>
             # Deprecated: {data.deprecationReason}
-          </span>
+          </DocsValueComment>
           <TypeLink
             type={data}
             x={level}
@@ -104,11 +64,47 @@ const DocTypeSchema = ({
           />
         </div>
       ))}
-      <div className="doc-type-schema-line type-line">
-        <span className="brace">{'}'}</span>
-      </div>
-    </div>
+      <DocTypeLine>
+        <Brace>{'}'}</Brace>
+      </DocTypeLine>
+    </DocTypeSchema>
   )
 }
 
-export default DocTypeSchema
+const DocTypeSchema = styled.div`
+  font-size: 14px;
+  overflow: auto;
+  .doc-category-item {
+    padding-left: 32px;
+  }
+`
+
+const DocTypeLine = styled.div`
+  padding: 6px 16px;
+  white-space: nowrap;
+`
+
+const DocsTypeName = styled.span`
+  color: #f25c54;
+`
+
+const DocsTypeInferface = styled(TypeLink)`
+  padding-left: 16px;
+  .field-name {
+    color: rgb(245, 160, 0);
+  }
+  .type-name {
+    color: #f25c54;
+  }
+`
+
+const DocsValueComment = styled.span`
+  color: ${p => p.theme.colours.black50};
+  padding-right: 16px;
+  padding-left: 32px;
+`
+
+const Brace = styled.span`
+  font-weight: 600;
+  color: ${p => p.theme.colours.darkBlue50};
+`

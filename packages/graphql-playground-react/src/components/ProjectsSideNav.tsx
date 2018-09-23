@@ -1,7 +1,7 @@
 import * as React from 'react'
 import { GraphQLConfig, GraphQLConfigEnpointsMapData } from '../graphqlConfig'
 import ProjectsSideNavItem from './ProjectsSideNavItem'
-import { SettingsIcon, AddFullIcon } from './Playground/Icons'
+import { SettingsIcon, AddFullIcon } from './Icons'
 import { styled } from '../styled/index'
 import { getEndpointFromEndpointConfig } from './util'
 import { createStructuredSelector } from 'reselect'

@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { SettingsIcon } from './Playground/Icons'
+import { SettingsIcon } from './Icons'
 import { styled } from '../styled'
 import { openSettingsTab } from '../state/sessions/actions'
 import { connect } from 'react-redux'

@@ -16,7 +16,7 @@ import { toggleHistoryItemStarring } from '../state/history/actions'
 import { Session } from '../state/sessions/reducers'
 import { OrderedMap } from 'immutable'
 import { Container } from './Playground/EditorWrapper'
-import { ArrowRight } from '../components/Playground/Icons'
+import { ArrowRight } from './Icons'
 
 export interface ReduxProps {
   isOpen: boolean
@@ -225,7 +225,7 @@ const Big = styled.div`
   flex: 1 1 auto;
 `
 
-const GraphiqlWrapper = Big.extend`
+const GraphiqlWrapper = styled(Big)`
   width: 100%;
   height: 100%;
   position: relative;

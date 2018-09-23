@@ -1,6 +1,6 @@
 import * as React from 'react'
 import { styled } from '../styled'
-import { FullArrowRightIcon } from './Playground/Icons'
+import { FullArrowRightIcon } from './Icons'
 
 export interface Props {
   purple?: boolean
