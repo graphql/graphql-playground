@@ -14,9 +14,7 @@
     "skipLibCheck": true,
     "suppressImplicitAnyIndexErrors": true,
     "noUnusedLocals": false,
-    "declaration": true,
-    "no-string-literal": false,
-    "prefer-for-of": false
+    "declaration": true
   },
   "exclude": ["node_modules", "examples"]
 }
