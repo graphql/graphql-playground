@@ -1,7 +1,7 @@
 import * as React from 'react'
 import { HistoryFilter } from '../../types'
 import { styled, withTheme, ThemeInterface } from '../../styled'
-import { Star, History } from '../Playground/Icons'
+import { Star, History } from '../Icons'
 
 interface Props {
   theme: ThemeInterface

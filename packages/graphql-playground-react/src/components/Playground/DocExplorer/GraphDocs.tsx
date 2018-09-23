@@ -15,7 +15,6 @@ import {
 import Spinner from '../../Spinner'
 import { columnWidth } from '../../../constants'
 import RootColumn from './RootColumn'
-import * as cn from 'classnames'
 import {
   serialize,
   getElementRoot,
@@ -125,37 +124,7 @@ class GraphDocs extends React.Component<
     }
 
     return (
-      <Docs
-        className={cn('graph-docs docExplorerWrap docs', { open: docsOpen })}
-        style={docsStyle}
-        innerRef={this.setRef}
-      >
-        <style jsx={true} global={true}>{`
-          .graph-docs .doc-category-title {
-            @p: .mh0, .ph16;
-            border: none;
-          }
-          .doc-type-description p {
-            @p: .pa16, .f14;
-          }
-          .graphiql-container .doc-type-description {
-            @p: .mh0, .ph16, .f14;
-          }
-          .doc-header .doc-category-item {
-            @p: .f16;
-            word-wrap: break-word;
-          }
-        `}</style>
-        <style jsx={true}>{`
-          .docs :global(.doc-category-title) {
-            @p: .pa16, .f14;
-          }
-          .graph-docs :global(code) {
-            @p: .mono, .br2;
-            padding: 1px 2px;
-            background: rgba(0, 0, 0, 0.06);
-          }
-        `}</style>
+      <Docs open={docsOpen} style={docsStyle} innerRef={this.setRef}>
         <DocsButton onClick={this.handleToggleDocs}>Schema</DocsButton>
         <DocsResizer onMouseDown={this.handleDocsResizeStart} />
         <DocsGradient />
@@ -388,18 +357,23 @@ export default connect<StateFromProps, DispatchFromProps, Props>(
   { withRef: true },
 )(GraphDocs)
 
-const Docs = styled.div`
+interface DocsProps {
+  open: boolean
+}
+
+const Docs = styled<DocsProps, 'div'>('div')`
   background: white;
   box-shadow: 0 0 8px rgba(0, 0, 0, 0.15);
   position: absolute;
   right: -2px;
-  z-index: 3;
+  z-index: ${p => (p.open ? 2000 : 3)};
   height: 100%;
   font-family: 'Open Sans', sans-serif;
   -webkit-font-smoothing: antialiased;
 
-  &.open {
-    z-index: 2000;
+  .doc-type-description p {
+    padding: 16px;
+    font-size: 14px;
   }
 
   .field-name {

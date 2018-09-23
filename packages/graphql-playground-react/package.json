@@ -165,7 +165,7 @@
     "redux-saga": "^0.16.0",
     "reselect": "^3.0.1",
     "seamless-immutable": "^7.0.1",
-    "styled-components": "^3.4.5",
+    "styled-components": "^3.4.9",
     "styled-jsx": "^2.2.1",
     "styled-jsx-postcss": "timsuchanek/styled-jsx-postcss#build3",
     "subscriptions-transport-ws": "^0.9.5",

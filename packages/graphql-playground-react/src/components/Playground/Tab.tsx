@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { SettingsIcon, CrossIcon } from './Icons'
+import { SettingsIcon, CrossIcon } from '../Icons'
 import { connect } from 'react-redux'
 import { closeTab, selectTab, editName } from '../../state/sessions/actions'
 import { styled } from '../../styled'

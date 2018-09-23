@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { ShareIcon } from './Playground/Icons'
+import { ShareIcon } from './Icons'
 import ToggleButton from './ToggleButton'
 import Tooltip from './Tooltip'
 import { Button } from './Button'

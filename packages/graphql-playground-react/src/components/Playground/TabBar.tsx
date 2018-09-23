@@ -1,6 +1,6 @@
 import * as React from 'react'
 import { styled } from '../../styled'
-import { AddIcon } from './Icons'
+import { AddIcon } from '../Icons'
 import Tab from './Tab'
 import { connect } from 'react-redux'
 import { createStructuredSelector } from 'reselect'

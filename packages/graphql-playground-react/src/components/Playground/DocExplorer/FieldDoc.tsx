@@ -78,26 +78,7 @@ export default class FieldDoc extends React.Component<Props, State> {
 
     return (
       <div ref={this.setRef}>
-        <style jsx={true} global={true}>{`
-          .doc-header .doc-category-item {
-            @p: .fw6, .f14;
-          }
-          .doc-header .doc-category-item .field-name {
-            color: #f25c54;
-          }
-          .doc-type-description {
-            @p: .black50;
-          }
-        `}</style>
-        <style jsx={true}>{`
-          .doc-type-description {
-            @p: .pb16;
-          }
-          .markdown-content {
-            @p: .pb20;
-          }
-        `}</style>
-        <DocsHeader className="doc-header">
+        <DocsHeader>
           <TypeLink
             type={field}
             x={level}
@@ -106,7 +87,7 @@ export default class FieldDoc extends React.Component<Props, State> {
             lastActive={false}
           />
         </DocsHeader>
-        <MarkdownContent
+        <DocsDescription
           className="doc-type-description"
           markdown={field.description || ''}
         />
@@ -114,9 +95,7 @@ export default class FieldDoc extends React.Component<Props, State> {
         <CategoryTitle>{`${typeInstance} details`}</CategoryTitle>
         {type.description &&
           type.description.length > 0 && (
-            <div className="markdown-content">
-              <DocsDescription markdown={type.description || ''} />
-            </div>
+            <DocsDescription markdown={type.description || ''} />
           )}
         {type instanceof GraphQLScalarType && <ScalarTypeSchema type={type} />}
         {type instanceof GraphQLEnumType && <EnumTypeSchema type={type} />}
@@ -196,10 +175,19 @@ const DocsHeader = styled.div`
   background: ${p => p.theme.colours.black02};
   padding-top: 20px;
   padding-bottom: 10px;
+
+  .doc-category-item {
+    font-size: 14px;
+    font-weight: 600;
+    word-wrap: break-word;
+  }
+  .doc-category-item .field-name {
+    color: #f25c54;
+  }
 `
 
 const DocsDescription = styled(MarkdownContent)`
   font-size: 14px;
-  padding: 0 16px;
+  padding: 0 16px 20px 16px;
   color: rgba(0, 0, 0, 0.5);
 `
