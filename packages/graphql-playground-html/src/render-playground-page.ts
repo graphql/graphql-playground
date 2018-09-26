@@ -69,14 +69,14 @@ export interface Tab {
 const loading = getLoadingMarkup()
 
 const getCdnMarkup = ({version, cdnUrl = '//cdn.jsdelivr.net/npm'}) => `
-    <link rel="stylesheet" href="${cdnUrl}/graphql-playground-react@${
-      version
+    <link rel="stylesheet" href="${cdnUrl}/graphql-playground-react${
+      version ? `@${version}` : ''
     }/build/static/css/index.css" />
-    <link rel="shortcut icon" href="${cdnUrl}/graphql-playground-react@${
-      version
+    <link rel="shortcut icon" href="${cdnUrl}/graphql-playground-react${
+      version ? `@${version}` : ''
     }/build/favicon.png" />
-    <script src="${cdnUrl}/graphql-playground-react@${
-      version
+    <script src="${cdnUrl}/graphql-playground-react${
+      version ? `@${version}` : ''
     }/build/static/js/middleware.js"></script>
 `
 
