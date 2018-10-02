@@ -9,7 +9,7 @@ import { safely } from '../../utils'
 function* share() {
   const state = yield makeSharingState()
   const endpoint = yield select(getEndpoint)
-  const res = yield fetch('https://graphqlbin.prisma.sh/', {
+  const res = yield fetch('https://api.graphqlbin.com/', {
     method: 'post',
     headers: {
       'Content-Type': 'application/json',

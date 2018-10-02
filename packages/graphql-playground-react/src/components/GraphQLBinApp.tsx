@@ -71,7 +71,7 @@ class GraphQLBinApp extends React.Component<Props & ReduxProps, State> {
         }
       }, 1000)
 
-      fetch('https://graphqlbin.prisma.sh/', {
+      fetch('https://api.graphqlbin.com', {
         method: 'post',
         headers: {
           'Content-Type': 'application/json',
