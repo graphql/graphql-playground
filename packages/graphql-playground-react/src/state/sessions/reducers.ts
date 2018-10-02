@@ -26,6 +26,7 @@ import { getSelectedSessionId } from './selectors'
 import { getDefaultSession, defaultQuery } from '../../constants'
 import * as cuid from 'cuid'
 import { formatError } from './fetchingSagas'
+import { arrayMove } from 'react-sortable-hoc'
 
 export interface SessionStateProps {
   sessions: OrderedMap<string, Session>
@@ -525,6 +526,21 @@ const reducer = handleActions(
         'sessionCount',
         state.sessions.size - 1,
       )
+    },
+    REORDER_TABS: (state, { payload: { src, dest } }) => {
+      const seq = state.sessions.toIndexedSeq()
+
+      const indexes: number[] = []
+      for (let i = 0; i < seq.size; i++) indexes.push(i)
+      const newIndexes = arrayMove(indexes, src, dest)
+
+      let newSessions = OrderedMap()
+      for (let i = 0; i < seq.size; i++) {
+        const ndx = newIndexes[i]
+        const val = seq.get(ndx)
+        newSessions = newSessions.set(val.id, val)
+      }
+      return state.set('sessions', newSessions)
     },
     EDIT_SETTINGS: state => {
       return state.setIn(
