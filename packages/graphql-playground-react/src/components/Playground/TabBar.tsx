@@ -48,7 +48,6 @@ class TabBar extends React.PureComponent<Props & ReduxProps, State> {
         axis="x"
         lockAxis="x"
         lockToContainerEdges={true}
-        lockOffset="0px"
         distance={10}
         transitionDuration={200}
       >
@@ -61,17 +60,15 @@ class TabBar extends React.PureComponent<Props & ReduxProps, State> {
               index={ndx}
             />
           ))}
-          {!sorting && (
-            <Plus onClick={onNewSession}>
-              <Icon
-                src={require('graphcool-styles/icons/stroke/add.svg')}
-                width={34}
-                height={34}
-                stroke={true}
-                strokeWidth={4}
-              />
-            </Plus>
-          )}
+          <Plus onClick={onNewSession} sorting={sorting}>
+            <Icon
+              src={require('graphcool-styles/icons/stroke/add.svg')}
+              width={34}
+              height={34}
+              stroke={true}
+              strokeWidth={4}
+            />
+          </Plus>
         </Tabs>
       </SortableTabBar>
     )
@@ -126,9 +123,14 @@ const Tabs = withProps<TabsProps>()(styled.div)`
   padding-left: ${p => (p.isApp ? '43px' : '0')};
 `
 
-const Plus = styled.div`
+interface PlusProps {
+  sorting: boolean
+}
+
+const Plus = withProps<PlusProps>()(styled.div)`
   box-sizing: border-box;
   display: flex;
+  visibility: ${p => (p.sorting ? 'hidden' : 'visible')}
   height: 43px;
   width: 43px;
   border-radius: 2px;
