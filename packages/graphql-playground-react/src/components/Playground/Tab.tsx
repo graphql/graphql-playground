@@ -45,7 +45,7 @@ class Tab extends React.PureComponent<Props & ReduxProps, State> {
       'New Tab'
 
     return (
-      <TabItem active={active} onClick={this.handleSelectSession}>
+      <TabItem active={active} onMouseDown={this.handleSelectSession}>
         <Icons active={active}>
           {session.subscriptionActive && <RedDot />}
           <QueryTypes>
