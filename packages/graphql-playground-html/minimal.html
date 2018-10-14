@@ -42,6 +42,11 @@
       .title {
         font-weight: 400;
       }
+      /* This fixes the disappearing cursor */
+      .CodeMirror-cursor {
+        width: 1px;
+        background: rgba(255, 255, 255, 0.6) !important;
+      }
     </style>
     <img src='//cdn.jsdelivr.net/npm/graphql-playground-react/build/logo.png' alt=''>
     <div class="loading"> Loading
