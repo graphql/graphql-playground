@@ -66,7 +66,7 @@ class Tab extends React.PureComponent<Props & ReduxProps, State> {
         </Icons>
         {this.state.editingName ? (
           <OperationNameInput
-            value={session.name}
+            value={session.name || ''}
             onChange={this.handleEditName}
             onBlur={this.stopEditName}
             onKeyDown={this.handleKeyDown}
