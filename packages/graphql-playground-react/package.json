@@ -87,7 +87,7 @@
     "postcss-import": "9.1.0",
     "postcss-inherit": "timsuchanek/postcss-inherit#build3",
     "postcss-inject": "1.0.1",
-    "postcss-loader": "2.1.5",
+    "postcss-loader": "2.1.6",
     "postcss-nested": "1.0.1",
     "postcss-simple-vars": "3.1.0",
     "promise": "8.0.1",
