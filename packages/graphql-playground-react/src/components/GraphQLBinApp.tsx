@@ -74,7 +74,7 @@ class GraphQLBinApp extends React.Component<Props & ReduxProps, State> {
         }
       }, 1000)
 
-      fetch('https://api.graph.cool/simple/v1/cj81hi46q03c30196uxaswrz2', {
+      fetch('https://api.graphqlbin.com', {
         method: 'post',
         headers: {
           'Content-Type': 'application/json',

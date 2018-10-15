@@ -9,28 +9,26 @@ import { safely } from '../../utils'
 function* share() {
   const state = yield makeSharingState()
   const endpoint = yield select(getEndpoint)
-  const res = yield fetch(
-    'https://api.graph.cool/simple/v1/cj81hi46q03c30196uxaswrz2',
-    {
-      method: 'post',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        query: `
+  const res = yield fetch('https://api.graphqlbin.com/', {
+    method: 'post',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      query: `
         mutation ($session: String! $endpoint: String!) {
           addSession(session: $session endpoint: $endpoint) {
             id
           }
         }
       `,
-        variables: {
-          session: JSON.stringify(state),
-          endpoint,
-        },
-      }),
-    },
-  ).then(data => data.json())
+      variables: {
+        session: JSON.stringify(state),
+        endpoint,
+      },
+    }),
+  }).then(data => data.json())
+
   const shareUrl = `https://graphqlbin.com/v2/${res.data.addSession.id}`
   yield put(setShareUrl(shareUrl))
 }
