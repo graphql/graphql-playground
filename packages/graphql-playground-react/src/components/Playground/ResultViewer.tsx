@@ -134,6 +134,9 @@ const Result = styled<ResultProps, 'div'>('div')`
     background: none;
     padding-left: 38px;
   }
+  .CodeMirror-cursor {
+    display: none !important;
+  }
   .CodeMirror-scroll {
     overflow: auto !important;
     max-width: 50vw;
