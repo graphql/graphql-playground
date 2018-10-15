@@ -13,7 +13,12 @@ class Settings extends React.Component<Props, {}> {
     return (
       <Wrapper>
         <IconWrapper>
-          <SettingsIcon width={23} height={23} onClick={this.props.onClick} />
+          <SettingsIcon
+            width={23}
+            height={23}
+            onClick={this.props.onClick}
+            title="Settings"
+          />
         </IconWrapper>
       </Wrapper>
     )

@@ -10,6 +10,10 @@ export const getQueryTypes = (ast): QueryTypes => {
   if (ast && ast.definitions) {
     ast.definitions.forEach(definition => {
       if (!firstOperationName) {
+        firstOperationName = definition.name && definition.name.value
+      }
+
+      if (!firstOperationName) {
         firstOperationName =
           definition.selectionSet &&
           definition.selectionSet.selections &&

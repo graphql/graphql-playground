@@ -33,8 +33,8 @@ export default withTheme(
             <OperationSide>
               <Star
                 onClick={() => onItemStarToggled(item.id)}
-                color={item.starred ? 'rgb(221,171,0)' : theme.colours.black40}
-                stroke={!item.starred}
+                stroke={!item.starred ? 'rgb(221,171,0)' : undefined}
+                fill={item.starred ? 'rgb(221,171,0)' : undefined}
                 strokeWidth={0.5}
                 width={25}
                 height={25}

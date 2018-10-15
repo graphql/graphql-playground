@@ -1,6 +1,6 @@
 import TypeLink from '../TypeLink'
 import * as React from 'react'
-import DocTypeSchema from './DocType'
+import { DocType } from './DocType'
 
 export interface EnumTypeSchemaProps {
   schema: any
@@ -17,7 +17,7 @@ const UnionTypeSchema = ({
 }: EnumTypeSchemaProps) => {
   const types = schema.getPossibleTypes(type)
   return (
-    <DocTypeSchema className="doc-type-schema">
+    <DocType className="doc-type-schema">
       <span className="field-name">union</span>{' '}
       <span className="type-name">{type.name}</span>
       {' = '}
@@ -32,7 +32,7 @@ const UnionTypeSchema = ({
           lastActive={false}
         />
       ))}
-    </DocTypeSchema>
+    </DocType>
   )
 }
 

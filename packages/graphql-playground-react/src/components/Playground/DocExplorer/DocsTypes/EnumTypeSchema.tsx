@@ -1,6 +1,6 @@
 import * as React from 'react'
 import { styled } from '../../../../styled'
-import DocTypeSchema from './DocType'
+import { DocType } from './DocType'
 
 export interface EnumTypeSchemaProps {
   type: any
@@ -10,7 +10,7 @@ const EnumTypeSchema = ({ type }: EnumTypeSchemaProps) => {
   const values = type.getValues()
   const deprecatedValues = values.filter((value: any) => value.isDeprecated)
   return (
-    <DocTypeSchema className="doc-type-schema">
+    <DocType className="doc-type-schema">
       <span className="field-name">enum</span>{' '}
       <span className="type-name">{type.name}</span>{' '}
       <span className="brace">{'{'}</span>
@@ -29,7 +29,7 @@ const EnumTypeSchema = ({ type }: EnumTypeSchemaProps) => {
         />
       ))}
       <span className="brace">{'}'}</span>
-    </DocTypeSchema>
+    </DocType>
   )
 }
 

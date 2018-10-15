@@ -45,14 +45,14 @@ class Tab extends React.PureComponent<Props & ReduxProps, State> {
       'New Tab'
 
     return (
-      <TabItem active={active} onClick={this.handleSelectSession}>
+      <TabItem active={active} onMouseDown={this.handleSelectSession}>
         <Icons active={active}>
           {session.subscriptionActive && <RedDot />}
           <QueryTypes>
             {queryTypes.query && <Query>Q</Query>}
             {(session.isSettingsTab || session.isConfigTab) && (
               <Query>
-                <SettingsIcon width={12} height={12} color="white" />
+                <SettingsIcon width={12} height={12} fill="white" />
               </Query>
             )}
             {queryTypes.mutation && <Mutation>M</Mutation>}
@@ -61,7 +61,7 @@ class Tab extends React.PureComponent<Props & ReduxProps, State> {
         </Icons>
         {this.state.editingName ? (
           <OperationNameInput
-            value={session.name}
+            value={session.name || ''}
             onChange={this.handleEditName}
             onBlur={this.stopEditName}
             onKeyDown={this.handleKeyDown}
@@ -83,7 +83,12 @@ class Tab extends React.PureComponent<Props & ReduxProps, State> {
           {session.isFile && session.changed && !this.state.overCross ? (
             <Circle>⬤</Circle>
           ) : (
-            <CrossIcon width={12} height={11} strokeWidth={7} />
+            <CrossIcon
+              width={12}
+              height={11}
+              strokeWidth={7}
+              title="Close Tab"
+            />
           )}
         </Close>
       </TabItem>
@@ -143,17 +148,15 @@ const TabItem = styled<TabItemProps, 'div'>('div')`
   height: 43px;
   padding: 10px;
   padding-top: 9px;
-  margin-left: 10px;
+  margin-right: 10px;
   font-size: 14px;
   border-radius: 2px;
   border-bottom: 2px solid ${p => p.theme.editorColours.navigationBar};
   box-sizing: border-box;
   cursor: pointer;
+  user-select: none;
   background: ${p =>
     p.active ? p.theme.editorColours.tab : p.theme.editorColours.tabInactive};
-  &:first-child {
-    margin-left: 0;
-  }
   &:hover {
     background: ${p => p.theme.editorColours.tab};
     .close {
@@ -191,6 +194,7 @@ const Icons = styled<TabItemProps, 'div'>('div')`
 
 const QueryTypes = styled.div`
   display: flex;
+  color: white;
 `
 
 const QueryType = styled.div`

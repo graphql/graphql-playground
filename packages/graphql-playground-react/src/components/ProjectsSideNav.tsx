@@ -45,6 +45,7 @@ class ProjectsSideNav extends React.Component<Props & ReduxProps, {}> {
                 width={18}
                 height={18}
                 onClick={this.props.openConfigTab}
+                title="Project settings"
               />
             </TitleRow>
             {endpoints && this.renderEndpoints(endpoints)}

@@ -62,6 +62,7 @@ export interface PlaygroundWrapperProps {
   schema?: { __schema: any } // introspection result
   codeTheme?: EditorColours
   workspaceName?: string
+  headers?: any
 }
 
 export interface ReduxProps {
@@ -334,6 +335,10 @@ class PlaygroundWrapper extends React.Component<
       </Helmet>
     ) : null
 
+    const defaultHeaders = this.props.headers || {}
+    const stateHeaders = this.state.headers || {}
+    const combinedHeaders = { ...defaultHeaders, ...stateHeaders }
+
     const { theme } = this.props
     return (
       <div>
@@ -384,7 +389,7 @@ class PlaygroundWrapper extends React.Component<
               onSaveConfig={this.handleSaveConfig}
               onUpdateSessionCount={this.handleUpdateSessionCount}
               fixedEndpoints={Boolean(this.state.configString)}
-              headers={this.state.headers}
+              headers={combinedHeaders}
               configPath={this.props.configPath}
               workspaceName={
                 this.props.workspaceName || this.state.activeProjectName
@@ -520,7 +525,7 @@ class PlaygroundWrapper extends React.Component<
 
 const mapStateToProps = (state, ownProps) => {
   const theme = ownProps.theme || getTheme(state, ownProps.settings)
-  const settings = ownProps.settings || getSettings(state)
+  const settings = getSettings(state)
   return { theme, settings }
 }
 
