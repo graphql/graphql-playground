@@ -83,7 +83,7 @@ class GraphQLBinApp extends React.Component<Props & ReduxProps, State> {
           query: `
             query ($id: String!) {
               session(id: $id) {
-                session
+                data
                 endpoint
               }
             }
@@ -100,7 +100,7 @@ class GraphQLBinApp extends React.Component<Props & ReduxProps, State> {
           if (!res.data || res.data.session === null) {
             location.href = `${location.origin}/v2/new`
           }
-          const state = JSON.parse(res.data.session.session)
+          const state = JSON.parse(res.data.session.data)
           this.props.injectState(state)
           this.setState({
             endpoint: res.data.session.endpoint,

@@ -258,6 +258,7 @@ const Input = styled.input`
   display: block;
   width: 100%;
   padding: ${p => p.theme.sizes.small6} ${p => p.theme.sizes.small10};
+  padding-right: 25px;
 
   font-weight: ${p => p.theme.sizes.fontSemiBold};
   font-size: ${p => p.theme.sizes.fontTiny};

@@ -10,7 +10,7 @@ export interface Props {
 }
 
 export const Button = ({ purple, hideArrow, children, onClick }: Props) => (
-  <ButtonBox purple={purple}>
+  <ButtonBox purple={purple} onClick={onClick}>
     {children ? children : 'Learn more'}
     {!hideArrow && <FullArrowRightIcon color={'red'} width={14} height={11} />}
   </ButtonBox>
