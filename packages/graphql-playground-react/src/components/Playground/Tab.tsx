@@ -45,7 +45,7 @@ class Tab extends React.PureComponent<Props & ReduxProps, State> {
       'New Tab'
 
     return (
-      <TabItem active={active} onClick={this.handleSelectSession}>
+      <TabItem active={active} onMouseDown={this.handleSelectSession}>
         <Icons active={active}>
           {session.subscriptionActive && <RedDot />}
           <QueryTypes>
@@ -155,17 +155,15 @@ const TabItem = withProps<TabItemProps>()(styled.div)`
   height: 43px;
   padding: 10px;
   padding-top: 9px;
-  margin-left: 10px;
+  margin-right: 10px;
   font-size: 14px;
   border-radius: 2px;
   border-bottom: 2px solid ${p => p.theme.editorColours.navigationBar};
   box-sizing: border-box;
   cursor: pointer;
+  user-select: none;
   background: ${p =>
     p.active ? p.theme.editorColours.tab : p.theme.editorColours.tabInactive};
-  &:first-child {
-    margin-left: 0;
-  }
   &:hover {
     background: ${p => p.theme.editorColours.tab};
     .close {
@@ -203,6 +201,7 @@ const Icons = withProps<TabItemProps>()(styled.div)`
 
 const QueryTypes = styled.div`
   display: flex;
+  color: white;
 `
 
 const QueryType = styled.div`
