@@ -1,7 +1,7 @@
 import * as React from 'react'
 import { styled, withProps } from '../../styled'
 import { Icon } from 'graphcool-styles'
-import Tab from './Tab'
+import Tab, { Props as TabProps } from './Tab'
 import { connect } from 'react-redux'
 import { createStructuredSelector } from 'reselect'
 import {
@@ -9,6 +9,13 @@ import {
   getSelectedSessionIdFromRoot,
 } from '../../state/sessions/selectors'
 import { Session } from '../../state/sessions/reducers'
+import { reorderTabs } from '../../state/sessions/actions'
+import {
+  SortableContainer,
+  SortableElement,
+  SortStart,
+  SortEnd,
+} from 'react-sortable-hoc'
 
 export interface Props {
   onNewSession: any
@@ -18,42 +25,79 @@ export interface Props {
 export interface ReduxProps {
   sessions: Session[]
   selectedSessionId: string
+  reorderTabs: (src: number, dest: number) => void
 }
 
-const TabBar = ({
-  sessions,
-  isApp,
-  selectedSessionId,
-  onNewSession,
-}: Props & ReduxProps) => (
-  <StyledTabBar>
-    <Tabs isApp={isApp}>
-      {sessions.map(session => (
-        <Tab
-          key={session.id}
-          session={session}
-          selectedSessionId={selectedSessionId}
-        />
-      ))}
-      <Plus onClick={onNewSession}>
-        <Icon
-          src={require('graphcool-styles/icons/stroke/add.svg')}
-          width={34}
-          height={34}
-          stroke={true}
-          strokeWidth={4}
-        />
-      </Plus>
-    </Tabs>
-  </StyledTabBar>
-)
+interface State {
+  sorting: boolean
+}
+
+const SortableTab = SortableElement<TabProps>(Tab)
+
+class TabBar extends React.PureComponent<Props & ReduxProps, State> {
+  state = { sorting: false }
+
+  render() {
+    const { sessions, isApp, selectedSessionId, onNewSession } = this.props
+    const { sorting } = this.state
+    return (
+      <SortableTabBar
+        onSortStart={this.onSortStart}
+        onSortEnd={this.onSortEnd}
+        getHelperDimensions={this.getHelperDimensions}
+        axis="x"
+        lockAxis="x"
+        lockToContainerEdges={true}
+        distance={10}
+        transitionDuration={200}
+      >
+        <Tabs isApp={isApp}>
+          {sessions.map((session, ndx) => (
+            <SortableTab
+              key={session.id}
+              session={session}
+              selectedSessionId={selectedSessionId}
+              index={ndx}
+            />
+          ))}
+          <Plus onClick={onNewSession} sorting={sorting}>
+            <Icon
+              src={require('graphcool-styles/icons/stroke/add.svg')}
+              width={34}
+              height={34}
+              stroke={true}
+              strokeWidth={4}
+            />
+          </Plus>
+        </Tabs>
+      </SortableTabBar>
+    )
+  }
+
+  private onSortStart = ({ index }: SortStart) => {
+    this.setState({ sorting: true })
+  }
+
+  private onSortEnd = ({ oldIndex, newIndex }: SortEnd) => {
+    this.props.reorderTabs(oldIndex, newIndex)
+    this.setState({ sorting: false })
+  }
+
+  private getHelperDimensions = ({ node }: SortStart) => {
+    const { width, height } = node.getBoundingClientRect()
+    return { width, height }
+  }
+}
 
 const mapStateToProps = createStructuredSelector({
   sessions: getSessionsArray,
   selectedSessionId: getSelectedSessionIdFromRoot,
 })
 
-export default connect(mapStateToProps)(TabBar)
+export default connect(
+  mapStateToProps,
+  { reorderTabs },
+)(TabBar)
 
 const StyledTabBar = styled.div`
   color: white;
@@ -66,6 +110,8 @@ const StyledTabBar = styled.div`
   }
 `
 
+const SortableTabBar = SortableContainer(StyledTabBar)
+
 interface TabsProps {
   isApp?: boolean
 }
@@ -77,12 +123,16 @@ const Tabs = withProps<TabsProps>()(styled.div)`
   padding-left: ${p => (p.isApp ? '43px' : '0')};
 `
 
-const Plus = styled.div`
+interface PlusProps {
+  sorting: boolean
+}
+
+const Plus = withProps<PlusProps>()(styled.div)`
   box-sizing: border-box;
   display: flex;
+  visibility: ${p => (p.sorting ? 'hidden' : 'visible')}
   height: 43px;
   width: 43px;
-  margin-left: 10px;
   border-radius: 2px;
   border-bottom: 2px solid ${p => p.theme.editorColours.navigationBar};
   background: ${p => p.theme.editorColours.tabInactive};
