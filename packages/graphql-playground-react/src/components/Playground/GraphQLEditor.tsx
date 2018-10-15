@@ -12,10 +12,8 @@ import { connect } from 'react-redux'
 import Spinner from '../Spinner'
 import Results from './Results'
 import ResponseTracing from './ResponseTracing'
-import withTheme from '../Theme/withTheme'
-import { LocalThemeInterface } from '../Theme'
 import GraphDocs from './DocExplorer/GraphDocs'
-import { withProps, styled } from '../../styled/index'
+import { styled } from '../../styled/index'
 import TopBar from './TopBar/TopBar'
 import {
   VariableEditorComponent,
@@ -118,9 +116,7 @@ export interface ToolbarButtonProps extends SimpleProps {
   label: string
 }
 
-class GraphQLEditor extends React.PureComponent<
-  Props & LocalThemeInterface & ReduxProps
-> {
+class GraphQLEditor extends React.PureComponent<Props & ReduxProps> {
   public codeMirrorSizer
   public queryEditorComponent
   public variableEditorComponent
@@ -160,74 +156,6 @@ class GraphQLEditor extends React.PureComponent<
   render() {
     return (
       <Container>
-        <style jsx={true} global={true}>{`
-          .docs-button,
-          .schema-button {
-            @p: .absolute, .white, .bgGreen, .pa6, .br2, .z2, .ttu, .fw6, .f14,
-              .ph10, .pointer;
-            padding-bottom: 8px;
-            transform: rotate(-90deg);
-            left: -44px;
-            top: 195px;
-          }
-
-          div.schema-button {
-            @p: .bgLightOrange;
-            left: -53px;
-            top: 120px;
-          }
-
-          .queryWrap {
-            @p: .relative;
-            border-top: 8px solid $darkBlue;
-          }
-          .queryWrap.light {
-            border-top: 8px solid #eeeff0;
-          }
-
-          .graphiql-button {
-            @p: .white50, .bgDarkBlue, .ttu, .f14, .fw6, .br2, .pointer;
-            padding: 5px 9px 6px 9px;
-            letter-spacing: 0.53px;
-          }
-          .graphiql-button.prettify {
-            @p: .absolute;
-            top: -57px;
-            right: 38px;
-            z-index: 2;
-          }
-
-          .onboarding-hint {
-            @p: .absolute, .br2, .z999;
-          }
-          .onboarding-hint.step1 {
-            top: 207px;
-            left: 90px;
-          }
-          .onboarding-hint.step2 {
-            top: 207px;
-            left: 90px;
-          }
-        `}</style>
-        <style jsx={true} global={true}>{`
-          .query-header-enter {
-            opacity: 0.01;
-          }
-
-          .query-header-enter.query-header-enter-active {
-            opacity: 1;
-            transition: opacity 500ms ease-in;
-          }
-
-          .query-header-leave {
-            opacity: 1;
-          }
-
-          .query-header-leave.query-header-leave-active {
-            opacity: 0.01;
-            transition: opacity 300ms ease-in;
-          }
-        `}</style>
         <EditorWrapper>
           <TopBar shareEnabled={this.props.shareEnabled} />
           <EditorBar
@@ -614,31 +542,29 @@ const mapStateToProps = createStructuredSelector({
   sessionId: getSelectedSessionIdFromRoot,
 })
 
-export default withTheme<Props>(
-  // TODO fix redux types
-  connect<any, any, any>(
-    mapStateToProps,
-    {
-      updateQueryFacts,
-      stopQuery,
-      runQueryAtPosition,
-      openQueryVariables,
-      closeQueryVariables,
-      openVariables,
-      closeVariables,
-      openTracing,
-      closeTracing,
-      toggleTracing,
-      setEditorFlex,
-      toggleVariables,
-      fetchSchema,
-    },
-    null,
-    {
-      withRef: true,
-    },
-  )(GraphQLEditor),
-)
+export default // TODO fix redux types
+connect<any, any, any>(
+  mapStateToProps,
+  {
+    updateQueryFacts,
+    stopQuery,
+    runQueryAtPosition,
+    openQueryVariables,
+    closeQueryVariables,
+    openVariables,
+    closeVariables,
+    openTracing,
+    closeTracing,
+    toggleTracing,
+    setEditorFlex,
+    toggleVariables,
+    fetchSchema,
+  },
+  null,
+  {
+    withRef: true,
+  },
+)(GraphQLEditor)
 
 const EditorBar = styled.div`
   display: flex;
@@ -677,16 +603,19 @@ interface DrawerProps {
   height: number
 }
 
-const BottomDrawer = withProps<DrawerProps>()(styled.div)`
+const BottomDrawer = styled<DrawerProps, 'div'>('div')`
   display: flex;
   background: #0b1924;
   flex-direction: column;
   position: relative;
   height: ${props => (props.isOpen ? `${props.height}px` : '43px')};
-  `
+`
 
 interface TitleProps {
   isOpen: boolean
+  onMouseDown?: any
+  onClick?: any
+  innerRef?: any
 }
 
 const BottomDrawerTitle = styled.div`
@@ -714,12 +643,14 @@ const VariableEditor = styled(BottomDrawer)`
   }
 `
 
-const VariableEditorTitle = withProps<TitleProps>()(styled(BottomDrawerTitle))`
+const VariableEditorTitle = styled<TitleProps>(({ isOpen, ...rest }) => (
+  <BottomDrawerTitle {...rest} />
+))`
   cursor: ${p => (p.isOpen ? 'row-resize' : 'n-resize')};
   background: ${p => p.theme.editorColours.leftDrawerBackground};
 `
 
-const VariableEditorSubtitle = withProps<TitleProps>()(styled.span)`
+const VariableEditorSubtitle = styled<TitleProps, 'span'>('span')`
   margin-right: 10px;
   cursor: pointer;
   color: ${p =>
@@ -735,9 +666,9 @@ const ResponseTracking = styled(BottomDrawer)`
   background: ${p => p.theme.editorColours.rightDrawerBackground};
 `
 
-const ResponseTrackingTitle = withProps<TitleProps>()(
-  styled(BottomDrawerTitle),
-)`
+const ResponseTrackingTitle = styled<TitleProps>(({ isOpen, ...rest }) => (
+  <BottomDrawerTitle {...rest} />
+))`
   text-align: right;
   background: ${p => p.theme.editorColours.rightDrawerBackground};
   cursor: ${props => (props.isOpen ? 's-resize' : 'n-resize')};
@@ -748,7 +679,7 @@ interface QueryProps {
   flex: number
 }
 
-const QueryWrap = withProps<QueryProps>()(styled.div)`
+const QueryWrap = styled<QueryProps, 'div'>('div')`
   position: relative;
   display: flex;
   flex-direction: column;

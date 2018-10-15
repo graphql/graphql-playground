@@ -1,6 +1,6 @@
 import * as React from 'react'
-import { styled, withProps } from '../../styled'
-import { Icon } from 'graphcool-styles'
+import { styled } from '../../styled'
+import { AddIcon } from '../Icons'
 import Tab, { Props as TabProps } from './Tab'
 import { connect } from 'react-redux'
 import { createStructuredSelector } from 'reselect'
@@ -61,11 +61,9 @@ class TabBar extends React.PureComponent<Props & ReduxProps, State> {
             />
           ))}
           <Plus onClick={onNewSession} sorting={sorting}>
-            <Icon
-              src={require('graphcool-styles/icons/stroke/add.svg')}
+            <AddIcon
               width={34}
               height={34}
-              stroke={true}
               strokeWidth={4}
               title="Opens a New Tab"
             />
@@ -117,7 +115,7 @@ interface TabsProps {
   isApp?: boolean
 }
 
-const Tabs = withProps<TabsProps>()(styled.div)`
+const Tabs = styled<TabsProps, 'div'>('div')`
   display: flex;
   align-items: center;
   margin-top: 16px;
@@ -128,7 +126,7 @@ interface PlusProps {
   sorting: boolean
 }
 
-const Plus = withProps<PlusProps>()(styled.div)`
+const Plus = styled<PlusProps, 'div'>('div')`
   box-sizing: border-box;
   display: flex;
   visibility: ${p => (p.sorting ? 'hidden' : 'visible')}

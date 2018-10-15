@@ -1,8 +1,8 @@
 import * as React from 'react'
-import { Icon, $v } from 'graphcool-styles'
-import * as cx from 'classnames'
 import { Session } from '../../state/sessions/reducers'
 import { OrderedMap } from 'immutable'
+import { Star } from '../Icons'
+import { styled, withTheme, ThemeInterface } from '../../styled'
 
 export interface Props {
   items: OrderedMap<string, Session>
@@ -10,124 +10,132 @@ export interface Props {
   onItemSelect: (index: string) => void
   onItemStarToggled: (sessionId: string) => void
   searchTerm: string
+  theme: ThemeInterface
 }
 
 /* tslint:disable */
-const HistoryItems = ({
-  items,
-  onItemSelect,
-  selectedItemIndex,
-  onItemStarToggled,
-}: Props) => (
-  <div className="history-items">
-    <style jsx={true}>{`
-      .history-items {
-        @inherit: .overflowYScroll;
-        max-height: calc(100vh - 121px);
-      }
-      .item {
-        @inherit: .flex,
-          .itemsCenter,
-          .justifyBetween,
-          .bb,
-          .bBlack10,
-          .pointer;
-        padding: 25px 20px;
-        &.active {
-          @inherit: .bgBlack04;
-        }
-      }
-      .operation,
-      .star,
-      .viewer,
-      .left,
-      .right {
-        @inherit: .flex, .itemsCenter;
-      }
-      .operation {
-        @inherit: .itemsCenter;
-        margin-left: 20px;
-      }
-      .operation-text {
-        @inherit: .fw3, .f20, .mr16;
-      }
-      .operation-icon {
-        @inherit: .br2, .flex, .itemsCenter, .justifyCenter, .mr4, .fw7, .f12;
-        height: 21px;
-        width: 21px;
-        &.subscription {
-          @inherit: .purple, .bgPurple20;
-        }
-        &.query {
-          @inherit: .blue, .bgBlue20;
-        }
-        &.mutation {
-          @inherit: .lightOrange, .bgLightOrange20;
-        }
-      }
-      .date {
-        @inherit: .f14, .black50, .ml16;
-      }
-      .viewer {
-        @inherit: .ml6;
-      }
-    `}</style>
-    {items
-      .map((item, index) => (
-        <div
-          key={item.id}
-          className={cx('item', {
-            active: selectedItemIndex === index,
-          })}
-          onClick={() => onItemSelect(index)}
-        >
-          <div className="left">
-            <div className="star" onClick={() => onItemStarToggled(item.id)}>
-              <Icon
-                src={require('../../assets/icons/star.svg')}
-                color={item.starred ? 'rgb(221,171,0)' : $v.gray30}
-                stroke={!item.starred}
+export default withTheme(
+  ({
+    items,
+    onItemSelect,
+    selectedItemIndex,
+    onItemStarToggled,
+    theme,
+  }: Props) => (
+    <HistoryItems>
+      {items
+        .map((item, index) => (
+          <HistoryItem
+            key={item.id}
+            active={selectedItemIndex === index}
+            onClick={() => onItemSelect(index)}
+          >
+            <OperationSide>
+              <Star
+                onClick={() => onItemStarToggled(item.id)}
+                stroke={!item.starred ? 'rgb(221,171,0)' : undefined}
+                fill={item.starred ? 'rgb(221,171,0)' : undefined}
                 strokeWidth={0.5}
                 width={25}
                 height={25}
               />
-            </div>
-            <div className="operation">
-              <div className="operation-text">
-                {item.operationName ||
-                  item.queryTypes.firstOperationName ||
-                  'New Session'}
-              </div>
-              {item.queryTypes.query && (
-                <div className="operation-icon query">Q</div>
-              )}
-              {item.queryTypes.mutation && (
-                <div className="operation-icon mutation">M</div>
-              )}
-              {item.queryTypes.subscription && (
-                <div className="operation-icon subscription">S</div>
-              )}
-            </div>
-          </div>
-          <div className="right">
-            {item.date && (
-              <div className="date">
-                {typeof item.date.getMonth === 'function' && (
-                  <span>
-                    {item.date.getMonth() + 1}/{item.date.getDate()}/{item.date
-                      .getFullYear()
-                      .toString()
-                      .slice(2, 4)}
-                  </span>
+              <Operation>
+                <OperationText>
+                  {item.operationName ||
+                    item.queryTypes.firstOperationName ||
+                    'New Session'}
+                </OperationText>
+                {item.queryTypes.query && <QueryIcon>Q</QueryIcon>}
+                {item.queryTypes.mutation && <MutationIcon>M</MutationIcon>}
+                {item.queryTypes.subscription && (
+                  <SubscriptionIcon>S</SubscriptionIcon>
                 )}
-              </div>
-            )}
-          </div>
-        </div>
-      ))
-      .toArray()
-      .map(x => x[1])}
-  </div>
+              </Operation>
+            </OperationSide>
+            <OperationSide>
+              {item.date && (
+                <Time>
+                  {typeof item.date.getMonth === 'function' &&
+                    item.date.getMonth() + 1}/{item.date.getDate()}/{item.date
+                    .getFullYear()
+                    .toString()
+                    .slice(2, 4)}
+                </Time>
+              )}
+            </OperationSide>
+          </HistoryItem>
+        ))
+        .toArray()
+        .map(x => x[1])}
+    </HistoryItems>
+  ),
 )
 
-export default HistoryItems
+const HistoryItems = styled.div`
+  overflow-y: scroll;
+  max-height: calc(100vh - 121px);
+`
+
+interface ItemProps {
+  active: boolean
+}
+
+const HistoryItem = styled<ItemProps, 'div'>('div')`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 25px 20px;
+  cursor: pointer;
+  border-bottom: 1px solid;
+  border-color: ${p => p.theme.colours.black10};
+  background: ${p =>
+    p.active ? p.theme.colours.black04 : p.theme.colours.white};
+`
+
+const Operation = styled.div`
+  display: flex;
+  align-items: center;
+  margin-left: 20px;
+`
+
+const OperationSide = styled.div`
+  display: flex;
+  align-items: center;
+`
+
+const OperationText = styled.p`
+  font-weight: 300;
+  font-size: 20px;
+  margin-right: 16px;
+`
+
+const OperationIcon = styled.div`
+  height: 21px;
+  width: 21px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-right: 4px;
+  border-radius: 2px;
+  font-weight: 700;
+  font-size: 12px;
+  color: ${p => p.theme.colours.white};
+`
+
+const QueryIcon = styled(OperationIcon)`
+  background: ${p => p.theme.colours.blue};
+`
+
+const MutationIcon = styled(OperationIcon)`
+  background: ${p => p.theme.colours.orange};
+`
+
+const SubscriptionIcon = styled(OperationIcon)`
+  background: ${p => p.theme.colours.purple};
+`
+
+const Time = styled.time`
+  color: ${p => p.theme.colours.black40};
+  font-size: 14px;
+  margin-left: 16px;
+`

@@ -3,7 +3,6 @@ import * as Modal from 'react-modal'
 import HistoryHeader from './HistoryPopup/HistoryHeader'
 import { HistoryFilter } from '../types'
 import HistoryItems from './HistoryPopup/HistoryItems'
-import { Icon } from 'graphcool-styles'
 import { modalStyle } from '../constants'
 import { QueryEditor } from './Playground/QueryEditor'
 import { styled } from '../styled'
@@ -17,6 +16,7 @@ import { toggleHistoryItemStarring } from '../state/history/actions'
 import { Session } from '../state/sessions/reducers'
 import { OrderedMap } from 'immutable'
 import { Container } from './Playground/EditorWrapper'
+import { ArrowRight } from './Icons'
 
 export interface ReduxProps {
   isOpen: boolean
@@ -87,13 +87,7 @@ class HistoryPopup extends React.Component<ReduxProps, State> {
                 <View />
                 <Use onClick={this.handleClickUse}>
                   <UseText>Use</UseText>
-                  <Icon
-                    src={require('../assets/icons/arrowRight.svg')}
-                    color="white"
-                    stroke={true}
-                    width={13}
-                    height={13}
-                  />
+                  <ArrowRight color="white" width={13} height={13} />
                 </Use>
               </RightHeader>
               <Big>
@@ -231,7 +225,7 @@ const Big = styled.div`
   flex: 1 1 auto;
 `
 
-const GraphiqlWrapper = Big.extend`
+const GraphiqlWrapper = styled(Big)`
   width: 100%;
   height: 100%;
   position: relative;

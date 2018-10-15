@@ -17,7 +17,7 @@ import {
   lightEditorColours,
   EditorColours,
 } from '../styled/theme'
-import OldThemeProvider from './Theme/ThemeProvider'
+// import OldThemeProvider from './Theme/ThemeProvider'
 import { getActiveEndpoints } from './util'
 import { ISettings } from '../types'
 import { connect } from 'react-redux'
@@ -355,51 +355,49 @@ class PlaygroundWrapper extends React.Component<
             settings: this.props.settings,
           }}
         >
-          <OldThemeProvider theme={theme}>
-            <App>
-              {this.props.config &&
-                this.state.activeEnv && (
-                  <ProjectsSideNav
-                    config={this.props.config}
-                    folderName={this.props.folderName || 'GraphQL App'}
-                    theme={theme}
-                    activeEnv={this.state.activeEnv}
-                    onSelectEnv={this.handleSelectEnv}
-                    onNewWorkspace={this.props.onNewWorkspace}
-                    showNewWorkspace={Boolean(this.props.showNewWorkspace)}
-                    isElectron={Boolean(this.props.isElectron)}
-                    activeProjectName={this.state.activeProjectName}
-                    configPath={this.props.configPath}
-                  />
-                )}
-              <Playground
-                endpoint={this.state.endpoint}
-                subscriptionEndpoint={this.state.subscriptionEndpoint}
-                shareUrl={this.state.shareUrl}
-                onChangeEndpoint={this.handleChangeEndpoint}
-                onChangeSubscriptionsEndpoint={
-                  this.handleChangeSubscriptionsEndpoint
-                }
-                adminAuthToken={this.state.platformToken}
-                getRef={this.getPlaygroundRef}
-                config={this.props.config!}
-                configString={this.state.configString!}
-                configIsYaml={this.state.configIsYaml!}
-                canSaveConfig={Boolean(this.props.canSaveConfig)}
-                onChangeConfig={this.handleChangeConfig}
-                onSaveConfig={this.handleSaveConfig}
-                onUpdateSessionCount={this.handleUpdateSessionCount}
-                fixedEndpoints={Boolean(this.state.configString)}
-                headers={combinedHeaders}
-                configPath={this.props.configPath}
-                workspaceName={
-                  this.props.workspaceName || this.state.activeProjectName
-                }
-                createApolloLink={this.props.createApolloLink}
-                schema={this.state.schema}
-              />
-            </App>
-          </OldThemeProvider>
+          <App>
+            {this.props.config &&
+              this.state.activeEnv && (
+                <ProjectsSideNav
+                  config={this.props.config}
+                  folderName={this.props.folderName || 'GraphQL App'}
+                  theme={theme}
+                  activeEnv={this.state.activeEnv}
+                  onSelectEnv={this.handleSelectEnv}
+                  onNewWorkspace={this.props.onNewWorkspace}
+                  showNewWorkspace={Boolean(this.props.showNewWorkspace)}
+                  isElectron={Boolean(this.props.isElectron)}
+                  activeProjectName={this.state.activeProjectName}
+                  configPath={this.props.configPath}
+                />
+              )}
+            <Playground
+              endpoint={this.state.endpoint}
+              subscriptionEndpoint={this.state.subscriptionEndpoint}
+              shareUrl={this.state.shareUrl}
+              onChangeEndpoint={this.handleChangeEndpoint}
+              onChangeSubscriptionsEndpoint={
+                this.handleChangeSubscriptionsEndpoint
+              }
+              adminAuthToken={this.state.platformToken}
+              getRef={this.getPlaygroundRef}
+              config={this.props.config!}
+              configString={this.state.configString!}
+              configIsYaml={this.state.configIsYaml!}
+              canSaveConfig={Boolean(this.props.canSaveConfig)}
+              onChangeConfig={this.handleChangeConfig}
+              onSaveConfig={this.handleSaveConfig}
+              onUpdateSessionCount={this.handleUpdateSessionCount}
+              fixedEndpoints={Boolean(this.state.configString)}
+              headers={combinedHeaders}
+              configPath={this.props.configPath}
+              workspaceName={
+                this.props.workspaceName || this.state.activeProjectName
+              }
+              createApolloLink={this.props.createApolloLink}
+              schema={this.state.schema}
+            />
+          </App>
         </ThemeProvider>
       </div>
     )

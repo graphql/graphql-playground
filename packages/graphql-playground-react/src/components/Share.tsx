@@ -1,12 +1,10 @@
 import * as React from 'react'
-import Icon from 'graphcool-styles/dist/components/Icon/Icon'
-import { $v } from 'graphcool-styles'
+import { ShareIcon } from './Icons'
 import ToggleButton from './ToggleButton'
 import Tooltip from './Tooltip'
-import { LocalThemeInterface } from './Theme'
 import { Button } from './Button'
 import Copy from './Copy'
-import { keyframes, styled } from '../styled'
+import { keyframes, styled, ThemeInterface, withTheme } from '../styled'
 import { connect } from 'react-redux'
 import { createStructuredSelector } from 'reselect'
 import {
@@ -22,10 +20,11 @@ import {
   share,
 } from '../state/sharing/actions'
 
-export interface SharingProps extends LocalThemeInterface {
+export interface SharingProps {
   allTabs: boolean
   headers: boolean
   history: boolean
+  theme: ThemeInterface
 
   toggleShareHistory: () => void
   toggleShareHeaders: () => void
@@ -51,7 +50,7 @@ class Share extends React.Component<SharingProps, State> {
   }
   render() {
     const { open } = this.state
-    const { allTabs, headers, history, shareUrl, reshare } = this.props
+    const { allTabs, headers, history, shareUrl, reshare, theme } = this.props
     return (
       <Wrapper>
         <IconWrapper>
@@ -100,9 +99,8 @@ class Share extends React.Component<SharingProps, State> {
                       <Input value={shareUrl} disabled={true} />
                       <CopyWrapper>
                         <Copy text={shareUrl}>
-                          <Icon
-                            src={require('graphcool-styles/icons/fill/copy.svg')}
-                            color={$v.darkBlue30}
+                          <ShareIcon
+                            color={theme.colours.darkBlue30}
                             width={25}
                             height={25}
                             title="Copy URL to Clipboard"
@@ -150,15 +148,17 @@ const mapStateToProps = createStructuredSelector({
   shareUrl: getShareUrl,
 })
 
-export default connect(
-  mapStateToProps,
-  {
-    toggleShareAllTabs,
-    toggleShareHeaders,
-    toggleShareHistory,
-    share,
-  },
-)(Share)
+export default withTheme(
+  connect(
+    mapStateToProps,
+    {
+      toggleShareAllTabs,
+      toggleShareHeaders,
+      toggleShareHistory,
+      share,
+    },
+  )(Share),
+)
 
 const AuthSharingWarning = () => (
   <Message>

@@ -1,4 +1,5 @@
 import * as React from 'react'
+import { DocType } from './DocType'
 
 export interface ScalarTypeSchemaProps {
   type: any
@@ -6,15 +7,10 @@ export interface ScalarTypeSchemaProps {
 
 const ScalarTypeSchema = ({ type }: ScalarTypeSchemaProps) => {
   return (
-    <div className="doc-type-schema">
-      <style jsx={true}>{`
-        .doc-type-schema {
-          @p: .ph16, .pt20, .overflowAuto, .f14;
-        }
-      `}</style>
+    <DocType className="doc-type-schema">
       <span className="field-name">scalar</span>{' '}
       <span className="type-name">{type.name}</span>
-    </div>
+    </DocType>
   )
 }
 

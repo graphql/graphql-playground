@@ -1,4 +1,4 @@
 {
   "presets": ["es2015", "es2016", "react"],
-  "plugins": ["styled-jsx-postcss/babel", "babel-plugin-styled-components"]
+  "plugins": ["babel-plugin-styled-components"]
 }

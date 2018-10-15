@@ -1,4 +1,6 @@
 import * as React from 'react'
+import { styled } from '../../../../styled'
+import { DocType } from './DocType'
 
 export interface EnumTypeSchemaProps {
   type: any
@@ -8,18 +10,7 @@ const EnumTypeSchema = ({ type }: EnumTypeSchemaProps) => {
   const values = type.getValues()
   const deprecatedValues = values.filter((value: any) => value.isDeprecated)
   return (
-    <div className="doc-type-schema">
-      <style jsx={true}>{`
-        .doc-type-schema {
-          @p: .ph16, .pt20, .overflowAuto, .f14;
-        }
-        .doc-value .field-name {
-          @p: .ph16;
-        }
-        .doc-value-comment {
-          @p: .ph16, .black50;
-        }
-      `}</style>
+    <DocType className="doc-type-schema">
       <span className="field-name">enum</span>{' '}
       <span className="type-name">{type.name}</span>{' '}
       <span className="brace">{'{'}</span>
@@ -38,7 +29,7 @@ const EnumTypeSchema = ({ type }: EnumTypeSchemaProps) => {
         />
       ))}
       <span className="brace">{'}'}</span>
-    </div>
+    </DocType>
   )
 }
 
@@ -51,30 +42,30 @@ interface ValueProps {
 }
 
 const Value = ({ value, isDeprecated, first }: ValueProps) => (
-  <div className={`doc-value${first ? ' doc-value--first' : ''}`}>
-    <style jsx={true}>{`
-      .doc-value {
-        margin-top: 6px;
-      }
-      .doc-value--first {
-        margin-top: 0px;
-      }
-      .doc-value .field-name {
-        @p: .ph16;
-        color: red;
-      }
-      .doc-value-comment {
-        @p: .ph16, .black50;
-      }
-    `}</style>
+  <DocsValue first={first}>
     <div className="field-name">{value.name}</div>
     {value.description && (
-      <div className="doc-value-comment">{value.description}</div>
+      <DocsValueComment>{value.description}</DocsValueComment>
     )}
     {isDeprecated && (
-      <div className="doc-value-comment">
-        Deprecated: {value.deprecationReason}
-      </div>
+      <DocsValueComment>Deprecated: {value.deprecationReason}</DocsValueComment>
     )}
-  </div>
+  </DocsValue>
 )
+
+interface DocsValueProps {
+  first: boolean
+}
+
+const DocsValue = styled<DocsValueProps, 'div'>('div')`
+  margin-top: ${p => (p.first ? 0 : 6)}px;
+  .field-name {
+    padding: 0 16px;
+    color: red;
+  }
+`
+
+const DocsValueComment = styled.div`
+  padding: 0 16px;
+  color: ${p => p.theme.colours.black50};
+`

@@ -1,8 +1,8 @@
 import * as React from 'react'
-import Icon from 'graphcool-styles/dist/components/Icon/Icon'
+import { SettingsIcon, CrossIcon } from '../Icons'
 import { connect } from 'react-redux'
 import { closeTab, selectTab, editName } from '../../state/sessions/actions'
-import { styled, withProps } from '../../styled'
+import { styled } from '../../styled'
 import { Session } from '../../state/sessions/reducers'
 import AutosizeInput from 'react-input-autosize'
 
@@ -52,12 +52,7 @@ class Tab extends React.PureComponent<Props & ReduxProps, State> {
             {queryTypes.query && <Query>Q</Query>}
             {(session.isSettingsTab || session.isConfigTab) && (
               <Query>
-                <Icon
-                  src={require('graphcool-styles/icons/fill/settings.svg')}
-                  width={12}
-                  height={12}
-                  color="white"
-                />
+                <SettingsIcon width={12} height={12} fill="white" />
               </Query>
             )}
             {queryTypes.mutation && <Mutation>M</Mutation>}
@@ -88,13 +83,11 @@ class Tab extends React.PureComponent<Props & ReduxProps, State> {
           {session.isFile && session.changed && !this.state.overCross ? (
             <Circle>⬤</Circle>
           ) : (
-            <Icon
-              src={require('graphcool-styles/icons/stroke/cross.svg')}
-              stroke={true}
+            <CrossIcon
               width={12}
               height={11}
               strokeWidth={7}
-              title="Close tab"
+              title="Close Tab"
             />
           )}
         </Close>
@@ -148,7 +141,7 @@ interface TabItemProps {
   hasCircle?: boolean
 }
 
-const TabItem = withProps<TabItemProps>()(styled.div)`
+const TabItem = styled<TabItemProps, 'div'>('div')`
   flex: 0 0 auto;
   display: flex;
   align-items: center;
@@ -172,7 +165,7 @@ const TabItem = withProps<TabItemProps>()(styled.div)`
   }
 `
 
-const OperationName = withProps<TabItemProps>()(styled.div)`
+const OperationName = styled<TabItemProps, 'div'>('div')`
   opacity: ${p => (p.active ? 1 : 0.5)};
   background: transparent;
   color: ${p => p.theme.editorColours.tabText};
@@ -193,7 +186,7 @@ const OperationNameInput = styled(AutosizeInput)`
   }
 `
 
-const Icons = withProps<TabItemProps>()(styled.div)`
+const Icons = styled<TabItemProps, 'div'>('div')`
   display: flex;
   align-items: center;
   opacity: ${p => (p.active ? 1 : 0.5)};
@@ -217,15 +210,15 @@ const QueryType = styled.div`
 `
 
 const Query = styled(QueryType)`
-  background: rgba(42, 126, 210, 1);
+  background: ${p => p.theme.colours.blue};
 `
 
 const Mutation = styled(QueryType)`
-  background: rgba(241, 143, 1, 1);
+  background: ${p => p.theme.colours.orange};
 `
 
 const Subscription = styled(QueryType)`
-  background: rgba(164, 3, 111, 1);
+  background: ${p => p.theme.colours.purple};
 `
 
 const RedDot = styled.div`
@@ -243,8 +236,9 @@ const Circle = styled.div`
   background: ${p => p.theme.editorColours.circle};
 `
 
-const Close = withProps<TabItemProps>()(styled.div)`
+const Close = styled<TabItemProps, 'div'>('div')`
   position: relative;
+  display: flex;
   margin-left: 10px;
   top: 1px;
   height: 13px;

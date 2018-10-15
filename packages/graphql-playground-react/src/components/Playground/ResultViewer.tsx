@@ -7,7 +7,7 @@
  */
 
 import * as React from 'react'
-import { styled, withProps } from '../../styled'
+import { styled } from '../../styled'
 
 export interface Props {
   value: string
@@ -122,7 +122,7 @@ interface ResultProps {
   isSubscription: boolean
 }
 
-const Result = withProps<ResultProps>()(styled.div)`
+const Result = styled<ResultProps, 'div'>('div')`
   position: relative;
   display: flex;
   flex: 1;
@@ -133,6 +133,9 @@ const Result = withProps<ResultProps>()(styled.div)`
     box-sizing: border-box;
     background: none;
     padding-left: 38px;
+  }
+  .CodeMirror-cursor {
+    display: none !important;
   }
   .CodeMirror-scroll {
     overflow: auto !important;

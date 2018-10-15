@@ -17,7 +17,7 @@ export default class RootColumn extends React.PureComponent<Props, {}> {
     const { searchValue, schema, width, sessionId, handleSearch } = this.props
     return (
       <ColumnDoc width={width} overflow={false}>
-        <SearchBox isShown={true} onSearch={handleSearch} />
+        <SearchBox onSearch={handleSearch} />
         <div className="overflowAuto flexAuto">
           {searchValue && (
             <SearchResults

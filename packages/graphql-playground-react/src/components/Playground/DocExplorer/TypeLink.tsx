@@ -1,10 +1,9 @@
 import * as React from 'react'
-import * as cx from 'classnames'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import { GraphQLList, GraphQLNonNull, isType } from 'graphql'
 import ArgumentInline from './ArgumentInline'
-import { Triangle } from '../../Icons/Triangle'
+import { Triangle } from '../../Icons'
 import { toJS } from '../util/toJS'
 import { addStack } from '../../../state/docs/actions'
 import { getSessionDocsState } from '../../../state/docs/selectors'
@@ -13,6 +12,7 @@ import {
   getSelectedSessionIdFromRoot,
 } from '../../../state/sessions/selectors'
 import { createSelector } from 'reselect'
+import { styled } from '../../../styled'
 
 interface ReduxProps {
   keyMove: boolean
@@ -118,10 +118,8 @@ class TypeLink extends React.Component<
       className,
       beforeNode,
       afterNode,
-      keyMove,
       showParentName,
       isActive,
-      lastActive,
     } = this.props
     const isGraphqlType = isType(type)
 
@@ -135,62 +133,13 @@ class TypeLink extends React.Component<
       )
 
     return (
-      <div
-        className={cx('doc-category-item', className, {
-          clickable,
-          active: isActive,
-          'last-active': lastActive,
-          'no-hover': keyMove,
-        })}
+      <DocsCategoryItem
+        active={isActive}
+        clickable={clickable}
+        className={`doc-category-item${className ? className : ''}`}
         onClick={this.onClick}
-        ref={this.setRef}
+        innerRef={this.setRef}
       >
-        <style jsx={true}>{`
-          .doc-category-item {
-            @p: .mv0, .ph16, .pv6, .relative, .overflowAuto, .f14;
-            transition: $duration background-color;
-          }
-          .doc-category-item.clickable:hover {
-            @p: .pointer, .white, .bgBlue;
-          }
-          .doc-category-item.clickable:hover :global(.brace) {
-            @p: .white;
-          }
-          .doc-category-item.active {
-            @p: .bgBlack07;
-          }
-          .doc-category-icon {
-            @p: .absolute;
-            right: 10px;
-            top: 50%;
-            transform: translateY(-50%);
-          }
-        `}</style>
-        <style jsx={true} global={true}>{`
-          .doc-category-item.last-active,
-          .doc-category-item.clickable:hover:not(.no-hover) {
-            background-color: #2a7ed3 !important;
-            color: #fff !important;
-            z-index: 1;
-
-            & .field-name,
-            & .type-name,
-            & .arg-name {
-              color: #fff !important;
-            }
-          }
-          /*
-          .doc-category-item.active:not(.last-active) svg {
-            fill: #2a7ed3 !important;
-          }
-          */
-          .doc-category-item b {
-            @p: .fw6;
-          }
-          .dots {
-            @p: .fw6;
-          }
-        `}</style>
         {beforeNode}
         {beforeNode && ' '}
         {!isGraphqlType && (
@@ -201,7 +150,7 @@ class TypeLink extends React.Component<
                 '(',
                 <span key="args">
                   {this.state.collapsed ? (
-                    <span className="dots">...</span>
+                    <Dots>...</Dots>
                   ) : (
                     type.args.map(arg => (
                       <ArgumentInline key={arg.name} arg={arg} />
@@ -215,13 +164,13 @@ class TypeLink extends React.Component<
         )}
         <span className="type-name">{renderType(type.type || type)}</span>
         {clickable && (
-          <span className="doc-category-icon">
+          <IconBox>
             <Triangle />
-          </span>
+          </IconBox>
         )}
         {afterNode && ' '}
         {afterNode}
-      </div>
+      </DocsCategoryItem>
     )
   }
 }
@@ -284,3 +233,44 @@ export default connect<ReduxProps, DispatchFromProps, Props>(
   selector,
   mapDispatchToProps,
 )(toJS(TypeLink))
+
+interface DocsCategoryItemProps {
+  clickable?: boolean
+  active?: boolean
+}
+
+const DocsCategoryItem = styled<DocsCategoryItemProps, 'div'>('div')`
+  position: relative;
+  padding: 6px 16px;
+  overflow: auto;
+  font-size: 14px;
+  transition: 0.1s background-color;
+  background: ${p =>
+    p.active ? p.theme.colours.black07 : p.theme.colours.white};
+
+  cursor: ${p => (p.clickable ? 'pointer' : 'select')};
+
+  &:hover {
+    color: ${p => p.theme.colours.white};
+    background: #2a7ed3;
+    .field-name,
+    .type-name,
+    .arg-name {
+      color: ${p => p.theme.colours.white} !important;
+    }
+  }
+  b {
+    font-weight: 600;
+  }
+`
+
+const Dots = styled.span`
+  font-weight: 600;
+`
+
+const IconBox = styled.div`
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+`
