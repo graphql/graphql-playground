@@ -94,6 +94,7 @@ class Tab extends React.PureComponent<Props & ReduxProps, State> {
               width={12}
               height={11}
               strokeWidth={7}
+              title="Close tab"
             />
           )}
         </Close>

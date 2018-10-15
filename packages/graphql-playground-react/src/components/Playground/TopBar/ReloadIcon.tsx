@@ -7,7 +7,7 @@ export interface Props {
 }
 
 const ReloadIcon: React.SFC<Props> = props => (
-  <Positioner onClick={props.onReloadSchema}>
+  <Positioner onClick={props.onReloadSchema} title="Reload Schema">
     <Svg viewBox="0 0 20 20">
       <Circle
         cx="9.5"

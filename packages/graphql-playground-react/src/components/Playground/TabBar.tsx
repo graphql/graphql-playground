@@ -67,6 +67,7 @@ class TabBar extends React.PureComponent<Props & ReduxProps, State> {
               height={34}
               stroke={true}
               strokeWidth={4}
+              title="Opens a New Tab"
             />
           </Plus>
         </Tabs>

@@ -105,6 +105,7 @@ class Share extends React.Component<SharingProps, State> {
                             color={$v.darkBlue30}
                             width={25}
                             height={25}
+                            title="Copy URL to Clipboard"
                           />
                         </Copy>
                       </CopyWrapper>

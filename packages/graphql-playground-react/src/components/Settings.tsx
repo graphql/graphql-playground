@@ -19,6 +19,7 @@ class Settings extends React.Component<Props, {}> {
             height={23}
             onClick={this.props.onClick}
             className={'settings-icon'}
+            title="Settings"
           />
         </IconWrapper>
       </Wrapper>
