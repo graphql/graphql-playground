@@ -26,6 +26,7 @@ export interface Props {
   subscriptionEndpoint?: string
   history?: any
   match?: any
+  headers?: any
 }
 
 export interface State {
@@ -33,6 +34,7 @@ export interface State {
   subscriptionEndpoint?: string
   shareUrl?: string
   loading: boolean
+  headers: any
 }
 
 export interface ReduxProps {
@@ -47,6 +49,7 @@ class GraphQLBinApp extends React.Component<Props & ReduxProps, State> {
       endpoint: props.endpoint,
       subscriptionEndpoint: props.subscriptionEndpoint,
       loading: false,
+      headers: props.headers || {},
     }
   }
 
@@ -140,6 +143,7 @@ class GraphQLBinApp extends React.Component<Props & ReduxProps, State> {
         ) : (
           <PlaygroundWrapper
             endpoint={endpoint}
+            headers={this.state.headers}
             subscriptionEndpoint={subscriptionEndpoint}
           />
         )}
