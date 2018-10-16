@@ -1,6 +1,6 @@
 {
   "name": "graphql-playground-middleware-koa",
-  "version": "1.5.1",
+  "version": "1.6.5",
   "homepage": "https://github.com/graphcool/graphql-playground/tree/master/packages/graphql-playground-middleware-koa",
   "description": "GraphQL IDE for better development workflows (GraphQL Subscriptions, interactive docs & collaboration).",
   "contributors": [
@@ -14,7 +14,7 @@
   "files": [
     "dist"
   ],
-  "playgroundVersion": "1.5.13",
+  "playgroundVersion": "1.7.8",
   "scripts": {
     "build": "rimraf dist && tsc",
     "prepare": "npm run build"
@@ -27,10 +27,11 @@
     "koa"
   ],
   "peerDependencies": {
-    "koa": "^2.3.0"
+    "koa": "^2"
   },
   "devDependencies": {
     "@types/node": "9.4.0",
+    "koa": "^2.5.1",
     "rimraf": "2.6.2",
     "typescript": "2.6.2"
   },
@@ -39,7 +40,6 @@
     "definition": "dist/index.d.ts"
   },
   "dependencies": {
-    "graphql-playground-html": "1.5.4",
-    "koa": "^2.4.1"
+    "graphql-playground-html": "1.6.0"
   }
 }

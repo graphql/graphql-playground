@@ -3,7 +3,7 @@ import { Provider, connect } from 'react-redux'
 import createStore from '../state/createStore'
 import 'isomorphic-fetch'
 import EndpointPopup from './EndpointPopup'
-import { ThemeProvider, theme as styledTheme } from '../styled'
+import { styled, ThemeProvider, theme as styledTheme } from '../styled'
 import { Store } from 'redux'
 import PlaygroundWrapper from './PlaygroundWrapper'
 import { injectState } from '../state/workspace/actions'
@@ -26,6 +26,7 @@ export interface Props {
   subscriptionEndpoint?: string
   history?: any
   match?: any
+  headers?: any
 }
 
 export interface State {
@@ -33,6 +34,7 @@ export interface State {
   subscriptionEndpoint?: string
   shareUrl?: string
   loading: boolean
+  headers: any
 }
 
 export interface ReduxProps {
@@ -47,6 +49,7 @@ class GraphQLBinApp extends React.Component<Props & ReduxProps, State> {
       endpoint: props.endpoint,
       subscriptionEndpoint: props.subscriptionEndpoint,
       loading: false,
+      headers: props.headers || {},
     }
   }
 
@@ -71,7 +74,7 @@ class GraphQLBinApp extends React.Component<Props & ReduxProps, State> {
         }
       }, 1000)
 
-      fetch('https://api.graph.cool/simple/v1/cj81hi46q03c30196uxaswrz2', {
+      fetch('https://api.graphqlbin.com', {
         method: 'post',
         headers: {
           'Content-Type': 'application/json',
@@ -80,7 +83,7 @@ class GraphQLBinApp extends React.Component<Props & ReduxProps, State> {
           query: `
             query ($id: String!) {
               session(id: $id) {
-                session
+                data
                 endpoint
               }
             }
@@ -97,7 +100,7 @@ class GraphQLBinApp extends React.Component<Props & ReduxProps, State> {
           if (!res.data || res.data.session === null) {
             location.href = `${location.origin}/v2/new`
           }
-          const state = JSON.parse(res.data.session.session)
+          const state = JSON.parse(res.data.session.data)
           this.props.injectState(state)
           this.setState({
             endpoint: res.data.session.endpoint,
@@ -118,17 +121,7 @@ class GraphQLBinApp extends React.Component<Props & ReduxProps, State> {
     }
 
     return (
-      <div className={'wrapper'}>
-        <style jsx={true}>{`
-          .wrapper {
-            @p: .w100, .h100;
-          }
-          .loading {
-            @p: .f20, .white, .flex, .w100, .h100, .bgDarkBlue, .itemsCenter,
-              .justifyCenter;
-          }
-        `}</style>
-
+      <Wrapper>
         {this.state.loading ? null : !this.state.endpoint ||
         this.state.endpoint.length === 0 ? (
           <ThemeProvider theme={styledTheme}>
@@ -140,10 +133,11 @@ class GraphQLBinApp extends React.Component<Props & ReduxProps, State> {
         ) : (
           <PlaygroundWrapper
             endpoint={endpoint}
+            headers={this.state.headers}
             subscriptionEndpoint={subscriptionEndpoint}
           />
         )}
-      </div>
+      </Wrapper>
     )
   }
 
@@ -153,7 +147,10 @@ class GraphQLBinApp extends React.Component<Props & ReduxProps, State> {
   }
 }
 
-const ConnectedGraphQLBinApp = connect(null, { injectState })(GraphQLBinApp)
+const ConnectedGraphQLBinApp = connect(
+  null,
+  { injectState },
+)(GraphQLBinApp)
 
 // tslint:disable
 export default class GraphQLBinAppHOC extends React.Component<Props> {
@@ -165,3 +162,8 @@ export default class GraphQLBinAppHOC extends React.Component<Props> {
     )
   }
 }
+
+const Wrapper = styled.div`
+  width: 100%;
+  height: 100%;
+`

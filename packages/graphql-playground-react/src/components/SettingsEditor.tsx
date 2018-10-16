@@ -1,6 +1,5 @@
 import * as React from 'react'
 import { styled } from '../styled'
-import * as theme from 'styled-theming'
 import { Button } from './Playground/TopBar/TopBar'
 import { ConfigEditor } from './Playground/ConfigEditor'
 import { connect } from 'react-redux'
@@ -9,6 +8,7 @@ import { getConfigString } from '../state/general/selectors'
 import { setSettingsString, setConfigString } from '../state/general/actions'
 import { editSettings, saveSettings } from '../state/sessions/actions'
 import { getSettingsString } from '../state/workspace/reducers'
+import EditorWrapper, { Container } from './Playground/EditorWrapper'
 
 export interface Props {
   value: string
@@ -29,9 +29,9 @@ export class SettingsEditor extends React.Component<Props, {}> {
   render() {
     const { isConfig } = this.props
     return (
-      <Wrapper className="graphiql-container">
-        <div className="editorWrap">
-          <div className="variable-editor">
+      <Container>
+        <Wrapper>
+          <EditorWrapper>
             <ConfigEditor
               value={this.props.value}
               onEdit={this.props.onChange}
@@ -40,16 +40,16 @@ export class SettingsEditor extends React.Component<Props, {}> {
               readOnly={this.props.readOnly}
             />
             <PlaygroundVersion>{window.version}</PlaygroundVersion>
-          </div>
-        </div>
-        {!this.props.readOnly && (
-          <ButtonWrapper>
-            <Button onClick={this.props.onSave}>
-              Save {isConfig ? `Config` : `Settings`}
-            </Button>
-          </ButtonWrapper>
-        )}
-      </Wrapper>
+          </EditorWrapper>
+          {!this.props.readOnly && (
+            <ButtonWrapper>
+              <Button onClick={this.props.onSave}>
+                Save {isConfig ? `Config` : `Settings`}
+              </Button>
+            </ButtonWrapper>
+          )}
+        </Wrapper>
+      </Container>
     )
   }
 
@@ -103,42 +103,41 @@ class SettingsEditorHOC extends React.Component<
   }
 }
 
-export const PlaygroundSettingsEditor = connect(playgroundSettingsSelector, {
-  onSave: setSettingsString,
-  editSettings,
-  saveSettings,
-})(SettingsEditorHOC)
+export const PlaygroundSettingsEditor = connect(
+  playgroundSettingsSelector,
+  {
+    onSave: setSettingsString,
+    editSettings,
+    saveSettings,
+  },
+)(SettingsEditorHOC)
 
 const configSelector = createStructuredSelector({
   value: getConfigString,
 })
 
-export const GraphQLConfigEditor = connect(configSelector, {
-  onChange: setConfigString,
-})(SettingsEditor)
-
-const backgroundColor = theme('mode', {
-  light: p => p.theme.colours.darkBlue10,
-  dark: p => p.theme.colours.darkBlue,
-})
+export const GraphQLConfigEditor = connect(
+  configSelector,
+  {
+    onChange: setConfigString,
+  },
+)(SettingsEditor)
 
 const Wrapper = styled.div`
-  background: ${backgroundColor};
+  background: ${p => p.theme.editorColours.resultBackground};
   position: relative;
-  .variable-editor {
-    height: 100% !important;
-  }
+  display: flex;
+  flex-flow: column;
+  flex: 1 1 0;
+
   .CodeMirror {
-    background: none !important;
+    background: ${p => p.theme.editorColours.resultBackground};
     .CodeMirror-code {
       color: rgba(255, 255, 255, 0.7);
     }
     .cm-atom {
       color: rgba(42, 126, 210, 1);
     }
-  }
-  .CodeMirror-gutters {
-    background: none !important;
   }
 `
 
@@ -149,16 +148,11 @@ const ButtonWrapper = styled.div`
   z-index: 2;
 `
 
-const versionColor = theme('mode', {
-  light: p => p.theme.colours.darkBlue20,
-  dark: p => p.theme.colours.white20,
-})
-
 const PlaygroundVersion = styled.span`
   position: absolute;
   right: 20px;
   bottom: 17px;
-  color: ${versionColor};
+  color: ${p => p.theme.editorColours.textInactive};
   font-weight: 700;
   margin-right: 14px;
 `

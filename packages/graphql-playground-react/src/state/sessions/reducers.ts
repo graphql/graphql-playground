@@ -26,13 +26,22 @@ import { getSelectedSessionId } from './selectors'
 import { getDefaultSession, defaultQuery } from '../../constants'
 import * as cuid from 'cuid'
 import { formatError } from './fetchingSagas'
-import { prettify } from '../../utils'
+import { arrayMove } from 'react-sortable-hoc'
 
 export interface SessionStateProps {
   sessions: OrderedMap<string, Session>
   selectedSessionId: string
   sessionCount: number
   headers?: string
+}
+
+export interface Tab {
+  endpoint: string
+  query: string
+  name?: string
+  variables?: string
+  responses?: string[]
+  headers?: { [key: string]: string }
 }
 
 // tslint:disable
@@ -95,12 +104,13 @@ export class Session extends Record(getDefaultSession('')) {
     const override: any = {
       queryRunning: false,
       subscriptionActive: false,
+      responseExtensions: {},
     }
     // dont serialize very big responses as the localStorage size is limited
     if (
       obj.responses &&
       obj.responses.size > 0 &&
-      (obj.responses.size > 20 || obj.responses.get(0).date.length > 20000)
+      (obj.responses.size > 20 || obj.responses.get(0).date.length > 2000)
     ) {
       override.responses = List()
     }
@@ -139,6 +149,17 @@ export class ResponseRecord extends Record({
 
 function makeSession(endpoint = '') {
   return new Session({ endpoint }).set('id', cuid())
+}
+
+export function sessionFromTab(tab: Tab): Session {
+  return new Session({
+    ...tab,
+    headers: tab.headers ? JSON.stringify(tab.headers, null, 2) : '',
+    responses:
+      tab.responses && tab.responses.length > 0
+        ? List(tab.responses.map(r => new ResponseRecord({ date: r })))
+        : List(),
+  }).set('id', cuid())
 }
 
 export class SessionState extends Record({
@@ -195,7 +216,6 @@ const reducer = handleActions(
     START_QUERY: state => {
       return state
         .setIn(['sessions', getSelectedSessionId(state), 'queryRunning'], true)
-        .setIn(['sessions', getSelectedSessionId(state), 'responses'], List())
         .setIn(
           ['sessions', getSelectedSessionId(state), 'responseExtensions'],
           undefined,
@@ -214,10 +234,6 @@ const reducer = handleActions(
         'responseTracingOpen',
       ]
       return state.setIn(path, !state.getIn(path))
-    },
-    PRETTIFY_QUERY: state => {
-      const path = ['sessions', getSelectedSessionId(state), 'query']
-      return state.setIn(path, prettify(state.getIn(path)))
     },
     OPEN_TRACING: (state, { payload: { responseTracingHeight } }) => {
       return state.mergeDeepIn(
@@ -251,7 +267,7 @@ const reducer = handleActions(
       )
     },
     SET_RESPONSE: (state, { payload: { response, sessionId } }) => {
-      return state.setIn(['sessions', sessionId, 'responses'], List(response))
+      return state.setIn(['sessions', sessionId, 'responses'], List([response]))
     },
     CLEAR_RESPONSES: state => {
       return state.setIn(
@@ -404,11 +420,17 @@ const reducer = handleActions(
     },
     NEW_SESSION: (state, { payload: { reuseHeaders, endpoint } }) => {
       const currentSession = state.sessions.first()
-      let session = makeSession(endpoint || currentSession.endpoint).merge({
+      const newSession: any = {
         query: '',
         isReloadingSchema: currentSession.isReloadingSchema,
         endpointUnreachable: currentSession.endpointUnreachable,
-      })
+      }
+      if (currentSession.endpointUnreachable) {
+        newSession.responses = currentSession.responses
+      }
+      let session = makeSession(endpoint || currentSession.endpoint).merge(
+        newSession,
+      )
       if (reuseHeaders) {
         const selectedSessionId = getSelectedSessionId(state)
         const currentSession = state.sessions.get(selectedSessionId)
@@ -505,6 +527,21 @@ const reducer = handleActions(
         state.sessions.size - 1,
       )
     },
+    REORDER_TABS: (state, { payload: { src, dest } }) => {
+      const seq = state.sessions.toIndexedSeq()
+
+      const indexes: number[] = []
+      for (let i = 0; i < seq.size; i++) indexes.push(i)
+      const newIndexes = arrayMove(indexes, src, dest)
+
+      let newSessions = OrderedMap()
+      for (let i = 0; i < seq.size; i++) {
+        const ndx = newIndexes[i]
+        const val = seq.get(ndx)
+        newSessions = newSessions.set(val.id, val)
+      }
+      return state.set('sessions', newSessions)
+    },
     EDIT_SETTINGS: state => {
       return state.setIn(
         ['sessions', getSelectedSessionId(state), 'changed'],
@@ -562,9 +599,16 @@ function closeTab(state, sessionId) {
   // if there is only one session, delete it and replace it by a new one
   // and keep the endpoint & headers of the last one
   if (length === 1) {
-    const newSession = makeSession(session.endpoint)
-      .set('headers', session.headers)
-      .set('query', '')
+    const newSessionData: any = {
+      query: '',
+      headers: session.headers,
+      isReloadingSchema: session.isReloadingSchema,
+      endpointUnreachable: session.endpointUnreachable,
+    }
+    if (session.endpointUnreachable) {
+      newSessionData.responses = session.responses
+    }
+    const newSession = makeSession(session.endpoint).merge(newSessionData)
     newState = newState.set('selectedSessionId', newSession.id)
     return newState.setIn(['sessions', newSession.id], newSession)
   }

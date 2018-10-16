@@ -1,6 +1,5 @@
 import * as React from 'react'
-import { styled, keyframes, withProps } from '../../../styled/index'
-import * as theme from 'styled-theming'
+import { styled, keyframes } from '../../../styled/index'
 
 export interface Props {
   isReloadingSchema: boolean
@@ -8,7 +7,7 @@ export interface Props {
 }
 
 const ReloadIcon: React.SFC<Props> = props => (
-  <Positioner onClick={props.onReloadSchema}>
+  <Positioner onClick={props.onReloadSchema} title="Reload Schema">
     <Svg viewBox="0 0 20 20">
       <Circle
         cx="9.5"
@@ -28,16 +27,6 @@ const ReloadIcon: React.SFC<Props> = props => (
 )
 
 export default ReloadIcon
-
-const iconColor = theme('mode', {
-  light: p => p.theme.colours.darkBlue20,
-  dark: p => p.theme.colours.white20,
-})
-
-const iconColorHover = theme('mode', {
-  light: p => p.theme.colours.darkBlue60,
-  dark: p => p.theme.colours.white60,
-})
 
 const refreshFrames = keyframes`
 0% {
@@ -78,26 +67,26 @@ const Positioner = styled.div`
 `
 
 const Svg = styled.svg`
-  fill: ${iconColor};
+  fill: ${p => p.theme.editorColours.icon};
   transition: 0.1s linear all;
 
   &:hover {
-    fill: ${iconColorHover};
+    fill: ${p => p.theme.editorColours.iconHover};
   }
 `
 
-const Circle = withProps<Props>()(styled.circle)`
+const Circle = styled<Props, 'circle'>('circle')`
   fill: none;
-  stroke: ${iconColor};
+  stroke: ${p => p.theme.editorColours.icon};
   stroke-dasharray: 37.68;
   transition: opacity 0.3s ease-in-out;
   opacity: ${p => (p.isReloadingSchema ? 1 : 0)};
   transform-origin: 9.5px 10px;
-  animation: ${refreshFrames} 2s linear ${p =>
-  p.isReloadingSchema ? 'infinite' : ''};
+  animation: ${refreshFrames} 2s linear
+    ${p => (p.isReloadingSchema ? 'infinite' : '')};
 `
 
-const Icon = withProps<Props>()(styled.path)`
+const Icon = styled<Props, 'path'>('path')`
   transition: opacity 0.3s ease-in-out;
   opacity: ${p => (p.isReloadingSchema ? 0 : 1)};
   transform-origin: 9.5px 10px;

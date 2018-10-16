@@ -1,9 +1,9 @@
 import * as React from 'react'
 import * as ReactDOM from 'react-dom'
 import { isNamedType, GraphQLSchema } from 'graphql'
-import * as cn from 'classnames'
 import ExecuteButton from './ExecuteButton'
 import QueryEditor from './QueryEditor'
+import EditorWrapper, { Container } from './EditorWrapper'
 import CodeMirrorSizer from 'graphiql/dist/utility/CodeMirrorSizer'
 import { fillLeafs } from 'graphiql/dist/utility/fillLeafs'
 import { getLeft, getTop } from 'graphiql/dist/utility/elementPosition'
@@ -11,9 +11,7 @@ import { connect } from 'react-redux'
 
 import Spinner from '../Spinner'
 import Results from './Results'
-import ReponseTracing from './ResponseTracing'
-import withTheme from '../Theme/withTheme'
-import { LocalThemeInterface } from '../Theme'
+import ResponseTracing from './ResponseTracing'
 import GraphDocs from './DocExplorer/GraphDocs'
 import { styled } from '../../styled/index'
 import TopBar from './TopBar/TopBar'
@@ -118,9 +116,7 @@ export interface ToolbarButtonProps extends SimpleProps {
   label: string
 }
 
-class GraphQLEditor extends React.PureComponent<
-  Props & LocalThemeInterface & ReduxProps
-> {
+class GraphQLEditor extends React.PureComponent<Props & ReduxProps> {
   public codeMirrorSizer
   public queryEditorComponent
   public variableEditorComponent
@@ -136,7 +132,7 @@ class GraphQLEditor extends React.PureComponent<
   componentDidMount() {
     // Ensure a form of a schema exists (including `null`) and
     // if not, fetch one using an introspection query.
-    this.props.fetchSchema()
+    // this.props.fetchSchema()
 
     // Utility for keeping CodeMirror correctly sized.
     this.codeMirrorSizer = new CodeMirrorSizer()
@@ -159,109 +155,14 @@ class GraphQLEditor extends React.PureComponent<
 
   render() {
     return (
-      <div className={cn('graphiql-container')}>
-        <style jsx={true}>{`
-          .graphiql-container {
-            font-family: Open Sans, sans-serif;
-          }
-
-          .docs-button,
-          .schema-button {
-            @p: .absolute, .white, .bgGreen, .pa6, .br2, .z2, .ttu, .fw6, .f14,
-              .ph10, .pointer;
-            padding-bottom: 8px;
-            transform: rotate(-90deg);
-            left: -44px;
-            top: 195px;
-          }
-
-          div.schema-button {
-            @p: .bgLightOrange;
-            left: -53px;
-            top: 120px;
-          }
-
-          .queryWrap {
-            @p: .relative;
-            border-top: 8px solid $darkBlue;
-          }
-          .queryWrap.light {
-            border-top: 8px solid #eeeff0;
-          }
-
-          .graphiql-button {
-            @p: .white50, .bgDarkBlue, .ttu, .f14, .fw6, .br2, .pointer;
-            padding: 5px 9px 6px 9px;
-            letter-spacing: 0.53px;
-          }
-          .graphiql-button.prettify {
-            @p: .absolute;
-            top: -57px;
-            right: 38px;
-            z-index: 2;
-          }
-          .intro {
-            @p: .absolute, .tlCenter, .top50, .left50, .white20, .f16, .tc;
-            font-family: 'Source Code Pro', 'Consolas', 'Inconsolata',
-              'Droid Sans Mono', 'Monaco', monospace;
-            letter-spacing: 0.6px;
-            width: 235px;
-          }
-
-          .listening {
-            @p: .f16, .white40, .absolute, .bottom0, .bgDarkBlue;
-            font-family: 'Source Code Pro', 'Consolas', 'Inconsolata',
-              'Droid Sans Mono', 'Monaco', monospace;
-            letter-spacing: 0.6px;
-            padding-left: 24px;
-            padding-bottom: 60px;
-          }
-
-          .onboarding-hint {
-            @p: .absolute, .br2, .z999;
-          }
-          .onboarding-hint.step1 {
-            top: 207px;
-            left: 90px;
-          }
-          .onboarding-hint.step2 {
-            top: 207px;
-            left: 90px;
-          }
-        `}</style>
-        <style jsx={true} global={true}>{`
-          .query-header-enter {
-            opacity: 0.01;
-          }
-
-          .query-header-enter.query-header-enter-active {
-            opacity: 1;
-            transition: opacity 500ms ease-in;
-          }
-
-          .query-header-leave {
-            opacity: 1;
-          }
-
-          .query-header-leave.query-header-leave-active {
-            opacity: 0.01;
-            transition: opacity 300ms ease-in;
-          }
-        `}</style>
-        <div className="editorWrap">
+      <Container>
+        <EditorWrapper>
           <TopBar shareEnabled={this.props.shareEnabled} />
-          <div
+          <EditorBar
             ref={this.setEditorBarComponent}
-            className="editorBar"
             onMouseDown={this.handleResizeStart}
           >
-            <div
-              className={cn('queryWrap', this.props.localTheme)}
-              style={{
-                WebkitFlex: this.props.editorFlex,
-                flex: this.props.editorFlex,
-              }}
-            >
+            <QueryWrap flex={this.props.editorFlex}>
               <QueryEditor
                 getRef={this.setQueryEditorComponent}
                 schema={this.props.schema}
@@ -269,36 +170,23 @@ class GraphQLEditor extends React.PureComponent<
                 onRunQuery={this.runQueryAtCursor}
                 onClickReference={this.handleClickReference}
               />
-              <div
-                className="variable-editor"
-                style={{
-                  height: this.props.variableEditorOpen
-                    ? this.props.variableEditorHeight
-                    : null,
-                }}
+              <VariableEditor
+                isOpen={this.props.variableEditorOpen}
+                height={this.props.variableEditorHeight}
               >
-                <div
-                  className="variable-editor-title"
-                  style={{
-                    cursor: this.props.variableEditorOpen
-                      ? 'row-resize'
-                      : 'n-resize',
-                  }}
+                <VariableEditorTitle
+                  isOpen={this.props.variableEditorOpen}
                   onMouseDown={this.handleVariableResizeStart}
                 >
-                  <span
-                    className={cn('subtitle', {
-                      active: this.props.queryVariablesActive,
-                    })}
+                  <VariableEditorSubtitle
+                    isOpen={this.props.queryVariablesActive}
                     ref={this.setQueryVariablesRef}
                     onClick={this.props.openQueryVariables}
                   >
-                    {'Query Variables'}
-                  </span>
-                  <span
-                    className={cn('subtitle', {
-                      active: !this.props.queryVariablesActive,
-                    })}
+                    Query Variables
+                  </VariableEditorSubtitle>
+                  <VariableEditorSubtitle
+                    isOpen={!this.props.queryVariablesActive}
                     ref={this.setHttpHeadersRef}
                     onClick={this.props.closeQueryVariables}
                   >
@@ -306,8 +194,8 @@ class GraphQLEditor extends React.PureComponent<
                       (this.props.headersCount && this.props.headersCount > 0
                         ? `(${this.props.headersCount})`
                         : '')}
-                  </span>
-                </div>
+                  </VariableEditorSubtitle>
+                </VariableEditorTitle>
                 {this.props.queryVariablesActive ? (
                   <VariableEditorComponent
                     getRef={this.setVariableEditorComponent}
@@ -329,10 +217,10 @@ class GraphQLEditor extends React.PureComponent<
                     onRunQuery={this.runQueryAtCursor}
                   />
                 )}
-              </div>
+              </VariableEditor>
               <QueryDragBar ref={this.setQueryResizer} />
-            </div>
-            <div className="resultWrap">
+            </QueryWrap>
+            <ResultWrap>
               <ResultDragBar ref={this.setResponseResizer} />
               <ExecuteButton />
               {this.props.queryRunning &&
@@ -340,39 +228,30 @@ class GraphQLEditor extends React.PureComponent<
               <Results setRef={this.setResultComponent} />
               {!this.props.queryRunning &&
                 (!this.props.responses || this.props.responses.size === 0) && (
-                  <div className="intro">
-                    Hit the Play Button to get a response here
-                  </div>
+                  <Intro>Hit the Play Button to get a response here</Intro>
                 )}
               {this.props.subscriptionActive && (
-                <div className="listening">Listening &hellip;</div>
+                <Listening>Listening &hellip;</Listening>
               )}
-              <div
-                className="response-tracing"
-                style={{
-                  height: this.props.responseTracingOpen
-                    ? this.props.responseTracingHeight
-                    : null,
-                }}
+              <ResponseTracking
+                isOpen={this.props.responseTracingOpen}
+                height={this.props.responseTracingHeight}
               >
-                <div
-                  className="response-tracing-title"
-                  style={{
-                    cursor: this.props.responseTracingOpen
-                      ? 'row-resize'
-                      : 'n-resize',
-                  }}
+                <ResponseTrackingTitle
+                  isOpen={this.props.responseTracingOpen}
                   onMouseDown={this.handleTracingResizeStart}
                 >
-                  Tracing
-                </div>
-                <ReponseTracing open={this.props.responseTracingOpen} />
-              </div>
-            </div>
-          </div>
-        </div>
+                  <VariableEditorSubtitle isOpen={false}>
+                    Tracing
+                  </VariableEditorSubtitle>
+                </ResponseTrackingTitle>
+                <ResponseTracing open={this.props.responseTracingOpen} />
+              </ResponseTracking>
+            </ResultWrap>
+          </EditorBar>
+        </EditorWrapper>
         <GraphDocs ref={this.setDocExplorerRef} schema={this.props.schema} />
-      </div>
+      </Container>
     )
   }
 
@@ -415,7 +294,7 @@ class GraphQLEditor extends React.PureComponent<
   }
 
   handleClickReference = reference => {
-    this.docExplorerComponent.showDocFromType(reference.field)
+    this.docExplorerComponent.showDocFromType(reference.field || reference)
   }
 
   /**
@@ -663,31 +542,44 @@ const mapStateToProps = createStructuredSelector({
   sessionId: getSelectedSessionIdFromRoot,
 })
 
-export default withTheme<Props>(
-  // TODO fix redux types
-  connect<any, any, any>(
-    mapStateToProps,
-    {
-      updateQueryFacts,
-      stopQuery,
-      runQueryAtPosition,
-      openQueryVariables,
-      closeQueryVariables,
-      openVariables,
-      closeVariables,
-      openTracing,
-      closeTracing,
-      toggleTracing,
-      setEditorFlex,
-      toggleVariables,
-      fetchSchema,
-    },
-    null,
-    {
-      withRef: true,
-    },
-  )(GraphQLEditor),
-)
+export default // TODO fix redux types
+connect<any, any, any>(
+  mapStateToProps,
+  {
+    updateQueryFacts,
+    stopQuery,
+    runQueryAtPosition,
+    openQueryVariables,
+    closeQueryVariables,
+    openVariables,
+    closeVariables,
+    openTracing,
+    closeTracing,
+    toggleTracing,
+    setEditorFlex,
+    toggleVariables,
+    fetchSchema,
+  },
+  null,
+  {
+    withRef: true,
+  },
+)(GraphQLEditor)
+
+const EditorBar = styled.div`
+  display: flex;
+  flex-direction: row;
+  flex: 1;
+`
+
+const ResultWrap = styled.div`
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  position: relative;
+  border-left: none;
+  background: ${p => p.theme.editorColours.resultBackground};
+`
 
 const DragBar = styled.div`
   width: 15px;
@@ -704,4 +596,119 @@ const QueryDragBar = styled(DragBar)`
 const ResultDragBar = styled(DragBar)`
   left: 0px;
   z-index: 1;
+`
+
+interface DrawerProps {
+  isOpen: boolean
+  height: number
+}
+
+const BottomDrawer = styled<DrawerProps, 'div'>('div')`
+  display: flex;
+  background: #0b1924;
+  flex-direction: column;
+  position: relative;
+  height: ${props => (props.isOpen ? `${props.height}px` : '43px')};
+`
+
+interface TitleProps {
+  isOpen: boolean
+  onMouseDown?: any
+  onClick?: any
+  ref?: any
+}
+
+const BottomDrawerTitle = styled.div`
+  background: #0b1924;
+  text-transform: uppercase;
+  font-weight: 600;
+  letter-spacing: 0.53px;
+  line-height: 14px;
+  font-size: 14px;
+  padding: 14px 14px 15px 21px;
+  user-select: none;
+`
+
+const VariableEditor = styled(BottomDrawer)`
+  .CodeMirror {
+    padding-left: 12px;
+    width: calc(100% - 12px);
+    background: ${p => p.theme.editorColours.leftDrawerBackground};
+  }
+  .CodeMirror-lines {
+    padding: 10px 0 20px 0;
+  }
+  .CodeMirror-linenumbers {
+    background: ${p => p.theme.editorColours.leftDrawerBackground};
+  }
+`
+
+const VariableEditorTitle = styled<TitleProps>(({ isOpen, ...rest }) => (
+  <BottomDrawerTitle {...rest} />
+))`
+  cursor: ${p => (p.isOpen ? 'row-resize' : 'n-resize')};
+  background: ${p => p.theme.editorColours.leftDrawerBackground};
+`
+
+const VariableEditorSubtitle = styled<TitleProps, 'span'>('span')`
+  margin-right: 10px;
+  cursor: pointer;
+  color: ${p =>
+    p.isOpen
+      ? p.theme.editorColours.drawerText
+      : p.theme.editorColours.drawerTextInactive};
+  &:last-child {
+    margin-right: 0;
+  }
+`
+
+const ResponseTracking = styled(BottomDrawer)`
+  background: ${p => p.theme.editorColours.rightDrawerBackground};
+`
+
+const ResponseTrackingTitle = styled<TitleProps>(({ isOpen, ...rest }) => (
+  <BottomDrawerTitle {...rest} />
+))`
+  text-align: right;
+  background: ${p => p.theme.editorColours.rightDrawerBackground};
+  cursor: ${props => (props.isOpen ? 's-resize' : 'n-resize')};
+  color: ${p => p.theme.editorColours.drawerTextInactive};
+`
+
+interface QueryProps {
+  flex: number
+}
+
+const QueryWrap = styled<QueryProps, 'div'>('div')`
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  flex: ${props => props.flex} 1 0%;
+  border-top: 8px solid ${props => props.theme.editorColours.resultBackground};
+`
+
+const Intro = styled.div`
+  width: 235px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: ${p => p.theme.colours.textInactive};
+  font-size: ${p => p.theme.sizes.small16};
+  font-family: 'Source Code Pro', 'Consolas', 'Inconsolata', 'Droid Sans Mono',
+    'Monaco', monospace;
+  text-align: center;
+  letter-spacing: 0.6px;
+`
+
+const Listening = styled.div`
+  position: absolute;
+  bottom: 0;
+  color: ${p => p.theme.editorColours.text};
+  background: ${p => p.theme.editorColours.resultBackground};
+  font-size: ${p => p.theme.sizes.small16};
+  font-family: ${p => p.theme.settings['editor.fontFamily']};
+  letter-spacing: 0.6px;
+  padding-left: 24px;
+  padding-bottom: 60px;
 `

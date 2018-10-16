@@ -7,9 +7,11 @@
  */
 
 import * as React from 'react'
+import { styled } from '../../styled'
 
 export interface Props {
   value: string
+  isSubscription: boolean
   hideGutters?: boolean
 }
 
@@ -28,8 +30,6 @@ export class ResultViewer extends React.Component<Props, {}> {
   private viewer: any
 
   componentDidMount() {
-    // Lazily require to ensure requiring GraphiQL outside of a Browser context
-    // does not produce an error.
     const CodeMirror = require('codemirror')
     require('codemirror/addon/fold/foldgutter')
     require('codemirror/addon/fold/brace-fold')
@@ -91,15 +91,7 @@ export class ResultViewer extends React.Component<Props, {}> {
 
   render() {
     return (
-      <div className="result-codemirror" ref={this.setRef}>
-        <style jsx={true}>{`
-          .result-codemirror :global(.CodeMirror) {
-            @p: .bbox, .pl38;
-            background: none;
-            position: relative !important;
-          }
-        `}</style>
-      </div>
+      <Result ref={this.setRef} isSubscription={this.props.isSubscription} />
     )
   }
 
@@ -122,3 +114,32 @@ export class ResultViewer extends React.Component<Props, {}> {
     return this.node && this.node.clientHeight
   }
 }
+
+interface ResultProps {
+  isSubscription: boolean
+}
+
+const Result = styled<ResultProps, 'div'>('div')`
+  position: relative;
+  display: flex;
+  flex: 1;
+  height: ${props => (props.isSubscription ? 'auto' : '100%')};
+  .CodeMirror {
+    height: ${props => (props.isSubscription ? 'auto' : '100%')};
+    position: ${props => (props.isSubscription ? 'relative' : 'absolute%')};
+    box-sizing: border-box;
+    background: none;
+    padding-left: 38px;
+  }
+  .CodeMirror-cursor {
+    display: none !important;
+  }
+  .CodeMirror-scroll {
+    overflow: auto !important;
+    max-width: 50vw;
+    margin-right: 10px;
+  }
+  .cm-string {
+    color: ${p => p.theme.editorColours.property} !important;
+  }
+`

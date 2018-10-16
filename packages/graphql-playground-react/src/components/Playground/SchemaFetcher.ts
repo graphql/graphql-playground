@@ -62,7 +62,9 @@ export class SchemaFetcher {
       'X-Apollo-Tracing': '1',
     }
 
-    const { link } = this.linkGetter(set(session, 'headers', headers) as any)
+    const options = set(session, 'headers', headers) as any
+
+    const { link } = this.linkGetter(options)
 
     const operation = makeOperation({ query: introspectionQuery })
 

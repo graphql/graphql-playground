@@ -98,7 +98,7 @@ export const introspectionQuery = `
   }
 `
 
-export const defaultQuery = '# Try to write your query here\n'
+export const defaultQuery = '# Write your query or mutation here\n'
 
 export const modalStyle = {
   overlay: {

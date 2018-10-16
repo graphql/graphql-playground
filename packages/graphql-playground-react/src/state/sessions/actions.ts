@@ -63,6 +63,7 @@ export const {
   setCurrentQueryEndTime,
   refetchSchema,
   setScrollTop,
+  reorderTabs,
 } = createActions({
   // simple property setting
   EDIT_QUERY: query => ({ query }),
@@ -119,7 +120,11 @@ export const {
     sessionId,
     response,
   }),
-  SET_RESPONSE: simpleAction('response'),
+  SET_RESPONSE: (workspaceId, sessionId, response) => ({
+    workspaceId,
+    sessionId,
+    response,
+  }),
   CLEAR_RESPONSES: simpleAction(),
 
   FETCH_SCHEMA: simpleAction(),
@@ -175,6 +180,7 @@ export const {
   SELECT_TAB: simpleAction('sessionId'),
   SELECT_TAB_INDEX: simpleAction('index'),
   CLOSE_TAB: simpleAction('sessionId'),
+  REORDER_TABS: (src, dest) => ({ src, dest }),
 
   // files, settings, config
   EDIT_SETTINGS: simpleAction(),

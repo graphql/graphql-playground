@@ -4,19 +4,26 @@ import { ComponentClass } from 'react' // tslint:disable-line
 
 import { ThemeInterface, theme } from './theme'
 
-const withProps = <U>() => <P, T, O>(
-  fn: styledComponents.ThemedStyledFunction<P, T, O>,
-) => fn as styledComponents.ThemedStyledFunction<P & U, T, O & U>
-
 const {
   default: styled,
   css,
   injectGlobal,
   keyframes,
   ThemeProvider,
+  withTheme,
+  createGlobalStyle,
 } = styledComponents as ThemedStyledComponentsModule<ThemeInterface>
 
-export { css, injectGlobal, keyframes, ThemeProvider, theme, withProps }
+export {
+  css,
+  injectGlobal,
+  keyframes,
+  ThemeProvider,
+  theme,
+  withTheme,
+  createGlobalStyle,
+  ThemeInterface,
+}
 export default styled
 
 export { ComponentClass }

@@ -1,15 +1,13 @@
 import * as React from 'react'
-import Icon from 'graphcool-styles/dist/components/Icon/Icon'
-import { $v } from 'graphcool-styles'
+import { SettingsIcon, CrossIcon } from '../Icons'
 import { connect } from 'react-redux'
 import { closeTab, selectTab, editName } from '../../state/sessions/actions'
-import * as cn from 'classnames'
+import { styled } from '../../styled'
 import { Session } from '../../state/sessions/reducers'
 import AutosizeInput from 'react-input-autosize'
 
 export interface Props {
   session: Session
-  localTheme?: string
   selectedSessionId: string
 }
 
@@ -35,7 +33,7 @@ class Tab extends React.PureComponent<Props & ReduxProps, State> {
   }
 
   render() {
-    const { session, selectedSessionId, localTheme } = this.props
+    const { session, selectedSessionId } = this.props
     const { queryTypes } = session
 
     const active = session.id === selectedSessionId
@@ -47,230 +45,53 @@ class Tab extends React.PureComponent<Props & ReduxProps, State> {
       'New Tab'
 
     return (
-      <div
-        className={cn('tab', localTheme, { active })}
-        onClick={this.handleSelectSession}
-      >
-        <style jsx={true}>{`
-          .tab {
-            @p: .flex,
-              .itemsCenter,
-              .bgDarkerBlue,
-              .br2,
-              .brTop,
-              .ml10,
-              .bbox,
-              .pointer,
-              .nowrap;
-            height: 43px;
-            padding: 10px;
-            padding-top: 9px;
-            &.active {
-              @p: .bgDarkBlue;
-            }
-            border-bottom: 2px solid #172a3a;
-            font-size: 14px;
-          }
-          .tab:first-of-type {
-            margin-left: 0;
-          }
-          .light.tab {
-            color: $darkBlue80;
-            background-color: #e7eaec;
-            &.active {
-              background-color: #eeeff0;
-            }
-            border-bottom: 2px solid #eeeff0;
-          }
-          .tab:hover {
-            @p: .bgDarkBlue;
-          }
-          .tab:hover :global(.close) {
-            opacity: 1;
-          }
-          .light.tab:hover {
-            background-color: #eeeff0;
-          }
-
-          .icons {
-            @p: .flex, .itemsCenter, .o50;
-            &.active {
-              @p: .o100;
-            }
-          }
-
-          .red-dot {
-            @p: .br100, .bgrRed, .mr10;
-            width: 7px;
-            height: 7px;
-          }
-
-          .query-type {
-            @p: .br2, .flex, .itemsCenter, .justifyCenter, .mr4, .fw7, .f12;
-            height: 21px;
-            width: 21px;
-            margin-right: 2px;
-          }
-
-          .light .query-type {
-            @p: .white;
-          }
-
-          .subscription {
-            @p: .bgPurple;
-          }
-
-          .query {
-            @p: .bgBlue;
-          }
-
-          .mutation {
-            @p: .bgLightOrange;
-          }
-
-          .viewer {
-            @p: .mr10;
-          }
-
-          .tab .operation-name,
-          .tab :global(input) {
-            @p: .o50;
-            background: transparent !important;
-            color: white;
-            font-size: 14px;
-            margin-left: 2px;
-            display: inline;
-            letter-spacing: 0.53px;
-            &.active {
-              @p: .o100;
-            }
-          }
-
-          .light.tab .operation-name,
-          .light.tab :global(input) {
-            color: $darkBlue80;
-          }
-
-          .tab :global(input) {
-            opacity: 1 !important;
-          }
-
-          .close {
-            @p: .ml10, .relative;
-            top: 1px;
-            height: 13px;
-            width: 13px;
-            opacity: 0;
-
-            &.active {
-              @p: .o100;
-              opacity: 1;
-            }
-
-            &.hasCircle {
-              opacity: 1;
-            }
-          }
-
-          .plus {
-            @p: .flex, .justifyCenter, .itemsCenter;
-            width: 43px;
-          }
-
-          .history {
-            @p: .pointer, .absolute;
-            top: 15px;
-            right: 56px;
-          }
-
-          .change-theme {
-            @p: .absolute, .pointer;
-            top: 200px;
-            right: 200px;
-          }
-          .border-bottom {
-            height: 8px;
-            background-color: #eeeff0;
-            width: 100%;
-          }
-
-          .circle {
-            @p: .white40, .relative;
-            font-size: 9px;
-            top: -2px;
-          }
-
-          .light .circle {
-            @p: .darkBlue40;
-          }
-          .query-types {
-            @p: .flex;
-          }
-        `}</style>
-        <div className={cn('icons', { active })}>
-          {session.subscriptionActive && <div className="red-dot" />}
-          <div className="query-types">
-            {queryTypes.query && <div className="query-type query">Q</div>}
+      <TabItem active={active} onMouseDown={this.handleSelectSession}>
+        <Icons active={active}>
+          {session.subscriptionActive && <RedDot />}
+          <QueryTypes>
+            {queryTypes.query && <Query>Q</Query>}
             {(session.isSettingsTab || session.isConfigTab) && (
-              <div className="query-type query">
-                <Icon
-                  src={require('graphcool-styles/icons/fill/settings.svg')}
-                  width={12}
-                  height={12}
-                  color="white"
-                />
-              </div>
+              <Query>
+                <SettingsIcon width={12} height={12} fill="white" />
+              </Query>
             )}
-            {queryTypes.mutation && (
-              <div className="query-type mutation">M</div>
-            )}
-            {queryTypes.subscription && (
-              <div className="query-type subscription">S</div>
-            )}
-          </div>
-        </div>
+            {queryTypes.mutation && <Mutation>M</Mutation>}
+            {queryTypes.subscription && <Subscription>S</Subscription>}
+          </QueryTypes>
+        </Icons>
         {this.state.editingName ? (
-          <AutosizeInput
-            value={session.name}
+          <OperationNameInput
+            value={session.name || ''}
             onChange={this.handleEditName}
             onBlur={this.stopEditName}
             onKeyDown={this.handleKeyDown}
             autoFocus={true}
-            className="operation-name"
-            style={{ background: 'transparent' }}
           />
         ) : (
-          <div
-            className={cn('operation-name', { active })}
-            onDoubleClick={this.startEditName}
-          >
+          <OperationName active={active} onDoubleClick={this.startEditName}>
             {name}
-          </div>
+          </OperationName>
         )}
-        <div
-          className={cn('close', {
-            active,
-            hasCircle:
-              session.isFile && session.changed && !this.state.overCross,
-          })}
+        <Close
+          className="close"
+          active={active}
+          hasCircle={session.isFile && session.changed && !this.state.overCross}
           onClick={this.handleCloseSession}
           onMouseEnter={this.handleMouseOverCross}
           onMouseLeave={this.handleMouseOutCross}
         >
           {session.isFile && session.changed && !this.state.overCross ? (
-            <div className="circle">⬤</div>
+            <Circle>⬤</Circle>
           ) : (
-            <Icon
-              src={require('graphcool-styles/icons/stroke/cross.svg')}
-              stroke={true}
-              color={localTheme === 'dark' ? 'rgb(74, 85, 95)' : $v.darkBlue40}
+            <CrossIcon
               width={12}
               height={11}
               strokeWidth={7}
+              title="Close Tab"
             />
           )}
-        </div>
-      </div>
+        </Close>
+      </TabItem>
     )
   }
 
@@ -310,4 +131,120 @@ class Tab extends React.PureComponent<Props & ReduxProps, State> {
   }
 }
 
-export default connect(null, { closeTab, selectTab, editName })(Tab)
+export default connect(
+  null,
+  { closeTab, selectTab, editName },
+)(Tab)
+
+interface TabItemProps {
+  active: boolean
+  hasCircle?: boolean
+}
+
+const TabItem = styled<TabItemProps, 'div'>('div')`
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  height: 43px;
+  padding: 10px;
+  padding-top: 9px;
+  margin-right: 10px;
+  font-size: 14px;
+  border-radius: 2px;
+  border-bottom: 2px solid ${p => p.theme.editorColours.navigationBar};
+  box-sizing: border-box;
+  cursor: pointer;
+  user-select: none;
+  background: ${p =>
+    p.active ? p.theme.editorColours.tab : p.theme.editorColours.tabInactive};
+  &:hover {
+    background: ${p => p.theme.editorColours.tab};
+    .close {
+      opacity: 1;
+    }
+  }
+`
+
+const OperationName = styled<TabItemProps, 'div'>('div')`
+  opacity: ${p => (p.active ? 1 : 0.5)};
+  background: transparent;
+  color: ${p => p.theme.editorColours.tabText};
+  font-size: 14px;
+  margin-left: 2px;
+  display: inline;
+  letter-spacing: 0.53px;
+`
+
+const OperationNameInput = styled(AutosizeInput)`
+  input {
+    background: transparent;
+    color: ${p => p.theme.editorColours.tabText};
+    font-size: 14px;
+    margin-left: 2px;
+    display: inline;
+    letter-spacing: 0.53px;
+  }
+`
+
+const Icons = styled<TabItemProps, 'div'>('div')`
+  display: flex;
+  align-items: center;
+  opacity: ${p => (p.active ? 1 : 0.5)};
+`
+
+const QueryTypes = styled.div`
+  display: flex;
+  color: white;
+`
+
+const QueryType = styled.div`
+  height: 22px;
+  width: 22px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 4px;
+  font-size: 12px;
+  font-weight: 700;
+  border-radius: 2px;
+`
+
+const Query = styled(QueryType)`
+  background: ${p => p.theme.colours.blue};
+`
+
+const Mutation = styled(QueryType)`
+  background: ${p => p.theme.colours.orange};
+`
+
+const Subscription = styled(QueryType)`
+  background: ${p => p.theme.colours.purple};
+`
+
+const RedDot = styled.div`
+  width: 7px;
+  height: 7px;
+  background: rgba(242, 92, 84, 1);
+  border-radius: 100%;
+  margin-right: 10px;
+`
+
+const Circle = styled.div`
+  position: relative;
+  top: -2px;
+  font-size: 9px;
+  background: ${p => p.theme.editorColours.circle};
+`
+
+const Close = styled<TabItemProps, 'div'>('div')`
+  position: relative;
+  display: flex;
+  margin-left: 10px;
+  top: 1px;
+  height: 13px;
+  width: 13px;
+  opacity: ${p => (p.active || p.hasCircle ? 1 : 0)};
+  svg {
+    stroke: ${p => p.theme.editorColours.icon};
+  }
+`

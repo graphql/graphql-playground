@@ -3,38 +3,80 @@ import { GraphQLConfigData } from 'graphql-config'
 
 export interface MiddlewareOptions {
   endpoint?: string
-  subscriptionsEndpoint?: string
-  htmlTitle?: string
+  subscriptionEndpoint?: string
   workspaceName?: string
   env?: any
   config?: GraphQLConfigData
   settings?: ISettings
+  schema?: IntrospectionResult
+  tabs?: Tab[]
+  codeTheme?: EditorColours
 }
 
 export type Theme = 'dark' | 'light'
 export interface ISettings {
-  ['general.betaUpdates']: boolean
-  ['editor.theme']: Theme
-  ['editor.reuseHeaders']: boolean
-  ['tracing.hideTracingResponse']: boolean
+  'general.betaUpdates': boolean
+  'editor.theme': Theme
+  'editor.reuseHeaders': boolean
+  'tracing.hideTracingResponse': boolean
+  'editor.fontSize': number
+  'editor.fontFamily': string
+  'request.credentials': string
+}
+
+export interface EditorColours {
+  property: string
+  comment: string
+  punctuation: string
+  keyword: string
+  def: string
+  qualifier: string
+  attribute: string
+  number: string
+  string: string
+  builtin: string
+  string2: string
+  variable: string
+  meta: string
+  atom: string
+  ws: string
+  selection: string
+  cursorColor: string
+  editorBackground: string
+  resultBackground: string
+  leftDrawerBackground: string
+  rightDrawerBackground: string
+}
+
+export interface IntrospectionResult {
+  __schema: any
 }
 
 export interface RenderPageOptions extends MiddlewareOptions {
   version: string
+  cdnUrl?: string
   env?: any
+}
+
+export interface Tab {
+  endpoint: string
+  query: string
+  variables?: string
+  responses?: string[]
+  headers?: { [key: string]: string }
 }
 
 const loading = getLoadingMarkup()
 
-const getCdnMarkup = options => `
-    <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/graphql-playground-react@${
-      options.version
+const getCdnMarkup = ({version, cdnUrl = '//cdn.jsdelivr.net/npm'}) => `
+    <link rel="stylesheet" href="${cdnUrl}/graphql-playground-react${
+      version ? `@${version}` : ''
     }/build/static/css/index.css" />
-    <link rel="shortcut icon" href="//cdn.jsdelivr.net/npm/graphql-playground-react@${
-      options.version
+    <link rel="shortcut icon" href="${cdnUrl}/graphql-playground-react${
+      version ? `@${version}` : ''
     }/build/favicon.png" />
-    <script src="//cdn.jsdelivr.net/npm/graphql-playground-react@${
-      options.version
+    <script src="${cdnUrl}/graphql-playground-react${
+      version ? `@${version}` : ''
     }/build/static/js/middleware.js"></script>
 `
 
@@ -43,11 +85,9 @@ export function renderPlaygroundPage(options: RenderPageOptions) {
     ...options,
     canSaveConfig: false,
   }
-  if (options.htmlTitle) {
-    extendedOptions.title = options.htmlTitle
-  }
-  if (options.subscriptionsEndpoint) {
-    extendedOptions.subscriptionEndpoint = options.subscriptionsEndpoint
+  // for compatibility
+  if ((options as any).subscriptionsEndpoint) {
+    extendedOptions.subscriptionEndpoint = (options as any).subscriptionsEndpoint
   }
   if (options.config) {
     extendedOptions.configString = JSON.stringify(options.config, null, 2)

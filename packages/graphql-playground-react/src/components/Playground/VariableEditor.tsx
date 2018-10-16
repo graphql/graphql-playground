@@ -17,6 +17,7 @@ import {
 } from '../../state/sessions/selectors'
 import { createStructuredSelector } from 'reselect'
 import { VariableToType } from '../../state/sessions/reducers'
+import { styled } from '../../styled'
 
 /* tslint:disable */
 
@@ -184,8 +185,7 @@ class VariableEditor extends React.PureComponent<Props & ReduxProps> {
 
   render() {
     return (
-      <div
-        className="codemirrorWrap"
+      <Editor
         ref={node => {
           this._node = node
         }}
@@ -237,14 +237,26 @@ const mapStateToVariablesProps = createStructuredSelector({
   variableToType: getVariableToType,
 })
 
-export const VariableEditorComponent = connect(mapStateToVariablesProps, {
-  onChange: editVariables,
-})(VariableEditor)
+export const VariableEditorComponent = connect(
+  mapStateToVariablesProps,
+  {
+    onChange: editVariables,
+  },
+)(VariableEditor)
 
 const mapStateToHeadersProps = createStructuredSelector({
   value: getHeaders,
 })
 
-export const HeadersEditorComponent = connect(mapStateToHeadersProps, {
-  onChange: editHeaders,
-})(VariableEditor)
+export const HeadersEditorComponent = connect(
+  mapStateToHeadersProps,
+  {
+    onChange: editHeaders,
+  },
+)(VariableEditor)
+
+const Editor = styled.div`
+  flex: 1;
+  height: 100%;
+  position: relative;
+`

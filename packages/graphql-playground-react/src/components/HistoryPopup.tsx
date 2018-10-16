@@ -3,13 +3,9 @@ import * as Modal from 'react-modal'
 import HistoryHeader from './HistoryPopup/HistoryHeader'
 import { HistoryFilter } from '../types'
 import HistoryItems from './HistoryPopup/HistoryItems'
-import { Icon } from 'graphcool-styles'
 import { modalStyle } from '../constants'
-import { withTheme, LocalThemeInterface } from './Theme'
-import * as cn from 'classnames'
 import { QueryEditor } from './Playground/QueryEditor'
 import { styled } from '../styled'
-import * as theme from 'styled-theming'
 import { connect } from 'react-redux'
 import { createStructuredSelector } from 'reselect'
 import { getHistory } from '../state/history/selectors'
@@ -19,6 +15,8 @@ import { duplicateSession } from '../state/sessions/actions'
 import { toggleHistoryItemStarring } from '../state/history/actions'
 import { Session } from '../state/sessions/reducers'
 import { OrderedMap } from 'immutable'
+import { Container } from './Playground/EditorWrapper'
+import { ArrowRight } from './Icons'
 
 export interface ReduxProps {
   isOpen: boolean
@@ -34,11 +32,8 @@ export interface State {
   searchTerm: string
 }
 
-class HistoryPopup extends React.Component<
-  ReduxProps & LocalThemeInterface,
-  State
-> {
-  constructor(props: ReduxProps & LocalThemeInterface) {
+class HistoryPopup extends React.Component<ReduxProps, State> {
+  constructor(props: ReduxProps) {
     super(props)
     const selectedItemIndex = props.items.keySeq().first() || ''
     this.state = {
@@ -49,7 +44,6 @@ class HistoryPopup extends React.Component<
   }
   render() {
     const { searchTerm, selectedFilter } = this.state
-    const { localTheme } = this.props
     const items = this.props.items.filter(item => {
       return selectedFilter === 'STARRED'
         ? item.starred
@@ -64,25 +58,15 @@ class HistoryPopup extends React.Component<
     ) as any
     selectedItem =
       selectedItem && selectedItem.toJS ? selectedItem.toJS() : undefined
-    let customModalStyle = modalStyle
-    if (localTheme === 'light') {
-      customModalStyle = {
-        ...modalStyle,
-        overlay: {
-          ...modalStyle.overlay,
-          backgroundColor: 'rgba(255,255,255,0.9)',
-        },
-      }
-    }
 
     return (
       <Modal
         isOpen={this.props.isOpen}
         onRequestClose={this.props.closeHistory}
         contentLabel="GraphiQL Session History"
-        style={customModalStyle}
+        style={modalStyle}
       >
-        <Wrapper className={localTheme}>
+        <Wrapper>
           <Left>
             <HistoryHeader
               onSelectFilter={this.handleSelectFilter}
@@ -103,30 +87,16 @@ class HistoryPopup extends React.Component<
                 <View />
                 <Use onClick={this.handleClickUse}>
                   <UseText>Use</UseText>
-                  <Icon
-                    src={require('../assets/icons/arrowRight.svg')}
-                    color="white"
-                    stroke={true}
-                    width={13}
-                    height={13}
-                  />
+                  <ArrowRight color="white" width={13} height={13} />
                 </Use>
               </RightHeader>
-              <Big
-                className={cn({
-                  'docs-graphiql': localTheme === 'light',
-                })}
-              >
-                <GraphiqlWrapper
-                  className={cn({
-                    'graphiql-wrapper': localTheme === 'light',
-                  })}
-                >
-                  <div className="graphiql-container">
-                    <div className="queryWrap">
+              <Big>
+                <GraphiqlWrapper>
+                  <Container>
+                    <QueryWrap>
                       <QueryEditor value={selectedItem.query} />
-                    </div>
-                  </div>
+                    </QueryWrap>
+                  </Container>
                 </GraphiqlWrapper>
               </Big>
             </Right>
@@ -167,24 +137,19 @@ const mapStateToProps = createStructuredSelector({
   isOpen: getHistoryOpen,
 })
 
-export default withTheme<{}>(
-  connect(mapStateToProps, {
+export default connect(
+  mapStateToProps,
+  {
     closeHistory,
     openHistory,
     duplicateSession,
     toggleHistoryItemStarring,
-  })(HistoryPopup),
-)
+  },
+)(HistoryPopup)
 
 const Wrapper = styled.div`
   display: flex;
   min-height: 500px;
-
-  & .graphiql-container.graphiql-container {
-    & .queryWrap.queryWrap {
-      border-top: none;
-    }
-  }
 `
 
 const Left = styled.div`
@@ -198,11 +163,6 @@ const Right = styled.div`
   z-index: 2;
 `
 
-const rightBackgroundColor = theme('mode', {
-  light: '#f6f7f7',
-  dark: p => p.theme.colours.darkBlue,
-})
-
 const RightHeader = styled.div`
   display: flex;
   justify-content: space-between;
@@ -213,7 +173,7 @@ const RightHeader = styled.div`
   padding-top: 20px;
   padding-bottom: 20px;
 
-  background: ${rightBackgroundColor};
+  background: ${p => p.theme.editorColours.resultBackground};
 `
 
 const RightEmpty = styled.div`
@@ -222,17 +182,12 @@ const RightEmpty = styled.div`
   justify-content: center;
   align-items: center;
 
-  background: ${rightBackgroundColor};
+  background: ${p => p.theme.editorColours.resultBackground};
 `
-
-const color = theme('mode', {
-  dark: p => p.theme.colours.white60,
-  light: p => p.theme.colours.darkBlue60,
-})
 
 const RightEmptyText = styled.div`
   font-size: 16px;
-  color: ${color};
+  color: ${p => p.theme.editorColours.text};
 `
 
 const View = styled.div`
@@ -270,10 +225,16 @@ const Big = styled.div`
   flex: 1 1 auto;
 `
 
-const GraphiqlWrapper = Big.extend`
+const GraphiqlWrapper = styled(Big)`
   width: 100%;
   height: 100%;
   position: relative;
   display: flex;
   flex: 1 1 auto;
+`
+
+const QueryWrap = styled.div`
+  display: flex;
+  flex-direction: column;
+  flex: 1;
 `

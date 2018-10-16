@@ -1,5 +1,6 @@
 import * as React from 'react'
 import { astFromValue, print, GraphQLList, GraphQLNonNull } from 'graphql'
+import { styled } from '../../../styled'
 
 export interface Props {
   arg: any
@@ -8,12 +9,7 @@ export interface Props {
 
 export default function Argument({ arg, showDefaultValue }: Props) {
   return (
-    <div className="arg">
-      <style jsx={true}>{`
-        .arg {
-          @p: .ml16;
-        }
-      `}</style>
+    <ArgumentLine>
       <span className="arg-name">{arg.name}</span>
       {': '}
       <span className="type-name">{renderType(arg.type)}</span>
@@ -26,7 +22,7 @@ export default function Argument({ arg, showDefaultValue }: Props) {
             </span>
           </span>
         )}
-    </div>
+    </ArgumentLine>
   )
 }
 
@@ -50,3 +46,7 @@ function renderType(type) {
   }
   return <span>{type.name}</span>
 }
+
+const ArgumentLine = styled.div`
+  margin-left: 16px;
+`

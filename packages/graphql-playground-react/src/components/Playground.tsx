@@ -3,7 +3,6 @@ import GraphQLEditor from './Playground/GraphQLEditor'
 import TabBar from './Playground/TabBar'
 import { ISettings } from '../types'
 import HistoryPopup from './HistoryPopup'
-import * as cx from 'classnames'
 import { styled } from '../styled'
 import Settings from './Settings'
 import { PlaygroundSettingsEditor, GraphQLConfigEditor } from './SettingsEditor'
@@ -37,6 +36,7 @@ import {
   getFile,
   getHeaders,
   getIsReloadingSchema,
+  getEndpoint,
 } from '../state/sessions/selectors'
 import { getHistoryOpen } from '../state/general/selectors'
 import {
@@ -48,6 +48,7 @@ import { Session } from '../state/sessions/reducers'
 import { getWorkspaceId } from './Playground/util/getWorkspaceId'
 import { getSettings, getSettingsString } from '../state/workspace/reducers'
 import { Backoff } from './Playground/util/fibonacci-backoff'
+import { debounce } from 'lodash'
 
 export interface Response {
   resultID: string
@@ -57,6 +58,7 @@ export interface Response {
 
 export interface Props {
   endpoint: string
+  sessionEndpoint: string
   subscriptionEndpoint?: string
   projectId?: string
   shareEnabled?: boolean
@@ -84,6 +86,7 @@ export interface Props {
   configPath?: string
   createApolloLink?: (session: Session) => ApolloLink
   workspaceName?: string
+  schema?: GraphQLSchema
 }
 
 export interface ReduxProps {
@@ -130,16 +133,43 @@ export class Playground extends React.PureComponent<Props & ReduxProps, State> {
   apolloLinks: { [sessionId: string]: any } = {}
   observers: { [sessionId: string]: any } = {}
   graphiqlComponents: any[] = []
+
+  // debounce as we call this on each http header or endpoint edit
+  getSchema = debounce(
+    async (props: Props & ReduxProps = this.props) => {
+      if (props.schema) {
+        return
+      }
+      if (this.mounted && this.state.schema) {
+        this.setState({ schema: undefined })
+      }
+      let first = true
+      if (this.backoff) {
+        this.backoff.stop()
+      }
+      this.backoff = new Backoff(async () => {
+        if (first) {
+          await this.schemaGetter(props)
+          first = false
+        } else {
+          await this.schemaGetter()
+        }
+      })
+      this.backoff.start()
+    },
+    600,
+    { trailing: true }, // important to not miss the last call
+  ) as any
+
   private backoff: Backoff
   private initialIndex: number = -1
   private mounted = false
-  private fetchingSchema = false
 
   constructor(props: Props & ReduxProps) {
     super(props)
 
     this.state = {
-      schema: undefined,
+      schema: props.schema,
     }
     ;(global as any).p = this
 
@@ -168,7 +198,7 @@ export class Playground extends React.PureComponent<Props & ReduxProps, State> {
     this.mounted = true
   }
 
-  componentWillReceiveProps(nextProps) {
+  componentWillReceiveProps(nextProps: Props & ReduxProps) {
     if (this.props.createApolloLink !== nextProps.createApolloLink) {
       setLinkCreator(nextProps.createApolloLink)
     }
@@ -176,7 +206,8 @@ export class Playground extends React.PureComponent<Props & ReduxProps, State> {
       nextProps.headers !== this.props.headers ||
       nextProps.endpoint !== this.props.endpoint ||
       nextProps.workspaceName !== this.props.workspaceName ||
-      nextProps.sessionHeaders !== this.props.sessionHeaders
+      nextProps.sessionHeaders !== this.props.sessionHeaders ||
+      nextProps.sessionEndpoint !== this.props.sessionEndpoint
     ) {
       this.getSchema(nextProps)
     }
@@ -201,73 +232,53 @@ export class Playground extends React.PureComponent<Props & ReduxProps, State> {
     if (nextProps.configString !== this.props.configString) {
       this.props.setConfigString(nextProps.configString)
     }
+    if (nextProps.schema !== this.props.schema) {
+      this.setState({ schema: nextProps.schema })
+    }
   }
 
-  async getSchema(props = this.props) {
-    if (this.mounted && this.state.schema) {
-      this.setState({ schema: undefined })
-    }
-    let first = true
-    if (this.backoff) {
-      this.backoff.stop()
-    }
-    this.backoff = new Backoff(async () => {
-      if (first) {
-        await this.schemaGetter(props)
-        first = false
-      } else {
-        await this.schemaGetter()
+  async schemaGetter(propsInput?: Props & ReduxProps) {
+    const props = this.props || propsInput
+    const endpoint = props.sessionEndpoint || props.endpoint
+    try {
+      const data = {
+        endpoint,
+        headers:
+          props.sessionHeaders && props.sessionHeaders.length > 0
+            ? props.sessionHeaders
+            : JSON.stringify(props.headers),
+        credentials: props.settings['request.credentials'],
       }
-    })
-    this.backoff.start()
-  }
-
-  async schemaGetter(props = this.props) {
-    if (!this.fetchingSchema) {
-      try {
-        const data = {
-          endpoint: props.endpoint,
-          headers:
-            props.sessionHeaders && props.sessionHeaders.length > 0
-              ? props.sessionHeaders
-              : JSON.stringify(props.headers),
+      const schema = await schemaFetcher.fetch(data)
+      schemaFetcher.subscribe(data, newSchema => {
+        if (
+          data.endpoint === this.props.endpoint ||
+          data.endpoint === this.props.sessionEndpoint
+        ) {
+          this.setState({ schema: newSchema })
         }
-        const schema = await schemaFetcher.fetch(data)
-        schemaFetcher.subscribe(data, newSchema => {
-          if (data.endpoint === this.props.endpoint) {
-            this.setState({ schema: newSchema })
-          }
-        })
-        if (schema) {
-          this.setState({ schema: schema.schema })
-          this.props.schemaFetchingSuccess(
-            props.endpoint,
-            schema.tracingSupported,
-          )
-          this.backoff.stop()
-        }
-      } catch (e) {
-        // tslint:disable-next-line
-        console.error(e)
-        this.props.schemaFetchingError(props.endpoint, e.message)
+      })
+      if (schema) {
+        this.setState({ schema: schema.schema })
+        this.props.schemaFetchingSuccess(data.endpoint, schema.tracingSupported)
+        this.backoff.stop()
       }
+    } catch (e) {
+      // tslint:disable-next-line
+      console.error(e)
+      this.props.schemaFetchingError(endpoint, e.message)
     }
   }
 
   render() {
-    const theme = this.props.settings['editor.theme']
     const { version }: any = app
 
     window.version = version
 
     return (
-      <PlaygroundWrapper className="playground">
+      <PlaygroundContainer className="playground">
         <TabBar onNewSession={this.createSession} isApp={this.props.isApp} />
-        <GraphiqlsContainer
-          className={cx('graphiqls-container', {
-            'docs-graphiql': theme === 'light',
-          })}
-        >
+        <GraphiqlsContainer>
           <GraphiqlWrapper className="graphiql-wrapper active">
             {this.props.isConfigTab ? (
               <GraphQLConfigEditor
@@ -290,7 +301,7 @@ export class Playground extends React.PureComponent<Props & ReduxProps, State> {
         </GraphiqlsContainer>
         <Settings />
         {this.props.historyOpen && this.renderHistoryPopup()}
-      </PlaygroundWrapper>
+      </PlaygroundContainer>
     )
   }
 
@@ -350,25 +361,29 @@ const mapStateToProps = createStructuredSelector({
   settings: getSettings,
   settingsString: getSettingsString,
   isReloadingSchema: getIsReloadingSchema,
+  sessionEndpoint: getEndpoint,
 })
 
-export default connect(mapStateToProps, {
-  selectTabIndex,
-  selectNextTab,
-  selectPrevTab,
-  newSession,
-  closeSelectedTab,
-  initState,
-  saveSettings,
-  saveConfig,
-  setTracingSupported,
-  injectHeaders,
-  setConfigString,
-  schemaFetchingError,
-  schemaFetchingSuccess,
-})(Playground)
+export default connect(
+  mapStateToProps,
+  {
+    selectTabIndex,
+    selectNextTab,
+    selectPrevTab,
+    newSession,
+    closeSelectedTab,
+    initState,
+    saveSettings,
+    saveConfig,
+    setTracingSupported,
+    injectHeaders,
+    setConfigString,
+    schemaFetchingError,
+    schemaFetchingSuccess,
+  },
+)(Playground)
 
-const PlaygroundWrapper = styled.div`
+const PlaygroundContainer = styled.div`
   flex: 1;
   display: flex;
   flex-direction: column;

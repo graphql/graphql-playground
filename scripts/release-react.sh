@@ -1,5 +1,10 @@
 #!/bin/bash
 
+if ! [ -x "$(command -v jq)" ]; then
+  echo 'Error: jq is not installed.' >&2
+  exit 1
+fi
+
 set -e
 
 cd packages
@@ -12,6 +17,7 @@ middlewares=(
 )
 
 cd graphql-playground-react
+yarn install
 echo "Releasing graphql-playground-react..."
 npm version patch --no-git-tag-version
 npm publish
@@ -33,6 +39,7 @@ curl -X POST \
 for middleware in "${middlewares[@]}"
 do
   cd $middleware
+  yarn install
   echo "Releasing ${middleware}..."
   cat package.json | jq ".playgroundVersion = \"$version\"" > package.tmp.json
   mv package.tmp.json package.json

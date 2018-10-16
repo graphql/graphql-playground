@@ -1,16 +1,5 @@
 import * as React from 'react'
-import * as theme from 'styled-theming'
 import styled from '../../styled/styled'
-
-const textColor = theme('mode', {
-  light: p => p.theme.colours.darkBlue60,
-  dark: p => p.theme.colours.white,
-})
-
-const durationColor = theme('mode', {
-  light: p => p.theme.colours.darkBlue50,
-  dark: p => p.theme.colours.white60,
-})
 
 const Row = styled.div`
   position: relative;
@@ -18,7 +7,7 @@ const Row = styled.div`
   display: table;
   padding-right: 25px;
 
-  color: ${textColor};
+  color: ${p => p.theme.editorColours.text};
 `
 
 const Bar = styled.span`
@@ -28,12 +17,12 @@ const Bar = styled.span`
   height: 1.5px;
   bottom: 4px;
 
-  background: ${textColor};
+  background: ${p => p.theme.editorColours.text};
 `
 
 const Duration = styled.span`
   font-size: 10px;
-  color: ${durationColor};
+  color: ${p => p.theme.editorColours.textInactive};
 `
 
 const NameWrapper = styled.span`
@@ -75,14 +64,6 @@ export default class TracingRow extends React.Component<
     return (
       <Row style={{ transform: `translateX(${offsetLeft}px)` }}>
         <NameWrapper>
-          {/*
-          <Icon
-            width={8}
-            height={8}
-            color="white"
-            src={require('../../assets/icons/smallArrowBottom.svg')}
-          />
-          */}
           <Name>
             {path.slice(-2).map((p, index) => (
               <span
