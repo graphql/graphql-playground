@@ -126,7 +126,7 @@
     "@types/react-addons-test-utils": "0.14.20",
     "@types/react-dom": "16.0.3",
     "@types/react-redux": "5.0.14",
-    "awesome-typescript-loader": "5.0.0",
+    "awesome-typescript-loader": "5.2.1",
     "babel-cli": "6.26.0",
     "babel-loader": "7.1.4",
     "babel-plugin-transform-runtime": "6.23.0",
