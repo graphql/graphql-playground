@@ -86,6 +86,10 @@
   version "8.10.17"
   resolved "https://registry.yarnpkg.com/@types/node/-/node-8.10.17.tgz#d48cf10f0dc6dcf59f827f5a3fc7a4a6004318d3"
 
+"@types/prop-types@*":
+  version "15.5.6"
+  resolved "https://registry.yarnpkg.com/@types/prop-types/-/prop-types-15.5.6.tgz#9c03d3fed70a8d517c191b7734da2879b50ca26c"
+
 "@types/react-addons-test-utils@0.14.20":
   version "0.14.20"
   resolved "https://registry.yarnpkg.com/@types/react-addons-test-utils/-/react-addons-test-utils-0.14.20.tgz#66a5787b8f15cce01c195fe2b95b89046054810d"
@@ -112,9 +116,12 @@
   dependencies:
     csstype "^2.2.0"
 
-"@types/react@16.0.34":
-  version "16.0.34"
-  resolved "https://registry.yarnpkg.com/@types/react/-/react-16.0.34.tgz#7a8f795afd8a404a9c4af9539b24c75d3996914e"
+"@types/react@16.4.17":
+  version "16.4.17"
+  resolved "https://registry.yarnpkg.com/@types/react/-/react-16.4.17.tgz#a3b3bffe147b00dd22846eb6b0da23e18afa4b80"
+  dependencies:
+    "@types/prop-types" "*"
+    csstype "^2.2.0"
 
 abab@^1.0.4:
   version "1.0.4"
@@ -1883,7 +1890,7 @@ code-point-at@^1.0.0:
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/code-point-at/-/code-point-at-1.1.0.tgz#0d070b4d043a5bea33a2f1a40e2edb3d9a4ccf77"
 
-codemirror-graphql@^0.6.11, "codemirror-graphql@github:timsuchanek/codemirror-graphql#details-fix":
+codemirror-graphql@^0.6.11, codemirror-graphql@timsuchanek/codemirror-graphql#details-fix:
   version "0.6.12"
   resolved "https://codeload.github.com/timsuchanek/codemirror-graphql/tar.gz/801ec32683c38d6dc0f8f7bc19014a111edc9ebd"
   dependencies:
