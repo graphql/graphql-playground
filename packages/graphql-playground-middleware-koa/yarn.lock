@@ -148,9 +148,9 @@ graphql-import@^0.4.0:
     graphql "^0.12.3"
     lodash "^4.17.4"
 
-graphql-playground-html@1.6.0:
-  version "1.6.0"
-  resolved "https://registry.yarnpkg.com/graphql-playground-html/-/graphql-playground-html-1.6.0.tgz#6ec4d54325ab2e5352506fdb89eb37c3fc718bf8"
+graphql-playground-html@1.6.3:
+  version "1.6.3"
+  resolved "https://registry.yarnpkg.com/graphql-playground-html/-/graphql-playground-html-1.6.3.tgz#4fb0db36016241f5355e4afe125f8c2f1dab7f50"
   dependencies:
     graphql-config "2.0.0"
 
