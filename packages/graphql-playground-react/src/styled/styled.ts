@@ -11,6 +11,7 @@ const {
   keyframes,
   ThemeProvider,
   withTheme,
+  createGlobalStyle,
 } = styledComponents as ThemedStyledComponentsModule<ThemeInterface>
 
 export {
@@ -20,6 +21,7 @@ export {
   ThemeProvider,
   theme,
   withTheme,
+  createGlobalStyle,
   ThemeInterface,
 }
 export default styled

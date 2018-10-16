@@ -26,7 +26,7 @@ const Results: React.SFC<Props & ReduxProps> = ({ setRef, responses }) => {
   const response1 = responses.get(0) || defaultResponseRecord
   const isSubscription = responses.size > 1
   return (
-    <ResultWindow innerRef={setRef} isSubscription={isSubscription}>
+    <ResultWindow ref={setRef} isSubscription={isSubscription}>
       {responses.size <= 1 ? (
         <Response key={'first'} isSubscription={isSubscription}>
           {responses.size > 1 &&

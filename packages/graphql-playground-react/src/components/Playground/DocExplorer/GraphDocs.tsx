@@ -124,7 +124,7 @@ class GraphDocs extends React.Component<
     }
 
     return (
-      <Docs open={docsOpen} style={docsStyle} innerRef={this.setRef}>
+      <Docs open={docsOpen} style={docsStyle} ref={this.setRef}>
         <DocsButton onClick={this.handleToggleDocs}>Schema</DocsButton>
         <DocsResizer onMouseDown={this.handleDocsResizeStart} />
         <DocsGradient />
@@ -132,7 +132,7 @@ class GraphDocs extends React.Component<
           onKeyDown={this.handleKeyDown}
           onMouseMove={this.handleMouseMove}
           tabIndex={0}
-          innerRef={this.setDocExplorerRef}
+          ref={this.setDocExplorerRef}
         >
           <DocsExplorerContainer>
             {emptySchema && <ColumnDoc>{emptySchema}</ColumnDoc>}

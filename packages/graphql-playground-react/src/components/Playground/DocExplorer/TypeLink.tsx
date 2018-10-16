@@ -138,7 +138,7 @@ class TypeLink extends React.Component<
         clickable={clickable}
         className={`doc-category-item${className ? className : ''}`}
         onClick={this.onClick}
-        innerRef={this.setRef}
+        ref={this.setRef}
       >
         {beforeNode}
         {beforeNode && ' '}

@@ -1,6 +1,5 @@
 import * as React from 'react'
-import { styled } from '../../styled'
-import { injectGlobal } from 'styled-components'
+import { styled, createGlobalStyle } from '../../styled'
 
 const EditorWrapper = styled.div`
   /* Comment */
@@ -642,7 +641,7 @@ const EditorWrapper = styled.div`
 // Styling of portal for hints
 // .CodeMirror-info info for types breaks stack trace
 // tslint:disable-next-line
-injectGlobal`
+const GlobalStyle = createGlobalStyle`
   *::-webkit-scrollbar {
     -webkit-appearance: none;
     width: 7px;
@@ -840,7 +839,12 @@ injectGlobal`
   }
 `
 
-const Wrapper = ({ children }) => <EditorWrapper>{children}</EditorWrapper>
+const Wrapper = ({ children }) => (
+  <EditorWrapper>
+    {children}
+    <GlobalStyle />
+  </EditorWrapper>
+)
 
 const GraphqlContainer = styled.div`
   color: #141823;

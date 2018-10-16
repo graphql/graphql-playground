@@ -186,7 +186,7 @@ class VariableEditor extends React.PureComponent<Props & ReduxProps> {
   render() {
     return (
       <Editor
-        innerRef={node => {
+        ref={node => {
           this._node = node
         }}
       />

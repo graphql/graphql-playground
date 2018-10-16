@@ -180,14 +180,14 @@ class GraphQLEditor extends React.PureComponent<Props & ReduxProps> {
                 >
                   <VariableEditorSubtitle
                     isOpen={this.props.queryVariablesActive}
-                    innerRef={this.setQueryVariablesRef}
+                    ref={this.setQueryVariablesRef}
                     onClick={this.props.openQueryVariables}
                   >
                     Query Variables
                   </VariableEditorSubtitle>
                   <VariableEditorSubtitle
                     isOpen={!this.props.queryVariablesActive}
-                    innerRef={this.setHttpHeadersRef}
+                    ref={this.setHttpHeadersRef}
                     onClick={this.props.closeQueryVariables}
                   >
                     {'HTTP Headers ' +
@@ -615,7 +615,7 @@ interface TitleProps {
   isOpen: boolean
   onMouseDown?: any
   onClick?: any
-  innerRef?: any
+  ref?: any
 }
 
 const BottomDrawerTitle = styled.div`

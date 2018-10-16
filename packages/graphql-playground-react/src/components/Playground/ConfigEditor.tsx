@@ -127,7 +127,7 @@ export class ConfigEditor extends React.Component<Props, {}> {
   render() {
     return (
       <EditorWrapper>
-        <Editor innerRef={this.setNode} />
+        <Editor ref={this.setNode} />
       </EditorWrapper>
     )
   }

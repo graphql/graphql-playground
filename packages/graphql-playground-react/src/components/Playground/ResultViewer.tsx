@@ -91,10 +91,7 @@ export class ResultViewer extends React.Component<Props, {}> {
 
   render() {
     return (
-      <Result
-        innerRef={this.setRef}
-        isSubscription={this.props.isSubscription}
-      />
+      <Result ref={this.setRef} isSubscription={this.props.isSubscription} />
     )
   }
 
