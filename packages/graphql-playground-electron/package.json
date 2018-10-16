@@ -165,7 +165,7 @@
     "tslint": "5.10.0",
     "tslint-graphcool-frontend": "0.0.3",
     "tslint-loader": "3.6.0",
-    "typescript": "2.8.3",
+    "typescript": "3.0.1",
     "url-loader": "0.6.2",
     "wait-on": "2.1.0",
     "webpack": "3.10.0",

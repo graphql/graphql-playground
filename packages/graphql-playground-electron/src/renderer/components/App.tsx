@@ -128,7 +128,8 @@ class App extends React.Component<ReduxProps, State> {
     return {
       endpoint: args.endpoint,
       subscriptionsEndpoint: args['subscriptions-endpoint'],
-      platformToken: args['platform-token'] || localStorage.platformToken,
+      platformToken:
+        args['platform-token'] || localStorage.getItem('platformToken'),
       env: args.env,
     }
   }
@@ -648,14 +649,17 @@ const mapStateToProps = createStructuredSelector({
   endpoint: getEndpoint,
 })
 
-export default connect(mapStateToProps, {
-  openSettingsTab,
-  selectNextTab,
-  selectPrevTab,
-  closeSelectedTab,
-  refetchSchema,
-  newSession,
-  saveFile,
-  newFileTab,
-  selectAppHistoryItem,
-})(App)
+export default connect(
+  mapStateToProps,
+  {
+    openSettingsTab,
+    selectNextTab,
+    selectPrevTab,
+    closeSelectedTab,
+    refetchSchema,
+    newSession,
+    saveFile,
+    newFileTab,
+    selectAppHistoryItem,
+  },
+)(App)
