@@ -1,10 +1,9 @@
 version: 2
 
 jobs:
-
   playground-build:
     docker:
-      - image: circleci/node:8
+      - image: circleci/node:8.9
     steps:
       - checkout
       - run: yarn show-versions
@@ -13,7 +12,7 @@ jobs:
 
   electron-build:
     macos:
-      xcode: "9.0"
+      xcode: '9.0'
     steps:
       - checkout
       - run: |
