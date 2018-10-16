@@ -91,7 +91,7 @@
     "electron-squirrel-startup": "^1.0.0",
     "electron-updater": "2.21.10",
     "find-up": "^2.1.0",
-    "graphcool-styles": "0.2.7",
+    "graphcool-styles": "0.2.10",
     "graphcool-ui": "^0.0.14",
     "graphql": "^0.13.2",
     "graphql-config": "^2.1.0",
