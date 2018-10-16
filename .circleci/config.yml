@@ -3,7 +3,7 @@ version: 2
 jobs:
   playground-build:
     docker:
-      - image: circleci/node:8
+      # - image: circleci/node:8
       - image: circleci/node:10
 
     steps:
