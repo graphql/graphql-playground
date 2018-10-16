@@ -169,7 +169,7 @@
     "url-loader": "0.6.2",
     "wait-on": "2.1.0",
     "webpack": "3.10.0",
-    "webpack-bundle-analyzer": "2.9.2",
+    "webpack-bundle-analyzer": "2.13.1",
     "webpack-dev-server": "2.11.1",
     "webpack-uglify-parallel": "0.1.4"
   },
