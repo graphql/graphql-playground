@@ -670,7 +670,7 @@ const GlobalStyle = createGlobalStyle`
 
 
   .CodeMirror-lint-tooltip, .CodeMirror-info {
-    background-color: white;
+    background-color: infobackground;
     border-radius: 4px 4px 4px 4px;
     border: 1px solid black;
     color: infotext;
