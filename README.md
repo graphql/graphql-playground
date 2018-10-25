@@ -40,7 +40,7 @@ See the following question for more additonal features.
 
 The desktop app is the same as the web version but includes these additional features:
 
-* Partial upport for [graphql-config](https://github.com/prismagraphql/graphql-config) enabling features like multi-environment setups (no support for sending HTTP headers).
+* Partial support for [graphql-config](https://github.com/prismagraphql/graphql-config) enabling features like multi-environment setups (no support for sending HTTP headers).
 * Double click on `*.graphql` files.
 
 ### How does GraphQL Bin work?
