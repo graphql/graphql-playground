@@ -30,7 +30,7 @@ See the following question for more additonal features.
 
 The desktop app is the same as the web version but includes these additional features:
 
-- Support for [graphql-config](https://github.com/graphcool/graphql-config) enabling features like multi-environment setups.
+- Support for [graphql-config](https://github.com/prisma/graphql-config) enabling features like multi-environment setups.
 - Double click on `*.graphql` files.
 
 ### How does GraphQL Bin work?
@@ -39,7 +39,7 @@ You can easily share your Playgrounds with others by clicking on the "Share" but
 
 ![](https://imgur.com/H1n64lL.png)
 
-> You can also find the announcement blog post [here](https://blog.graph.cool/introducing-graphql-playground-f1e0a018f05d).
+> You can also find the announcement blog post [here](https://www.prisma.io/blog/introducing-graphql-playground-f1e0a018f05d).
 
 ## Usage
 
@@ -105,11 +105,11 @@ yarn add graphql-playground-middleware-lambda
 
 We have a full example for each of the frameworks below:
 
-- **Express:** See [packages/graphql-playground-middleware-express/examples/basic](https://github.com/graphcool/graphql-playground/tree/master/packages/graphql-playground-middleware-express/examples/basic)
+- **Express:** See [packages/graphql-playground-middleware-express/examples/basic](https://github.com/prisma/graphql-playground/tree/master/packages/graphql-playground-middleware-express/examples/basic)
 
-- **Hapi:** See [packages/graphql-playground-middleware/examples/hapi](https://github.com/graphcool/graphql-playground/tree/master/packages/graphql-playground-middleware/examples/hapi)
+- **Hapi:** See [packages/graphql-playground-middleware/examples/hapi](https://github.com/prisma/graphql-playground/tree/master/packages/graphql-playground-middleware-hapi/examples/basic)
 
-- **Koa:** See [packages/graphql-playground-middleware/examples/koa](https://github.com/graphcool/graphql-playground/tree/master/packages/graphql-playground-middleware/examples/koa)
+- **Koa:** See [packages/graphql-playground-middleware/examples/koa](https://github.com/prisma/graphql-playground/tree/master/packages/graphql-playground-middleware-koa/examples/basic)
 
 - **Lambda (as serverless handler):** See [serverless-graphql-apollo](https://github.com/serverless/serverless-graphql-apollo) or a quick example below.
 
