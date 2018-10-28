@@ -3,6 +3,7 @@ import ColumnDoc from './ColumnDoc'
 import SearchResults from './SearchResults'
 import GraphDocsRoot from './GraphDocsRoot'
 import SearchBox from './SearchBox'
+import { styled } from '../../../styled'
 
 export interface Props {
   searchValue: string
@@ -18,7 +19,7 @@ export default class RootColumn extends React.PureComponent<Props, {}> {
     return (
       <ColumnDoc width={width} overflow={false}>
         <SearchBox onSearch={handleSearch} />
-        <div className="overflowAuto flexAuto">
+        <Column>
           {searchValue && (
             <SearchResults
               searchValue={searchValue}
@@ -30,8 +31,12 @@ export default class RootColumn extends React.PureComponent<Props, {}> {
           {!searchValue && (
             <GraphDocsRoot schema={schema} sessionId={sessionId} />
           )}
-        </div>
+        </Column>
       </ColumnDoc>
     )
   }
 }
+
+const Column = styled.div`
+  overflow: auto;
+`
