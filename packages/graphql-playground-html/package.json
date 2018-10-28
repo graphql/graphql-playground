@@ -33,7 +33,5 @@
   "typescript": {
     "definition": "dist/index.d.ts"
   },
-  "dependencies": {
-    "graphql-config": "2.2.1"
-  }
+  "dependencies": {}
 }
