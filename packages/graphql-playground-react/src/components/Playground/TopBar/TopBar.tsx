@@ -164,15 +164,17 @@ export const Button = styled.button`
   letter-spacing: 0.53px;
   font-size: 14px;
   padding: 6px 9px 7px 10px;
-  * + & {
-    margin-left: 6px;
-  }
+  margin-left: 6px;
+
   cursor: pointer;
   transition: 0.1s linear background-color;
+  &:first-child {
+    margin-left: 0;
+  }
   &:hover {
     background-color: ${p => p.theme.editorColours.buttonHover};
   }
-` as any
+`
 
 const TopBarWrapper = styled.div`
   display: flex;

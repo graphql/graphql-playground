@@ -354,7 +354,7 @@ const EditorWrapper = styled.div`
     /* padding-bottom: 30px; */
     position: relative;
     &:hover {
-      overflow: scroll !important; /* Things will break if this is overridden */
+      overflow: scroll !important;
     }
   }
   .CodeMirror-sizer {
@@ -400,6 +400,7 @@ const EditorWrapper = styled.div`
     left: 0;
     top: 0;
     z-index: 3;
+    margin-left: 3px;
   }
   .CodeMirror-gutter {
     display: inline-block;
@@ -670,16 +671,16 @@ const GlobalStyle = createGlobalStyle`
 
 
   .CodeMirror-lint-tooltip, .CodeMirror-info {
-    background-color: infobackground;
+    background-color: white;
     border-radius: 4px 4px 4px 4px;
     border: 1px solid black;
-    color: infotext;
-    font-family: monospace;
-    font-size: 10pt;
+    color: #09141C;
+    font-family: Open Sans, monospace;
+    font-size: 14px;
     max-width: 600px;
     opacity: 0;
     overflow: hidden;
-    padding: 2px 5px;
+    padding: 12px 14px;
     position: fixed;
     -webkit-transition: opacity 0.4s;
     transition: opacity 0.4s;
@@ -688,7 +689,7 @@ const GlobalStyle = createGlobalStyle`
 
   .CodeMirror-lint-message-error,
   .CodeMirror-lint-message-warning {
-    padding-left: 23px;
+    padding-left: 18px;
   }
 
   .CodeMirror-lint-mark-error,
@@ -698,7 +699,10 @@ const GlobalStyle = createGlobalStyle`
   }
 
   .CodeMirror-lint-mark-error {
-    background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAQAAAADCAYAAAC09K7GAAAAAXNSR0IArs4c6QAAAAZiS0dEAP8A/wD/oL2nkwAAAAlwSFlzAAALEwAACxMBAJqcGAAAAAd0SU1FB9sJDw4cOCW1/KIAAAAZdEVYdENvbW1lbnQAQ3JlYXRlZCB3aXRoIEdJTVBXgQ4XAAAAHElEQVQI12NggIL/DAz/GdA5/xkY/qPKMDAwAADLZwf5rvm+LQAAAABJRU5ErkJggg==');
+    background-image: url('data:image/svg+xml;utf8,<svg width="5" height="4" viewBox="0 0 5 4" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M5 1.00954C4.87191 1.03474 4.75219 1.10989 4.674 1.235L3.87 2.52141C3.28249 3.46141 1.9135 3.46141 1.326 2.52141L0.521998 1.235C0.404356 1.04677 0.19271 0.971619 0 1.00954V0.00314821C0.0325855 0.00105209 0.0652291 2.68503e-06 0.0978728 5.14592e-09C0.0977892 -1.71531e-09 0.0979564 -1.71531e-09 0.0978728 5.14592e-09C0.586954 4.01563e-05 1.07627 0.235041 1.37 0.705002L2.174 1.99141C2.36983 2.30474 2.82616 2.30474 3.022 1.99141L3.826 0.705002C4.10012 0.266408 4.54438 0.0324569 5 0.00314818V1.00954Z" fill="#FF4F56"/>
+    </svg>
+    ');
   }
 
   .CodeMirror-lint-mark-warning {
@@ -721,12 +725,17 @@ const GlobalStyle = createGlobalStyle`
   .CodeMirror-lint-message-warning {
     background-position: top left;
     background-repeat: no-repeat;
-    padding-left: 18px;
+    padding-left: 22px;
   }
 
   .CodeMirror-lint-marker-error,
   .CodeMirror-lint-message-error {
-    background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAMAAAAoLQ9TAAAAHlBMVEW7AAC7AACxAAC7AAC7AAAAAAC4AAC5AAD///+7AAAUdclpAAAABnRSTlMXnORSiwCK0ZKSAAAATUlEQVR42mWPOQ7AQAgDuQLx/z8csYRmPRIFIwRGnosRrpamvkKi0FTIiMASR3hhKW+hAN6/tIWhu9PDWiTGNEkTtIOucA5Oyr9ckPgAWm0GPBog6v4AAAAASUVORK5CYII=');
+    background-image: url('data:image/svg+xml;utf8,<svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <circle cx="8" cy="8" r="8" fill="#FF4F56"/>
+    <path d="M4.2929 10.2928C3.90237 10.6833 3.90237 11.3164 4.29289 11.707C4.68341 12.0975 5.31657 12.0975 5.7071 11.707L4.2929 10.2928ZM11.7071 5.70711C12.0976 5.31659 12.0976 4.68343 11.7071 4.2929C11.3166 3.90237 10.6834 3.90237 10.2929 4.29289L11.7071 5.70711ZM5.7071 4.29301C5.31657 3.90249 4.68341 3.9025 4.29289 4.29302C3.90237 4.68355 3.90237 5.31672 4.2929 5.70724L5.7071 4.29301ZM10.2929 11.7071C10.6834 12.0976 11.3166 12.0976 11.7071 11.7071C12.0976 11.3166 12.0976 10.6834 11.7071 10.2929L10.2929 11.7071ZM5.7071 11.707L11.7071 5.70711L10.2929 4.29289L4.2929 10.2928L5.7071 11.707ZM4.2929 5.70724L10.2929 11.7071L11.7071 10.2929L5.7071 4.29301L4.2929 5.70724Z" fill="white"/>
+    </svg>
+    ');
+    background-position: 0 50%;
   }
 
   .CodeMirror-lint-marker-warning,
@@ -742,6 +751,29 @@ const GlobalStyle = createGlobalStyle`
     height: 100%;
   }
 
+  .CodeMirror-lint-mark-error {
+    &:before {
+      content: '';
+      width: 50px;
+      height: 14px;
+      position: absolute;
+      background: #FF4F56;
+      left: -80px;
+      top: 50%;
+      transform: translateY(-50%);
+      z-index: 10;
+    }
+  }
+
+  .CodeMirror-lint-message-error span {
+    color: white;
+    background: #FF4F56;
+    font-family: 'Source Code Pro', monospace;
+    font-weight: 600;
+    border-radius: 2px;
+    padding: 0 4px;
+  }
+
   .CodeMirror-hints {
     background: white;
     box-shadow: 0 1px 4px rgba(0, 0, 0, 0.15);
@@ -755,8 +787,8 @@ const GlobalStyle = createGlobalStyle`
     position: absolute;
     z-index: 10;
     border-radius: 2px;
-    top: 0 !important;
-    left: 0 !important;
+    top: 0;
+    left: 0;
     &:hover {
       overflow-y: overlay;
     }
@@ -839,12 +871,24 @@ const GlobalStyle = createGlobalStyle`
   }
 `
 
-const Wrapper = ({ children }) => (
-  <EditorWrapper>
-    {children}
-    <GlobalStyle />
-  </EditorWrapper>
-)
+const Wrapper = ({ children }) => {
+  function lintMessage(e) {
+    if (e.target.classList.contains('CodeMirror-lint-mark-error')) {
+      const items = document.getElementsByClassName(
+        'CodeMirror-lint-message-error',
+      )
+      for (const item of Array.from(items)) {
+        item.innerHTML = item.innerHTML.replace(/"(.*?)"/g, '<span>$1</span>')
+      }
+    }
+  }
+  return (
+    <EditorWrapper onMouseMove={lintMessage}>
+      {children}
+      <GlobalStyle />
+    </EditorWrapper>
+  )
+}
 
 const GraphqlContainer = styled.div`
   color: #141823;

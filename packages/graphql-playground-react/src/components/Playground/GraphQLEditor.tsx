@@ -631,8 +631,8 @@ const BottomDrawerTitle = styled.div`
 
 const VariableEditor = styled(BottomDrawer)`
   .CodeMirror {
-    padding-left: 12px;
-    width: calc(100% - 12px);
+    padding-left: 4px;
+    width: calc(100% - 4px);
     background: ${p => p.theme.editorColours.leftDrawerBackground};
   }
   .CodeMirror-lines {
