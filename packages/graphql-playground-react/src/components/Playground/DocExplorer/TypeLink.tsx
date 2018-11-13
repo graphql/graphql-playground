@@ -163,6 +163,14 @@ class TypeLink extends React.Component<
           </span>
         )}
         <span className="type-name">{renderType(type.type || type)}</span>
+        {type.defaultValue !== undefined ? (
+          <DefaultValue>
+            {' '}
+            = <span>{`${type.defaultValue}`}</span>
+          </DefaultValue>
+        ) : (
+          undefined
+        )}
         {clickable && (
           <IconBox>
             <Triangle />
@@ -255,7 +263,8 @@ const DocsCategoryItem = styled<DocsCategoryItemProps, 'div'>('div')`
     background: #2a7ed3;
     .field-name,
     .type-name,
-    .arg-name {
+    .arg-name,
+    span {
       color: ${p => p.theme.colours.white} !important;
     }
   }
@@ -273,4 +282,11 @@ const IconBox = styled.div`
   right: 10px;
   top: 50%;
   transform: translateY(-50%);
+`
+
+const DefaultValue = styled.span`
+  color: ${p => p.theme.colours.black30};
+  span {
+    color: #1f61a9;
+  }
 `

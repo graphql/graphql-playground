@@ -184,6 +184,10 @@ const DocsHeader = styled.div`
   .doc-category-item .field-name {
     color: #f25c54;
   }
+  div {
+    background: transparent;
+    pointer-events: none;
+  }
 `
 
 const DocsDescription = styled(MarkdownContent)`
