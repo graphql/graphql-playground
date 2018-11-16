@@ -32,5 +32,6 @@ const Column = styled<ColumnProps, 'div'>('div')`
   flex-flow: column;
   padding-bottom: 20px;
   border-right: 1px solid ${p => p.theme.colours.black10};
-  overflow: ${p => (p.overflow ? 'hidden scroll' : 'auto auto')};
+  overflow-x: ${p => (p.overflow ? 'hidden' : 'auto')}
+  overflow-y: ${p => (p.overflow ? 'scroll' : 'auto')}
 `
