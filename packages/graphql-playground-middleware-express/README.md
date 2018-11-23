@@ -1,4 +1,5 @@
 # graphql-playground-middleware-express
+
 > Express middleware to expose an endpoint for the GraphQL Playground IDE
 
 ## Installation
@@ -22,6 +23,7 @@ See full example in [examples/basic](https://github.com/prisma/graphql-playgroun
 ```js
 const express = require('express')
 const expressPlayground = require('graphql-playground-middleware-express')
+  .default
 
 const app = express()
 

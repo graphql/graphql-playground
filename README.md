@@ -65,7 +65,7 @@ These are the settings currently available:
   'editor.fontSize': 14,
   'editor.fontFamily': `'Source Code Pro', 'Consolas', 'Inconsolata', 'Droid Sans Mono', 'Monaco', monospace`,
   'editor.theme': 'dark', // possible values: 'dark', 'light'
-  'editor.reuseHeaders': true,
+  'editor.reuseHeaders': true, // new tab reuses headers from last tab
   'request.credentials': 'omit', // possible values: 'omit', 'include', 'same-origin'
   'tracing.hideTracingResponse': true,
 }
