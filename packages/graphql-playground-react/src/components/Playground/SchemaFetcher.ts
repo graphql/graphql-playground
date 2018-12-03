@@ -71,7 +71,11 @@ export class SchemaFetcher {
     return new Promise((resolve, reject) => {
       execute(link, operation).subscribe({
         next: schemaData => {
-          if (schemaData && ((schemaData.errors && schemaData.errors.length > 0) || !schemaData.data)) {
+          if (
+            schemaData &&
+            ((schemaData.errors && schemaData.errors.length > 0) ||
+              !schemaData.data)
+          ) {
             throw new Error(JSON.stringify(schemaData, null, 2))
           }
 
