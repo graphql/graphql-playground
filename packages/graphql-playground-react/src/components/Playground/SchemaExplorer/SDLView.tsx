@@ -2,9 +2,9 @@ import * as React from 'react'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import {
-  toggleDocs,
-  changeWidthDocs,
-  setDocsVisible,
+	toggleDocs,
+	changeWidthDocs,
+	setDocsVisible,
 } from '../../../state/docs/actions'
 import Spinner from '../../Spinner'
 import { columnWidth } from '../../../constants'
@@ -13,111 +13,110 @@ import { getSelectedSessionIdFromRoot } from '../../../state/sessions/selectors'
 import { getSessionDocs } from '../../../state/docs/selectors'
 import { createStructuredSelector } from 'reselect'
 import { ErrorContainer } from '../DocExplorer/ErrorContainer'
-import { SchemaExplorerContainer, SDLColumn } from './SDLTypes/SDLStyles'
-import SDLHeader from './SDLHeader'
+import {
+	SDLHeader,
+	SchemaExplorerContainer,
+	SDLColumn,
+} from './SDLTypes/SDLStyles'
 import SDLEditor from './SDLEditor'
-import { getSettings } from '../../../state/workspace/reducers'
 
 interface StateFromProps {
-  docs: {
-    navStack: any[]
-    docsOpen: boolean
-    docsWidth: number
-    keyMove: boolean
-  }
-  settings
+	docs: {
+		navStack: any[]
+		docsOpen: boolean
+		docsWidth: number
+		keyMove: boolean
+	}
 }
 
 interface DispatchFromProps {
-  toggleDocs: (sessionId: string) => any
-  setDocsVisible: (sessionId: string, open: boolean) => any
-  changeWidthDocs: (sessionId: string, width: number) => any
+	toggleDocs: (sessionId: string) => any
+	setDocsVisible: (sessionId: string, open: boolean) => any
+	changeWidthDocs: (sessionId: string, width: number) => any
 }
 
 class SDLView extends React.Component<
-  SideTabContentProps & StateFromProps & DispatchFromProps
+	SideTabContentProps & StateFromProps & DispatchFromProps
 > {
-  ref
-  constructor(props) {
-    super(props)
-    ;(window as any).d = this
-  }
-  componentWillReceiveProps(nextProps: SideTabContentProps & StateFromProps) {
-    // If user use default column size % columnWidth
-    // Make the column follow the clicks
-    if (!this.props.schema && nextProps.schema) {
-      this.setWidth(nextProps)
-    }
-  }
+	ref
+	constructor(props) {
+		super(props)
+		;(window as any).d = this
+	}
+	componentWillReceiveProps(nextProps: SideTabContentProps & StateFromProps) {
+		// If user use default column size % columnWidth
+		// Make the column follow the clicks
+		if (!this.props.schema && nextProps.schema) {
+			this.setWidth(nextProps)
+		}
+	}
 
-  setWidth(props: any = this.props) {
-    this.props.setWidth(props)
-  }
+	setWidth(props: any = this.props) {
+		this.props.setWidth(props)
+	}
 
-  getWidth(props: any = this.props) {
-    const rootWidth = props.docs.docsWidth || columnWidth
-    return rootWidth
-  }
-  componentDidMount() {
-    this.setWidth()
-  }
+	getWidth(props: any = this.props) {
+		const rootWidth = props.docs.docsWidth || columnWidth
+		return rootWidth
+	}
+	componentDidMount() {
+		this.setWidth()
+	}
 
-  render() {
-    const { schema, settings } = this.props
-    let emptySchema
-    if (schema === undefined) {
-      // Schema is undefined when it is being loaded via introspection.
-      emptySchema = <Spinner />
-    } else if (schema === null) {
-      // Schema is null when it explicitly does not exist, typically due to
-      // an error during introspection.
-      emptySchema = <ErrorContainer>{'No Schema Available'}</ErrorContainer>
-    }
-    // let types
-    // if (schema instanceof GraphQLSchema) {
-    // 	types = sdlArray(schema)
-    // }
-    return (
-      <SchemaExplorerContainer ref={this.setRef}>
-        {emptySchema ? (
-          <SDLColumn>{emptySchema}</SDLColumn>
-        ) : (
-          <SDLColumn width={this.props.docs.docsWidth || columnWidth - 1}>
-            <SDLHeader schema={schema} />
-            <SDLEditor
-              schema={schema}
-              settings={settings}
-              width={this.props.docs.docsWidth || columnWidth}
-            />
-          </SDLColumn>
-        )}
-      </SchemaExplorerContainer>
-    )
-  }
-  setRef = ref => {
-    this.ref = ref
-  }
+	render() {
+		const { schema } = this.props
+		let emptySchema
+		if (schema === undefined) {
+			// Schema is undefined when it is being loaded via introspection.
+			emptySchema = <Spinner />
+		} else if (schema === null) {
+			// Schema is null when it explicitly does not exist, typically due to
+			// an error during introspection.
+			emptySchema = <ErrorContainer>{'No Schema Available'}</ErrorContainer>
+		}
+		// let types
+		// if (schema instanceof GraphQLSchema) {
+		// 	types = sdlArray(schema)
+		// }
+		return (
+			<SchemaExplorerContainer ref={this.setRef}>
+				{emptySchema ? (
+					<SDLColumn>{emptySchema}</SDLColumn>
+				) : (
+					<SDLColumn width={this.props.docs.docsWidth || columnWidth - 1}>
+						<SDLHeader schema={schema} />
+						<SDLEditor
+							schema={schema}
+							width={this.props.docs.docsWidth || columnWidth}
+						/>
+					</SDLColumn>
+				)}
+			</SchemaExplorerContainer>
+		)
+	}
+	setRef = (ref) => {
+		this.ref = ref
+	}
 }
 
-const mapDispatchToProps = dispatch =>
-  bindActionCreators(
-    {
-      toggleDocs,
-      changeWidthDocs,
-      setDocsVisible,
-    },
-    dispatch,
-  )
+const mapDispatchToProps = (dispatch) =>
+	bindActionCreators(
+		{
+			toggleDocs,
+			changeWidthDocs,
+			setDocsVisible,
+		},
+		dispatch,
+	)
 
 const mapStateToProps = createStructuredSelector({
-  settings: getSettings,
-  docs: getSessionDocs,
-  sessionId: getSelectedSessionIdFromRoot,
+	docs: getSessionDocs,
+	sessionId: getSelectedSessionIdFromRoot,
 })
 
 export default connect<StateFromProps, DispatchFromProps, SideTabContentProps>(
-  mapStateToProps,
-  mapDispatchToProps,
-  null,
-  { withRef: true },
+	mapStateToProps,
+	mapDispatchToProps,
+	null,
+	{ withRef: true },
 )(SDLView)

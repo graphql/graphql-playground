@@ -3,27 +3,27 @@ import { columnWidth } from '../../../constants'
 import { styled } from '../../../styled'
 
 export interface Props {
-  children: any
-  overflow?: boolean
-  width?: number
+	children: any
+	overflow?: boolean
+	width?: number
 }
 
 const ColumnDoc = ({
-  children,
-  overflow = true,
-  width = columnWidth,
+	children,
+	overflow = true,
+	width = columnWidth,
 }: Props) => {
-  return (
-    <Column style={{ width }} verticalScroll={overflow}>
-      {children}
-    </Column>
-  )
+	return (
+		<Column style={{ width }} overflow={overflow}>
+			{children}
+		</Column>
+	)
 }
 
 export default ColumnDoc
 
 interface ColumnProps {
-  verticalScroll: boolean
+	overflow: boolean
 }
 
 const Column = styled<ColumnProps, 'div'>('div')`

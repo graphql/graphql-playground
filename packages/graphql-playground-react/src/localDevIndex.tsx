@@ -9,29 +9,29 @@ import { HttpLink } from 'apollo-link-http'
 // import { exampleSchema } from './fixtures/exampleSchema'
 
 if (process.env.NODE_ENV !== 'production') {
-  /* tslint:disable-next-line */
-  // const { whyDidYouUpdate } = require('why-did-you-update')
-  // whyDidYouUpdate(React)
+	/* tslint:disable-next-line */
+	// const { whyDidYouUpdate } = require('why-did-you-update')
+	// whyDidYouUpdate(React)
 }
 
 /* tslint:disable-next-line */
 ;(window as any)['GraphQLPlayground'] = {
-  init(element: HTMLElement, options) {
-    ReactDOM.render(
-      <MiddlewareApp
-        setTitle={true}
-        showNewWorkspace={false}
-        {...options}
-        // config={config}
-        // configString={configString}
-        // codeTheme={lightEditorColours}
-        // tabs={tabs}
-        createApolloLink={customLinkCreator}
-        // schema={exampleSchema}
-      />,
-      element,
-    )
-  },
+	init(element: HTMLElement, options) {
+		ReactDOM.render(
+			<MiddlewareApp
+				setTitle={true}
+				showNewWorkspace={false}
+				{...options}
+				// config={config}
+				// configString={configString}
+				// codeTheme={lightEditorColours}
+				// tabs={tabs}
+				createApolloLink={customLinkCreator}
+				// schema={exampleSchema}
+			/>,
+			element,
+		)
+	},
 }
 
 // const configString = `projects:
@@ -92,19 +92,19 @@ if (process.env.NODE_ENV !== 'production') {
 // ]
 
 const customLinkCreator = (
-  session: LinkCreatorProps,
-  wsEndpoint?: string,
+	session: LinkCreatorProps,
+	wsEndpoint?: string,
 ): { link: ApolloLink } => {
-  const { headers, credentials } = session
+	const { headers, credentials } = session
 
-  const link = new HttpLink({
-    uri: session.endpoint,
-    fetch,
-    headers,
-    credentials,
-  })
+	const link = new HttpLink({
+		uri: session.endpoint,
+		fetch,
+		headers,
+		credentials,
+	})
 
-  return { link }
+	return { link }
 }
 
 // const lightEditorColours = {
