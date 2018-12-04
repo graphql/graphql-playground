@@ -3692,9 +3692,10 @@ graphql-config-extension-graphcool@1.0.8:
     graphcool-yml "0.4.15"
     graphql-config "^2.0.1"
 
-graphql-config-extension-prisma@^0.2.2:
+graphql-config-extension-prisma@^0.2.5:
   version "0.2.5"
   resolved "https://registry.yarnpkg.com/graphql-config-extension-prisma/-/graphql-config-extension-prisma-0.2.5.tgz#f67db5b6f882ac76096fb2e68a18ec81c7d51fd2"
+  integrity sha512-7Qh3TzZS3hwZpJbTNfTHXBM6UbzV7DMik9Mc95Rz76yTAs7Wr83xBFsH4Ap1NWlqBgANfO3cLLI4YomDJmO5SA==
   dependencies:
     graphql-config "2.2.1"
     prisma-yml "1.20.0-beta.18"
