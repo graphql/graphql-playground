@@ -6,14 +6,20 @@ export interface Props {
   activeColor: string
   children: any
   active?: boolean
+  tabWidth?: string
   onClick?: () => any
 }
 
 export default class SideTab extends React.PureComponent<Props> {
   render() {
-    const { label, activeColor, active, onClick } = this.props
+    const { label, activeColor, active, onClick, tabWidth } = this.props
     return (
-      <Tab onClick={onClick} activeColor={activeColor} active={active}>
+      <Tab
+        onClick={onClick}
+        activeColor={activeColor}
+        active={active}
+        tabWidth={tabWidth}
+      >
         {label}
       </Tab>
     )
@@ -27,7 +33,7 @@ export interface TabProps {
 
 const Tab = styled<TabProps, 'div'>('div')`
   z-index: ${p => (p.active ? 10 : 2)};
-  padding: 8px;
+  padding: 8px 8px 8px 8px;
   border-top-left-radius: 2px;
   border-top-right-radius: 2px;
   color: ${p =>
@@ -51,4 +57,5 @@ const Tab = styled<TabProps, 'div'>('div')`
   transform: rotate(-90deg);
   transform-origin: bottom left;
   margin-top: 65px;
+  width: ${p => p.tabWidth || '100%'};
 `
