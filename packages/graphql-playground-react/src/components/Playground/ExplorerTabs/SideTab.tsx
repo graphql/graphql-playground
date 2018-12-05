@@ -27,7 +27,7 @@ export interface TabProps {
 
 const Tab = styled<TabProps, 'div'>('div')`
   z-index: ${p => (p.active ? 10 : 2)};
-  padding: 6px 10px;
+  padding: 8px;
   border-top-left-radius: 2px;
   border-top-right-radius: 2px;
   color: ${p =>
@@ -45,11 +45,10 @@ const Tab = styled<TabProps, 'div'>('div')`
   text-align: center;
   font-weight: 600;
   font-size: 12px;
-  line-height: 17px;
+  line-height: 12px;
   letter-spacing: 0.45px;
   cursor: pointer;
   transform: rotate(-90deg);
   transform-origin: bottom left;
-  width: 60px;
   margin-top: 65px;
 `
