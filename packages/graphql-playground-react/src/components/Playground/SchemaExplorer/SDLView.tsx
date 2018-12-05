@@ -13,11 +13,8 @@ import { getSelectedSessionIdFromRoot } from '../../../state/sessions/selectors'
 import { getSessionDocs } from '../../../state/docs/selectors'
 import { createStructuredSelector } from 'reselect'
 import { ErrorContainer } from '../DocExplorer/ErrorContainer'
-import {
-  SDLHeader,
-  SchemaExplorerContainer,
-  SDLColumn,
-} from './SDLTypes/SDLStyles'
+import { SchemaExplorerContainer, SDLColumn } from './SDLTypes/SDLStyles'
+import SDLHeader from './SDLHeader'
 import SDLEditor from './SDLEditor'
 import { getSettings } from '../../../state/workspace/reducers'
 

@@ -43,7 +43,7 @@ export default class SearchBox extends React.Component<Props, State> {
           onChange={this.handleChange}
           type="text"
           value={this.state.value}
-          placeholder={this.props.placeholder || 'Search the schema ...'}
+          placeholder={this.props.placeholder || 'Search the docs ...'}
         />
       </Label>
     )

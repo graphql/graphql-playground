@@ -87,7 +87,7 @@ class SideTabs extends React.Component<
     }
   }
 
-  componentDidReceiveProps(prevProps) {
+  componentDidUpdate(prevProps) {
     if (!prevProps.docs.activeTabIdx && this.props.docs.activeTabIdx) {
       this.props.setDocsVisible(
         this.props.sessionId,
@@ -336,7 +336,8 @@ const TabContentContainer = styled.div`
   height: 100%;
   letter-spacing: 0.3px;
   box-shadow: -1px 1px 6px 0 rgba(0, 0, 0, 0.3);
-
+  outline: none;
+  user-select: none;
   &::before {
     top: 0;
     bottom: 0;

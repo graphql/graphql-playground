@@ -13,14 +13,16 @@ export interface Props {
   settings: ISettings
 }
 
-class SDLEditor extends React.PureComponent<Props, {}> {
+class SDLEditor extends React.PureComponent<Props, { overflowY: boolean }> {
   cachedValue: string
   private editor: any
   private node: any
 
   constructor(props) {
     super(props)
-
+    this.state = {
+      overflowY: false,
+    }
     // Keep a cached version of the value, this cache will be updated when the
     // editor is updated, which can later be used to protect the editor from
     // unnecessary updates during the update lifecycle.
@@ -53,12 +55,13 @@ class SDLEditor extends React.PureComponent<Props, {}> {
       tabSize: 1,
       mode: 'graphql',
       theme: 'graphiql',
-      lineWrapping: true,
+      // lineWrapping: true,
       keyMap: 'sublime',
       readOnly: true,
       gutters,
     })
     ;(global as any).editor = this.editor
+    this.editor.on('scroll', this.handleScroll)
     this.editor.refresh()
   }
 
@@ -96,12 +99,26 @@ class SDLEditor extends React.PureComponent<Props, {}> {
   }
 
   componentWillUnmount() {
+    this.editor.off('scroll')
     this.editor = null
   }
 
+  handleScroll = e => {
+    if (e.doc.scrollTop > 0) {
+      return this.setState({
+        overflowY: true,
+      })
+    }
+    return this.setState({
+      overflowY: false,
+    })
+  }
+
   render() {
+    const { overflowY } = this.state
     return (
       <EditorWrapper>
+        {overflowY && <OverflowShadow />}
         <Editor ref={this.setRef} />
       </EditorWrapper>
     )
@@ -127,6 +144,19 @@ const Editor = styled.div`
   overflow-x: hidden;
   overflow-y: scroll;
   .CodeMirror {
-    background: ${p => p.theme.editorColours.editorBackground};
+    background: ${p =>
+      p.theme.mode === 'dark'
+        ? p.theme.editorColours.editorBackground
+        : 'white'};
+    padding-left: 20px;
   }
+`
+const OverflowShadow = styled.div`
+	position: fixed:
+	top: 0;
+	left: 0;
+	right: 0;
+	height: 1px;
+	box-shadow: 0px 1px 3px rgba(17, 17, 17, 0.1);
+	z-index: 1000;
 `
