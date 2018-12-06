@@ -34,8 +34,7 @@ export interface TabProps {
 const Tab = styled<TabProps, 'div'>('div')`
   z-index: ${p => (p.active ? 10 : 2)};
   padding: 8px 8px 8px 8px;
-  border-top-left-radius: 2px;
-  border-top-right-radius: 2px;
+  border-radius: 2px 2px 0px 0px;
   color: ${p =>
     p.theme.mode === 'dark'
       ? p.theme.colours.white

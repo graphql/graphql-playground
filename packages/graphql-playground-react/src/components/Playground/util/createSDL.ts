@@ -61,22 +61,41 @@ function getTypeInstance(type) {
   }
 }
 
+// Adds Line Breaks to Schema View
+function addLineBreaks(sdl: string, commentsDisabled?: boolean) {
+  const noNewLines = sdl.replace(/^\s*$(?:\r\n?|\n)/gm, '')
+  // Line Break all Brackets
+  const breakBrackets = noNewLines.replace(/[}]/gm, '$&\r\n')
+  // Line Break all Scalars
+  const withLineBreaks = breakBrackets.replace(/(?:scalar )\w+/g, '$&\r\n')
+
+  if (commentsDisabled) {
+    return withLineBreaks
+  }
+  // Special Line Breaking for Comments
+  const withCommentLineBreaks = withLineBreaks.replace(
+    /(?:\#[\w\'\s\r\n\*](.*)$)/gm,
+    '$&\r',
+  )
+  return withCommentLineBreaks
+}
+
 // Returns a prettified schema
 export function getSDL(
   schema: GraphQLSchema | null | undefined,
   commentsDisabled: boolean,
 ) {
   if (schema instanceof GraphQLSchema) {
-    const sdl = printSchema(schema, { commentDescriptions: false })
+    const rawSdl = printSchema(schema, { commentDescriptions: false })
     if (commentsDisabled) {
-      const sdlWithNewLines = sdl.replace(/(\#[\w\'\s\r\n\*](.*)$)/gm, '')
-      const sdlWithoutComments = prettify(sdlWithNewLines, 80).replace(
-        /^\s*$(?:\r\n?|\n)/gm,
-        '',
-      )
-      return sdlWithoutComments
+      // Removes Comments but still has new lines
+      const sdlWithNewLines = rawSdl.replace(/(\#[\w\'\s\r\n\*](.*)$)/gm, '')
+      // Removes newlines left behind by Comments
+      const sdlWithoutComments = prettify(sdlWithNewLines, 80)
+      return addLineBreaks(sdlWithoutComments, commentsDisabled)
     }
-    return sdl
+    const sdl = prettify(rawSdl, 80)
+    return addLineBreaks(sdl)
   }
   return ''
 }
