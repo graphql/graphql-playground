@@ -303,7 +303,7 @@ const Tabs = styled<TabsProps, 'div'>('div')`
   outline: none;
   box-shadow: 0 0 8px rgba(0, 0, 0, 0.15);
   position: absolute;
-  right: -2px;
+  right: 0px;
   z-index: ${p => (p.open ? 2000 : 3)};
   height: 100%;
   font-family: 'Open Sans', sans-serif;
