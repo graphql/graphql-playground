@@ -15,11 +15,11 @@ $ brew cask install graphql-playground
 
 ## Features
 
-* ✨ Context-aware autocompletion & error highlighting
-* 📚 Interactive, multi-column docs (keyboard support)
-* ⚡️ Supports real-time GraphQL Subscriptions
-* ⚙ GraphQL Config support with multiple Projects & Endpoints
-* 🚥 Apollo Tracing support
+- ✨ Context-aware autocompletion & error highlighting
+- 📚 Interactive, multi-column docs (keyboard support)
+- ⚡️ Supports real-time GraphQL Subscriptions
+- ⚙ GraphQL Config support with multiple Projects & Endpoints
+- 🚥 Apollo Tracing support
 
 ## FAQ
 
@@ -27,12 +27,12 @@ $ brew cask install graphql-playground
 
 GraphQL Playground uses components of GraphiQL under the hood but is meant as a more powerful GraphQL IDE enabling better (local) development workflows. Compared to GraphiQL, the GraphQL Playground ships with the following additional features:
 
-* Interactive, multi-column schema documentation
-* Automatic schema reloading
-* Support for GraphQL Subscriptions
-* Query history
-* Configuration of HTTP headers
-* Tabs
+- Interactive, multi-column schema documentation
+- Automatic schema reloading
+- Support for GraphQL Subscriptions
+- Query history
+- Configuration of HTTP headers
+- Tabs
 
 See the following question for more additonal features.
 
@@ -40,8 +40,8 @@ See the following question for more additonal features.
 
 The desktop app is the same as the web version but includes these additional features:
 
-* Partial support for [graphql-config](https://github.com/prismagraphql/graphql-config) enabling features like multi-environment setups (no support for sending HTTP headers).
-* Double click on `*.graphql` files.
+- Partial support for [graphql-config](https://github.com/prismagraphql/graphql-config) enabling features like multi-environment setups (no support for sending HTTP headers).
+- Double click on `*.graphql` files.
 
 ### How does GraphQL Bin work?
 
@@ -77,43 +77,44 @@ These are the settings currently available:
 
 The React component `<Playground />` and all middlewares expose the following options:
 
-* `props` (Middlewares & React Component)
-  * `endpoint` [`string`](optional) - the GraphQL endpoint url.
-  * `subscriptionEndpoint` [`string`](optional) - the GraphQL subscriptions endpoint url.
-  * `workspaceName` [`string`](optional) - in case you provide a GraphQL Config, you can name your workspace here
-  * `config` [`string`](optional) - the JSON of a GraphQL Config. See an example [here](https://github.com/prismagraphql/graphql-playground/blob/master/packages/graphql-playground-react/src/localDevIndex.tsx#L47)
-  * `settings` [`ISettings`](optional) - Editor settings in json format as [described here](https://github.com/prismagraphql/graphql-playground#settings)
+- `props` (Middlewares & React Component)
+  - `endpoint` [`string`](optional) - the GraphQL endpoint url.
+  - `subscriptionEndpoint` [`string`](optional) - the GraphQL subscriptions endpoint url.
+  - `workspaceName` [`string`](optional) - in case you provide a GraphQL Config, you can name your workspace here
+  - `config` [`string`](optional) - the JSON of a GraphQL Config. See an example [here](https://github.com/prismagraphql/graphql-playground/blob/master/packages/graphql-playground-react/src/localDevIndex.tsx#L47)
+  - `settings` [`ISettings`](optional) - Editor settings in json format as [described here](https://github.com/prismagraphql/graphql-playground#settings)
 
 ```ts
 interface ISettings {
-  'general.betaUpdates': boolean
-  'editor.theme': Theme
-  'editor.reuseHeaders': boolean
-  'tracing.hideTracingResponse': boolean
-  'editor.fontSize': number
-  'editor.fontFamily': string
-  'request.credentials': string
+	'general.betaUpdates': boolean
+	'editor.theme': Theme
+	'editor.reuseHeaders': boolean
+	'tracing.hideTracingResponse': boolean
+	'editor.fontSize': number
+	'editor.fontFamily': string
+	'request.credentials': string
+	'schema.disableComments': boolean
 }
 ```
 
-* `schema` [`IntrospectionResult`](optional) - The result of an introspection query (an object of this form: `{__schema: {...}}`) The playground automatically fetches the schema from the endpoint. This is only needed when you want to override the schema.
-* `tabs` [`Tab[]`](optional) - An array of tabs to inject. **Note: When using this feature, tabs will be resetted each time the page is reloaded**
+- `schema` [`IntrospectionResult`](optional) - The result of an introspection query (an object of this form: `{__schema: {...}}`) The playground automatically fetches the schema from the endpoint. This is only needed when you want to override the schema.
+- `tabs` [`Tab[]`](optional) - An array of tabs to inject. **Note: When using this feature, tabs will be resetted each time the page is reloaded**
 
 ```ts
 interface Tab {
-  endpoint: string
-  query: string
-  name?: string
-  variables?: string
-  responses?: string[]
-  headers?: { [key: string]: string }
+	endpoint: string
+	query: string
+	name?: string
+	variables?: string
+	responses?: string[]
+	headers?: { [key: string]: string }
 }
 ```
 
 In addition to this, the React app provides some more properties:
 
-* `props` (React Component)
-* `createApolloLink` [`(session: Session) => ApolloLink`] - this is the equivalent to the `fetcher` of GraphiQL. For each query that is being executed, this function will be called
+- `props` (React Component)
+- `createApolloLink` [`(session: Session) => ApolloLink`] - this is the equivalent to the `fetcher` of GraphiQL. For each query that is being executed, this function will be called
 
 `createApolloLink` is only available in the React Component and not the middlewares, because the content must be serializable as it is being printed into a HTML template.
 
@@ -145,7 +146,10 @@ The GraphQL Playground requires **React 16**.
 Including Fonts (`1.`)
 
 ```html
-<link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700|Source+Code+Pro:400,700" rel="stylesheet">
+<link
+	href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700|Source+Code+Pro:400,700"
+	rel="stylesheet"
+/>
 ```
 
 Including stylesheet and the component (`2., 3.`)
@@ -157,10 +161,10 @@ import { Provider } from 'react-redux'
 import { Playground, store } from 'graphql-playground-react'
 
 ReactDOM.render(
-  <Provider store={store}>
-    <Playground endpoint="https://api.graph.cool/simple/v1/swapi" />
-  </Provider>,
-  document.body,
+	<Provider store={store}>
+		<Playground endpoint="https://api.graph.cool/simple/v1/swapi" />
+	</Provider>,
+	document.body,
 )
 ```
 
@@ -180,13 +184,13 @@ yarn add graphql-playground-middleware-lambda
 
 We have a full example for each of the frameworks below:
 
-* **Express:** See [packages/graphql-playground-middleware-express/examples/basic](https://github.com/prismagraphql/graphql-playground/tree/master/packages/graphql-playground-middleware-express/examples/basic)
+- **Express:** See [packages/graphql-playground-middleware-express/examples/basic](https://github.com/prismagraphql/graphql-playground/tree/master/packages/graphql-playground-middleware-express/examples/basic)
 
-* **Hapi:** See [packages/graphql-playground-middleware-hapi](https://github.com/prismagraphql/graphql-playground/tree/master/packages/graphql-playground-middleware-hapi)
+- **Hapi:** See [packages/graphql-playground-middleware-hapi](https://github.com/prismagraphql/graphql-playground/tree/master/packages/graphql-playground-middleware-hapi)
 
-* **Koa:** See [packages/graphql-playground-middleware-koa](https://github.com/prismagraphql/graphql-playground/tree/master/packages/graphql-playground-middleware-koa)
+- **Koa:** See [packages/graphql-playground-middleware-koa](https://github.com/prismagraphql/graphql-playground/tree/master/packages/graphql-playground-middleware-koa)
 
-* **Lambda (as serverless handler):** See [serverless-graphql-apollo](https://github.com/serverless/serverless-graphql-apollo) or a quick example below.
+- **Lambda (as serverless handler):** See [serverless-graphql-apollo](https://github.com/serverless/serverless-graphql-apollo) or a quick example below.
 
 ### As serverless handler
 
@@ -206,18 +210,18 @@ import lambdaPlayground from 'graphql-playground-middleware-lambda'
 // const lambdaPlayground = require('graphql-playground-middleware-lambda').default
 
 exports.graphqlHandler = function graphqlHandler(event, context, callback) {
-  function callbackFilter(error, output) {
-    // eslint-disable-next-line no-param-reassign
-    output.headers['Access-Control-Allow-Origin'] = '*'
-    callback(error, output)
-  }
+	function callbackFilter(error, output) {
+		// eslint-disable-next-line no-param-reassign
+		output.headers['Access-Control-Allow-Origin'] = '*'
+		callback(error, output)
+	}
 
-  const handler = graphqlLambda({ schema: myGraphQLSchema })
-  return handler(event, context, callbackFilter)
+	const handler = graphqlLambda({ schema: myGraphQLSchema })
+	return handler(event, context, callbackFilter)
 }
 
 exports.playgroundHandler = lambdaPlayground({
-  endpoint: '/dev/graphql',
+	endpoint: '/dev/graphql',
 })
 ```
 
@@ -228,17 +232,17 @@ functions:
   graphql:
     handler: handler.graphqlHandler
     events:
-    - http:
-        path: graphql
-        method: post
-        cors: true
+      - http:
+          path: graphql
+          method: post
+          cors: true
   playground:
     handler: handler.playgroundHandler
     events:
-    - http:
-        path: playground
-        method: get
-        cors: true
+      - http:
+          path: playground
+          method: get
+          cors: true
 ```
 
 ## Development
@@ -253,32 +257,33 @@ Open
 [localhost:3000/localDev.html?endpoint=https://api.graph.cool/simple/v1/swapi](http://localhost:3000/localDev.html?endpoint=https://api.graph.cool/simple/v1/swapi) for local development!
 
 ## Custom Theme
+
 From `graphql-playground-react@1.7.0` on you can provide a `codeTheme` property to the React Component to customize your color theme.
 These are the available options:
-```ts
 
+```ts
 export interface EditorColours {
-  property: string
-  comment: string
-  punctuation: string
-  keyword: string
-  def: string
-  qualifier: string
-  attribute: string
-  number: string
-  string: string
-  builtin: string
-  string2: string
-  variable: string
-  meta: string
-  atom: string
-  ws: string
-  selection: string
-  cursorColor: string
-  editorBackground: string
-  resultBackground: string
-  leftDrawerBackground: string
-  rightDrawerBackground: string
+	property: string
+	comment: string
+	punctuation: string
+	keyword: string
+	def: string
+	qualifier: string
+	attribute: string
+	number: string
+	string: string
+	builtin: string
+	string2: string
+	variable: string
+	meta: string
+	atom: string
+	ws: string
+	selection: string
+	cursorColor: string
+	editorBackground: string
+	resultBackground: string
+	leftDrawerBackground: string
+	rightDrawerBackground: string
 }
 ```
 
@@ -290,13 +295,13 @@ This is repository is a "mono repo" and contains multiple packages using [Yarn w
 
 In the folder `packages` you'll find the following packages:
 
-* `graphql-playground-electron`: Cross-platform electron app which uses `graphql-playground-react`
-* `graphql-playground-html`: Simple HTML page rendering a version of `graphql-playground-react` hosted on JSDeliver
-* `graphql-playground-middleware-express`: Express middleware using `graphql-playground-html`
-* `graphql-playground-middleware-hapi`: Hapi middleware using `graphql-playground-html`
-* `graphql-playground-middleware-koa`: Koa middleware using `graphql-playground-html`
-* `graphql-playground-middleware-lambda`: AWS Lambda middleware using `graphql-playground-html`
-* `graphql-playground-react`: Core of GraphQL Playground built with ReactJS
+- `graphql-playground-electron`: Cross-platform electron app which uses `graphql-playground-react`
+- `graphql-playground-html`: Simple HTML page rendering a version of `graphql-playground-react` hosted on JSDeliver
+- `graphql-playground-middleware-express`: Express middleware using `graphql-playground-html`
+- `graphql-playground-middleware-hapi`: Hapi middleware using `graphql-playground-html`
+- `graphql-playground-middleware-koa`: Koa middleware using `graphql-playground-html`
+- `graphql-playground-middleware-lambda`: AWS Lambda middleware using `graphql-playground-html`
+- `graphql-playground-react`: Core of GraphQL Playground built with ReactJS
 
 <a name="help-and-community" />
 

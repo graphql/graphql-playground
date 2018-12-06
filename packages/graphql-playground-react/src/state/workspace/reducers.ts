@@ -50,6 +50,7 @@ export const defaultSettings: ISettings = {
   'prettier.printWidth': 80,
   'request.credentials': 'omit',
   'tracing.hideTracingResponse': true,
+  'schema.disableComments': true,
 }
 
 // tslint:disable-next-line:max-classes-per-file
