@@ -6,7 +6,7 @@ const Title = styled.div`
   cursor: default;
   font-size: 14px;
   font-weight: 600;
-  text-transform: uppercase;
+  text-transform: uppercase !important;
   letter-spacing: 1px;
   padding: 16px;
   user-select: none;

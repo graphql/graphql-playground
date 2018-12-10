@@ -16,12 +16,14 @@ export interface DocsSessionState {
   readonly docsOpen: boolean
   readonly docsWidth: number
   readonly keyMove: boolean
+  readonly activeTabIdx: number | null
 }
 
 export class DocsSession extends Record({
   navStack: List([]),
   docsOpen: false,
   docsWidth: columnWidth,
+  activeTabIdx: null,
   keyMove: false,
 }) {
   toJSON() {
@@ -60,14 +62,28 @@ export default handleActions(
       })
       return state.set(sessionId, session)
     },
-    TOGGLE_DOCS: (state, { payload: { sessionId } }) => {
+    TOGGLE_DOCS: (state, { payload: { sessionId, activeTabIdx } }) => {
       let session = getSession(state, sessionId)
       session = session.set('docsOpen', !session.docsOpen)
+      if (typeof activeTabIdx === 'number') {
+        session = session.set(
+          'activeTabIdx',
+          session.docsOpen ? activeTabIdx : null,
+        )
+      }
       return state.set(sessionId, session)
     },
-    SET_DOCS_VISIBLE: (state, { payload: { sessionId, open } }) => {
+    SET_DOCS_VISIBLE: (
+      state,
+      { payload: { sessionId, open, activeTabIdx } },
+    ) => {
       let session = getSession(state, sessionId)
       session = session.set('docsOpen', !!open)
+      if (!session.docsOpen) {
+        session = session.set('activeTabIdx', null)
+      } else if (typeof activeTabIdx === 'number') {
+        session = session.set('activeTabIdx', activeTabIdx)
+      }
       return state.set(sessionId, session)
     },
     CHANGE_WIDTH_DOCS: (state, { payload: { sessionId, width } }) => {
