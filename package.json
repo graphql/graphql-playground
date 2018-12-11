@@ -1,6 +1,6 @@
 {
   "private": true,
-  "_workspaces": [
+  "workspaces": [
     "packages/*"
   ],
   "scripts": {
@@ -19,5 +19,10 @@
   },
   "dependencies": {
     "dotenv": "^5.0.1"
+  },
+  "resolutions": {
+    "**/graphql": "0.13.2",
+    "**/**/graphql": "0.13.2",
+    "**/**/**/graphql": "0.13.2"
   }
 }
