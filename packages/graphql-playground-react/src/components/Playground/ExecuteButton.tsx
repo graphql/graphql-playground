@@ -198,6 +198,11 @@ const Wrapper = styled.div`
   z-index: 5;
   top: 15px;
   margin: 0 14px 0 28px;
+  @media screen and (max-width: 767px) {
+    top: -37px;
+    left: 50%;
+    margin: 0 0 0 -36px;
+  }
 `
 
 interface ButtonProps {

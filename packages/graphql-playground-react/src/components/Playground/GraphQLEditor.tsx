@@ -603,6 +603,9 @@ connect<any, any, any>(
 const EditorBar = styled.div`
   display: flex;
   flex-direction: row;
+  @media screen and (max-width: 767px) {
+    flex-direction: column;
+  }
   flex: 1;
 `
 

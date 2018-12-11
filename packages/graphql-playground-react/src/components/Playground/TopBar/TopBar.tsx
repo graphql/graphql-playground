@@ -36,7 +36,11 @@ export interface Props {
   refetchSchema: () => void
 }
 
-class TopBar extends React.Component<Props, {}> {
+interface State {
+  showMobileMenu: boolean
+}
+
+class TopBar extends React.Component<Props, State> {
   static contextTypes = {
     store: PropTypes.shape({
       subscribe: PropTypes.func.isRequired,
@@ -44,45 +48,65 @@ class TopBar extends React.Component<Props, {}> {
       getState: PropTypes.func.isRequired,
     }),
   }
+  state = { showMobileMenu: false }
   render() {
     const { endpointUnreachable } = this.props
     return (
       <TopBarWrapper>
-        <Button onClick={this.props.prettifyQuery}>Prettify</Button>
-        <Button onClick={this.openHistory}>History</Button>
-        <UrlBarWrapper>
-          <UrlBar
-            value={this.props.endpoint}
-            onChange={this.onChange}
-            onKeyDown={this.onKeyDown}
-            onBlur={this.props.refetchSchema}
-            disabled={this.props.fixedEndpoint}
-            active={!this.props.fixedEndpoint}
-          />
-          {endpointUnreachable ? (
-            <ReachError>
-              <span>Server cannot be reached</span>
-              <Spinner />
-            </ReachError>
-          ) : (
-            <ReloadIcon
-              isReloadingSchema={this.props.isReloadingSchema}
-              onReloadSchema={this.props.refetchSchema}
+        <TopBarInnerWrapper>
+          <Button desktopOnly={true} onClick={this.props.prettifyQuery}>
+            Prettify
+          </Button>
+          <Button desktopOnly={true} onClick={this.openHistory}>
+            History
+          </Button>
+          <UrlBarWrapper>
+            <UrlBar
+              value={this.props.endpoint}
+              onChange={this.onChange}
+              onKeyDown={this.onKeyDown}
+              onBlur={this.props.refetchSchema}
+              disabled={this.props.fixedEndpoint}
+              active={!this.props.fixedEndpoint}
             />
+            {endpointUnreachable ? (
+              <ReachError>
+                <span>Server cannot be reached</span>
+                <Spinner />
+              </ReachError>
+            ) : (
+              <ReloadIcon
+                isReloadingSchema={this.props.isReloadingSchema}
+                onReloadSchema={this.props.refetchSchema}
+              />
+            )}
+          </UrlBarWrapper>
+          <Button desktopOnly={true} onClick={this.copyCurlToClipboard}>
+            Copy CURL
+          </Button>
+          <Button mobileOnly={true} onClick={this.toggleMobileMenu}>
+            Menu
+          </Button>
+          {this.props.shareEnabled && (
+            <Share>
+              <Button>Share Playground</Button>
+            </Share>
           )}
-        </UrlBarWrapper>
-        <Button onClick={this.copyCurlToClipboard}>Copy CURL</Button>
-        {this.props.shareEnabled && (
-          <Share>
-            <Button>Share Playground</Button>
-          </Share>
-        )}
+        </TopBarInnerWrapper>
+        <MobileMenu mobileOnly={true} hidden={!this.state.showMobileMenu}>
+          <Button onClick={this.props.prettifyQuery}>Prettify</Button>
+          <Button onClick={this.openHistory}>History</Button>
+          <Button onClick={this.copyCurlToClipboard}>Copy CURL</Button>
+        </MobileMenu>
       </TopBarWrapper>
     )
   }
   copyCurlToClipboard = () => {
     const curl = this.getCurl()
     copy(curl)
+  }
+  toggleMobileMenu = () => {
+    this.setState({ showMobileMenu: !this.state.showMobileMenu })
   }
   onChange = e => {
     this.props.editEndpoint(e.target.value)
@@ -165,22 +189,37 @@ export const Button = styled.button`
   font-size: 14px;
   padding: 6px 9px 7px 10px;
   margin-left: 6px;
+  @media screen and (min-width: 768px) {
+    display: ${p => p.mobileOnly && `none`};
+  }
+  @media screen and (max-width: 767px) {
+    display: ${p => p.desktopOnly && `none`};
+  }
 
   cursor: pointer;
   transition: 0.1s linear background-color;
-  &:first-child {
-    margin-left: 0;
-  }
   &:hover {
     background-color: ${p => p.theme.editorColours.buttonHover};
   }
 `
 
+const MobileMenu = styled.div`
+  padding: 10px 0 0;
+  @media screen and (min-width: 768px) {
+    display: ${p => p.mobileOnly && `none`};
+  }
+`
+
 const TopBarWrapper = styled.div`
   display: flex;
+  flex-direction: column;
   background: ${p => p.theme.editorColours.navigationBar};
-  padding: 10px 10px 4px;
-  align-items: center;
+  padding: 10px 10px 4px 4px;
+  justify-content: center;
+`
+
+const TopBarInnerWrapper = styled.div`
+  display: flex;
 `
 
 interface UrlBarProps {
