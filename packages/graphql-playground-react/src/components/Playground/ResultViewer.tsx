@@ -138,6 +138,10 @@ const Result = styled<ResultProps, 'div'>('div')`
     overflow: auto !important;
     max-width: 50vw;
     margin-right: 10px;
+    @media screen and (max-width: 767px) {
+      max-width: 100%;
+      margin-right: 17px;
+    }
   }
   .cm-string {
     color: ${p => p.theme.editorColours.property} !important;

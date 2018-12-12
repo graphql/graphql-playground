@@ -54,6 +54,9 @@ class TopBar extends React.Component<Props, State> {
     return (
       <TopBarWrapper>
         <TopBarInnerWrapper>
+          <Button mobileOnly={true} onClick={this.toggleMobileMenu}>
+            Menu
+          </Button>
           <Button desktopOnly={true} onClick={this.props.prettifyQuery}>
             Prettify
           </Button>
@@ -84,8 +87,8 @@ class TopBar extends React.Component<Props, State> {
           <Button desktopOnly={true} onClick={this.copyCurlToClipboard}>
             Copy CURL
           </Button>
-          <Button mobileOnly={true} onClick={this.toggleMobileMenu}>
-            Menu
+          <Button alt={true} onClick={this.toggleMobileMenu}>
+            Run
           </Button>
           {this.props.shareEnabled && (
             <Share>
@@ -181,8 +184,9 @@ export default connect(
 export const Button = styled.button`
   text-transform: uppercase;
   font-weight: 600;
-  color: ${p => p.theme.editorColours.buttonText};
-  background: ${p => p.theme.editorColours.button};
+  color: ${p =>
+    p.alt ? p.theme.editorColours.button : p.theme.editorColours.buttonText};
+  background: ${p => (p.alt ? '#fff' : p.theme.editorColours.button)};
   border-radius: 2px;
   flex: 0 0 auto;
   letter-spacing: 0.53px;
