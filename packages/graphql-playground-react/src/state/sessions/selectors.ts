@@ -66,6 +66,7 @@ export const getCurrentQueryStartTime = makeSessionSelector(
   'currentQueryStartTime',
 )
 export const getCurrentQueryEndTime = makeSessionSelector('currentQueryEndTime')
+export const getIsPollingSchema = makeSessionSelector('isPollingSchema')
 export const getIsReloadingSchema = makeSessionSelector('isReloadingSchema')
 export const getResponseExtensions = makeSessionSelector('responseExtensions')
 export const getQueryVariablesActive = makeSessionSelector(

@@ -4,12 +4,14 @@ import * as copy from 'copy-to-clipboard'
 
 import Share from '../../Share'
 import ReloadIcon from './ReloadIcon'
+import PollingIcon from './PollingIcon'
 import { createStructuredSelector } from 'reselect'
 import {
   getEndpoint,
   getSelectedSession,
   getIsReloadingSchema,
   getEndpointUnreachable,
+  getIsPollingSchema,
 } from '../../../state/sessions/selectors'
 import { connect } from 'react-redux'
 import { getFixedEndpoint } from '../../../state/general/selectors'
@@ -18,6 +20,7 @@ import {
   editEndpoint,
   prettifyQuery,
   refetchSchema,
+  togglePollingSchema,
 } from '../../../state/sessions/actions'
 import { share } from '../../../state/sharing/actions'
 import { openHistory } from '../../../state/general/actions'
@@ -26,6 +29,7 @@ export interface Props {
   endpoint: string
   shareEnabled?: boolean
   fixedEndpoint?: boolean
+  isPollingSchema: boolean
   isReloadingSchema: boolean
   endpointUnreachable: boolean
 
@@ -33,6 +37,7 @@ export interface Props {
   prettifyQuery: () => void
   openHistory: () => void
   share: () => void
+  togglePollingSchema: () => void
   refetchSchema: () => void
 }
 
@@ -65,10 +70,25 @@ class TopBar extends React.Component<Props, {}> {
               <Spinner />
             </ReachError>
           ) : (
-            <ReloadIcon
-              isReloadingSchema={this.props.isReloadingSchema}
-              onReloadSchema={this.props.refetchSchema}
-            />
+            <div
+              style={{
+                display: 'flex',
+                flexDirection: 'row',
+                position: 'absolute',
+                alignItems: 'center',
+                right: '5px',
+              }}
+            >
+              <ReloadIcon
+                isReloadingSchema={this.props.isReloadingSchema}
+                onReloadSchema={this.props.refetchSchema}
+              />
+              <PollingIcon
+                isPollingSchema={this.props.isPollingSchema}
+                onTogglePollingSchema={this.props.togglePollingSchema}
+                onReloadSchema={this.props.refetchSchema}
+              />
+            </div>
           )}
         </UrlBarWrapper>
         <Button onClick={this.copyCurlToClipboard}>Copy CURL</Button>
@@ -139,6 +159,7 @@ class TopBar extends React.Component<Props, {}> {
 const mapStateToProps = createStructuredSelector({
   endpoint: getEndpoint,
   fixedEndpoint: getFixedEndpoint,
+  isPollingSchema: getIsPollingSchema,
   isReloadingSchema: getIsReloadingSchema,
   endpointUnreachable: getEndpointUnreachable,
 })
@@ -150,6 +171,7 @@ export default connect(
     prettifyQuery,
     openHistory,
     share,
+    togglePollingSchema,
     refetchSchema,
   },
 )(TopBar)

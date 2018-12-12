@@ -61,6 +61,7 @@ export const {
   setResponseExtensions,
   setCurrentQueryStartTime,
   setCurrentQueryEndTime,
+  togglePollingSchema,
   refetchSchema,
   setScrollTop,
   reorderTabs,
@@ -128,6 +129,7 @@ export const {
   CLEAR_RESPONSES: simpleAction(),
 
   FETCH_SCHEMA: simpleAction(),
+  TOGGLE_POLLING_SCHEMA: simpleAction(),
   REFETCH_SCHEMA: simpleAction(),
   SET_ENDPOINT_UNREACHABLE: simpleAction('endpoint'),
   SET_SCROLL_TOP: (sessionId, scrollTop) => ({ sessionId, scrollTop }),

@@ -58,8 +58,6 @@ const reloadAction = props => keyframes`
 }`
 
 const Positioner = styled.div`
-  position: absolute;
-  right: 5px;
   width: 20px;
   height: 20px;
   cursor: pointer;

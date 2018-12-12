@@ -81,6 +81,7 @@ export class Session extends Record(getDefaultSession('')) {
   currentQueryStartTime?: Date
   currentQueryEndTime?: Date
 
+  isPollingSchema: boolean
   isReloadingSchema: boolean
 
   responseExtensions: any
@@ -280,6 +281,10 @@ const reducer = handleActions(
         ['sessions', getSelectedSessionId(state), 'isReloadingSchema'],
         true,
       )
+    },
+    TOGGLE_POLLING_SCHEMA: state => {
+      const path = ['sessions', getSelectedSessionId(state), 'isPollingSchema']
+      return state.setIn(path, !state.getIn(path))
     },
     REFETCH_SCHEMA: state => {
       return state.setIn(
