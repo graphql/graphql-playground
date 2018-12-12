@@ -141,6 +141,7 @@ export function getDefaultSession(endpoint: string) {
     starred: false,
     queryRunning: false,
     operations: List([]),
+    isPollingSchema: false,
     isReloadingSchema: false,
     responseExtensions: {},
     queryVariablesActive: false,
