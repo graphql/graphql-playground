@@ -76,7 +76,7 @@ class TopBar extends React.Component<Props, {}> {
                 flexDirection: 'row',
                 position: 'absolute',
                 alignItems: 'center',
-                right: '5px',
+                left: '5px',
               }}
             >
               <ReloadIcon
@@ -218,6 +218,7 @@ const UrlBar = styled<UrlBarProps, 'input'>('input')`
       : p.theme.editorColours.textInactive};
   border: 1px solid ${p => p.theme.editorColours.background};
   padding: 6px 12px;
+  padding-left: 62px;
   font-size: 13px;
   flex: 1;
 `
