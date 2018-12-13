@@ -58,8 +58,8 @@ const reloadAction = props => keyframes`
 }`
 
 const Positioner = styled.div`
-  width: 20px;
-  height: 20px;
+  width: 25px;
+  height: 25px;
   cursor: pointer;
   transform: rotateY(180deg);
 `
