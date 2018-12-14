@@ -10,7 +10,6 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "express": "^4.16.4",
-    "graphql-playground-middleware-express": "^1.7.8"
+    "express": "^4.16.4"
   }
 }
