@@ -1,0 +1,11 @@
+{
+  "name": "server",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "dependencies": {
+    "body-parser": "^1.18.3",
+    "express": "^4.16.4",
+    "graphql-playground-middleware-express": "^1.7.8"
+  }
+}
