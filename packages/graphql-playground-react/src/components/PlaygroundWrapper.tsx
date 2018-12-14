@@ -45,6 +45,7 @@ export interface PlaygroundWrapperProps {
   setTitle?: boolean
   settings?: ISettings
   shareEnabled?: string
+  fixedEndpoint?: string
   folderName?: string
   configString?: string
   showNewWorkspace?: boolean
@@ -391,6 +392,7 @@ class PlaygroundWrapper extends React.Component<
               onSaveConfig={this.handleSaveConfig}
               onUpdateSessionCount={this.handleUpdateSessionCount}
               fixedEndpoints={Boolean(this.state.configString)}
+              fixedEndpoint={this.props.fixedEndpoint}
               headers={combinedHeaders}
               configPath={this.props.configPath}
               workspaceName={

@@ -12,7 +12,6 @@ import {
   getEndpointUnreachable,
 } from '../../../state/sessions/selectors'
 import { connect } from 'react-redux'
-import { getFixedEndpoint } from '../../../state/general/selectors'
 import * as PropTypes from 'prop-types'
 import {
   editEndpoint,
@@ -138,7 +137,6 @@ class TopBar extends React.Component<Props, {}> {
 
 const mapStateToProps = createStructuredSelector({
   endpoint: getEndpoint,
-  fixedEndpoint: getFixedEndpoint,
   isReloadingSchema: getIsReloadingSchema,
   endpointUnreachable: getEndpointUnreachable,
 })
