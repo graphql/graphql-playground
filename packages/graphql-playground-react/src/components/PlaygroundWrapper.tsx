@@ -44,6 +44,7 @@ export interface PlaygroundWrapperProps {
   subscriptionEndpoint?: string
   setTitle?: boolean
   settings?: ISettings
+  shareEnabled?: string
   folderName?: string
   configString?: string
   showNewWorkspace?: boolean
@@ -373,6 +374,7 @@ class PlaygroundWrapper extends React.Component<
               )}
             <Playground
               endpoint={this.state.endpoint}
+              shareEnabled={this.props.shareEnabled}
               subscriptionEndpoint={this.state.subscriptionEndpoint}
               shareUrl={this.state.shareUrl}
               onChangeEndpoint={this.handleChangeEndpoint}
