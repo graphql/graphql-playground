@@ -15,7 +15,6 @@ import { buildTemplate } from './menu'
 import { createWindow } from './createWindow'
 import { WindowContext } from './types'
 import { startUpdates } from './updates'
-import squirrelStartup = require('electron-squirrel-startup')
 import * as Raven from 'raven'
 Raven.config(
   'https://cce868d3730e473e9350f1436da7d908:ff5d65389e404b28b5af1d97d8024414@sentry.io/297194',
@@ -24,10 +23,6 @@ Raven.config(
 log.transports.file.level = 'info'
 log.transports.console.level = 'debug'
 
-// Immediately quit the app if squirrel is launching it
-if (squirrelStartup) {
-  app.quit()
-}
 
 const windowContext: WindowContext = {
   readyWindowsPromises: {},

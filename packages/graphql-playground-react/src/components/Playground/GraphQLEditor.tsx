@@ -1,24 +1,34 @@
 import * as React from 'react'
 import * as ReactDOM from 'react-dom'
 import { isNamedType, GraphQLSchema } from 'graphql'
+import { List } from 'immutable'
+
+// Query & Response Components
 import ExecuteButton from './ExecuteButton'
 import QueryEditor from './QueryEditor'
 import EditorWrapper, { Container } from './EditorWrapper'
 import CodeMirrorSizer from 'graphiql/dist/utility/CodeMirrorSizer'
-import { fillLeafs } from 'graphiql/dist/utility/fillLeafs'
-import { getLeft, getTop } from 'graphiql/dist/utility/elementPosition'
-import { connect } from 'react-redux'
-
-import Spinner from '../Spinner'
-import Results from './Results'
-import ResponseTracing from './ResponseTracing'
-import GraphDocs from './DocExplorer/GraphDocs'
-import { styled } from '../../styled/index'
 import TopBar from './TopBar/TopBar'
 import {
   VariableEditorComponent,
   HeadersEditorComponent,
 } from './VariableEditor'
+import Spinner from '../Spinner'
+import Results from './Results'
+import ResponseTracing from './ResponseTracing'
+import { fillLeafs } from 'graphiql/dist/utility/fillLeafs'
+import { getLeft, getTop } from 'graphiql/dist/utility/elementPosition'
+
+// Explorer Components
+import SideTab from './ExplorerTabs/SideTab'
+import SideTabs from './ExplorerTabs/SideTabs'
+import SDLView from './SchemaExplorer/SDLView'
+import GraphDocs from './DocExplorer/GraphDocs'
+
+import { styled } from '../../styled/index'
+
+// Redux Dependencies
+import { connect } from 'react-redux'
 import { createStructuredSelector } from 'reselect'
 import {
   getQueryRunning,
@@ -55,7 +65,6 @@ import {
   toggleVariables,
   fetchSchema,
 } from '../../state/sessions/actions'
-import { List } from 'immutable'
 import { ResponseRecord } from '../../state/sessions/reducers'
 
 /**
@@ -123,7 +132,8 @@ class GraphQLEditor extends React.PureComponent<Props & ReduxProps> {
   public resultComponent
   public editorBarComponent
   public docExplorerComponent: any // later React.Component<...>
-
+  public graphExplorerComponent: any
+  public schemaExplorerComponent: any
   private queryResizer: any
   private responseResizer: any
   private queryVariablesRef
@@ -250,7 +260,21 @@ class GraphQLEditor extends React.PureComponent<Props & ReduxProps> {
             </ResultWrap>
           </EditorBar>
         </EditorWrapper>
-        <GraphDocs ref={this.setDocExplorerRef} schema={this.props.schema} />
+        <SideTabs>
+          <SideTab label="Docs" activeColor="green" tabWidth="49px">
+            <GraphDocs
+              schema={this.props.schema}
+              ref={this.setDocExplorerRef}
+            />
+          </SideTab>
+          <SideTab label="Schema" activeColor="blue" tabWidth="65px">
+            <SDLView
+              schema={this.props.schema}
+              ref={this.setSchemaExplorerRef}
+              sessionId={this.props.sessionId}
+            />
+          </SideTab>
+        </SideTabs>
       </Container>
     )
   }
@@ -290,6 +314,16 @@ class GraphQLEditor extends React.PureComponent<Props & ReduxProps> {
   setDocExplorerRef = ref => {
     if (ref) {
       this.docExplorerComponent = ref.getWrappedInstance()
+    }
+  }
+  setGraphExplorerRef = ref => {
+    if (ref) {
+      this.graphExplorerComponent = ref.getWrappedInstance()
+    }
+  }
+  setSchemaExplorerRef = ref => {
+    if (ref) {
+      this.schemaExplorerComponent = ref.getWrappedInstance()
     }
   }
 

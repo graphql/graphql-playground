@@ -14,7 +14,7 @@ const ColumnDoc = ({
   width = columnWidth,
 }: Props) => {
   return (
-    <Column style={{ width }} overflow={overflow}>
+    <Column style={{ width }} verticalScroll={overflow}>
       {children}
     </Column>
   )
@@ -23,7 +23,7 @@ const ColumnDoc = ({
 export default ColumnDoc
 
 interface ColumnProps {
-  overflow: boolean
+  verticalScroll: boolean
 }
 
 const Column = styled<ColumnProps, 'div'>('div')`
@@ -32,5 +32,6 @@ const Column = styled<ColumnProps, 'div'>('div')`
   flex-flow: column;
   padding-bottom: 20px;
   border-right: 1px solid ${p => p.theme.colours.black10};
-  overflow: ${p => (p.overflow ? 'hidden scroll' : 'auto auto')};
+  overflow-x: ${p => (p.verticalScroll ? 'hidden' : 'auto')}
+  overflow-y: ${p => (p.verticalScroll ? 'scroll' : 'auto')}
 `

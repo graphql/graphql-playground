@@ -1,6 +1,6 @@
 {
   "name": "graphql-playground-middleware-express",
-  "version": "1.7.7",
+  "version": "1.7.8",
   "homepage": "https://github.com/graphcool/graphql-playground/tree/master/packages/graphql-playground-middleware-express",
   "description": "GraphQL IDE for better development workflows (GraphQL Subscriptions, interactive docs & collaboration).",
   "contributors": [
@@ -34,7 +34,7 @@
     "typescript": "2.6.2"
   },
   "dependencies": {
-    "graphql-playground-html": "1.6.5"
+    "graphql-playground-html": "1.6.6"
   },
   "typings": "dist/index.d.ts",
   "typescript": {

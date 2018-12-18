@@ -26,4 +26,5 @@ export interface ISettings {
   ['prettier.printWidth']: number
   ['tracing.hideTracingResponse']: boolean
   ['request.credentials']: 'omit' | 'include' | 'same-origin'
+  ['schema.disableComments']: boolean
 }

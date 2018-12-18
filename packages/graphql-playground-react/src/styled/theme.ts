@@ -162,7 +162,6 @@ export const lightColours: Colours = {
   orange: 'rgba(241, 143, 1, 1)',
   blue: 'rgba(42, 126, 210, 1)',
   purple: 'rgb(164, 3, 111)',
-
   paleText: 'rgba(0, 0, 0, 0.5)',
   paleGrey: '#f3f4f4', // use for bgs, borders, etc
   lightGrey: '#eeeff0',
@@ -190,7 +189,6 @@ export const darkEditorColours: EditorColours = {
   ws: 'rgba(255, 255, 255, 0.4)',
   selection: 'rgba(255, 255, 255, 0.1)',
   cursorColor: 'rgba(255, 255, 255, 0.4)',
-
   text: '#fff',
   textInactive: 'rgba(255, 255, 255, 0.6)',
   background: '#09141c',
@@ -245,7 +243,6 @@ export const lightEditorColours: EditorColours = {
   ws: 'rgba(23, 42, 58, 0.8)', //
   selection: '#d1e9fd',
   cursorColor: 'rgba(0, 0, 0, 0.4)',
-
   text: 'rgba(0, 0, 0, 0.7)',
   textInactive: 'rgba(0, 0, 0, 0.3)',
   background: '#dbdee0',

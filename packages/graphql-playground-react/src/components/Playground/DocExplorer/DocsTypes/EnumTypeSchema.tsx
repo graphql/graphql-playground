@@ -4,10 +4,11 @@ import { DocType } from './DocType'
 
 export interface EnumTypeSchemaProps {
   type: any
+  sdlType?: boolean
 }
 
-const EnumTypeSchema = ({ type }: EnumTypeSchemaProps) => {
-  const values = type.getValues()
+const EnumTypeSchema = ({ type, sdlType }: EnumTypeSchemaProps) => {
+  const values = sdlType ? type._values : type.getValues()
   const deprecatedValues = values.filter((value: any) => value.isDeprecated)
   return (
     <DocType className="doc-type-schema">
