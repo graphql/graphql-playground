@@ -98,7 +98,13 @@ class SideTabs extends React.Component<
     if (prevProps.activeTabIdx && !this.props.docs.activeTabIdx) {
       this.props.setDocsVisible(this.props.sessionId, false)
     }
-    return this.setWidth()
+    this.setWidth()
+    if (
+      this.props.docs.activeTabIdx !== prevProps.docs.activeTabIdx &&
+      this.refContentContainer
+    ) {
+      this.refContentContainer.focus()
+    }
   }
 
   componentDidMount() {
@@ -164,9 +170,6 @@ class SideTabs extends React.Component<
   }
 
   private handleTabClick = idx => () => {
-    if (!this.props.docs.docsOpen && this.refContentContainer) {
-      this.refContentContainer.focus()
-    }
     if (this.props.docs.activeTabIdx === idx) {
       this.props.setDocsVisible(this.props.sessionId, false)
       return this.setWidth()
