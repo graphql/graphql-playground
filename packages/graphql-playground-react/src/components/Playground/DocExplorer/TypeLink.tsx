@@ -166,7 +166,7 @@ class TypeLink extends React.Component<
         {type.defaultValue !== undefined ? (
           <DefaultValue>
             {' '}
-            = <span>{`${type.defaultValue}`}</span>
+            = <span>{`${JSON.stringify(type.defaultValue, null, 2)}`}</span>
           </DefaultValue>
         ) : (
           undefined
