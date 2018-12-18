@@ -1,41 +1,41 @@
-import * as React from "react";
+import * as React from 'react'
 
 export interface Props {
-  isPollingSchema: boolean;
-  onReloadSchema: () => void;
+  isPollingSchema: boolean
+  onReloadSchema: () => void
 }
 
 class SchemaPolling extends React.Component<Props> {
-  timer: any;
+  timer: any
 
   componentDidMount() {
-    this.startPolling();
+    this.startPolling()
   }
   componentWillUnmount() {
-    this.clearTimer();
+    this.clearTimer()
   }
   componentWillReceiveProps(nextProps: Props) {
     if (nextProps.isPollingSchema !== this.props.isPollingSchema) {
-      this.startPolling(nextProps);
+      this.startPolling(nextProps)
     }
   }
 
   render() {
-    return null;
+    return null
   }
   private startPolling(props: Props = this.props) {
-    this.clearTimer();
+    this.clearTimer()
     if (props.isPollingSchema) {
-      this.timer = setInterval(() => props.onReloadSchema(), 3000);
+      this.timer = setInterval(() => props.onReloadSchema(), 2000)
     }
   }
 
   private clearTimer() {
     if (this.timer) {
-      clearInterval(this.timer);
-      this.timer = null;
+      clearInterval(this.timer)
+      this.timer = null
     }
   }
 }
 
-export default SchemaPolling;
+export default SchemaPolling

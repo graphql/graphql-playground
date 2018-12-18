@@ -91,7 +91,8 @@ export class SchemaFetcher {
             schema,
             tracingSupported,
           }
-          // this.cache = this.cache.set(this.hash(session), result);
+          // this.cache = this.cache.delete(this.hash(session))
+          this.cache = this.cache.set(this.hash(session), result)
           resolve(result)
           this.fetching = this.fetching.remove(hash)
           const subscription = this.subscriptions.get(hash)

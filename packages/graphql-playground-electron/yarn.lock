@@ -3695,7 +3695,6 @@ graphql-config-extension-graphcool@1.0.8:
 graphql-config-extension-prisma@^0.2.5:
   version "0.2.5"
   resolved "https://registry.yarnpkg.com/graphql-config-extension-prisma/-/graphql-config-extension-prisma-0.2.5.tgz#f67db5b6f882ac76096fb2e68a18ec81c7d51fd2"
-  integrity sha512-7Qh3TzZS3hwZpJbTNfTHXBM6UbzV7DMik9Mc95Rz76yTAs7Wr83xBFsH4Ap1NWlqBgANfO3cLLI4YomDJmO5SA==
   dependencies:
     graphql-config "2.2.1"
     prisma-yml "1.20.0-beta.18"
@@ -3769,7 +3768,6 @@ graphql-playground-html@^1.6.0:
 graphql-playground-react@^1.7.10:
   version "1.7.10"
   resolved "https://registry.yarnpkg.com/graphql-playground-react/-/graphql-playground-react-1.7.10.tgz#12e1f7397524e9c05db224ddb4215f5435a36654"
-  integrity sha512-AQbBlL3Gtyuw5hxS9QC67dIc1dj1uqEB6IrD5Lh7uuQ+i6jUVFlI+ACXsKEvNiRYldYUk4Lfa6fIXV9nPZkuHQ==
   dependencies:
     apollo-link "^1.0.7"
     apollo-link-http "^1.3.2"
