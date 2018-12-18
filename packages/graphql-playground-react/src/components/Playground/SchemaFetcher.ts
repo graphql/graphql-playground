@@ -89,12 +89,13 @@ export class SchemaFetcher {
             false;
           const result = {
             schema,
-            tracingSupported
-          };
-          // this.cache = this.cache.set(this.hash(session), result);
-          resolve(result);
-          this.fetching = this.fetching.remove(hash);
-          const subscription = this.subscriptions.get(hash);
+            tracingSupported,
+          }
+          // this.cache = this.cache.delete(this.hash(session))
+          this.cache = this.cache.set(this.hash(session), result)
+          resolve(result)
+          this.fetching = this.fetching.remove(hash)
+          const subscription = this.subscriptions.get(hash)
           if (subscription) {
             subscription(result.schema);
           }
