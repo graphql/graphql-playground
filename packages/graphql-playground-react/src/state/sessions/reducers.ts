@@ -32,8 +32,7 @@ export interface SessionStateProps {
   sessions: OrderedMap<string, Session>
   selectedSessionId: string
   sessionCount: number
-  
-  ?: string
+  headers?: string
 }
 
 export interface Tab {
