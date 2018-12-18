@@ -1,44 +1,41 @@
-import * as React from 'react'
-import { styled } from '../../../styled/index'
-import * as copy from 'copy-to-clipboard'
+import * as React from "react";
+import { styled } from "../../../styled/index";
+import * as copy from "copy-to-clipboard";
 
-import Share from '../../Share'
-import ReloadIcon from './ReloadIcon'
-import PollingIcon from './PollingIcon'
-import { createStructuredSelector } from 'reselect'
+import Share from "../../Share";
+import ReloadIcon from "./ReloadIcon";
+import SchemaPolling from "./SchemaPolling";
+import { createStructuredSelector } from "reselect";
 import {
   getEndpoint,
   getSelectedSession,
   getIsReloadingSchema,
-  getEndpointUnreachable,
-  getIsPollingSchema,
-} from '../../../state/sessions/selectors'
-import { connect } from 'react-redux'
-import { getFixedEndpoint } from '../../../state/general/selectors'
-import * as PropTypes from 'prop-types'
+  getEndpointUnreachable
+} from "../../../state/sessions/selectors";
+import { connect } from "react-redux";
+import { getFixedEndpoint } from "../../../state/general/selectors";
+import * as PropTypes from "prop-types";
 import {
   editEndpoint,
   prettifyQuery,
-  refetchSchema,
-  togglePollingSchema,
-} from '../../../state/sessions/actions'
-import { share } from '../../../state/sharing/actions'
-import { openHistory } from '../../../state/general/actions'
+  refetchSchema
+} from "../../../state/sessions/actions";
+import { share } from "../../../state/sharing/actions";
+import { openHistory } from "../../../state/general/actions";
 
 export interface Props {
-  endpoint: string
-  shareEnabled?: boolean
-  fixedEndpoint?: boolean
-  isPollingSchema: boolean
-  isReloadingSchema: boolean
-  endpointUnreachable: boolean
+  endpoint: string;
+  shareEnabled?: boolean;
+  fixedEndpoint?: boolean;
+  isReloadingSchema: boolean;
+  endpointUnreachable: boolean;
 
-  editEndpoint: (value: string) => void
-  prettifyQuery: () => void
-  openHistory: () => void
-  share: () => void
-  togglePollingSchema: () => void
-  refetchSchema: () => void
+  editEndpoint: (value: string) => void;
+  prettifyQuery: () => void;
+  openHistory: () => void;
+  share: () => void;
+  togglePollingSchema: () => void;
+  refetchSchema: () => void;
 }
 
 class TopBar extends React.Component<Props, {}> {
@@ -46,11 +43,11 @@ class TopBar extends React.Component<Props, {}> {
     store: PropTypes.shape({
       subscribe: PropTypes.func.isRequired,
       dispatch: PropTypes.func.isRequired,
-      getState: PropTypes.func.isRequired,
-    }),
-  }
+      getState: PropTypes.func.isRequired
+    })
+  };
   render() {
-    const { endpointUnreachable } = this.props
+    const { endpointUnreachable } = this.props;
     return (
       <TopBarWrapper>
         <Button onClick={this.props.prettifyQuery}>Prettify</Button>
@@ -72,20 +69,19 @@ class TopBar extends React.Component<Props, {}> {
           ) : (
             <div
               style={{
-                display: 'flex',
-                flexDirection: 'row',
-                position: 'absolute',
-                alignItems: 'center',
-                left: '5px',
+                display: "flex",
+                flexDirection: "row",
+                alignItems: "center",
+                position: "absolute",
+                left: "5px"
               }}
             >
               <ReloadIcon
                 isReloadingSchema={this.props.isReloadingSchema}
                 onReloadSchema={this.props.refetchSchema}
               />
-              <PollingIcon
-                isPollingSchema={this.props.isPollingSchema}
-                onTogglePollingSchema={this.props.togglePollingSchema}
+              <SchemaPolling
+                isPollingSchema={true}
                 onReloadSchema={this.props.refetchSchema}
               />
             </div>
@@ -98,71 +94,70 @@ class TopBar extends React.Component<Props, {}> {
           </Share>
         )}
       </TopBarWrapper>
-    )
+    );
   }
   copyCurlToClipboard = () => {
-    const curl = this.getCurl()
-    copy(curl)
-  }
+    const curl = this.getCurl();
+    copy(curl);
+  };
   onChange = e => {
-    this.props.editEndpoint(e.target.value)
-  }
+    this.props.editEndpoint(e.target.value);
+  };
   onKeyDown = e => {
     if (e.keyCode === 13) {
-      this.props.refetchSchema()
+      this.props.refetchSchema();
     }
-  }
+  };
   openHistory = () => {
-    this.props.openHistory()
-  }
+    this.props.openHistory();
+  };
   getCurl = () => {
     // no need to rerender the whole time. only on-demand the store is fetched
-    const session = getSelectedSession(this.context.store.getState())
-    let variables
+    const session = getSelectedSession(this.context.store.getState());
+    let variables;
     try {
-      variables = JSON.parse(session.variables)
+      variables = JSON.parse(session.variables);
     } catch (e) {
       //
     }
     const data = JSON.stringify({
       query: session.query,
       variables,
-      operationName: session.operationName,
-    })
-    let sessionHeaders
+      operationName: session.operationName
+    });
+    let sessionHeaders;
     try {
-      sessionHeaders = JSON.parse(session.headers!)
+      sessionHeaders = JSON.parse(session.headers!);
     } catch (e) {
       //
     }
     const headers = {
-      'Accept-Encoding': 'gzip, deflate, br',
-      'Content-Type': 'application/json',
-      Accept: 'application/json',
-      Connection: 'keep-alive',
-      DNT: '1',
+      "Accept-Encoding": "gzip, deflate, br",
+      "Content-Type": "application/json",
+      Accept: "application/json",
+      Connection: "keep-alive",
+      DNT: "1",
       Origin: location.origin || session.endpoint,
-      ...sessionHeaders,
-    }
+      ...sessionHeaders
+    };
     const headersString = Object.keys(headers)
       .map(key => {
-        const value = headers[key]
-        return `-H '${key}: ${value}'`
+        const value = headers[key];
+        return `-H '${key}: ${value}'`;
       })
-      .join(' ')
+      .join(" ");
     return `curl '${
       session.endpoint
-    }' ${headersString} --data-binary '${data}' --compressed`
-  }
+    }' ${headersString} --data-binary '${data}' --compressed`;
+  };
 }
 
 const mapStateToProps = createStructuredSelector({
   endpoint: getEndpoint,
   fixedEndpoint: getFixedEndpoint,
-  isPollingSchema: getIsPollingSchema,
   isReloadingSchema: getIsReloadingSchema,
-  endpointUnreachable: getEndpointUnreachable,
-})
+  endpointUnreachable: getEndpointUnreachable
+});
 
 export default connect(
   mapStateToProps,
@@ -171,10 +166,9 @@ export default connect(
     prettifyQuery,
     openHistory,
     share,
-    togglePollingSchema,
-    refetchSchema,
-  },
-)(TopBar)
+    refetchSchema
+  }
+)(TopBar);
 
 export const Button = styled.button`
   text-transform: uppercase;
@@ -196,20 +190,20 @@ export const Button = styled.button`
   &:hover {
     background-color: ${p => p.theme.editorColours.buttonHover};
   }
-`
+`;
 
 const TopBarWrapper = styled.div`
   display: flex;
   background: ${p => p.theme.editorColours.navigationBar};
   padding: 10px 10px 4px;
   align-items: center;
-`
+`;
 
 interface UrlBarProps {
-  active: boolean
+  active: boolean;
 }
 
-const UrlBar = styled<UrlBarProps, 'input'>('input')`
+const UrlBar = styled<UrlBarProps, "input">("input")`
   background: ${p => p.theme.editorColours.button};
   border-radius: 4px;
   color: ${p =>
@@ -218,10 +212,10 @@ const UrlBar = styled<UrlBarProps, 'input'>('input')`
       : p.theme.editorColours.textInactive};
   border: 1px solid ${p => p.theme.editorColours.background};
   padding: 6px 12px;
-  padding-left: 62px;
+  padding-left: 38px;
   font-size: 13px;
   flex: 1;
-`
+`;
 
 const UrlBarWrapper = styled.div`
   flex: 1;
@@ -229,7 +223,7 @@ const UrlBarWrapper = styled.div`
   position: relative;
   display: flex;
   align-items: center;
-`
+`;
 
 const ReachError = styled.div`
   position: absolute;
@@ -237,22 +231,22 @@ const ReachError = styled.div`
   display: flex;
   align-items: center;
   color: #f25c54;
-`
+`;
 
 const Pulse = styled.div`
   width: 16px;
   height: 16px;
   background-color: ${p => p.theme.editorColours.icon};
   border-radius: 100%;
-`
+`;
 
 const SpinnerWrapper = styled.div`
   position: relative;
   margin: 6px;
-`
+`;
 
 const Spinner = () => (
   <SpinnerWrapper>
     <Pulse />
   </SpinnerWrapper>
-)
+);
