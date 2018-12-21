@@ -2,7 +2,6 @@ import * as React from 'react'
 import { styled, keyframes } from '../../../styled/index'
 
 export interface Props {
-  isPollingSchema: boolean
   isReloadingSchema: boolean
   onReloadSchema?: () => void
 }
@@ -17,13 +16,11 @@ const ReloadIcon: React.SFC<Props> = props => (
         strokeWidth="1.5"
         fill="none"
         strokeLinecap="round"
-        isReloadingSchema={props.isReloadingSchema && !props.isPollingSchema}
+        isReloadingSchema={props.isReloadingSchema}
       />
       <Icon
-        d={
-          'M4.83 4.86a6.92 6.92 0 0 1 11.3 2.97l.41-1.23c.13-.4.56-.6.95-.47.4.13.6.56.47.95l-1.13 3.33a.76.76 0 0 1-.7.5.72.72 0 0 1-.43-.12l-2.88-1.92a.76.76 0 0 1-.2-1.04.75.75 0 0 1 1.03-.2l1.06.7A5.34 5.34 0 0 0 9.75 4.5a5.44 5.44 0 0 0-5.64 5.22 5.42 5.42 0 0 0 5.24 5.62c.41 0 .74.36.72.78a.75.75 0 0 1-.75.72H9.3a6.9 6.9 0 0 1-6.68-7.18 6.88 6.88 0 0 1 2.22-4.81z'
-        }
-        isReloadingSchema={props.isReloadingSchema && !props.isPollingSchema}
+        d="M4.83 4.86a6.92 6.92 0 0 1 11.3 2.97l.41-1.23c.13-.4.56-.6.95-.47.4.13.6.56.47.95l-1.13 3.33a.76.76 0 0 1-.7.5.72.72 0 0 1-.43-.12l-2.88-1.92a.76.76 0 0 1-.2-1.04.75.75 0 0 1 1.03-.2l1.06.7A5.34 5.34 0 0 0 9.75 4.5a5.44 5.44 0 0 0-5.64 5.22 5.42 5.42 0 0 0 5.24 5.62c.41 0 .74.36.72.78a.75.75 0 0 1-.75.72H9.3a6.9 6.9 0 0 1-6.68-7.18 6.88 6.88 0 0 1 2.22-4.81z"
+        isReloadingSchema={props.isReloadingSchema}
       />
     </Svg>
   </Positioner>
