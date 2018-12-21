@@ -79,15 +79,17 @@ class TopBar extends React.Component<Props, {}> {
                 left: '5px',
               }}
             >
-              <ReloadIcon
-                isReloadingSchema={this.props.isReloadingSchema}
-                isPollingSchema={settings['schema.enablePolling']}
-                onReloadSchema={this.props.refetchSchema}
-              />
-              <SchemaPolling
-                isPollingSchema={settings['schema.enablePolling']}
-                onReloadSchema={this.props.refetchSchema}
-              />
+              {settings['schema.enablePolling'] ? (
+                <SchemaPolling
+                  isPollingSchema={settings['schema.enablePolling']}
+                  onReloadSchema={this.props.refetchSchema}
+                />
+              ) : (
+                <ReloadIcon
+                  isReloadingSchema={this.props.isReloadingSchema}
+                  onReloadSchema={this.props.refetchSchema}
+                />
+              )}
             </div>
           )}
         </UrlBarWrapper>
