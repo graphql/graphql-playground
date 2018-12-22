@@ -40,7 +40,7 @@ import { safely } from '../../utils'
 import { set } from 'immutable'
 
 // tslint:disable
-let subscriptionEndpoint = ''
+let subscriptionEndpoint
 
 export function setSubscriptionEndpoint(endpoint) {
   subscriptionEndpoint = endpoint
@@ -58,7 +58,7 @@ export interface Headers {
 
 export const defaultLinkCreator = (
   session: LinkCreatorProps,
-  wsEndpoint?: string,
+  subscriptionEndpoint?: string,
 ): { link: ApolloLink; subscriptionClient?: SubscriptionClient } => {
   let connectionParams = {}
   const { headers, credentials } = session
@@ -73,20 +73,15 @@ export const defaultLinkCreator = (
     credentials,
   })
 
-  if (!(wsEndpoint || subscriptionEndpoint)) {
+  if (!subscriptionEndpoint) {
     return { link: httpLink }
   }
 
-  const finalSubscriptionsEndpoint = wsEndpoint || subscriptionEndpoint
-
-  const subscriptionClient = new SubscriptionClient(
-    finalSubscriptionsEndpoint,
-    {
-      timeout: 20000,
-      lazy: true,
-      connectionParams,
-    },
-  )
+  const subscriptionClient = new SubscriptionClient(subscriptionEndpoint, {
+    timeout: 20000,
+    lazy: true,
+    connectionParams,
+  })
 
   const webSocketLink = new WebSocketLink(subscriptionClient)
   return {
@@ -138,7 +133,7 @@ function* runQuerySaga(action) {
     credentials: settings['request.credentials'],
   }
 
-  const { link, subscriptionClient } = linkCreator(lol)
+  const { link, subscriptionClient } = linkCreator(lol, subscriptionEndpoint)
   yield put(setCurrentQueryStartTime(new Date()))
 
   let firstResponse = false

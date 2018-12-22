@@ -114,7 +114,7 @@ interface Tab {
 In addition to this, the React app provides some more properties:
 
 - `props` (React Component)
-- `createApolloLink` [`(session: Session) => ApolloLink`] - this is the equivalent to the `fetcher` of GraphiQL. For each query that is being executed, this function will be called
+- `createApolloLink` [`(session: Session, subscriptionEndpoint?: string) => ApolloLink`] - this is the equivalent to the `fetcher` of GraphiQL. For each query that is being executed, this function will be called
 
 `createApolloLink` is only available in the React Component and not the middlewares, because the content must be serializable as it is being printed into a HTML template.
 
