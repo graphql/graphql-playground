@@ -143,8 +143,12 @@ export class Playground extends React.PureComponent<Props & ReduxProps, State> {
       if (props.schema) {
         return;
       }
-      if (this.mounted && this.state.schema) {
-        this.setState({ schema: undefined });
+      if (
+        this.mounted &&
+        this.state.schema &&
+        !props.settings['schema.enablePolling']
+      ) {
+        this.setState({ schema: undefined })
       }
       let first = true;
       if (this.backoff) {
@@ -241,8 +245,11 @@ export class Playground extends React.PureComponent<Props & ReduxProps, State> {
   }
 
   async schemaGetter(propsInput?: Props & ReduxProps) {
-    const props = this.props || propsInput;
-    const endpoint = props.sessionEndpoint || props.endpoint;
+    const props = this.props || propsInput
+    const endpoint = props.sessionEndpoint || props.endpoint
+    const currentSchemaStr = this.state.schema
+      ? JSON.stringify(this.state.schema)
+      : null
     try {
       const data = {
         endpoint,
@@ -258,16 +265,25 @@ export class Playground extends React.PureComponent<Props & ReduxProps, State> {
           data.endpoint === this.props.endpoint ||
           data.endpoint === this.props.sessionEndpoint
         ) {
-          this.setState({ schema: newSchema });
+          const newSchemaStr = JSON.stringify(newSchema)
+          if (
+            newSchemaStr !== currentSchemaStr ||
+            !props.settings['schema.enablePolling']
+          ) {
+            this.setState({ schema: newSchema })
+          }
         }
       });
       if (schema) {
-        this.setState({ schema: schema.schema });
-        this.props.schemaFetchingSuccess(
-          data.endpoint,
-          schema.tracingSupported
-        );
-        this.backoff.stop();
+        const newSchemaStr = JSON.stringify(schema.schema)
+        if (
+          newSchemaStr !== currentSchemaStr ||
+          !props.settings['schema.enablePolling']
+        ) {
+          this.setState({ schema: schema.schema })
+        }
+        this.props.schemaFetchingSuccess(data.endpoint, schema.tracingSupported)
+        this.backoff.stop()
       }
     } catch (e) {
       // tslint:disable-next-line
