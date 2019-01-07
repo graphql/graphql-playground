@@ -152,11 +152,11 @@ const Editor = styled.div`
   }
 `
 const OverflowShadow = styled.div`
-	position: fixed:
-	top: 0;
-	left: 0;
-	right: 0;
-	height: 1px;
-	box-shadow: 0px 1px 3px rgba(17, 17, 17, 0.1);
-	z-index: 1000;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  box-shadow: 0px 1px 3px rgba(17, 17, 17, 0.1);
+  z-index: 1000;
 `

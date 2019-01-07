@@ -62,7 +62,7 @@ function getTypeInstance(type) {
 }
 
 // Adds Line Breaks to Schema View
-function addLineBreaks(sdl: string, commentsDisabled: boolean = true) {
+function addLineBreaks(sdl: string, commentsDisabled?: boolean) {
   const noNewLines = sdl.replace(/^\s*$(?:\r\n?|\n)/gm, '')
   // Line Break all Brackets
   const breakBrackets = noNewLines.replace(/[}]/gm, '$&\r\n')
@@ -83,10 +83,10 @@ function addLineBreaks(sdl: string, commentsDisabled: boolean = true) {
 // Returns a prettified schema
 export function getSDL(
   schema: GraphQLSchema | null | undefined,
-  commentsDisabled: boolean = true,
+  commentsDisabled: boolean,
 ) {
   if (schema instanceof GraphQLSchema) {
-    const rawSdl = printSchema(schema, { commentDescriptions: true })
+    const rawSdl = printSchema(schema, { commentDescriptions: false })
     if (commentsDisabled) {
       // Removes Comments but still has new lines
       const sdlWithNewLines = rawSdl.replace(/(\#[\w\'\s\r\n\*](.*)$)/gm, '')

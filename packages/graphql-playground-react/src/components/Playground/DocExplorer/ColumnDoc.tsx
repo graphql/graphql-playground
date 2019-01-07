@@ -14,7 +14,7 @@ const ColumnDoc = ({
   width = columnWidth,
 }: Props) => {
   return (
-    <Column style={{ width }} overflow={overflow}>
+    <Column style={{ width }} verticalScroll={overflow}>
       {children}
     </Column>
   )
@@ -23,7 +23,7 @@ const ColumnDoc = ({
 export default ColumnDoc
 
 interface ColumnProps {
-  overflow: boolean
+  verticalScroll: boolean
 }
 
 const Column = styled<ColumnProps, 'div'>('div')`

@@ -1,4 +1,4 @@
-import { createActions } from "redux-actions";
+import { createActions } from 'redux-actions'
 
 export const {
   editQuery,
@@ -63,29 +63,29 @@ export const {
   setCurrentQueryEndTime,
   refetchSchema,
   setScrollTop,
-  reorderTabs
+  reorderTabs,
 } = createActions({
   // simple property setting
   EDIT_QUERY: query => ({ query }),
-  EDIT_HEADERS: simpleAction("headers"),
-  EDIT_ENDPOINT: simpleAction("endpoint"),
-  EDIT_VARIABLES: simpleAction("variables"),
-  SET_OPERATION_NAME: simpleAction("operationName"),
-  SET_VARIABLE_TO_TYPE: simpleAction("variableToType"),
-  SET_OPERATIONS: simpleAction("operations"),
-  SET_EDITOR_FLEX: simpleAction("editorFlex"),
-  EDIT_NAME: simpleAction("name"),
+  EDIT_HEADERS: simpleAction('headers'),
+  EDIT_ENDPOINT: simpleAction('endpoint'),
+  EDIT_VARIABLES: simpleAction('variables'),
+  SET_OPERATION_NAME: simpleAction('operationName'),
+  SET_VARIABLE_TO_TYPE: simpleAction('variableToType'),
+  SET_OPERATIONS: simpleAction('operations'),
+  SET_EDITOR_FLEX: simpleAction('editorFlex'),
+  EDIT_NAME: simpleAction('name'),
 
   OPEN_QUERY_VARIABLES: () => ({ queryVariablesActive: true }),
   CLOSE_QUERY_VARIABLES: () => ({ queryVariablesActive: false }),
-  SET_VARIABLE_EDITOR_HEIGHT: simpleAction("variableEditorHeight"),
-  SET_RESPONSE_TRACING_HEIGHT: simpleAction("responceTracingHeight"),
-  SET_TRACING_SUPPORTED: simpleAction("tracingSupported"),
-  SET_SUBSCRIPTION_ACTIVE: simpleAction("subscriptionActive"),
-  SET_QUERY_TYPES: simpleAction("queryTypes"),
-  SET_RESPONSE_EXTENSIONS: simpleAction("responseExtensions"),
-  SET_CURRENT_QUERY_START_TIME: simpleAction("currentQueryStartTime"),
-  SET_CURRENT_QUERY_END_TIME: simpleAction("currentQueryEndTime"),
+  SET_VARIABLE_EDITOR_HEIGHT: simpleAction('variableEditorHeight'),
+  SET_RESPONSE_TRACING_HEIGHT: simpleAction('responceTracingHeight'),
+  SET_TRACING_SUPPORTED: simpleAction('tracingSupported'),
+  SET_SUBSCRIPTION_ACTIVE: simpleAction('subscriptionActive'),
+  SET_QUERY_TYPES: simpleAction('queryTypes'),
+  SET_RESPONSE_EXTENSIONS: simpleAction('responseExtensions'),
+  SET_CURRENT_QUERY_START_TIME: simpleAction('currentQueryStartTime'),
+  SET_CURRENT_QUERY_END_TIME: simpleAction('currentQueryEndTime'),
 
   UPDATE_QUERY_FACTS: simpleAction(),
   PRETTIFY_QUERY: simpleAction(),
@@ -98,8 +98,8 @@ export const {
       responseTracingHeight: hadHeight,
     } as State)
   */
-  CLOSE_TRACING: simpleAction("responseTracingHeight"),
-  OPEN_TRACING: simpleAction("responseTracingHeight"),
+  CLOSE_TRACING: simpleAction('responseTracingHeight'),
+  OPEN_TRACING: simpleAction('responseTracingHeight'),
   TOGGLE_TRACING: simpleAction(),
   // setting multiple props
   /*
@@ -108,8 +108,8 @@ export const {
       responseTracingHeight: hadHeight,
     } as State)
   */
-  CLOSE_VARIABLES: simpleAction("variableEditorHeight"),
-  OPEN_VARIABLES: simpleAction("variableEditorHeight"),
+  CLOSE_VARIABLES: simpleAction('variableEditorHeight'),
+  OPEN_VARIABLES: simpleAction('variableEditorHeight'),
   TOGGLE_VARIABLES: simpleAction(),
 
   /*
@@ -118,22 +118,22 @@ export const {
   ADD_RESPONSE: (workspaceId, sessionId, response) => ({
     workspaceId,
     sessionId,
-    response
+    response,
   }),
   SET_RESPONSE: (workspaceId, sessionId, response) => ({
     workspaceId,
     sessionId,
-    response
+    response,
   }),
   CLEAR_RESPONSES: simpleAction(),
 
   FETCH_SCHEMA: simpleAction(),
   REFETCH_SCHEMA: simpleAction(),
-  SET_ENDPOINT_UNREACHABLE: simpleAction("endpoint"),
+  SET_ENDPOINT_UNREACHABLE: simpleAction('endpoint'),
   SET_SCROLL_TOP: (sessionId, scrollTop) => ({ sessionId, scrollTop }),
   SCHEMA_FETCHING_SUCCESS: (endpoint, tracingSupported) => ({
     endpoint,
-    tracingSupported
+    tracingSupported,
   }),
   /*
         this.setState({
@@ -161,7 +161,7 @@ export const {
   QUERY_SUCCESS: simpleAction(),
   QUERY_ERROR: simpleAction(),
   RUN_QUERY_AT_POSITION: position => ({ position }),
-  START_QUERY: simpleAction("queryRunning", true),
+  START_QUERY: simpleAction('queryRunning', true),
   STOP_QUERY: (sessionId, workspaceId) => ({ workspaceId, sessionId }),
   /* GraphQLEditor.handleRunQuery */
   OPEN_SETTINGS_TAB: () => ({}),
@@ -171,15 +171,15 @@ export const {
   NEW_FILE_TAB: (fileName: string, filePath: string, file: string) => ({
     fileName,
     filePath,
-    file
+    file,
   }),
-  DUPLICATE_SESSION: simpleAction("session"),
+  DUPLICATE_SESSION: simpleAction('session'),
   CLOSE_SELECTED_TAB: () => ({}),
   SELECT_NEXT_TAB: () => ({}),
   SELECT_PREV_TAB: () => ({}),
-  SELECT_TAB: simpleAction("sessionId"),
-  SELECT_TAB_INDEX: simpleAction("index"),
-  CLOSE_TAB: simpleAction("sessionId"),
+  SELECT_TAB: simpleAction('sessionId'),
+  SELECT_TAB_INDEX: simpleAction('index'),
+  CLOSE_TAB: simpleAction('sessionId'),
   REORDER_TABS: (src, dest) => ({ src, dest }),
 
   // files, settings, config
@@ -188,9 +188,9 @@ export const {
   EDIT_CONFIG: simpleAction(),
   SAVE_CONFIG: simpleAction(),
   EDIT_FILE: simpleAction(),
-  SAVE_FILE: simpleAction()
-});
+  SAVE_FILE: simpleAction(),
+})
 
 function simpleAction(key?: any, defaultValue?: any) {
-  return value => ({ [key]: value || defaultValue });
+  return value => ({ [key]: value || defaultValue })
 }

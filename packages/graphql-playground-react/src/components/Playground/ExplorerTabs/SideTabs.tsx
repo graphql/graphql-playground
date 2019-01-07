@@ -98,13 +98,13 @@ class SideTabs extends React.Component<
     if (prevProps.activeTabIdx && !this.props.docs.activeTabIdx) {
       this.props.setDocsVisible(this.props.sessionId, false)
     }
+    this.setWidth()
     if (
       this.props.docs.activeTabIdx !== prevProps.docs.activeTabIdx &&
       this.refContentContainer
     ) {
       this.refContentContainer.focus()
     }
-    this.setWidth()
   }
 
   componentDidMount() {

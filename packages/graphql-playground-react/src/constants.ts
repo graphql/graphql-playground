@@ -1,8 +1,8 @@
-import * as cuid from "cuid";
-import { getQueryTypes } from "./components/Playground/util/getQueryTypes";
-import { List, Map } from "immutable";
+import * as cuid from 'cuid'
+import { getQueryTypes } from './components/Playground/util/getQueryTypes'
+import { List, Map } from 'immutable'
 
-export const columnWidth = 300;
+export const columnWidth = 300
 
 export const introspectionQuery = `
   query IntrospectionQuery {
@@ -96,39 +96,39 @@ export const introspectionQuery = `
       }
     }
   }
-`;
+`
 
-export const defaultQuery = "# Write your query or mutation here\n";
+export const defaultQuery = '# Write your query or mutation here\n'
 
 export const modalStyle = {
   overlay: {
     zIndex: 99999,
-    backgroundColor: "rgba(15,32,46,.9)",
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center"
+    backgroundColor: 'rgba(15,32,46,.9)',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   content: {
-    position: "relative",
+    position: 'relative',
     width: 976,
-    height: "auto",
-    top: "initial",
-    left: "initial",
-    right: "initial",
-    bottom: "initial",
+    height: 'auto',
+    top: 'initial',
+    left: 'initial',
+    right: 'initial',
+    bottom: 'initial',
     borderRadius: 2,
     padding: 0,
-    border: "none",
-    background: "none",
-    boxShadow: "0 1px 7px rgba(0,0,0,.2)"
-  }
-};
+    border: 'none',
+    background: 'none',
+    boxShadow: '0 1px 7px rgba(0,0,0,.2)',
+  },
+}
 
 export function getDefaultSession(endpoint: string) {
   return {
     id: cuid(),
     query: defaultQuery,
-    variables: "",
+    variables: '',
     responses: List([]),
     endpoint,
     operationName: undefined,
@@ -152,7 +152,7 @@ export function getDefaultSession(endpoint: string) {
     responseTracingHeight: 300,
     docExplorerWidth: 350,
     variableToType: Map({}),
-    headers: "",
+    headers: '',
     file: undefined,
     isFile: false,
     name: undefined,
@@ -167,6 +167,6 @@ export function getDefaultSession(endpoint: string) {
     nextQueryStartTime: undefined,
     tracingSupported: undefined,
     changed: undefined,
-    scrollTop: undefined
-  } as any;
+    scrollTop: undefined,
+  } as any
 }
