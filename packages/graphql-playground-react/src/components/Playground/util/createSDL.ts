@@ -62,7 +62,7 @@ function getTypeInstance(type) {
 }
 
 // Adds Line Breaks to Schema View
-function addLineBreaks(sdl: string, commentsDisabled?: boolean = true) {
+function addLineBreaks(sdl: string, commentsDisabled: boolean = true) {
   const noNewLines = sdl.replace(/^\s*$(?:\r\n?|\n)/gm, '')
   // Line Break all Brackets
   const breakBrackets = noNewLines.replace(/[}]/gm, '$&\r\n')
