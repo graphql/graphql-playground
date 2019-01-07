@@ -3,8 +3,7 @@ import { styled } from '../../../styled/index'
 import * as copy from 'copy-to-clipboard'
 
 import Share from '../../Share'
-import ReloadIcon from './ReloadIcon'
-import SchemaPolling from './SchemaPolling'
+import SchemaReload from './SchemaReload'
 import { createStructuredSelector } from 'reselect'
 import {
   getEndpoint,
@@ -35,7 +34,6 @@ export interface Props {
   prettifyQuery: () => void
   openHistory: () => void
   share: () => void
-  togglePollingSchema: () => void
   refetchSchema: () => void
 
   settings
@@ -79,17 +77,11 @@ class TopBar extends React.Component<Props, {}> {
                 left: '6px',
               }}
             >
-              {settings['schema.enablePolling'] ? (
-                <SchemaPolling
-                  isPollingSchema={settings['schema.enablePolling']}
-                  onReloadSchema={this.props.refetchSchema}
-                />
-              ) : (
-                <ReloadIcon
-                  isReloadingSchema={this.props.isReloadingSchema}
-                  onReloadSchema={this.props.refetchSchema}
-                />
-              )}
+              <SchemaReload
+                isPollingSchema={settings['schema.enablePolling']}
+                isReloadingSchema={this.props.isReloadingSchema}
+                onReloadSchema={this.props.refetchSchema}
+              />
             </div>
           )}
         </UrlBarWrapper>
