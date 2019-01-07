@@ -372,6 +372,24 @@ export class Playground extends React.PureComponent<Props & ReduxProps, State> {
     }
   }
 
+  private updateSchema(
+    currentSchema: GraphQLSchema | undefined,
+    newSchema: GraphQLSchema,
+    props: Readonly<{ children?: React.ReactNode }> &
+      Readonly<Props & ReduxProps>,
+  ) {
+    const currentSchemaStr = currentSchema
+      ? JSON.stringify(currentSchema)
+      : null
+    const newSchemaStr = JSON.stringify(newSchema)
+    if (
+      newSchemaStr !== currentSchemaStr ||
+      !props.settings['schema.enablePolling']
+    ) {
+      this.setState({ schema: newSchema })
+    }
+  }
+
   get httpApiPrefix() {
     return this.props.endpoint.match(/(https?:\/\/.*?)\/?/)![1];
   }
