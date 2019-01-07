@@ -244,9 +244,7 @@ export class Playground extends React.PureComponent<Props & ReduxProps, State> {
   async schemaGetter(propsInput?: Props & ReduxProps) {
     const props = this.props || propsInput
     const endpoint = props.sessionEndpoint || props.endpoint
-    const currentSchemaStr = this.state.schema
-      ? JSON.stringify(this.state.schema)
-      : null
+    const currentSchema = this.state.schema
     try {
       const data = {
         endpoint,
@@ -262,23 +260,11 @@ export class Playground extends React.PureComponent<Props & ReduxProps, State> {
           data.endpoint === this.props.endpoint ||
           data.endpoint === this.props.sessionEndpoint
         ) {
-          const newSchemaStr = JSON.stringify(newSchema)
-          if (
-            newSchemaStr !== currentSchemaStr ||
-            !props.settings['schema.enablePolling']
-          ) {
-            this.setState({ schema: newSchema })
-          }
+          this.updateSchema(currentSchema, newSchema, props)
         }
       })
       if (schema) {
-        const newSchemaStr = JSON.stringify(schema.schema)
-        if (
-          newSchemaStr !== currentSchemaStr ||
-          !props.settings['schema.enablePolling']
-        ) {
-          this.setState({ schema: schema.schema })
-        }
+        this.updateSchema(currentSchema, schema.schema, props)
         this.props.schemaFetchingSuccess(data.endpoint, schema.tracingSupported)
         this.backoff.stop()
       }
@@ -363,6 +349,24 @@ export class Playground extends React.PureComponent<Props & ReduxProps, State> {
       this.props.endpoint,
       this.props.settings['editor.reuseHeaders'],
     )
+  }
+
+  private updateSchema(
+    currentSchema: GraphQLSchema | undefined,
+    newSchema: GraphQLSchema,
+    props: Readonly<{ children?: React.ReactNode }> &
+      Readonly<Props & ReduxProps>,
+  ) {
+    const currentSchemaStr = currentSchema
+      ? JSON.stringify(currentSchema)
+      : null
+    const newSchemaStr = JSON.stringify(newSchema)
+    if (
+      newSchemaStr !== currentSchemaStr ||
+      !props.settings['schema.enablePolling']
+    ) {
+      this.setState({ schema: newSchema })
+    }
   }
 
   get httpApiPrefix() {
