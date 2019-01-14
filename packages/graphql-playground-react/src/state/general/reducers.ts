@@ -3,11 +3,13 @@ import { handleActions } from 'redux-actions'
 
 export class GeneralState extends Record({
   historyOpen: false,
+  fixedEndpoint: false,
   endpoint: '',
   configString: '',
   envVars: {},
 }) {
   historyOpen: boolean
+  fixedEndpoint: boolean
   endpoint: string
   configString: string
   envVars: any
