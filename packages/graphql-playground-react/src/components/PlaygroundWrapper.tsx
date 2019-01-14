@@ -57,7 +57,10 @@ export interface PlaygroundWrapperProps {
   config?: GraphQLConfig
   configPath?: string
   injectedState?: any
-  createApolloLink?: (session: Session) => ApolloLink
+  createApolloLink?: (
+    session: Session,
+    subscriptionEndpoint?: string,
+  ) => ApolloLink
   tabs?: Tab[]
   schema?: { __schema: any } // introspection result
   codeTheme?: EditorColours

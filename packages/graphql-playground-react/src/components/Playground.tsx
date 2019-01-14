@@ -84,7 +84,10 @@ export interface Props {
   fixedEndpoints: boolean
   headers?: any
   configPath?: string
-  createApolloLink?: (session: Session) => ApolloLink
+  createApolloLink?: (
+    session: Session,
+    subscriptionEndpoint?: string,
+  ) => ApolloLink
   workspaceName?: string
   schema?: GraphQLSchema
 }
