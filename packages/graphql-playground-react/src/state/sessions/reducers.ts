@@ -447,7 +447,7 @@ const reducer = handleActions(
     // it makes sure, that there definitely is a tab open with the correct header
     INJECT_HEADERS: (state, { payload: { headers, endpoint } }) => {
       // if there are no headers to inject, there's nothing to do
-      if (!headers || headers === '') {
+      if (!headers || headers === '' || Object.keys(headers).length === 0) {
         return state
       }
       const headersString =
