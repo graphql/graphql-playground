@@ -27,7 +27,7 @@ import {
 } from '../state/sessions/actions'
 import { setConfigString } from '../state/general/actions'
 import { initState } from '../state/workspace/actions'
-import { GraphQLSchema } from 'graphql'
+import { GraphQLSchema, printSchema } from 'graphql'
 import { createStructuredSelector } from 'reselect'
 import {
   getIsConfigTab,
@@ -357,10 +357,8 @@ export class Playground extends React.PureComponent<Props & ReduxProps, State> {
     props: Readonly<{ children?: React.ReactNode }> &
       Readonly<Props & ReduxProps>,
   ) {
-    const currentSchemaStr = currentSchema
-      ? JSON.stringify(currentSchema)
-      : null
-    const newSchemaStr = JSON.stringify(newSchema)
+    const currentSchemaStr = currentSchema ? printSchema(currentSchema) : null
+    const newSchemaStr = printSchema(newSchema)
     if (
       newSchemaStr !== currentSchemaStr ||
       !props.settings['schema.enablePolling']
