@@ -82,6 +82,7 @@ export class Session extends Record(getDefaultSession('')) {
   currentQueryEndTime?: Date
 
   isReloadingSchema: boolean
+  isSchemaPendingUpdate: boolean
 
   responseExtensions: any
   queryVariablesActive: boolean
@@ -285,6 +286,18 @@ const reducer = handleActions(
       return state.setIn(
         ['sessions', getSelectedSessionId(state), 'isReloadingSchema'],
         true,
+      )
+    },
+    SET_SCHEMA_PENDING_UPDATE: state => {
+      return state.setIn(
+        ['sessions', getSelectedSessionId(state), 'isSchemaPendingUpdate'],
+        true,
+      )
+    },
+    SET_SCHEMA_UPDATED: state => {
+      return state.setIn(
+        ['sessions', getSelectedSessionId(state), 'isSchemaPendingUpdate'],
+        false,
       )
     },
     STOP_QUERY: (state, { payload: { sessionId } }) => {
