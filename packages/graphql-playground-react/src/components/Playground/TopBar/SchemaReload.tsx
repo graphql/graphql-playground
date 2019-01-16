@@ -1,6 +1,6 @@
 import * as React from 'react'
-import ReloadIcon from './ReloadIcon'
-import PollingIcon from './PollingIcon'
+import ReloadIcon from './Reload'
+import PollingIcon from './Polling'
 
 export interface Props {
   isPollingSchema: boolean
