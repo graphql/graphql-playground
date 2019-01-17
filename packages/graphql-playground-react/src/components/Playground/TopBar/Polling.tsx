@@ -22,7 +22,7 @@ class SchemaPolling extends React.Component<Props> {
   }
 
   render() {
-    return <ReloadIcon animate={true} disabled={true} />
+    return <ReloadIcon animate={false} disabled={true} />
   }
   private startPolling(props: Props = this.props) {
     this.clearTimer()
