@@ -85,6 +85,8 @@ export interface EditorColours {
   executeButtonSubscriptionHover: string
   icon: string
   iconHover: string
+  pollingIcon: string
+  pollingIconShadow: string
   button: string
   buttonHover: string
   buttonText: string
@@ -216,6 +218,8 @@ export const darkEditorColours: EditorColours = {
   executeButtonSubscriptionHover: '#f36c65',
   icon: 'rgb(74, 85, 95)',
   iconHover: 'rgba(255, 255, 255, 0.6)',
+  pollingIcon: 'rgba(139, 149, 156, 1)',
+  pollingIconShadow: 'rgba(139, 149, 156, 0.4)',
   button: '#0F202D',
   buttonHover: '#122535',
   buttonText: 'rgba(255,255,255,0.6)',
@@ -270,6 +274,8 @@ export const lightEditorColours: EditorColours = {
   executeButtonSubscriptionHover: '#f36c65',
   icon: 'rgb(194, 200, 203)',
   iconHover: 'rgba(23, 42, 58, 0.6)',
+  pollingIcon: 'rgba(139, 149, 156, 1)',
+  pollingIconShadow: 'rgba(139, 149, 156, 0.4)',
   button: '#d8dbde',
   buttonHover: 'rgba(20, 37, 51, 0.2)',
   buttonText: 'rgba(23, 42, 58, 0.8)',

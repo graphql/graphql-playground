@@ -1,5 +1,6 @@
 import * as React from 'react'
 import { styled, keyframes, css } from '../../../styled/index'
+import BasePositioner from './Positioner'
 
 export interface Props {
   animate: boolean
@@ -62,13 +63,6 @@ const reloadAction = props => keyframes`
   transform: rotate(${props.animate ? 360 : 720}deg);
 }`
 
-const Positioner = styled.div`
-  width: 25px;
-  height: 25px;
-  cursor: ${p => (p.disabled ? 'auto' : 'pointer')};
-  transform: rotateY(180deg);
-`
-
 const Svg = styled.svg`
   fill: ${p => p.theme.editorColours.icon};
   transition: 0.1s linear all;
@@ -81,7 +75,10 @@ const Svg = styled.svg`
           }
         `};
 `
-
+const Positioner = styled(BasePositioner)`
+  cursor: ${({ disabled = false }) => (disabled ? 'auto' : 'pointer')};
+  transform: rotateY(180deg);
+`
 const Circle = styled<Props, 'circle'>('circle')`
   fill: none;
   stroke: ${p => p.theme.editorColours.icon};

@@ -1,5 +1,5 @@
 import * as React from 'react'
-import ReloadIcon from './ReloadIcon'
+import PollingIcon from './PollingIcon'
 
 export interface Props {
   isPollingSchema: boolean
@@ -22,7 +22,7 @@ class SchemaPolling extends React.Component<Props> {
   }
 
   render() {
-    return <ReloadIcon animate={false} disabled={true} />
+    return <PollingIcon animate={true} />
   }
   private startPolling(props: Props = this.props) {
     this.clearTimer()
