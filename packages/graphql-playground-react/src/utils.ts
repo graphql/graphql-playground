@@ -12,10 +12,16 @@ export function safely(cb: any) {
   }
 }
 
-export function prettify(query: string, printWidth: number) {
+interface PrettierOptions {
+  printWidth: number
+  tabWidth: number
+  useTabs: boolean
+}
+
+export function prettify(query: string, options: PrettierOptions) {
   return prettier.format(query, {
+    ...options,
     parser: 'graphql',
-    printWidth,
     plugins: [graphql],
   })
 }

@@ -60,13 +60,17 @@ These are the settings currently available:
 
 ```js
 {
-  'general.betaUpdates': false,
   'editor.cursorShape': 'line', // possible values: 'line', 'block', 'underline'
-  'editor.fontSize': 14,
   'editor.fontFamily': `'Source Code Pro', 'Consolas', 'Inconsolata', 'Droid Sans Mono', 'Monaco', monospace`,
-  'editor.theme': 'dark', // possible values: 'dark', 'light'
+  'editor.fontSize': 14,
   'editor.reuseHeaders': true, // new tab reuses headers from last tab
+  'editor.theme': 'dark', // possible values: 'dark', 'light'
+  'general.betaUpdates': false,
+  'prettier.printWidth': 80,
+  'prettier.tabWidth': 2,
+  'prettier.useTabs': false,
   'request.credentials': 'omit', // possible values: 'omit', 'include', 'same-origin'
+  'schema.disableComments': boolean,
   'tracing.hideTracingResponse': true,
 }
 ```
@@ -86,14 +90,18 @@ The React component `<Playground />` and all middlewares expose the following op
 
 ```ts
 interface ISettings {
-	'general.betaUpdates': boolean
-	'editor.theme': Theme
-	'editor.reuseHeaders': boolean
-	'tracing.hideTracingResponse': boolean
-	'editor.fontSize': number
-	'editor.fontFamily': string
-	'request.credentials': string
-	'schema.disableComments': boolean
+  'editor.cursorShape': 'line' | 'block' | 'underline'
+  'editor.fontFamily': string
+  'editor.fontSize': number
+  'editor.reuseHeaders': boolean
+  'editor.theme': 'dark' | 'light'
+  'general.betaUpdates': boolean
+  'prettier.printWidth': number
+  'prettier.tabWidth': number
+  'prettier.useTabs': boolean
+  'request.credentials': 'omit' | 'include' | 'same-origin'
+  'schema.disableComments': boolean
+  'tracing.hideTracingResponse': boolean
 }
 ```
 
