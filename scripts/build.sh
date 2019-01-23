@@ -2,8 +2,6 @@
 
 set -e
 
-yarn
-
 cd packages
 
 packages=(
@@ -20,7 +18,6 @@ for pkg in "${packages[@]}"
 do
   cd $pkg
   echo "Building ${pkg}"
-  yarn
   yarn build
   cd ..
 done
