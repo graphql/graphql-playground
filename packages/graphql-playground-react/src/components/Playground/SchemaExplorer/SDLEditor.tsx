@@ -11,8 +11,6 @@ export interface Props {
   width?: number
   sessionId?: string
   settings: ISettings
-  isSchemaPendingUpdate: boolean
-  setSchemaUpdated: () => void
 }
 
 class SDLEditor extends React.PureComponent<Props, { overflowY: boolean }> {
@@ -65,20 +63,11 @@ class SDLEditor extends React.PureComponent<Props, { overflowY: boolean }> {
     ;(global as any).editor = this.editor
     this.editor.on('scroll', this.handleScroll)
     this.editor.refresh()
-    this.props.setSchemaUpdated()
   }
   componentDidUpdate(prevProps: Props) {
-    if (
-      this.props.settings['schema.enablePolling'] &&
-      this.props.isSchemaPendingUpdate
-    ) {
-      return
-    }
-    const pollingStatusUpdated =
-      this.props.settings['schema.enablePolling'] &&
-      this.props.isSchemaPendingUpdate !== prevProps.isSchemaPendingUpdate
     const CodeMirror = require('codemirror')
-    if (this.props.schema !== prevProps.schema || pollingStatusUpdated) {
+    if (this.props.schema !== prevProps.schema) {
+      const initialScroll = this.editor.getScrollInfo()
       this.cachedValue =
         getSDL(
           this.props.schema,
@@ -90,6 +79,9 @@ class SDLEditor extends React.PureComponent<Props, { overflowY: boolean }> {
           this.props.settings['schema.disableComments'],
         ),
       )
+      if (this.props.settings['schema.enablePolling']) {
+        this.editor.scrollTo(initialScroll.left, initialScroll.top)
+      }
       CodeMirror.signal(this.editor, 'change', this.editor)
     }
     if (this.props.width !== prevProps.width) {
@@ -97,8 +89,7 @@ class SDLEditor extends React.PureComponent<Props, { overflowY: boolean }> {
     }
     if (
       this.props.settings['schema.disableComments'] !==
-        prevProps.settings['schema.disableComments'] ||
-      pollingStatusUpdated
+      prevProps.settings['schema.disableComments']
     ) {
       this.editor.refresh()
     }

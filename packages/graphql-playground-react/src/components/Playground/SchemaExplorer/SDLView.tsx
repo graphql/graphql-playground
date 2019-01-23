@@ -9,10 +9,7 @@ import {
 import Spinner from '../../Spinner'
 import { columnWidth } from '../../../constants'
 import { SideTabContentProps } from '../ExplorerTabs/SideTabs'
-import {
-  getSelectedSessionIdFromRoot,
-  getSchemaPendingUpdate,
-} from '../../../state/sessions/selectors'
+import { getSelectedSessionIdFromRoot } from '../../../state/sessions/selectors'
 import { getSessionDocs } from '../../../state/docs/selectors'
 import { createStructuredSelector } from 'reselect'
 import { ErrorContainer } from '../DocExplorer/ErrorContainer'
@@ -20,7 +17,6 @@ import { SchemaExplorerContainer, SDLColumn } from './SDLTypes/SDLStyles'
 import SDLHeader from './SDLHeader'
 import SDLEditor from './SDLEditor'
 import { getSettings } from '../../../state/workspace/reducers'
-import { setSchemaUpdated } from '../../../state/sessions/actions'
 
 interface StateFromProps {
   docs: {
@@ -30,7 +26,6 @@ interface StateFromProps {
     keyMove: boolean
   }
   settings
-  isSchemaPendingUpdate: boolean
 }
 
 interface DispatchFromProps {
@@ -89,15 +84,9 @@ class SDLView extends React.Component<
           <SDLColumn>{emptySchema}</SDLColumn>
         ) : (
           <SDLColumn width={this.props.docs.docsWidth || columnWidth - 1}>
-            <SDLHeader
-              schema={schema}
-              isSchemaPendingUpdate={this.props.isSchemaPendingUpdate}
-              setSchemaUpdated={this.props.setSchemaUpdated}
-            />
+            <SDLHeader schema={schema} />
             <SDLEditor
               schema={schema}
-              isSchemaPendingUpdate={this.props.isSchemaPendingUpdate}
-              setSchemaUpdated={this.props.setSchemaUpdated}
               settings={settings}
               width={this.props.docs.docsWidth || columnWidth}
             />
@@ -117,7 +106,6 @@ const mapDispatchToProps = dispatch =>
       toggleDocs,
       changeWidthDocs,
       setDocsVisible,
-      setSchemaUpdated,
     },
     dispatch,
   )
@@ -126,7 +114,6 @@ const mapStateToProps = createStructuredSelector({
   settings: getSettings,
   docs: getSessionDocs,
   sessionId: getSelectedSessionIdFromRoot,
-  isSchemaPendingUpdate: getSchemaPendingUpdate,
 })
 
 export default connect<StateFromProps, DispatchFromProps, SideTabContentProps>(
