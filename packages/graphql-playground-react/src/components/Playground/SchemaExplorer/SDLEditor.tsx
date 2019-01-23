@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { GraphQLSchema } from 'graphql'
+import { GraphQLSchema, printSchema } from 'graphql'
 import EditorWrapper from '../EditorWrapper'
 import { styled } from '../../../styled'
 import { getSDL } from '../util/createSDL'
@@ -66,7 +66,9 @@ class SDLEditor extends React.PureComponent<Props, { overflowY: boolean }> {
   }
   componentDidUpdate(prevProps: Props) {
     const CodeMirror = require('codemirror')
-    if (this.props.schema !== prevProps.schema) {
+    const currentSchemaStr = this.props.schema && printSchema(this.props.schema)
+    const prevSchemaStr = prevProps.schema && printSchema(prevProps.schema)
+    if (currentSchemaStr !== prevSchemaStr) {
       const initialScroll = this.editor.getScrollInfo()
       this.cachedValue =
         getSDL(
