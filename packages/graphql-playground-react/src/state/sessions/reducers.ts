@@ -288,18 +288,6 @@ const reducer = handleActions(
         true,
       )
     },
-    SET_SCHEMA_PENDING_UPDATE: state => {
-      return state.setIn(
-        ['sessions', getSelectedSessionId(state), 'isSchemaPendingUpdate'],
-        true,
-      )
-    },
-    SET_SCHEMA_UPDATED: state => {
-      return state.setIn(
-        ['sessions', getSelectedSessionId(state), 'isSchemaPendingUpdate'],
-        false,
-      )
-    },
     STOP_QUERY: (state, { payload: { sessionId } }) => {
       return state.mergeIn(['sessions', sessionId], {
         queryRunning: false,

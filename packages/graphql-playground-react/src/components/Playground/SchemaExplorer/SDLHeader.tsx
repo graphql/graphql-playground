@@ -6,8 +6,6 @@ import { downloadSchema } from '../util/createSDL'
 
 interface SDLHeaderProps {
   schema: GraphQLSchema
-  isSchemaPendingUpdate: boolean
-  setSchemaUpdated: () => void
 }
 
 interface State {
@@ -64,11 +62,6 @@ export default class SDLHeader extends React.Component<SDLHeaderProps, State> {
     return (
       <SchemaHeader ref={this.setRef}>
         <Title>Schema</Title>
-        {this.props.isSchemaPendingUpdate ? (
-          <Refresh onClick={this.props.setSchemaUpdated}>
-            Refresh to see changes
-          </Refresh>
-        ) : null}
         <Box>
           <Download onClick={this.showOptions} open={open}>
             Download
@@ -118,17 +111,6 @@ const Title = styled.div`
   user-select: none !important;
   padding: 16px;
   padding-right: 5px;
-`
-const Refresh = styled.div`
-  color: ${p => styleHelper(p).subtitle};
-  cursor: pointer;
-  font-size: 14px;
-  font-family: 'Open Sans', sans-serif !important;
-  letter-spacing: 1px;
-  text-decoration: underline;
-  user-select: none !important;
-  padding: 16px;
-  padding-left: 5px;
 `
 
 const Download = styled(Button)`

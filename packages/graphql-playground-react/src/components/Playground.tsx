@@ -24,7 +24,6 @@ import {
   injectHeaders,
   schemaFetchingError,
   schemaFetchingSuccess,
-  setSchemaPendingUpdate,
 } from '../state/sessions/actions'
 import { setConfigString } from '../state/general/actions'
 import { initState } from '../state/workspace/actions'
@@ -104,7 +103,6 @@ export interface ReduxProps {
   setConfigString: (str: string) => void
   schemaFetchingError: (endpoint: string, error: string) => void
   schemaFetchingSuccess: (endpoint: string, tracingSupported: boolean) => void
-  setSchemaPendingUpdate: () => void
   isReloadingSchema: boolean
   isConfigTab: boolean
   isSettingsTab: boolean
@@ -365,9 +363,6 @@ export class Playground extends React.PureComponent<Props & ReduxProps, State> {
       newSchemaStr !== currentSchemaStr ||
       !props.settings['schema.enablePolling']
     ) {
-      if (currentSchemaStr && props.settings['schema.enablePolling']) {
-        props.setSchemaPendingUpdate()
-      }
       this.setState({ schema: newSchema })
     }
   }
@@ -406,7 +401,6 @@ export default connect(
     setConfigString,
     schemaFetchingError,
     schemaFetchingSuccess,
-    setSchemaPendingUpdate,
   },
 )(Playground)
 
