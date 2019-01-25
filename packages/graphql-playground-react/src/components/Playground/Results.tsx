@@ -140,7 +140,6 @@ const SubscriptionTime = styled.div`
 `
 
 const SubscriptionTimeText = styled.div`
-  color: rgba(23, 42, 58, 1);
   font-size: 12px;
   color: rgba(255, 255, 255, 0.5);
   padding-left: 15px;
