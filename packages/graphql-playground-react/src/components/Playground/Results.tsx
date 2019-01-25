@@ -135,13 +135,14 @@ const SubscriptionTime = styled.div`
     content: '';
     top: 9px;
     left: 95px;
-    border-top: 1px solid ${p => p.theme.colours.white20};
+    border-top: 1px solid
+      ${p => p.theme.editorColours.subscriptionTimeBoaderTop};
   }
 `
 
 const SubscriptionTimeText = styled.div`
   font-size: 12px;
-  color: rgba(255, 255, 255, 0.5);
+  color: ${p => p.theme.editorColours.subscriptionTimeText};
   padding-left: 15px;
 `
 
