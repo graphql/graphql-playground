@@ -1,5 +1,5 @@
 import { createSelector } from 'reselect'
-import { makeWorkspace } from '../workspace/reducers'
+import { makeWorkspace, getSettingsString } from '../workspace/reducers'
 
 function getSelectedWorkspaceId(state) {
   return state.get('selectedWorkspace')
@@ -85,6 +85,27 @@ export const getResponseTracingHeight = makeSessionSelector(
 export const getDocExplorerWidth = makeSessionSelector('docExplorerWidth')
 export const getNextQueryStartTime = makeSessionSelector('nextQueryStartTime')
 export const getTracingSupported = makeSessionSelector('tracingSupported')
+
+export const getTabWidth = createSelector([getSettingsString], settings => {
+  try {
+    const json = JSON.parse(settings)
+    return json['prettier.tabWidth'] || 2
+  } catch (e) {
+    //
+  }
+
+  return 2
+})
+export const getUseTabs = createSelector([getSettingsString], settings => {
+  try {
+    const json = JSON.parse(settings)
+    return json['prettier.useTabs'] || false
+  } catch (e) {
+    //
+  }
+
+  return false
+})
 
 export const getHeadersCount = createSelector([getHeaders], headers => {
   try {

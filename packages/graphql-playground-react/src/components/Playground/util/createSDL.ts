@@ -91,10 +91,18 @@ export function getSDL(
       // Removes Comments but still has new lines
       const sdlWithNewLines = rawSdl.replace(/(\#[\w\'\s\r\n\*](.*)$)/gm, '')
       // Removes newlines left behind by Comments
-      const sdlWithoutComments = prettify(sdlWithNewLines, 80)
+      const sdlWithoutComments = prettify(sdlWithNewLines, {
+        printWidth: 80,
+        tabWidth: 2,
+        useTabs: false,
+      })
       return addLineBreaks(sdlWithoutComments, commentsDisabled)
     }
-    const sdl = prettify(rawSdl, 80)
+    const sdl = prettify(rawSdl, {
+      printWidth: 80,
+      tabWidth: 2,
+      useTabs: false,
+    })
     return addLineBreaks(sdl)
   }
   return ''
