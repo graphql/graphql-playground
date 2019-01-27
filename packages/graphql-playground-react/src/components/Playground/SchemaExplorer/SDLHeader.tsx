@@ -80,10 +80,12 @@ export default class SDLHeader extends React.Component<SDLHeaderProps, State> {
 
 const SchemaHeader = styled.div`
   display: flex;
+  flex-direction: row;
   height: 64px;
   width: 100%;
+  margin-right: 108px;
   align-items: center;
-  justify-content: space-between;
+  justify-content: flex-start;
   outline: none;
   user-select: none;
 `
@@ -99,7 +101,6 @@ const Box = styled.div`
 `
 
 const Title = styled.div`
-  flex: 1;
   color: ${p => styleHelper(p).title};
   cursor: default;
   font-size: 14px;
@@ -109,6 +110,7 @@ const Title = styled.div`
   letter-spacing: 1px;
   user-select: none !important;
   padding: 16px;
+  padding-right: 5px;
 `
 
 const Download = styled(Button)`
@@ -136,6 +138,7 @@ const styleHelper = p => {
   if (p.theme.mode === 'dark') {
     return {
       title: 'white',
+      subtitle: '#8B959C',
       download: {
         text: p.open ? '#8B959C' : 'white',
         button: p.theme.colours.darkBlue,
@@ -148,6 +151,7 @@ const styleHelper = p => {
   }
   return {
     title: p.theme.colours.darkBlue,
+    subtitle: 'rgba(61, 88, 102, 0.5)',
     download: {
       text: p.open ? 'rgba(61, 88, 102, 0.5)' : p.theme.colours.darkBlue,
       button: '#f6f6f6',

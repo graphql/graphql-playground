@@ -82,6 +82,7 @@ export class Session extends Record(getDefaultSession('')) {
   currentQueryEndTime?: Date
 
   isReloadingSchema: boolean
+  isSchemaPendingUpdate: boolean
 
   responseExtensions: any
   queryVariablesActive: boolean
