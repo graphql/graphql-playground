@@ -55,7 +55,7 @@ export interface IntrospectionResult {
 }
 
 export interface RenderPageOptions extends MiddlewareOptions {
-  version: string
+  version?: string
   cdnUrl?: string
   env?: any
 }
