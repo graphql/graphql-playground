@@ -142,6 +142,7 @@ export function getDefaultSession(endpoint: string) {
     queryRunning: false,
     operations: List([]),
     isReloadingSchema: false,
+    isSchemaPendingUpdate: false,
     responseExtensions: {},
     queryVariablesActive: false,
     endpointUnreachable: false,

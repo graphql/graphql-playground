@@ -32,6 +32,7 @@ interface DispatchFromProps {
   toggleDocs: (sessionId: string) => any
   setDocsVisible: (sessionId: string, open: boolean) => any
   changeWidthDocs: (sessionId: string, width: number) => any
+  setSchemaUpdated: () => void
 }
 
 class SDLView extends React.Component<

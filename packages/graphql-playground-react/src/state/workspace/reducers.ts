@@ -52,7 +52,8 @@ export const defaultSettings: ISettings = {
   'prettier.useTabs': false,
   'request.credentials': 'omit',
   'schema.disableComments': true,
-  'tracing.hideTracingResponse': true,
+  'schema.enablePolling': true,
+  'tracing.hideTracingResponse': true,  
 }
 
 // tslint:disable-next-line:max-classes-per-file

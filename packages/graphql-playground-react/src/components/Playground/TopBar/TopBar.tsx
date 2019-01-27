@@ -3,7 +3,7 @@ import { styled } from '../../../styled/index'
 import * as copy from 'copy-to-clipboard'
 
 import Share from '../../Share'
-import ReloadIcon from './ReloadIcon'
+import SchemaReload from './SchemaReload'
 import { createStructuredSelector } from 'reselect'
 import {
   getEndpoint,
@@ -21,6 +21,7 @@ import {
 } from '../../../state/sessions/actions'
 import { share } from '../../../state/sharing/actions'
 import { openHistory } from '../../../state/general/actions'
+import { getSettings } from '../../../state/workspace/reducers'
 
 export interface Props {
   endpoint: string
@@ -34,6 +35,8 @@ export interface Props {
   openHistory: () => void
   share: () => void
   refetchSchema: () => void
+
+  settings
 }
 
 class TopBar extends React.Component<Props, {}> {
@@ -45,7 +48,7 @@ class TopBar extends React.Component<Props, {}> {
     }),
   }
   render() {
-    const { endpointUnreachable } = this.props
+    const { endpointUnreachable, settings } = this.props
     return (
       <TopBarWrapper>
         <Button onClick={this.props.prettifyQuery}>Prettify</Button>
@@ -65,10 +68,21 @@ class TopBar extends React.Component<Props, {}> {
               <Spinner />
             </ReachError>
           ) : (
-            <ReloadIcon
-              isReloadingSchema={this.props.isReloadingSchema}
-              onReloadSchema={this.props.refetchSchema}
-            />
+            <div
+              style={{
+                display: 'flex',
+                flexDirection: 'row',
+                alignItems: 'center',
+                position: 'absolute',
+                left: '6px',
+              }}
+            >
+              <SchemaReload
+                isPollingSchema={settings['schema.enablePolling']}
+                isReloadingSchema={this.props.isReloadingSchema}
+                onReloadSchema={this.props.refetchSchema}
+              />
+            </div>
           )}
         </UrlBarWrapper>
         <Button onClick={this.copyCurlToClipboard}>Copy CURL</Button>
@@ -141,6 +155,7 @@ const mapStateToProps = createStructuredSelector({
   fixedEndpoint: getFixedEndpoint,
   isReloadingSchema: getIsReloadingSchema,
   endpointUnreachable: getEndpointUnreachable,
+  settings: getSettings,
 })
 
 export default connect(
@@ -196,6 +211,7 @@ const UrlBar = styled<UrlBarProps, 'input'>('input')`
       : p.theme.editorColours.textInactive};
   border: 1px solid ${p => p.theme.editorColours.background};
   padding: 6px 12px;
+  padding-left: 30px;
   font-size: 13px;
   flex: 1;
 `

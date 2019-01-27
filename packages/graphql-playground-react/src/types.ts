@@ -28,5 +28,6 @@ export interface ISettings {
   ['prettier.useTabs']: boolean
   ['request.credentials']: 'omit' | 'include' | 'same-origin'
   ['schema.disableComments']: boolean
+  ['schema.enablePolling']: boolean
   ['tracing.hideTracingResponse']: boolean
 }
