@@ -62,7 +62,7 @@ export interface Props {
   subscriptionEndpoint?: string
   projectId?: string
   shareEnabled?: boolean
-  adminAuthToken?: string
+  fixedEndpoint?: boolean
   onSuccess?: (graphQLParams: any, response: any) => void
   isEndpoint?: boolean
   isApp?: boolean
@@ -302,6 +302,7 @@ export class Playground extends React.PureComponent<Props & ReduxProps, State> {
             ) : (
               <GraphQLEditor
                 shareEnabled={this.props.shareEnabled}
+                fixedEndpoint={this.props.fixedEndpoint}
                 schema={this.state.schema}
               />
             )}
