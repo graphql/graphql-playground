@@ -24,6 +24,7 @@ import SideTab from './ExplorerTabs/SideTab'
 import SideTabs from './ExplorerTabs/SideTabs'
 import SDLView from './SchemaExplorer/SDLView'
 import GraphDocs from './DocExplorer/GraphDocs'
+import QueryExplorer from './QueryExplorer/QueryExplorer'
 
 import { styled } from '../../styled/index'
 
@@ -135,6 +136,7 @@ class GraphQLEditor extends React.PureComponent<Props & ReduxProps> {
   public docExplorerComponent: any // later React.Component<...>
   public graphExplorerComponent: any
   public schemaExplorerComponent: any
+  public queryExplorerComponent: any
   private queryResizer: any
   private responseResizer: any
   private queryVariablesRef
@@ -278,6 +280,13 @@ class GraphQLEditor extends React.PureComponent<Props & ReduxProps> {
               sessionId={this.props.sessionId}
             />
           </SideTab>
+          <SideTab label="Explorer" activeColor="black" tabWidth="65px">
+            <QueryExplorer
+              ref={this.setQueryExplorerRef}
+              schema={this.props.schema}
+              query={this.props.query}
+            />
+          </SideTab>
         </SideTabs>
       </Container>
     )
@@ -328,6 +337,11 @@ class GraphQLEditor extends React.PureComponent<Props & ReduxProps> {
   setSchemaExplorerRef = ref => {
     if (ref) {
       this.schemaExplorerComponent = ref.getWrappedInstance()
+    }
+  }
+  setQueryExplorerRef = ref => {
+    if (ref) {
+      this.queryExplorerComponent = ref.getWrappedInstance()
     }
   }
 

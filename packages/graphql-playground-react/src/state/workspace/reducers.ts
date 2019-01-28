@@ -53,7 +53,7 @@ export const defaultSettings: ISettings = {
   'request.credentials': 'omit',
   'schema.disableComments': true,
   'schema.enablePolling': true,
-  'tracing.hideTracingResponse': true,  
+  'tracing.hideTracingResponse': true,
 }
 
 // tslint:disable-next-line:max-classes-per-file

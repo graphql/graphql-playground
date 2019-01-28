@@ -59,6 +59,7 @@ class SDLView extends React.Component<
     const rootWidth = props.docs.docsWidth || columnWidth
     return rootWidth
   }
+
   componentDidMount() {
     this.setWidth()
   }
