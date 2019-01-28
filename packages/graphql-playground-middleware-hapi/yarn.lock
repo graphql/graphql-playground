@@ -112,10 +112,10 @@ glob@^7.0.5:
     once "^1.3.0"
     path-is-absolute "^1.0.0"
 
-graphql-playground-html@1.6.10:
-  version "1.6.10"
-  resolved "https://registry.yarnpkg.com/graphql-playground-html/-/graphql-playground-html-1.6.10.tgz#edb68f67ce71c4a092d163e1b435ea2e73bbe0d8"
-  integrity sha512-PZFVWJqNct7+tSlVSseH/YRHj9T0Que0Q8hskaCLGDmyGZVkv5XM3k5LUybR4LKXJqi7x4ekEkK6R4M4CQPGnQ==
+graphql-playground-html@1.6.11:
+  version "1.6.11"
+  resolved "https://registry.yarnpkg.com/graphql-playground-html/-/graphql-playground-html-1.6.11.tgz#a4e40b3d43527270722cacf7a96811c7806eb22a"
+  integrity sha512-KBeZH7irqW0GB08AfryknQ4c0BPDGxJSvqJ+DYmGzbhyaQTUnocMv+5TfpaU+SUY8lnS7OGvEIHo/SIYyrjuWg==
 
 hapi@^18.0.0:
   version "18.0.0"
