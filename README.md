@@ -70,6 +70,7 @@ These are the settings currently available:
   'prettier.tabWidth': 2,
   'prettier.useTabs': false,
   'request.credentials': 'omit', // possible values: 'omit', 'include', 'same-origin'
+  "schema.enablePolling": true // enables automatic schema polling
   'schema.disableComments': boolean,
   'tracing.hideTracingResponse': true,
 }
@@ -100,6 +101,7 @@ interface ISettings {
   'prettier.tabWidth': number
   'prettier.useTabs': boolean
   'request.credentials': 'omit' | 'include' | 'same-origin'
+  "schema.enablePolling": boolean
   'schema.disableComments': boolean
   'tracing.hideTracingResponse': boolean
 }
