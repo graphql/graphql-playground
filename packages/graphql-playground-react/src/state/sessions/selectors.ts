@@ -1,5 +1,5 @@
 import { createSelector } from 'reselect'
-import { makeWorkspace } from '../workspace/reducers'
+import { makeWorkspace, getSettings } from '../workspace/reducers'
 
 function getSelectedWorkspaceId(state) {
   return state.get('selectedWorkspace')
@@ -67,6 +67,14 @@ export const getCurrentQueryStartTime = makeSessionSelector(
 )
 export const getCurrentQueryEndTime = makeSessionSelector('currentQueryEndTime')
 export const getIsReloadingSchema = makeSessionSelector('isReloadingSchema')
+export const getIsPollingSchema = createSelector(
+  [getEndpoint, getSettings],
+  (endpoint, settings) =>
+    settings['schema.polling.enable'] &&
+    endpoint.match(`/${settings['schema.polling.endpointFilter']}`) &&
+    true,
+)
+
 export const getResponseExtensions = makeSessionSelector('responseExtensions')
 export const getQueryVariablesActive = makeSessionSelector(
   'queryVariablesActive',

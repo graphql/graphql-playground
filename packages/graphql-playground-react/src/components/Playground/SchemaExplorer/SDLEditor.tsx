@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { GraphQLSchema } from 'graphql'
+import { GraphQLSchema, printSchema } from 'graphql'
 import EditorWrapper from '../EditorWrapper'
 import { styled } from '../../../styled'
 import { getSDL } from '../util/createSDL'
@@ -7,6 +7,7 @@ import { ISettings } from '../../../types'
 
 export interface Props {
   schema?: GraphQLSchema | null
+  isPollingSchema: boolean
   getRef?: (ref: SDLEditor) => void
   width?: number
   sessionId?: string
@@ -64,10 +65,12 @@ class SDLEditor extends React.PureComponent<Props, { overflowY: boolean }> {
     this.editor.on('scroll', this.handleScroll)
     this.editor.refresh()
   }
-
   componentDidUpdate(prevProps: Props) {
     const CodeMirror = require('codemirror')
-    if (this.props.schema !== prevProps.schema) {
+    const currentSchemaStr = this.props.schema && printSchema(this.props.schema)
+    const prevSchemaStr = prevProps.schema && printSchema(prevProps.schema)
+    if (currentSchemaStr !== prevSchemaStr) {
+      const initialScroll = this.editor.getScrollInfo()
       this.cachedValue =
         getSDL(
           this.props.schema,
@@ -79,6 +82,9 @@ class SDLEditor extends React.PureComponent<Props, { overflowY: boolean }> {
           this.props.settings['schema.disableComments'],
         ),
       )
+      if (this.props.isPollingSchema) {
+        this.editor.scrollTo(initialScroll.left, initialScroll.top)
+      }
       CodeMirror.signal(this.editor, 'change', this.editor)
     }
     if (this.props.width !== prevProps.width) {

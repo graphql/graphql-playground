@@ -27,4 +27,7 @@ export interface ISettings {
   ['tracing.hideTracingResponse']: boolean
   ['request.credentials']: 'omit' | 'include' | 'same-origin'
   ['schema.disableComments']: boolean
+  ['schema.polling.enable']: boolean
+  ['schema.polling.endpointFilter']: string
+  ['schema.polling.interval']: number
 }

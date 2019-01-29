@@ -3,13 +3,14 @@ import { styled } from '../../../styled/index'
 import * as copy from 'copy-to-clipboard'
 
 import Share from '../../Share'
-import ReloadIcon from './ReloadIcon'
+import SchemaReload from './SchemaReload'
 import { createStructuredSelector } from 'reselect'
 import {
   getEndpoint,
   getSelectedSession,
   getIsReloadingSchema,
   getEndpointUnreachable,
+  getIsPollingSchema,
 } from '../../../state/sessions/selectors'
 import { connect } from 'react-redux'
 import { getFixedEndpoint } from '../../../state/general/selectors'
@@ -21,12 +22,15 @@ import {
 } from '../../../state/sessions/actions'
 import { share } from '../../../state/sharing/actions'
 import { openHistory } from '../../../state/general/actions'
+import { getSettings } from '../../../state/workspace/reducers'
+import { ISettings } from '../../../types'
 
 export interface Props {
   endpoint: string
   shareEnabled?: boolean
   fixedEndpoint?: boolean
   isReloadingSchema: boolean
+  isPollingSchema: boolean
   endpointUnreachable: boolean
 
   editEndpoint: (value: string) => void
@@ -34,6 +38,8 @@ export interface Props {
   openHistory: () => void
   share: () => void
   refetchSchema: () => void
+
+  settings: ISettings
 }
 
 class TopBar extends React.Component<Props, {}> {
@@ -45,7 +51,7 @@ class TopBar extends React.Component<Props, {}> {
     }),
   }
   render() {
-    const { endpointUnreachable } = this.props
+    const { endpointUnreachable, settings } = this.props
     return (
       <TopBarWrapper>
         <Button onClick={this.props.prettifyQuery}>Prettify</Button>
@@ -65,10 +71,22 @@ class TopBar extends React.Component<Props, {}> {
               <Spinner />
             </ReachError>
           ) : (
-            <ReloadIcon
-              isReloadingSchema={this.props.isReloadingSchema}
-              onReloadSchema={this.props.refetchSchema}
-            />
+            <div
+              style={{
+                display: 'flex',
+                flexDirection: 'row',
+                alignItems: 'center',
+                position: 'absolute',
+                left: '6px',
+              }}
+            >
+              <SchemaReload
+                settings={settings}
+                isPollingSchema={this.props.isPollingSchema}
+                isReloadingSchema={this.props.isReloadingSchema}
+                onReloadSchema={this.props.refetchSchema}
+              />
+            </div>
           )}
         </UrlBarWrapper>
         <Button onClick={this.copyCurlToClipboard}>Copy CURL</Button>
@@ -140,7 +158,9 @@ const mapStateToProps = createStructuredSelector({
   endpoint: getEndpoint,
   fixedEndpoint: getFixedEndpoint,
   isReloadingSchema: getIsReloadingSchema,
+  isPollingSchema: getIsPollingSchema,
   endpointUnreachable: getEndpointUnreachable,
+  settings: getSettings,
 })
 
 export default connect(
@@ -196,6 +216,7 @@ const UrlBar = styled<UrlBarProps, 'input'>('input')`
       : p.theme.editorColours.textInactive};
   border: 1px solid ${p => p.theme.editorColours.background};
   padding: 6px 12px;
+  padding-left: 30px;
   font-size: 13px;
   flex: 1;
 `

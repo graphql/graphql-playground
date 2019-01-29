@@ -27,7 +27,7 @@ import {
 } from '../state/sessions/actions'
 import { setConfigString } from '../state/general/actions'
 import { initState } from '../state/workspace/actions'
-import { GraphQLSchema } from 'graphql'
+import { GraphQLSchema, printSchema } from 'graphql'
 import { createStructuredSelector } from 'reselect'
 import {
   getIsConfigTab,
@@ -37,6 +37,7 @@ import {
   getHeaders,
   getIsReloadingSchema,
   getEndpoint,
+  getIsPollingSchema,
 } from '../state/sessions/selectors'
 import { getHistoryOpen } from '../state/general/selectors'
 import {
@@ -104,6 +105,7 @@ export interface ReduxProps {
   schemaFetchingError: (endpoint: string, error: string) => void
   schemaFetchingSuccess: (endpoint: string, tracingSupported: boolean) => void
   isReloadingSchema: boolean
+  isPollingSchema: boolean
   isConfigTab: boolean
   isSettingsTab: boolean
   isFile: boolean
@@ -140,7 +142,7 @@ export class Playground extends React.PureComponent<Props & ReduxProps, State> {
       if (props.schema) {
         return
       }
-      if (this.mounted && this.state.schema) {
+      if (this.mounted && this.state.schema && !props.isPollingSchema) {
         this.setState({ schema: undefined })
       }
       let first = true
@@ -240,6 +242,7 @@ export class Playground extends React.PureComponent<Props & ReduxProps, State> {
   async schemaGetter(propsInput?: Props & ReduxProps) {
     const props = this.props || propsInput
     const endpoint = props.sessionEndpoint || props.endpoint
+    const currentSchema = this.state.schema
     try {
       const data = {
         endpoint,
@@ -255,11 +258,11 @@ export class Playground extends React.PureComponent<Props & ReduxProps, State> {
           data.endpoint === this.props.endpoint ||
           data.endpoint === this.props.sessionEndpoint
         ) {
-          this.setState({ schema: newSchema })
+          this.updateSchema(currentSchema, newSchema, props)
         }
       })
       if (schema) {
-        this.setState({ schema: schema.schema })
+        this.updateSchema(currentSchema, schema.schema, props)
         this.props.schemaFetchingSuccess(data.endpoint, schema.tracingSupported)
         this.backoff.stop()
       }
@@ -346,6 +349,19 @@ export class Playground extends React.PureComponent<Props & ReduxProps, State> {
     )
   }
 
+  private updateSchema(
+    currentSchema: GraphQLSchema | undefined,
+    newSchema: GraphQLSchema,
+    props: Readonly<{ children?: React.ReactNode }> &
+      Readonly<Props & ReduxProps>,
+  ) {
+    const currentSchemaStr = currentSchema ? printSchema(currentSchema) : null
+    const newSchemaStr = printSchema(newSchema)
+    if (newSchemaStr !== currentSchemaStr || !props.isPollingSchema) {
+      this.setState({ schema: newSchema })
+    }
+  }
+
   get httpApiPrefix() {
     return this.props.endpoint.match(/(https?:\/\/.*?)\/?/)![1]
   }
@@ -361,6 +377,7 @@ const mapStateToProps = createStructuredSelector({
   settings: getSettings,
   settingsString: getSettingsString,
   isReloadingSchema: getIsReloadingSchema,
+  isPollingSchema: getIsPollingSchema,
   sessionEndpoint: getEndpoint,
 })
 
