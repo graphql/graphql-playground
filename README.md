@@ -60,13 +60,18 @@ These are the settings currently available:
 
 ```js
 {
-  'general.betaUpdates': false,
   'editor.cursorShape': 'line', // possible values: 'line', 'block', 'underline'
-  'editor.fontSize': 14,
   'editor.fontFamily': `'Source Code Pro', 'Consolas', 'Inconsolata', 'Droid Sans Mono', 'Monaco', monospace`,
-  'editor.theme': 'dark', // possible values: 'dark', 'light'
+  'editor.fontSize': 14,
   'editor.reuseHeaders': true, // new tab reuses headers from last tab
+  'editor.theme': 'dark', // possible values: 'dark', 'light'
+  'general.betaUpdates': false,
+  'prettier.printWidth': 80,
+  'prettier.tabWidth': 2,
+  'prettier.useTabs': false,
   'request.credentials': 'omit', // possible values: 'omit', 'include', 'same-origin'
+  "schema.enablePolling": true // enables automatic schema polling
+  'schema.disableComments': boolean,
   'tracing.hideTracingResponse': true,
 }
 ```
@@ -86,14 +91,19 @@ The React component `<Playground />` and all middlewares expose the following op
 
 ```ts
 interface ISettings {
-	'general.betaUpdates': boolean
-	'editor.theme': Theme
-	'editor.reuseHeaders': boolean
-	'tracing.hideTracingResponse': boolean
-	'editor.fontSize': number
-	'editor.fontFamily': string
-	'request.credentials': string
-	'schema.disableComments': boolean
+  'editor.cursorShape': 'line' | 'block' | 'underline'
+  'editor.fontFamily': string
+  'editor.fontSize': number
+  'editor.reuseHeaders': boolean
+  'editor.theme': 'dark' | 'light'
+  'general.betaUpdates': boolean
+  'prettier.printWidth': number
+  'prettier.tabWidth': number
+  'prettier.useTabs': boolean
+  'request.credentials': 'omit' | 'include' | 'same-origin'
+  "schema.enablePolling": boolean
+  'schema.disableComments': boolean
+  'tracing.hideTracingResponse': boolean
 }
 ```
 
@@ -114,7 +124,7 @@ interface Tab {
 In addition to this, the React app provides some more properties:
 
 - `props` (React Component)
-- `createApolloLink` [`(session: Session) => ApolloLink`] - this is the equivalent to the `fetcher` of GraphiQL. For each query that is being executed, this function will be called
+- `createApolloLink` [`(session: Session, subscriptionEndpoint?: string) => ApolloLink`] - this is the equivalent to the `fetcher` of GraphiQL. For each query that is being executed, this function will be called
 
 `createApolloLink` is only available in the React Component and not the middlewares, because the content must be serializable as it is being printed into a HTML template.
 

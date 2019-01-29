@@ -93,6 +93,32 @@ export const getDocExplorerWidth = makeSessionSelector('docExplorerWidth')
 export const getNextQueryStartTime = makeSessionSelector('nextQueryStartTime')
 export const getTracingSupported = makeSessionSelector('tracingSupported')
 
+function getSettings(state) {
+  return state.getIn(['settingsString'])
+}
+
+export const getTabWidth = createSelector([getSettings], settings => {
+  try {
+    const json = JSON.parse(settings)
+    return json['prettier.tabWidth'] || 2
+  } catch (e) {
+    //
+  }
+
+  return 2
+})
+
+export const getUseTabs = createSelector([getSettings], settings => {
+  try {
+    const json = JSON.parse(settings)
+    return json['prettier.useTabs'] || false
+  } catch (e) {
+    //
+  }
+
+  return false
+})
+
 export const getHeadersCount = createSelector([getHeaders], headers => {
   try {
     const json = JSON.parse(headers)

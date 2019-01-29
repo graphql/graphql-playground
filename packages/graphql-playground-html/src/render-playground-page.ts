@@ -12,9 +12,12 @@ export interface MiddlewareOptions {
   codeTheme?: EditorColours
 }
 
+export type CursorShape = 'line' | 'block' | 'underline'
 export type Theme = 'dark' | 'light'
+
 export interface ISettings {
   'general.betaUpdates': boolean
+  'editor.cursorShape': CursorShape
   'editor.theme': Theme
   'editor.reuseHeaders': boolean
   'tracing.hideTracingResponse': boolean
@@ -52,7 +55,7 @@ export interface IntrospectionResult {
 }
 
 export interface RenderPageOptions extends MiddlewareOptions {
-  version: string
+  version?: string
   cdnUrl?: string
   env?: any
 }

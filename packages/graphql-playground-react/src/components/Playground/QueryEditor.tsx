@@ -17,6 +17,8 @@ import {
   getQuery,
   getSelectedSessionIdFromRoot,
   getScrollTop,
+  getTabWidth,
+  getUseTabs,
 } from '../../state/sessions/selectors'
 import EditorWrapper from './EditorWrapper'
 import { styled } from '../../styled'
@@ -48,6 +50,8 @@ export interface ReduxProps {
   value: string
   sessionId?: string
   scrollTop?: number
+  tabWidth?: number
+  useTabs?: boolean
 }
 
 const md = new MD()
@@ -102,7 +106,8 @@ export class QueryEditor extends React.PureComponent<Props & ReduxProps, {}> {
       autofocus: !isIframe() ? true : false,
       value: this.props.value || '',
       lineNumbers: true,
-      tabSize: 2,
+      tabSize: this.props.tabWidth || 2,
+      indentWithTabs: this.props.useTabs || false,
       mode: 'graphql',
       theme: 'graphiql',
       keyMap: 'sublime',
@@ -305,6 +310,8 @@ const mapStateToProps = createStructuredSelector({
   value: getQuery,
   sessionId: getSelectedSessionIdFromRoot,
   scrollTop: getScrollTop,
+  tabWidth: getTabWidth,
+  useTabs: getUseTabs,
 })
 
 export default connect(

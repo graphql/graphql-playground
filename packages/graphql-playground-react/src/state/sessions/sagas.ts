@@ -192,7 +192,11 @@ function* prettifyQuery() {
   const { query } = yield select(getSelectedSession)
   const settings = yield select(getSettings)
   try {
-    const prettyQuery = prettify(query, settings['prettier.printWidth'])
+    const prettyQuery = prettify(query, {
+      printWidth: settings['prettier.printWidth'],
+      tabWidth: settings['prettier.tabWidth'],
+      useTabs: settings['prettier.useTabs'],
+    })
     yield put(editQuery(prettyQuery))
   } catch (e) {
     // TODO show erros somewhere

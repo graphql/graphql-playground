@@ -44,6 +44,8 @@ export interface PlaygroundWrapperProps {
   subscriptionEndpoint?: string
   setTitle?: boolean
   settings?: ISettings
+  shareEnabled?: string
+  fixedEndpoint?: string
   folderName?: string
   configString?: string
   showNewWorkspace?: boolean
@@ -57,7 +59,10 @@ export interface PlaygroundWrapperProps {
   config?: GraphQLConfig
   configPath?: string
   injectedState?: any
-  createApolloLink?: (session: Session) => ApolloLink
+  createApolloLink?: (
+    session: Session,
+    subscriptionEndpoint?: string,
+  ) => ApolloLink
   tabs?: Tab[]
   schema?: { __schema: any } // introspection result
   codeTheme?: EditorColours
@@ -373,6 +378,7 @@ class PlaygroundWrapper extends React.Component<
               )}
             <Playground
               endpoint={this.state.endpoint}
+              shareEnabled={this.props.shareEnabled}
               subscriptionEndpoint={this.state.subscriptionEndpoint}
               shareUrl={this.state.shareUrl}
               onChangeEndpoint={this.handleChangeEndpoint}
@@ -389,6 +395,7 @@ class PlaygroundWrapper extends React.Component<
               onSaveConfig={this.handleSaveConfig}
               onUpdateSessionCount={this.handleUpdateSessionCount}
               fixedEndpoints={Boolean(this.state.configString)}
+              fixedEndpoint={this.props.fixedEndpoint}
               headers={combinedHeaders}
               configPath={this.props.configPath}
               workspaceName={

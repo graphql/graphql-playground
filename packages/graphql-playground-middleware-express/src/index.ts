@@ -1,12 +1,10 @@
 import { Request, Response } from 'express'
 import {
   MiddlewareOptions,
-  RenderPageOptions,
   renderPlaygroundPage,
 } from 'graphql-playground-html'
 
 /* tslint:disable */
-const { playgroundVersion } = require('../package.json')
 
 export type ExpressPlaygroundMiddleware = (
   req: Request,
@@ -19,14 +17,9 @@ export type Register = (
 ) => ExpressPlaygroundMiddleware
 
 const express: Register = function voyagerExpress(options: MiddlewareOptions) {
-  const middlewareOptions: RenderPageOptions = {
-    ...options,
-    version: playgroundVersion,
-  }
-
   return (req, res, next) => {
     res.setHeader('Content-Type', 'text/html')
-    const playground = renderPlaygroundPage(middlewareOptions)
+    const playground = renderPlaygroundPage(options)
     res.write(playground)
     res.end()
     next()

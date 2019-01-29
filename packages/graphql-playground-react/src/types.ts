@@ -17,17 +17,19 @@ export type Theme = 'dark' | 'light'
 export type CursorShape = 'line' | 'block' | 'underline'
 
 export interface ISettings {
-  ['general.betaUpdates']: boolean
   ['editor.cursorShape']: CursorShape
   ['editor.fontFamily']: string
   ['editor.fontSize']: number
-  ['editor.theme']: Theme
   ['editor.reuseHeaders']: boolean
+  ['editor.theme']: Theme
+  ['general.betaUpdates']: boolean
   ['prettier.printWidth']: number
-  ['tracing.hideTracingResponse']: boolean
+  ['prettier.tabWidth']: number
+  ['prettier.useTabs']: boolean
   ['request.credentials']: 'omit' | 'include' | 'same-origin'
   ['schema.disableComments']: boolean
   ['schema.polling.enable']: boolean
   ['schema.polling.endpointFilter']: string
   ['schema.polling.interval']: number
+  ['tracing.hideTracingResponse']: boolean
 }
