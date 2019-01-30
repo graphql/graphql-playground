@@ -131,9 +131,10 @@ export const {
   REFETCH_SCHEMA: simpleAction(),
   SET_ENDPOINT_UNREACHABLE: simpleAction('endpoint'),
   SET_SCROLL_TOP: (sessionId, scrollTop) => ({ sessionId, scrollTop }),
-  SCHEMA_FETCHING_SUCCESS: (endpoint, tracingSupported) => ({
+  SCHEMA_FETCHING_SUCCESS: (endpoint, tracingSupported, isPollingSchema) => ({
     endpoint,
     tracingSupported,
+    isPollingSchema,
   }),
   /*
         this.setState({

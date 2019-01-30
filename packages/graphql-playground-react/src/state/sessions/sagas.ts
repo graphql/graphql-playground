@@ -7,7 +7,7 @@ import {
   put,
 } from 'redux-saga/effects'
 import { delay } from 'redux-saga'
-import { getSelectedSession } from './selectors'
+import { getSelectedSession, getIsPollingSchema } from './selectors'
 import getSelectedOperationName from '../../components/Playground/util/getSelectedOperationName'
 import { getQueryFacts } from '../../components/Playground/util/getQueryFacts'
 import { fromJS, is } from 'immutable'
@@ -139,7 +139,13 @@ function* fetchSchemaSaga() {
   const session: Session = yield getSessionWithCredentials()
   yield schemaFetcher.fetch(session)
   try {
-    yield put(schemaFetchingSuccess(session.endpoint))
+    yield put(
+      schemaFetchingSuccess(
+        session.endpoint,
+        null,
+        yield select(getIsPollingSchema),
+      ),
+    )
   } catch (e) {
     yield put(schemaFetchingError(session.endpoint))
     yield call(delay, 5000)
@@ -151,7 +157,13 @@ function* refetchSchemaSaga() {
   const session: Session = yield getSessionWithCredentials()
   yield schemaFetcher.refetch(session)
   try {
-    yield put(schemaFetchingSuccess(session.endpoint))
+    yield put(
+      schemaFetchingSuccess(
+        session.endpoint,
+        null,
+        yield select(getIsPollingSchema),
+      ),
+    )
   } catch (e) {
     yield put(schemaFetchingError(session.endpoint))
     yield call(delay, 5000)

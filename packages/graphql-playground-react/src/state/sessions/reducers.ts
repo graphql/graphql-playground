@@ -317,7 +317,7 @@ const reducer = handleActions(
             if (
               response &&
               session.responses!.size === 1 &&
-              (response.date.includes('error') ||
+              ((response.date.includes('error') && !payload.isPollingSchema) ||
                 response.date.includes('Failed to fetch'))
             ) {
               data.responses = List([])
