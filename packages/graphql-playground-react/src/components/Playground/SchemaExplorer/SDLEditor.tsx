@@ -7,6 +7,7 @@ import { ISettings } from '../../../types'
 
 export interface Props {
   schema?: GraphQLSchema | null
+  isPollingSchema: boolean
   getRef?: (ref: SDLEditor) => void
   width?: number
   sessionId?: string
@@ -81,7 +82,7 @@ class SDLEditor extends React.PureComponent<Props, { overflowY: boolean }> {
           this.props.settings['schema.disableComments'],
         ),
       )
-      if (this.props.settings['schema.enablePolling']) {
+      if (this.props.isPollingSchema) {
         this.editor.scrollTo(initialScroll.left, initialScroll.top)
       }
       CodeMirror.signal(this.editor, 'change', this.editor)

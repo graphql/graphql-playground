@@ -1,18 +1,21 @@
 import * as React from 'react'
 import ReloadIcon from './Reload'
-import PollingIcon from './Polling'
+import Polling from './Polling'
+import { ISettings } from '../../../types'
 
 export interface Props {
   isPollingSchema: boolean
   isReloadingSchema: boolean
   onReloadSchema: () => any
+  settings: ISettings
 }
 
 export default (props: Props) => {
   if (props.isPollingSchema) {
     return (
-      <PollingIcon
-        isPollingSchema={props.isPollingSchema}
+      <Polling
+        interval={props.settings['schema.polling.interval']}
+        isReloadingSchema={props.isReloadingSchema}
         onReloadSchema={props.onReloadSchema}
       />
     )

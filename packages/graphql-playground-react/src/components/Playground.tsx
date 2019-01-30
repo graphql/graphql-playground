@@ -37,6 +37,7 @@ import {
   getHeaders,
   getIsReloadingSchema,
   getEndpoint,
+  getIsPollingSchema,
 } from '../state/sessions/selectors'
 import { getHistoryOpen } from '../state/general/selectors'
 import {
@@ -105,8 +106,13 @@ export interface ReduxProps {
   injectHeaders: (headers: string, endpoint: string) => void
   setConfigString: (str: string) => void
   schemaFetchingError: (endpoint: string, error: string) => void
-  schemaFetchingSuccess: (endpoint: string, tracingSupported: boolean) => void
+  schemaFetchingSuccess: (
+    endpoint: string,
+    tracingSupported: boolean,
+    isPollingSchema: boolean,
+  ) => void
   isReloadingSchema: boolean
+  isPollingSchema: boolean
   isConfigTab: boolean
   isSettingsTab: boolean
   isFile: boolean
@@ -143,11 +149,7 @@ export class Playground extends React.PureComponent<Props & ReduxProps, State> {
       if (props.schema) {
         return
       }
-      if (
-        this.mounted &&
-        this.state.schema &&
-        !props.settings['schema.enablePolling']
-      ) {
+      if (this.mounted && this.state.schema && !props.isPollingSchema) {
         this.setState({ schema: undefined })
       }
       let first = true
@@ -268,7 +270,11 @@ export class Playground extends React.PureComponent<Props & ReduxProps, State> {
       })
       if (schema) {
         this.updateSchema(currentSchema, schema.schema, props)
-        this.props.schemaFetchingSuccess(data.endpoint, schema.tracingSupported)
+        this.props.schemaFetchingSuccess(
+          data.endpoint,
+          schema.tracingSupported,
+          props.isPollingSchema,
+        )
         this.backoff.stop()
       }
     } catch (e) {
@@ -363,10 +369,7 @@ export class Playground extends React.PureComponent<Props & ReduxProps, State> {
   ) {
     const currentSchemaStr = currentSchema ? printSchema(currentSchema) : null
     const newSchemaStr = printSchema(newSchema)
-    if (
-      newSchemaStr !== currentSchemaStr ||
-      !props.settings['schema.enablePolling']
-    ) {
+    if (newSchemaStr !== currentSchemaStr || !props.isPollingSchema) {
       this.setState({ schema: newSchema })
     }
   }
@@ -386,6 +389,7 @@ const mapStateToProps = createStructuredSelector({
   settings: getSettings,
   settingsString: getSettingsString,
   isReloadingSchema: getIsReloadingSchema,
+  isPollingSchema: getIsPollingSchema,
   sessionEndpoint: getEndpoint,
 })
 

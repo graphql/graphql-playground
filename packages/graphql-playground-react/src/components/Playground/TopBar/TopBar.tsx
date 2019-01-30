@@ -10,6 +10,7 @@ import {
   getSelectedSession,
   getIsReloadingSchema,
   getEndpointUnreachable,
+  getIsPollingSchema,
 } from '../../../state/sessions/selectors'
 import { connect } from 'react-redux'
 import { getFixedEndpoint } from '../../../state/general/selectors'
@@ -22,12 +23,14 @@ import {
 import { share } from '../../../state/sharing/actions'
 import { openHistory } from '../../../state/general/actions'
 import { getSettings } from '../../../state/workspace/reducers'
+import { ISettings } from '../../../types'
 
 export interface Props {
   endpoint: string
   shareEnabled?: boolean
   fixedEndpoint?: boolean
   isReloadingSchema: boolean
+  isPollingSchema: boolean
   endpointUnreachable: boolean
 
   editEndpoint: (value: string) => void
@@ -36,7 +39,7 @@ export interface Props {
   share: () => void
   refetchSchema: () => void
 
-  settings
+  settings: ISettings
 }
 
 class TopBar extends React.Component<Props, {}> {
@@ -78,7 +81,8 @@ class TopBar extends React.Component<Props, {}> {
               }}
             >
               <SchemaReload
-                isPollingSchema={settings['schema.enablePolling']}
+                settings={settings}
+                isPollingSchema={this.props.isPollingSchema}
                 isReloadingSchema={this.props.isReloadingSchema}
                 onReloadSchema={this.props.refetchSchema}
               />
@@ -154,6 +158,7 @@ const mapStateToProps = createStructuredSelector({
   endpoint: getEndpoint,
   fixedEndpoint: getFixedEndpoint,
   isReloadingSchema: getIsReloadingSchema,
+  isPollingSchema: getIsPollingSchema,
   endpointUnreachable: getEndpointUnreachable,
   settings: getSettings,
 })

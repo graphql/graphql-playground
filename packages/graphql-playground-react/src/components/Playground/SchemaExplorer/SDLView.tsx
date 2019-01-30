@@ -9,7 +9,10 @@ import {
 import Spinner from '../../Spinner'
 import { columnWidth } from '../../../constants'
 import { SideTabContentProps } from '../ExplorerTabs/SideTabs'
-import { getSelectedSessionIdFromRoot } from '../../../state/sessions/selectors'
+import {
+  getSelectedSessionIdFromRoot,
+  getIsPollingSchema,
+} from '../../../state/sessions/selectors'
 import { getSessionDocs } from '../../../state/docs/selectors'
 import { createStructuredSelector } from 'reselect'
 import { ErrorContainer } from '../DocExplorer/ErrorContainer'
@@ -17,6 +20,7 @@ import { SchemaExplorerContainer, SDLColumn } from './SDLTypes/SDLStyles'
 import SDLHeader from './SDLHeader'
 import SDLEditor from './SDLEditor'
 import { getSettings } from '../../../state/workspace/reducers'
+import { ISettings } from '../../../types'
 
 interface StateFromProps {
   docs: {
@@ -25,7 +29,8 @@ interface StateFromProps {
     docsWidth: number
     keyMove: boolean
   }
-  settings
+  isPollingSchema: boolean
+  settings: ISettings
 }
 
 interface DispatchFromProps {
@@ -64,7 +69,7 @@ class SDLView extends React.Component<
   }
 
   render() {
-    const { schema, settings } = this.props
+    const { schema, settings, isPollingSchema } = this.props
     let emptySchema
     if (schema === undefined) {
       // Schema is undefined when it is being loaded via introspection.
@@ -88,6 +93,7 @@ class SDLView extends React.Component<
             <SDLEditor
               schema={schema}
               settings={settings}
+              isPollingSchema={isPollingSchema}
               width={this.props.docs.docsWidth || columnWidth}
             />
           </SDLColumn>
@@ -114,6 +120,7 @@ const mapStateToProps = createStructuredSelector({
   settings: getSettings,
   docs: getSessionDocs,
   sessionId: getSelectedSessionIdFromRoot,
+  isPollingSchema: getIsPollingSchema,
 })
 
 export default connect<StateFromProps, DispatchFromProps, SideTabContentProps>(

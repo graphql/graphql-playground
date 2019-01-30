@@ -67,6 +67,17 @@ export const getCurrentQueryStartTime = makeSessionSelector(
 )
 export const getCurrentQueryEndTime = makeSessionSelector('currentQueryEndTime')
 export const getIsReloadingSchema = makeSessionSelector('isReloadingSchema')
+export const getIsPollingSchema = createSelector(
+  [getEndpoint, getSettings],
+  (endpoint, settings) => {
+    const json = JSON.parse(settings)
+    return (
+      json['schema.polling.enable'] &&
+      endpoint.match(`/${json['schema.polling.endpointFilter']}`) &&
+      true
+    )
+  },
+)
 
 export const getResponseExtensions = makeSessionSelector('responseExtensions')
 export const getQueryVariablesActive = makeSessionSelector(
