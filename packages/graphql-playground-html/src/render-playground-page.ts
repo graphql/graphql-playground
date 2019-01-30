@@ -59,6 +59,7 @@ export interface RenderPageOptions extends MiddlewareOptions {
   cdnUrl?: string
   env?: any
   title?: string
+  faviconUrl?: string
 }
 
 export interface Tab {
@@ -71,13 +72,13 @@ export interface Tab {
 
 const loading = getLoadingMarkup()
 
-const getCdnMarkup = ({ version, cdnUrl = '//cdn.jsdelivr.net/npm' }) => `
+const getCdnMarkup = ({ version, cdnUrl = '//cdn.jsdelivr.net/npm', faviconUrl }) => `
     <link rel="stylesheet" href="${cdnUrl}/graphql-playground-react${
   version ? `@${version}` : ''
 }/build/static/css/index.css" />
-    <link rel="shortcut icon" href="${cdnUrl}/graphql-playground-react${
-  version ? `@${version}` : ''
-}/build/favicon.png" />
+    <link rel="shortcut icon" href="${faviconUrl ? faviconUrl : `${cdnUrl}/graphql-playground-react${
+      version ? `@${version}` : ''
+    }/build/favicon.png`}" />
     <script src="${cdnUrl}/graphql-playground-react${
   version ? `@${version}` : ''
 }/build/static/js/middleware.js"></script>
