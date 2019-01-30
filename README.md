@@ -72,6 +72,9 @@ These are the settings currently available:
   'request.credentials': 'omit', // possible values: 'omit', 'include', 'same-origin'
   "schema.enablePolling": true // enables automatic schema polling
   'schema.disableComments': boolean,
+  'schema.polling.enable': true,
+  'schema.polling.endpointFilter': '*localhost*',
+  'schema.polling.interval': 2000,
   'tracing.hideTracingResponse': true,
 }
 ```
@@ -101,8 +104,11 @@ interface ISettings {
   'prettier.tabWidth': number
   'prettier.useTabs': boolean
   'request.credentials': 'omit' | 'include' | 'same-origin'
-  "schema.enablePolling": boolean
+  'schema.enablePolling': boolean
   'schema.disableComments': boolean
+  'schema.polling.enable': boolean
+  'schema.polling.endpointFilter': string
+  'schema.polling.interval': number
   'tracing.hideTracingResponse': boolean
 }
 ```
@@ -112,12 +118,12 @@ interface ISettings {
 
 ```ts
 interface Tab {
-	endpoint: string
-	query: string
-	name?: string
-	variables?: string
-	responses?: string[]
-	headers?: { [key: string]: string }
+  endpoint: string
+  query: string
+  name?: string
+  variables?: string
+  responses?: string[]
+  headers?: { [key: string]: string }
 }
 ```
 
@@ -157,8 +163,8 @@ Including Fonts (`1.`)
 
 ```html
 <link
-	href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700|Source+Code+Pro:400,700"
-	rel="stylesheet"
+  href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700|Source+Code+Pro:400,700"
+  rel="stylesheet"
 />
 ```
 
@@ -171,10 +177,10 @@ import { Provider } from 'react-redux'
 import { Playground, store } from 'graphql-playground-react'
 
 ReactDOM.render(
-	<Provider store={store}>
-		<Playground endpoint="https://api.graph.cool/simple/v1/swapi" />
-	</Provider>,
-	document.body,
+  <Provider store={store}>
+    <Playground endpoint="https://api.graph.cool/simple/v1/swapi" />
+  </Provider>,
+  document.body,
 )
 ```
 
@@ -220,18 +226,18 @@ import lambdaPlayground from 'graphql-playground-middleware-lambda'
 // const lambdaPlayground = require('graphql-playground-middleware-lambda').default
 
 exports.graphqlHandler = function graphqlHandler(event, context, callback) {
-	function callbackFilter(error, output) {
-		// eslint-disable-next-line no-param-reassign
-		output.headers['Access-Control-Allow-Origin'] = '*'
-		callback(error, output)
-	}
+  function callbackFilter(error, output) {
+    // eslint-disable-next-line no-param-reassign
+    output.headers['Access-Control-Allow-Origin'] = '*'
+    callback(error, output)
+  }
 
-	const handler = graphqlLambda({ schema: myGraphQLSchema })
-	return handler(event, context, callbackFilter)
+  const handler = graphqlLambda({ schema: myGraphQLSchema })
+  return handler(event, context, callbackFilter)
 }
 
 exports.playgroundHandler = lambdaPlayground({
-	endpoint: '/dev/graphql',
+  endpoint: '/dev/graphql',
 })
 ```
 
@@ -273,27 +279,27 @@ These are the available options:
 
 ```ts
 export interface EditorColours {
-	property: string
-	comment: string
-	punctuation: string
-	keyword: string
-	def: string
-	qualifier: string
-	attribute: string
-	number: string
-	string: string
-	builtin: string
-	string2: string
-	variable: string
-	meta: string
-	atom: string
-	ws: string
-	selection: string
-	cursorColor: string
-	editorBackground: string
-	resultBackground: string
-	leftDrawerBackground: string
-	rightDrawerBackground: string
+  property: string
+  comment: string
+  punctuation: string
+  keyword: string
+  def: string
+  qualifier: string
+  attribute: string
+  number: string
+  string: string
+  builtin: string
+  string2: string
+  variable: string
+  meta: string
+  atom: string
+  ws: string
+  selection: string
+  cursorColor: string
+  editorBackground: string
+  resultBackground: string
+  leftDrawerBackground: string
+  rightDrawerBackground: string
 }
 ```
 

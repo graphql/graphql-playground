@@ -3,7 +3,6 @@ import PollingIcon from './PollingIcon'
 
 export interface Props {
   interval: number
-  isReloadingSchema: boolean
   onReloadSchema: () => void
 }
 
@@ -47,9 +46,7 @@ class SchemaPolling extends React.Component<Props, State> {
     }
   }
   componentWillReceiveProps(nextProps: Props) {
-    if (nextProps.isReloadingSchema !== this.props.isReloadingSchema) {
-      this.updatePolling(nextProps)
-    }
+    this.updatePolling(nextProps)
   }
 
   render() {
@@ -57,7 +54,7 @@ class SchemaPolling extends React.Component<Props, State> {
   }
   private updatePolling = (props: Props = this.props) => {
     this.clearTimer()
-    if (!props.isReloadingSchema && this.state.windowVisible) {
+    if (this.state.windowVisible) {
       // timer starts only when introspection not in flight
       this.timer = setInterval(() => props.onReloadSchema(), props.interval)
     }
