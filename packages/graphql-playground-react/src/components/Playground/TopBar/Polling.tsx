@@ -21,7 +21,7 @@ class SchemaPolling extends React.Component<Props, State> {
     }
   }
   componentDidMount() {
-    this.startPolling()
+    this.updatePolling()
     document.addEventListener('visibilitychange', this.setWindowVisibility)
   }
   componentWillUnmount() {
@@ -34,7 +34,7 @@ class SchemaPolling extends React.Component<Props, State> {
         {
           windowVisible: true,
         },
-        this.startPolling,
+        this.updatePolling,
       )
     }
     if (document.visibilityState === 'hidden') {
@@ -42,20 +42,20 @@ class SchemaPolling extends React.Component<Props, State> {
         {
           windowVisible: false,
         },
-        this.startPolling,
+        this.updatePolling,
       )
     }
   }
   componentWillReceiveProps(nextProps: Props) {
     if (nextProps.isReloadingSchema !== this.props.isReloadingSchema) {
-      this.startPolling(nextProps)
+      this.updatePolling(nextProps)
     }
   }
 
   render() {
     return <PollingIcon animate={this.state.windowVisible} />
   }
-  private startPolling = (props: Props = this.props) => {
+  private updatePolling = (props: Props = this.props) => {
     this.clearTimer()
     if (!props.isReloadingSchema && this.state.windowVisible) {
       // timer starts only when introspection not in flight
