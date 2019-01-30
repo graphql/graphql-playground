@@ -70,11 +70,10 @@ These are the settings currently available:
   'prettier.tabWidth': 2,
   'prettier.useTabs': false,
   'request.credentials': 'omit', // possible values: 'omit', 'include', 'same-origin'
-  "schema.enablePolling": true // enables automatic schema polling
+  'schema.polling.enable': true, // enables automatic schema polling
+  'schema.polling.endpointFilter': '*localhost*', // endpoint filter for schema polling
+  'schema.polling.interval': 2000, // schema polling interval in ms
   'schema.disableComments': boolean,
-  'schema.polling.enable': true,
-  'schema.polling.endpointFilter': '*localhost*',
-  'schema.polling.interval': 2000,
   'tracing.hideTracingResponse': true,
 }
 ```
@@ -104,11 +103,10 @@ interface ISettings {
   'prettier.tabWidth': number
   'prettier.useTabs': boolean
   'request.credentials': 'omit' | 'include' | 'same-origin'
-  'schema.enablePolling': boolean
-  'schema.disableComments': boolean
   'schema.polling.enable': boolean
   'schema.polling.endpointFilter': string
   'schema.polling.interval': number
+  'schema.disableComments': boolean
   'tracing.hideTracingResponse': boolean
 }
 ```
