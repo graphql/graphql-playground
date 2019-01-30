@@ -142,10 +142,12 @@ export class ResponseRecord extends Record({
   resultID: '',
   date: '',
   time: new Date(),
+  isSchemaError: false,
 }) {
   resultID: string
   date: string
   time: Date
+  isSchemaError: boolean
 }
 
 function makeSession(endpoint = '') {
@@ -317,8 +319,7 @@ const reducer = handleActions(
             if (
               response &&
               session.responses!.size === 1 &&
-              ((response.date.includes('error') && !payload.isPollingSchema) ||
-                response.date.includes('Failed to fetch'))
+              response.isSchemaError
             ) {
               data.responses = List([])
             }
@@ -344,21 +345,28 @@ const reducer = handleActions(
     SCHEMA_FETCHING_ERROR: (state, { payload }) => {
       const newSessions = state.get('sessions').map((session, sessionId) => {
         if (session.get('endpoint') === payload.endpoint) {
+          let { responses } = session
+
+          // Only override the responses if there is one or zero and that one is a schemaError
+          // Don't override user's responses!
+          if (responses.size <= 1) {
+            let response = session.responses ? session.responses!.first() : null
+            if (!response || response.isSchemaError) {
+              response = new ResponseRecord({
+                resultID: cuid(),
+                isSchemaError: true,
+                date: JSON.stringify(formatError(payload.error, true), null, 2),
+                time: new Date(),
+              })
+            }
+            responses = List([response])
+          }
+
           return session.merge(
             Map({
               isReloadingSchema: false,
               endpointUnreachable: true,
-              responses: List([
-                new ResponseRecord({
-                  resultID: cuid(),
-                  date: JSON.stringify(
-                    formatError(payload.error, true),
-                    null,
-                    2,
-                  ),
-                  time: new Date(),
-                }),
-              ]),
+              responses,
             }),
           )
         }

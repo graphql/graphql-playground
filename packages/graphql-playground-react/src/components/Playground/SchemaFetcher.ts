@@ -5,6 +5,9 @@ import { Map, set } from 'immutable'
 import { makeOperation } from './util/makeOperation'
 import { parseHeaders } from './util/parseHeaders'
 import { LinkCreatorProps } from '../../state/sessions/fetchingSagas'
+import * as HLRU from 'hashlru'
+
+const LRU: any = HLRU
 
 export interface TracingSchemaTuple {
   schema: GraphQLSchema
@@ -19,12 +22,14 @@ export interface SchemaFetchProps {
 export type LinkGetter = (session: LinkCreatorProps) => { link: ApolloLink }
 
 export class SchemaFetcher {
-  cache: Map<string, TracingSchemaTuple>
+  cache: any
+  schemaCache: any
   linkGetter: LinkGetter
   fetching: Map<string, Promise<any>>
   subscriptions: Map<string, (schema: GraphQLSchema) => void> = Map()
   constructor(linkGetter: LinkGetter) {
-    this.cache = Map()
+    this.cache = LRU(10)
+    this.schemaCache = LRU(10)
     this.fetching = Map()
     this.linkGetter = linkGetter
   }
@@ -51,6 +56,19 @@ export class SchemaFetcher {
   }
   hash(session: SchemaFetchProps) {
     return `${session.endpoint}~${session.headers || ''}`
+  }
+  private getSchema(data: any) {
+    const schemaString = JSON.stringify(data)
+    const cachedSchema = this.schemaCache.get(schemaString)
+    if (cachedSchema) {
+      return cachedSchema
+    }
+
+    const schema = buildClientSchema(data as any)
+
+    this.schemaCache.set(schemaString, schema)
+
+    return schema
   }
   private fetchSchema(
     session: SchemaFetchProps,
@@ -83,7 +101,7 @@ export class SchemaFetcher {
             throw new NoSchemaError(endpoint)
           }
 
-          const schema = buildClientSchema(schemaData.data as any)
+          const schema = this.getSchema(schemaData.data as any)
           const tracingSupported =
             (schemaData.extensions && Boolean(schemaData.extensions.tracing)) ||
             false
@@ -91,7 +109,7 @@ export class SchemaFetcher {
             schema,
             tracingSupported,
           }
-          this.cache = this.cache.set(this.hash(session), result)
+          this.cache.set(this.hash(session), result)
           resolve(result)
           this.fetching = this.fetching.remove(hash)
           const subscription = this.subscriptions.get(hash)

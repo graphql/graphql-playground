@@ -18,10 +18,12 @@ import {
   setOperationName,
   schemaFetchingSuccess,
   schemaFetchingError,
-  fetchSchema,
+  // fetchSchema,
   runQuery,
   setTracingSupported,
   setQueryTypes,
+  refetchSchema,
+  fetchSchema,
 } from './actions'
 import { getRootMap, getNewStack } from '../../components/Playground/util/stack'
 import { DocsSessionState } from '../docs/reducers'
@@ -137,8 +139,8 @@ function* getSessionWithCredentials() {
 
 function* fetchSchemaSaga() {
   const session: Session = yield getSessionWithCredentials()
-  yield schemaFetcher.fetch(session)
   try {
+    yield schemaFetcher.fetch(session)
     yield put(
       schemaFetchingSuccess(
         session.endpoint,
@@ -155,8 +157,8 @@ function* fetchSchemaSaga() {
 
 function* refetchSchemaSaga() {
   const session: Session = yield getSessionWithCredentials()
-  yield schemaFetcher.refetch(session)
   try {
+    yield schemaFetcher.refetch(session)
     yield put(
       schemaFetchingSuccess(
         session.endpoint,
@@ -167,9 +169,11 @@ function* refetchSchemaSaga() {
   } catch (e) {
     yield put(schemaFetchingError(session.endpoint))
     yield call(delay, 5000)
-    yield put(fetchSchema())
+    yield put(refetchSchema())
   }
 }
+
+let lastSchema
 
 function* renewStacks() {
   const session: Session = yield select(getSelectedSession)
@@ -177,13 +181,14 @@ function* renewStacks() {
   const docs: DocsSessionState = yield select(getSessionDocsState)
   const result = yield schemaFetcher.fetch(fetchSession)
   const { schema, tracingSupported } = result
-  if (schema) {
+  if (schema && (!lastSchema || lastSchema !== schema)) {
     const rootMap = getRootMap(schema)
     const stacks = docs.navStack
       .map(stack => getNewStack(rootMap, schema, stack))
       .filter(s => s)
     yield put(setStacks(session.id, stacks))
     yield put(setTracingSupported(tracingSupported))
+    lastSchema = schema
   }
 }
 
@@ -211,7 +216,7 @@ function* prettifyQuery() {
     })
     yield put(editQuery(prettyQuery))
   } catch (e) {
-    // TODO show erros somewhere
+    // TODO show errors somewhere
     // tslint:disable-next-line
     console.log(e)
   }

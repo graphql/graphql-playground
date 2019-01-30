@@ -92,7 +92,11 @@ function deserializeSession(session) {
 }
 
 function deserializeResponses(responses) {
-  return List(responses.map(response => deserializeResponse(response)))
+  return List(
+    responses
+      .filter(r => r.isSchemaError)
+      .map(response => deserializeResponse(response)),
+  )
 }
 
 function deserializeResponse(response) {
@@ -100,6 +104,7 @@ function deserializeResponse(response) {
     resultID: response.resultID,
     date: response.date,
     time: new Date(response.time),
+    isSchemaError: response.isSchemaError || false,
   })
 }
 

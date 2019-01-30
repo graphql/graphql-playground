@@ -427,10 +427,8 @@ class PlaygroundWrapper extends React.Component<
 
   handleSaveConfig = () => {
     /* tslint:disable-next-line */
-    console.log('handleSaveConfig called')
     if (typeof this.props.onSaveConfig === 'function') {
       /* tslint:disable-next-line */
-      console.log('calling this.props.onSaveConfig', this.state.configString)
       this.props.onSaveConfig(this.state.configString!)
     }
   }

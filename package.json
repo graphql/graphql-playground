@@ -18,6 +18,7 @@
     "rimraf": "2.6.2"
   },
   "dependencies": {
-    "dotenv": "^5.0.1"
+    "dotenv": "^5.0.1",
+    "hashlru": "^2.3.0"
   }
 }

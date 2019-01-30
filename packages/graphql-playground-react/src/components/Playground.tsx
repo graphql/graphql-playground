@@ -173,6 +173,7 @@ export class Playground extends React.PureComponent<Props & ReduxProps, State> {
   private backoff: Backoff
   private initialIndex: number = -1
   private mounted = false
+  private initialSchemaFetch = true
 
   constructor(props: Props & ReduxProps) {
     super(props)
@@ -270,11 +271,14 @@ export class Playground extends React.PureComponent<Props & ReduxProps, State> {
       })
       if (schema) {
         this.updateSchema(currentSchema, schema.schema, props)
-        this.props.schemaFetchingSuccess(
-          data.endpoint,
-          schema.tracingSupported,
-          props.isPollingSchema,
-        )
+        if (this.initialSchemaFetch) {
+          this.props.schemaFetchingSuccess(
+            data.endpoint,
+            schema.tracingSupported,
+            props.isPollingSchema,
+          )
+          this.initialSchemaFetch = false
+        }
         this.backoff.stop()
       }
     } catch (e) {
