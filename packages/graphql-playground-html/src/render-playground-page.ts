@@ -58,6 +58,7 @@ export interface RenderPageOptions extends MiddlewareOptions {
   version?: string
   cdnUrl?: string
   env?: any
+  title?: string
 }
 
 export interface Tab {
