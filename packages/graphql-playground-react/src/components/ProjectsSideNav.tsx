@@ -67,7 +67,7 @@ class ProjectsSideNav extends React.Component<Props & ReduxProps, {}> {
               })}
           </div>
         </List>
-        {true && (
+        {isElectron && (
           <Footer>
             <WorkspaceButton onClick={onNewWorkspace}>
               <AddFullIcon width={14} height={14} strokeWidth={6} />
