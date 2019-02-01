@@ -2,6 +2,9 @@ import * as React from 'react'
 import ReloadIcon from './Reload'
 import Polling from './Polling'
 import { ISettings } from '../../../types'
+import { createStructuredSelector } from 'reselect'
+import { getIsReloadingSchema } from '../../../state/sessions/selectors'
+import { connect } from 'react-redux'
 
 export interface Props {
   isPollingSchema: boolean
@@ -10,7 +13,7 @@ export interface Props {
   settings: ISettings
 }
 
-export default (props: Props) => {
+const SchemaReload = (props: Props) => {
   if (props.isPollingSchema) {
     return (
       <Polling
@@ -26,3 +29,9 @@ export default (props: Props) => {
     />
   )
 }
+
+const mapStateToProps = createStructuredSelector({
+  isReloadingSchema: getIsReloadingSchema,
+})
+
+export default connect(mapStateToProps)(SchemaReload)

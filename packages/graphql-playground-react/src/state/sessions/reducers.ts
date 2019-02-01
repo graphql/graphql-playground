@@ -303,30 +303,26 @@ const reducer = handleActions(
       return state
     },
     SCHEMA_FETCHING_SUCCESS: (state, { payload }) => {
-      const newSessions = state
-        .get('sessions')
-        .map((session: Session, sessionId) => {
-          if (session.endpoint === payload.endpoint) {
-            // if there was an error, clear it away
-            const data: any = {
-              tracingSupported: payload.tracingSupported,
-              isReloadingSchema: false,
-              endpointUnreachable: false,
-            }
-            const response = session.responses
-              ? session.responses!.first()
-              : null
-            if (
-              response &&
-              session.responses!.size === 1 &&
-              response.isSchemaError
-            ) {
-              data.responses = List([])
-            }
-            return session.merge(Map(data))
+      const newSessions = state.get('sessions').map((session: Session) => {
+        if (session.endpoint === payload.endpoint) {
+          // if there was an error, clear it away
+          const data: any = {
+            tracingSupported: payload.tracingSupported,
+            isReloadingSchema: false,
+            endpointUnreachable: false,
           }
-          return session
-        })
+          const response = session.responses ? session.responses!.first() : null
+          if (
+            response &&
+            session.responses!.size === 1 &&
+            response.isSchemaError
+          ) {
+            data.responses = List([])
+          }
+          return session.merge(Map(data))
+        }
+        return session
+      })
       return state.set('sessions', newSessions)
     },
     SET_ENDPOINT_UNREACHABLE: (state, { payload }) => {

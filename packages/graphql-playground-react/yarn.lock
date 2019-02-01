@@ -58,6 +58,11 @@
   version "4.14.92"
   resolved "https://registry.yarnpkg.com/@types/lodash/-/lodash-4.14.92.tgz#6e3cb0b71a1e12180a47a42a744e856c3ae99a57"
 
+"@types/lru-cache@^4.1.1":
+  version "4.1.1"
+  resolved "https://registry.yarnpkg.com/@types/lru-cache/-/lru-cache-4.1.1.tgz#b2d87a5e3df8d4b18ca426c5105cd701c2306d40"
+  integrity sha512-8mNEUG6diOrI6pMqOHrHPDBB1JsrpedeMK9AWGzVCQ7StRRribiT9BRvUmF8aUws9iBbVlgVekOT5Sgzc1MTKw==
+
 "@types/node@*":
   version "9.3.0"
   resolved "https://registry.yarnpkg.com/@types/node/-/node-9.3.0.tgz#3a129cda7c4e5df2409702626892cb4b96546dd5"
@@ -65,11 +70,6 @@
 "@types/node@10.1.4":
   version "10.1.4"
   resolved "https://registry.yarnpkg.com/@types/node/-/node-10.1.4.tgz#606651d3f8a8bec08b8cb262161aab9209f4a29d"
-
-"@types/quick-lru@^2.0.0":
-  version "2.0.0"
-  resolved "https://registry.yarnpkg.com/@types/quick-lru/-/quick-lru-2.0.0.tgz#04b3a558d45533ceef1be33950b7ed7e1202cd2f"
-  integrity sha512-bQLWvCkzO4OFPUFAQH5Ql0K8Q+9XH0uGbsODUXQlv9PfT+1hMVB++XZpiLDTKad35hu0KB2e9sYop/jVnkosVg==
 
 "@types/react@16.3.14":
   version "16.3.14"
@@ -6518,11 +6518,6 @@ querystringify@0.0.x:
 querystringify@~1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/querystringify/-/querystringify-1.0.0.tgz#6286242112c5b712fa654e526652bf6a13ff05cb"
-
-quick-lru@^2.0.0:
-  version "2.0.0"
-  resolved "https://registry.yarnpkg.com/quick-lru/-/quick-lru-2.0.0.tgz#32b017b28d1784631c8ab0a1ed2978e094dbe181"
-  integrity sha512-DqOtZziv7lDjEyuqyVQacRciAwMCEjTNrLYCHYEIIgjcE/tLEpBF82hiDIwCjRnEL9/hY2GJxA0T8ZvYvVVSSA==
 
 raf@^3.4.0:
   version "3.4.0"

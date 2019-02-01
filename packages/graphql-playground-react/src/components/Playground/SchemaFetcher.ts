@@ -5,7 +5,7 @@ import { Map, set } from 'immutable'
 import { makeOperation } from './util/makeOperation'
 import { parseHeaders } from './util/parseHeaders'
 import { LinkCreatorProps } from '../../state/sessions/fetchingSagas'
-import * as LRU from 'quick-lru'
+import * as LRU from 'lru-cache'
 
 export interface TracingSchemaTuple {
   schema: GraphQLSchema
@@ -34,13 +34,13 @@ export class SchemaFetcher {
    * If the relevant information of the session didn't change (endpoint and headers),
    * the cached schema will be returned.
    */
-  sessionCache: LRU<string, TracingSchemaTuple>
+  sessionCache: LRU.Cache<string, TracingSchemaTuple>
   /**
    * The `schemaInstanceCache` property is used to prevent unnecessary buildClientSchema calls.
    * It's tested by stringifying the introspection result, which is orders of magnitude
    * faster than rebuilding the schema.
    */
-  schemaInstanceCache: LRU<string, GraphQLSchema>
+  schemaInstanceCache: LRU.Cache<string, GraphQLSchema>
   /**
    * The `linkGetter` property is a callback that provides an ApolloLink instance.
    * This can be overriden by the user.
@@ -58,8 +58,8 @@ export class SchemaFetcher {
    */
   subscriptions: Map<string, (schema: GraphQLSchema) => void> = Map()
   constructor(linkGetter: LinkGetter) {
-    this.sessionCache = new LRU({ maxSize: 10 })
-    this.schemaInstanceCache = new LRU({ maxSize: 10 })
+    this.sessionCache = new LRU<string, TracingSchemaTuple>({ max: 10 })
+    this.schemaInstanceCache = new LRU({ max: 10 })
     this.fetching = Map()
     this.linkGetter = linkGetter
   }

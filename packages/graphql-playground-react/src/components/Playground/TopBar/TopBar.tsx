@@ -8,7 +8,6 @@ import { createStructuredSelector } from 'reselect'
 import {
   getEndpoint,
   getSelectedSession,
-  getIsReloadingSchema,
   getEndpointUnreachable,
   getIsPollingSchema,
 } from '../../../state/sessions/selectors'
@@ -29,7 +28,6 @@ export interface Props {
   endpoint: string
   shareEnabled?: boolean
   fixedEndpoint?: boolean
-  isReloadingSchema: boolean
   isPollingSchema: boolean
   endpointUnreachable: boolean
 
@@ -83,7 +81,6 @@ class TopBar extends React.Component<Props, {}> {
               <SchemaReload
                 settings={settings}
                 isPollingSchema={this.props.isPollingSchema}
-                isReloadingSchema={this.props.isReloadingSchema}
                 onReloadSchema={this.props.refetchSchema}
               />
             </div>
@@ -157,7 +154,6 @@ class TopBar extends React.Component<Props, {}> {
 const mapStateToProps = createStructuredSelector({
   endpoint: getEndpoint,
   fixedEndpoint: getFixedEndpoint,
-  isReloadingSchema: getIsReloadingSchema,
   isPollingSchema: getIsPollingSchema,
   endpointUnreachable: getEndpointUnreachable,
   settings: getSettings,
