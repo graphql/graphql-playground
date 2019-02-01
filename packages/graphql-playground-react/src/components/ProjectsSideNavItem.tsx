@@ -42,32 +42,19 @@ interface SidebarItemProps {
 }
 
 const ListItem = styled<SidebarItemProps, 'div'>('div')`
-  position: relative;
-  padding: 10px 10px;
+  padding: 10px 10px 10px ${p => (p.deep ? '43px' : '38px')};
+  word-break: break-word;
   font-weight: 600;
-  text-overflow: ellipsis;
-  white-space: nowrap;
   cursor: pointer;
-  padding-left: ${p => (p.deep ? '43px' : '38px')};
-  padding-right: 10px;
   font-size: 12px;
   display: flex;
   justify-content: space-between;
   align-items: center;
   background: ${p =>
     p.active ? p.theme.editorColours.sidebarItemActive : 'transparent'};
-
-  &:before {
-    content: '';
-    border-radius: 2px;
-    background: ${p =>
-      p.active ? p.theme.editorColours.sidebarItemSide : 'transparent'};
-    position: absolute;
-    top: -2px;
-    bottom: -2px;
-    left: -2px;
-    width: 6px;
-  }
+  border-left: 4px solid
+    ${p => (p.active ? p.theme.editorColours.sidebarItemSide : 'transparent')};
+  border-radius: 2px;
 
   &:hover {
     background: ${p => p.theme.editorColours.sidebarItemActive};
@@ -76,9 +63,8 @@ const ListItem = styled<SidebarItemProps, 'div'>('div')`
 
 const Count = styled<SidebarItemProps, 'div'>('div')`
   border-radius: 6px;
-  width: 18px;
-  height: 18px;
-  line-height: 18px;
+  min-width: 18px;
+  min-height: 18px;
   display: flex;
   align-items: center;
   justify-content: center;
