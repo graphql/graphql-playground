@@ -71,11 +71,15 @@ export const getIsPollingSchema = createSelector(
   [getEndpoint, getSettings],
   (endpoint, settings) => {
     const json = JSON.parse(settings)
-    return (
-      json['schema.polling.enable'] &&
-      endpoint.match(`/${json['schema.polling.endpointFilter']}`) &&
-      true
-    )
+    try {
+      const isPolling =
+        json['schema.polling.enable'] &&
+        endpoint.match(`/${json['schema.polling.endpointFilter']}`) &&
+        true
+      return isPolling
+    } catch (e) {
+      return false
+    }
   },
 )
 

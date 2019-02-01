@@ -15,7 +15,6 @@ export default (props: Props) => {
     return (
       <Polling
         interval={props.settings['schema.polling.interval']}
-        isReloadingSchema={props.isReloadingSchema}
         onReloadSchema={props.onReloadSchema}
       />
     )
