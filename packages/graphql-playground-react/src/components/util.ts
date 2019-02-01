@@ -1,6 +1,6 @@
 import { GraphQLConfig, GraphQLConfigEnpointConfig } from '../graphqlConfig'
 import { GraphQLSchema, printSchema } from 'graphql'
-import * as LRU from 'quick-lru'
+import * as LRU from 'lru-cache'
 
 export function getActiveEndpoints(
   config: GraphQLConfig,
@@ -35,7 +35,7 @@ export function getEndpointFromEndpointConfig(
   }
 }
 
-const printSchemaCache: LRU<GraphQLSchema, string> = new LRU({ maxSize: 10 })
+const printSchemaCache: LRU.Cache<GraphQLSchema, string> = new LRU({ max: 10 })
 /**
  * A cached version of `printSchema`
  * @param schema GraphQLSchema instance
