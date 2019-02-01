@@ -57,11 +57,6 @@ class SchemaPolling extends React.Component<Props, State> {
     if (this.state.windowVisible) {
       // timer starts only when introspection not in flight
       this.timer = setInterval(() => props.onReloadSchema(), props.interval)
-    } else {
-      // Check if polling is available again
-      setTimeout(() => {
-        this.updatePolling()
-      }, 5000)
     }
   }
 
