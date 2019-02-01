@@ -27,7 +27,7 @@ import {
 } from '../state/sessions/actions'
 import { setConfigString } from '../state/general/actions'
 import { initState } from '../state/workspace/actions'
-import { GraphQLSchema, printSchema } from 'graphql'
+import { GraphQLSchema } from 'graphql'
 import { createStructuredSelector } from 'reselect'
 import {
   getIsConfigTab,
@@ -50,6 +50,7 @@ import { getWorkspaceId } from './Playground/util/getWorkspaceId'
 import { getSettings, getSettingsString } from '../state/workspace/reducers'
 import { Backoff } from './Playground/util/fibonacci-backoff'
 import { debounce } from 'lodash'
+import { cachedPrintSchema } from './util'
 
 export interface Response {
   resultID: string
@@ -173,6 +174,7 @@ export class Playground extends React.PureComponent<Props & ReduxProps, State> {
   private backoff: Backoff
   private initialIndex: number = -1
   private mounted = false
+  private initialSchemaFetch = true
 
   constructor(props: Props & ReduxProps) {
     super(props)
@@ -270,11 +272,14 @@ export class Playground extends React.PureComponent<Props & ReduxProps, State> {
       })
       if (schema) {
         this.updateSchema(currentSchema, schema.schema, props)
-        this.props.schemaFetchingSuccess(
-          data.endpoint,
-          schema.tracingSupported,
-          props.isPollingSchema,
-        )
+        if (this.initialSchemaFetch) {
+          this.props.schemaFetchingSuccess(
+            data.endpoint,
+            schema.tracingSupported,
+            props.isPollingSchema,
+          )
+          this.initialSchemaFetch = false
+        }
         this.backoff.stop()
       }
     } catch (e) {
@@ -367,10 +372,17 @@ export class Playground extends React.PureComponent<Props & ReduxProps, State> {
     props: Readonly<{ children?: React.ReactNode }> &
       Readonly<Props & ReduxProps>,
   ) {
-    const currentSchemaStr = currentSchema ? printSchema(currentSchema) : null
-    const newSchemaStr = printSchema(newSchema)
-    if (newSchemaStr !== currentSchemaStr || !props.isPollingSchema) {
-      this.setState({ schema: newSchema })
+    // first check for reference equality
+    if (currentSchema !== newSchema) {
+      // if references are not equal, do an equality check on the printed schema
+      const currentSchemaStr = currentSchema
+        ? cachedPrintSchema(currentSchema)
+        : null
+      const newSchemaStr = cachedPrintSchema(newSchema)
+
+      if (newSchemaStr !== currentSchemaStr || !props.isPollingSchema) {
+        this.setState({ schema: newSchema })
+      }
     }
   }
 

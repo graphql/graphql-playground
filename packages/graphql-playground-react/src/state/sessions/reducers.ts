@@ -142,10 +142,12 @@ export class ResponseRecord extends Record({
   resultID: '',
   date: '',
   time: new Date(),
+  isSchemaError: false,
 }) {
   resultID: string
   date: string
   time: Date
+  isSchemaError: boolean
 }
 
 function makeSession(endpoint = '') {
@@ -301,31 +303,26 @@ const reducer = handleActions(
       return state
     },
     SCHEMA_FETCHING_SUCCESS: (state, { payload }) => {
-      const newSessions = state
-        .get('sessions')
-        .map((session: Session, sessionId) => {
-          if (session.endpoint === payload.endpoint) {
-            // if there was an error, clear it away
-            const data: any = {
-              tracingSupported: payload.tracingSupported,
-              isReloadingSchema: false,
-              endpointUnreachable: false,
-            }
-            const response = session.responses
-              ? session.responses!.first()
-              : null
-            if (
-              response &&
-              session.responses!.size === 1 &&
-              ((response.date.includes('error') && !payload.isPollingSchema) ||
-                response.date.includes('Failed to fetch'))
-            ) {
-              data.responses = List([])
-            }
-            return session.merge(Map(data))
+      const newSessions = state.get('sessions').map((session: Session) => {
+        if (session.endpoint === payload.endpoint) {
+          // if there was an error, clear it away
+          const data: any = {
+            tracingSupported: payload.tracingSupported,
+            isReloadingSchema: false,
+            endpointUnreachable: false,
           }
-          return session
-        })
+          const response = session.responses ? session.responses!.first() : null
+          if (
+            response &&
+            session.responses!.size === 1 &&
+            response.isSchemaError
+          ) {
+            data.responses = List([])
+          }
+          return session.merge(Map(data))
+        }
+        return session
+      })
       return state.set('sessions', newSessions)
     },
     SET_ENDPOINT_UNREACHABLE: (state, { payload }) => {
@@ -344,21 +341,28 @@ const reducer = handleActions(
     SCHEMA_FETCHING_ERROR: (state, { payload }) => {
       const newSessions = state.get('sessions').map((session, sessionId) => {
         if (session.get('endpoint') === payload.endpoint) {
+          let { responses } = session
+
+          // Only override the responses if there is one or zero and that one is a schemaError
+          // Don't override user's responses!
+          if (responses.size <= 1) {
+            let response = session.responses ? session.responses!.first() : null
+            if (!response || response.isSchemaError) {
+              response = new ResponseRecord({
+                resultID: cuid(),
+                isSchemaError: true,
+                date: JSON.stringify(formatError(payload.error, true), null, 2),
+                time: new Date(),
+              })
+            }
+            responses = List([response])
+          }
+
           return session.merge(
             Map({
               isReloadingSchema: false,
               endpointUnreachable: true,
-              responses: List([
-                new ResponseRecord({
-                  resultID: cuid(),
-                  date: JSON.stringify(
-                    formatError(payload.error, true),
-                    null,
-                    2,
-                  ),
-                  time: new Date(),
-                }),
-              ]),
+              responses,
             }),
           )
         }
