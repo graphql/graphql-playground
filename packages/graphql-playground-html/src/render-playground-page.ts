@@ -58,6 +58,8 @@ export interface RenderPageOptions extends MiddlewareOptions {
   version?: string
   cdnUrl?: string
   env?: any
+  title?: string
+  faviconUrl?: string | null
 }
 
 export interface Tab {
@@ -70,13 +72,14 @@ export interface Tab {
 
 const loading = getLoadingMarkup()
 
-const getCdnMarkup = ({ version, cdnUrl = '//cdn.jsdelivr.net/npm' }) => `
+const getCdnMarkup = ({ version, cdnUrl = '//cdn.jsdelivr.net/npm', faviconUrl }) => `
     <link rel="stylesheet" href="${cdnUrl}/graphql-playground-react${
   version ? `@${version}` : ''
 }/build/static/css/index.css" />
-    <link rel="shortcut icon" href="${cdnUrl}/graphql-playground-react${
-  version ? `@${version}` : ''
-}/build/favicon.png" />
+    ${typeof faviconUrl === 'string' ? `<link rel="shortcut icon" href="${faviconUrl}" />` : ''}
+    ${faviconUrl === undefined ? `<link rel="shortcut icon" href="${cdnUrl}/graphql-playground-react${
+      version ? `@${version}` : ''
+    }/build/favicon.png" />` : ''}
     <script src="${cdnUrl}/graphql-playground-react${
   version ? `@${version}` : ''
 }/build/static/js/middleware.js"></script>
@@ -107,7 +110,6 @@ export function renderPlaygroundPage(options: RenderPageOptions) {
   <head>
     <meta charset=utf-8 />
     <meta name="viewport" content="user-scalable=no, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, minimal-ui">
-    <link rel="shortcut icon" href="https://graphcool-playground.netlify.com/favicon.png">
     <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700|Source+Code+Pro:400,700" rel="stylesheet">
     <title>${extendedOptions.title || 'GraphQL Playground'}</title>
     ${
