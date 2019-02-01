@@ -5,9 +5,7 @@ import { Map, set } from 'immutable'
 import { makeOperation } from './util/makeOperation'
 import { parseHeaders } from './util/parseHeaders'
 import { LinkCreatorProps } from '../../state/sessions/fetchingSagas'
-import * as HLRU from 'hashlru'
-
-const LRU: any = HLRU
+import * as LRU from 'quick-lru'
 
 export interface TracingSchemaTuple {
   schema: GraphQLSchema
@@ -22,14 +20,14 @@ export interface SchemaFetchProps {
 export type LinkGetter = (session: LinkCreatorProps) => { link: ApolloLink }
 
 export class SchemaFetcher {
-  cache: any
-  schemaCache: any
+  cache: LRU<string, TracingSchemaTuple>
+  schemaCache: LRU<string, GraphQLSchema>
   linkGetter: LinkGetter
   fetching: Map<string, Promise<any>>
   subscriptions: Map<string, (schema: GraphQLSchema) => void> = Map()
   constructor(linkGetter: LinkGetter) {
-    this.cache = LRU(10)
-    this.schemaCache = LRU(10)
+    this.cache = new LRU({ maxSize: 10 })
+    this.schemaCache = new LRU({ maxSize: 10 })
     this.fetching = Map()
     this.linkGetter = linkGetter
   }
@@ -105,7 +103,7 @@ export class SchemaFetcher {
           const tracingSupported =
             (schemaData.extensions && Boolean(schemaData.extensions.tracing)) ||
             false
-          const result = {
+          const result: TracingSchemaTuple = {
             schema,
             tracingSupported,
           }
