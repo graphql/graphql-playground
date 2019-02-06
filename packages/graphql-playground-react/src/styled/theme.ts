@@ -94,6 +94,8 @@ export interface EditorColours {
   buttonWorkspaceHover: string
   buttonWorkspaceText: string
   circle: string
+  subscriptionTimeBoaderTop: string
+  subscriptionTimeText: string
 }
 
 export const darkColours: Colours = {
@@ -227,6 +229,8 @@ export const darkEditorColours: EditorColours = {
   buttonWorkspaceHover: '#a4acb2',
   buttonWorkspaceText: 'rgb(23, 42, 58)',
   circle: 'rgba(255, 255, 255, 0.4)',
+  subscriptionTimeBoaderTop: 'rgba(255, 255, 255, 0.2)',
+  subscriptionTimeText: 'rgba(255, 255, 255, 0.5)',
 }
 
 export const lightEditorColours: EditorColours = {
@@ -283,6 +287,8 @@ export const lightEditorColours: EditorColours = {
   buttonWorkspaceHover: 'rgb(157, 166, 173)',
   buttonWorkspaceText: 'rgb(238, 239, 240)',
   circle: 'rgba(23,42,58,.4)',
+  subscriptionTimeBoaderTop: 'rgba(23, 42, 58, 0.2)',
+  subscriptionTimeText: 'rgba(23, 42, 58, 0.5)',
 }
 
 export interface Sizes {
