@@ -108,49 +108,52 @@ export default class FieldDoc extends React.Component<Props, State> {
           />
         )}
 
-        {obj.fields.length > 0 && (
-          <DocTypeSchema
-            type={type}
-            fields={obj.fields}
-            interfaces={obj.interfaces}
-            level={level}
-            sessionId={this.props.sessionId}
-          />
-        )}
+        {obj.fields &&
+          obj.fields.length > 0 && (
+            <DocTypeSchema
+              type={type}
+              fields={obj.fields}
+              interfaces={obj.interfaces}
+              level={level}
+              sessionId={this.props.sessionId}
+            />
+          )}
 
-        {obj.args.length > 0 && (
-          <div>
-            <CategoryTitle>arguments</CategoryTitle>
-            {obj.args.map((arg, index) => (
-              <div key={arg.name}>
-                <div>
-                  <Argument
-                    arg={arg}
-                    x={level}
-                    y={index + argsOffset}
-                    sessionId={this.props.sessionId}
-                  />
+        {obj.args &&
+          obj.args.length > 0 && (
+            <div>
+              <CategoryTitle>arguments</CategoryTitle>
+              {obj.args.map((arg, index) => (
+                <div key={arg.name}>
+                  <div>
+                    <Argument
+                      arg={arg}
+                      x={level}
+                      y={index + argsOffset}
+                      sessionId={this.props.sessionId}
+                    />
+                  </div>
                 </div>
-              </div>
-            ))}
-          </div>
-        )}
+              ))}
+            </div>
+          )}
 
-        {obj.implementations.length > 0 && (
-          <div>
-            <CategoryTitle>implementations</CategoryTitle>
-            {obj.implementations.map((data, index) => (
-              <TypeLink
-                key={data.name}
-                type={data}
-                x={level}
-                y={index + implementationsOffset}
-                collapsable={true}
-                lastActive={false}
-              />
-            ))}
-          </div>
-        )}
+        {obj.implementations &&
+          obj.implementations.length > 0 && (
+            <div>
+              <CategoryTitle>implementations</CategoryTitle>
+              {obj.implementations.map((data, index) => (
+                <TypeLink
+                  key={data.name}
+                  type={data}
+                  x={level}
+                  y={index + implementationsOffset}
+                  collapsable={true}
+                  lastActive={false}
+                />
+              ))}
+            </div>
+          )}
       </div>
     )
   }
