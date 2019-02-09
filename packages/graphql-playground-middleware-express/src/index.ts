@@ -22,7 +22,6 @@ const express: Register = function voyagerExpress(options: MiddlewareOptions) {
     const playground = renderPlaygroundPage(options)
     res.write(playground)
     res.end()
-    next()
   }
 }
 
