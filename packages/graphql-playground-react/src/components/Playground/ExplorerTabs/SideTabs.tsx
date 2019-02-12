@@ -39,6 +39,7 @@ export interface Props {
   schema: GraphQLSchema
   sessionId: string
   children: Array<React.ReactElement<any>>
+  maxWidth: number
 }
 
 export interface SideTabContentProps {
@@ -77,7 +78,7 @@ class SideTabs extends React.Component<
       const width = this.activeContentComponent.getWidth(props)
       this.props.changeWidthDocs(
         props.sessionId,
-        Math.min(width, window.innerWidth - 86),
+        Math.min(width, this.props.maxWidth),
       )
     })
   }

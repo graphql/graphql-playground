@@ -904,8 +904,12 @@ const GraphqlContainer = styled.div`
   width: 100%;
 `
 
-export const Container = ({ children }) => (
-  <GraphqlContainer>{children}</GraphqlContainer>
+interface Props {
+  setRef?: (ref: any) => void
+}
+
+export const Container: React.SFC<Props> = ({ children, setRef }) => (
+  <GraphqlContainer ref={setRef}>{children}</GraphqlContainer>
 )
 
 export default Wrapper
