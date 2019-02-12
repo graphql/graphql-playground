@@ -807,7 +807,7 @@ const GlobalStyle = createGlobalStyle`
     box-shadow: none;
     margin-left: 0;
     position: relative;
-    z-index: 0; 
+    z-index: 0;
   }
 
   .CodeMirror-hint {
