@@ -40,6 +40,13 @@ export const buildTemplate = (
       },
       { type: 'separator' },
       {
+        label: 'Hide GraphQL Playground',
+        accelerator: 'Cmd+H',
+        visible: process.platform === 'darwin',
+        click: () => app.hide(),
+      },
+      { type: 'separator', visible: process.platform === 'darwin' },
+      {
         label: 'Quit',
         accelerator: 'CmdOrCtrl+Q',
         click: () => app.quit(),
