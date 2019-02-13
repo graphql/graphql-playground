@@ -66,7 +66,7 @@ import {
   fetchSchema,
 } from '../../state/sessions/actions'
 import { ResponseRecord } from '../../state/sessions/reducers'
-import VisualizerView from './SchemaVisualizer/VisualizerView'
+import DiagramView from './SchemaDiagram/DiagramView'
 
 /**
  * The top-level React component for GraphQLEditor, intended to encompass the entire
@@ -280,7 +280,7 @@ class GraphQLEditor extends React.PureComponent<Props & ReduxProps> {
             />
           </SideTab>
           <SideTab label="Diagram" activeColor="red" tabWidth="65px">
-            <VisualizerView
+            <DiagramView
               schema={this.props.schema}
               sessionId={this.props.sessionId}
             />
