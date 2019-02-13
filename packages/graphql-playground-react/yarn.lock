@@ -82,17 +82,9 @@
   version "0.12.6"
   resolved "https://registry.yarnpkg.com/@types/graphql/-/graphql-0.12.6.tgz#3d619198585fcabe5f4e1adfb5cf5f3388c66c13"
 
-"@types/graphql@^14.0.3":
-  version "14.0.5"
-  resolved "https://registry.npmjs.org/@types/graphql/-/graphql-14.0.5.tgz#e696292fd2d77dc168b5b791710f83463aa39abd"
-
 "@types/jest@22.2.3":
   version "22.2.3"
   resolved "https://registry.yarnpkg.com/@types/jest/-/jest-22.2.3.tgz#0157c0316dc3722c43a7b71de3fdf3acbccef10d"
-
-"@types/lodash@^4.14.118":
-  version "4.14.120"
-  resolved "https://registry.npmjs.org/@types/lodash/-/lodash-4.14.120.tgz#cf265d06f6c7a710db087ed07523ab8c1a24047b"
 
 "@types/lodash@^4.14.85":
   version "4.14.92"
@@ -3422,13 +3414,11 @@ graphlib@^2.1.5:
   dependencies:
     lodash "^4.17.5"
 
-graphql-birdseye@1.0.6:
-  version "1.0.6"
-  resolved "https://registry.npmjs.org/graphql-birdseye/-/graphql-birdseye-1.0.6.tgz#c0e838c4b4bee7fdcc4faad44a1cea8982dee217"
+graphql-birdseye@1.0.6-rc2:
+  version "1.0.6-rc2"
+  resolved "https://registry.npmjs.org/graphql-birdseye/-/graphql-birdseye-1.0.6-rc2.tgz#7f1e2769e40288d7723ff450f7f5f3d2f59cfd8b"
   dependencies:
     "@f/animate" "^1.0.1"
-    "@types/graphql" "^14.0.3"
-    "@types/lodash" "^4.14.118"
     jointjs "^2.2.1"
     react-resize-detector "^3.4.0"
     svg-pan-zoom "^3.6.0"
