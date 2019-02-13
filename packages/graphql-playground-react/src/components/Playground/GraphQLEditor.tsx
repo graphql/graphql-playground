@@ -66,6 +66,7 @@ import {
   fetchSchema,
 } from '../../state/sessions/actions'
 import { ResponseRecord } from '../../state/sessions/reducers'
+import VisualizerView from './SchemaVisualizer/VisualizerView'
 
 /**
  * The top-level React component for GraphQLEditor, intended to encompass the entire
@@ -275,6 +276,12 @@ class GraphQLEditor extends React.PureComponent<Props & ReduxProps> {
             <SDLView
               schema={this.props.schema}
               ref={this.setSchemaExplorerRef}
+              sessionId={this.props.sessionId}
+            />
+          </SideTab>
+          <SideTab label="Diagram" activeColor="red" tabWidth="65px">
+            <VisualizerView
+              schema={this.props.schema}
               sessionId={this.props.sessionId}
             />
           </SideTab>
