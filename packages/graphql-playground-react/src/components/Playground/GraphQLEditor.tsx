@@ -266,12 +266,7 @@ class GraphQLEditor extends React.PureComponent<Props & ReduxProps> {
           </EditorBar>
         </EditorWrapper>
         {this.containerComponent && (
-          <SideTabs
-            maxWidth={
-              this.containerComponent &&
-              this.containerComponent.offsetWidth - 86
-            }
-          >
+          <SideTabs maxWidth={this.containerComponent.offsetWidth - 86}>
             <SideTab label="Docs" activeColor="green" tabWidth="49px">
               <GraphDocs
                 schema={this.props.schema}
