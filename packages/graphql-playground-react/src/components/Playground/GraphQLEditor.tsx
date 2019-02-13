@@ -279,7 +279,7 @@ class GraphQLEditor extends React.PureComponent<Props & ReduxProps> {
               sessionId={this.props.sessionId}
             />
           </SideTab>
-          <SideTab label="Diagram" activeColor="red" tabWidth="65px">
+          <SideTab label="Diagram" activeColor="purple" tabWidth="65px">
             <DiagramView
               schema={this.props.schema}
               sessionId={this.props.sessionId}
