@@ -49,6 +49,10 @@ export const buildTemplate = (
         accelerator: 'Option+Cmd+H',
         role: 'hideOthers',
       },
+      {
+        label: 'Show All',
+        role: 'unhide',
+      },
       { type: 'separator', visible: process.platform === 'darwin' },
       {
         label: 'Quit',
