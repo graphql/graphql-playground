@@ -42,8 +42,12 @@ export const buildTemplate = (
       {
         label: 'Hide GraphQL Playground',
         accelerator: 'Cmd+H',
-        visible: process.platform === 'darwin',
-        click: () => app.hide(),
+        role: 'hide',
+      },
+      {
+        label: 'Hide Others',
+        accelerator: 'Option+Cmd+H',
+        role: 'hideOthers',
       },
       { type: 'separator', visible: process.platform === 'darwin' },
       {
