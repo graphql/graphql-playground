@@ -284,7 +284,7 @@ module.exports = {
         ascii_only: true
       },
       sourceMap: shouldUseSourceMap,
-      exclude: [/graphql-birdseye/]
+      exclude: ["**/graphql-birdseye/**", "**/jointjs/**"]
     }),
     // Note: this won't work without ExtractTextPlugin.extract(..) in `loaders`.
     new ExtractTextPlugin({
