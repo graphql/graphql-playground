@@ -4,7 +4,7 @@
   "homepage": "https://github.com/graphcool/graphql-playground",
   "repository": "graphcool/graphql-playground",
   "description": "GraphQL IDE for better development workflows (GraphQL Subscriptions, interactive docs & collaboration)",
-  "version": "1.8.9",
+  "version": "1.8.10",
   "author": {
     "name": "Graphcool",
     "email": "hello@graph.cool",
@@ -97,7 +97,7 @@
     "graphql-config-extension-graphcool": "1.0.8",
     "graphql-config-extension-prisma": "^0.2.5",
     "graphql-playground-html": "^1.6.0",
-    "graphql-playground-react": "1.7.19",
+    "graphql-playground-react": "1.7.20",
     "immutable": "4.0.0-rc.9",
     "js-yaml": "^3.11.0",
     "lodash.merge": "^4.6.1",

@@ -3770,10 +3770,10 @@ graphql-playground-html@^1.6.0:
   version "1.6.5"
   resolved "https://registry.yarnpkg.com/graphql-playground-html/-/graphql-playground-html-1.6.5.tgz#0de1a68db891f7356312cf03dcf371d67388e95a"
 
-graphql-playground-react@1.7.19:
-  version "1.7.19"
-  resolved "https://registry.yarnpkg.com/graphql-playground-react/-/graphql-playground-react-1.7.19.tgz#c625b05abca50fa148e2647ce9096aa9f6a2ec5c"
-  integrity sha512-Qk5jEjloCa2ynN2KAOpb2BCtY9MovH7Xgh0ClBJrO/m6dfz3ButSNdjS3In/XeN+FvVhy4sWW2FDKGTzj4MJng==
+graphql-playground-react@1.7.20:
+  version "1.7.20"
+  resolved "https://registry.yarnpkg.com/graphql-playground-react/-/graphql-playground-react-1.7.20.tgz#99f27fabbb9b24bb18cce2b62a5324567d7cdfb6"
+  integrity sha512-0l0z6/D4KhsleX4JKWM/1qiSa+g8s7nmUEn1pj52UmxzqRgDkEequbPEa3zMeeR+k1In89J1i7/YdhHuFNFICQ==
   dependencies:
     "@types/lru-cache" "^4.1.1"
     apollo-link "^1.0.7"
