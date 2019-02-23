@@ -36,36 +36,33 @@ class ProjectsSideNav extends React.Component<Props & ReduxProps, {}> {
     const projects = config.projects
     return (
       <SideNav>
-        <DraggableHeader isElectron={isElectron} />
-        <List>
-          <div>
-            <TitleRow>
-              <Title>{folderName}</Title>
-              <SettingsIcon
-                width={18}
-                height={18}
-                onClick={this.props.openConfigTab}
-                title="Project settings"
-              />
-            </TitleRow>
-            {endpoints && this.renderEndpoints(endpoints)}
-            {projects &&
-              Object.keys(projects).map(projectName => {
-                const project = projects[projectName]
-                const projectEndpoints =
-                  project.extensions && project.extensions.endpoints
-                if (!projectEndpoints) {
-                  return null
-                }
+        <List isElectron={isElectron}>
+          <TitleRow>
+            <Title>{folderName}</Title>
+            <SettingsIcon
+              width={18}
+              height={18}
+              onClick={this.props.openConfigTab}
+              title="Project settings"
+            />
+          </TitleRow>
+          {endpoints && this.renderEndpoints(endpoints)}
+          {projects &&
+            Object.keys(projects).map(projectName => {
+              const project = projects[projectName]
+              const projectEndpoints =
+                project.extensions && project.extensions.endpoints
+              if (!projectEndpoints) {
+                return null
+              }
 
-                return (
-                  <Project key={projectName}>
-                    <ProjectName>{projectName}</ProjectName>
-                    {this.renderEndpoints(projectEndpoints, projectName)}
-                  </Project>
-                )
-              })}
-          </div>
+              return (
+                <Project key={projectName}>
+                  <ProjectName>{projectName}</ProjectName>
+                  {this.renderEndpoints(projectEndpoints, projectName)}
+                </Project>
+              )
+            })}
         </List>
         {isElectron && (
           <Footer>
@@ -118,30 +115,21 @@ export default connect(
   { openConfigTab },
 )(ProjectsSideNav)
 
-const Project = styled.div`
-  margin-bottom: 12px;
-`
-
 const SideNav = styled.div`
-  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
   background: ${p => p.theme.editorColours.sidebar};
-  flex: 0 222px;
+  flex-basis: 222px;
   color: ${p => p.theme.editorColours.text};
   border-right: 6px solid ${p => p.theme.editorColours.background};
 `
 
-const DraggableHeader = styled.div`
-  padding-top: ${(p: any) => (p.isElectron ? 48 : 20)}px;
-  background: ${p => p.theme.editorColours.sidebarTop};
-  -webkit-app-region: drag;
-  max-width: 222px;
-  overflow: hidden;
-` as any
-
 const List = styled.div`
-  padding-bottom: 32px;
-  max-width: 222px;
-  overflow: hidden;
+  -webkit-app-region: drag;
+  padding-top: ${(p: any) => (p.isElectron ? 48 : 20)}px;
+  display: flex;
+  flex-direction: column;
   background: ${p => p.theme.editorColours.sidebarTop};
 `
 
@@ -149,29 +137,36 @@ const Title = styled.div`
   font-size: 16px;
   font-weight: 600;
   color: ${p => p.theme.editorColours.text};
+  word-break: break-word;
 `
 
 const TitleRow = styled.div`
   display: flex;
   align-items: center;
-  padding-left: 20px;
-  padding-right: 10px;
-  padding-bottom: 20px;
-  justify-content: space-between;
-
+  justify-content: space-evenly;
+  margin: 0 15px 20px 15px;
   svg {
+    min-width: 18px;
+    min-height: 18px;
     cursor: pointer;
-  }
-
-  svg {
     fill: ${p => p.theme.editorColours.icon};
     transition: 0.1s linear fill;
   }
-
   &:hover {
     svg {
       fill: ${p => p.theme.editorColours.iconHover};
     }
+  }
+`
+
+const Project = styled.div`
+  display: flex;
+  flex-direction: column;
+  & + & {
+    margin-top: 12px;
+  }
+  &:last-child {
+    margin-bottom: 32px;
   }
 `
 
@@ -180,19 +175,14 @@ const ProjectName = styled.div`
   color: ${p => p.theme.editorColours.text};
   font-weight: 600;
   letter-spacing: 0.53px;
-  margin-left: 30px;
-  margin-bottom: 6px;
+  margin: 0 10px 6px 30px;
+  word-break: break-word;
 `
 
 const Footer = styled.div`
-  position: absolute;
-  bottom: 0;
-  width: 100%;
-  box-sizing: border-box;
   display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 20px;
+  justify-content: center;
+  margin: 32px 0;
   background: ${p => p.theme.editorColours.sidebarBottom};
 `
 
@@ -215,6 +205,8 @@ const WorkspaceButton = styled.button`
     margin-right: 6px;
   }
   svg {
+    min-width: 18px;
+    min-height: 18px;
     stroke: ${p => p.theme.editorColours.buttonWorkspaceText};
   }
 `
