@@ -9,7 +9,7 @@
     "Mohammad Rajabifard <mo.rajbi@gmail.com>"
   ],
   "repository": "http://github.com/graphcool/graphql-playground.git",
-  "license": "SEE LICENSE IN LICENSE",
+  "license": "MIT",
   "main": "dist/index.js",
   "files": [
     "dist"
