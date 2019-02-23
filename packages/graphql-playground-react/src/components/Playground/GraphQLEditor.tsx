@@ -139,6 +139,7 @@ class GraphQLEditor extends React.PureComponent<Props & ReduxProps> {
   private responseResizer: any
   private queryVariablesRef
   private httpHeadersRef
+  private containerComponent
 
   componentDidMount() {
     // Ensure a form of a schema exists (including `null`) and
@@ -166,7 +167,7 @@ class GraphQLEditor extends React.PureComponent<Props & ReduxProps> {
 
   render() {
     return (
-      <Container>
+      <Container setRef={this.setContainerComponent}>
         <EditorWrapper>
           <TopBar
             shareEnabled={this.props.shareEnabled}
@@ -264,21 +265,23 @@ class GraphQLEditor extends React.PureComponent<Props & ReduxProps> {
             </ResultWrap>
           </EditorBar>
         </EditorWrapper>
-        <SideTabs>
-          <SideTab label="Docs" activeColor="green" tabWidth="49px">
-            <GraphDocs
-              schema={this.props.schema}
-              ref={this.setDocExplorerRef}
-            />
-          </SideTab>
-          <SideTab label="Schema" activeColor="blue" tabWidth="65px">
-            <SDLView
-              schema={this.props.schema}
-              ref={this.setSchemaExplorerRef}
-              sessionId={this.props.sessionId}
-            />
-          </SideTab>
-        </SideTabs>
+        {this.containerComponent && (
+          <SideTabs maxWidth={this.containerComponent.offsetWidth - 86}>
+            <SideTab label="Docs" activeColor="green" tabWidth="49px">
+              <GraphDocs
+                schema={this.props.schema}
+                ref={this.setDocExplorerRef}
+              />
+            </SideTab>
+            <SideTab label="Schema" activeColor="blue" tabWidth="65px">
+              <SDLView
+                schema={this.props.schema}
+                ref={this.setSchemaExplorerRef}
+                sessionId={this.props.sessionId}
+              />
+            </SideTab>
+          </SideTabs>
+        )}
       </Container>
     )
   }
@@ -329,6 +332,9 @@ class GraphQLEditor extends React.PureComponent<Props & ReduxProps> {
     if (ref) {
       this.schemaExplorerComponent = ref.getWrappedInstance()
     }
+  }
+  setContainerComponent = ref => {
+    this.containerComponent = ref
   }
 
   handleClickReference = reference => {
