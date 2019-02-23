@@ -40,6 +40,21 @@ export const buildTemplate = (
       },
       { type: 'separator' },
       {
+        label: 'Hide GraphQL Playground',
+        accelerator: 'Cmd+H',
+        role: 'hide',
+      },
+      {
+        label: 'Hide Others',
+        accelerator: 'Option+Cmd+H',
+        role: 'hideOthers',
+      },
+      {
+        label: 'Show All',
+        role: 'unhide',
+      },
+      { type: 'separator', visible: process.platform === 'darwin' },
+      {
         label: 'Quit',
         accelerator: 'CmdOrCtrl+Q',
         click: () => app.quit(),
