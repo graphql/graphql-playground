@@ -127,6 +127,7 @@ interface PlusProps {
 }
 
 const Plus = styled<PlusProps, 'div'>('div')`
+  -webkit-app-region: no-drag;
   box-sizing: border-box;
   display: flex;
   visibility: ${p => (p.sorting ? 'hidden' : 'visible')}
