@@ -4,6 +4,7 @@
     "target": "es5",
     "lib": ["esnext", "dom"],
     "sourceMap": true,
+    "inlineSources": true,
     "jsx": "preserve",
     "rootDir": "src",
     "forceConsistentCasingInFileNames": true,
