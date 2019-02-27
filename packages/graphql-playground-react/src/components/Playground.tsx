@@ -8,7 +8,6 @@ import Settings from './Settings'
 import { PlaygroundSettingsEditor, GraphQLConfigEditor } from './SettingsEditor'
 import { GraphQLConfig } from '../graphqlConfig'
 import FileEditor from './FileEditor'
-import { ApolloLink } from 'apollo-link'
 
 import * as app from '../../package.json'
 import { connect } from 'react-redux'
@@ -44,8 +43,8 @@ import {
   setLinkCreator,
   schemaFetcher,
   setSubscriptionEndpoint,
+  LinkAndSubscriptionGetter,
 } from '../state/sessions/fetchingSagas'
-import { Session } from '../state/sessions/reducers'
 import { getWorkspaceId } from './Playground/util/getWorkspaceId'
 import { getSettings, getSettingsString } from '../state/workspace/reducers'
 import { Backoff } from './Playground/util/fibonacci-backoff'
@@ -86,10 +85,7 @@ export interface Props {
   fixedEndpoints: boolean
   headers?: any
   configPath?: string
-  createApolloLink?: (
-    session: Session,
-    subscriptionEndpoint?: string,
-  ) => ApolloLink
+  createApolloLink?: LinkAndSubscriptionGetter
   workspaceName?: string
   schema?: GraphQLSchema
 }

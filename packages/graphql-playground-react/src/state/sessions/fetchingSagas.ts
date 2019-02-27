@@ -56,7 +56,12 @@ export interface Headers {
   [key: string]: string | number | null
 }
 
-export const defaultLinkCreator = (
+export type LinkAndSubscriptionGetter = (
+  session: LinkCreatorProps,
+  subscriptionEndpoint?: string,
+) => { link: ApolloLink; subscriptionClient?: SubscriptionClient }
+
+export const defaultLinkCreator: LinkAndSubscriptionGetter = (
   session: LinkCreatorProps,
   subscriptionEndpoint?: string,
 ): { link: ApolloLink; subscriptionClient?: SubscriptionClient } => {
@@ -94,11 +99,13 @@ export const defaultLinkCreator = (
   }
 }
 
-let linkCreator = defaultLinkCreator
+let linkCreator: LinkAndSubscriptionGetter = defaultLinkCreator
 export let schemaFetcher: SchemaFetcher = new SchemaFetcher(linkCreator)
 ;(window as any).schemaFetcher = schemaFetcher
 
-export function setLinkCreator(newLinkCreator) {
+export function setLinkCreator(
+  newLinkCreator: LinkAndSubscriptionGetter | undefined,
+) {
   if (newLinkCreator) {
     linkCreator = newLinkCreator
     schemaFetcher = new SchemaFetcher(newLinkCreator)

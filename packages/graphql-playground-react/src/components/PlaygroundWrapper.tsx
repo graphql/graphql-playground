@@ -22,10 +22,10 @@ import { getActiveEndpoints } from './util'
 import { ISettings } from '../types'
 import { connect } from 'react-redux'
 import { getTheme, getSettings } from '../state/workspace/reducers'
-import { Session, Tab } from '../state/sessions/reducers'
-import { ApolloLink } from 'apollo-link'
+import { Tab } from '../state/sessions/reducers'
 import { injectTabs } from '../state/workspace/actions'
 import { buildSchema, buildClientSchema, GraphQLSchema } from 'graphql'
+import { LinkAndSubscriptionGetter } from '../state/sessions/fetchingSagas'
 
 function getParameterByName(name: string, uri?: string): string | null {
   const url = uri || window.location.href
@@ -59,10 +59,7 @@ export interface PlaygroundWrapperProps {
   config?: GraphQLConfig
   configPath?: string
   injectedState?: any
-  createApolloLink?: (
-    session: Session,
-    subscriptionEndpoint?: string,
-  ) => ApolloLink
+  createApolloLink?: LinkAndSubscriptionGetter
   tabs?: Tab[]
   schema?: { __schema: any } // introspection result
   codeTheme?: EditorColours
