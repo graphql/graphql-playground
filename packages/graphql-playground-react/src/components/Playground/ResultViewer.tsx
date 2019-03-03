@@ -139,6 +139,13 @@ const Result = styled<ResultProps, 'div'>('div')`
     max-width: 50vw;
     margin-right: 10px;
   }
+  .CodeMirror-sizer {
+    margin-bottom: 0 !important;
+  }
+  .CodeMirror-lines {
+    margin: 20px 0;
+    padding: 0;
+  }
   .cm-string {
     color: ${p => p.theme.editorColours.property} !important;
   }
