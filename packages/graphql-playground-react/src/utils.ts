@@ -1,5 +1,6 @@
 import * as prettier from 'prettier/standalone'
 import * as graphql from 'prettier/parser-graphql'
+import { notify } from 'react-notify-toast'
 // tslint:disable
 
 export function safely(cb: any) {
@@ -7,6 +8,7 @@ export function safely(cb: any) {
     try {
       yield cb(...args)
     } catch (e) {
+      notify.show(e.message, 'error')
       console.error(e)
     }
   }
