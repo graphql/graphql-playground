@@ -64,7 +64,6 @@ export const {
   refetchSchema,
   setScrollTop,
   reorderTabs,
-  displayGrowl,
 } = createActions({
   // simple property setting
   EDIT_QUERY: query => ({ query }),
@@ -191,7 +190,6 @@ export const {
   SAVE_CONFIG: simpleAction(),
   EDIT_FILE: simpleAction(),
   SAVE_FILE: simpleAction(),
-  DISPLAY_GROWL: simpleAction(),
 })
 
 function simpleAction(key?: any, defaultValue?: any) {

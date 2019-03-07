@@ -1,7 +1,6 @@
 import * as prettier from 'prettier/standalone'
 import * as graphql from 'prettier/parser-graphql'
-import { put } from 'redux-saga/effects'
-import { displayGrowl } from '../src/state/sessions/actions'
+import { notify } from 'react-notify-toast'
 // tslint:disable
 
 export function safely(cb: any) {
@@ -9,7 +8,7 @@ export function safely(cb: any) {
     try {
       yield cb(...args)
     } catch (e) {
-      yield put(displayGrowl(e))
+      notify.show(e.message, 'error')
       console.error(e)
     }
   }

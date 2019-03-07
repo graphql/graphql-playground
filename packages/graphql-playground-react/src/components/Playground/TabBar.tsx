@@ -16,7 +16,7 @@ import {
   SortStart,
   SortEnd,
 } from 'react-sortable-hoc'
-import Growl from '../Growl'
+import Notifications from 'react-notify-toast'
 
 export interface Props {
   onNewSession: any
@@ -52,7 +52,7 @@ class TabBar extends React.PureComponent<Props & ReduxProps, State> {
         distance={10}
         transitionDuration={200}
       >
-        <Growl />
+        <Notifications />
         <Tabs isApp={isApp}>
           {sessions.map((session, ndx) => (
             <SortableTab
