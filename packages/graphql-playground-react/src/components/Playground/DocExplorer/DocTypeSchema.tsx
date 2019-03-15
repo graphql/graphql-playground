@@ -98,7 +98,7 @@ const DocsTypeInferface = styled(TypeLink)`
   }
 `
 
-const DocsValueComment = styled.span`
+const DocsValueComment = styled.p`
   color: ${p => p.theme.colours.black50};
   padding-right: 16px;
   padding-left: 32px;
