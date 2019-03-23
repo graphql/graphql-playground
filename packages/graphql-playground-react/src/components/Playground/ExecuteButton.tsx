@@ -220,6 +220,7 @@ const Button = styled<ButtonProps, 'div'>('div')`
       : p.theme.editorColours.executeButton};
   border: 6px solid ${p => p.theme.editorColours.executeButtonBorder};
   cursor: pointer;
+  user-select: none;
 
   svg {
     fill: ${p => (p.theme.mode === 'light' ? 'white' : 'inherit')};
@@ -242,6 +243,7 @@ const ExecuteBox = styled.div`
   position: absolute;
   top: 78px;
   z-index: 100;
+  user-select: none;
 
   &:before {
     position: absolute;
