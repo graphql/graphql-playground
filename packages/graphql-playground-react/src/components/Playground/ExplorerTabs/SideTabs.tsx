@@ -161,11 +161,6 @@ class SideTabs extends React.Component<
     this.ref = ref
   }
 
-  public showDocFromType = type => {
-    this.props.setDocsVisible(this.props.sessionId, true, 0)
-    this.activeContentComponent.showDocFromType(type)
-  }
-
   private setContentContainerRef = ref => {
     this.refContentContainer = ref
   }
