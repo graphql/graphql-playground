@@ -42,8 +42,7 @@ import * as queryString from 'query-string'
 function* setQueryFacts() {
   // debounce by 100 ms
   yield call(delay, 100)
-  const session: Session = yield select(getSelectedSession)
-
+  const session: Session = yield getSessionWithCredentials()
   const { schema } = yield schemaFetcher.fetch(session)
   try {
     const ast = parse(session.query)
@@ -129,10 +128,14 @@ function* runQueryAtPosition(action) {
 function* getSessionWithCredentials() {
   const session = yield select(getSelectedSession)
   const settings = yield select(getSettings)
+  const combinedHeaders = {
+    ...settings['request.globalHeaders'],
+    ...JSON.parse(session.headers),
+  }
 
   return {
     endpoint: session.endpoint,
-    headers: session.headers,
+    headers: JSON.stringify(combinedHeaders),
     credentials: settings['request.credentials'],
   }
 }

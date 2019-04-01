@@ -252,13 +252,21 @@ export class Playground extends React.PureComponent<Props & ReduxProps, State> {
     const props = this.props || propsInput
     const endpoint = props.sessionEndpoint || props.endpoint
     const currentSchema = this.state.schema
+    const globalHeaders = props.settings['request.globalHeaders']
+
     try {
       const data = {
         endpoint,
         headers:
           props.sessionHeaders && props.sessionHeaders.length > 0
-            ? props.sessionHeaders
-            : JSON.stringify(props.headers),
+            ? JSON.stringify({
+                ...globalHeaders,
+                ...JSON.parse(props.sessionHeaders),
+              })
+            : JSON.stringify({
+                ...globalHeaders,
+                ...props.headers,
+              }),
         credentials: props.settings['request.credentials'],
       }
       const schema = await schemaFetcher.fetch(data)

@@ -108,6 +108,7 @@ interface ISettings {
   'schema.polling.interval': number
   'schema.disableComments': boolean
   'tracing.hideTracingResponse': boolean
+  'request.globalHeaders': { [key: string]: string }
 }
 ```
 

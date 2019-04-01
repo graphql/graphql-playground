@@ -56,6 +56,7 @@ export const defaultSettings: ISettings = {
   'schema.polling.endpointFilter': '*localhost*',
   'schema.polling.interval': 2000,
   'tracing.hideTracingResponse': true,
+  'request.globalHeaders': {},
 }
 
 // tslint:disable-next-line:max-classes-per-file
