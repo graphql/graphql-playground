@@ -143,7 +143,7 @@ class SideTabs extends React.Component<
           onKeyDown={this.handleKeyDown}
           onMouseMove={this.handleMouseMove}
           tabIndex={activeTabIdx}
-          color={activeTab && activeTab.props.activeColor}
+          color={activeTab ? activeTab.props.activeColor : undefined}
           ref={this.setContentContainerRef}
         >
           {activeTab &&
@@ -344,7 +344,8 @@ const TabContentContainer = styled.div`
   &::before {
     top: 0;
     bottom: 0;
-    background: ${props => props.theme.colours[props.color] || '#3D5866'};
+    background: ${props =>
+      props.color ? props.theme.colours[props.color] : '#3D5866'};
     position: absolute;
     z-index: 3;
     left: 0px;
