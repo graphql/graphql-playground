@@ -23,6 +23,7 @@ export interface GraphQLConfigEnpointsSubscription {
 
 export interface GraphQLConfigEnpointConfig {
   url: string
+  aws?: boolean
   headers?: { [name: string]: string }
   subscription?: GraphQLConfigEnpointsSubscription
 }

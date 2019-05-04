@@ -1,8 +1,12 @@
 import { ApolloLink, execute } from 'apollo-link'
 import { parseHeaders } from '../../components/Playground/util/parseHeaders'
-import { SubscriptionClient } from 'subscriptions-transport-ws'
 import { HttpLink } from 'apollo-link-http'
+import { SubscriptionClient } from 'subscriptions-transport-ws'
 import { WebSocketLink } from 'apollo-link-ws'
+import {
+  Client as SubscriptionClientLambda,
+  WebSocketLink as WebSocketLinkLambda,
+} from 'aws-lambda-ws-link'
 import { isSubscription } from '../../components/Playground/util/hasSubscription'
 import {
   takeLatest,
@@ -41,9 +45,14 @@ import { set } from 'immutable'
 
 // tslint:disable
 let subscriptionEndpoint
+let awsEndpoint
 
 export function setSubscriptionEndpoint(endpoint) {
   subscriptionEndpoint = endpoint
+}
+
+export function setAws(aws) {
+  awsEndpoint = aws
 }
 
 export interface LinkCreatorProps {
@@ -59,7 +68,8 @@ export interface Headers {
 export const defaultLinkCreator = (
   session: LinkCreatorProps,
   subscriptionEndpoint?: string,
-): { link: ApolloLink; subscriptionClient?: SubscriptionClient } => {
+  awsEndpoint?: boolean,
+): { link: ApolloLink; subscriptionClient?: SubscriptionClientLambda } => {
   let connectionParams = {}
   const { headers, credentials } = session
 
@@ -77,13 +87,23 @@ export const defaultLinkCreator = (
     return { link: httpLink }
   }
 
-  const subscriptionClient = new SubscriptionClient(subscriptionEndpoint, {
-    timeout: 20000,
-    lazy: true,
-    connectionParams,
-  })
+  let subscriptionClient
+  let webSocketLink
 
-  const webSocketLink = new WebSocketLink(subscriptionClient)
+  if (awsEndpoint) {
+    subscriptionClient = new SubscriptionClientLambda({
+      uri: subscriptionEndpoint,
+    })
+    webSocketLink = new WebSocketLinkLambda(subscriptionClient)
+  } else {
+    subscriptionClient = new SubscriptionClient(subscriptionEndpoint, {
+      timeout: 20000,
+      lazy: true,
+      connectionParams,
+    })
+    webSocketLink = new WebSocketLink(subscriptionClient)
+  }
+
   return {
     link: ApolloLink.split(
       operation => isSubscription(operation),
@@ -133,7 +153,11 @@ function* runQuerySaga(action) {
     credentials: settings['request.credentials'],
   }
 
-  const { link, subscriptionClient } = linkCreator(lol, subscriptionEndpoint)
+  const { link, subscriptionClient } = linkCreator(
+    lol,
+    subscriptionEndpoint,
+    awsEndpoint,
+  )
   yield put(setCurrentQueryStartTime(new Date()))
 
   let firstResponse = false

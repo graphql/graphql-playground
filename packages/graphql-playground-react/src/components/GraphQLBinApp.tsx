@@ -122,20 +122,19 @@ class GraphQLBinApp extends React.Component<Props & ReduxProps, State> {
 
     return (
       <Wrapper>
-        {this.state.loading ? null : !this.state.endpoint ||
-        this.state.endpoint.length === 0 ? (
-          <ThemeProvider theme={styledTheme}>
-            <EndpointPopup
-              onRequestClose={this.handleChangeEndpoint}
-              endpoint={this.state.endpoint || ''}
-            />
-          </ThemeProvider>
-        ) : (
+        {endpoint ? (
           <PlaygroundWrapper
             endpoint={endpoint}
             headers={this.state.headers}
             subscriptionEndpoint={subscriptionEndpoint}
           />
+        ) : (
+          <ThemeProvider theme={styledTheme}>
+            <EndpointPopup
+              onRequestClose={this.handleChangeEndpoint}
+              endpoint={this.state.endpoint || endpoint || ''}
+            />
+          </ThemeProvider>
         )}
       </Wrapper>
     )

@@ -44,6 +44,7 @@ import {
   setLinkCreator,
   schemaFetcher,
   setSubscriptionEndpoint,
+  setAws,
 } from '../state/sessions/fetchingSagas'
 import { Session } from '../state/sessions/reducers'
 import { getWorkspaceId } from './Playground/util/getWorkspaceId'
@@ -62,6 +63,7 @@ export interface Props {
   endpoint: string
   sessionEndpoint: string
   subscriptionEndpoint?: string
+  aws?: boolean
   projectId?: string
   shareEnabled?: boolean
   fixedEndpoint?: boolean
@@ -89,6 +91,7 @@ export interface Props {
   createApolloLink?: (
     session: Session,
     subscriptionEndpoint?: string,
+    aws?: boolean,
   ) => ApolloLink
   workspaceName?: string
   schema?: GraphQLSchema
@@ -191,6 +194,7 @@ export class Playground extends React.PureComponent<Props & ReduxProps, State> {
     setLinkCreator(props.createApolloLink)
     this.getSchema()
     setSubscriptionEndpoint(props.subscriptionEndpoint)
+    setAws(props.aws)
   }
 
   componentWillMount() {
@@ -236,6 +240,9 @@ export class Playground extends React.PureComponent<Props & ReduxProps, State> {
     }
     if (this.props.subscriptionEndpoint !== nextProps.subscriptionEndpoint) {
       setSubscriptionEndpoint(nextProps.subscriptionEndpoint)
+    }
+    if (this.props.aws !== nextProps.aws) {
+      setAws(nextProps.aws)
     }
     if (nextProps.headers !== this.props.headers) {
       this.props.injectHeaders(nextProps.headers, nextProps.endpoint)

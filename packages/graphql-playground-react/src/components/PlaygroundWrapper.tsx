@@ -43,6 +43,7 @@ export interface PlaygroundWrapperProps {
   endpointUrl?: string
   subscriptionEndpoint?: string
   setTitle?: boolean
+  aws?: boolean
   settings?: ISettings
   shareEnabled?: string
   fixedEndpoint?: string
@@ -378,6 +379,7 @@ class PlaygroundWrapper extends React.Component<
               )}
             <Playground
               endpoint={this.state.endpoint}
+              aws={this.props.aws}
               shareEnabled={this.props.shareEnabled}
               subscriptionEndpoint={this.state.subscriptionEndpoint}
               shareUrl={this.state.shareUrl}
