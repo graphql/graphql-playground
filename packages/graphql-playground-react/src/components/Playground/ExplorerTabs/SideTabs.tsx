@@ -6,7 +6,6 @@ import { getLeft } from 'graphiql/dist/utility/elementPosition'
 import {
   addStack,
   toggleDocs,
-  changeWidthDocs,
   changeKeyMove,
   setDocsVisible,
 } from '../../../state/docs/actions'
@@ -40,12 +39,14 @@ export interface Props {
   sessionId: string
   children: Array<React.ReactElement<any>>
   maxWidth: number
+  setWidth: (props?: any) => any
+  setActiveContentRef: (ref: any) => void
 }
 
 export interface SideTabContentProps {
   schema: GraphQLSchema
   sessionId: string
-  setWidth: (props: any) => any
+  setWidth: (props?: any) => any
 }
 
 export interface State {
@@ -58,34 +59,12 @@ class SideTabs extends React.Component<
   State
 > {
   ref
-  public activeContentComponent: any // later React.Component<...>
   private refContentContainer: any
   private clientX: number = 0
   private clientY: number = 0
   constructor(props) {
     super(props)
     ;(window as any).d = this
-  }
-
-  setWidth = (props: any = this.props) => {
-    if (!this.activeContentComponent) {
-      return
-    }
-    if (!this.props.docs.docsOpen) {
-      return
-    }
-    requestAnimationFrame(() => {
-      const width = this.activeContentComponent.getWidth(props)
-      this.props.changeWidthDocs(
-        props.sessionId,
-        Math.min(width, this.props.maxWidth),
-      )
-    })
-  }
-  setActiveContentRef = ref => {
-    if (ref) {
-      this.activeContentComponent = ref.getWrappedInstance()
-    }
   }
 
   componentDidUpdate(prevProps) {
@@ -99,7 +78,7 @@ class SideTabs extends React.Component<
     if (prevProps.activeTabIdx && !this.props.docs.activeTabIdx) {
       this.props.setDocsVisible(this.props.sessionId, false)
     }
-    this.setWidth()
+    this.props.setWidth()
     if (
       this.props.docs.activeTabIdx !== prevProps.docs.activeTabIdx &&
       this.refContentContainer
@@ -112,7 +91,7 @@ class SideTabs extends React.Component<
     if (!this.props.docs.activeTabIdx) {
       this.props.setDocsVisible(this.props.sessionId, false)
     }
-    return this.setWidth()
+    return this.props.setWidth()
   }
 
   render() {
@@ -143,14 +122,14 @@ class SideTabs extends React.Component<
           onKeyDown={this.handleKeyDown}
           onMouseMove={this.handleMouseMove}
           tabIndex={activeTabIdx}
-          color={activeTab && activeTab.props.activeColor}
+          color={activeTab ? activeTab.props.activeColor : undefined}
           ref={this.setContentContainerRef}
         >
           {activeTab &&
             React.cloneElement(activeTab.props.children, {
               ...activeTab.props,
-              ref: this.setActiveContentRef,
-              setWidth: this.setWidth,
+              ref: this.props.setActiveContentRef,
+              setWidth: this.props.setWidth,
             })}
         </TabContentContainer>
       </Tabs>
@@ -161,11 +140,6 @@ class SideTabs extends React.Component<
     this.ref = ref
   }
 
-  public showDocFromType = type => {
-    this.props.setDocsVisible(this.props.sessionId, true, 0)
-    this.activeContentComponent.showDocFromType(type)
-  }
-
   private setContentContainerRef = ref => {
     this.refContentContainer = ref
   }
@@ -173,7 +147,7 @@ class SideTabs extends React.Component<
   private handleTabClick = idx => () => {
     if (this.props.docs.activeTabIdx === idx) {
       this.props.setDocsVisible(this.props.sessionId, false)
-      return this.setWidth()
+      return this.props.setWidth()
     }
     if (this.props.docs.activeTabIdx !== idx) {
       this.props.setDocsVisible(
@@ -182,10 +156,10 @@ class SideTabs extends React.Component<
         this.props.docs.activeTabIdx,
       )
       this.props.setDocsVisible(this.props.sessionId, true, idx)
-      return this.setWidth()
+      return this.props.setWidth()
     } else {
       this.props.setDocsVisible(this.props.sessionId, true, idx)
-      return this.setWidth()
+      return this.props.setWidth()
     }
   }
 
@@ -275,7 +249,6 @@ const mapDispatchToProps = dispatch =>
     {
       addStack,
       toggleDocs,
-      changeWidthDocs,
       changeKeyMove,
       setDocsVisible,
     },
@@ -344,7 +317,8 @@ const TabContentContainer = styled.div`
   &::before {
     top: 0;
     bottom: 0;
-    background: ${props => props.theme.colours[props.color] || '#3D5866'};
+    background: ${props =>
+      props.color ? props.theme.colours[props.color] : '#3D5866'};
     position: absolute;
     z-index: 3;
     left: 0px;
