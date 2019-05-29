@@ -146,7 +146,7 @@ Note: In case you do not want to serve assets from a CDN (like jsDelivr) and ins
 #### Install
 
 ```sh
-yarn add graphql-playground-react
+yarn add graphql graphql-playground-react
 ```
 
 #### Use
