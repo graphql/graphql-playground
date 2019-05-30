@@ -342,7 +342,11 @@ class PlaygroundWrapper extends React.Component<
 
     const defaultHeaders = this.props.headers || {}
     const stateHeaders = this.state.headers || {}
-    const combinedHeaders = { ...defaultHeaders, ...stateHeaders }
+    const combinedHeaders =
+      Object.keys(defaultHeaders).length > 0 ||
+      Object.keys(stateHeaders).length > 0
+        ? { ...defaultHeaders, ...stateHeaders }
+        : undefined
 
     const { theme } = this.props
     return (
