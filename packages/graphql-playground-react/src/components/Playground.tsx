@@ -258,7 +258,9 @@ export class Playground extends React.PureComponent<Props & ReduxProps, State> {
         headers:
           props.sessionHeaders && props.sessionHeaders.length > 0
             ? props.sessionHeaders
-            : JSON.stringify(props.headers),
+            : props.headers && Object.keys(props.headers).length > 0
+              ? JSON.stringify(props.headers)
+              : undefined,
         credentials: props.settings['request.credentials'],
       }
       const schema = await schemaFetcher.fetch(data)
