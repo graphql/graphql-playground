@@ -84,7 +84,7 @@ export interface Props {
   configIsYaml: boolean
   canSaveConfig: boolean
   fixedEndpoints: boolean
-  headers?: any
+  headers?: { [key: string]: string }
   configPath?: string
   createApolloLink?: (
     session: Session,
@@ -104,7 +104,10 @@ export interface ReduxProps {
   saveConfig: () => void
   saveSettings: () => void
   setTracingSupported: (value: boolean) => void
-  injectHeaders: (headers: string, endpoint: string) => void
+  injectHeaders: (
+    headers: string | { [key: string]: string } | void,
+    endpoint: string,
+  ) => void
   setConfigString: (str: string) => void
   schemaFetchingError: (endpoint: string, error: string) => void
   schemaFetchingSuccess: (
