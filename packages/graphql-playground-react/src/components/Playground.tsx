@@ -137,7 +137,7 @@ export { GraphQLEditor }
 
 export class Playground extends React.PureComponent<Props & ReduxProps, State> {
   static defaultProps = {
-    shareEnabled: false,
+    shareEnabled: true,
   }
 
   apolloLinks: { [sessionId: string]: any } = {}
