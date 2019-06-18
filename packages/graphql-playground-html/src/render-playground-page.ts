@@ -65,7 +65,7 @@ export interface RenderPageOptions extends MiddlewareOptions {
 export interface Tab {
   endpoint: string
   query: string
-  name: string
+	name?: string
   variables?: string
   responses?: string[]
   headers?: { [key: string]: string }
