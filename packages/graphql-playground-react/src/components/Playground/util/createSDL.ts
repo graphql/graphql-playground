@@ -116,7 +116,7 @@ export function downloadSchema(schema: GraphQLSchema, type: string) {
     return download(data, filename)
   } else {
     const data = JSON.stringify(schema)
-    const filename = 'instrospectionSchema.json'
+    const filename = 'introspectionSchema.json'
     return download(data, filename)
   }
 }
