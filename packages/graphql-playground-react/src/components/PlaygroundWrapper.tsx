@@ -44,8 +44,8 @@ export interface PlaygroundWrapperProps {
   subscriptionEndpoint?: string
   setTitle?: boolean
   settings?: ISettings
-  shareEnabled?: string
-  fixedEndpoint?: string
+  shareEnabled?: boolean
+  fixedEndpoint?: boolean
   folderName?: string
   configString?: string
   showNewWorkspace?: boolean
