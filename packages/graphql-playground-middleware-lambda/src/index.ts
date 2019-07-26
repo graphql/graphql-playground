@@ -1,18 +1,16 @@
-import * as lambda from 'aws-lambda'
+import { APIGatewayProxyHandler } from 'aws-lambda'
 import {
   MiddlewareOptions,
   renderPlaygroundPage,
 } from 'graphql-playground-html'
 
-/* tslint:disable-next-line */
-
-export default function lambdaPlayground(options: MiddlewareOptions) {
-  return async (
+export default function lambdaPlayground(options: MiddlewareOptions): APIGatewayProxyHandler {
+  return (
     event,
-    lambdaContext: lambda.Context,
-    callback: lambda.Callback,
+    lambdaContext,
+    callback,
   ) => {
-    const body = await renderPlaygroundPage(options)
+    const body = renderPlaygroundPage(options)
     callback(null, {
       statusCode: 200,
       headers: {

@@ -25,12 +25,8 @@
     "graphcool",
     "lambada"
   ],
-  "peerDependencies": {
-    "aws-lambda": "^0.1.2"
-  },
   "devDependencies": {
     "@types/node": "9.4.0",
-    "aws-lambda": "^0.1.2",
     "rimraf": "2.6.2",
     "typescript": "2.6.2"
   },
@@ -39,6 +35,7 @@
     "definition": "dist/index.d.ts"
   },
   "dependencies": {
+    "@types/aws-lambda": "8.10.31",
     "graphql-playground-html": "1.6.13"
   }
 }
