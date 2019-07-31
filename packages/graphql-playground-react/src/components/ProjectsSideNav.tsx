@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { GraphQLConfig, GraphQLConfigEnpointsMapData } from '../graphqlConfig'
+import { GraphQLConfig, GraphQLConfigEndpointsMapData } from '../graphqlConfig'
 import ProjectsSideNavItem from './ProjectsSideNavItem'
 import { SettingsIcon, AddFullIcon } from './Icons'
 import { styled } from '../styled/index'
@@ -77,7 +77,7 @@ class ProjectsSideNav extends React.Component<Props & ReduxProps, {}> {
   }
 
   private renderEndpoints(
-    endpoints: GraphQLConfigEnpointsMapData,
+    endpoints: GraphQLConfigEndpointsMapData,
     projectName?: string,
   ) {
     return Object.keys(endpoints).map(env => {

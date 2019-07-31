@@ -1,5 +1,5 @@
 export interface GraphQLConfigExtensions {
-  endpoints?: GraphQLConfigEnpointsData
+  endpoints?: GraphQLConfigEndpointsData
   [name: string]: any
 }
 
@@ -16,23 +16,32 @@ export type GraphQLConfig = GraphQLResolvedConfigData & {
   projects?: { [projectName: string]: GraphQLResolvedConfigData }
 }
 
-export interface GraphQLConfigEnpointsSubscription {
+export interface GraphQLConfigEndpointsSubscription {
   url: string
   connectionParams?: { [name: string]: string | undefined }
 }
 
-export interface GraphQLConfigEnpointConfig {
+export interface GraphQLConfigEndpointConfig {
   url: string
   headers?: { [name: string]: string }
-  subscription?: GraphQLConfigEnpointsSubscription
+  subscription?: GraphQLConfigEndpointsSubscription
+  oauth?: GraphQLConfigOAuthConfig
 }
 
-export interface GraphQLConfigEnpointsMapData {
-  [env: string]: GraphQLConfigEnpointConfig | string
+export interface GraphQLConfigOAuthConfig {
+  endpoint: string
+  username: string
+  password: string
+  clientId: string
+  clientSecret: string
 }
 
-export interface GraphQLConfigEnpointsMap {
-  [env: string]: GraphQLConfigEnpointConfig
+export interface GraphQLConfigEndpointsMapData {
+  [env: string]: GraphQLConfigEndpointConfig | string
 }
 
-export type GraphQLConfigEnpointsData = GraphQLConfigEnpointsMapData
+export interface GraphQLConfigEndpointsMap {
+  [env: string]: GraphQLConfigEndpointConfig
+}
+
+export type GraphQLConfigEndpointsData = GraphQLConfigEndpointsMapData

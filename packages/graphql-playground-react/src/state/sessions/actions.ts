@@ -56,6 +56,7 @@ export const {
   setSubscriptionActive,
   setQueryTypes,
   injectHeaders,
+  injectOauth,
   openConfigTab,
   editName,
   setResponseExtensions,
@@ -90,6 +91,7 @@ export const {
   UPDATE_QUERY_FACTS: simpleAction(),
   PRETTIFY_QUERY: simpleAction(),
   INJECT_HEADERS: (headers, endpoint) => ({ headers, endpoint }),
+  INJECT_OAUTH: oauth => ({ oauth }),
 
   // setting multiple props
   /*

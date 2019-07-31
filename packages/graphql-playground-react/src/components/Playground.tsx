@@ -6,7 +6,7 @@ import HistoryPopup from './HistoryPopup'
 import { styled } from '../styled'
 import Settings from './Settings'
 import { PlaygroundSettingsEditor, GraphQLConfigEditor } from './SettingsEditor'
-import { GraphQLConfig } from '../graphqlConfig'
+import { GraphQLConfig, GraphQLConfigOAuthConfig } from '../graphqlConfig'
 import FileEditor from './FileEditor'
 import { ApolloLink } from 'apollo-link'
 
@@ -22,6 +22,7 @@ import {
   saveConfig,
   setTracingSupported,
   injectHeaders,
+  injectOauth,
   schemaFetchingError,
   schemaFetchingSuccess,
 } from '../state/sessions/actions'
@@ -60,6 +61,7 @@ export interface Response {
 
 export interface Props {
   endpoint: string
+  oauth?: GraphQLConfigOAuthConfig
   sessionEndpoint: string
   subscriptionEndpoint?: string
   projectId?: string
@@ -105,6 +107,7 @@ export interface ReduxProps {
   saveSettings: () => void
   setTracingSupported: (value: boolean) => void
   injectHeaders: (headers: string, endpoint: string) => void
+  injectOauth: (oauth: GraphQLConfigOAuthConfig) => void
   setConfigString: (str: string) => void
   schemaFetchingError: (endpoint: string, error: string) => void
   schemaFetchingSuccess: (
@@ -198,6 +201,9 @@ export class Playground extends React.PureComponent<Props & ReduxProps, State> {
     this.props.initState(getWorkspaceId(this.props), this.props.endpoint)
     this.props.setConfigString(this.props.configString)
     this.props.injectHeaders(this.props.headers, this.props.endpoint)
+    if (this.props.oauth) {
+      this.props.injectOauth(this.props.oauth)
+    }
   }
 
   componentDidMount() {
@@ -239,6 +245,9 @@ export class Playground extends React.PureComponent<Props & ReduxProps, State> {
     }
     if (nextProps.headers !== this.props.headers) {
       this.props.injectHeaders(nextProps.headers, nextProps.endpoint)
+    }
+    if (nextProps.oauth && nextProps.oauth !== this.props.oauth) {
+      this.props.injectOauth(nextProps.oauth)
     }
     if (nextProps.configString !== this.props.configString) {
       this.props.setConfigString(nextProps.configString)
@@ -418,6 +427,7 @@ export default connect(
     saveConfig,
     setTracingSupported,
     injectHeaders,
+    injectOauth,
     setConfigString,
     schemaFetchingError,
     schemaFetchingSuccess,

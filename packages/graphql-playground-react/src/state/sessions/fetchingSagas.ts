@@ -1,8 +1,10 @@
 import { ApolloLink, execute } from 'apollo-link'
+import { TokenRefreshLink } from 'apollo-link-oauth-token-refresh'
 import { parseHeaders } from '../../components/Playground/util/parseHeaders'
 import { SubscriptionClient } from 'subscriptions-transport-ws'
 import { HttpLink } from 'apollo-link-http'
 import { WebSocketLink } from 'apollo-link-ws'
+import { GraphQLConfigOAuthConfig } from '../../graphqlConfig'
 import { isSubscription } from '../../components/Playground/util/hasSubscription'
 import {
   takeLatest,
@@ -50,6 +52,7 @@ export interface LinkCreatorProps {
   endpoint: string
   headers?: Headers
   credentials?: string
+  oauth?: GraphQLConfigOAuthConfig
 }
 
 export interface Headers {
@@ -61,7 +64,7 @@ export const defaultLinkCreator = (
   subscriptionEndpoint?: string,
 ): { link: ApolloLink; subscriptionClient?: SubscriptionClient } => {
   let connectionParams = {}
-  const { headers, credentials } = session
+  const { headers, credentials, oauth } = session
 
   if (headers) {
     connectionParams = { ...headers }
@@ -84,12 +87,53 @@ export const defaultLinkCreator = (
   })
 
   const webSocketLink = new WebSocketLink(subscriptionClient)
+
+  const graphqlLink = ApolloLink.split(
+    operation => isSubscription(operation),
+    webSocketLink as any,
+    httpLink,
+  )
+
+  const oauthLink =
+    oauth &&
+    new TokenRefreshLink({
+      isTokenValidOrUndefined: () => false,
+      fetchAccessToken: () => {
+        const [username, password, clientId, clientSecret] = [
+          oauth.username,
+          oauth.password,
+          oauth.clientId,
+          oauth.clientSecret,
+        ].map(encodeURIComponent)
+
+        return fetch(oauth.endpoint, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+          },
+          body: `grant_type=password&username=${username}&password=${password}&client_id=${clientId}&client_secret=${clientSecret}`,
+        })
+      },
+      handleResponse: operation => response => {
+        // here you can handle response & save the token
+        if (response.status !== 401) {
+          return response.json().then(({ access_token }) => {
+            operation.setContext({
+              headers: {
+                Authorization: `Bearer ${access_token}`,
+              },
+            })
+          })
+        }
+      },
+    })
+
+  const links = oauthLink ? [oauthLink, graphqlLink] : [graphqlLink]
+
+  const link = ApolloLink.from(links)
+
   return {
-    link: ApolloLink.split(
-      operation => isSubscription(operation),
-      webSocketLink as any,
-      httpLink,
-    ),
+    link,
     subscriptionClient,
   }
 }
@@ -127,7 +171,9 @@ function* runQuerySaga(action) {
   if (session.tracingSupported && session.responseTracingOpen) {
     headers = set(headers, 'X-Apollo-Tracing', '1')
   }
+
   const lol = {
+    oauth: session.oauth,
     endpoint: session.endpoint,
     headers,
     credentials: settings['request.credentials'],

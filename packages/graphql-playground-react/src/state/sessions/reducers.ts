@@ -27,6 +27,7 @@ import { getDefaultSession, defaultQuery } from '../../constants'
 import * as cuid from 'cuid'
 import { formatError } from './fetchingSagas'
 import { arrayMove } from 'react-sortable-hoc'
+import { GraphQLConfigOAuthConfig } from '../../graphqlConfig'
 
 export interface SessionStateProps {
   sessions: OrderedMap<string, Session>
@@ -48,6 +49,7 @@ export interface Tab {
 export class Session extends Record(getDefaultSession('')) {
   id: string
   endpoint: string
+  oauth?: GraphQLConfigOAuthConfig
 
   query: string
   file?: string
@@ -478,6 +480,18 @@ const reducer = handleActions(
         .setIn(['sessions', session.id], session)
         .set('selectedSessionId', session.id)
         .set('sessionCount', state.sessions.size + 1)
+    },
+    // inject headers is used for graphql config
+    // it makes sure, that there definitely is a tab open with the correct header
+    INJECT_OAUTH: (state, { payload: { oauth } }) => {
+      // if there are no oauth props to inject, there's nothing to do
+      if (!oauth || oauth === '' || Object.keys(oauth).length === 0) {
+        return state
+      }
+
+      const selectedSessionId = getSelectedSessionId(state)
+
+      return state.setIn(['sessions', selectedSessionId, 'oauth'], oauth)
     },
     DUPLICATE_SESSION: (state, { payload: { session } }) => {
       const newSession = session.set('id', cuid())

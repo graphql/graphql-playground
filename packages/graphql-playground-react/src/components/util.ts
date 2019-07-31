@@ -1,4 +1,8 @@
-import { GraphQLConfig, GraphQLConfigEnpointConfig } from '../graphqlConfig'
+import {
+  GraphQLConfig,
+  GraphQLConfigEndpointConfig,
+  GraphQLConfigOAuthConfig,
+} from '../graphqlConfig'
 import { GraphQLSchema, printSchema } from 'graphql'
 import * as LRU from 'lru-cache'
 
@@ -6,7 +10,12 @@ export function getActiveEndpoints(
   config: GraphQLConfig,
   envName: string,
   projectName?: string,
-): { endpoint: string; subscriptionEndpoint?: string; headers?: any } {
+): {
+  endpoint: string
+  subscriptionEndpoint?: string
+  headers?: any
+  oauth?: GraphQLConfigOAuthConfig
+} {
   if (projectName) {
     const env = config.projects![projectName].extensions!.endpoints![envName]!
     return getEndpointFromEndpointConfig(env)
@@ -17,7 +26,7 @@ export function getActiveEndpoints(
 }
 
 export function getEndpointFromEndpointConfig(
-  env: GraphQLConfigEnpointConfig | string,
+  env: GraphQLConfigEndpointConfig | string,
 ) {
   if (typeof env === 'string') {
     return {
@@ -31,6 +40,7 @@ export function getEndpointFromEndpointConfig(
         ? env.subscription!.url
         : undefined,
       headers: env.headers,
+      oauth: env.oauth,
     }
   }
 }

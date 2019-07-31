@@ -154,6 +154,7 @@ export function getDefaultSession(endpoint: string) {
     docExplorerWidth: 350,
     variableToType: Map({}),
     headers: '',
+    oauth: undefined,
     file: undefined,
     isFile: false,
     name: undefined,

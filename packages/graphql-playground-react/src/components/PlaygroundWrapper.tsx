@@ -1,7 +1,7 @@
 import * as React from 'react'
 import Playground, { Playground as IPlayground } from './Playground'
 import { Helmet } from 'react-helmet'
-import { GraphQLConfig } from '../graphqlConfig'
+import { GraphQLConfig, GraphQLConfigOAuthConfig } from '../graphqlConfig'
 import * as yaml from 'js-yaml'
 import ProjectsSideNav from './ProjectsSideNav'
 import {
@@ -77,6 +77,7 @@ export interface ReduxProps {
 
 export interface State {
   endpoint: string
+  oauth?: GraphQLConfigOAuthConfig
   subscriptionPrefix?: string
   subscriptionEndpoint?: string
   shareUrl?: string
@@ -118,6 +119,7 @@ class PlaygroundWrapper extends React.Component<
     const result = this.extractEndpointAndHeaders(endpoint)
     endpoint = result.endpoint
     let headers = result.headers
+    let oauth
 
     let subscriptionEndpoint: any =
       props.subscriptionEndpoint || getParameterByName('subscriptionEndpoint')
@@ -127,6 +129,7 @@ class PlaygroundWrapper extends React.Component<
       endpoint = endpoints.endpoint
       subscriptionEndpoint = endpoints.subscriptionEndpoint
       headers = endpoints.headers
+      oauth = endpoints.oauth
     }
 
     subscriptionEndpoint =
@@ -144,6 +147,7 @@ class PlaygroundWrapper extends React.Component<
       activeEnv,
       activeProjectName: projectName,
       headers,
+      oauth,
     }
   }
 
@@ -316,10 +320,12 @@ class PlaygroundWrapper extends React.Component<
         endpoints.subscriptionEndpoint ||
         this.normalizeSubscriptionUrl(endpoint, endpoints.subscriptionEndpoint)
       const headers = endpoints.headers
+      const oauth = endpoints.oauth
       this.setState({
         endpoint,
         subscriptionEndpoint,
         headers,
+        oauth,
         activeEnv: activeEnv.activeEnv,
         activeProjectName: activeEnv.projectName,
       })
@@ -378,6 +384,7 @@ class PlaygroundWrapper extends React.Component<
               )}
             <Playground
               endpoint={this.state.endpoint}
+              oauth={this.state.oauth}
               shareEnabled={this.props.shareEnabled}
               subscriptionEndpoint={this.state.subscriptionEndpoint}
               shareUrl={this.state.shareUrl}
@@ -434,15 +441,17 @@ class PlaygroundWrapper extends React.Component<
   }
 
   handleSelectEnv = (env: string, projectName?: string) => {
-    const { endpoint, subscriptionEndpoint, headers } = getActiveEndpoints(
-      this.props.config!,
-      env,
-      projectName,
-    )!
+    const {
+      endpoint,
+      subscriptionEndpoint,
+      headers,
+      oauth,
+    } = getActiveEndpoints(this.props.config!, env, projectName)!
     this.setState({
       activeEnv: env,
       endpoint,
       headers,
+      oauth,
       subscriptionEndpoint: this.normalizeSubscriptionUrl(
         endpoint,
         subscriptionEndpoint,
