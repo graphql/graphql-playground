@@ -351,12 +351,7 @@ class GraphQLEditor extends React.PureComponent<Props & ReduxProps> {
   }
 
   handleClickReference = reference => {
-    if (
-      !this.activeSideTabContent ||
-      !this.activeSideTabContent.showDocFromType
-    ) {
-      this.openTab(0)
-    }
+    this.openTab(0)
 
     if (
       this.activeSideTabContent &&

@@ -147,7 +147,8 @@ class SideTabs extends React.Component<
   }
 
   openTab = idx => {
-    this.handleTabClick(idx)()
+    this.props.setDocsVisible(this.props.sessionId, true, idx)
+    return this.props.setWidth()
   }
 
   private setContentContainerRef = ref => {
