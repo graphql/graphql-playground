@@ -145,6 +145,7 @@ class GraphQLEditor extends React.PureComponent<Props & ReduxProps> {
   private httpHeadersRef
   private containerComponent
   private activeSideTabContent
+  private openTab
 
   componentDidMount() {
     // Ensure a form of a schema exists (including `null`) and
@@ -271,8 +272,9 @@ class GraphQLEditor extends React.PureComponent<Props & ReduxProps> {
           </EditorBar>
         </EditorWrapper>
         <SideTabs
-          setActiveContentRef={this.setSideTabActiveContentRef}
           setWidth={this.setDocsWidth}
+          openTabRef={this.setOpenTab}
+          setActiveContentRef={this.setSideTabActiveContentRef}
         >
           <SideTab label="Docs" activeColor="green" tabWidth="49px">
             <GraphDocs
@@ -325,6 +327,10 @@ class GraphQLEditor extends React.PureComponent<Props & ReduxProps> {
     this.resultComponent = ref
   }
 
+  setOpenTab = openTab => {
+    this.openTab = openTab
+  }
+
   setDocExplorerRef = ref => {
     if (ref) {
       this.docExplorerComponent = ref.getWrappedInstance()
@@ -345,8 +351,18 @@ class GraphQLEditor extends React.PureComponent<Props & ReduxProps> {
   }
 
   handleClickReference = reference => {
-    if (this.docExplorerComponent) {
-      this.docExplorerComponent.showDocFromType(reference.field || reference)
+    if (
+      !this.activeSideTabContent ||
+      !this.activeSideTabContent.showDocFromType
+    ) {
+      this.openTab(0)
+    }
+
+    if (
+      this.activeSideTabContent &&
+      this.activeSideTabContent.showDocFromType
+    ) {
+      this.activeSideTabContent.showDocFromType(reference.field || reference)
     }
   }
 

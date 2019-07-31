@@ -41,6 +41,7 @@ export interface Props {
   maxWidth: number
   setWidth: (props?: any) => any
   setActiveContentRef: (ref: any) => void
+  openTabRef: (openTab: (idx: number) => void) => void
 }
 
 export interface SideTabContentProps {
@@ -91,6 +92,11 @@ class SideTabs extends React.Component<
     if (!this.props.docs.activeTabIdx) {
       this.props.setDocsVisible(this.props.sessionId, false)
     }
+
+    if (this.props.openTabRef) {
+      this.props.openTabRef(this.openTab)
+    }
+
     return this.props.setWidth()
   }
 
@@ -138,6 +144,10 @@ class SideTabs extends React.Component<
 
   setRef = ref => {
     this.ref = ref
+  }
+
+  openTab = idx => {
+    this.handleTabClick(idx)()
   }
 
   private setContentContainerRef = ref => {
