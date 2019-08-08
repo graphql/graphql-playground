@@ -24,6 +24,9 @@ export interface ISettings {
   'editor.fontSize': number
   'editor.fontFamily': string
   'request.credentials': string
+  'schema.polling.enable': boolean
+  'schema.polling.endpointFilter': string
+  'schema.polling.interval': number
 }
 
 export interface EditorColours {
@@ -125,17 +128,17 @@ export function renderPlaygroundPage(options: RenderPageOptions) {
         font-family: "Open Sans", sans-serif;
         overflow: hidden;
       }
-  
+
       body {
         margin: 0;
         background: #172a3a;
       }
-  
+
       .playgroundIn {
         -webkit-animation: playgroundIn 0.5s ease-out forwards;
         animation: playgroundIn 0.5s ease-out forwards;
       }
-  
+
       @-webkit-keyframes playgroundIn {
         from {
           opacity: 0;
@@ -150,7 +153,7 @@ export function renderPlaygroundPage(options: RenderPageOptions) {
           transform: translateY(0);
         }
       }
-  
+
       @keyframes playgroundIn {
         from {
           opacity: 0;
@@ -171,10 +174,10 @@ export function renderPlaygroundPage(options: RenderPageOptions) {
     <script type="text/javascript">
       window.addEventListener('load', function (event) {
         ${loading.script}
-  
+
         const root = document.getElementById('root');
         root.classList.add('playgroundIn');
-  
+
         GraphQLPlayground.init(root, ${JSON.stringify(
           extendedOptions,
           null,
