@@ -1566,7 +1566,7 @@ chalk@2.1.0:
     escape-string-regexp "^1.0.5"
     supports-color "^4.0.0"
 
-chalk@2.4.1, chalk@^2.0.0, chalk@^2.0.1, chalk@^2.1.0, chalk@^2.3.0:
+chalk@2.4.1:
   version "2.4.1"
   resolved "https://registry.yarnpkg.com/chalk/-/chalk-2.4.1.tgz#18c49ab16a037b6eb0152cc83e3471338215b66e"
   dependencies:
@@ -1590,7 +1590,7 @@ chalk@^2.4.1:
     ansi-styles "^3.2.1"
     escape-string-regexp "^1.0.5"
     supports-color "^5.3.0"
-    
+
 chardet@^0.4.0:
   version "0.4.2"
   resolved "https://registry.yarnpkg.com/chardet/-/chardet-0.4.2.tgz#b5473b33dc97c424e5d98dc87d55d4d8a29c8bf2"
@@ -1759,20 +1759,33 @@ code-point-at@^1.0.0:
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/code-point-at/-/code-point-at-1.1.0.tgz#0d070b4d043a5bea33a2f1a40e2edb3d9a4ccf77"
 
-codemirror-graphql@^0.6.11, codemirror-graphql@timsuchanek/codemirror-graphql#details-fix:
+codemirror-graphql@^0.9.0:
+  version "0.9.0"
+  resolved "https://registry.yarnpkg.com/codemirror-graphql/-/codemirror-graphql-0.9.0.tgz#78647c9d11942a210d80fdf6d43c3da5f3b88afe"
+  integrity sha512-dB2V9zj0NYjR25Xt0/N0WA7V0yDaCDH4/6N61aBS8JS49y3CCwsW5m8IL0DXYunIfBUin/I9fFwiHL22/e/BHQ==
+  dependencies:
+    graphql-language-service-interface "^2.1.0"
+    graphql-language-service-parser "^1.3.0"
+
+codemirror-graphql@timsuchanek/codemirror-graphql#details-fix:
   version "0.6.12"
   resolved "https://codeload.github.com/timsuchanek/codemirror-graphql/tar.gz/801ec32683c38d6dc0f8f7bc19014a111edc9ebd"
   dependencies:
     graphql-language-service-interface "^1.0.18"
     graphql-language-service-parser "^1.0.18"
 
-codemirror@^5.18.2, codemirror@^5.26.0:
+codemirror@^5.18.2:
   version "5.33.0"
   resolved "https://registry.yarnpkg.com/codemirror/-/codemirror-5.33.0.tgz#462ad9a6fe8d38b541a9536a3997e1ef93b40c6a"
 
 codemirror@^5.38.0:
   version "5.38.0"
   resolved "https://registry.yarnpkg.com/codemirror/-/codemirror-5.38.0.tgz#26a9551446e51dbdde36aabe60f72469724fd332"
+
+codemirror@^5.47.0:
+  version "5.48.4"
+  resolved "https://registry.yarnpkg.com/codemirror/-/codemirror-5.48.4.tgz#4210fbe92be79a88f0eea348fab3ae78da85ce47"
+  integrity sha512-pUhZXDQ6qXSpWdwlgAwHEkd4imA0kf83hINmUEzJpmG80T/XLtDDEzZo8f6PQLuRCcUQhmzqqIo3ZPTRaWByRA==
 
 collection-visit@^1.0.0:
   version "1.0.0"
@@ -1937,6 +1950,13 @@ copy-to-clipboard@^3, copy-to-clipboard@^3.0.8:
   dependencies:
     toggle-selection "^1.0.3"
 
+copy-to-clipboard@^3.2.0:
+  version "3.2.0"
+  resolved "https://registry.yarnpkg.com/copy-to-clipboard/-/copy-to-clipboard-3.2.0.tgz#d2724a3ccbfed89706fac8a894872c979ac74467"
+  integrity sha512-eOZERzvCmxS8HWzugj4Uxl8OJxa7T2k1Gi0X5qavwydHIfuSHq2dTD09LOg/XyGq4Zpb5IsR/2OJ5lbOegz78w==
+  dependencies:
+    toggle-selection "^1.0.6"
+
 core-js@^1.0.0, core-js@^1.1.1:
   version "1.2.7"
   resolved "https://registry.yarnpkg.com/core-js/-/core-js-1.2.7.tgz#652294c14651db28fa93bd2d5ff2983a4f08c636"
@@ -2009,6 +2029,14 @@ cross-fetch@1.1.1:
   dependencies:
     node-fetch "1.7.3"
     whatwg-fetch "2.0.3"
+
+cross-fetch@2.2.2:
+  version "2.2.2"
+  resolved "https://registry.yarnpkg.com/cross-fetch/-/cross-fetch-2.2.2.tgz#a47ff4f7fc712daba8f6a695a11c948440d45723"
+  integrity sha1-pH/09/xxLauo9qaVoRyUhEDUVyM=
+  dependencies:
+    node-fetch "2.1.2"
+    whatwg-fetch "2.0.4"
 
 cross-spawn@5.1.0, cross-spawn@^5.0.1:
   version "5.1.0"
@@ -3441,13 +3469,16 @@ graceful-fs@^4.1.11, graceful-fs@^4.1.2, graceful-fs@^4.1.4, graceful-fs@^4.1.6,
   version "4.1.11"
   resolved "https://registry.yarnpkg.com/graceful-fs/-/graceful-fs-4.1.11.tgz#0e8bdfe4d1ddb8854d64e04ea7c00e2a026e5658"
 
-graphiql@^0.11.2:
-  version "0.11.11"
-  resolved "https://registry.yarnpkg.com/graphiql/-/graphiql-0.11.11.tgz#eeaf9a38927dbe8c6ecbf81e700735e16ec50e71"
+graphiql@^0.14.2:
+  version "0.14.2"
+  resolved "https://registry.yarnpkg.com/graphiql/-/graphiql-0.14.2.tgz#6dda66c8998794533e9c98a011bd1b3568462b21"
+  integrity sha512-4vhGm3nmJBtaOcjq6r4QeZ+zg+DA5fwn0OZXvgmyHO3J11xnp8n9PQP8IGrGWTJL6Ey1vNtOgn1VbSy2Ixwg6A==
   dependencies:
-    codemirror "^5.26.0"
-    codemirror-graphql "^0.6.11"
+    codemirror "^5.47.0"
+    codemirror-graphql "^0.9.0"
+    copy-to-clipboard "^3.2.0"
     markdown-it "^8.4.0"
+    regenerator-runtime "^0.13.3"
 
 graphql-config@1.1.4:
   version "1.1.4"
@@ -3470,6 +3501,17 @@ graphql-config@2.0.0:
     lodash "^4.17.4"
     minimatch "^3.0.4"
 
+graphql-config@2.2.1:
+  version "2.2.1"
+  resolved "https://registry.yarnpkg.com/graphql-config/-/graphql-config-2.2.1.tgz#5fd0ec77ac7428ca5fb2026cf131be10151a0cb2"
+  integrity sha512-U8+1IAhw9m6WkZRRcyj8ZarK96R6lQBQ0an4lp76Ps9FyhOXENC5YQOxOFGm5CxPrX2rD0g3Je4zG5xdNJjwzQ==
+  dependencies:
+    graphql-import "^0.7.1"
+    graphql-request "^1.5.0"
+    js-yaml "^3.10.0"
+    lodash "^4.17.4"
+    minimatch "^3.0.4"
+
 graphql-import@^0.1.7:
   version "0.1.9"
   resolved "https://registry.yarnpkg.com/graphql-import/-/graphql-import-0.1.9.tgz#9161f4f7ea92337b60fd40e22e64d3a68c212729"
@@ -3486,6 +3528,14 @@ graphql-import@^0.4.0:
     graphql "^0.12.3"
     lodash "^4.17.4"
 
+graphql-import@^0.7.1:
+  version "0.7.1"
+  resolved "https://registry.yarnpkg.com/graphql-import/-/graphql-import-0.7.1.tgz#4add8d91a5f752d764b0a4a7a461fcd93136f223"
+  integrity sha512-YpwpaPjRUVlw2SN3OPljpWbVRWAhMAyfSba5U47qGMOSsPLi2gYeJtngGpymjm9nk57RFWEpjqwh4+dpYuFAPw==
+  dependencies:
+    lodash "^4.17.4"
+    resolve-from "^4.0.0"
+
 graphql-language-service-interface@^1.0.18:
   version "1.0.18"
   resolved "https://registry.yarnpkg.com/graphql-language-service-interface/-/graphql-language-service-interface-1.0.18.tgz#c0fc1ef72c6f6f4bf9042bd7a8a8a66e0772caa8"
@@ -3495,6 +3545,16 @@ graphql-language-service-interface@^1.0.18:
     graphql-language-service-types "^1.0.18"
     graphql-language-service-utils "^1.0.18"
 
+graphql-language-service-interface@^2.1.0:
+  version "2.1.0"
+  resolved "https://registry.yarnpkg.com/graphql-language-service-interface/-/graphql-language-service-interface-2.1.0.tgz#d32cdd4808042694179eb59200b701468f20a669"
+  integrity sha512-GpVv1h03nahz7E6oUrYbtlNdi4zXZPhR+YDydM76lE4SiOuxYkUBup7qg0wPL1Y2dWxEDrV1FECbfbuudRWl5Q==
+  dependencies:
+    graphql-config "2.2.1"
+    graphql-language-service-parser "^1.3.0"
+    graphql-language-service-types "^1.3.0"
+    graphql-language-service-utils "^2.1.0"
+
 graphql-language-service-parser@^1.0.18:
   version "1.0.18"
   resolved "https://registry.yarnpkg.com/graphql-language-service-parser/-/graphql-language-service-parser-1.0.18.tgz#80fe714f244fc81bc0352d0008ecafdf8fa75fe8"
@@ -3502,11 +3562,26 @@ graphql-language-service-parser@^1.0.18:
     graphql-config "1.1.4"
     graphql-language-service-types "^1.0.18"
 
+graphql-language-service-parser@^1.3.0:
+  version "1.3.0"
+  resolved "https://registry.yarnpkg.com/graphql-language-service-parser/-/graphql-language-service-parser-1.3.0.tgz#55814c3776f6d583402af65df64a40d41c370387"
+  integrity sha512-IVW5EQts6CCm6G1pJzyOSNGv28Ia1afyx7gGIhDQkbXbNmShbNOneUWyURbawX9fL2A1AGhdA80fuCSLO8Jb9Q==
+  dependencies:
+    graphql-config "2.2.1"
+    graphql-language-service-types "^1.3.0"
+
 graphql-language-service-types@^1.0.18:
   version "1.0.18"
   resolved "https://registry.yarnpkg.com/graphql-language-service-types/-/graphql-language-service-types-1.0.18.tgz#0c9ebb6dd7babd61bf6b3bea0675abde5d7e5b16"
   dependencies:
     graphql-config "1.1.4"
+
+graphql-language-service-types@^1.3.0:
+  version "1.3.0"
+  resolved "https://registry.yarnpkg.com/graphql-language-service-types/-/graphql-language-service-types-1.3.0.tgz#f2778731b95c9a082bb8cbcafe30bc293f19a547"
+  integrity sha512-agVSOtvr1qKgURsNONI7pY6xRshVTTxhBSUZvyNDFKYma1P/uWK9xVuPyU4zMuXeugaWNGysWAf4VgP8SnawxA==
+  dependencies:
+    graphql-config "2.2.1"
 
 graphql-language-service-utils@^1.0.18:
   version "1.0.18"
@@ -3514,6 +3589,14 @@ graphql-language-service-utils@^1.0.18:
   dependencies:
     graphql-config "1.1.4"
     graphql-language-service-types "^1.0.18"
+
+graphql-language-service-utils@^2.1.0:
+  version "2.1.0"
+  resolved "https://registry.yarnpkg.com/graphql-language-service-utils/-/graphql-language-service-utils-2.1.0.tgz#3fed58fce2885d0b8336faf7270c3b61fb04d88c"
+  integrity sha512-ZUCyFeEbXUL63TxK37Uc+dbX+M7HGxCMIvaMN+HZpnpYb8ga71B7H9hg3z4zhPLbMecczuPNcmVlQhcmtClJ8A==
+  dependencies:
+    graphql-config "2.2.1"
+    graphql-language-service-types "^1.3.0"
 
 graphql-playground-html@1.5.6:
   version "1.5.6"
@@ -3526,6 +3609,13 @@ graphql-request@^1.4.0:
   resolved "https://registry.yarnpkg.com/graphql-request/-/graphql-request-1.4.1.tgz#0772743cfac8dfdd4d69d36106a96c9bdd191ce8"
   dependencies:
     cross-fetch "1.1.1"
+
+graphql-request@^1.5.0:
+  version "1.8.2"
+  resolved "https://registry.yarnpkg.com/graphql-request/-/graphql-request-1.8.2.tgz#398d10ae15c585676741bde3fc01d5ca948f8fbe"
+  integrity sha512-dDX2M+VMsxXFCmUX0Vo0TopIZIX4ggzOtiCsThgtrKR4niiaagsGTDIHj3fsOMFETpa064vzovI+4YV4QnMbcg==
+  dependencies:
+    cross-fetch "2.2.2"
 
 graphql@^0.11.7:
   version "0.11.7"
@@ -5562,6 +5652,11 @@ node-fetch@1.7.3, node-fetch@^1.0.1:
     encoding "^0.1.11"
     is-stream "^1.0.1"
 
+node-fetch@2.1.2:
+  version "2.1.2"
+  resolved "https://registry.yarnpkg.com/node-fetch/-/node-fetch-2.1.2.tgz#ab884e8e7e57e38a944753cec706f788d1768bb5"
+  integrity sha1-q4hOjn5X44qUR1POxwb3iNF2i7U=
+
 node-fingerprint@0.0.2:
   version "0.0.2"
   resolved "https://registry.yarnpkg.com/node-fingerprint/-/node-fingerprint-0.0.2.tgz#31cbabeb71a67ae7dd5a7dc042e51c3c75868501"
@@ -7094,6 +7189,11 @@ regenerator-runtime@^0.11.0:
   version "0.11.1"
   resolved "https://registry.yarnpkg.com/regenerator-runtime/-/regenerator-runtime-0.11.1.tgz#be05ad7f9bf7d22e056f9726cee5017fbf19e2e9"
 
+regenerator-runtime@^0.13.3:
+  version "0.13.3"
+  resolved "https://registry.yarnpkg.com/regenerator-runtime/-/regenerator-runtime-0.13.3.tgz#7cf6a77d8f5c6f60eb73c5fc1955b2ceb01e6bf5"
+  integrity sha512-naKIZz2GQ8JWh///G7L3X6LaQUAMp2lvb1rvwwsURe/VXwD6VMfr+/1NuNw3ag8v2kY1aQ/go5SNn79O9JU7yw==
+
 regenerator-transform@^0.10.0:
   version "0.10.1"
   resolved "https://registry.yarnpkg.com/regenerator-transform/-/regenerator-transform-0.10.1.tgz#1e4996837231da8b7f3cf4114d71b5691a0680dd"
@@ -7289,6 +7389,11 @@ resolve-dir@^1.0.0:
 resolve-from@^3.0.0:
   version "3.0.0"
   resolved "https://registry.yarnpkg.com/resolve-from/-/resolve-from-3.0.0.tgz#b22c7af7d9d6881bc8b6e653335eebcb0a188748"
+
+resolve-from@^4.0.0:
+  version "4.0.0"
+  resolved "https://registry.yarnpkg.com/resolve-from/-/resolve-from-4.0.0.tgz#4abcd852ad32dd7baabfe9b40e00a36db5f392e6"
+  integrity sha512-pb/MYmXstAkysRFx8piNI1tGFNQIFA3vkE3Gq4EuA1dF6gHp/+vgZqsCGJapvy8N3Q+4o7FwvquPJcnZ7RYy4g==
 
 resolve-pathname@^2.2.0:
   version "2.2.0"
@@ -8249,7 +8354,7 @@ to-regex@^3.0.1:
     extend-shallow "^2.0.1"
     regex-not "^1.0.0"
 
-toggle-selection@^1.0.3:
+toggle-selection@^1.0.3, toggle-selection@^1.0.6:
   version "1.0.6"
   resolved "https://registry.yarnpkg.com/toggle-selection/-/toggle-selection-1.0.6.tgz#6e45b1263f2017fa0acc7d89d78b15b8bf77da32"
 
@@ -8849,9 +8954,10 @@ whatwg-fetch@2.0.3:
   version "2.0.3"
   resolved "https://registry.yarnpkg.com/whatwg-fetch/-/whatwg-fetch-2.0.3.tgz#9c84ec2dcf68187ff00bc64e1274b442176e1c84"
 
-whatwg-fetch@>=0.10.0:
+whatwg-fetch@2.0.4, whatwg-fetch@>=0.10.0:
   version "2.0.4"
   resolved "https://registry.yarnpkg.com/whatwg-fetch/-/whatwg-fetch-2.0.4.tgz#dde6a5df315f9d39991aa17621853d720b85566f"
+  integrity sha512-dcQ1GWpOD/eEQ97k66aiEVpNnapVj90/+R+SXTPYGHpYBBypfKJEQjLrvMZ7YXbKm21gXd4NcuxUTjiv1YtLng==
 
 whatwg-url@^6.3.0:
   version "6.4.0"
