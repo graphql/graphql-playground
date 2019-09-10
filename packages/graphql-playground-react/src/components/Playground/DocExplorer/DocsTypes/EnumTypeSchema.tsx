@@ -1,6 +1,7 @@
 import * as React from 'react'
 import { styled } from '../../../../styled'
 import { DocType } from './DocType'
+import MarkdownContent from 'graphiql/dist/components/DocExplorer/MarkdownContent'
 
 export interface EnumTypeSchemaProps {
   type: any
@@ -45,11 +46,9 @@ interface ValueProps {
 const Value = ({ value, isDeprecated, first }: ValueProps) => (
   <DocsValue first={first}>
     <div className="field-name">{value.name}</div>
-    {value.description && (
-      <DocsValueComment>{value.description}</DocsValueComment>
-    )}
+    {value.description && <DocsValueComment markdown={value.description} />}
     {isDeprecated && (
-      <DocsValueComment>Deprecated: {value.deprecationReason}</DocsValueComment>
+      <DocsValueComment markdown={'Deprecated: ' + value.deprecationReason} />
     )}
   </DocsValue>
 )
@@ -66,7 +65,7 @@ const DocsValue = styled<DocsValueProps, 'div'>('div')`
   }
 `
 
-const DocsValueComment = styled.div`
+const DocsValueComment = styled(MarkdownContent)`
   padding: 0 16px;
   color: ${p => p.theme.colours.black50};
 `
