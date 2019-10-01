@@ -24,7 +24,7 @@ GraphQL Playground uses components of GraphiQL under the hood but is meant as a 
 - Configuration of HTTP headers
 - Tabs
 
-See the following question for more additonal features.
+See the following question for more additional features.
 
 ### What's the difference between the desktop app and the web version?
 
