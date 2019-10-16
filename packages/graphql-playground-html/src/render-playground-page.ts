@@ -24,6 +24,7 @@ export interface ISettings {
   'editor.fontSize': number
   'editor.fontFamily': string
   'request.credentials': string
+  'prettier.printWidth': number
 }
 
 export interface EditorColours {
