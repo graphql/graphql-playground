@@ -86,6 +86,11 @@ export class ConfigEditor extends React.Component<Props, {}> {
             this.props.onPrettifyQuery()
           }
         },
+        'Shift-Cmd-P': () => {
+          if (this.props.onPrettifyQuery) {
+            this.props.onPrettifyQuery()
+          }
+        },
 
         // Persistent search box in Query Editor
         'Cmd-F': 'findPersistent',
