@@ -46,10 +46,16 @@ export function setSubscriptionEndpoint(endpoint) {
   subscriptionEndpoint = endpoint
 }
 
+export interface CsrfHeader {
+  name: string
+  value: string
+}
+
 export interface LinkCreatorProps {
   endpoint: string
   headers?: Headers
   credentials?: string
+  csrf?: CsrfHeader
 }
 
 export interface Headers {
@@ -61,7 +67,15 @@ export const defaultLinkCreator = (
   subscriptionEndpoint?: string,
 ): { link: ApolloLink; subscriptionClient?: SubscriptionClient } => {
   let connectionParams = {}
-  const { headers, credentials } = session
+  let { headers } = session
+  const { credentials, csrf } = session
+
+  if (csrf) {
+    headers = {
+      ...headers,
+      [csrf.name]: csrf.value,
+    }
+  }
 
   if (headers) {
     connectionParams = { ...headers }
@@ -130,6 +144,7 @@ function* runQuerySaga(action) {
   const lol = {
     endpoint: session.endpoint,
     headers,
+    csrf: settings['csrf.header'],
     credentials: settings['request.credentials'],
   }
 

@@ -95,7 +95,14 @@ const customLinkCreator = (
   session: LinkCreatorProps,
   wsEndpoint?: string,
 ): { link: ApolloLink } => {
-  const { headers, credentials } = session
+  let { headers } = session
+  const { credentials, csrf } = session
+  if (csrf) {
+    headers = {
+      ...headers,
+      [csrf.name]: csrf.value,
+    }
+  }
 
   const link = new HttpLink({
     uri: session.endpoint,

@@ -12,9 +12,15 @@ export interface TracingSchemaTuple {
   tracingSupported: boolean
 }
 
+export interface CsrfHeader {
+  name: string
+  value: string
+}
+
 export interface SchemaFetchProps {
   endpoint: string
   headers?: string
+  csrf?: CsrfHeader
 }
 
 export type LinkGetter = (session: LinkCreatorProps) => { link: ApolloLink }
@@ -104,10 +110,13 @@ export class SchemaFetcher {
     session: SchemaFetchProps,
   ): Promise<{ schema: GraphQLSchema; tracingSupported: boolean } | null> {
     const hash = this.hash(session)
-    const { endpoint } = session
+    const { endpoint, csrf } = session
     const headers = {
       ...parseHeaders(session.headers),
       'X-Apollo-Tracing': '1',
+    }
+    if (csrf) {
+      headers[csrf.name] = csrf.value
     }
 
     const options = set(session, 'headers', headers) as any

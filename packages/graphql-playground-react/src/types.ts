@@ -16,7 +16,13 @@ export type Theme = 'dark' | 'light'
 
 export type CursorShape = 'line' | 'block' | 'underline'
 
+export interface CsrfHeader {
+  name: string
+  value: string
+}
+
 export interface ISettings {
+  ['csrf.header']?: CsrfHeader
   ['editor.cursorShape']: CursorShape
   ['editor.fontFamily']: string
   ['editor.fontSize']: number

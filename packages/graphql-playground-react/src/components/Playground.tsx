@@ -260,6 +260,7 @@ export class Playground extends React.PureComponent<Props & ReduxProps, State> {
             ? props.sessionHeaders
             : JSON.stringify(props.headers),
         credentials: props.settings['request.credentials'],
+        csrf: props.settings['csrf.header'],
       }
       const schema = await schemaFetcher.fetch(data)
       schemaFetcher.subscribe(data, newSchema => {
