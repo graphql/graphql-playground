@@ -451,7 +451,7 @@ const PlaygroundContainer = styled.div`
 `
 
 const GraphiqlsContainer = styled.div`
-  height: calc(100vh - 57px);
+  height: 100%;
   position: relative;
   overflow: hidden;
 `
