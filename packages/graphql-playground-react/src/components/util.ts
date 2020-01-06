@@ -1,11 +1,11 @@
 import { GraphQLConfig, GraphQLConfigEnpointConfig } from '../graphqlConfig'
 import { GraphQLSchema, printSchema } from 'graphql'
-import * as LRU from 'lru-cache'
+import LRUCache from 'lru-cache'
 
 export function getActiveEndpoints(
   config: GraphQLConfig,
   envName: string,
-  projectName?: string,
+  projectName?: string
 ): { endpoint: string; subscriptionEndpoint?: string; headers?: any } {
   if (projectName) {
     const env = config.projects![projectName].extensions!.endpoints![envName]!
@@ -17,12 +17,12 @@ export function getActiveEndpoints(
 }
 
 export function getEndpointFromEndpointConfig(
-  env: GraphQLConfigEnpointConfig | string,
+  env: GraphQLConfigEnpointConfig | string
 ) {
   if (typeof env === 'string') {
     return {
       endpoint: env,
-      subscriptionEndpoint: undefined,
+      subscriptionEndpoint: undefined
     }
   } else {
     return {
@@ -30,12 +30,14 @@ export function getEndpointFromEndpointConfig(
       subscriptionEndpoint: env.subscription
         ? env.subscription!.url
         : undefined,
-      headers: env.headers,
+      headers: env.headers
     }
   }
 }
 
-const printSchemaCache: LRU.Cache<GraphQLSchema, string> = new LRU({ max: 10 })
+const printSchemaCache: LRUCache<GraphQLSchema, string> = new LRUCache({
+  max: 10
+})
 /**
  * A cached version of `printSchema`
  * @param schema GraphQLSchema instance

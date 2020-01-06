@@ -4,18 +4,14 @@ import { Helmet } from 'react-helmet'
 import { GraphQLConfig } from '../graphqlConfig'
 import * as yaml from 'js-yaml'
 import ProjectsSideNav from './ProjectsSideNav'
-import {
-  styled,
-  ThemeProvider,
-  theme as styledTheme,
-  keyframes,
-} from '../styled'
+import { styled, ThemeProvider, keyframes } from '../styled'
 import {
   darkColours,
   lightColours,
   darkEditorColours,
   lightEditorColours,
   EditorColours,
+  theme as styledTheme
 } from '../styled/theme'
 // import OldThemeProvider from './Theme/ThemeProvider'
 import { getActiveEndpoints } from './util'
@@ -61,7 +57,7 @@ export interface PlaygroundWrapperProps {
   injectedState?: any
   createApolloLink?: (
     session: Session,
-    subscriptionEndpoint?: string,
+    subscriptionEndpoint?: string
   ) => ApolloLink
   tabs?: Tab[]
   schema?: { __schema: any } // introspection result
@@ -113,7 +109,7 @@ class PlaygroundWrapper extends React.Component<
       props.endpoint ||
       props.endpointUrl ||
       getParameterByName('endpoint') ||
-      location.href
+      window.location.href
 
     const result = this.extractEndpointAndHeaders(endpoint)
     endpoint = result.endpoint
@@ -143,7 +139,7 @@ class PlaygroundWrapper extends React.Component<
       configString: props.configString,
       activeEnv,
       activeProjectName: projectName,
-      headers,
+      headers
     }
   }
 
@@ -174,10 +170,10 @@ class PlaygroundWrapper extends React.Component<
     if (subscriptionEndpoint) {
       if (subscriptionEndpoint.startsWith('/')) {
         const secure =
-          endpoint.includes('https') || location.href.includes('https')
+          endpoint.includes('https') || window.location.href.includes('https')
             ? 's'
             : ''
-        return `ws${secure}://${location.host}${subscriptionEndpoint}`
+        return `ws${secure}://${window.location.host}${subscriptionEndpoint}`
       } else {
         return subscriptionEndpoint.replace(/^http/, 'ws')
       }
@@ -185,7 +181,7 @@ class PlaygroundWrapper extends React.Component<
 
     return this.getGraphcoolSubscriptionEndpoint(endpoint).replace(
       /^http/,
-      'ws',
+      'ws'
     )
   }
 
@@ -215,12 +211,12 @@ class PlaygroundWrapper extends React.Component<
   }
 
   getInitialActiveEnv(
-    config?: GraphQLConfig,
+    config?: GraphQLConfig
   ): { projectName?: string; activeEnv?: string } {
     if (config) {
       if (config.extensions && config.extensions.endpoints) {
         return {
-          activeEnv: Object.keys(config.extensions.endpoints)[0],
+          activeEnv: Object.keys(config.extensions.endpoints)[0]
         }
       }
       if (config.projects) {
@@ -229,7 +225,7 @@ class PlaygroundWrapper extends React.Component<
         if (project.extensions && project.extensions.endpoints) {
           return {
             activeEnv: Object.keys(project.extensions.endpoints)[0],
-            projectName,
+            projectName
           }
         }
       }
@@ -250,7 +246,7 @@ class PlaygroundWrapper extends React.Component<
 
   absolutizeUrl(url) {
     if (url.startsWith('/')) {
-      return location.origin + url
+      return window.location.origin + url
     }
 
     return url
@@ -309,7 +305,7 @@ class PlaygroundWrapper extends React.Component<
       const endpoints = getActiveEndpoints(
         props.config,
         activeEnv.activeEnv!,
-        activeEnv.projectName,
+        activeEnv.projectName
       )
       const endpoint = endpoints.endpoint
       const subscriptionEndpoint =
@@ -321,7 +317,7 @@ class PlaygroundWrapper extends React.Component<
         subscriptionEndpoint,
         headers,
         activeEnv: activeEnv.activeEnv,
-        activeProjectName: activeEnv.projectName,
+        activeProjectName: activeEnv.projectName
       })
     }
   }
@@ -355,27 +351,26 @@ class PlaygroundWrapper extends React.Component<
             colours: theme === 'dark' ? darkColours : lightColours,
             editorColours: {
               ...(theme === 'dark' ? darkEditorColours : lightEditorColours),
-              ...this.props.codeTheme,
+              ...this.props.codeTheme
             },
-            settings: this.props.settings,
+            settings: this.props.settings
           }}
         >
           <App>
-            {this.props.config &&
-              this.state.activeEnv && (
-                <ProjectsSideNav
-                  config={this.props.config}
-                  folderName={this.props.folderName || 'GraphQL App'}
-                  theme={theme}
-                  activeEnv={this.state.activeEnv}
-                  onSelectEnv={this.handleSelectEnv}
-                  onNewWorkspace={this.props.onNewWorkspace}
-                  showNewWorkspace={Boolean(this.props.showNewWorkspace)}
-                  isElectron={Boolean(this.props.isElectron)}
-                  activeProjectName={this.state.activeProjectName}
-                  configPath={this.props.configPath}
-                />
-              )}
+            {this.props.config && this.state.activeEnv && (
+              <ProjectsSideNav
+                config={this.props.config}
+                folderName={this.props.folderName || 'GraphQL App'}
+                theme={theme}
+                activeEnv={this.state.activeEnv}
+                onSelectEnv={this.handleSelectEnv}
+                onNewWorkspace={this.props.onNewWorkspace}
+                showNewWorkspace={Boolean(this.props.showNewWorkspace)}
+                isElectron={Boolean(this.props.isElectron)}
+                activeProjectName={this.state.activeProjectName}
+                configPath={this.props.configPath}
+              />
+            )}
             <Playground
               endpoint={this.state.endpoint}
               shareEnabled={this.props.shareEnabled}
@@ -437,7 +432,7 @@ class PlaygroundWrapper extends React.Component<
     const { endpoint, subscriptionEndpoint, headers } = getActiveEndpoints(
       this.props.config!,
       env,
-      projectName,
+      projectName
     )!
     this.setState({
       activeEnv: env,
@@ -445,9 +440,9 @@ class PlaygroundWrapper extends React.Component<
       headers,
       subscriptionEndpoint: this.normalizeSubscriptionUrl(
         endpoint,
-        subscriptionEndpoint,
+        subscriptionEndpoint
       ),
-      activeProjectName: projectName,
+      activeProjectName: projectName
     })
   }
 
@@ -477,7 +472,7 @@ class PlaygroundWrapper extends React.Component<
   private async updateSubscriptionsUrl() {
     const candidates = this.getSubscriptionsUrlCandidated(this.state.endpoint)
     const validCandidate = await find(candidates, candidate =>
-      this.wsEndpointValid(candidate),
+      this.wsEndpointValid(candidate)
     )
     if (validCandidate) {
       this.setState({ subscriptionEndpoint: validCandidate })
@@ -489,14 +484,14 @@ class PlaygroundWrapper extends React.Component<
     candidates.push(endpoint.replace('https', 'wss').replace('http', 'ws'))
     if (endpoint.includes('graph.cool')) {
       candidates.push(
-        `wss://subscriptions.graph.cool/v1/${this.getProjectId(endpoint)}`,
+        `wss://subscriptions.graph.cool/v1/${this.getProjectId(endpoint)}`
       )
     }
     if (endpoint.includes('/simple/v1/')) {
       // it's a graphcool local endpoint
       const host = endpoint.match(/https?:\/\/(.*?)\//)
       candidates.push(
-        `ws://${host![1]}/subscriptions/v1/${this.getProjectId(endpoint)}`,
+        `ws://${host![1]}/subscriptions/v1/${this.getProjectId(endpoint)}`
       )
     }
     return candidates
@@ -534,14 +529,11 @@ const mapStateToProps = (state, ownProps) => {
   return { theme, settings }
 }
 
-export default connect(
-  mapStateToProps,
-  { injectTabs },
-)(PlaygroundWrapper)
+export default connect(mapStateToProps, { injectTabs })(PlaygroundWrapper)
 
 async function find(
   iterable: any[],
-  predicate: (item?: any, index?: number) => Promise<boolean>,
+  predicate: (item?: any, index?: number) => Promise<boolean>
 ): Promise<any | null> {
   for (let i = 0; i < iterable.length; i++) {
     const element = iterable[i]

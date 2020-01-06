@@ -19,7 +19,7 @@ export interface ReduxProps {
 const defaultResponseRecord = new ResponseRecord({
   date: '',
   time: new Date(),
-  resultID: 'default-id',
+  resultID: 'default-id'
 })
 
 const Results: React.SFC<Props & ReduxProps> = ({ setRef, responses }) => {
@@ -29,14 +29,13 @@ const Results: React.SFC<Props & ReduxProps> = ({ setRef, responses }) => {
     <ResultWindow ref={setRef} isSubscription={isSubscription}>
       {responses.size <= 1 ? (
         <Response key={'first'} isSubscription={isSubscription}>
-          {responses.size > 1 &&
-            response1.time && (
-              <SubscriptionTime>
-                <SubscriptionTimeText>
-                  {ageOfDate(response1.time)}
-                </SubscriptionTimeText>
-              </SubscriptionTime>
-            )}
+          {responses.size > 1 && response1.time && (
+            <SubscriptionTime>
+              <SubscriptionTimeText>
+                {ageOfDate(response1.time)}
+              </SubscriptionTimeText>
+            </SubscriptionTime>
+          )}
           <ResultWrapper isSubscription={isSubscription}>
             <ResultViewer
               value={response1.date}
@@ -50,14 +49,13 @@ const Results: React.SFC<Props & ReduxProps> = ({ setRef, responses }) => {
             key={response.resultID || String(response.time)}
             isSubscription={isSubscription}
           >
-            {responses.size > 1 &&
-              response.time && (
-                <SubscriptionTime>
-                  <SubscriptionTimeText>
-                    {ageOfDate(response.time)}
-                  </SubscriptionTimeText>
-                </SubscriptionTime>
-              )}
+            {responses.size > 1 && response.time && (
+              <SubscriptionTime>
+                <SubscriptionTimeText>
+                  {ageOfDate(response.time)}
+                </SubscriptionTimeText>
+              </SubscriptionTime>
+            )}
             <ResultWrapper isSubscription={responses.size > 1}>
               <ResultViewer
                 value={response.date}
@@ -72,7 +70,7 @@ const Results: React.SFC<Props & ReduxProps> = ({ setRef, responses }) => {
 }
 
 const mapStateToProps = createStructuredSelector({
-  responses: getResponses,
+  responses: getResponses
 })
 
 export default connect(mapStateToProps)(Results)

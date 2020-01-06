@@ -1,17 +1,14 @@
 import { Record } from 'immutable'
 import { handleActions } from 'redux-actions'
 
-export class SharingState extends Record({
+const SharingStateRecord = Record({
   history: false,
   headers: true,
   allTabs: true,
-  shareUrl: null,
-}) {
-  history: boolean
-  headers: boolean
-  allTabs: boolean
-  shareUrl: any // go away typescript
-}
+  shareUrl: null
+})
+
+export class SharingState extends SharingStateRecord {}
 
 export default handleActions(
   {
@@ -19,7 +16,7 @@ export default handleActions(
     TOGGLE_SHARE_HEADERS: state => state.set('headers', !state.headers),
     TOGGLE_SHARE_ALL_TABS: state => state.set('allTabs', !state.allTabs),
     SET_SHARE_URL: (state, { payload: { shareUrl } }) =>
-      state.set('shareUrl', shareUrl),
+      state.set('shareUrl', shareUrl)
   },
-  new SharingState(),
+  new SharingState()
 )

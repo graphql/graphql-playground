@@ -61,7 +61,7 @@ export class SettingsEditor extends React.Component<Props, {}> {
   }
 }
 const playgroundSettingsSelector = createStructuredSelector({
-  value: getSettingsString,
+  value: getSettingsString
 })
 
 interface HOCProps {
@@ -103,25 +103,19 @@ class SettingsEditorHOC extends React.Component<
   }
 }
 
-export const PlaygroundSettingsEditor = connect(
-  playgroundSettingsSelector,
-  {
-    onSave: setSettingsString,
-    editSettings,
-    saveSettings,
-  },
-)(SettingsEditorHOC)
+export const PlaygroundSettingsEditor = connect(playgroundSettingsSelector, {
+  onSave: setSettingsString,
+  editSettings,
+  saveSettings
+})(SettingsEditorHOC)
 
 const configSelector = createStructuredSelector({
-  value: getConfigString,
+  value: getConfigString
 })
 
-export const GraphQLConfigEditor = connect(
-  configSelector,
-  {
-    onChange: setConfigString,
-  },
-)(SettingsEditor)
+export const GraphQLConfigEditor = connect(configSelector, {
+  onChange: setConfigString
+})(SettingsEditor)
 
 const Wrapper = styled.div`
   background: ${p => p.theme.editorColours.resultBackground};

@@ -6,7 +6,7 @@ import { connect } from 'react-redux'
 import { createStructuredSelector } from 'reselect'
 import {
   getSessionsArray,
-  getSelectedSessionIdFromRoot,
+  getSelectedSessionIdFromRoot
 } from '../../state/sessions/selectors'
 import { Session } from '../../state/sessions/reducers'
 import { reorderTabs } from '../../state/sessions/actions'
@@ -14,7 +14,7 @@ import {
   SortableContainer,
   SortableElement,
   SortStart,
-  SortEnd,
+  SortEnd
 } from 'react-sortable-hoc'
 
 export interface Props {
@@ -90,13 +90,10 @@ class TabBar extends React.PureComponent<Props & ReduxProps, State> {
 
 const mapStateToProps = createStructuredSelector({
   sessions: getSessionsArray,
-  selectedSessionId: getSelectedSessionIdFromRoot,
+  selectedSessionId: getSelectedSessionIdFromRoot
 })
 
-export default connect(
-  mapStateToProps,
-  { reorderTabs },
-)(TabBar)
+export default connect(mapStateToProps, { reorderTabs })(TabBar)
 
 const StyledTabBar = styled.div`
   color: white;

@@ -16,6 +16,7 @@
     "skipLibCheck": true,
     "strictNullChecks": true,
     "suppressImplicitAnyIndexErrors": true,
+    "esModuleInterop": true,
     "noUnusedLocals": true,
     "declaration": true,
     "plugins": [

@@ -20,11 +20,11 @@ import {
   editName,
   setResponseExtensions,
   setCurrentQueryStartTime,
-  setCurrentQueryEndTime,
+  setCurrentQueryEndTime
 } from './actions'
 import { getSelectedSessionId } from './selectors'
 import { getDefaultSession, defaultQuery } from '../../constants'
-import * as cuid from 'cuid'
+import cuid from 'cuid'
 import { formatError } from './fetchingSagas'
 import { arrayMove } from 'react-sortable-hoc'
 
@@ -44,8 +44,7 @@ export interface Tab {
   headers?: { [key: string]: string }
 }
 
-// tslint:disable
-export class Session extends Record(getDefaultSession('')) {
+export interface ISessionRecord {
   id: string
   endpoint: string
 
@@ -99,19 +98,24 @@ export class Session extends Record(getDefaultSession('')) {
   docExplorerWidth: number
   changed?: boolean
   scrollTop?: number
+}
 
+const SessionRecord = Record<ISessionRecord>(getDefaultSession(''))
+
+// tslint:disable
+export class Session extends SessionRecord {
   toJSON() {
     const obj = this.toObject()
     const override: any = {
       queryRunning: false,
       subscriptionActive: false,
-      responseExtensions: {},
+      responseExtensions: {}
     }
     // dont serialize very big responses as the localStorage size is limited
     if (
       obj.responses &&
       obj.responses.size > 0 &&
-      (obj.responses.size > 20 || obj.responses.get(0).date.length > 2000)
+      (obj.responses.size > 20 || obj.responses.get(0)!.date.length > 2000)
     ) {
       override.responses = List()
     }
@@ -138,17 +142,14 @@ export interface ResponseType {
   time: Date
 }
 
-export class ResponseRecord extends Record({
+const ResponseRecordObj = Record({
   resultID: '',
   date: '',
   time: new Date(),
-  isSchemaError: false,
-}) {
-  resultID: string
-  date: string
-  time: Date
-  isSchemaError: boolean
-}
+  isSchemaError: false
+})
+
+export class ResponseRecord extends ResponseRecordObj {}
 
 function makeSession(endpoint = '') {
   return new Session({ endpoint }).set('id', cuid())
@@ -161,21 +162,18 @@ export function sessionFromTab(tab: Tab): Session {
     responses:
       tab.responses && tab.responses.length > 0
         ? List(tab.responses.map(r => new ResponseRecord({ date: r })))
-        : List(),
+        : List()
   }).set('id', cuid())
 }
 
-export class SessionState extends Record({
+const SessionStateRecord = Record({
   sessions: OrderedMap({}),
   selectedSessionId: '',
   sessionCount: 0,
-  headers: '',
-}) {
-  sessions: OrderedMap<string, Session>
-  selectedSessionId: string
-  sessionCount: number
-  headers: string
-}
+  headers: ''
+})
+
+export class SessionState extends SessionStateRecord {}
 
 export function makeSessionState(endpoint) {
   const session = new Session({ endpoint: endpoint || '' })
@@ -183,7 +181,7 @@ export function makeSessionState(endpoint) {
   return new SessionState({
     sessions: OrderedMap({ [session.id]: session }),
     selectedSessionId: session.id,
-    sessionCount: 1,
+    sessionCount: 1
   })
 }
 
@@ -209,7 +207,7 @@ const reducer = handleActions(
       editName,
       setResponseExtensions,
       setCurrentQueryStartTime,
-      setCurrentQueryEndTime,
+      setCurrentQueryEndTime
     )]: (state, { payload }) => {
       const keys = Object.keys(payload)
       const keyName = keys.length === 1 ? keys[0] : keys[1]
@@ -221,52 +219,52 @@ const reducer = handleActions(
         .setIn(['sessions', getSelectedSessionId(state), 'queryRunning'], true)
         .setIn(
           ['sessions', getSelectedSessionId(state), 'responseExtensions'],
-          undefined,
+          undefined
         )
     },
     CLOSE_TRACING: (state, { payload: { responseTracingHeight } }) => {
       return state.mergeDeepIn(
         ['sessions', getSelectedSessionId(state)],
-        Map({ responseTracingHeight, responseTracingOpen: false }),
+        Map({ responseTracingHeight, responseTracingOpen: false })
       )
     },
     TOGGLE_TRACING: state => {
       const path = [
         'sessions',
         getSelectedSessionId(state),
-        'responseTracingOpen',
+        'responseTracingOpen'
       ]
       return state.setIn(path, !state.getIn(path))
     },
     OPEN_TRACING: (state, { payload: { responseTracingHeight } }) => {
       return state.mergeDeepIn(
         ['sessions', getSelectedSessionId(state)],
-        Map({ responseTracingHeight, responseTracingOpen: true }),
+        Map({ responseTracingHeight, responseTracingOpen: true })
       )
     },
     CLOSE_VARIABLES: (state, { payload: { variableEditorHeight } }) => {
       return state.mergeDeepIn(
         ['sessions', getSelectedSessionId(state)],
-        Map({ variableEditorHeight, variableEditorOpen: false }),
+        Map({ variableEditorHeight, variableEditorOpen: false })
       )
     },
     OPEN_VARIABLES: (state, { payload: { variableEditorHeight } }) => {
       return state.mergeDeepIn(
         ['sessions', getSelectedSessionId(state)],
-        Map({ variableEditorHeight, variableEditorOpen: true }),
+        Map({ variableEditorHeight, variableEditorOpen: true })
       )
     },
     TOGGLE_VARIABLES: state => {
       const path = [
         'sessions',
         getSelectedSessionId(state),
-        'variableEditorOpen',
+        'variableEditorOpen'
       ]
       return state.setIn(path, !state.getIn(path))
     },
     ADD_RESPONSE: (state, { payload: { response, sessionId } }) => {
       return state.updateIn(['sessions', sessionId, 'responses'], responses =>
-        responses.push(response),
+        responses.push(response)
       )
     },
     SET_RESPONSE: (state, { payload: { response, sessionId } }) => {
@@ -275,25 +273,25 @@ const reducer = handleActions(
     CLEAR_RESPONSES: state => {
       return state.setIn(
         ['sessions', getSelectedSessionId(state), 'responses'],
-        List(),
+        List()
       )
     },
     FETCH_SCHEMA: state => {
       return state.setIn(
         ['sessions', getSelectedSessionId(state), 'isReloadingSchema'],
-        true,
+        true
       )
     },
     REFETCH_SCHEMA: state => {
       return state.setIn(
         ['sessions', getSelectedSessionId(state), 'isReloadingSchema'],
-        true,
+        true
       )
     },
     STOP_QUERY: (state, { payload: { sessionId } }) => {
       return state.mergeIn(['sessions', sessionId], {
         queryRunning: false,
-        subscriptionActive: false,
+        subscriptionActive: false
       })
     },
     SET_SCROLL_TOP: (state, { payload: { sessionId, scrollTop } }) => {
@@ -309,12 +307,13 @@ const reducer = handleActions(
           const data: any = {
             tracingSupported: payload.tracingSupported,
             isReloadingSchema: false,
-            endpointUnreachable: false,
+            endpointUnreachable: false
           }
           const response = session.responses ? session.responses!.first() : null
           if (
             response &&
             session.responses!.size === 1 &&
+            // @ts-ignore
             response.isSchemaError
           ) {
             data.responses = List([])
@@ -330,8 +329,8 @@ const reducer = handleActions(
         if (session.get('endpoint') === payload.endpoint) {
           return session.merge(
             Map({
-              endpointUnreachable: true,
-            }),
+              endpointUnreachable: true
+            })
           )
         }
         return session
@@ -352,7 +351,7 @@ const reducer = handleActions(
                 resultID: cuid(),
                 isSchemaError: true,
                 date: JSON.stringify(formatError(payload.error, true), null, 2),
-                time: new Date(),
+                time: new Date()
               })
             }
             responses = List([response])
@@ -362,8 +361,8 @@ const reducer = handleActions(
             Map({
               isReloadingSchema: false,
               endpointUnreachable: true,
-              responses,
-            }),
+              responses
+            })
           )
         }
         return session
@@ -375,14 +374,14 @@ const reducer = handleActions(
     OPEN_SETTINGS_TAB: (state: any) => {
       let newState = state
       let settingsTab = state.sessions.find(value =>
-        value.get('isSettingsTab', false),
+        value.get('isSettingsTab', false)
       )
       if (!settingsTab) {
         settingsTab = makeSession().merge({
           isSettingsTab: true,
           isFile: true,
           name: 'Settings',
-          changed: false,
+          changed: false
         })
         newState = newState.setIn(['sessions', settingsTab.id], settingsTab)
       }
@@ -391,14 +390,14 @@ const reducer = handleActions(
     OPEN_CONFIG_TAB: state => {
       let newState = state
       let configTab = state.sessions.find(value =>
-        value.get('isConfigTab', false),
+        value.get('isConfigTab', false)
       )
       if (!configTab) {
         configTab = makeSession().merge({
           isConfigTab: true,
           isFile: true,
           name: 'GraphQL Config',
-          changed: false,
+          changed: false
         })
         newState = newState.setIn(['sessions', configTab.id], configTab)
       }
@@ -407,7 +406,7 @@ const reducer = handleActions(
     NEW_FILE_TAB: (state, { payload: { fileName, filePath, file } }) => {
       let newState = state
       let fileTab = state.sessions.find(
-        value => value.get('name', '') === fileName,
+        value => value.get('name', '') === fileName
       )
       if (!fileTab) {
         fileTab = makeSession().merge({
@@ -415,7 +414,7 @@ const reducer = handleActions(
           name: fileName,
           changed: false,
           file,
-          filePath,
+          filePath
         })
         newState = newState.setIn(['sessions', fileTab.id], fileTab)
       }
@@ -428,13 +427,13 @@ const reducer = handleActions(
       const newSession: any = {
         query: '',
         isReloadingSchema: currentSession.isReloadingSchema,
-        endpointUnreachable: currentSession.endpointUnreachable,
+        endpointUnreachable: currentSession.endpointUnreachable
       }
       if (currentSession.endpointUnreachable) {
         newSession.responses = currentSession.responses
       }
       let session = makeSession(endpoint || currentSession.endpoint).merge(
-        newSession,
+        newSession
       )
       if (reuseHeaders) {
         const selectedSessionId = getSelectedSessionId(state)
@@ -468,7 +467,7 @@ const reducer = handleActions(
       if (currentSession.query === defaultQuery) {
         return newState.setIn(
           ['sessions', selectedSessionId, 'headers'],
-          headersString,
+          headersString
         )
       }
 
@@ -496,7 +495,7 @@ const reducer = handleActions(
       const selectedSessionId = getSelectedSessionId(state)
       return closeTab(state, selectedSessionId).set(
         'sessionCount',
-        state.sessions.size - 1,
+        state.sessions.size - 1
       )
     },
     SELECT_NEXT_TAB: state => {
@@ -529,7 +528,7 @@ const reducer = handleActions(
     CLOSE_TAB: (state, { payload: { sessionId } }) => {
       return closeTab(state, sessionId).set(
         'sessionCount',
-        state.sessions.size - 1,
+        state.sessions.size - 1
       )
     },
     REORDER_TABS: (state, { payload: { src, dest } }) => {
@@ -550,41 +549,41 @@ const reducer = handleActions(
     EDIT_SETTINGS: state => {
       return state.setIn(
         ['sessions', getSelectedSessionId(state), 'changed'],
-        true,
+        true
       )
     },
     SAVE_SETTINGS: state => {
       return state.setIn(
         ['sessions', getSelectedSessionId(state), 'changed'],
-        false,
+        false
       )
     },
     EDIT_CONFIG: state => {
       return state.setIn(
         ['sessions', getSelectedSessionId(state), 'changed'],
-        true,
+        true
       )
     },
     SAVE_CONFIG: state => {
       return state.setIn(
         ['sessions', getSelectedSessionId(state), 'changed'],
-        false,
+        false
       )
     },
     EDIT_FILE: state => {
       return state.setIn(
         ['sessions', getSelectedSessionId(state), 'changed'],
-        true,
+        true
       )
     },
     SAVE_FILE: state => {
       return state.setIn(
         ['sessions', getSelectedSessionId(state), 'changed'],
-        false,
+        false
       )
-    },
+    }
   },
-  makeSessionState(''),
+  makeSessionState('')
 )
 
 // add a self-healing wrapper to clean up broken states
@@ -608,7 +607,7 @@ function closeTab(state, sessionId) {
       query: '',
       headers: session.headers,
       isReloadingSchema: session.isReloadingSchema,
-      endpointUnreachable: session.endpointUnreachable,
+      endpointUnreachable: session.endpointUnreachable
     }
     if (session.endpointUnreachable) {
       newSessionData.responses = session.responses

@@ -1,13 +1,13 @@
 import * as React from 'react'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
-import * as keycode from 'keycode'
+import keycode from 'keycode'
 import { getLeft } from 'graphiql/dist/utility/elementPosition'
 import {
   addStack,
   toggleDocs,
   changeKeyMove,
-  setDocsVisible,
+  setDocsVisible
 } from '../../../state/docs/actions'
 import { GraphQLSchema } from 'graphql'
 import { getSessionDocs } from '../../../state/docs/selectors'
@@ -72,7 +72,7 @@ class SideTabs extends React.Component<
       this.props.setDocsVisible(
         this.props.sessionId,
         true,
-        this.props.docs.activeTabIdx,
+        this.props.docs.activeTabIdx
       )
     }
     if (prevProps.activeTabIdx && !this.props.docs.activeTabIdx) {
@@ -111,9 +111,9 @@ class SideTabs extends React.Component<
                 ...child.props,
                 key: index,
                 onClick: this.handleTabClick(index),
-                active: index === activeTabIdx,
+                active: index === activeTabIdx
               })
-            },
+            }
           )}
         </TabsContainer>
         <TabContentResizer onMouseDown={this.handleDocsResizeStart} />
@@ -129,7 +129,7 @@ class SideTabs extends React.Component<
             React.cloneElement(activeTab.props.children, {
               ...activeTab.props,
               ref: this.props.setActiveContentRef,
-              setWidth: this.props.setWidth,
+              setWidth: this.props.setWidth
             })}
         </TabContentContainer>
       </Tabs>
@@ -153,7 +153,7 @@ class SideTabs extends React.Component<
       this.props.setDocsVisible(
         this.props.sessionId,
         false,
-        this.props.docs.activeTabIdx,
+        this.props.docs.activeTabIdx
       )
       this.props.setDocsVisible(this.props.sessionId, true, idx)
       return this.props.setWidth()
@@ -205,13 +205,13 @@ class SideTabs extends React.Component<
         this.props.setDocsVisible(
           this.props.sessionId,
           false,
-          this.props.docs.activeTabIdx,
+          this.props.docs.activeTabIdx
         )
       } else {
         this.props.setDocsVisible(
           this.props.sessionId,
           true,
-          this.props.docs.activeTabIdx,
+          this.props.docs.activeTabIdx
         )
         this.props.changeWidthDocs(this.props.sessionId, docsSize)
       }
@@ -250,21 +250,21 @@ const mapDispatchToProps = dispatch =>
       addStack,
       toggleDocs,
       changeKeyMove,
-      setDocsVisible,
+      setDocsVisible
     },
-    dispatch,
+    dispatch
   )
 
 const mapStateToProps = createStructuredSelector({
   docs: getSessionDocs,
-  sessionId: getSelectedSessionIdFromRoot,
+  sessionId: getSelectedSessionIdFromRoot
 })
 
 const ConnectedGraphDocs = connect<StateFromProps, DispatchFromProps, Props>(
   mapStateToProps,
   mapDispatchToProps,
   null,
-  { withRef: true },
+  { forwardRef: true }
 )(SideTabs)
 
 ConnectedGraphDocs.Tab = SideTab

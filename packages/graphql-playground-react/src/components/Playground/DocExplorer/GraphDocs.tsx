@@ -1,7 +1,7 @@
 import * as React from 'react'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
-import * as keycode from 'keycode'
+import keycode from 'keycode'
 import FieldDoc from './FieldDoc'
 import ColumnDoc from './ColumnDoc'
 import {
@@ -9,7 +9,7 @@ import {
   toggleDocs,
   changeWidthDocs,
   changeKeyMove,
-  setDocsVisible,
+  setDocsVisible
 } from '../../../state/docs/actions'
 import Spinner from '../../Spinner'
 import { columnWidth } from '../../../constants'
@@ -18,7 +18,7 @@ import {
   serialize,
   getElementRoot,
   serializeRoot,
-  getElement,
+  getElement
 } from '../util/stack'
 import { getSessionDocs } from '../../../state/docs/selectors'
 import { getSelectedSessionIdFromRoot } from '../../../state/sessions/selectors'
@@ -60,7 +60,7 @@ class GraphDocs extends React.Component<
     super(props)
     this.state = {
       searchValue: '',
-      widthMap: {},
+      widthMap: {}
     }
     ;(window as any).d = this
   }
@@ -85,7 +85,7 @@ class GraphDocs extends React.Component<
   getWidth(props: any = this.props) {
     const rootWidth = this.state.widthMap.root || columnWidth
     const stackWidths = props.docs.navStack.map(
-      stack => this.state.widthMap[stack.field.path] || columnWidth,
+      stack => this.state.widthMap[stack.field.path] || columnWidth
     )
 
     return [rootWidth].concat(stackWidths).reduce((acc, curr) => acc + curr, 0)
@@ -115,16 +115,15 @@ class GraphDocs extends React.Component<
         ref={this.setRef}
       >
         {emptySchema && <ColumnDoc>{emptySchema}</ColumnDoc>}
-        {!emptySchema &&
-          schema && (
-            <RootColumn
-              schema={schema}
-              width={this.state.widthMap.root || columnWidth - 1}
-              searchValue={this.state.searchValue}
-              handleSearch={this.handleSearch}
-              sessionId={this.props.sessionId}
-            />
-          )}
+        {!emptySchema && schema && (
+          <RootColumn
+            schema={schema}
+            width={this.state.widthMap.root || columnWidth - 1}
+            searchValue={this.state.searchValue}
+            handleSearch={this.handleSearch}
+            sessionId={this.props.sessionId}
+          />
+        )}
         {navStack.map((stack, index) => (
           <ColumnDoc
             key={index}
@@ -184,7 +183,7 @@ class GraphDocs extends React.Component<
             this.props.sessionId,
             beforeLastNavStack.field,
             beforeLastNavStack.x,
-            beforeLastNavStack.y,
+            beforeLastNavStack.y
           )
         }
         break
@@ -197,7 +196,7 @@ class GraphDocs extends React.Component<
               this.props.sessionId,
               firstElement,
               lastNavStack.x + 1,
-              0,
+              0
             )
           }
         } else {
@@ -214,14 +213,14 @@ class GraphDocs extends React.Component<
           const obj = serialize(this.props.schema, beforeLastNavStack.field)
           const element = getElement(
             obj,
-            keyPressed === 'up' ? lastNavStack.y - 1 : lastNavStack.y + 1,
+            keyPressed === 'up' ? lastNavStack.y - 1 : lastNavStack.y + 1
           )
           if (element) {
             this.props.addStack(
               this.props.sessionId,
               element,
               lastNavStack.x,
-              keyPressed === 'up' ? lastNavStack.y - 1 : lastNavStack.y + 1,
+              keyPressed === 'up' ? lastNavStack.y - 1 : lastNavStack.y + 1
             )
           }
         } else {
@@ -229,14 +228,14 @@ class GraphDocs extends React.Component<
           const y = lastNavStack ? lastNavStack.y : 0
           const element = getElementRoot(
             obj,
-            keyPressed === 'up' ? y - 1 : y + 1,
+            keyPressed === 'up' ? y - 1 : y + 1
           )
           if (element) {
             this.props.addStack(
               this.props.sessionId,
               element,
               0,
-              keyPressed === 'up' ? y - 1 : y + 1,
+              keyPressed === 'up' ? y - 1 : y + 1
             )
           }
         }
@@ -252,21 +251,21 @@ const mapDispatchToProps = dispatch =>
       toggleDocs,
       changeWidthDocs,
       changeKeyMove,
-      setDocsVisible,
+      setDocsVisible
     },
-    dispatch,
+    dispatch
   )
 
 const mapStateToProps = createStructuredSelector({
   docs: getSessionDocs,
-  sessionId: getSelectedSessionIdFromRoot,
+  sessionId: getSelectedSessionIdFromRoot
 })
 
 export default connect<StateFromProps, DispatchFromProps, SideTabContentProps>(
   mapStateToProps,
   mapDispatchToProps,
   null,
-  { withRef: true },
+  { forwardRef: true }
 )(GraphDocs)
 
 const DocsExplorerContainer = styled.div`

@@ -4,20 +4,21 @@ import ToggleButton from './ToggleButton'
 import Tooltip from './Tooltip'
 import { Button } from './Button'
 import Copy from './Copy'
-import { keyframes, styled, ThemeInterface, withTheme } from '../styled'
+import { keyframes, styled, withTheme } from '../styled'
+import { ThemeInterface } from '../styled/theme'
 import { connect } from 'react-redux'
 import { createStructuredSelector } from 'reselect'
 import {
   getSharingHistory,
   getSharingHeaders,
   getSharingAllTabs,
-  getShareUrl,
+  getShareUrl
 } from '../state/sharing/selectors'
 import {
   toggleShareHistory,
   toggleShareHeaders,
   toggleShareAllTabs,
-  share,
+  share
 } from '../state/sharing/actions'
 
 export interface SharingProps {
@@ -45,7 +46,7 @@ class Share extends React.Component<SharingProps, State> {
   constructor(props) {
     super(props)
     this.state = {
-      open: false,
+      open: false
     }
   }
   render() {
@@ -62,7 +63,7 @@ class Share extends React.Component<SharingProps, State> {
                 onClose={this.toggleTooltip}
                 anchorOrigin={{
                   horizontal: 'right',
-                  vertical: 'bottom',
+                  vertical: 'bottom'
                 }}
                 renderAfterContent={this.renderAuthSharingWarning}
               >
@@ -145,19 +146,16 @@ const mapStateToProps = createStructuredSelector({
   history: getSharingHistory,
   headers: getSharingHeaders,
   allTabs: getSharingAllTabs,
-  shareUrl: getShareUrl,
+  shareUrl: getShareUrl
 })
 
 export default withTheme(
-  connect(
-    mapStateToProps,
-    {
-      toggleShareAllTabs,
-      toggleShareHeaders,
-      toggleShareHistory,
-      share,
-    },
-  )(Share),
+  connect(mapStateToProps, {
+    toggleShareAllTabs,
+    toggleShareHeaders,
+    toggleShareHistory,
+    share
+  })(Share)
 )
 
 const AuthSharingWarning = () => (

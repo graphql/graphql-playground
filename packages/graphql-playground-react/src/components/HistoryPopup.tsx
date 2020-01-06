@@ -35,11 +35,11 @@ export interface State {
 class HistoryPopup extends React.Component<ReduxProps, State> {
   constructor(props: ReduxProps) {
     super(props)
-    const selectedItemIndex = props.items.keySeq().first() || ''
+    const selectedItemIndex = (props.items.keySeq().first() as string) || ''
     this.state = {
       selectedFilter: 'HISTORY',
       selectedItemIndex,
-      searchTerm: '',
+      searchTerm: ''
     }
   }
   render() {
@@ -54,7 +54,7 @@ class HistoryPopup extends React.Component<ReduxProps, State> {
     })
 
     let selectedItem = this.props.items.get(
-      this.state.selectedItemIndex!,
+      this.state.selectedItemIndex!
     ) as any
     selectedItem =
       selectedItem && selectedItem.toJS ? selectedItem.toJS() : undefined
@@ -134,18 +134,15 @@ class HistoryPopup extends React.Component<ReduxProps, State> {
 
 const mapStateToProps = createStructuredSelector({
   items: getHistory,
-  isOpen: getHistoryOpen,
+  isOpen: getHistoryOpen
 })
 
-export default connect(
-  mapStateToProps,
-  {
-    closeHistory,
-    openHistory,
-    duplicateSession,
-    toggleHistoryItemStarring,
-  },
-)(HistoryPopup)
+export default connect(mapStateToProps, {
+  closeHistory,
+  openHistory,
+  duplicateSession,
+  toggleHistoryItemStarring
+})(HistoryPopup)
 
 const Wrapper = styled.div`
   display: flex;

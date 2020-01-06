@@ -1,5 +1,5 @@
 import { configure } from 'enzyme'
-import * as EnzymeAdapter from 'enzyme-adapter-react-16'
+import EnzymeAdapter from 'enzyme-adapter-react-16'
 import { JSDOM } from 'jsdom'
 
 configure({ adapter: new EnzymeAdapter() })
@@ -9,7 +9,7 @@ configure({ adapter: new EnzymeAdapter() })
 const jsdom = new JSDOM('<!doctype html><html><body></body></html>', {
   beforeParse(window) {
     window.focus = jest.fn()
-  },
+  }
 })
 const { window } = jsdom
 
@@ -19,9 +19,9 @@ function copyProps(src, target) {
     .reduce(
       (result, prop) => ({
         ...result,
-        [prop]: Object.getOwnPropertyDescriptor(src, prop),
+        [prop]: Object.getOwnPropertyDescriptor(src, prop)
       }),
-      {},
+      {}
     )
   Object.defineProperties(target, props)
 }
@@ -29,7 +29,7 @@ function copyProps(src, target) {
 ;(global as any).window = window as any
 ;(global as any).document = window.document as any
 ;(global as any).navigator = {
-  userAgent: 'node.js',
+  userAgent: 'node.js'
 }
 copyProps(window, global)
 
@@ -40,15 +40,15 @@ copyProps(window, global)
     setStart: () => {},
     getBoundingClientRect: () => {
       return {
-        right: 0,
+        right: 0
       }
     },
     getClientRects: () => {
       return {
         length: 0,
         left: 0,
-        right: 0,
+        right: 0
       }
-    },
+    }
   }
 }

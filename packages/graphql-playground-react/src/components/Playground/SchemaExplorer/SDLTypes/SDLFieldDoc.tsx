@@ -24,10 +24,9 @@ export default class FieldDoc extends React.Component<Props, State> {
     return (
       <div>
         <CategoryTitle>{`${type.name} details`}</CategoryTitle>
-        {type.description &&
-          type.description.length > 0 && (
-            <DocsDescription markdown={type.description || ''} />
-          )}
+        {type.description && type.description.length > 0 && (
+          <DocsDescription markdown={type.description || ''} />
+        )}
         {type.instanceOf === 'scalar' && <ScalarTypeSchema type={type} />}
         {type.instanceOf === 'enum' && (
           <EnumTypeSchema sdlType={true} type={type} />

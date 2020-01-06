@@ -2,7 +2,8 @@ import * as React from 'react'
 import { Session } from '../../state/sessions/reducers'
 import { OrderedMap } from 'immutable'
 import { Star } from '../Icons'
-import { styled, withTheme, ThemeInterface } from '../../styled'
+import { styled, withTheme } from '../../styled'
+import { ThemeInterface } from '../../styled/theme'
 
 export interface Props {
   items: OrderedMap<string, Session>
@@ -20,7 +21,7 @@ export default withTheme(
     onItemSelect,
     selectedItemIndex,
     onItemStarToggled,
-    theme,
+    theme
   }: Props) => (
     <HistoryItems>
       {items
@@ -56,7 +57,9 @@ export default withTheme(
               {item.date && (
                 <Time>
                   {typeof item.date.getMonth === 'function' &&
-                    item.date.getMonth() + 1}/{item.date.getDate()}/{item.date
+                    item.date.getMonth() + 1}
+                  /{item.date.getDate()}/
+                  {item.date
                     .getFullYear()
                     .toString()
                     .slice(2, 4)}
@@ -68,7 +71,7 @@ export default withTheme(
         .toArray()
         .map(x => x[1])}
     </HistoryItems>
-  ),
+  )
 )
 
 const HistoryItems = styled.div`

@@ -1,19 +1,15 @@
 import { Record } from 'immutable'
 import { handleActions } from 'redux-actions'
 
-export class GeneralState extends Record({
+const GeneralStateRecord = Record({
   historyOpen: false,
   fixedEndpoint: false,
   endpoint: '',
   configString: '',
-  envVars: {},
-}) {
-  historyOpen: boolean
-  fixedEndpoint: boolean
-  endpoint: string
-  configString: string
-  envVars: any
-}
+  envVars: {}
+})
+
+export class GeneralState extends GeneralStateRecord {}
 
 export default handleActions(
   {
@@ -22,7 +18,7 @@ export default handleActions(
     SET_ENDPOINT_DISABLED: (state, { payload: { value } }) =>
       state.set('endpointDisabled', value),
     SET_CONFIG_STRING: (state, { payload: { configString } }) =>
-      state.set('configString', configString),
+      state.set('configString', configString)
   },
-  new GeneralState(),
+  new GeneralState()
 )

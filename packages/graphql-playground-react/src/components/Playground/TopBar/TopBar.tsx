@@ -1,6 +1,6 @@
 import * as React from 'react'
 import { styled } from '../../../styled/index'
-import * as copy from 'copy-to-clipboard'
+import copy from 'copy-to-clipboard'
 
 import Share from '../../Share'
 import SchemaReload from './SchemaReload'
@@ -9,7 +9,7 @@ import {
   getEndpoint,
   getSelectedSession,
   getEndpointUnreachable,
-  getIsPollingSchema,
+  getIsPollingSchema
 } from '../../../state/sessions/selectors'
 import { connect } from 'react-redux'
 import { getFixedEndpoint } from '../../../state/general/selectors'
@@ -17,7 +17,7 @@ import * as PropTypes from 'prop-types'
 import {
   editEndpoint,
   prettifyQuery,
-  refetchSchema,
+  refetchSchema
 } from '../../../state/sessions/actions'
 import { share } from '../../../state/sharing/actions'
 import { openHistory } from '../../../state/general/actions'
@@ -45,8 +45,8 @@ class TopBar extends React.Component<Props, {}> {
     store: PropTypes.shape({
       subscribe: PropTypes.func.isRequired,
       dispatch: PropTypes.func.isRequired,
-      getState: PropTypes.func.isRequired,
-    }),
+      getState: PropTypes.func.isRequired
+    })
   }
   render() {
     const { endpointUnreachable, settings } = this.props
@@ -75,7 +75,7 @@ class TopBar extends React.Component<Props, {}> {
                 flexDirection: 'row',
                 alignItems: 'center',
                 position: 'absolute',
-                left: '6px',
+                left: '6px'
               }}
             >
               <SchemaReload
@@ -122,7 +122,7 @@ class TopBar extends React.Component<Props, {}> {
     const data = JSON.stringify({
       query: session.query,
       variables,
-      operationName: session.operationName,
+      operationName: session.operationName
     })
     let sessionHeaders
     try {
@@ -136,8 +136,8 @@ class TopBar extends React.Component<Props, {}> {
       Accept: 'application/json',
       Connection: 'keep-alive',
       DNT: '1',
-      Origin: location.origin || session.endpoint,
-      ...sessionHeaders,
+      Origin: window.location.origin || session.endpoint,
+      ...sessionHeaders
     }
     const headersString = Object.keys(headers)
       .map(key => {
@@ -145,9 +145,7 @@ class TopBar extends React.Component<Props, {}> {
         return `-H '${key}: ${value}'`
       })
       .join(' ')
-    return `curl '${
-      session.endpoint
-    }' ${headersString} --data-binary '${data}' --compressed`
+    return `curl '${session.endpoint}' ${headersString} --data-binary '${data}' --compressed`
   }
 }
 
@@ -156,19 +154,16 @@ const mapStateToProps = createStructuredSelector({
   fixedEndpoint: getFixedEndpoint,
   isPollingSchema: getIsPollingSchema,
   endpointUnreachable: getEndpointUnreachable,
-  settings: getSettings,
+  settings: getSettings
 })
 
-export default connect(
-  mapStateToProps,
-  {
-    editEndpoint,
-    prettifyQuery,
-    openHistory,
-    share,
-    refetchSchema,
-  },
-)(TopBar)
+export default connect(mapStateToProps, {
+  editEndpoint,
+  prettifyQuery,
+  openHistory,
+  share,
+  refetchSchema
+})(TopBar)
 
 export const Button = styled.button`
   text-transform: uppercase;
