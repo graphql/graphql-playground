@@ -44,6 +44,9 @@ export default class SearchBox extends React.Component<Props, State> {
           type="text"
           value={this.state.value}
           placeholder={this.props.placeholder || 'Search the docs ...'}
+          title={
+            'Wrap in quotes "" to match exactly. Prefix with e.g. Mutation. to only match mutations'
+          }
         />
       </Label>
     )
