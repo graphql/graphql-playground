@@ -1,0 +1,26 @@
+# See http://help.github.com/ignore-files/ for more about ignoring files.
+
+# dependencies
+node_modules
+example/node_modules
+example/yarn.lock
+
+# testing
+/coverage
+
+# production
+/build
+/dist
+
+# misc
+.DS_Store
+.env
+npm-debug.log
+.idea
+lib
+/middleware
+playground.css
+/middleware-build
+
+# editors
+.vscode

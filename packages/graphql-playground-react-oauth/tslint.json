@@ -1,0 +1,13 @@
+{
+  "extends": ["tslint-graphcool-frontend"],
+  "rules": {
+    "forin": false,
+    "no-submodule-imports": false,
+    "prefer-conditional-expression": false,
+    "no-implicit-dependencies": false,
+    "no-empty": false,
+    "no-shadowed-variable": false,
+    "prefer-for-of": false,
+    "no-string-literal": false
+  }
+}

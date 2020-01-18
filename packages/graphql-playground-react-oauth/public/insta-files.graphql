@@ -1,0 +1,14 @@
+type Post @model {
+  id: ID! @isUnique
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  description: String!
+  image: File @relation(name: "PostImage")
+}
+
+type File @model {
+  id: ID! @isUnique
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  post: Post @relation(name: "PostImage")
+}

@@ -1,0 +1,25 @@
+type Traveller @model {
+  id: ID! @isUnique
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  name: String!
+  location: Location! @relation(name: "TravellerLocation")
+  messages: [Message!]! @relation(name: "MessagesFromTraveller")
+}
+
+type Message @model {
+  id: ID! @isUnique
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  text: String!
+  sentBy: Traveller!  @relation(name: "MessagesFromTraveller")
+}
+
+type Location @model {
+  id: ID! @isUnique
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  traveller: Traveller! @relation(name: "TravellerLocation")
+  latitude: Float!
+  longitude: Float!
+}

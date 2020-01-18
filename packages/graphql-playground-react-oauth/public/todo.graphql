@@ -1,0 +1,5 @@
+type Todo @model {
+  id: ID! @isUnique
+  text: String!
+  complete: Boolean!
+}

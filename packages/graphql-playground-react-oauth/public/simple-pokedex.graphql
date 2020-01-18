@@ -1,0 +1,7 @@
+type Pokemon @model {
+  id: ID! @isUnique
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  name: String!
+  url: String!
+}

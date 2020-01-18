@@ -1,0 +1,22 @@
+enum UserRole { Standard, Admin }
+
+type User @model {
+  id: ID! @isUnique
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  name: String!
+  role: UserRole!
+  posts: [Post!]! @relation(name: "PostAuthor")
+  collaborationPosts: [Post!]! @relation(name: "PostCollaborators")
+  friends: [User!]! @relation(name: "Friends")
+}
+
+type Post @model {
+  id: ID! @isUnique
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  isPublished: Boolean!
+  text: String!
+  author: User! @relation(name: "PostAuthor")
+  collaborators: [User!]! @relation(name: "PostCollaborators")
+}

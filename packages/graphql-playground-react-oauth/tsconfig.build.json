@@ -1,0 +1,20 @@
+{
+  "compilerOptions": {
+    "outDir": "lib",
+    "target": "es5",
+    "lib": ["esnext", "dom"],
+    "sourceMap": true,
+    "jsx": "preserve",
+    "rootDir": "src",
+    "forceConsistentCasingInFileNames": true,
+    "noImplicitReturns": true,
+    "noImplicitThis": true,
+    "noImplicitAny": false,
+    "strictNullChecks": true,
+    "skipLibCheck": true,
+    "suppressImplicitAnyIndexErrors": true,
+    "noUnusedLocals": false,
+    "declaration": true
+  },
+  "exclude": ["node_modules", "examples"]
+}
