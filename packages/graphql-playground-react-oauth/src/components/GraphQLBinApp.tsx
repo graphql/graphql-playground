@@ -7,6 +7,7 @@ import { styled, ThemeProvider, theme as styledTheme } from '../styled'
 import { Store } from 'redux'
 import PlaygroundWrapper from './PlaygroundWrapper'
 import { injectState } from '../state/workspace/actions'
+import { AuthConfig } from '../graphqlConfig'
 
 export const store: Store<any> = createStore()
 
@@ -27,6 +28,7 @@ export interface Props {
   history?: any
   match?: any
   headers?: any
+  oauth?: AuthConfig
 }
 
 export interface State {
@@ -135,13 +137,7 @@ class GraphQLBinApp extends React.Component<Props & ReduxProps, State> {
             endpoint={endpoint}
             headers={this.state.headers}
             subscriptionEndpoint={subscriptionEndpoint}
-            auth={{
-              authority:
-                'https://login.microsoftonline.com/e8513859-fd27-4b85-b275-b2f61ada8ac4/v2.0',
-              clientId: '78bdcfc0-92b9-41a2-aa5c-7c836085992d',
-              redirectUri:
-                'http://localhost:5000/authorization/graphql/playground/oauth2-redirect.html',
-            }}
+            oauth={this.props.oauth}
           />
         )}
       </Wrapper>
@@ -164,11 +160,7 @@ export default class GraphQLBinAppHOC extends React.Component<Props> {
   render() {
     return (
       <Provider store={store}>
-        <ConnectedGraphQLBinApp
-          {...this.props}
-          endpoint="http://localhost:5000/authorization/graphql"
-          subscriptionEndpoint="ws://localhost:5000/authorization/graphql"
-        />
+        <ConnectedGraphQLBinApp {...this.props} />
       </Provider>
     )
   }

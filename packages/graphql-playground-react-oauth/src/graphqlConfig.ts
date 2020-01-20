@@ -40,5 +40,8 @@ export type GraphQLConfigEnpointsData = GraphQLConfigEnpointsMapData
 export interface AuthConfig {
   authority: string
   clientId: string
-  redirectUri: string
+  responseType?: string
+  scope?: string
+  redirectUri?: string
+  silentRedirectUri?: string
 }

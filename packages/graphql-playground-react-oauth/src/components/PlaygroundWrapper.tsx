@@ -68,7 +68,7 @@ export interface PlaygroundWrapperProps {
   codeTheme?: EditorColours
   workspaceName?: string
   headers?: any
-  auth?: AuthConfig
+  oauth?: AuthConfig
 }
 
 export interface ReduxProps {
@@ -404,7 +404,7 @@ class PlaygroundWrapper extends React.Component<
               }
               createApolloLink={this.props.createApolloLink}
               schema={this.state.schema}
-              auth={this.props.auth}
+              oauth={this.props.oauth}
             />
           </App>
         </ThemeProvider>
