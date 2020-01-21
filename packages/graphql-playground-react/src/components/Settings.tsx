@@ -31,10 +31,7 @@ export default connect(
 )(Settings)
 
 const Wrapper = styled.div`
-  position: absolute;
-  z-index: 1005;
-  right: 20px;
-  top: 17px;
+  margin: 5px;
 `
 
 const IconWrapper = styled.div`
