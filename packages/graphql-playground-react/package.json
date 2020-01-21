@@ -86,7 +86,7 @@
     "raw-loader": "0.5.1",
     "react-dev-utils": "5.0.2",
     "recursive-readdir": "2.2.2",
-    "rimraf": "^2.6.2",
+    "rimraf": "2.6.2",
     "source-map-loader": "0.2.3",
     "strip-ansi": "4.0.0",
     "style-loader": "0.20.1",

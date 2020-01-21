@@ -93,7 +93,7 @@ export interface Props {
   ) => ApolloLink
   workspaceName?: string
   schema?: GraphQLSchema
-  oauth?: AuthConfig
+  oauth?: GraphQLOAuthConfig
 }
 
 export interface ReduxProps {
@@ -325,7 +325,7 @@ export class Playground extends React.PureComponent<Props & ReduxProps, State> {
           <Settings />
           {this.props.oauth && (
             <UserManager
-              {...this.props.oauth || {}}
+              {...this.props.oauth}
               endpoint={this.props.endpoint}
             />
           )}
