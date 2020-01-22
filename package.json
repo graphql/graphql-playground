@@ -10,7 +10,7 @@
     "release-react": "bash scripts/release-react.sh"
   },
   "devDependencies": {
-    "@types/node": "10.1.4",
+    "@types/node": "^13.1.8",
     "aws-lambda": "0.1.2",
     "express": "4.16.3",
     "hapi": "17.5.0",
@@ -18,6 +18,8 @@
     "rimraf": "2.6.2"
   },
   "dependencies": {
-    "dotenv": "^5.0.1"
+    "dotenv": "^5.0.1",
+    "graphql-typings": "^0.0.1-beta-2",
+    "typescript": "^3.7.5"
   }
 }

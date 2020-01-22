@@ -159,6 +159,12 @@ export class SchemaFetcher {
         error: err => {
           reject(err)
           this.fetching = this.fetching.remove(this.hash(session))
+          const answer = confirm(
+            'Session timed out, would you like to refresh?',
+          )
+          if (answer) {
+            location.reload()
+          }
         },
       })
     })
