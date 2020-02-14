@@ -26,11 +26,11 @@
     "lambada"
   ],
   "peerDependencies": {
-    "aws-lambda": "^0.1.2"
+    "aws-lambda": "^1.0.5"
   },
   "devDependencies": {
     "@types/node": "9.4.0",
-    "aws-lambda": "^0.1.2",
+    "aws-lambda": "^1.0.5",
     "rimraf": "2.6.2",
     "typescript": "2.6.2"
   },
