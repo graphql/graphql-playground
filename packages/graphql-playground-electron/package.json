@@ -101,7 +101,7 @@
     "immutable": "4.0.0-rc.9",
     "js-yaml": "^3.11.0",
     "lodash.merge": "^4.6.2",
-    "minimist": "^1.2.2",
+    "minimist": "^1.2.3",
     "ms": "^2.1.1",
     "query-string": "^5.0.1",
     "raven": "^2.4.2",
