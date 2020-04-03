@@ -2,9 +2,9 @@
 # yarn lockfile v1
 
 
-"@types/node@10.1.4":
-  version "10.1.4"
-  resolved "https://registry.yarnpkg.com/@types/node/-/node-10.1.4.tgz#606651d3f8a8bec08b8cb262161aab9209f4a29d"
+"@types/node@13.11.0":
+  version "13.11.0"
+  resolved "https://registry.yarnpkg.com/@types/node/-/node-13.11.0.tgz#390ea202539c61c8fa6ba4428b57e05bc36dc47b"
 
 accept@3.x.x:
   version "3.0.2"
