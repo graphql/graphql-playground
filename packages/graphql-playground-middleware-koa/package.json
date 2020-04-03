@@ -29,10 +29,10 @@
     "koa": "^2"
   },
   "devDependencies": {
-    "@types/node": "9.4.0",
-    "koa": "^2.6.2",
-    "rimraf": "2.6.2",
-    "typescript": "2.6.2"
+    "@types/node": "^12.12.34",
+    "koa": "^2.11.0",
+    "rimraf": "^3.0.2",
+    "typescript": "^3.8.3"
   },
   "typings": "dist/index.d.ts",
   "typescript": {

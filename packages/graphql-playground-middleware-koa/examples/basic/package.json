@@ -10,12 +10,13 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "apollo-server-koa": "^1.2.0",
-    "graphql": "^0.11.7",
-    "graphql-playground-middleware-koa": "^1.2.1-beta.4",
-    "graphql-tools": "^2.7.1",
-    "koa": "^2.3.0",
-    "koa-bodyparser": "^4.2.0",
-    "koa-router": "^7.2.1"
+    "apollo-server-koa": "^2.11.0",
+    "graphql": "^14.6.0",
+    "graphql-playground-middleware-koa": "^1.6.12",
+    "graphql-tag": "^2.10.3",
+    "graphql-tools": "^4.0.7",
+    "koa": "^2.11.0",
+    "koa-bodyparser": "^4.3.0",
+    "koa-router": "^8.0.8"
   }
 }
