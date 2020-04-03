@@ -30,10 +30,10 @@
     "hapi": "^18.1.0"
   },
   "devDependencies": {
-    "@types/node": "9.4.0",
-    "hapi": "^18.1.0",
-    "rimraf": "2.6.2",
-    "typescript": "2.6.2"
+    "@types/node": "^12.12.34",
+    "@hapi/hapi": "^19.1.1",
+    "rimraf": "^3.0.2",
+    "typescript": "^3.8.3"
   },
   "typings": "dist/index.d.ts",
   "typescript": {
