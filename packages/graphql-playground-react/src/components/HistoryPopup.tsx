@@ -38,6 +38,7 @@ class HistoryPopup extends React.Component<ReduxProps, State> {
     const selectedItemIndex = props.items.keySeq().first() || ''
     this.state = {
       selectedFilter: 'HISTORY',
+      // @ts-ignore
       selectedItemIndex,
       searchTerm: '',
     }
@@ -137,15 +138,12 @@ const mapStateToProps = createStructuredSelector({
   isOpen: getHistoryOpen,
 })
 
-export default connect(
-  mapStateToProps,
-  {
-    closeHistory,
-    openHistory,
-    duplicateSession,
-    toggleHistoryItemStarring,
-  },
-)(HistoryPopup)
+export default connect(mapStateToProps, {
+  closeHistory,
+  openHistory,
+  duplicateSession,
+  toggleHistoryItemStarring,
+})(HistoryPopup)
 
 const Wrapper = styled.div`
   display: flex;

@@ -13,15 +13,15 @@ export default function Argument({ arg, showDefaultValue }: Props) {
       <span className="arg-name">{arg.name}</span>
       {': '}
       <span className="type-name">{renderType(arg.type)}</span>
-      {arg.defaultValue !== undefined &&
-        showDefaultValue !== false && (
-          <span>
-            {' = '}
-            <span className="arg-default-value">
-              {print(astFromValue(arg.defaultValue, arg.type))}
-            </span>
+      {arg.defaultValue !== undefined && showDefaultValue !== false && (
+        <span>
+          {' = '}
+          <span className="arg-default-value">
+            {// @ts-ignore
+            print(astFromValue(arg.defaultValue, arg.type))}
           </span>
-        )}
+        </span>
+      )}
     </ArgumentLine>
   )
 }

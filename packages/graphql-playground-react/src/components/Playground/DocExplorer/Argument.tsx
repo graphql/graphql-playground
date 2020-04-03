@@ -30,7 +30,8 @@ Props) {
             <span>
               {' = '}
               <span className="arg-default-value">
-                {print(astFromValue(arg.defaultValue, arg.type))}
+                {// @ts-ignore
+                print(astFromValue(arg.defaultValue, arg.type))}
               </span>
             </span>
           )
