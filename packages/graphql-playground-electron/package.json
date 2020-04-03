@@ -100,7 +100,7 @@
     "graphql-playground-react": "1.7.20",
     "immutable": "4.0.0-rc.9",
     "js-yaml": "^3.11.0",
-    "lodash.merge": "^4.6.1",
+    "lodash.merge": "^4.6.2",
     "minimist": "^1.2.2",
     "ms": "^2.1.1",
     "query-string": "^5.0.1",
