@@ -1,15 +1,14 @@
 import { Reducer } from 'redux'
 import { combineReducers } from 'redux-immutable'
-import docs, { DocsSession, DocsState } from '../docs/reducers'
+import docs, { DocsSession } from '../docs/reducers'
 import sessions, {
   makeSessionState,
-  SessionState,
   Tab,
   sessionFromTab,
-  Session,
+  Session
 } from '../sessions/reducers'
 import sharing, { SharingState } from '../sharing/reducers'
-import history, { HistoryState } from '../history/reducers'
+import history from '../history/reducers'
 import { Map, Record, OrderedMap } from 'immutable'
 import general, { GeneralState } from '../general/reducers'
 import { immutableMemoize } from '../../components/Playground/util/immutableMemoize'
@@ -28,17 +27,14 @@ export function getSelectedWorkspace(state) {
   return state.getIn(['workspaces', getSelectedWorkspaceId(state)])
 }
 
-export class Workspace extends Record({
+const WorkspaceRecord = Record({
   docs: Map({}),
   sessions: makeSessionState(''),
   sharing: new SharingState(),
-  history: OrderedMap(),
-}) {
-  docs: DocsState
-  sessions: SessionState
-  sharing: SharingState
-  history: HistoryState
-}
+  history: OrderedMap()
+})
+
+export class Workspace extends WorkspaceRecord {}
 
 export const defaultSettings: ISettings = {
   'editor.cursorShape': 'line',
@@ -55,25 +51,19 @@ export const defaultSettings: ISettings = {
   'schema.polling.enable': true,
   'schema.polling.endpointFilter': '*localhost*',
   'schema.polling.interval': 2000,
-  'tracing.hideTracingResponse': true,
+  'tracing.hideTracingResponse': true
 }
 
-// tslint:disable-next-line:max-classes-per-file
-export class RootState extends Record({
+const RootStateRecord = Record({
   workspaces: Map({ '': makeWorkspace('') }),
   selectedWorkspace: '',
   settingsString: JSON.stringify(defaultSettings, null, 2),
   stateInjected: false,
   appHistory: new AppHistory(),
-  general: new GeneralState(),
-}) {
-  workspaces: Map<string, Workspace>
-  selectedWorkspace: string
-  settingsString: string
-  stateInjected: false
-  appHistory: AppHistory
-  general: GeneralState
-}
+  general: new GeneralState()
+})
+// tslint:disable-next-line:max-classes-per-file
+export class RootState extends RootStateRecord {}
 
 const workspaceReducers: Reducer<any> = combineReducers({
   docs,
@@ -81,7 +71,7 @@ const workspaceReducers: Reducer<any> = combineReducers({
   sharing,
   history,
   general,
-  appHistory,
+  appHistory
 })
 
 // todo: add lru-cache later when the localStorage is full
@@ -99,7 +89,7 @@ export const rootReducer = (state = new RootState(), action) => {
     if (!state.workspaces.get(workspaceId)) {
       const newState = state.setIn(
         ['workspaces', workspaceId],
-        makeWorkspace(endpoint),
+        makeWorkspace(endpoint)
       )
       return newState.set('selectedWorkspace', workspaceId)
     }
@@ -109,7 +99,7 @@ export const rootReducer = (state = new RootState(), action) => {
   if (action.type === 'INJECT_STATE') {
     return deserializePersistedState(action.payload.state).set(
       'stateInjected',
-      true,
+      true
     )
   }
 
@@ -125,7 +115,7 @@ export const rootReducer = (state = new RootState(), action) => {
     OPEN_HISTORY: true,
     CLOSE_HISTORY: true,
     SET_ENDPOINT_DISABLED: true,
-    SET_CONFIG_STRING: true,
+    SET_CONFIG_STRING: true
   }
 
   if (generalActions[action.type]) {
@@ -145,13 +135,11 @@ export const rootReducer = (state = new RootState(), action) => {
 function makeStateFromTabs(tabs: Tab[]): RootState {
   const endpoint = tabs[0].endpoint
   const tabSessions = OrderedMap(
-    tabs.map(sessionFromTab).reduce(
-      (acc, curr) => {
-        return { ...acc, [curr.id]: curr }
-      },
-      {} as OrderedMap<string, Session>,
-    ),
+    tabs.map(sessionFromTab).reduce((acc, curr) => {
+      return { ...acc, [curr.id]: curr }
+    }, {} as OrderedMap<string, Session>)
   )
+  // @ts-ignore
   const selectedSessionId = tabSessions.first()!.id
   const workspace = makeWorkspace(endpoint)
     .setIn(['sessions', 'sessions'], tabSessions)
@@ -167,11 +155,11 @@ export function makeWorkspace(endpoint) {
   // weird typescript error
   return new Workspace({
     docs: Map({
-      [sessionState.selectedSessionId]: new DocsSession(),
+      [sessionState.selectedSessionId]: new DocsSession()
     }),
     sessions: sessionState,
     sharing: new SharingState(),
-    history: OrderedMap(),
+    history: OrderedMap()
   }) as any
 }
 
@@ -184,7 +172,7 @@ export const getSessionCounts = immutableMemoize(state => {
 export const getSettingsString = state => state.settingsString
 export const getSettings = createSelector(
   [getSettingsString],
-  parseSettingsString,
+  parseSettingsString
 )
 
 function normalizeSettings(settings) {
@@ -195,7 +183,7 @@ function normalizeSettings(settings) {
 
   return {
     ...defaultSettings,
-    ...settings,
+    ...settings
   }
 }
 

@@ -1,7 +1,7 @@
-import { takeEvery, ForkEffect, select, put } from 'redux-saga/effects'
+import { takeEvery, select, put } from 'redux-saga/effects'
 import { getEndpoint } from '../sessions/selectors'
 import { setShareUrl } from './actions'
-import * as cuid from 'cuid'
+import cuid from 'cuid'
 import { getSharingState } from './selectors'
 import { Map } from 'immutable'
 import { safely } from '../../utils'
@@ -12,7 +12,7 @@ function* share() {
   const res = yield fetch('https://api.graphqlbin.com/', {
     method: 'post',
     headers: {
-      'Content-Type': 'application/json',
+      'Content-Type': 'application/json'
     },
     body: JSON.stringify({
       query: `
@@ -24,9 +24,9 @@ function* share() {
       `,
       variables: {
         session: JSON.stringify(state),
-        endpoint,
-      },
-    }),
+        endpoint
+      }
+    })
   }).then(data => data.json())
 
   const shareUrl = `https://graphqlbin.com/v2/${res.data.addSession.id}`
@@ -40,7 +40,7 @@ function* makeSharingState() {
   const id = cuid()
   state = state
     .update('workspaces', w =>
-      w.filter((workspace, key) => key === state.selectedWorkspace),
+      w.filter((workspace, key) => key === state.selectedWorkspace)
     )
     .set('selectedWorkspace', `${id}~${state.selectedWorkspace}`)
     .update('workspaces', w => w.mapKeys(k => `${id}~${k}`))
@@ -52,25 +52,25 @@ function* makeSharingState() {
     state = state
       .updateIn(
         ['workspaces', state.selectedWorkspace, 'sessions', 'sessions'],
-        sessions => sessions.filter((value, key) => key === selectedSessionId),
+        sessions => sessions.filter((value, key) => key === selectedSessionId)
       )
       .setIn(
         ['workspaces', state.selectedWorkspace, 'sessions', 'sessionCount'],
-        1,
+        1
       )
   }
 
   if (!sharing.headers) {
     state = state.updateIn(
       ['workspaces', state.selectedWorkspace, 'sessions', 'sessions'],
-      sessions => sessions.map(session => session.set('headers', '')),
+      sessions => sessions.map(session => session.set('headers', ''))
     )
   }
 
   if (!sharing.history) {
     state = state.setIn(
       ['workspaces', state.selectedWorkspace, 'history'],
-      Map(),
+      Map()
     )
   }
 
@@ -78,6 +78,3 @@ function* makeSharingState() {
 }
 
 export const sharingSagas = [takeEvery('SHARE', safely(share))]
-
-// needed to fix typescript
-export { ForkEffect }

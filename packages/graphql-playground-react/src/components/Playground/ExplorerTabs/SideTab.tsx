@@ -43,8 +43,8 @@ const Tab = styled<TabProps, 'div'>('div')`
     p.active && p.activeColor
       ? p.theme.colours[p.activeColor]
       : p.theme.mode === 'dark'
-        ? '#3D5866'
-        : '#DBDEE0'};
+      ? '#3D5866'
+      : '#DBDEE0'};
   box-shadow: -1px 1px 6px 0 rgba(0, 0, 0, 0.3);
   text-transform: uppercase;
   text-align: center;

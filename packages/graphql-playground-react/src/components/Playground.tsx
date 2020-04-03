@@ -23,7 +23,7 @@ import {
   setTracingSupported,
   injectHeaders,
   schemaFetchingError,
-  schemaFetchingSuccess,
+  schemaFetchingSuccess
 } from '../state/sessions/actions'
 import { setConfigString } from '../state/general/actions'
 import { initState } from '../state/workspace/actions'
@@ -37,13 +37,13 @@ import {
   getHeaders,
   getIsReloadingSchema,
   getEndpoint,
-  getIsPollingSchema,
+  getIsPollingSchema
 } from '../state/sessions/selectors'
 import { getHistoryOpen } from '../state/general/selectors'
 import {
   setLinkCreator,
   schemaFetcher,
-  setSubscriptionEndpoint,
+  setSubscriptionEndpoint
 } from '../state/sessions/fetchingSagas'
 import { Session } from '../state/sessions/reducers'
 import { getWorkspaceId } from './Playground/util/getWorkspaceId'
@@ -88,7 +88,7 @@ export interface Props {
   configPath?: string
   createApolloLink?: (
     session: Session,
-    subscriptionEndpoint?: string,
+    subscriptionEndpoint?: string
   ) => ApolloLink
   workspaceName?: string
   schema?: GraphQLSchema
@@ -110,7 +110,7 @@ export interface ReduxProps {
   schemaFetchingSuccess: (
     endpoint: string,
     tracingSupported: boolean,
-    isPollingSchema: boolean,
+    isPollingSchema: boolean
   ) => void
   isReloadingSchema: boolean
   isPollingSchema: boolean
@@ -137,7 +137,7 @@ export { GraphQLEditor }
 
 export class Playground extends React.PureComponent<Props & ReduxProps, State> {
   static defaultProps = {
-    shareEnabled: false,
+    shareEnabled: false
   }
 
   apolloLinks: { [sessionId: string]: any } = {}
@@ -168,7 +168,7 @@ export class Playground extends React.PureComponent<Props & ReduxProps, State> {
       this.backoff.start()
     },
     600,
-    { trailing: true }, // important to not miss the last call
+    { trailing: true } // important to not miss the last call
   ) as any
 
   private backoff: Backoff
@@ -180,7 +180,7 @@ export class Playground extends React.PureComponent<Props & ReduxProps, State> {
     super(props)
 
     this.state = {
-      schema: props.schema,
+      schema: props.schema
     }
     ;(global as any).p = this
 
@@ -203,7 +203,7 @@ export class Playground extends React.PureComponent<Props & ReduxProps, State> {
   componentDidMount() {
     if (this.initialIndex > -1) {
       this.setState({
-        selectedSessionIndex: this.initialIndex,
+        selectedSessionIndex: this.initialIndex
       } as State)
     }
     this.mounted = true
@@ -259,7 +259,7 @@ export class Playground extends React.PureComponent<Props & ReduxProps, State> {
           props.sessionHeaders && props.sessionHeaders.length > 0
             ? props.sessionHeaders
             : JSON.stringify(props.headers),
-        credentials: props.settings['request.credentials'],
+        credentials: props.settings['request.credentials']
       }
       const schema = await schemaFetcher.fetch(data)
       schemaFetcher.subscribe(data, newSchema => {
@@ -276,7 +276,7 @@ export class Playground extends React.PureComponent<Props & ReduxProps, State> {
           this.props.schemaFetchingSuccess(
             data.endpoint,
             schema.tracingSupported,
-            props.isPollingSchema,
+            props.isPollingSchema
           )
           this.initialSchemaFetch = false
         }
@@ -362,7 +362,7 @@ export class Playground extends React.PureComponent<Props & ReduxProps, State> {
   private createSession = () => {
     this.props.newSession(
       this.props.endpoint,
-      this.props.settings['editor.reuseHeaders'],
+      this.props.settings['editor.reuseHeaders']
     )
   }
 
@@ -370,7 +370,7 @@ export class Playground extends React.PureComponent<Props & ReduxProps, State> {
     currentSchema: GraphQLSchema | undefined,
     newSchema: GraphQLSchema,
     props: Readonly<{ children?: React.ReactNode }> &
-      Readonly<Props & ReduxProps>,
+      Readonly<Props & ReduxProps>
   ) {
     // first check for reference equality
     if (currentSchema !== newSchema) {
@@ -402,27 +402,24 @@ const mapStateToProps = createStructuredSelector({
   settingsString: getSettingsString,
   isReloadingSchema: getIsReloadingSchema,
   isPollingSchema: getIsPollingSchema,
-  sessionEndpoint: getEndpoint,
+  sessionEndpoint: getEndpoint
 })
 
-export default connect(
-  mapStateToProps,
-  {
-    selectTabIndex,
-    selectNextTab,
-    selectPrevTab,
-    newSession,
-    closeSelectedTab,
-    initState,
-    saveSettings,
-    saveConfig,
-    setTracingSupported,
-    injectHeaders,
-    setConfigString,
-    schemaFetchingError,
-    schemaFetchingSuccess,
-  },
-)(Playground)
+export default connect(mapStateToProps, {
+  selectTabIndex,
+  selectNextTab,
+  selectPrevTab,
+  newSession,
+  closeSelectedTab,
+  initState,
+  saveSettings,
+  saveConfig,
+  setTracingSupported,
+  injectHeaders,
+  setConfigString,
+  schemaFetchingError,
+  schemaFetchingSuccess
+})(Playground)
 
 const PlaygroundContainer = styled.div`
   flex: 1;

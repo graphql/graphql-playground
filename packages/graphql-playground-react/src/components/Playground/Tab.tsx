@@ -28,7 +28,7 @@ class Tab extends React.PureComponent<Props & ReduxProps, State> {
 
     this.state = {
       overCross: false,
-      editingName: false,
+      editingName: false
     }
   }
 
@@ -131,10 +131,7 @@ class Tab extends React.PureComponent<Props & ReduxProps, State> {
   }
 }
 
-export default connect(
-  null,
-  { closeTab, selectTab, editName },
-)(Tab)
+export default connect(null, { closeTab, selectTab, editName })(Tab)
 
 interface TabItemProps {
   active: boolean

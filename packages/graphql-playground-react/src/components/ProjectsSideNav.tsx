@@ -78,7 +78,7 @@ class ProjectsSideNav extends React.Component<Props & ReduxProps, {}> {
 
   private renderEndpoints(
     endpoints: GraphQLConfigEnpointsMapData,
-    projectName?: string,
+    projectName?: string
   ) {
     return Object.keys(endpoints).map(env => {
       const { endpoint } = getEndpointFromEndpointConfig(endpoints[env])
@@ -87,8 +87,8 @@ class ProjectsSideNav extends React.Component<Props & ReduxProps, {}> {
           getWorkspaceId({
             endpoint,
             configPath: this.props.configPath,
-            workspaceName: projectName,
-          }),
+            workspaceName: projectName
+          })
         ) || 1
       return (
         <ProjectsSideNavItem
@@ -107,13 +107,10 @@ class ProjectsSideNav extends React.Component<Props & ReduxProps, {}> {
 }
 
 const mapStateToProps = createStructuredSelector({
-  counts: getSessionCounts,
+  counts: getSessionCounts
 })
 
-export default connect(
-  mapStateToProps,
-  { openConfigTab },
-)(ProjectsSideNav)
+export default connect(mapStateToProps, { openConfigTab })(ProjectsSideNav)
 
 const SideNav = styled.div`
   display: flex;

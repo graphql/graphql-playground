@@ -5,7 +5,7 @@ import { Map, set } from 'immutable'
 import { makeOperation } from './util/makeOperation'
 import { parseHeaders } from './util/parseHeaders'
 import { LinkCreatorProps } from '../../state/sessions/fetchingSagas'
-import * as LRU from 'lru-cache'
+import LRUCache from 'lru-cache'
 
 export interface TracingSchemaTuple {
   schema: GraphQLSchema
@@ -34,13 +34,13 @@ export class SchemaFetcher {
    * If the relevant information of the session didn't change (endpoint and headers),
    * the cached schema will be returned.
    */
-  sessionCache: LRU.Cache<string, TracingSchemaTuple>
+  sessionCache: LRUCache<string, TracingSchemaTuple>
   /**
    * The `schemaInstanceCache` property is used to prevent unnecessary buildClientSchema calls.
    * It's tested by stringifying the introspection result, which is orders of magnitude
    * faster than rebuilding the schema.
    */
-  schemaInstanceCache: LRU.Cache<string, GraphQLSchema>
+  schemaInstanceCache: LRUCache<string, GraphQLSchema>
   /**
    * The `linkGetter` property is a callback that provides an ApolloLink instance.
    * This can be overriden by the user.
@@ -58,8 +58,8 @@ export class SchemaFetcher {
    */
   subscriptions: Map<string, (schema: GraphQLSchema) => void> = Map()
   constructor(linkGetter: LinkGetter) {
-    this.sessionCache = new LRU<string, TracingSchemaTuple>({ max: 10 })
-    this.schemaInstanceCache = new LRU({ max: 10 })
+    this.sessionCache = new LRUCache<string, TracingSchemaTuple>({ max: 10 })
+    this.schemaInstanceCache = new LRUCache({ max: 10 })
     this.fetching = Map()
     this.linkGetter = linkGetter
   }
@@ -101,13 +101,13 @@ export class SchemaFetcher {
     return schema
   }
   private fetchSchema(
-    session: SchemaFetchProps,
+    session: SchemaFetchProps
   ): Promise<{ schema: GraphQLSchema; tracingSupported: boolean } | null> {
     const hash = this.hash(session)
     const { endpoint } = session
     const headers = {
       ...parseHeaders(session.headers),
-      'X-Apollo-Tracing': '1',
+      'X-Apollo-Tracing': '1'
     }
 
     const options = set(session, 'headers', headers) as any
@@ -137,7 +137,7 @@ export class SchemaFetcher {
             false
           const result: TracingSchemaTuple = {
             schema,
-            tracingSupported,
+            tracingSupported
           }
           this.sessionCache.set(this.hash(session), result)
           resolve(result)
@@ -150,7 +150,7 @@ export class SchemaFetcher {
         error: err => {
           reject(err)
           this.fetching = this.fetching.remove(this.hash(session))
-        },
+        }
       })
     })
   }

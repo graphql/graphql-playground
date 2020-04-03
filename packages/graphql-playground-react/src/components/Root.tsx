@@ -22,8 +22,6 @@ export default class Root extends React.Component<{}, {}> {
 }
 
 const RedirectToOldPlayground = props => {
-  location.href = `https://legacy.graphqlbin.com${location.pathname}${
-    location.search
-  }`
+  window.location.href = `https://legacy.graphqlbin.com${window.location.pathname}${window.location.search}`
   return null
 }

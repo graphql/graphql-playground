@@ -1,12 +1,4 @@
-import {
-  takeLatest,
-  ForkEffect,
-  call,
-  select,
-  takeEvery,
-  put,
-} from 'redux-saga/effects'
-import { delay } from 'redux-saga'
+import { takeLatest, select, takeEvery, put, delay } from 'redux-saga/effects'
 import { getSelectedSession, getIsPollingSchema } from './selectors'
 import getSelectedOperationName from '../../components/Playground/util/getSelectedOperationName'
 import { getQueryFacts } from '../../components/Playground/util/getQueryFacts'
@@ -23,7 +15,7 @@ import {
   setTracingSupported,
   setQueryTypes,
   refetchSchema,
-  fetchSchema,
+  fetchSchema
 } from './actions'
 import { getRootMap, getNewStack } from '../../components/Playground/util/stack'
 import { DocsSessionState } from '../docs/reducers'
@@ -41,7 +33,7 @@ import * as queryString from 'query-string'
 
 function* setQueryFacts() {
   // debounce by 100 ms
-  yield call(delay, 100)
+  yield delay(100)
   const session: Session = yield select(getSelectedSession)
 
   const { schema } = yield schemaFetcher.fetch(session)
@@ -54,7 +46,7 @@ function* setQueryFacts() {
       const operationName = getSelectedOperationName(
         session.operations,
         session.operationName,
-        immutableQueryFacts.operations,
+        immutableQueryFacts.operations
       )
       if (
         !is(immutableQueryFacts.get('variableToType'), session.variableToType)
@@ -81,22 +73,22 @@ function* setQueryFacts() {
 
 function* reflectQueryToUrl({ payload }) {
   // debounce by 100 ms
-  yield call(delay, 100)
-  if (!location.search.includes('query')) {
+  yield delay(100)
+  if (!window.location.search.includes('query')) {
     return
   }
 
-  const params = queryString.parse(location.search)
+  const params = queryString.parse(window.location.search)
   if (typeof params.query !== 'undefined') {
     const newSearch = queryString.stringify({
       ...params,
-      query: payload.query,
+      query: payload.query
     })
-    const url = `${location.origin}${location.pathname}?${newSearch}`
+    const url = `${window.location.origin}${window.location.pathname}?${newSearch}`
     window.history.replaceState(
       {},
       document.getElementsByTagName('title')[0].innerHTML,
-      url,
+      url
     )
   }
 }
@@ -133,7 +125,7 @@ function* getSessionWithCredentials() {
   return {
     endpoint: session.endpoint,
     headers: session.headers,
-    credentials: settings['request.credentials'],
+    credentials: settings['request.credentials']
   }
 }
 
@@ -145,12 +137,12 @@ function* fetchSchemaSaga() {
       schemaFetchingSuccess(
         session.endpoint,
         null,
-        yield select(getIsPollingSchema),
-      ),
+        yield select(getIsPollingSchema)
+      )
     )
   } catch (e) {
     yield put(schemaFetchingError(session.endpoint))
-    yield call(delay, 5000)
+    yield delay(5000)
     yield put(fetchSchema())
   }
 }
@@ -163,12 +155,12 @@ function* refetchSchemaSaga() {
       schemaFetchingSuccess(
         session.endpoint,
         null,
-        yield select(getIsPollingSchema),
-      ),
+        yield select(getIsPollingSchema)
+      )
     )
   } catch (e) {
     yield put(schemaFetchingError(session.endpoint))
-    yield call(delay, 5000)
+    yield delay(5000)
     yield put(refetchSchema())
   }
 }
@@ -212,7 +204,7 @@ function* prettifyQuery() {
     const prettyQuery = prettify(query, {
       printWidth: settings['prettier.printWidth'],
       tabWidth: settings['prettier.tabWidth'],
-      useTabs: settings['prettier.useTabs'],
+      useTabs: settings['prettier.useTabs']
     })
     yield put(editQuery(prettyQuery))
   } catch (e) {
@@ -232,8 +224,5 @@ export const sessionsSagas = [
   takeLatest('REFETCH_SCHEMA', safely(refetchSchemaSaga)),
   takeLatest('SCHEMA_FETCHING_SUCCESS', safely(renewStacks)),
   takeEvery('QUERY_SUCCESS' as any, safely(addToHistory)),
-  takeLatest('PRETTIFY_QUERY', safely(prettifyQuery)),
+  takeLatest('PRETTIFY_QUERY', safely(prettifyQuery))
 ]
-
-// needed to fix typescript
-export { ForkEffect }

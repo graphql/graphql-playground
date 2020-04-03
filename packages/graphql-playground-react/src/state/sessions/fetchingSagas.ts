@@ -4,14 +4,7 @@ import { SubscriptionClient } from 'subscriptions-transport-ws'
 import { HttpLink } from 'apollo-link-http'
 import { WebSocketLink } from 'apollo-link-ws'
 import { isSubscription } from '../../components/Playground/util/hasSubscription'
-import {
-  takeLatest,
-  ForkEffect,
-  put,
-  select,
-  takeEvery,
-  take,
-} from 'redux-saga/effects'
+import { takeLatest, put, select, takeEvery, take } from 'redux-saga/effects'
 import { eventChannel, END } from 'redux-saga'
 import { makeOperation } from '../../components/Playground/util/makeOperation'
 import {
@@ -24,16 +17,16 @@ import {
   setCurrentQueryEndTime,
   setEndpointUnreachable,
   clearResponses,
-  setResponse,
+  setResponse
 } from './actions'
 import {
   getSelectedSession,
   getSessionsState,
-  getParsedVariablesFromSession,
+  getParsedVariablesFromSession
 } from './selectors'
 import { SchemaFetcher } from '../../components/Playground/SchemaFetcher'
 import { getSelectedWorkspaceId, getSettings } from '../workspace/reducers'
-import * as cuid from 'cuid'
+import cuid from 'cuid'
 import { Session, ResponseRecord } from './reducers'
 import { addHistoryItem } from '../history/actions'
 import { safely } from '../../utils'
@@ -58,7 +51,7 @@ export interface Headers {
 
 export const defaultLinkCreator = (
   session: LinkCreatorProps,
-  subscriptionEndpoint?: string,
+  subscriptionEndpoint?: string
 ): { link: ApolloLink; subscriptionClient?: SubscriptionClient } => {
   let connectionParams = {}
   const { headers, credentials } = session
@@ -70,7 +63,7 @@ export const defaultLinkCreator = (
   const httpLink = new HttpLink({
     uri: session.endpoint,
     headers,
-    credentials,
+    credentials
   })
 
   if (!subscriptionEndpoint) {
@@ -80,7 +73,7 @@ export const defaultLinkCreator = (
   const subscriptionClient = new SubscriptionClient(subscriptionEndpoint, {
     timeout: 20000,
     lazy: true,
-    connectionParams,
+    connectionParams
   })
 
   const webSocketLink = new WebSocketLink(subscriptionClient)
@@ -88,9 +81,9 @@ export const defaultLinkCreator = (
     link: ApolloLink.split(
       operation => isSubscription(operation),
       webSocketLink as any,
-      httpLink,
+      httpLink
     ),
-    subscriptionClient,
+    subscriptionClient
   }
 }
 
@@ -115,7 +108,7 @@ function* runQuerySaga(action) {
   const request = {
     query: session.query,
     operationName,
-    variables: getParsedVariablesFromSession(session),
+    variables: getParsedVariablesFromSession(session)
   }
   const operation = makeOperation(request)
   const operationIsSubscription = isSubscription(operation)
@@ -130,7 +123,7 @@ function* runQuerySaga(action) {
   const lol = {
     endpoint: session.endpoint,
     headers,
-    credentials: settings['request.credentials'],
+    credentials: settings['request.credentials']
   }
 
   const { link, subscriptionClient } = linkCreator(lol, subscriptionEndpoint)
@@ -144,8 +137,8 @@ function* runQuerySaga(action) {
         closed = true
         emitter({
           error: new Error(
-            `Could not connect to websocket endpoint ${subscriptionEndpoint}. Please check if the endpoint url is correct.`,
-          ),
+            `Could not connect to websocket endpoint ${subscriptionEndpoint}. Please check if the endpoint url is correct.`
+          )
         })
         emitter(END)
       })
@@ -160,7 +153,7 @@ function* runQuerySaga(action) {
       },
       complete: () => {
         emitter(END)
-      },
+      }
     })
 
     const unsubscribe = () => {
@@ -195,7 +188,7 @@ function* runQuerySaga(action) {
       const response = new ResponseRecord({
         date: JSON.stringify(value ? value : formatError(error), null, 2),
         time: new Date(),
-        resultID: cuid(),
+        resultID: cuid()
       })
       const errorMessage = extractMessage(error)
       if (errorMessage === 'Failed to fetch') {
@@ -268,8 +261,5 @@ function* stopQuerySaga(action) {
 
 export const fecthingSagas = [
   takeEvery('RUN_QUERY', safely(runQuerySaga)),
-  takeLatest('STOP_QUERY', safely(stopQuerySaga)),
+  takeLatest('STOP_QUERY', safely(stopQuerySaga))
 ]
-
-// needed to fix typescript
-export { ForkEffect }

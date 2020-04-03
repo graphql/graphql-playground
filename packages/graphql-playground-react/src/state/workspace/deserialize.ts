@@ -8,31 +8,33 @@ import { RootState, Workspace, normalizeSettingsString } from './reducers'
 import { AppHistory, AppHistoryItem } from '../appHistory/reducers'
 
 export function deserializePersistedState(state) {
+  // @ts-ignore
   return new RootState({
     workspaces: deserializeWorkspaces(state.workspaces),
     selectedWorkspace: state.selectedWorkspace,
     settingsString: normalizeSettingsString(state.settingsString),
     appHistory: deserializeAppHistory(state.appHistory),
-    general: deserializeGeneral(state.general),
+    general: deserializeGeneral(state.general)
   }) as any
 }
 
 function deserializeWorkspaces(workspaces) {
   return Map(
     mapValues(workspaces, (workspace, workspaceId) => {
+      // @ts-ignore
       return new Workspace({
         docs: deserializeDocs(workspace.docs),
         sessions: deserializeSessionsState(workspace.sessions),
         sharing: deserializeSharing(workspace.sharing),
-        history: deserializeHistory(workspace.history),
+        history: deserializeHistory(workspace.history)
       })
-    }),
+    })
   )
 }
 
 function deserializeAppHistory(state) {
   return new AppHistory({
-    items: OrderedMap(mapValues(state.items, item => new AppHistoryItem(item))),
+    items: OrderedMap(mapValues(state.items, item => new AppHistoryItem(item)))
   })
 }
 
@@ -43,9 +45,9 @@ function deserializeDocs(state) {
         docsOpen: docsSession.docsOpen,
         keyMove: docsSession.keyMove,
         docsWidth: docsSession.docsWidth,
-        navStack: deserializeNavstack(docsSession.navStack),
+        navStack: deserializeNavstack(docsSession.navStack)
       })
-    }),
+    })
   )
 }
 
@@ -56,15 +58,18 @@ function deserializeNavstack(navStack) {
 
 function deserializeSessionsState(state) {
   const sessions = deserializeSessions(state.sessions)
+  // @ts-ignore
+  const sessionId = sessions.first()!.id
   const selectedSessionId =
     state.selectedSessionId && state.selectedSessionId !== ''
       ? state.selectedSessionId
-      : sessions.first()!.id
+      : sessionId
+  // @ts-ignore
   return new SessionState({
     selectedSessionId,
     sessions,
     sessionCount: sessions.size,
-    headers: state.headers,
+    headers: state.headers
   })
 }
 
@@ -87,7 +92,7 @@ function deserializeSession(session) {
       : undefined,
     nextQueryStartTime: session.nextQueryStartTime
       ? new Date(session.nextQueryStartTime)
-      : undefined,
+      : undefined
   })
 }
 
@@ -95,7 +100,7 @@ function deserializeResponses(responses) {
   return List(
     responses
       .filter(r => r.isSchemaError)
-      .map(response => deserializeResponse(response)),
+      .map(response => deserializeResponse(response))
   )
 }
 
@@ -104,7 +109,7 @@ function deserializeResponse(response) {
     resultID: response.resultID,
     date: response.date,
     time: new Date(response.time),
-    isSchemaError: response.isSchemaError || false,
+    isSchemaError: response.isSchemaError || false
   })
 }
 

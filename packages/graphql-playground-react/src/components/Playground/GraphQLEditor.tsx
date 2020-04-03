@@ -11,7 +11,7 @@ import CodeMirrorSizer from 'graphiql/dist/utility/CodeMirrorSizer'
 import TopBar from './TopBar/TopBar'
 import {
   VariableEditorComponent,
-  HeadersEditorComponent,
+  HeadersEditorComponent
 } from './VariableEditor'
 import Spinner from '../Spinner'
 import Results from './Results'
@@ -48,7 +48,7 @@ import {
   getOperations,
   getOperationName,
   getHeadersCount,
-  getSelectedSessionIdFromRoot,
+  getSelectedSessionIdFromRoot
 } from '../../state/sessions/selectors'
 import {
   updateQueryFacts,
@@ -63,7 +63,7 @@ import {
   toggleTracing,
   setEditorFlex,
   toggleVariables,
-  fetchSchema,
+  fetchSchema
 } from '../../state/sessions/actions'
 import { ResponseRecord } from '../../state/sessions/reducers'
 import { getDocsOpen } from '../../state/docs/selectors'
@@ -243,8 +243,9 @@ class GraphQLEditor extends React.PureComponent<Props & ReduxProps> {
             <ResultWrap>
               <ResultDragBar ref={this.setResponseResizer} />
               <ExecuteButton />
-              {this.props.queryRunning &&
-                this.props.responses.size === 0 && <Spinner />}
+              {this.props.queryRunning && this.props.responses.size === 0 && (
+                <Spinner />
+              )}
               <Results setRef={this.setResultComponent} />
               {!this.props.queryRunning &&
                 (!this.props.responses || this.props.responses.size === 0) && (
@@ -352,7 +353,7 @@ class GraphQLEditor extends React.PureComponent<Props & ReduxProps> {
 
   setSideTabActiveContentRef = ref => {
     if (ref) {
-      this.activeSideTabContent = ref.getWrappedInstance()
+      this.activeSideTabContent = ref
     }
   }
 
@@ -365,7 +366,7 @@ class GraphQLEditor extends React.PureComponent<Props & ReduxProps> {
   autoCompleteLeafs() {
     const { insertions, result } = fillLeafs(
       this.props.schema,
-      this.props.query,
+      this.props.query
     ) as {
       insertions: Array<{ index: number; string: string }>
       result: string
@@ -386,9 +387,9 @@ class GraphQLEditor extends React.PureComponent<Props & ReduxProps> {
               {
                 className: 'autoInsertedLeaf',
                 clearOnEnter: true,
-                title: 'Automatically added leaf fields',
-              },
-            ),
+                title: 'Automatically added leaf fields'
+              }
+            )
           )
           setTimeout(() => markers.forEach(marker => marker.clear()), 7000)
         } catch (e) {
@@ -431,7 +432,7 @@ class GraphQLEditor extends React.PureComponent<Props & ReduxProps> {
       (onRemoveFn = () => {
         elem.removeEventListener('DOMNodeRemoved', onRemoveFn)
         elem.removeEventListener('click', this.onClickHintInformation)
-      }),
+      })
     )
   }
 
@@ -451,7 +452,8 @@ class GraphQLEditor extends React.PureComponent<Props & ReduxProps> {
 
       const editorBar = ReactDOM.findDOMNode(this.editorBarComponent)
       const leftSize = moveEvent.clientX - getLeft(editorBar) - offset
-      const rightSize = editorBar.clientWidth - leftSize
+      // @ts-ignore
+      const rightSize = editorBar!.clientWidth - leftSize
       this.props.setEditorFlex(leftSize / rightSize)
     }
 
@@ -490,7 +492,8 @@ class GraphQLEditor extends React.PureComponent<Props & ReduxProps> {
 
       const editorBar = ReactDOM.findDOMNode(this.editorBarComponent)
       const topSize = moveEvent.clientY - getTop(editorBar) - offset
-      const bottomSize = editorBar.clientHeight - topSize
+      // @ts-ignore
+      const bottomSize = editorBar!.clientHeight - topSize
       if (bottomSize < 60) {
         this.props.closeTracing(hadHeight)
       } else {
@@ -538,7 +541,8 @@ class GraphQLEditor extends React.PureComponent<Props & ReduxProps> {
 
       const editorBar = ReactDOM.findDOMNode(this.editorBarComponent)
       const topSize = moveEvent.clientY - getTop(editorBar) - offset
-      const bottomSize = editorBar.clientHeight - topSize
+      // @ts-ignore
+      const bottomSize = editorBar!.clientHeight - topSize
       if (bottomSize < 60) {
         this.props.closeVariables(hadHeight)
       } else {
@@ -613,7 +617,7 @@ const mapStateToProps = createStructuredSelector({
   operationName: getOperationName,
   headersCount: getHeadersCount,
   sessionId: getSelectedSessionIdFromRoot,
-  docsOpen: getDocsOpen,
+  docsOpen: getDocsOpen
 })
 
 export default // TODO fix redux types
@@ -633,12 +637,12 @@ connect<any, any, any>(
     setEditorFlex,
     toggleVariables,
     fetchSchema,
-    changeWidthDocs,
+    changeWidthDocs
   },
   null,
   {
-    withRef: true,
-  },
+    forwardRef: true
+  }
 )(GraphQLEditor)
 
 const EditorBar = styled.div`

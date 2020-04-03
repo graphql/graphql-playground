@@ -7,7 +7,7 @@ import {
   getCurrentQueryStartTime,
   getCurrentQueryEndTime,
   getTracingSupported,
-  getQueryRunning,
+  getQueryRunning
 } from '../../state/sessions/selectors'
 import { connect } from 'react-redux'
 
@@ -115,7 +115,8 @@ class ResponseTracing extends React.PureComponent<ReduxProps & Props> {
         ) : (
           <NotSupported>
             This GraphQL server doesn’t support tracing. See the following page
-            for instructions:<br />
+            for instructions:
+            <br />
             https://github.com/apollographql/apollo-tracing
           </NotSupported>
         )}
@@ -129,7 +130,7 @@ const mapStateToProps = createStructuredSelector({
   startTime: getCurrentQueryStartTime,
   endTime: getCurrentQueryEndTime,
   tracingSupported: getTracingSupported,
-  queryRunning: getQueryRunning,
+  queryRunning: getQueryRunning
 })
 
 export default connect(mapStateToProps)(ResponseTracing)

@@ -8,7 +8,7 @@
 
 import * as React from 'react'
 import { GraphQLSchema } from 'graphql'
-import * as MD from 'markdown-it'
+import MD from 'markdown-it'
 import { connect } from 'react-redux'
 import onHasCompletion from './onHasCompletion'
 import { editQuery, setScrollTop } from '../../state/sessions/actions'
@@ -18,7 +18,7 @@ import {
   getSelectedSessionIdFromRoot,
   getScrollTop,
   getTabWidth,
-  getUseTabs,
+  getUseTabs
 } from '../../state/sessions/selectors'
 import EditorWrapper from './EditorWrapper'
 import { styled } from '../../styled'
@@ -116,24 +116,24 @@ export class QueryEditor extends React.PureComponent<Props & ReduxProps, {}> {
       showCursorWhenSelecting: true,
       readOnly: false,
       foldGutter: {
-        minFoldSize: 4,
+        minFoldSize: 4
       },
       lint: {
-        schema: this.props.schema,
+        schema: this.props.schema
       },
       hintOptions: {
         schema: this.props.schema,
         closeOnUnfocus: true,
-        completeSingle: false,
+        completeSingle: false
       },
       info: {
         schema: this.props.schema,
         renderDescription: text => md.render(text),
-        onClick: this.props.onClickReference,
+        onClick: this.props.onClickReference
       },
       jump: {
         schema: this.props.schema,
-        onClick: this.props.onClickReference,
+        onClick: this.props.onClickReference
       },
       gutters,
       extraKeys: {
@@ -160,8 +160,8 @@ export class QueryEditor extends React.PureComponent<Props & ReduxProps, {}> {
         'Alt-Right': 'goGroupRight',
 
         'Cmd-F': 'findPersistent',
-        'Ctrl-F': 'findPersistent',
-      },
+        'Ctrl-F': 'findPersistent'
+      }
     })
 
     this.editor.on('change', this.onEdit)
@@ -225,7 +225,7 @@ export class QueryEditor extends React.PureComponent<Props & ReduxProps, {}> {
     if (this.props.setScrollTop && this.props.sessionId) {
       this.props.setScrollTop(
         this.props.sessionId!,
-        this.node.querySelector('.CodeMirror-scroll').scrollTop,
+        this.node.querySelector('.CodeMirror-scroll').scrollTop
       )
     }
   }
@@ -311,13 +311,12 @@ const mapStateToProps = createStructuredSelector({
   sessionId: getSelectedSessionIdFromRoot,
   scrollTop: getScrollTop,
   tabWidth: getTabWidth,
-  useTabs: getUseTabs,
+  useTabs: getUseTabs
 })
 
-export default connect(
-  mapStateToProps,
-  { onChange: editQuery, setScrollTop },
-)(QueryEditor)
+export default connect(mapStateToProps, { onChange: editQuery, setScrollTop })(
+  QueryEditor
+)
 
 const Editor = styled.div`
   flex: 1 1 0%;

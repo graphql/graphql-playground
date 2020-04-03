@@ -15,7 +15,7 @@ import { createStructuredSelector } from 'reselect'
 import {
   getQueryRunning,
   getOperations,
-  getSelectedSessionIdFromRoot,
+  getSelectedSessionIdFromRoot
 } from '../../state/sessions/selectors'
 import { toJS } from './util/toJS'
 
@@ -46,7 +46,7 @@ class ExecuteButton extends React.Component<ReduxProps, State> {
 
     this.state = {
       optionsOpen: false,
-      highlight: null,
+      highlight: null
     }
   }
 
@@ -168,8 +168,8 @@ class ExecuteButton extends React.Component<ReduxProps, State> {
           if (firstTime) {
             this.onOptionSelected(
               this.props.operations.find(
-                op => op.name.value === upEvent.target.textContent,
-              ) || this.props.operations[0],
+                op => op.name.value === upEvent.target.textContent
+              ) || this.props.operations[0]
             )
             firstTime = false
           }
@@ -184,13 +184,12 @@ class ExecuteButton extends React.Component<ReduxProps, State> {
 const mapStateToProps = createStructuredSelector({
   queryRunning: getQueryRunning,
   operations: getOperations,
-  sessionId: getSelectedSessionIdFromRoot,
+  sessionId: getSelectedSessionIdFromRoot
 })
 
-export default connect(
-  mapStateToProps,
-  { runQuery, stopQuery },
-)(toJS(ExecuteButton))
+export default connect(mapStateToProps, { runQuery, stopQuery })(
+  toJS(ExecuteButton)
+)
 
 const Wrapper = styled.div`
   position: absolute;

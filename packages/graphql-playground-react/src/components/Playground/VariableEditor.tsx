@@ -13,7 +13,7 @@ import { editVariables, editHeaders } from '../../state/sessions/actions'
 import {
   getVariables,
   getVariableToType,
-  getHeaders,
+  getHeaders
 } from '../../state/sessions/selectors'
 import { createStructuredSelector } from 'reselect'
 import { VariableToType } from '../../state/sessions/reducers'
@@ -95,19 +95,19 @@ class VariableEditor extends React.PureComponent<Props & ReduxProps> {
       showCursorWhenSelecting: true,
       readOnly: false,
       foldGutter: {
-        minFoldSize: 4,
+        minFoldSize: 4
       },
       lint: {
         variableToType: this.props.variableToType
           ? this.props.variableToType.toJS()
-          : undefined,
+          : undefined
       },
       hintOptions: {
         variableToType: this.props.variableToType
           ? this.props.variableToType.toJS()
           : undefined,
         closeOnUnfocus: false,
-        completeSingle: false,
+        completeSingle: false
       },
       gutters: ['CodeMirror-linenumbers', 'CodeMirror-foldgutter'],
       extraKeys: {
@@ -141,8 +141,8 @@ class VariableEditor extends React.PureComponent<Props & ReduxProps> {
         'Ctrl-Left': 'goSubwordLeft',
         'Ctrl-Right': 'goSubwordRight',
         'Alt-Left': 'goGroupLeft',
-        'Alt-Right': 'goGroupRight',
-      },
+        'Alt-Right': 'goGroupRight'
+      }
     })
 
     this.editor.on('change', this._onEdit)
@@ -234,26 +234,20 @@ class VariableEditor extends React.PureComponent<Props & ReduxProps> {
 
 const mapStateToVariablesProps = createStructuredSelector({
   value: getVariables,
-  variableToType: getVariableToType,
+  variableToType: getVariableToType
 })
 
-export const VariableEditorComponent = connect(
-  mapStateToVariablesProps,
-  {
-    onChange: editVariables,
-  },
-)(VariableEditor)
+export const VariableEditorComponent = connect(mapStateToVariablesProps, {
+  onChange: editVariables
+})(VariableEditor)
 
 const mapStateToHeadersProps = createStructuredSelector({
-  value: getHeaders,
+  value: getHeaders
 })
 
-export const HeadersEditorComponent = connect(
-  mapStateToHeadersProps,
-  {
-    onChange: editHeaders,
-  },
-)(VariableEditor)
+export const HeadersEditorComponent = connect(mapStateToHeadersProps, {
+  onChange: editHeaders
+})(VariableEditor)
 
 const Editor = styled.div`
   flex: 1;

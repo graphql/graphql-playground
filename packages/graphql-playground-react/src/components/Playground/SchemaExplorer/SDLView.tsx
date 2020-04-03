@@ -4,14 +4,14 @@ import { connect } from 'react-redux'
 import {
   toggleDocs,
   changeWidthDocs,
-  setDocsVisible,
+  setDocsVisible
 } from '../../../state/docs/actions'
 import Spinner from '../../Spinner'
 import { columnWidth } from '../../../constants'
 import { SideTabContentProps } from '../ExplorerTabs/SideTabs'
 import {
   getSelectedSessionIdFromRoot,
-  getIsPollingSchema,
+  getIsPollingSchema
 } from '../../../state/sessions/selectors'
 import { getSessionDocs } from '../../../state/docs/selectors'
 import { createStructuredSelector } from 'reselect'
@@ -111,21 +111,21 @@ const mapDispatchToProps = dispatch =>
     {
       toggleDocs,
       changeWidthDocs,
-      setDocsVisible,
+      setDocsVisible
     },
-    dispatch,
+    dispatch
   )
 
 const mapStateToProps = createStructuredSelector({
   settings: getSettings,
   docs: getSessionDocs,
   sessionId: getSelectedSessionIdFromRoot,
-  isPollingSchema: getIsPollingSchema,
+  isPollingSchema: getIsPollingSchema
 })
 
 export default connect<StateFromProps, DispatchFromProps, SideTabContentProps>(
   mapStateToProps,
   mapDispatchToProps,
   null,
-  { withRef: true },
+  { forwardRef: true }
 )(SDLView)

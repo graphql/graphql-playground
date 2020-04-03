@@ -1,4 +1,4 @@
-import * as cuid from 'cuid'
+import cuid from 'cuid'
 import { getQueryTypes } from './components/Playground/util/getQueryTypes'
 import { List, Map } from 'immutable'
 
@@ -106,7 +106,7 @@ export const modalStyle = {
     backgroundColor: 'rgba(15,32,46,.9)',
     display: 'flex',
     alignItems: 'center',
-    justifyContent: 'center',
+    justifyContent: 'center'
   },
   content: {
     position: 'relative',
@@ -120,8 +120,8 @@ export const modalStyle = {
     padding: 0,
     border: 'none',
     background: 'none',
-    boxShadow: '0 1px 7px rgba(0,0,0,.2)',
-  },
+    boxShadow: '0 1px 7px rgba(0,0,0,.2)'
+  }
 }
 
 export function getDefaultSession(endpoint: string) {
@@ -168,6 +168,6 @@ export function getDefaultSession(endpoint: string) {
     nextQueryStartTime: undefined,
     tracingSupported: undefined,
     changed: undefined,
-    scrollTop: undefined,
+    scrollTop: undefined
   } as any
 }

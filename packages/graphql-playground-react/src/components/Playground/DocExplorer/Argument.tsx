@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { astFromValue, print } from 'graphql'
+import { astFromValue, ASTNode, print } from 'graphql'
 import TypeLink from './TypeLink'
 
 export interface Props {
@@ -14,7 +14,7 @@ export default function Argument({
   arg,
   showDefaultValue,
   x,
-  y,
+  y
 }: // sessionId,
 Props) {
   return (
@@ -30,7 +30,7 @@ Props) {
             <span>
               {' = '}
               <span className="arg-default-value">
-                {print(astFromValue(arg.defaultValue, arg.type))}
+                {print(astFromValue(arg.defaultValue, arg.type) as ASTNode)}
               </span>
             </span>
           )

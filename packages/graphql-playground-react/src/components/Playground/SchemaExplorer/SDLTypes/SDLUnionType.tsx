@@ -14,7 +14,9 @@ const UnionTypeSchema = ({ schema, type }: EnumTypeSchemaProps) => {
       <span className="field-name">union</span>{' '}
       <span className="type-name">{type.name}</span>
       {' = '}
-      {types.map(value => <SDLType key={value.name} type={value} />)}
+      {types.map(value => (
+        <SDLType key={value.name} type={value} />
+      ))}
     </DocType>
   )
 }
