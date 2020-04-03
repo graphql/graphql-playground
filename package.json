@@ -15,7 +15,7 @@
     "express": "4.16.3",
     "hapi": "17.5.0",
     "koa": "2.5.1",
-    "rimraf": "2.6.2"
+    "rimraf": "3.0.2"
   },
   "dependencies": {
     "dotenv": "^5.0.1"
