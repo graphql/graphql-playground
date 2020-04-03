@@ -645,15 +645,18 @@ const EditorBar = styled.div`
   display: flex;
   flex-direction: row;
   flex: 1;
+  height: 100%;
 `
 
 const ResultWrap = styled.div`
   display: flex;
   flex-direction: column;
   flex: 1;
+  height: 100%;
   position: relative;
   border-left: none;
   background: ${p => p.theme.editorColours.resultBackground};
+  overflow-anchor: auto;
 `
 
 const DragBar = styled.div`
