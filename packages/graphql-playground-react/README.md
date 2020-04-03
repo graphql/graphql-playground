@@ -50,6 +50,7 @@ All interfaces, the React component `<Playground />` and all middlewares expose 
 - `properties`
   - `endpoint` [`string`] - the GraphQL endpoint url.
   - `subscriptionEndpoint` [`string`] - the GraphQL subscriptions endpoint url.
+  - `aws` [`boolean`] - the subscription websocket is on AWS API Gateway
   - `setTitle` [`boolean`] - reflect the current endpoint in the page title
 
 ### As React Component

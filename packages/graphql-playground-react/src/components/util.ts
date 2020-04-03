@@ -6,7 +6,12 @@ export function getActiveEndpoints(
   config: GraphQLConfig,
   envName: string,
   projectName?: string,
-): { endpoint: string; subscriptionEndpoint?: string; headers?: any } {
+): {
+  endpoint: string
+  aws?: boolean
+  subscriptionEndpoint?: string
+  headers?: any
+} {
   if (projectName) {
     const env = config.projects![projectName].extensions!.endpoints![envName]!
     return getEndpointFromEndpointConfig(env)
@@ -22,11 +27,13 @@ export function getEndpointFromEndpointConfig(
   if (typeof env === 'string') {
     return {
       endpoint: env,
+      aws: undefined,
       subscriptionEndpoint: undefined,
     }
   } else {
     return {
       endpoint: env.url,
+      aws: env.aws,
       subscriptionEndpoint: env.subscription
         ? env.subscription!.url
         : undefined,
