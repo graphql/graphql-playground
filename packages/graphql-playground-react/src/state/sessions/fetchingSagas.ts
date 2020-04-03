@@ -2,6 +2,7 @@ import { ApolloLink, execute } from 'apollo-link'
 import { parseHeaders } from '../../components/Playground/util/parseHeaders'
 import { SubscriptionClient } from 'subscriptions-transport-ws'
 import { HttpLink } from 'apollo-link-http'
+import { DeferPatchLink } from 'apollo-link-patch'
 import { WebSocketLink } from 'apollo-link-ws'
 import { isSubscription } from '../../components/Playground/util/hasSubscription'
 import {
@@ -67,11 +68,13 @@ export const defaultLinkCreator = (
     connectionParams = { ...headers }
   }
 
-  const httpLink = new HttpLink({
-    uri: session.endpoint,
-    headers,
-    credentials,
-  })
+  const httpLink = new DeferPatchLink().concat(
+    new HttpLink({
+      uri: session.endpoint,
+      headers,
+      credentials,
+    }),
+  )
 
   if (!subscriptionEndpoint) {
     return { link: httpLink }
