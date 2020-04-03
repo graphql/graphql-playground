@@ -11,7 +11,7 @@
   },
   "devDependencies": {
     "@types/node": "10.1.4",
-    "aws-lambda": "0.1.2",
+    "aws-lambda": "1.0.5",
     "express": "4.16.3",
     "hapi": "17.5.0",
     "koa": "2.5.1",
