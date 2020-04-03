@@ -7,6 +7,7 @@ import { styled, ThemeProvider, theme as styledTheme } from '../styled'
 import { Store } from 'redux'
 import PlaygroundWrapper from './PlaygroundWrapper'
 import { injectState } from '../state/workspace/actions'
+import { GraphQLOAuthConfig } from '../graphqlConfig'
 
 export const store: Store<any> = createStore()
 
@@ -27,6 +28,7 @@ export interface Props {
   history?: any
   match?: any
   headers?: any
+  oauth?: GraphQLOAuthConfig
 }
 
 export interface State {
@@ -135,6 +137,7 @@ class GraphQLBinApp extends React.Component<Props & ReduxProps, State> {
             endpoint={endpoint}
             headers={this.state.headers}
             subscriptionEndpoint={subscriptionEndpoint}
+            oauth={this.props.oauth}
           />
         )}
       </Wrapper>

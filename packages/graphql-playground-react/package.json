@@ -126,6 +126,7 @@
     "lodash.debounce": "^4.0.8",
     "markdown-it": "^8.4.1",
     "marked": "^0.3.19",
+    "oidc-client": "^1.10.1",
     "prettier": "^1.13.0",
     "prop-types": "^15.6.0",
     "query-string": "5",

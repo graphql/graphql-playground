@@ -1,7 +1,7 @@
 import * as React from 'react'
 import Playground, { Playground as IPlayground } from './Playground'
 import { Helmet } from 'react-helmet'
-import { GraphQLConfig } from '../graphqlConfig'
+import { GraphQLConfig, GraphQLOAuthConfig } from '../graphqlConfig'
 import * as yaml from 'js-yaml'
 import ProjectsSideNav from './ProjectsSideNav'
 import {
@@ -68,6 +68,7 @@ export interface PlaygroundWrapperProps {
   codeTheme?: EditorColours
   workspaceName?: string
   headers?: any
+  oauth?: GraphQLOAuthConfig
 }
 
 export interface ReduxProps {
@@ -403,6 +404,7 @@ class PlaygroundWrapper extends React.Component<
               }
               createApolloLink={this.props.createApolloLink}
               schema={this.state.schema}
+              oauth={this.props.oauth}
             />
           </App>
         </ThemeProvider>

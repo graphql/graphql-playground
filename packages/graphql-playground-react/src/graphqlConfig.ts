@@ -36,3 +36,12 @@ export interface GraphQLConfigEnpointsMap {
 }
 
 export type GraphQLConfigEnpointsData = GraphQLConfigEnpointsMapData
+
+export interface GraphQLOAuthConfig {
+  authority: string
+  clientId: string
+  responseType?: string
+  scope?: string
+  redirectUri?: string
+  silentRedirectUri?: string
+}
