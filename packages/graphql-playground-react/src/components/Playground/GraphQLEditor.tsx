@@ -639,7 +639,7 @@ connect<any, any, any>(
   },
   null,
   {
-    withRef: true,
+    forwardRef: true,
   },
 )(GraphQLEditor)
 
