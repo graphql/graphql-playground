@@ -176,7 +176,6 @@ class GraphQLEditor extends React.PureComponent<Props & ReduxProps> {
         <EditorWrapper>
           <TopBar
             shareEnabled={this.props.shareEnabled}
-            fixedEndpoint={this.props.fixedEndpoint}
           />
           <EditorBar
             ref={this.setEditorBarComponent}
@@ -422,7 +421,7 @@ class GraphQLEditor extends React.PureComponent<Props & ReduxProps> {
     }
   }
 
-  private handleHintInformationRender = elem => {
+  private handleHintInformationRender = (elem) => {
     elem.addEventListener('click', this.onClickHintInformation)
 
     let onRemoveFn
@@ -451,6 +450,7 @@ class GraphQLEditor extends React.PureComponent<Props & ReduxProps> {
 
       const editorBar = ReactDOM.findDOMNode(this.editorBarComponent)
       const leftSize = moveEvent.clientX - getLeft(editorBar) - offset
+      // @ts-ignore
       const rightSize = editorBar.clientWidth - leftSize
       this.props.setEditorFlex(leftSize / rightSize)
     }
@@ -490,6 +490,7 @@ class GraphQLEditor extends React.PureComponent<Props & ReduxProps> {
 
       const editorBar = ReactDOM.findDOMNode(this.editorBarComponent)
       const topSize = moveEvent.clientY - getTop(editorBar) - offset
+      // @ts-ignore
       const bottomSize = editorBar.clientHeight - topSize
       if (bottomSize < 60) {
         this.props.closeTracing(hadHeight)
@@ -538,6 +539,7 @@ class GraphQLEditor extends React.PureComponent<Props & ReduxProps> {
 
       const editorBar = ReactDOM.findDOMNode(this.editorBarComponent)
       const topSize = moveEvent.clientY - getTop(editorBar) - offset
+      // @ts-ignore
       const bottomSize = editorBar.clientHeight - topSize
       if (bottomSize < 60) {
         this.props.closeVariables(hadHeight)

@@ -5,7 +5,7 @@ import { ConfigEditor } from './Playground/ConfigEditor'
 import { connect } from 'react-redux'
 import { createStructuredSelector } from 'reselect'
 import { getConfigString } from '../state/general/selectors'
-import { setSettingsString, setConfigString } from '../state/general/actions'
+import { setConfigString } from '../state/general/actions'
 import { editSettings, saveSettings } from '../state/sessions/actions'
 import { getSettingsString } from '../state/workspace/reducers'
 import EditorWrapper, { Container } from './Playground/EditorWrapper'
@@ -106,7 +106,7 @@ class SettingsEditorHOC extends React.Component<
 export const PlaygroundSettingsEditor = connect(
   playgroundSettingsSelector,
   {
-    onSave: setSettingsString,
+    // onSave: setSettingsString,
     editSettings,
     saveSettings,
   },

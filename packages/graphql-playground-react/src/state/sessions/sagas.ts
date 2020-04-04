@@ -6,7 +6,7 @@ import {
   takeEvery,
   put,
 } from 'redux-saga/effects'
-import { delay } from 'redux-saga'
+import { delay } from 'redux-saga/effects'
 import { getSelectedSession, getIsPollingSchema } from './selectors'
 import getSelectedOperationName from '../../components/Playground/util/getSelectedOperationName'
 import { getQueryFacts } from '../../components/Playground/util/getQueryFacts'

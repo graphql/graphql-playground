@@ -55,7 +55,7 @@ function deserializeNavstack(navStack) {
 }
 
 function deserializeSessionsState(state) {
-  const sessions = deserializeSessions(state.sessions)
+  const sessions: any = deserializeSessions(state.sessions)
   const selectedSessionId =
     state.selectedSessionId && state.selectedSessionId !== ''
       ? state.selectedSessionId

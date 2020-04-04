@@ -5,7 +5,7 @@ import { ISettings } from '../types'
 import HistoryPopup from './HistoryPopup'
 import { styled } from '../styled'
 import Settings from './Settings'
-import { PlaygroundSettingsEditor, GraphQLConfigEditor } from './SettingsEditor'
+import { GraphQLConfigEditor } from './SettingsEditor'
 import { GraphQLConfig } from '../graphqlConfig'
 import FileEditor from './FileEditor'
 import { ApolloLink } from 'apollo-link'
@@ -306,8 +306,8 @@ export class Playground extends React.PureComponent<Props & ReduxProps, State> {
                 isConfig={true}
                 readOnly={!this.props.canSaveConfig}
               />
-            ) : this.props.isSettingsTab ? (
-              <PlaygroundSettingsEditor onSave={this.handleSaveSettings} />
+            // ) : this.props.isSettingsTab ? (
+            //   <PlaygroundSettingsEditor  onSave={this.handleSaveSettings} />
             ) : this.props.isFile && this.props.file ? (
               <FileEditor />
             ) : (

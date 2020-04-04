@@ -44,8 +44,8 @@ export interface PlaygroundWrapperProps {
   subscriptionEndpoint?: string
   setTitle?: boolean
   settings?: ISettings
-  shareEnabled?: string
-  fixedEndpoint?: string
+  shareEnabled?: boolean
+  fixedEndpoint?: boolean
   folderName?: string
   configString?: string
   showNewWorkspace?: boolean
@@ -376,34 +376,36 @@ class PlaygroundWrapper extends React.Component<
                   configPath={this.props.configPath}
                 />
               )}
-            <Playground
-              endpoint={this.state.endpoint}
-              shareEnabled={this.props.shareEnabled}
-              subscriptionEndpoint={this.state.subscriptionEndpoint}
-              shareUrl={this.state.shareUrl}
-              onChangeEndpoint={this.handleChangeEndpoint}
-              onChangeSubscriptionsEndpoint={
-                this.handleChangeSubscriptionsEndpoint
-              }
-              adminAuthToken={this.state.platformToken}
-              getRef={this.getPlaygroundRef}
-              config={this.props.config!}
-              configString={this.state.configString!}
-              configIsYaml={this.state.configIsYaml!}
-              canSaveConfig={Boolean(this.props.canSaveConfig)}
-              onChangeConfig={this.handleChangeConfig}
-              onSaveConfig={this.handleSaveConfig}
-              onUpdateSessionCount={this.handleUpdateSessionCount}
-              fixedEndpoints={Boolean(this.state.configString)}
-              fixedEndpoint={this.props.fixedEndpoint}
-              headers={combinedHeaders}
-              configPath={this.props.configPath}
-              workspaceName={
-                this.props.workspaceName || this.state.activeProjectName
-              }
-              createApolloLink={this.props.createApolloLink}
-              schema={this.state.schema}
-            />
+            {
+              // @ts-ignore
+              <Playground
+                endpoint={this.state.endpoint}
+                shareEnabled={this.props.shareEnabled}
+                subscriptionEndpoint={this.state.subscriptionEndpoint}
+                shareUrl={this.state.shareUrl}
+                onChangeEndpoint={this.handleChangeEndpoint}
+                onChangeSubscriptionsEndpoint={
+                  this.handleChangeSubscriptionsEndpoint
+                }
+                getRef={this.getPlaygroundRef}
+                config={this.props.config!}
+                configString={this.state.configString!}
+                configIsYaml={this.state.configIsYaml!}
+                canSaveConfig={Boolean(this.props.canSaveConfig)}
+                onChangeConfig={this.handleChangeConfig}
+                onSaveConfig={this.handleSaveConfig}
+                onUpdateSessionCount={this.handleUpdateSessionCount}
+                fixedEndpoints={Boolean(this.state.configString)}
+                fixedEndpoint={this.props.fixedEndpoint}
+                headers={combinedHeaders}
+                configPath={this.props.configPath}
+                workspaceName={
+                  this.props.workspaceName || this.state.activeProjectName
+                }
+                createApolloLink={this.props.createApolloLink}
+                schema={this.state.schema}
+              />
+            }
           </App>
         </ThemeProvider>
       </div>
