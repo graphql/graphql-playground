@@ -29,10 +29,10 @@
     "aws-lambda": "^1.0.5"
   },
   "devDependencies": {
-    "@types/node": "9.4.0",
+    "@types/node": "^12.12.34",
     "aws-lambda": "^1.0.5",
-    "rimraf": "2.6.2",
-    "typescript": "2.6.2"
+    "rimraf": "^3.0.2",
+    "typescript": "^3.8.3"
   },
   "typings": "dist/index.d.ts",
   "typescript": {
