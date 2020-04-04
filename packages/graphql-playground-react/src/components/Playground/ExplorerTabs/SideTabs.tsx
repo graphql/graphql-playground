@@ -266,7 +266,7 @@ const ConnectedGraphDocs = connect<StateFromProps, DispatchFromProps, Props>(
   // @ts-ignore
   mapDispatchToProps,
   null,
-  { withRef: true },
+  { forwardRef: true },
 )(SideTabs)
 
 ConnectedGraphDocs.Tab = SideTab
