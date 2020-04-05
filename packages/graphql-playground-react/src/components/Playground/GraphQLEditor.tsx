@@ -336,7 +336,7 @@ class GraphQLEditor extends React.PureComponent<Props & ReduxProps> {
   }
   setSchemaExplorerRef = ref => {
     if (ref) {
-      this.schemaExplorerComponent = ref.getWrappedInstance()
+      this.schemaExplorerComponent = ref
     }
   }
   setContainerComponent = ref => {
@@ -351,7 +351,7 @@ class GraphQLEditor extends React.PureComponent<Props & ReduxProps> {
 
   setSideTabActiveContentRef = ref => {
     if (ref) {
-      this.activeSideTabContent = ref.getWrappedInstance()
+      this.activeSideTabContent = ref
     }
   }
 
@@ -421,7 +421,7 @@ class GraphQLEditor extends React.PureComponent<Props & ReduxProps> {
     }
   }
 
-  private handleHintInformationRender = (elem) => {
+  private handleHintInformationRender = elem => {
     elem.addEventListener('click', this.onClickHintInformation)
 
     let onRemoveFn
@@ -448,9 +448,8 @@ class GraphQLEditor extends React.PureComponent<Props & ReduxProps> {
         return onMouseUp()
       }
 
-      const editorBar = ReactDOM.findDOMNode(this.editorBarComponent)
+      const editorBar = ReactDOM.findDOMNode(this.editorBarComponent) as Element
       const leftSize = moveEvent.clientX - getLeft(editorBar) - offset
-      // @ts-ignore
       const rightSize = editorBar.clientWidth - leftSize
       this.props.setEditorFlex(leftSize / rightSize)
     }
@@ -488,9 +487,8 @@ class GraphQLEditor extends React.PureComponent<Props & ReduxProps> {
 
       didMove = true
 
-      const editorBar = ReactDOM.findDOMNode(this.editorBarComponent)
+      const editorBar = ReactDOM.findDOMNode(this.editorBarComponent) as Element
       const topSize = moveEvent.clientY - getTop(editorBar) - offset
-      // @ts-ignore
       const bottomSize = editorBar.clientHeight - topSize
       if (bottomSize < 60) {
         this.props.closeTracing(hadHeight)
@@ -537,9 +535,8 @@ class GraphQLEditor extends React.PureComponent<Props & ReduxProps> {
 
       didMove = true
 
-      const editorBar = ReactDOM.findDOMNode(this.editorBarComponent)
+      const editorBar = ReactDOM.findDOMNode(this.editorBarComponent) as Element
       const topSize = moveEvent.clientY - getTop(editorBar) - offset
-      // @ts-ignore
       const bottomSize = editorBar.clientHeight - topSize
       if (bottomSize < 60) {
         this.props.closeVariables(hadHeight)

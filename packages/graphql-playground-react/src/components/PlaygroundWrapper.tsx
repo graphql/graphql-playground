@@ -376,36 +376,33 @@ class PlaygroundWrapper extends React.Component<
                   configPath={this.props.configPath}
                 />
               )}
-            {
-              // @ts-ignore
-              <Playground
-                endpoint={this.state.endpoint}
-                shareEnabled={this.props.shareEnabled}
-                subscriptionEndpoint={this.state.subscriptionEndpoint}
-                shareUrl={this.state.shareUrl}
-                onChangeEndpoint={this.handleChangeEndpoint}
-                onChangeSubscriptionsEndpoint={
-                  this.handleChangeSubscriptionsEndpoint
-                }
-                getRef={this.getPlaygroundRef}
-                config={this.props.config!}
-                configString={this.state.configString!}
-                configIsYaml={this.state.configIsYaml!}
-                canSaveConfig={Boolean(this.props.canSaveConfig)}
-                onChangeConfig={this.handleChangeConfig}
-                onSaveConfig={this.handleSaveConfig}
-                onUpdateSessionCount={this.handleUpdateSessionCount}
-                fixedEndpoints={Boolean(this.state.configString)}
-                fixedEndpoint={this.props.fixedEndpoint}
-                headers={combinedHeaders}
-                configPath={this.props.configPath}
-                workspaceName={
-                  this.props.workspaceName || this.state.activeProjectName
-                }
-                createApolloLink={this.props.createApolloLink}
-                schema={this.state.schema}
-              />
-            }
+            <Playground
+              endpoint={this.state.endpoint}
+              shareEnabled={this.props.shareEnabled}
+              subscriptionEndpoint={this.state.subscriptionEndpoint}
+              shareUrl={this.state.shareUrl}
+              onChangeEndpoint={this.handleChangeEndpoint}
+              onChangeSubscriptionsEndpoint={
+                this.handleChangeSubscriptionsEndpoint
+              }
+              getRef={this.getPlaygroundRef}
+              config={this.props.config!}
+              configString={this.state.configString!}
+              configIsYaml={this.state.configIsYaml!}
+              canSaveConfig={Boolean(this.props.canSaveConfig)}
+              onChangeConfig={this.handleChangeConfig}
+              onSaveConfig={this.handleSaveConfig}
+              onUpdateSessionCount={this.handleUpdateSessionCount}
+              fixedEndpoints={Boolean(this.state.configString)}
+              fixedEndpoint={this.props.fixedEndpoint}
+              headers={combinedHeaders}
+              configPath={this.props.configPath}
+              workspaceName={
+                this.props.workspaceName || this.state.activeProjectName
+              }
+              createApolloLink={this.props.createApolloLink}
+              schema={this.state.schema}
+            />
           </App>
         </ThemeProvider>
       </div>

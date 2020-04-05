@@ -35,10 +35,9 @@ export interface State {
 class HistoryPopup extends React.Component<ReduxProps, State> {
   constructor(props: ReduxProps) {
     super(props)
-    const selectedItemIndex = props.items.keySeq().first() || ''
+    const selectedItemIndex: any = props.items.keySeq().first() || ''
     this.state = {
       selectedFilter: 'HISTORY',
-      // @ts-ignore
       selectedItemIndex,
       searchTerm: '',
     }
@@ -66,6 +65,7 @@ class HistoryPopup extends React.Component<ReduxProps, State> {
         onRequestClose={this.props.closeHistory}
         contentLabel="GraphiQL Session History"
         style={modalStyle}
+        ariaHideApp={false}
       >
         <Wrapper>
           <Left>
@@ -138,12 +138,15 @@ const mapStateToProps = createStructuredSelector({
   isOpen: getHistoryOpen,
 })
 
-export default connect(mapStateToProps, {
-  closeHistory,
-  openHistory,
-  duplicateSession,
-  toggleHistoryItemStarring,
-})(HistoryPopup)
+export default connect(
+  mapStateToProps,
+  {
+    closeHistory,
+    openHistory,
+    duplicateSession,
+    toggleHistoryItemStarring,
+  },
+)(HistoryPopup)
 
 const Wrapper = styled.div`
   display: flex;
