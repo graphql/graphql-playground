@@ -52,6 +52,7 @@ export default class Popup extends React.Component<Props, {}> {
         isOpen={true}
         onRequestClose={this.props.onRequestClose}
         style={modalStyle}
+        ariaHideApp={false}
         contentLabel="Popup"
       >
         <ContentWrapper>{this.props.children}</ContentWrapper>

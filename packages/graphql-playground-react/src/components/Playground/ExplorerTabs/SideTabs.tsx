@@ -46,8 +46,9 @@ export interface Props {
 
 export interface SideTabContentProps {
   schema: GraphQLSchema
-  sessionId: string
-  setWidth: (props?: any) => any
+  sessionId?: string
+  ref?: any
+  setWidth?: (props?: any) => any
 }
 
 export interface State {
@@ -264,9 +265,10 @@ const mapStateToProps = createStructuredSelector({
 
 const ConnectedGraphDocs = connect<StateFromProps, DispatchFromProps, Props>(
   mapStateToProps,
+  // @ts-ignore
   mapDispatchToProps,
   null,
-  { withRef: true },
+  { forwardRef: true },
 )(SideTabs)
 
 ConnectedGraphDocs.Tab = SideTab

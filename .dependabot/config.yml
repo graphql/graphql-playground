@@ -1,0 +1,132 @@
+version: 1
+update_configs:
+  - package_manager: 'javascript'
+    directory: '/'
+    update_schedule: 'live'
+    allowed_updates:
+      - match:
+          update_type: 'security'
+    commit_message:
+      prefix: 'fix'
+      prefix_development: 'chore'
+      include_scope: true
+  - package_manager: 'javascript'
+    directory: '/packages/graphql-playground-react'
+    update_schedule: 'live'
+    allowed_updates:
+      - match:
+          update_type: 'security'
+    commit_message:
+      prefix: 'fix'
+      prefix_development: 'chore'
+      include_scope: true
+  - package_manager: 'javascript'
+    directory: '/packages/graphql-playground-html'
+    update_schedule: 'live'
+    allowed_updates:
+      - match:
+          update_type: 'security'
+    commit_message:
+      prefix: 'fix'
+      prefix_development: 'chore'
+      include_scope: true
+  - package_manager: 'javascript'
+    directory: '/packages/graphql-playground-electron'
+    update_schedule: 'live'
+    allowed_updates:
+      - match:
+          update_type: 'security'
+    commit_message:
+      prefix: 'fix'
+      prefix_development: 'fix'
+      include_scope: true
+  - package_manager: 'javascript'
+    directory: '/packages/graphql-playground-middleware-hapi'
+    update_schedule: 'live'
+    allowed_updates:
+      - match:
+          update_type: 'security'
+    commit_message:
+      prefix: 'fix'
+      prefix_development: 'fix'
+      include_scope: true
+  - package_manager: 'javascript'
+    directory: '/packages/graphql-playground-middleware-express'
+    update_schedule: 'live'
+    allowed_updates:
+      - match:
+          update_type: 'security'
+    commit_message:
+      prefix: 'fix'
+      prefix_development: 'fix'
+      include_scope: true
+  - package_manager: 'javascript'
+    directory: '/packages/graphql-playground-middleware-koa'
+    update_schedule: 'live'
+    allowed_updates:
+      - match:
+          update_type: 'security'
+    commit_message:
+      prefix: 'fix'
+      prefix_development: 'fix'
+      include_scope: true
+  - package_manager: 'javascript'
+    directory: '/packages/graphql-playground-middleware-lambda'
+    update_schedule: 'live'
+    allowed_updates:
+      - match:
+          update_type: 'security'
+    commit_message:
+      prefix: 'fix'
+      prefix_development: 'fix'
+      include_scope: true
+  - package_manager: 'javascript'
+    directory: '/packages/graphql-playground-middleware-hapi/examples/basic'
+    update_schedule: 'live'
+    allowed_updates:
+      - match:
+          update_type: 'security'
+    commit_message:
+      prefix: 'fix'
+      prefix_development: 'fix'
+      include_scope: true
+  - package_manager: 'javascript'
+    directory: '/packages/graphql-playground-middleware-express/examples/basic'
+    update_schedule: 'live'
+    allowed_updates:
+      - match:
+          update_type: 'security'
+    commit_message:
+      prefix: 'fix'
+      prefix_development: 'fix'
+      include_scope: true
+  - package_manager: 'javascript'
+    directory: '/packages/graphql-playground-middleware-express/examples/graphcool'
+    update_schedule: 'live'
+    allowed_updates:
+      - match:
+          update_type: 'security'
+    commit_message:
+      prefix: 'fix'
+      prefix_development: 'fix'
+      include_scope: true
+  - package_manager: 'javascript'
+    directory: '/packages/graphql-playground-middleware-lambda/examples/basic'
+    update_schedule: 'live'
+    allowed_updates:
+      - match:
+          update_type: 'security'
+    commit_message:
+      prefix: 'fix'
+      prefix_development: 'fix'
+      include_scope: true
+  - package_manager: 'javascript'
+    directory: '/packages/graphql-playground-middleware-koa/examples/basic'
+    update_schedule: 'live'
+    allowed_updates:
+      - match:
+          update_type: 'security'
+    commit_message:
+      prefix: 'fix'
+      prefix_development: 'fix'
+      include_scope: true
