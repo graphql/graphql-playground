@@ -5,6 +5,9 @@ import { throttle } from 'lodash'
 import { Button } from './Button'
 import { styled, css } from '../styled'
 
+// @ts-ignore
+import imageSource from '../assets/logo.png'
+
 export interface Props {
   onRequestClose: (endpoint: string) => void
   endpoint: string
@@ -60,7 +63,7 @@ export default class EndpointPopup extends React.Component<Props, State> {
         <Wrapper>
           <LogoWrapper>
             <Logo>
-              <img src={require('../assets/logo.png')} alt="" />
+              <img src={imageSource} alt="" />
               <Heading>GraphQL Playground</Heading>
             </Logo>
           </LogoWrapper>

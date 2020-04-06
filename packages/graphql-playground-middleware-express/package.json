@@ -28,10 +28,10 @@
     "express": "^4.16.2"
   },
   "devDependencies": {
-    "@types/node": "9.4.0",
-    "express": "^4.16.4",
-    "rimraf": "2.6.2",
-    "typescript": "2.6.2"
+    "@types/node": "12.12.34",
+    "express": "^4.17.1",
+    "rimraf": "3.0.2",
+    "typescript": "3.8.3"
   },
   "dependencies": {
     "graphql-playground-html": "1.6.13"

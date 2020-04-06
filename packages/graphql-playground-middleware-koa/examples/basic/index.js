@@ -1,34 +1,34 @@
+const gql = require('graphql-tag')
 const koa = require('koa')
 const koaRouter = require('koa-router')
 const koaBody = require('koa-bodyparser')
-const { graphqlKoa } = require('apollo-server-koa')
+const { ApolloServer } = require('apollo-server-koa')
 const { makeExecutableSchema } = require('graphql-tools')
-const koaPlayground = require('../../src/index').default
+const koaPlayground = require('../../dist/index').default
 
-const schema = makeExecutableSchema({
-  typeDefs: `
+const typeDefs = gql`
     type Query {
       hello: String!
     }
     schema {
       query: Query
     }
-  `,
-  resolvers: {
-    Query: {
-      hello: () => 'world',
-    },
+  `
+const resolvers = {
+  Query: {
+    hello: () => 'world',
   },
-})
+}
 
 const app = new koa()
 const router = new koaRouter()
 const PORT = 4000
+const schema = makeExecutableSchema({ typeDefs, resolvers })
+const graphql = new ApolloServer({ schema });
+graphql.applyMiddleware({ app });
 
 // koaBody is needed just for POST.
 app.use(koaBody())
-
-router.post('/graphql', graphqlKoa({ schema }))
 
 router.all(
   '/playground',

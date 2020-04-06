@@ -1,6 +1,6 @@
 {
   "private": true,
-  "_workspaces": [
+  "workspaces": [
     "packages/*"
   ],
   "scripts": {
@@ -10,14 +10,14 @@
     "release-react": "bash scripts/release-react.sh"
   },
   "devDependencies": {
-    "@types/node": "10.1.4",
+    "@hapi/hapi": "19.1.1",
+    "@types/node": "12.12.34",
     "aws-lambda": "1.0.5",
-    "express": "4.16.3",
-    "hapi": "^18.1.0",
-    "koa": "2.5.1",
-    "rimraf": "2.6.2"
+    "express": "4.17.1",
+    "koa": "2.11.0",
+    "rimraf": "3.0.2"
   },
   "dependencies": {
-    "dotenv": "^5.0.1"
+    "dotenv": "8.2.0"
   }
 }

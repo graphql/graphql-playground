@@ -1,4 +1,8 @@
-import { GraphQLSchema, introspectionQuery, buildClientSchema } from 'graphql'
+import {
+  GraphQLSchema,
+  getIntrospectionQuery,
+  buildClientSchema,
+} from 'graphql'
 import { NoSchemaError } from './util/NoSchemaError'
 import { ApolloLink, execute } from 'apollo-link'
 import { Map, set } from 'immutable'
@@ -114,7 +118,7 @@ export class SchemaFetcher {
 
     const { link } = this.linkGetter(options)
 
-    const operation = makeOperation({ query: introspectionQuery })
+    const operation = makeOperation({ query: getIntrospectionQuery() })
 
     return new Promise((resolve, reject) => {
       execute(link, operation).subscribe({

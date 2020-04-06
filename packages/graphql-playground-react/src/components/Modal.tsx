@@ -21,6 +21,7 @@ const ModalComponent = ({
       onRequestClose={onRequestClose}
       contentLabel={contentLabel}
       style={modalStyle}
+      ariaHideApp={false}
     >
       {children}
     </Modal>
