@@ -1,6 +1,11 @@
 <p align="center"><img src="https://imgur.com/5fzMbyV.png" width="269"></p>
 
-[![npm version](https://badge.fury.io/js/graphql-playground-react.svg)](https://badge.fury.io/js/graphql-playground-react) [![CircleCI](https://circleci.com/gh/prisma/graphql-playground.svg?style=shield)](https://circleci.com/gh/prisma/graphql-playground)
+[![npm version](https://badge.fury.io/js/graphql-playground-react.svg)](https://badge.fury.io/js/graphql-playground-react) 
+[![prisma-labs](https://circleci.com/gh/prisma-labs/graphql-playground.svg?style=shield)](https://circleci.com/gh/prisma-labs/graphql-playground)
+
+**Future of this repository**: see [the announcement issue](https://github.com/prisma-labs/graphql-playground/issues/1143) for details.
+
+---
 
 GraphQL IDE for better development workflows (GraphQL Subscriptions, interactive docs & collaboration). <br />
 **You can download the [desktop app](https://github.com/prisma/graphql-playground/releases) or use the web version at graphqlbin.com: [Demo](https://graphqlbin.com/v2/6RQ6TM)**
