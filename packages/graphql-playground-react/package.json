@@ -129,7 +129,7 @@
     "lodash": "^4.17.11",
     "lodash.debounce": "^4.0.8",
     "markdown-it": "^8.4.1",
-    "marked": "^0.3.19",
+    "marked": "^0.8.2",
     "prettier": "2.0.2",
     "prop-types": "^15.7.2",
     "query-string": "5",
