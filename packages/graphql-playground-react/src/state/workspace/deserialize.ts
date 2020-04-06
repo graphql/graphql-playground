@@ -17,7 +17,7 @@ export function deserializePersistedState(state) {
   }) as any
 }
 
-function deserializeWorkspaces(workspaces) {
+function deserializeWorkspaces(workspaces): Map<string, any> {
   return Map(
     mapValues(workspaces, (workspace, workspaceId) => {
       return new Workspace({
@@ -36,7 +36,7 @@ function deserializeAppHistory(state) {
   })
 }
 
-function deserializeDocs(state) {
+function deserializeDocs(state): Map<string, any> {
   return Map(
     mapValues(state, docsSession => {
       return new DocsSession({
@@ -55,13 +55,15 @@ function deserializeNavstack(navStack) {
 }
 
 function deserializeSessionsState(state) {
-  const sessions = deserializeSessions(state.sessions)
+  const sessions: any = deserializeSessions(state.sessions)
   const selectedSessionId =
     state.selectedSessionId && state.selectedSessionId !== ''
       ? state.selectedSessionId
-      : sessions.first()!.id
+      : // @ts-ignore
+        sessions.first()!.id
   return new SessionState({
     selectedSessionId,
+    // @ts-ignore
     sessions,
     sessionCount: sessions.size,
     headers: state.headers,

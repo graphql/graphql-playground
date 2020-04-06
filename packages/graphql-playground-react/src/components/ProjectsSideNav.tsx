@@ -146,6 +146,7 @@ const TitleRow = styled.div`
   justify-content: space-evenly;
   margin: 0 15px 20px 15px;
   svg {
+    -webkit-app-region: no-drag;
     min-width: 18px;
     min-height: 18px;
     cursor: pointer;

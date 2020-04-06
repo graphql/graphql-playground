@@ -152,6 +152,7 @@ function makeStateFromTabs(tabs: Tab[]): RootState {
       {} as OrderedMap<string, Session>,
     ),
   )
+  // @ts-ignore
   const selectedSessionId = tabSessions.first()!.id
   const workspace = makeWorkspace(endpoint)
     .setIn(['sessions', 'sessions'], tabSessions)

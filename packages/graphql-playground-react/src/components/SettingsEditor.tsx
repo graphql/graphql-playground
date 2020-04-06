@@ -106,7 +106,7 @@ class SettingsEditorHOC extends React.Component<
 export const PlaygroundSettingsEditor = connect(
   playgroundSettingsSelector,
   {
-    onSave: setSettingsString,
+    onChange: setSettingsString,
     editSettings,
     saveSettings,
   },

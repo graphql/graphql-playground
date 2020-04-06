@@ -142,6 +142,7 @@ interface TabItemProps {
 }
 
 const TabItem = styled<TabItemProps, 'div'>('div')`
+  -webkit-app-region: no-drag;
   flex: 0 0 auto;
   display: flex;
   align-items: center;
