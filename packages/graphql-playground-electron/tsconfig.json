@@ -11,7 +11,7 @@
     "noImplicitThis": true,
     "noUnusedLocals": true,
     "lib": [
-      "es2015",
+      "esnext",
       "dom"
     ],
     "outDir": "lib",

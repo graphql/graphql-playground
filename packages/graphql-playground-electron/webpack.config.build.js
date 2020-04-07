@@ -3,7 +3,6 @@ const HtmlWebpackPlugin = require('html-webpack-plugin')
 const cssnano = require('cssnano')
 const path = require('path')
 const config = require('./webpack.config')
-const HappyPack = require('happypack')
 const os = require('os')
 const fs = require('fs')
 const UglifyJSParallelPlugin = require('webpack-uglify-parallel')
@@ -18,6 +17,7 @@ if (!fs.existsSync(appEntrypoint)) {
 
 module.exports = {
   devtool: 'source-map',
+  mode: 'production',
   target: 'electron-renderer',
   entry: {
     app: ['./src/renderer'],
@@ -41,10 +41,6 @@ module.exports = {
         exclude: /node_modules/,
       },
       {
-        test: /\.json$/, // TODO check if still needed
-        loader: 'json-loader',
-      },
-      {
         test: /\.css$/,
         loader: 'style-loader!css-loader',
       },
@@ -54,21 +50,16 @@ module.exports = {
           'style-loader!css-loader?modules&importLoaders=1&localIdentName=[name]__[local]___[hash:base64:5]!postcss-loader!sass-loader',
       },
       {
-        test: /\.ts(x?)$/,
-        include: __dirname + '/src',
-        use: [
-          {
-            loader: 'happypack/loader?id=babel',
-          },
-          {
-            loader: 'happypack/loader?id=ts',
-          },
-        ],
+        test: /\.(ts|js)x?$/,
+        exclude: /node_modules/,
+        use: {
+          loader: 'babel-loader'
+        },
       },
       {
-        test: /\.js$/,
-        loader: 'happypack/loader?id=babel',
-        include: __dirname + '/src',
+        test: /\.mjs$/,
+        include: /node_modules/,
+        type: "javascript/auto"
       },
       {
         test: /\.mp3$/,
@@ -88,6 +79,11 @@ module.exports = {
         loader: 'file-loader',
       },
     ],
+  },
+  optimization: {
+    splitChunks: {
+      chunks: 'all',
+    },
   },
   plugins: [
     new webpack.DefinePlugin({
@@ -117,7 +113,6 @@ module.exports = {
       /\.js$/,
     ),
     new webpack.NormalModuleReplacementPlugin(/\/iconv-loader$/, 'node-noop'),
-    new webpack.optimize.CommonsChunkPlugin('vendor'),
     new webpack.optimize.ModuleConcatenationPlugin(),
     new webpack.LoaderOptionsPlugin({
       options: {
@@ -139,19 +134,9 @@ module.exports = {
         },
       },
     }),
-    new HappyPack({
-      id: 'ts',
-      threads: 2,
-      loaders: ['ts-loader?' + JSON.stringify({ happyPackMode: true })],
-    }),
-    new HappyPack({
-      id: 'babel',
-      threads: 2,
-      loaders: ['babel-loader'],
-    }),
   ],
   resolve: {
     modules: [path.resolve('./src'), 'node_modules'],
-    extensions: ['.js', '.ts', '.tsx'],
+    extensions: ['.mjs','.js', '.ts', '.tsx'],
   },
 }

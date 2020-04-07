@@ -5,7 +5,6 @@ const BundleAnalyzerPlugin = require('webpack-bundle-analyzer')
 const path = require('path')
 const fs = require('fs')
 const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin')
-const HappyPack = require('happypack')
 const { renderPlaygroundPage } = require('graphql-playground-html')
 
 const appEntrypoint = 'src/renderer/index.html'
@@ -17,8 +16,9 @@ if (!fs.existsSync(appEntrypoint)) {
 
 module.exports = {
   devtool: 'cheap-module-eval-source-map',
+  mode: 'development',
   entry: './src/renderer',
-  target: 'electron',
+  target: 'electron-main',
   output: {
     filename: '[name].[hash].js',
     publicPath: '/',
@@ -37,24 +37,12 @@ module.exports = {
       },
       {
         test: /\.css$/,
-        loader: 'style-loader!css-loader',
+        loaders: ['style-loader', 'css-loader']
       },
       {
-        test: /\.ts(x?)$/,
-        include: [__dirname + '/src'],
-        use: [
-          {
-            loader: 'happypack/loader?id=babel',
-          },
-          {
-            loader: 'happypack/loader?id=ts',
-          },
-        ],
-      },
-      {
-        test: /\.js$/,
-        loader: 'babel-loader',
+        test: /\.(js|ts|tsx)$/,
         exclude: /node_modules/,
+        loader: 'babel-loader'
       },
       {
         test: /\.mp3$/,
@@ -76,7 +64,7 @@ module.exports = {
   },
   plugins: [
     new webpack.HotModuleReplacementPlugin(),
-    new ForkTsCheckerWebpackPlugin({}),
+    new ForkTsCheckerWebpackPlugin(),
     new webpack.DefinePlugin({
       'process.env': {
         NODE_ENV: JSON.stringify('production'),
@@ -100,20 +88,10 @@ module.exports = {
         },
       },
     }),
-    new HappyPack({
-      id: 'ts',
-      threads: 2,
-      loaders: ['ts-loader?' + JSON.stringify({ happyPackMode: true })],
-    }),
-    new HappyPack({
-      id: 'babel',
-      threads: 2,
-      loaders: ['babel-loader'],
-    }),
     // new BundleAnalyzerPlugin(),
   ],
   resolve: {
     modules: [path.resolve('./src'), 'node_modules'],
-    extensions: ['.js', '.ts', '.tsx'],
+    extensions: ['.js', '.css', '.ts', '.tsx'],
   },
 }
