@@ -2,10 +2,9 @@ const webpack = require('webpack')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const cssnano = require('cssnano')
 const path = require('path')
-const config = require('./webpack.config')
-const os = require('os')
 const fs = require('fs')
 const UglifyJSParallelPlugin = require('webpack-uglify-parallel')
+const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin')
 const { renderPlaygroundPage } = require('graphql-playground-html')
 
 const appEntrypoint = 'src/renderer/index.html'
@@ -50,11 +49,16 @@ module.exports = {
           'style-loader!css-loader?modules&importLoaders=1&localIdentName=[name]__[local]___[hash:base64:5]!postcss-loader!sass-loader',
       },
       {
-        test: /\.(ts|js)x?$/,
-        exclude: /node_modules/,
-        use: {
-          loader: 'babel-loader'
-        },
+        test: /\.(js|ts|tsx)$/,
+        include: path.join(__dirname, './src'),
+        use: [
+          {
+            loader:'babel-loader'
+          },
+          {
+            loader:'ts-loader'
+          }
+        ]
       },
       {
         test: /\.mjs$/,
@@ -86,6 +90,7 @@ module.exports = {
     },
   },
   plugins: [
+    new ForkTsCheckerWebpackPlugin(),
     new webpack.DefinePlugin({
       'process.env': {
         NODE_ENV: JSON.stringify('production'),
