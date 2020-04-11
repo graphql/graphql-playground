@@ -1,12 +1,11 @@
 import {
   takeLatest,
   ForkEffect,
-  call,
+  delay,
   select,
   takeEvery,
   put,
 } from 'redux-saga/effects'
-import { delay } from 'redux-saga'
 import { getSelectedSession, getIsPollingSchema } from './selectors'
 import getSelectedOperationName from '../../components/Playground/util/getSelectedOperationName'
 import { getQueryFacts } from '../../components/Playground/util/getQueryFacts'
@@ -41,7 +40,7 @@ import * as queryString from 'query-string'
 
 function* setQueryFacts() {
   // debounce by 100 ms
-  yield call(delay, 100)
+  yield delay(100)
   const session: Session = yield select(getSelectedSession)
 
   const { schema } = yield schemaFetcher.fetch(session)
@@ -81,7 +80,7 @@ function* setQueryFacts() {
 
 function* reflectQueryToUrl({ payload }) {
   // debounce by 100 ms
-  yield call(delay, 100)
+  yield delay(100)
   if (!location.search.includes('query')) {
     return
   }
@@ -150,7 +149,7 @@ function* fetchSchemaSaga() {
     )
   } catch (e) {
     yield put(schemaFetchingError(session.endpoint))
-    yield call(delay, 5000)
+    yield delay(5000)
     yield put(fetchSchema())
   }
 }
@@ -168,7 +167,7 @@ function* refetchSchemaSaga() {
     )
   } catch (e) {
     yield put(schemaFetchingError(session.endpoint))
-    yield call(delay, 5000)
+    yield delay(5000)
     yield put(refetchSchema())
   }
 }
