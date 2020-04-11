@@ -260,6 +260,9 @@ export class Playground extends React.PureComponent<Props & ReduxProps, State> {
             ? props.sessionHeaders
             : JSON.stringify(props.headers),
         credentials: props.settings['request.credentials'],
+        useTracingHeader:
+          !this.initialSchemaFetch &&
+          this.props.settings['tracing.tracingSupported'],
       }
       const schema = await schemaFetcher.fetch(data)
       schemaFetcher.subscribe(data, newSchema => {
