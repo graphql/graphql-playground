@@ -98,7 +98,7 @@ class SettingsEditorHOC extends React.Component<
     this.props.editSettings()
   }
   handleSave = () => {
-    this.props.onSave(this.state.value)
+    this.props.onChange(this.state.value)
     this.props.saveSettings()
   }
 }
