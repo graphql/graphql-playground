@@ -414,11 +414,9 @@ class GraphQLEditor extends React.PureComponent<Props & ReduxProps> {
     }
 
     const editor = this.queryEditorComponent.getCodeMirror()
-    if (editor.hasFocus()) {
-      const cursor = editor.getCursor()
-      const cursorIndex = editor.indexFromPos(cursor)
-      this.props.runQueryAtPosition(cursorIndex)
-    }
+    const cursor = editor.getCursor()
+    const cursorIndex = editor.indexFromPos(cursor)
+    this.props.runQueryAtPosition(cursorIndex)
   }
 
   private handleHintInformationRender = elem => {
