@@ -17,5 +17,6 @@ module.exports = {
       tsConfigFile: 'tsconfig.jest.json',
     },
   },
+  testURL: 'https://localhost',
   setupFiles: ['<rootDir>/config/polyfills.js', 'jest-localstorage-mock'],
 }
