@@ -5,7 +5,7 @@
   "license": "MIT",
   "dependencies": {
     "apollo-server-lambda": "^2.11.0",
-    "graphql": "^14.6.0",
+    "graphql": "^15.0.0",
     "graphql-playground-middleware-lambda": "^1.7.13",
     "graphql-tools": "^4.0.7"
   },

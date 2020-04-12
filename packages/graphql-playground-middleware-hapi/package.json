@@ -27,7 +27,7 @@
     "hapi"
   ],
   "peerDependencies": {
-    "hapi": "^18.1.0"
+    "@hapi/hapi": "^19.1.1"
   },
   "devDependencies": {
     "@types/node": "12.12.34",
