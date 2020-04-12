@@ -7,10 +7,10 @@ cd packages
 packages=(
   graphql-playground-react
   graphql-playground-html
-  graphql-playground-electron
+  # graphql-playground-electron
   graphql-playground-middleware-express
-  graphql-playground-middleware-hapi
-  graphql-playground-middleware-koa
+  # graphql-playground-middleware-hapi
+  # graphql-playground-middleware-koa
   graphql-playground-middleware-lambda
 )
 
