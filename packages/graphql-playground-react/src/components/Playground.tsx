@@ -69,13 +69,13 @@ export interface Props {
   isEndpoint?: boolean
   isApp?: boolean
   onChangeEndpoint?: (endpoint: string) => void
-  share: (state: any) => void
+  share?: (state: any) => void
   shareUrl?: string
   onChangeSubscriptionsEndpoint?: (endpoint: string) => void
   getRef?: (ref: Playground) => void
   graphqlConfig?: any
-  onSaveSettings: () => void
-  onChangeSettings: (settingsString: string) => void
+  onSaveSettings?: () => void
+  onChangeSettings?: (settingsString: string) => void
   onSaveConfig: () => void
   onChangeConfig: (configString: string) => void
   onUpdateSessionCount?: () => void
@@ -265,6 +265,9 @@ export class Playground extends React.PureComponent<Props & ReduxProps, State> {
               ? JSON.stringify(props.headers)
               : undefined,
         credentials: props.settings['request.credentials'],
+        useTracingHeader:
+          !this.initialSchemaFetch &&
+          this.props.settings['tracing.tracingSupported'],
       }
       const schema = await schemaFetcher.fetch(data)
       schemaFetcher.subscribe(data, newSchema => {

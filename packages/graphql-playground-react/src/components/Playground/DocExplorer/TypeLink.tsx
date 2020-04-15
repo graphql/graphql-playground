@@ -37,7 +37,7 @@ export interface Props {
   showParentName?: boolean
   collapsable?: boolean
   lastActive: boolean
-  sessionId: string
+  sessionId?: string
 }
 
 interface State {
