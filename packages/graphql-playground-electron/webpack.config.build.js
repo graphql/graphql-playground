@@ -41,10 +41,6 @@ module.exports = {
         exclude: /node_modules/,
       },
       {
-        test: /\.json$/, // TODO check if still needed
-        loader: 'json-loader',
-      },
-      {
         test: /\.css$/,
         loader: 'style-loader!css-loader',
       },
