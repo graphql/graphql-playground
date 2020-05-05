@@ -252,7 +252,7 @@ export class Playground extends React.PureComponent<Props & ReduxProps, State> {
   }
 
   async schemaGetter(propsInput?: Props & ReduxProps) {
-    const props = this.props || propsInput
+    const props = propsInput || this.props
     const endpoint = props.sessionEndpoint || props.endpoint
     const currentSchema = this.state.schema
     try {
@@ -267,7 +267,7 @@ export class Playground extends React.PureComponent<Props & ReduxProps, State> {
         credentials: props.settings['request.credentials'],
         useTracingHeader:
           !this.initialSchemaFetch &&
-          this.props.settings['tracing.tracingSupported'],
+          props.settings['tracing.tracingSupported'],
       }
       const schema = await schemaFetcher.fetch(data)
       schemaFetcher.subscribe(data, newSchema => {
