@@ -1,4 +1,10 @@
 {
-  "presets": ["es2015", "es2016", "react"],
-  "plugins": ["babel-plugin-styled-components"]
+  "presets": [
+    "@babel/preset-env",
+    "@babel/preset-react"
+  ],
+  "plugins": [
+    "@babel/plugin-proposal-object-rest-spread",
+    "babel-plugin-styled-components"
+  ]
 }

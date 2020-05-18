@@ -13,3 +13,6 @@ export const getSessionDocsState = createSelector(
 export const getSessionDocs = createSelector([getSessionDocsState], state => {
   return state.toJS()
 })
+export const getDocsOpen = createSelector([getSessionDocsState], state => {
+  return state.get('docsOpen')
+})

@@ -22,15 +22,15 @@ import { styled } from '../../styled'
 /* tslint:disable */
 
 interface Props {
-  onHintInformationRender: () => void
+  onHintInformationRender: (elem) => void
   onRunQuery: () => void
-  prettifyQuery: () => void
+  prettifyQuery?: () => void
   getRef?: (editor: VariableEditor) => void
 }
 
 interface ReduxProps {
   value: string
-  variableToType: VariableToType
+  variableToType?: VariableToType
   onChange: (variable: string) => void
 }
 

@@ -4,12 +4,10 @@ import {
   renderPlaygroundPage,
 } from 'graphql-playground-html'
 
-/* tslint:disable-next-line */
-
 export default function lambdaPlayground(options: MiddlewareOptions) {
   return async (
-    event,
-    lambdaContext: lambda.Context,
+    _event,
+    _lambdaContext: lambda.Context,
     callback: lambda.Callback,
   ) => {
     const body = await renderPlaygroundPage(options)

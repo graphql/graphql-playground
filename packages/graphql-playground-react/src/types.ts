@@ -33,4 +33,5 @@ export interface ISettings {
   ['schema.polling.interval']: number
   ['tracing.hideTracingResponse']: boolean
   ['request.globalHeaders']: { [key: string]: string }
+  ['tracing.tracingSupported']: boolean
 }

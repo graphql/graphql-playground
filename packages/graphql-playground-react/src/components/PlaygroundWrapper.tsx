@@ -44,8 +44,8 @@ export interface PlaygroundWrapperProps {
   subscriptionEndpoint?: string
   setTitle?: boolean
   settings?: ISettings
-  shareEnabled?: string
-  fixedEndpoint?: string
+  shareEnabled?: boolean
+  fixedEndpoint?: boolean
   folderName?: string
   configString?: string
   showNewWorkspace?: boolean
@@ -385,7 +385,6 @@ class PlaygroundWrapper extends React.Component<
               onChangeSubscriptionsEndpoint={
                 this.handleChangeSubscriptionsEndpoint
               }
-              adminAuthToken={this.state.platformToken}
               getRef={this.getPlaygroundRef}
               config={this.props.config!}
               configString={this.state.configString!}

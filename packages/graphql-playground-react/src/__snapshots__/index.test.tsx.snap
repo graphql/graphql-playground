@@ -3,167 +3,188 @@
 exports[`test MiddleWareApp passed default headers 1`] = `
 <div>
   <div
-    class="sc-bAeIUo jscPmU"
+    class="sc-dEoRIm RziiU"
   >
     <div
-      class="playground sc-hXRMBi caimge"
+      class="sc-giadOv bQhkVW playground"
     >
       <div
-        class="sc-lhVmIH hMZGpR"
+        class="sc-gojNiO JVBvg"
       >
         <div
-          class="sc-bYSBpT cgxKmR"
+          class="sc-daURTG cZCkPb"
         >
           <div
-            class="sc-jnlKLf eYHWGF"
+            class="sc-esOvli lhalyo"
           >
             <div
-              class="sc-hEsumM cXKFpX"
+              class="sc-cLQEGU kvnLZM"
             >
               <div
-                class="sc-ktHwxA loQVQX"
+                class="sc-gqPbQI cjzsAe"
               />
             </div>
             <div
-              class="sc-fYxtnH fzgrEl"
+              class="sc-cmthru ehXREM"
             >
               New Tab
             </div>
             <div
-              class="close sc-btzYZH cttKsG"
-            />
+              class="sc-cQFLBn bpxnwx close"
+            >
+              <svg
+                height="11"
+                stroke-width="7"
+                viewBox="0 0 50 50"
+                width="12"
+              >
+                <title>
+                  Close Tab
+                </title>
+                <line
+                  x1="4"
+                  x2="46"
+                  y1="4"
+                  y2="46"
+                />
+                <line
+                  x1="46"
+                  x2="4"
+                  y1="4"
+                  y2="46"
+                />
+              </svg>
+            </div>
           </div>
           <div
-            class="sc-elJkPf jYmNRN"
-          />
+            class="sc-bXGyLb bNndAB"
+          >
+            <svg
+              height="34"
+              stroke-width="4"
+              viewBox="0 0 50 50"
+              width="34"
+            >
+              <title>
+                Opens a New Tab
+              </title>
+              <line
+                x1="25"
+                x2="25"
+                y1="13.1"
+                y2="36.9"
+              />
+              <line
+                x1="36.9"
+                x2="13.1"
+                y1="25"
+                y2="25"
+              />
+            </svg>
+          </div>
         </div>
       </div>
       <div
-        class="graphiqls-container sc-epnACN kltGk"
+        class="sc-fONwsr hFUbho"
       >
         <div
-          class="graphiql-wrapper active sc-iQNlJl kEHQIY"
+          class="sc-VJcYb iBSEOK graphiql-wrapper active"
         >
           <div
             class="sc-EHOje cIypmL"
           >
             <div
-              class="sc-ifAKCX fjtMTo"
+              class="sc-ifAKCX dAtAHQ"
             >
               <div
-                class="sc-fMiknA eacLCC"
+                class="sc-cvbbAY kOflzg"
               >
                 <button
-                  class="sc-fBuWsC fLszzQ"
+                  class="sc-eHgmQL dvmgwq"
                 >
                   Prettify
                 </button>
                 <button
-                  class="sc-fBuWsC fLszzQ"
+                  class="sc-eHgmQL dvmgwq"
                 >
                   History
                 </button>
                 <div
-                  class="sc-eqIVtm cgwgzU"
+                  class="sc-brqgnP kOowTR"
                 >
                   <input
-                    class="sc-dVhcbM jTygPs"
-                    value="about:blank"
+                    class="sc-jWBwVP cljqcK"
+                    value="https://localhost/"
                   />
                   <div
-                    class="sc-Rmtcm kkUIDC"
+                    style="display:flex;flex-direction:row;align-items:center;position:absolute;left:6px"
                   >
-                    <svg
-                      class="sc-bRBYWo linmmw"
-                      viewBox="0 0 20 20"
+                    <div
+                      class="sc-jKJlTe sc-iAyFgw cVhxIQ"
+                      title="Polling Schema"
                     >
-                      <circle
-                        class="sc-hzDkRC jSRGuu"
-                        cx="9.5"
-                        cy="10"
-                        fill="none"
-                        r="6"
-                        stroke-linecap="round"
-                        stroke-width="1.5"
+                      <div
+                        class="sc-hSdWYo vFglF"
                       />
-                      <path
-                        class="sc-jhAzac NPpIa"
-                        d="M4.83 4.86a6.92 6.92 0 0 1 11.3 2.97l.41-1.23c.13-.4.56-.6.95-.47.4.13.6.56.47.95l-1.13 3.33a.76.76 0 0 1-.7.5.72.72 0 0 1-.43-.12l-2.88-1.92a.76.76 0 0 1-.2-1.04.75.75 0 0 1 1.03-.2l1.06.7A5.34 5.34 0 0 0 9.75 4.5a5.44 5.44 0 0 0-5.64 5.22 5.42 5.42 0 0 0 5.24 5.62c.41 0 .74.36.72.78a.75.75 0 0 1-.75.72H9.3a6.9 6.9 0 0 1-6.68-7.18 6.88 6.88 0 0 1 2.22-4.81z"
-                      />
-                    </svg>
-                  </div>
-                </div>
-                <button
-                  class="sc-fBuWsC fLszzQ"
-                >
-                  Copy CURL
-                </button>
-                <div
-                  class="sc-jAaTju izqnJQ"
-                >
-                  <div
-                    class="sc-gPEVay hZVzor"
-                  >
-                    <div>
-                      <button
-                        class="sc-fBuWsC fLszzQ"
-                      >
-                        Share Playground
-                      </button>
                     </div>
                   </div>
                 </div>
+                <button
+                  class="sc-eHgmQL dvmgwq"
+                >
+                  Copy CURL
+                </button>
               </div>
               <div
-                class="sc-cHGsZl gXxfHh"
+                class="sc-eXEjpC bdygHZ"
               >
                 <div
-                  class="sc-uJMKN keNgMU"
+                  class="sc-hZSUBg HwDAJ"
                 >
                   <div
-                    class="sc-ifAKCX fjtMTo"
+                    class="sc-ifAKCX dAtAHQ"
                   >
                     <div
-                      class="sc-bZQynM gulWsJ"
+                      class="sc-bZQynM imcoIY"
                     />
                   </div>
                   <div
-                    class="sc-kvZOFW kEeHPI sc-hmzhuo hJPwxf"
+                    class="sc-hrWEMg sc-gwVKww iHIHnA"
                     height="200"
                   >
                     <div
-                      class="sc-hqyNC iVUKVr sc-frDJqD bjpSmb"
+                      class="sc-eTuwsz rgpvV sc-hXRMBi ilAbNh"
                     >
                       <span
-                        class="sc-jbKcbu crrjpn"
+                        class="sc-epnACN czrRzC"
                       >
                         Query Variables
                       </span>
                       <span
-                        class="sc-jbKcbu cUoSJz"
+                        class="sc-epnACN icSOla"
                       >
                         HTTP Headers (1)
                       </span>
                     </div>
                     <div
-                      class="sc-kjoXOD djmrSS"
+                      class="sc-gPEVay ihtVGC"
                     />
                   </div>
                   <div
-                    class="sc-cJSrbW cdFwbg sc-kgAjT hfRSWa"
+                    class="sc-RefOD sc-iQKALj kFhaXe"
                   />
                 </div>
                 <div
-                  class="sc-TOsTZ GvCtl"
+                  class="sc-ibxdXY chknfe"
                 >
                   <div
-                    class="sc-ksYbfQ hvCXwe sc-kgAjT hfRSWa"
+                    class="sc-RefOD sc-bwCtUz ecnDqC"
                   />
                   <div
                     class="sc-bdVaJa bFURGJ"
                   >
                     <div
-                      class="sc-bwzfXH iNzYbQ"
+                      class="sc-bwzfXH kJytub"
                       title="Execute Query (Ctrl-Enter)"
                     >
                       <svg
@@ -178,43 +199,43 @@ exports[`test MiddleWareApp passed default headers 1`] = `
                     </div>
                   </div>
                   <div
-                    class="sc-iwsKbI cRrmDs"
+                    class="sc-csuQGl jqqEqQ"
                   >
                     <div
-                      class="sc-gZMcBi ruAOc"
+                      class="sc-Rmtcm izeTTo"
                     >
                       <div
-                        class="sc-jTzLTM dWZjO"
+                        class="sc-jhAzac czBwBS"
                       >
                         <div
-                          class="sc-dnqmqq hqaUtI"
+                          class="sc-gipzik jWCgLV"
                         />
                       </div>
                     </div>
                   </div>
                   <div
-                    class="sc-bbmXgH kEppjG"
+                    class="sc-cMhqgX NzONc"
                   >
                     Hit the Play Button to get a response here
                   </div>
                   <div
-                    class="sc-dNLxif dRzCeo sc-hmzhuo hJPwxf"
+                    class="sc-hrWEMg sc-iQNlJl eDYAQB"
                     height="300"
                   >
                     <div
-                      class="sc-jqCOkK kXpZpy sc-frDJqD bjpSmb"
+                      class="sc-eTuwsz rgpvV sc-bsbRJL kbrtay"
                     >
                       <span
-                        class="sc-jbKcbu crrjpn"
+                        class="sc-epnACN czrRzC"
                       >
                         Tracing
                       </span>
                     </div>
                     <div
-                      class="sc-kgoBCf dBQkwa"
+                      class="sc-caSCKo jXBojK"
                     >
                       <div
-                        class="sc-kpOJdX cREUIk"
+                        class="sc-kjoXOD bJwwoz"
                       >
                         This GraphQL server doesn’t support tracing. See the following page for instructions:
                         <br />
@@ -226,51 +247,63 @@ exports[`test MiddleWareApp passed default headers 1`] = `
               </div>
             </div>
             <div
-              class="graph-docs docExplorerWrap docs sc-jKJlTe kXYhbp"
+              class="sc-kgAjT hyCFBj"
               style="width:0"
             >
               <div
-                class="docs-button"
-              >
-                Schema
-              </div>
-              <div
-                class="sc-hMqMXs jdpLqQ"
-              />
-              <div
-                class="doc-explorer-gradient"
-              />
-              <div
-                class="sc-eNQAEJ jXONrf"
-                tabindex="0"
+                class="sc-hmzhuo ckIQDP"
               >
                 <div
-                  class="doc-explorer-container"
+                  class="sc-TOsTZ iRmVrA"
                 >
-                  <div
-                    class="graph-docs-column overflow"
-                    style="width:300px"
-                  >
-                    <div
-                      class="sc-gzVnrw fNvFrw"
-                    >
-                      <div
-                        class="sc-htoDjs kgEMPg"
-                      />
-                    </div>
-                  </div>
+                  Docs
+                </div>
+                <div
+                  class="sc-TOsTZ FJeHV"
+                >
+                  Schema
                 </div>
               </div>
+              <div
+                class="sc-ksYbfQ jvrrBm"
+              />
+              <div
+                class="sc-frDJqD esEVLt"
+              />
+              <div
+                class="sc-cJSrbW hLWfWH"
+              />
             </div>
+            }
           </div>
         </div>
       </div>
       <div
-        class="sc-eXEjpC cltmBE"
+        class="sc-krDsej iXTGTt"
       >
         <div
-          class="sc-ibxdXY kyOYfW"
-        />
+          class="sc-dTdPqK jlWbrI"
+        >
+          <svg
+            height="23"
+            viewBox="0 0 50 50"
+            width="23"
+          >
+            <title>
+              Settings
+            </title>
+            <path
+              d="M48,21h-5.71c-0.4-1.58-0.91-3.33-1.56-4.66l4.06-4.06c0.19-0.19,0.29-0.44,0.29-0.71
+		c0-0.27-0.11-0.52-0.29-0.71L39.14,5.2c-0.39-0.39-1.02-0.39-1.41,0l-4.06,4.06C32.33,8.62,30.58,8.11,29,7.71V2c0-0.55-0.45-1-1-1
+		h-6c-0.55,0-1,0.45-1,1v5.71c-1.58,0.4-3.33,0.91-4.66,1.55L12.27,5.2c-0.39-0.39-1.02-0.39-1.41,0L5.2,10.86
+		c-0.39,0.39-0.39,1.02,0,1.41l4.07,4.07C8.62,17.66,8.11,19.42,7.71,21H2c-0.55,0-1,0.45-1,1v6c0,0.55,0.45,1,1,1h5.71
+		c0.4,1.58,0.91,3.34,1.56,4.66L5.2,37.73c-0.19,0.19-0.29,0.44-0.29,0.71s0.11,0.52,0.29,0.71l5.66,5.66c0.38,0.38,1.04,0.38,1.41,0
+		l4.07-4.06c1.32,0.65,3.08,1.15,4.66,1.56V48c0,0.55,0.45,1,1,1h6c0.55,0,1-0.45,1-1v-5.71c1.58-0.4,3.34-0.91,4.66-1.56l4.07,4.06
+		c0.39,0.39,1.02,0.39,1.41,0l5.66-5.66c0.39-0.39,0.39-1.02,0-1.41l-4.06-4.07c0.65-1.33,1.16-3.08,1.56-4.66H48c0.55,0,1-0.45,1-1
+		v-6C49,21.45,48.55,21,48,21 M25,33c-4.41,0-8-3.59-8-8s3.59-8,8-8s8,3.59,8,8S29.41,33,25,33"
+            />
+          </svg>
+        </div>
       </div>
     </div>
   </div>
@@ -280,167 +313,188 @@ exports[`test MiddleWareApp passed default headers 1`] = `
 exports[`test MiddleWareApp with tabs 1`] = `
 <div>
   <div
-    class="sc-bAeIUo jscPmU"
+    class="sc-dEoRIm RziiU"
   >
     <div
-      class="playground sc-hXRMBi caimge"
+      class="sc-giadOv bQhkVW playground"
     >
       <div
-        class="sc-lhVmIH hMZGpR"
+        class="sc-gojNiO JVBvg"
       >
         <div
-          class="sc-bYSBpT cgxKmR"
+          class="sc-daURTG cZCkPb"
         >
           <div
-            class="sc-jnlKLf eYHWGF"
+            class="sc-esOvli lhalyo"
           >
             <div
-              class="sc-hEsumM cXKFpX"
+              class="sc-cLQEGU kvnLZM"
             >
               <div
-                class="sc-ktHwxA loQVQX"
+                class="sc-gqPbQI cjzsAe"
               />
             </div>
             <div
-              class="sc-fYxtnH fzgrEl"
+              class="sc-cmthru ehXREM"
             >
               New Tab
             </div>
             <div
-              class="close sc-btzYZH cttKsG"
-            />
+              class="sc-cQFLBn bpxnwx close"
+            >
+              <svg
+                height="11"
+                stroke-width="7"
+                viewBox="0 0 50 50"
+                width="12"
+              >
+                <title>
+                  Close Tab
+                </title>
+                <line
+                  x1="4"
+                  x2="46"
+                  y1="4"
+                  y2="46"
+                />
+                <line
+                  x1="46"
+                  x2="4"
+                  y1="4"
+                  y2="46"
+                />
+              </svg>
+            </div>
           </div>
           <div
-            class="sc-elJkPf jYmNRN"
-          />
+            class="sc-bXGyLb bNndAB"
+          >
+            <svg
+              height="34"
+              stroke-width="4"
+              viewBox="0 0 50 50"
+              width="34"
+            >
+              <title>
+                Opens a New Tab
+              </title>
+              <line
+                x1="25"
+                x2="25"
+                y1="13.1"
+                y2="36.9"
+              />
+              <line
+                x1="36.9"
+                x2="13.1"
+                y1="25"
+                y2="25"
+              />
+            </svg>
+          </div>
         </div>
       </div>
       <div
-        class="graphiqls-container sc-epnACN kltGk"
+        class="sc-fONwsr hFUbho"
       >
         <div
-          class="graphiql-wrapper active sc-iQNlJl kEHQIY"
+          class="sc-VJcYb iBSEOK graphiql-wrapper active"
         >
           <div
             class="sc-EHOje cIypmL"
           >
             <div
-              class="sc-ifAKCX fjtMTo"
+              class="sc-ifAKCX dAtAHQ"
             >
               <div
-                class="sc-fMiknA eacLCC"
+                class="sc-cvbbAY kOflzg"
               >
                 <button
-                  class="sc-fBuWsC fLszzQ"
+                  class="sc-eHgmQL dvmgwq"
                 >
                   Prettify
                 </button>
                 <button
-                  class="sc-fBuWsC fLszzQ"
+                  class="sc-eHgmQL dvmgwq"
                 >
                   History
                 </button>
                 <div
-                  class="sc-eqIVtm cgwgzU"
+                  class="sc-brqgnP kOowTR"
                 >
                   <input
-                    class="sc-dVhcbM jTygPs"
-                    value="about:blank"
+                    class="sc-jWBwVP cljqcK"
+                    value="https://localhost/"
                   />
                   <div
-                    class="sc-Rmtcm kkUIDC"
+                    style="display:flex;flex-direction:row;align-items:center;position:absolute;left:6px"
                   >
-                    <svg
-                      class="sc-bRBYWo linmmw"
-                      viewBox="0 0 20 20"
+                    <div
+                      class="sc-jKJlTe sc-iAyFgw cVhxIQ"
+                      title="Polling Schema"
                     >
-                      <circle
-                        class="sc-hzDkRC jSRGuu"
-                        cx="9.5"
-                        cy="10"
-                        fill="none"
-                        r="6"
-                        stroke-linecap="round"
-                        stroke-width="1.5"
+                      <div
+                        class="sc-hSdWYo vFglF"
                       />
-                      <path
-                        class="sc-jhAzac NPpIa"
-                        d="M4.83 4.86a6.92 6.92 0 0 1 11.3 2.97l.41-1.23c.13-.4.56-.6.95-.47.4.13.6.56.47.95l-1.13 3.33a.76.76 0 0 1-.7.5.72.72 0 0 1-.43-.12l-2.88-1.92a.76.76 0 0 1-.2-1.04.75.75 0 0 1 1.03-.2l1.06.7A5.34 5.34 0 0 0 9.75 4.5a5.44 5.44 0 0 0-5.64 5.22 5.42 5.42 0 0 0 5.24 5.62c.41 0 .74.36.72.78a.75.75 0 0 1-.75.72H9.3a6.9 6.9 0 0 1-6.68-7.18 6.88 6.88 0 0 1 2.22-4.81z"
-                      />
-                    </svg>
-                  </div>
-                </div>
-                <button
-                  class="sc-fBuWsC fLszzQ"
-                >
-                  Copy CURL
-                </button>
-                <div
-                  class="sc-jAaTju izqnJQ"
-                >
-                  <div
-                    class="sc-gPEVay hZVzor"
-                  >
-                    <div>
-                      <button
-                        class="sc-fBuWsC fLszzQ"
-                      >
-                        Share Playground
-                      </button>
                     </div>
                   </div>
                 </div>
+                <button
+                  class="sc-eHgmQL dvmgwq"
+                >
+                  Copy CURL
+                </button>
               </div>
               <div
-                class="sc-cHGsZl gXxfHh"
+                class="sc-eXEjpC bdygHZ"
               >
                 <div
-                  class="sc-uJMKN keNgMU"
+                  class="sc-hZSUBg HwDAJ"
                 >
                   <div
-                    class="sc-ifAKCX fjtMTo"
+                    class="sc-ifAKCX dAtAHQ"
                   >
                     <div
-                      class="sc-bZQynM gulWsJ"
+                      class="sc-bZQynM imcoIY"
                     />
                   </div>
                   <div
-                    class="sc-kvZOFW kEeHPI sc-hmzhuo hJPwxf"
+                    class="sc-hrWEMg sc-gwVKww iHIHnA"
                     height="200"
                   >
                     <div
-                      class="sc-hqyNC iVUKVr sc-frDJqD bjpSmb"
+                      class="sc-eTuwsz rgpvV sc-hXRMBi ilAbNh"
                     >
                       <span
-                        class="sc-jbKcbu crrjpn"
+                        class="sc-epnACN czrRzC"
                       >
                         Query Variables
                       </span>
                       <span
-                        class="sc-jbKcbu cUoSJz"
+                        class="sc-epnACN icSOla"
                       >
                         HTTP Headers 
                       </span>
                     </div>
                     <div
-                      class="sc-kjoXOD djmrSS"
+                      class="sc-gPEVay ihtVGC"
                     />
                   </div>
                   <div
-                    class="sc-cJSrbW cdFwbg sc-kgAjT hfRSWa"
+                    class="sc-RefOD sc-iQKALj kFhaXe"
                   />
                 </div>
                 <div
-                  class="sc-TOsTZ GvCtl"
+                  class="sc-ibxdXY chknfe"
                 >
                   <div
-                    class="sc-ksYbfQ hvCXwe sc-kgAjT hfRSWa"
+                    class="sc-RefOD sc-bwCtUz ecnDqC"
                   />
                   <div
                     class="sc-bdVaJa bFURGJ"
                   >
                     <div
-                      class="sc-bwzfXH iNzYbQ"
+                      class="sc-bwzfXH kJytub"
                       title="Execute Query (Ctrl-Enter)"
                     >
                       <svg
@@ -455,43 +509,43 @@ exports[`test MiddleWareApp with tabs 1`] = `
                     </div>
                   </div>
                   <div
-                    class="sc-iwsKbI cRrmDs"
+                    class="sc-csuQGl jqqEqQ"
                   >
                     <div
-                      class="sc-gZMcBi ruAOc"
+                      class="sc-Rmtcm izeTTo"
                     >
                       <div
-                        class="sc-jTzLTM dWZjO"
+                        class="sc-jhAzac czBwBS"
                       >
                         <div
-                          class="sc-dnqmqq hqaUtI"
+                          class="sc-gipzik jWCgLV"
                         />
                       </div>
                     </div>
                   </div>
                   <div
-                    class="sc-bbmXgH kEppjG"
+                    class="sc-cMhqgX NzONc"
                   >
                     Hit the Play Button to get a response here
                   </div>
                   <div
-                    class="sc-dNLxif dRzCeo sc-hmzhuo hJPwxf"
+                    class="sc-hrWEMg sc-iQNlJl eDYAQB"
                     height="300"
                   >
                     <div
-                      class="sc-jqCOkK kXpZpy sc-frDJqD bjpSmb"
+                      class="sc-eTuwsz rgpvV sc-bsbRJL kbrtay"
                     >
                       <span
-                        class="sc-jbKcbu crrjpn"
+                        class="sc-epnACN czrRzC"
                       >
                         Tracing
                       </span>
                     </div>
                     <div
-                      class="sc-kgoBCf dBQkwa"
+                      class="sc-caSCKo jXBojK"
                     >
                       <div
-                        class="sc-kpOJdX cREUIk"
+                        class="sc-kjoXOD bJwwoz"
                       >
                         This GraphQL server doesn’t support tracing. See the following page for instructions:
                         <br />
@@ -503,51 +557,63 @@ exports[`test MiddleWareApp with tabs 1`] = `
               </div>
             </div>
             <div
-              class="graph-docs docExplorerWrap docs sc-jKJlTe kXYhbp"
+              class="sc-kgAjT hyCFBj"
               style="width:0"
             >
               <div
-                class="docs-button"
-              >
-                Schema
-              </div>
-              <div
-                class="sc-hMqMXs jdpLqQ"
-              />
-              <div
-                class="doc-explorer-gradient"
-              />
-              <div
-                class="sc-eNQAEJ jXONrf"
-                tabindex="0"
+                class="sc-hmzhuo ckIQDP"
               >
                 <div
-                  class="doc-explorer-container"
+                  class="sc-TOsTZ iRmVrA"
                 >
-                  <div
-                    class="graph-docs-column overflow"
-                    style="width:300px"
-                  >
-                    <div
-                      class="sc-gzVnrw fNvFrw"
-                    >
-                      <div
-                        class="sc-htoDjs kgEMPg"
-                      />
-                    </div>
-                  </div>
+                  Docs
+                </div>
+                <div
+                  class="sc-TOsTZ FJeHV"
+                >
+                  Schema
                 </div>
               </div>
+              <div
+                class="sc-ksYbfQ jvrrBm"
+              />
+              <div
+                class="sc-frDJqD esEVLt"
+              />
+              <div
+                class="sc-cJSrbW hLWfWH"
+              />
             </div>
+            }
           </div>
         </div>
       </div>
       <div
-        class="sc-eXEjpC cltmBE"
+        class="sc-krDsej iXTGTt"
       >
         <div
-          class="sc-ibxdXY kyOYfW"
-        />
+          class="sc-dTdPqK jlWbrI"
+        >
+          <svg
+            height="23"
+            viewBox="0 0 50 50"
+            width="23"
+          >
+            <title>
+              Settings
+            </title>
+            <path
+              d="M48,21h-5.71c-0.4-1.58-0.91-3.33-1.56-4.66l4.06-4.06c0.19-0.19,0.29-0.44,0.29-0.71
+		c0-0.27-0.11-0.52-0.29-0.71L39.14,5.2c-0.39-0.39-1.02-0.39-1.41,0l-4.06,4.06C32.33,8.62,30.58,8.11,29,7.71V2c0-0.55-0.45-1-1-1
+		h-6c-0.55,0-1,0.45-1,1v5.71c-1.58,0.4-3.33,0.91-4.66,1.55L12.27,5.2c-0.39-0.39-1.02-0.39-1.41,0L5.2,10.86
+		c-0.39,0.39-0.39,1.02,0,1.41l4.07,4.07C8.62,17.66,8.11,19.42,7.71,21H2c-0.55,0-1,0.45-1,1v6c0,0.55,0.45,1,1,1h5.71
+		c0.4,1.58,0.91,3.34,1.56,4.66L5.2,37.73c-0.19,0.19-0.29,0.44-0.29,0.71s0.11,0.52,0.29,0.71l5.66,5.66c0.38,0.38,1.04,0.38,1.41,0
+		l4.07-4.06c1.32,0.65,3.08,1.15,4.66,1.56V48c0,0.55,0.45,1,1,1h6c0.55,0,1-0.45,1-1v-5.71c1.58-0.4,3.34-0.91,4.66-1.56l4.07,4.06
+		c0.39,0.39,1.02,0.39,1.41,0l5.66-5.66c0.39-0.39,0.39-1.02,0-1.41l-4.06-4.07c0.65-1.33,1.16-3.08,1.56-4.66H48c0.55,0,1-0.45,1-1
+		v-6C49,21.45,48.55,21,48,21 M25,33c-4.41,0-8-3.59-8-8s3.59-8,8-8s8,3.59,8,8S29.41,33,25,33"
+            />
+          </svg>
+        </div>
       </div>
     </div>
   </div>
@@ -557,167 +623,188 @@ exports[`test MiddleWareApp with tabs 1`] = `
 exports[`test MiddleWareApp without tabs 1`] = `
 <div>
   <div
-    class="sc-bAeIUo jscPmU"
+    class="sc-dEoRIm RziiU"
   >
     <div
-      class="playground sc-hXRMBi caimge"
+      class="sc-giadOv bQhkVW playground"
     >
       <div
-        class="sc-lhVmIH hMZGpR"
+        class="sc-gojNiO JVBvg"
       >
         <div
-          class="sc-bYSBpT cgxKmR"
+          class="sc-daURTG cZCkPb"
         >
           <div
-            class="sc-jnlKLf eYHWGF"
+            class="sc-esOvli lhalyo"
           >
             <div
-              class="sc-hEsumM cXKFpX"
+              class="sc-cLQEGU kvnLZM"
             >
               <div
-                class="sc-ktHwxA loQVQX"
+                class="sc-gqPbQI cjzsAe"
               />
             </div>
             <div
-              class="sc-fYxtnH fzgrEl"
+              class="sc-cmthru ehXREM"
             >
               New Tab
             </div>
             <div
-              class="close sc-btzYZH cttKsG"
-            />
+              class="sc-cQFLBn bpxnwx close"
+            >
+              <svg
+                height="11"
+                stroke-width="7"
+                viewBox="0 0 50 50"
+                width="12"
+              >
+                <title>
+                  Close Tab
+                </title>
+                <line
+                  x1="4"
+                  x2="46"
+                  y1="4"
+                  y2="46"
+                />
+                <line
+                  x1="46"
+                  x2="4"
+                  y1="4"
+                  y2="46"
+                />
+              </svg>
+            </div>
           </div>
           <div
-            class="sc-elJkPf jYmNRN"
-          />
+            class="sc-bXGyLb bNndAB"
+          >
+            <svg
+              height="34"
+              stroke-width="4"
+              viewBox="0 0 50 50"
+              width="34"
+            >
+              <title>
+                Opens a New Tab
+              </title>
+              <line
+                x1="25"
+                x2="25"
+                y1="13.1"
+                y2="36.9"
+              />
+              <line
+                x1="36.9"
+                x2="13.1"
+                y1="25"
+                y2="25"
+              />
+            </svg>
+          </div>
         </div>
       </div>
       <div
-        class="graphiqls-container sc-epnACN kltGk"
+        class="sc-fONwsr hFUbho"
       >
         <div
-          class="graphiql-wrapper active sc-iQNlJl kEHQIY"
+          class="sc-VJcYb iBSEOK graphiql-wrapper active"
         >
           <div
             class="sc-EHOje cIypmL"
           >
             <div
-              class="sc-ifAKCX fjtMTo"
+              class="sc-ifAKCX dAtAHQ"
             >
               <div
-                class="sc-fMiknA eacLCC"
+                class="sc-cvbbAY kOflzg"
               >
                 <button
-                  class="sc-fBuWsC fLszzQ"
+                  class="sc-eHgmQL dvmgwq"
                 >
                   Prettify
                 </button>
                 <button
-                  class="sc-fBuWsC fLszzQ"
+                  class="sc-eHgmQL dvmgwq"
                 >
                   History
                 </button>
                 <div
-                  class="sc-eqIVtm cgwgzU"
+                  class="sc-brqgnP kOowTR"
                 >
                   <input
-                    class="sc-dVhcbM jTygPs"
-                    value="about:blank"
+                    class="sc-jWBwVP cljqcK"
+                    value="https://localhost/"
                   />
                   <div
-                    class="sc-Rmtcm kkUIDC"
+                    style="display:flex;flex-direction:row;align-items:center;position:absolute;left:6px"
                   >
-                    <svg
-                      class="sc-bRBYWo linmmw"
-                      viewBox="0 0 20 20"
+                    <div
+                      class="sc-jKJlTe sc-iAyFgw cVhxIQ"
+                      title="Polling Schema"
                     >
-                      <circle
-                        class="sc-hzDkRC jSRGuu"
-                        cx="9.5"
-                        cy="10"
-                        fill="none"
-                        r="6"
-                        stroke-linecap="round"
-                        stroke-width="1.5"
+                      <div
+                        class="sc-hSdWYo vFglF"
                       />
-                      <path
-                        class="sc-jhAzac NPpIa"
-                        d="M4.83 4.86a6.92 6.92 0 0 1 11.3 2.97l.41-1.23c.13-.4.56-.6.95-.47.4.13.6.56.47.95l-1.13 3.33a.76.76 0 0 1-.7.5.72.72 0 0 1-.43-.12l-2.88-1.92a.76.76 0 0 1-.2-1.04.75.75 0 0 1 1.03-.2l1.06.7A5.34 5.34 0 0 0 9.75 4.5a5.44 5.44 0 0 0-5.64 5.22 5.42 5.42 0 0 0 5.24 5.62c.41 0 .74.36.72.78a.75.75 0 0 1-.75.72H9.3a6.9 6.9 0 0 1-6.68-7.18 6.88 6.88 0 0 1 2.22-4.81z"
-                      />
-                    </svg>
-                  </div>
-                </div>
-                <button
-                  class="sc-fBuWsC fLszzQ"
-                >
-                  Copy CURL
-                </button>
-                <div
-                  class="sc-jAaTju izqnJQ"
-                >
-                  <div
-                    class="sc-gPEVay hZVzor"
-                  >
-                    <div>
-                      <button
-                        class="sc-fBuWsC fLszzQ"
-                      >
-                        Share Playground
-                      </button>
                     </div>
                   </div>
                 </div>
+                <button
+                  class="sc-eHgmQL dvmgwq"
+                >
+                  Copy CURL
+                </button>
               </div>
               <div
-                class="sc-cHGsZl gXxfHh"
+                class="sc-eXEjpC bdygHZ"
               >
                 <div
-                  class="sc-uJMKN keNgMU"
+                  class="sc-hZSUBg HwDAJ"
                 >
                   <div
-                    class="sc-ifAKCX fjtMTo"
+                    class="sc-ifAKCX dAtAHQ"
                   >
                     <div
-                      class="sc-bZQynM gulWsJ"
+                      class="sc-bZQynM imcoIY"
                     />
                   </div>
                   <div
-                    class="sc-kvZOFW kEeHPI sc-hmzhuo hJPwxf"
+                    class="sc-hrWEMg sc-gwVKww iHIHnA"
                     height="200"
                   >
                     <div
-                      class="sc-hqyNC iVUKVr sc-frDJqD bjpSmb"
+                      class="sc-eTuwsz rgpvV sc-hXRMBi ilAbNh"
                     >
                       <span
-                        class="sc-jbKcbu crrjpn"
+                        class="sc-epnACN czrRzC"
                       >
                         Query Variables
                       </span>
                       <span
-                        class="sc-jbKcbu cUoSJz"
+                        class="sc-epnACN icSOla"
                       >
                         HTTP Headers 
                       </span>
                     </div>
                     <div
-                      class="sc-kjoXOD djmrSS"
+                      class="sc-gPEVay ihtVGC"
                     />
                   </div>
                   <div
-                    class="sc-cJSrbW cdFwbg sc-kgAjT hfRSWa"
+                    class="sc-RefOD sc-iQKALj kFhaXe"
                   />
                 </div>
                 <div
-                  class="sc-TOsTZ GvCtl"
+                  class="sc-ibxdXY chknfe"
                 >
                   <div
-                    class="sc-ksYbfQ hvCXwe sc-kgAjT hfRSWa"
+                    class="sc-RefOD sc-bwCtUz ecnDqC"
                   />
                   <div
                     class="sc-bdVaJa bFURGJ"
                   >
                     <div
-                      class="sc-bwzfXH iNzYbQ"
+                      class="sc-bwzfXH kJytub"
                       title="Execute Query (Ctrl-Enter)"
                     >
                       <svg
@@ -732,43 +819,43 @@ exports[`test MiddleWareApp without tabs 1`] = `
                     </div>
                   </div>
                   <div
-                    class="sc-iwsKbI cRrmDs"
+                    class="sc-csuQGl jqqEqQ"
                   >
                     <div
-                      class="sc-gZMcBi ruAOc"
+                      class="sc-Rmtcm izeTTo"
                     >
                       <div
-                        class="sc-jTzLTM dWZjO"
+                        class="sc-jhAzac czBwBS"
                       >
                         <div
-                          class="sc-dnqmqq hqaUtI"
+                          class="sc-gipzik jWCgLV"
                         />
                       </div>
                     </div>
                   </div>
                   <div
-                    class="sc-bbmXgH kEppjG"
+                    class="sc-cMhqgX NzONc"
                   >
                     Hit the Play Button to get a response here
                   </div>
                   <div
-                    class="sc-dNLxif dRzCeo sc-hmzhuo hJPwxf"
+                    class="sc-hrWEMg sc-iQNlJl eDYAQB"
                     height="300"
                   >
                     <div
-                      class="sc-jqCOkK kXpZpy sc-frDJqD bjpSmb"
+                      class="sc-eTuwsz rgpvV sc-bsbRJL kbrtay"
                     >
                       <span
-                        class="sc-jbKcbu crrjpn"
+                        class="sc-epnACN czrRzC"
                       >
                         Tracing
                       </span>
                     </div>
                     <div
-                      class="sc-kgoBCf dBQkwa"
+                      class="sc-caSCKo jXBojK"
                     >
                       <div
-                        class="sc-kpOJdX cREUIk"
+                        class="sc-kjoXOD bJwwoz"
                       >
                         This GraphQL server doesn’t support tracing. See the following page for instructions:
                         <br />
@@ -780,51 +867,63 @@ exports[`test MiddleWareApp without tabs 1`] = `
               </div>
             </div>
             <div
-              class="graph-docs docExplorerWrap docs sc-jKJlTe kXYhbp"
+              class="sc-kgAjT hyCFBj"
               style="width:0"
             >
               <div
-                class="docs-button"
-              >
-                Schema
-              </div>
-              <div
-                class="sc-hMqMXs jdpLqQ"
-              />
-              <div
-                class="doc-explorer-gradient"
-              />
-              <div
-                class="sc-eNQAEJ jXONrf"
-                tabindex="0"
+                class="sc-hmzhuo ckIQDP"
               >
                 <div
-                  class="doc-explorer-container"
+                  class="sc-TOsTZ iRmVrA"
                 >
-                  <div
-                    class="graph-docs-column overflow"
-                    style="width:300px"
-                  >
-                    <div
-                      class="sc-gzVnrw fNvFrw"
-                    >
-                      <div
-                        class="sc-htoDjs kgEMPg"
-                      />
-                    </div>
-                  </div>
+                  Docs
+                </div>
+                <div
+                  class="sc-TOsTZ FJeHV"
+                >
+                  Schema
                 </div>
               </div>
+              <div
+                class="sc-ksYbfQ jvrrBm"
+              />
+              <div
+                class="sc-frDJqD esEVLt"
+              />
+              <div
+                class="sc-cJSrbW hLWfWH"
+              />
             </div>
+            }
           </div>
         </div>
       </div>
       <div
-        class="sc-eXEjpC cltmBE"
+        class="sc-krDsej iXTGTt"
       >
         <div
-          class="sc-ibxdXY kyOYfW"
-        />
+          class="sc-dTdPqK jlWbrI"
+        >
+          <svg
+            height="23"
+            viewBox="0 0 50 50"
+            width="23"
+          >
+            <title>
+              Settings
+            </title>
+            <path
+              d="M48,21h-5.71c-0.4-1.58-0.91-3.33-1.56-4.66l4.06-4.06c0.19-0.19,0.29-0.44,0.29-0.71
+		c0-0.27-0.11-0.52-0.29-0.71L39.14,5.2c-0.39-0.39-1.02-0.39-1.41,0l-4.06,4.06C32.33,8.62,30.58,8.11,29,7.71V2c0-0.55-0.45-1-1-1
+		h-6c-0.55,0-1,0.45-1,1v5.71c-1.58,0.4-3.33,0.91-4.66,1.55L12.27,5.2c-0.39-0.39-1.02-0.39-1.41,0L5.2,10.86
+		c-0.39,0.39-0.39,1.02,0,1.41l4.07,4.07C8.62,17.66,8.11,19.42,7.71,21H2c-0.55,0-1,0.45-1,1v6c0,0.55,0.45,1,1,1h5.71
+		c0.4,1.58,0.91,3.34,1.56,4.66L5.2,37.73c-0.19,0.19-0.29,0.44-0.29,0.71s0.11,0.52,0.29,0.71l5.66,5.66c0.38,0.38,1.04,0.38,1.41,0
+		l4.07-4.06c1.32,0.65,3.08,1.15,4.66,1.56V48c0,0.55,0.45,1,1,1h6c0.55,0,1-0.45,1-1v-5.71c1.58-0.4,3.34-0.91,4.66-1.56l4.07,4.06
+		c0.39,0.39,1.02,0.39,1.41,0l5.66-5.66c0.39-0.39,0.39-1.02,0-1.41l-4.06-4.07c0.65-1.33,1.16-3.08,1.56-4.66H48c0.55,0,1-0.45,1-1
+		v-6C49,21.45,48.55,21,48,21 M25,33c-4.41,0-8-3.59-8-8s3.59-8,8-8s8,3.59,8,8S29.41,33,25,33"
+            />
+          </svg>
+        </div>
       </div>
     </div>
   </div>

@@ -14,7 +14,7 @@
     "noImplicitThis": true,
     "noImplicitAny": false,
     "skipLibCheck": true,
-    "strictNullChecks": true,
+    "strictNullChecks": false,
     "suppressImplicitAnyIndexErrors": true,
     "noUnusedLocals": true,
     "declaration": true,
@@ -27,6 +27,7 @@
   "exclude": [
     "node_modules",
     "lib",
+    "dist",
     "examples",
     "build"
   ]

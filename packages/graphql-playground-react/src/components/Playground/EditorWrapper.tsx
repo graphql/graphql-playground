@@ -904,12 +904,24 @@ const GraphqlContainer = styled.div`
   width: 100%;
 `
 
-interface Props {
-  setRef?: (ref: any) => void
-}
+export class Container extends React.PureComponent {
+  private graphqlContainer
 
-export const Container: React.SFC<Props> = ({ children, setRef }) => (
-  <GraphqlContainer ref={setRef}>{children}</GraphqlContainer>
-)
+  render() {
+    return (
+      <GraphqlContainer ref={this.setGraphqlContainer}>
+        {this.props.children}
+      </GraphqlContainer>
+    )
+  }
+
+  getWidth = () => {
+    return this.graphqlContainer.offsetWidth
+  }
+
+  private setGraphqlContainer = ref => {
+    this.graphqlContainer = ref
+  }
+}
 
 export default Wrapper

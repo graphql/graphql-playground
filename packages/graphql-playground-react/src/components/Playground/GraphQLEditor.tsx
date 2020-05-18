@@ -66,6 +66,8 @@ import {
   fetchSchema,
 } from '../../state/sessions/actions'
 import { ResponseRecord } from '../../state/sessions/reducers'
+import { getDocsOpen } from '../../state/docs/selectors'
+import { changeWidthDocs } from '../../state/docs/actions'
 
 /**
  * The top-level React component for GraphQLEditor, intended to encompass the entire
@@ -94,7 +96,9 @@ export interface ReduxProps {
   toggleVariables: () => void
   setEditorFlex: (flex: number) => void
   stopQuery: (sessionId: string) => void
+  changeWidthDocs: (sessionId: string, width: number) => void
   navStack: any[]
+  docsOpen: boolean
   // sesion props
   queryRunning: boolean
   responses: List<ResponseRecord>
@@ -140,6 +144,7 @@ class GraphQLEditor extends React.PureComponent<Props & ReduxProps> {
   private queryVariablesRef
   private httpHeadersRef
   private containerComponent
+  private activeSideTabContent
 
   componentDidMount() {
     // Ensure a form of a schema exists (including `null`) and
@@ -167,11 +172,10 @@ class GraphQLEditor extends React.PureComponent<Props & ReduxProps> {
 
   render() {
     return (
-      <Container setRef={this.setContainerComponent}>
+      <Container ref={this.setContainerComponent}>
         <EditorWrapper>
           <TopBar
             shareEnabled={this.props.shareEnabled}
-            fixedEndpoint={this.props.fixedEndpoint}
           />
           <EditorBar
             ref={this.setEditorBarComponent}
@@ -265,23 +269,25 @@ class GraphQLEditor extends React.PureComponent<Props & ReduxProps> {
             </ResultWrap>
           </EditorBar>
         </EditorWrapper>
-        {this.containerComponent && (
-          <SideTabs maxWidth={this.containerComponent.offsetWidth - 86}>
-            <SideTab label="Docs" activeColor="green" tabWidth="49px">
-              <GraphDocs
-                schema={this.props.schema}
-                ref={this.setDocExplorerRef}
-              />
-            </SideTab>
-            <SideTab label="Schema" activeColor="blue" tabWidth="65px">
-              <SDLView
-                schema={this.props.schema}
-                ref={this.setSchemaExplorerRef}
-                sessionId={this.props.sessionId}
-              />
-            </SideTab>
-          </SideTabs>
-        )}
+        <SideTabs
+          setActiveContentRef={this.setSideTabActiveContentRef}
+          setWidth={this.setDocsWidth}
+        >
+          <SideTab label="Docs" activeColor="green" tabWidth="49px">
+            <GraphDocs
+              schema={this.props.schema}
+              ref={this.setDocExplorerRef}
+            />
+          </SideTab>
+          <SideTab label="Schema" activeColor="blue" tabWidth="65px">
+            <SDLView
+              schema={this.props.schema}
+              ref={this.setSchemaExplorerRef}
+              sessionId={this.props.sessionId}
+            />
+          </SideTab>
+        </SideTabs>
+        }
       </Container>
     )
   }
@@ -330,7 +336,7 @@ class GraphQLEditor extends React.PureComponent<Props & ReduxProps> {
   }
   setSchemaExplorerRef = ref => {
     if (ref) {
-      this.schemaExplorerComponent = ref.getWrappedInstance()
+      this.schemaExplorerComponent = ref
     }
   }
   setContainerComponent = ref => {
@@ -340,6 +346,12 @@ class GraphQLEditor extends React.PureComponent<Props & ReduxProps> {
   handleClickReference = reference => {
     if (this.docExplorerComponent) {
       this.docExplorerComponent.showDocFromType(reference.field || reference)
+    }
+  }
+
+  setSideTabActiveContentRef = ref => {
+    if (ref) {
+      this.activeSideTabContent = ref
     }
   }
 
@@ -402,11 +414,9 @@ class GraphQLEditor extends React.PureComponent<Props & ReduxProps> {
     }
 
     const editor = this.queryEditorComponent.getCodeMirror()
-    if (editor.hasFocus()) {
-      const cursor = editor.getCursor()
-      const cursorIndex = editor.indexFromPos(cursor)
-      this.props.runQueryAtPosition(cursorIndex)
-    }
+    const cursor = editor.getCursor()
+    const cursorIndex = editor.indexFromPos(cursor)
+    this.props.runQueryAtPosition(cursorIndex)
   }
 
   private handleHintInformationRender = elem => {
@@ -436,7 +446,7 @@ class GraphQLEditor extends React.PureComponent<Props & ReduxProps> {
         return onMouseUp()
       }
 
-      const editorBar = ReactDOM.findDOMNode(this.editorBarComponent)
+      const editorBar = ReactDOM.findDOMNode(this.editorBarComponent) as Element
       const leftSize = moveEvent.clientX - getLeft(editorBar) - offset
       const rightSize = editorBar.clientWidth - leftSize
       this.props.setEditorFlex(leftSize / rightSize)
@@ -475,7 +485,7 @@ class GraphQLEditor extends React.PureComponent<Props & ReduxProps> {
 
       didMove = true
 
-      const editorBar = ReactDOM.findDOMNode(this.editorBarComponent)
+      const editorBar = ReactDOM.findDOMNode(this.editorBarComponent) as Element
       const topSize = moveEvent.clientY - getTop(editorBar) - offset
       const bottomSize = editorBar.clientHeight - topSize
       if (bottomSize < 60) {
@@ -523,7 +533,7 @@ class GraphQLEditor extends React.PureComponent<Props & ReduxProps> {
 
       didMove = true
 
-      const editorBar = ReactDOM.findDOMNode(this.editorBarComponent)
+      const editorBar = ReactDOM.findDOMNode(this.editorBarComponent) as Element
       const topSize = moveEvent.clientY - getTop(editorBar) - offset
       const bottomSize = editorBar.clientHeight - topSize
       if (bottomSize < 60) {
@@ -565,6 +575,20 @@ class GraphQLEditor extends React.PureComponent<Props & ReduxProps> {
       }
     }
   }
+
+  private setDocsWidth = (props: any = this.props) => {
+    if (!this.activeSideTabContent) {
+      return
+    }
+    if (!this.props.docsOpen) {
+      return
+    }
+    requestAnimationFrame(() => {
+      const width = this.activeSideTabContent.getWidth()
+      const maxWidth = this.containerComponent.getWidth() - 86
+      this.props.changeWidthDocs(props.sessionId, Math.min(width, maxWidth))
+    })
+  }
 }
 
 const mapStateToProps = createStructuredSelector({
@@ -586,6 +610,7 @@ const mapStateToProps = createStructuredSelector({
   operationName: getOperationName,
   headersCount: getHeadersCount,
   sessionId: getSelectedSessionIdFromRoot,
+  docsOpen: getDocsOpen,
 })
 
 export default // TODO fix redux types
@@ -605,10 +630,11 @@ connect<any, any, any>(
     setEditorFlex,
     toggleVariables,
     fetchSchema,
+    changeWidthDocs,
   },
   null,
   {
-    withRef: true,
+    forwardRef: true,
   },
 )(GraphQLEditor)
 
@@ -616,15 +642,18 @@ const EditorBar = styled.div`
   display: flex;
   flex-direction: row;
   flex: 1;
+  height: 100%;
 `
 
 const ResultWrap = styled.div`
   display: flex;
   flex-direction: column;
   flex: 1;
+  height: 100%;
   position: relative;
   border-left: none;
   background: ${p => p.theme.editorColours.resultBackground};
+  overflow-anchor: auto;
 `
 
 const DragBar = styled.div`

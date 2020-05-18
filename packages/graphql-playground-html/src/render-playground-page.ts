@@ -21,6 +21,7 @@ export interface ISettings {
   'editor.theme': Theme
   'editor.reuseHeaders': boolean
   'tracing.hideTracingResponse': boolean
+  'tracing.tracingSupported': boolean
   'editor.fontSize': number
   'editor.fontFamily': string
   'request.credentials': string
@@ -66,6 +67,7 @@ export interface RenderPageOptions extends MiddlewareOptions {
 export interface Tab {
   endpoint: string
   query: string
+  name?: string
   variables?: string
   responses?: string[]
   headers?: { [key: string]: string }
