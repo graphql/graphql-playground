@@ -36,17 +36,17 @@ curl -X POST \
 	]
 }'
 
-# for middleware in "${middlewares[@]}"
-# do
-#   cd $middleware
-#   yarn install
-#   echo "Releasing ${middleware}..."
-#   cat package.json | jq ".playgroundVersion = \"$version\"" > package.tmp.json
-#   mv package.tmp.json package.json
-#   npm version patch --no-git-tag-version
-#   npm publish
-#   cd ..
-# done
+for middleware in "${middlewares[@]}"
+do
+  cd $middleware
+  yarn install
+  echo "Releasing ${middleware}..."
+  cat package.json | jq ".playgroundVersion = \"$version\"" > package.tmp.json
+  mv package.tmp.json package.json
+  npm version patch --no-git-tag-version
+  npm publish
+  cd ..
+done
 
 cd graphql-playground-electron
 echo "Updating dependency & version in graphql-playground-electron..."
