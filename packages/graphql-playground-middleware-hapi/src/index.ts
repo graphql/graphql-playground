@@ -1,4 +1,4 @@
-import { Server } from 'hapi'
+import { Server, Plugin } from '@hapi/hapi'
 import {
   MiddlewareOptions,
   RenderPageOptions,
@@ -9,17 +9,13 @@ export interface Register {
   (server: Server, options: MiddlewareOptions): void
 }
 
-export interface Plugin {
-  pkg?: any
-  register: Register
-}
-
 const plugin: Plugin = {
-  register: function(server, options: any) {
+  name: 'graphql-playground',
+  register: function (server, options: any) {
     if (arguments.length !== 2) {
       throw new Error(
         `Playground middleware expects exactly 2 arguments, got ${
-          arguments.length
+        arguments.length
         }`,
       )
     }
@@ -34,7 +30,7 @@ const plugin: Plugin = {
       method: 'GET',
       path,
       config,
-      handler: (request, h) =>
+      handler: (_request, h) =>
         h.response(renderPlaygroundPage(middlewareOptions)).type('text/html'),
     })
   },
