@@ -267,6 +267,10 @@ functions:
           cors: true
 ```
 
+### As Rails engine
+
+Use [GraphQL Playground Rails](https://github.com/papodaca/graphql_playground-rails) to get latest CDN-hosted version of GraphQL playground in your Rails application.
+
 ## Development
 
 ```sh
