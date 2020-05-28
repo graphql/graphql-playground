@@ -98,7 +98,7 @@ class SettingsEditorHOC extends React.Component<
     this.props.editSettings()
   }
   handleSave = () => {
-    this.props.onSave(this.state.value)
+    this.props.onChange(this.state.value)
     this.props.saveSettings()
   }
 }
@@ -106,7 +106,7 @@ class SettingsEditorHOC extends React.Component<
 export const PlaygroundSettingsEditor = connect(
   playgroundSettingsSelector,
   {
-    onSave: setSettingsString,
+    onChange: setSettingsString,
     editSettings,
     saveSettings,
   },

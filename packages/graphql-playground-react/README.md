@@ -24,7 +24,7 @@ GraphQL Playground uses components of GraphiQL under the hood but is meant as a 
 - Configuration of HTTP headers
 - Tabs
 
-See the following question for more additonal features.
+See the following question for more additional features.
 
 ### What's the difference between the desktop app and the web version?
 
@@ -57,7 +57,7 @@ All interfaces, the React component `<Playground />` and all middlewares expose 
 #### Install
 
 ```sh
-yarn add graphql-playground
+yarn add graphql-playground-react
 ```
 
 #### Use
@@ -166,7 +166,7 @@ functions:
         cors: true
 ```
 
-## Development [![npm version](https://badge.fury.io/js/graphql-playground.svg)](https://badge.fury.io/js/graphql-playground)
+## Development [![npm version](https://badge.fury.io/js/graphql-playground-react.svg)](https://badge.fury.io/js/graphql-playground-react)
 
 This is a mono-repo setup containing packages for the `graphql-playground` and `graphql-playground-electron`.
 

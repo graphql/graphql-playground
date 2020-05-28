@@ -21,6 +21,7 @@ export interface ISettings {
   'editor.theme': Theme
   'editor.reuseHeaders': boolean
   'tracing.hideTracingResponse': boolean
+  'tracing.tracingSupported': boolean
   'editor.fontSize': number
   'editor.fontFamily': string
   'request.credentials': string

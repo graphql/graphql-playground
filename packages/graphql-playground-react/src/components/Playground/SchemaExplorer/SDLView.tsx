@@ -125,7 +125,8 @@ const mapStateToProps = createStructuredSelector({
 
 export default connect<StateFromProps, DispatchFromProps, SideTabContentProps>(
   mapStateToProps,
+  // @ts-ignore
   mapDispatchToProps,
   null,
-  { withRef: true },
+  { forwardRef: true },
 )(SDLView)

@@ -1,33 +1,37 @@
-const express = require('express')
-const bodyParser = require('body-parser')
-const { graphqlExpress } = require('apollo-server-express')
-const { makeExecutableSchema } = require('graphql-tools')
-const expressPlayground = require('../../src/index').default
+const express = require("express");
+const { gql, ApolloServer } = require("apollo-server-express");
+const expressPlayground = require("../../dist/index").default;
 
-const schema = makeExecutableSchema({
-  typeDefs: `
-    type Query {
-      hello: String!
-    }
-    schema {
-      query: Query
-    }
-  `,
-  resolvers: {
-    Query: {
-      hello: () => 'world',
-    },
-  },
-})
-const PORT = 4001
+const typeDefs = gql`
+  type Query {
+    hello: String!
+  }
+  schema {
+    query: Query
+  }
+`;
+const resolvers = {
+  Query: {
+    hello: () => "world"
+  }
+};
+const PORT = 4001;
 
-const app = express()
+const server = new ApolloServer({ typeDefs, resolvers });
+const app = express();
+server.applyMiddleware({ app });
 
-app.use('/graphql', bodyParser.json(), graphqlExpress({ schema }))
-app.get('/playground', expressPlayground({ endpoint: '/graphql', env: process.env, useGraphQLConfig: true}))
+app.get(
+  "/playground",
+  expressPlayground({
+    endpoint: "/graphql",
+    env: process.env,
+    useGraphQLConfig: true
+  })
+);
 
-app.listen(PORT)
+app.listen(PORT);
 
 console.log(
-  `Serving the GraphQL Playground on http://localhost:${PORT}/playground`,
-)
+  `Serving the GraphQL Playground on http://localhost:${PORT}/playground`
+);
