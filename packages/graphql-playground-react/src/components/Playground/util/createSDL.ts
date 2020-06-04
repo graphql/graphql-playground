@@ -88,15 +88,22 @@ export function getSDL(
   if (schema instanceof GraphQLSchema) {
     const rawSdl = printSchema(schema, { commentDescriptions: true })
     if (commentsDisabled) {
-      // Removes Comments but still has new lines
-      const sdlWithNewLines = rawSdl.replace(/(\#[\w\'\s\r\n\*](.*)$)/gm, '')
-      // Removes newlines left behind by Comments
-      const sdlWithoutComments = prettify(sdlWithNewLines, {
-        printWidth: 80,
-        tabWidth: 2,
-        useTabs: false,
-      })
-      return addLineBreaks(sdlWithoutComments, commentsDisabled)
+      try {
+        // Fix Comments which are having '#' only and no message
+        const sdlWithEmptyCommentFixed = rawSdl.replace(/(\#$)/gm, '# ')
+        // Removes Comments but still has new lines
+        const sdlWithNewLines = sdlWithEmptyCommentFixed.replace(/(\#[\w\'\s\r\n\*](.*)$)/gm, '')
+        // Removes newlines left behind by Comments
+        const sdlWithoutComments = prettify(sdlWithNewLines, {
+          printWidth: 80,
+          tabWidth: 2,
+          useTabs: false,
+        })
+        return addLineBreaks(sdlWithoutComments, commentsDisabled)
+      } catch (e) {
+        // tslint:disable-next-line
+        console.error('Unable to remove comments from schema!')
+      }
     }
     const sdl = prettify(rawSdl, {
       printWidth: 80,
