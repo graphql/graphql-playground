@@ -6,7 +6,7 @@ name: merge to master
 # events but only for the master branch
 on:
   push:
-    branches: [ master ]
+    branches: [master]
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
@@ -19,5 +19,5 @@ jobs:
     steps:
       - uses: actions/checkout@v1
       - uses: bahmutov/npm-install@v1
-      - run: yarn add global lerna
+      - run: yarn global add lerna
       - run: lerna publish --yes
