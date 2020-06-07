@@ -204,7 +204,7 @@ export function renderPlaygroundPage(options: RenderPageOptions) {
         const root = document.getElementById('root');
         root.classList.add('playgroundIn');
         const configText = document.getElementById('config').innerText
-        if(configText && configText.length) {
+        if(configText) {
           try {
             GraphQLPlayground.init(root, JSON.parse(configText))
           }

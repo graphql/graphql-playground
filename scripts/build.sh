@@ -2,6 +2,8 @@
 
 set -e
 
+yarn
+
 cd packages
 
 packages=(
