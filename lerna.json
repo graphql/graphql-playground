@@ -16,8 +16,7 @@
         "**/examples"
       ],
       "message": "chore(release): publish",
-      "conventionalCommits": true,
-      "createRelease": "github"
+      "conventionalCommits": true
     }
   }
 }
