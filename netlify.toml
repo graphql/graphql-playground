@@ -1,3 +1,0 @@
-[build]
-  command = "yarn && yarn build"
-  publish = "packages/graphql-playground-react/public"
