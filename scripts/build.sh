@@ -2,14 +2,11 @@
 
 set -e
 
-yarn
-
 cd packages
 
 packages=(
   graphql-playground-html
   graphql-playground-react
-  graphql-playground-html
   # graphql-playground-electron
   graphql-playground-middleware-express
   graphql-playground-middleware-hapi
