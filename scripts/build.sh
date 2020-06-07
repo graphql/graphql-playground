@@ -7,6 +7,7 @@ yarn
 cd packages
 
 packages=(
+  graphql-playground-html
   graphql-playground-react
   graphql-playground-html
   # graphql-playground-electron

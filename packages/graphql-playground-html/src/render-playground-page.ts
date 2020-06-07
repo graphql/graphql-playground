@@ -138,7 +138,7 @@ export function renderPlaygroundPage(options: RenderPageOptions) {
     <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700|Source+Code+Pro:400,700" rel="stylesheet">
     <title>${extendedOptions.title || 'GraphQL Playground'}</title>
     ${
-    extendedOptions.env === 'react' || extendedOptions.env === 'electron'
+    extendedOptions.env === 'electron'
       ? ''
       : getCdnMarkup(extendedOptions)
     }
@@ -204,7 +204,7 @@ export function renderPlaygroundPage(options: RenderPageOptions) {
         const root = document.getElementById('root');
         root.classList.add('playgroundIn');
         const configText = document.getElementById('config').innerText
-        if(configText) {
+        if(configText && configText.length) {
           try {
             GraphQLPlayground.init(root, JSON.parse(configText))
           }
