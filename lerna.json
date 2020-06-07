@@ -13,10 +13,13 @@
     "version": {
       "ignoreChanges": [
         "'__tests__' '**/*.spec.js' '**/*.spec.js' '**/*.spec.ts'",
-        "**/examples"
+        "**/examples/**",
+        "**/public/**",
+        "public/**",
+        "packages/*/yarn.lock",
+        "**/*.md"
       ],
-      "message": "chore(release): publish",
-      "conventionalCommits": true
+      "message": "chore(release): publish"
     }
   }
 }
