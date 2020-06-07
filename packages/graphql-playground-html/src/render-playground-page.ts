@@ -86,6 +86,8 @@ const filter = (val) => {
 
 const loading = getLoadingMarkup()
 
+const CONFIG_ID = 'playground-config';
+
 const getCdnMarkup = ({ version, cdnUrl = '//cdn.jsdelivr.net/npm', faviconUrl }) => {
   const buildCDNUrl = (packageName: string, suffix: string) => filter(`${cdnUrl}/${packageName}/${version ? `@${version}/` : ''}${suffix}` || '')
   return `
@@ -102,7 +104,7 @@ const getCdnMarkup = ({ version, cdnUrl = '//cdn.jsdelivr.net/npm', faviconUrl }
 
 
 const renderConfig = (config) => {
-  return filterXSS(`<div id="config">${JSON.stringify(config)}</div>`, {
+  return filterXSS(`<div id="${CONFIG_ID}">${JSON.stringify(config)}</div>`, {
     whiteList: { div: ['id'] },
   })
 }
@@ -154,7 +156,7 @@ export function renderPlaygroundPage(options: RenderPageOptions) {
         background: #172a3a;
       }
 
-      #config {
+      #${CONFIG_ID} {
         display: none;
       }
   
@@ -202,14 +204,18 @@ export function renderPlaygroundPage(options: RenderPageOptions) {
   
         const root = document.getElementById('root');
         root.classList.add('playgroundIn');
-        const configText = document.getElementById('config').innerText
+        const configText = document.getElementById('${CONFIG_ID}').innerText;
+        
         if(configText && configText.length) {
           try {
-            GraphQLPlayground.init(root, JSON.parse(configText))
+            GraphQLPlayground.init(root, JSON.parse(configText));
           }
           catch(err) {
             console.error("could not find config")
           }
+        }
+        else {
+          GraphQLPlayground.init(root);
         }
       })
     </script>
