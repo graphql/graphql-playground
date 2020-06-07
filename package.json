@@ -7,7 +7,8 @@
     "build": "bash scripts/build.sh",
     "show-versions": "bash scripts/versions.sh",
     "release-html": "bash scripts/release-html.sh",
-    "release-react": "bash scripts/release-react.sh"
+    "release-react": "bash scripts/release-react.sh",
+    "prepublishOnly": "yarn build"
   },
   "devDependencies": {
     "@hapi/hapi": "19.1.1",
@@ -15,6 +16,7 @@
     "aws-lambda": "1.0.5",
     "express": "4.17.1",
     "koa": "2.11.0",
+    "lerna": "^3.22.0",
     "rimraf": "3.0.2"
   },
   "dependencies": {
