@@ -33,5 +33,7 @@
   "typescript": {
     "definition": "dist/index.d.ts"
   },
-  "dependencies": {}
+  "dependencies": {
+    "xss": "^1.0.6"
+  }
 }

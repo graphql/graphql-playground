@@ -1,6 +1,8 @@
+> **SECURITY WARNING:** This `graphql-playground-html` and [all of it's middleware dependents](#impacted-packages) in this repository **had a severe XSS Reflection attack vulnerability to unsanitized user input** until version `graphql-playground-html@1.6.20`. Impacted are any and all **user-defined** input to `renderPlaygroundPage()`, `koaPlayground()`,`expressPlayground()`, `koaPlayground()`, or `lambdaPlayground()`. If you used static values, such as `graphql-playground-electron` does in [it's webpack config](https://github.com/prisma-labs/graphql-playground/blob/master/packages/graphql-playground-electron/webpack.config.build.js#L16), you were not vulnerable to the attack. [More Details](./SECURITY.md)
+
 <p align="center"><img src="https://imgur.com/5fzMbyV.png" width="269"></p>
 
-[![npm version](https://badge.fury.io/js/graphql-playground-react.svg)](https://badge.fury.io/js/graphql-playground-react) 
+[![npm version](https://badge.fury.io/js/graphql-playground-react.svg)](https://badge.fury.io/js/graphql-playground-react)
 [![prisma-labs](https://circleci.com/gh/prisma-labs/graphql-playground.svg?style=shield)](https://circleci.com/gh/prisma-labs/graphql-playground)
 
 **Future of this repository**: see [the announcement issue](https://github.com/prisma-labs/graphql-playground/issues/1143) for details.
@@ -24,6 +26,32 @@ $ brew cask install graphql-playground
 - ⚡️ Supports real-time GraphQL Subscriptions
 - ⚙ GraphQL Config support with multiple Projects & Endpoints
 - 🚥 Apollo Tracing support
+
+## Security Details
+
+**NOTE: only _unsanitized user input_ to the functions in these packages is vulnerable** to the recently reported XSS Reflection attack.
+
+### Impact
+
+The only reason this vulnerability exists is because we are using template strings in `renderPlaygroundPage()` with potentially user defined variables. This allows an attacker to inject html and javascript into a page on execution.
+
+Common examples may be user-defined path parameters, query string, unsanitized UI provided values in database, etc that are used to build template strings or passed directly to a `renderPlaygroundPage()` or the matching middleware function equivalent.
+
+### Impacted Packages
+
+**All versions of these packages are impacted until the ones specified below**, which are now safe for user defined input:
+
+- `graphql-playground-html`: **☔ safe** @ `1.6.20`
+- `graphql-playground-express` **☔ safe** @ `1.7.15`
+- `graphql-playground-koa` **☔ safe** @ `1.6.14`
+- `graphql-playground-hapi` **☔ safe** @ `1.6.12`
+- `graphql-playground-lambda` **☔ safe** @ `1.7.16`
+- `graphql-playground-electron` has always been **☔ safe** from XSS attacks! This is because configuration is statically defined [it's webpack config](https://github.com/prisma-labs/graphql-playground/blob/master/packages/graphql-playground-electron/webpack.config.build.js#L16)
+- `graphql-playground-react` is safe because it does not use `renderPlaygroundPage()` anywhere, and thus is not susceptible to template string XSS reflection attacks.
+
+### More Information
+
+See the [security docs](./SECURITY.md) for more details on how your implementation might be impacted by this vulnerability. It contains safe examples, unsafe examples, workarounds, and more details.
 
 ## FAQ
 
@@ -122,12 +150,12 @@ interface ISettings {
 
 ```ts
 interface Tab {
-	endpoint: string
-	query: string
-	name?: string
-	variables?: string
-	responses?: string[]
-	headers?: { [key: string]: string }
+  endpoint: string
+  query: string
+  name?: string
+  variables?: string
+  responses?: string[]
+  headers?: { [key: string]: string }
 }
 ```
 
@@ -169,8 +197,8 @@ Including Fonts (`1.`)
 
 ```html
 <link
-	href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700|Source+Code+Pro:400,700"
-	rel="stylesheet"
+  href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700|Source+Code+Pro:400,700"
+  rel="stylesheet"
 />
 ```
 
@@ -183,10 +211,10 @@ import { Provider } from 'react-redux'
 import { Playground, store } from 'graphql-playground-react'
 
 ReactDOM.render(
-	<Provider store={store}>
-		<Playground endpoint="https://api.graph.cool/simple/v1/swapi" />
-	</Provider>,
-	document.body,
+  <Provider store={store}>
+    <Playground endpoint='https://api.graph.cool/simple/v1/swapi' />
+  </Provider>,
+  document.body,
 )
 ```
 
@@ -232,18 +260,18 @@ import lambdaPlayground from 'graphql-playground-middleware-lambda'
 // const lambdaPlayground = require('graphql-playground-middleware-lambda').default
 
 exports.graphqlHandler = function graphqlHandler(event, context, callback) {
-	function callbackFilter(error, output) {
-		// eslint-disable-next-line no-param-reassign
-		output.headers['Access-Control-Allow-Origin'] = '*'
-		callback(error, output)
-	}
+  function callbackFilter(error, output) {
+    // eslint-disable-next-line no-param-reassign
+    output.headers['Access-Control-Allow-Origin'] = '*'
+    callback(error, output)
+  }
 
-	const handler = graphqlLambda({ schema: myGraphQLSchema })
-	return handler(event, context, callbackFilter)
+  const handler = graphqlLambda({ schema: myGraphQLSchema })
+  return handler(event, context, callbackFilter)
 }
 
 exports.playgroundHandler = lambdaPlayground({
-	endpoint: '/dev/graphql',
+  endpoint: '/dev/graphql',
 })
 ```
 
@@ -267,6 +295,10 @@ functions:
           cors: true
 ```
 
+#### Security Issue
+
+There is an [XSS Reflection Vulnerability](./SECURITY.md) when using these middlewares with unsanitized user input before
+
 ## Development
 
 ```sh
@@ -285,27 +317,27 @@ These are the available options:
 
 ```ts
 export interface EditorColours {
-	property: string
-	comment: string
-	punctuation: string
-	keyword: string
-	def: string
-	qualifier: string
-	attribute: string
-	number: string
-	string: string
-	builtin: string
-	string2: string
-	variable: string
-	meta: string
-	atom: string
-	ws: string
-	selection: string
-	cursorColor: string
-	editorBackground: string
-	resultBackground: string
-	leftDrawerBackground: string
-	rightDrawerBackground: string
+  property: string
+  comment: string
+  punctuation: string
+  keyword: string
+  def: string
+  qualifier: string
+  attribute: string
+  number: string
+  string: string
+  builtin: string
+  string2: string
+  variable: string
+  meta: string
+  atom: string
+  ws: string
+  selection: string
+  cursorColor: string
+  editorBackground: string
+  resultBackground: string
+  leftDrawerBackground: string
+  rightDrawerBackground: string
 }
 ```
 
