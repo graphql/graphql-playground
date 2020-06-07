@@ -154,6 +154,10 @@ export function renderPlaygroundPage(options: RenderPageOptions) {
         margin: 0;
         background: #172a3a;
       }
+
+      #config {
+        display: none;
+      }
   
       .playgroundIn {
         -webkit-animation: playgroundIn 0.5s ease-out forwards;
