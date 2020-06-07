@@ -21,11 +21,11 @@ without sanitization of user input, your application is vulnerable to an XSS Ref
 
 **All versions of these packages are impacted until those specified below**, which are now safe for user defined input:
 
-- `graphql-playground-html`: **☔ safe** @ `1.6.20`
-- `graphql-playground-express` **☔ safe** @ `1.7.15`
-- `graphql-playground-koa` **☔ safe** @ `1.6.14`
-- `graphql-playground-hapi` **☔ safe** @ `1.6.12`
-- `graphql-playground-lambda` **☔ safe** @ `1.7.16`
+- `graphql-playground-html`: **☔ safe** @ `1.6.22`
+- `graphql-playground-express` **☔ safe** @ `1.7.16`
+- `graphql-playground-koa` **☔ safe** @ `1.6.15`
+- `graphql-playground-hapi` **☔ safe** @ `1.6.13`
+- `graphql-playground-lambda` **☔ safe** @ `1.7.17`
 
 ### Static input was always safe
 
