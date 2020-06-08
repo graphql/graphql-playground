@@ -53,6 +53,8 @@ Common examples may be user-defined path parameters, query string, unsanitized U
 
 See the [security docs](./SECURITY.md) for more details on how your implementation might be impacted by this vulnerability. It contains safe examples, unsafe examples, workarounds, and more details.
 
+We've also provided ['an example of the xss using the express middleware]('https://github.com/prisma-labs/graphql-playground/tree/master/packages/graphql-playground-html/examples/xss-attack')
+
 ## FAQ
 
 ### How is this different from [GraphiQL](https://github.com/graphql/graphiql)?
