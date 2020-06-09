@@ -1,3 +1,5 @@
+import { filterXSS } from 'xss';
+
 import getLoadingMarkup from './get-loading-markup'
 
 export interface MiddlewareOptions {
@@ -72,20 +74,40 @@ export interface Tab {
   headers?: { [key: string]: string }
 }
 
+const filter = (val) => {
+  return filterXSS(val, {
+    // @ts-ignore
+    whiteList: [],
+    stripIgnoreTag: true,
+    stripIgnoreTagBody: ["script"]
+  })
+}
+
+
 const loading = getLoadingMarkup()
 
-const getCdnMarkup = ({ version, cdnUrl = '//cdn.jsdelivr.net/npm', faviconUrl }) => `
-    <link rel="stylesheet" href="${cdnUrl}/graphql-playground-react${
-  version ? `@${version}` : ''
-}/build/static/css/index.css" />
-    ${typeof faviconUrl === 'string' ? `<link rel="shortcut icon" href="${faviconUrl}" />` : ''}
-    ${faviconUrl === undefined ? `<link rel="shortcut icon" href="${cdnUrl}/graphql-playground-react${
-      version ? `@${version}` : ''
-    }/build/favicon.png" />` : ''}
-    <script src="${cdnUrl}/graphql-playground-react${
-  version ? `@${version}` : ''
-}/build/static/js/middleware.js"></script>
-`
+const CONFIG_ID = 'playground-config';
+
+const getCdnMarkup = ({ version, cdnUrl = '//cdn.jsdelivr.net/npm', faviconUrl }) => {
+  const buildCDNUrl = (packageName: string, suffix: string) => filter(`${cdnUrl}/${packageName}/${version ? `@${version}/` : ''}${suffix}` || '')
+  return `
+    <link 
+      rel="stylesheet" 
+      href="${buildCDNUrl('graphql-playground-react', 'build/static/css/index.css')}"
+    />
+    ${typeof faviconUrl === 'string' ? `<link rel="shortcut icon" href="${filter(faviconUrl || '')}" />` : ''}
+    ${faviconUrl === undefined ? `<link rel="shortcut icon" href="${buildCDNUrl('graphql-playground-react', 'build/favicon.png')}" />` : ''}
+    <script 
+      src="${buildCDNUrl('graphql-playground-react', 'build/static/js/middleware.js')}"
+    ></script>
+`}
+
+
+const renderConfig = (config) => {
+  return filterXSS(`<div id="${CONFIG_ID}">${JSON.stringify(config)}</div>`, {
+    whiteList: { div: ['id'] },
+  })
+}
 
 export function renderPlaygroundPage(options: RenderPageOptions) {
   const extendedOptions: any = {
@@ -94,7 +116,7 @@ export function renderPlaygroundPage(options: RenderPageOptions) {
   }
   // for compatibility
   if ((options as any).subscriptionsEndpoint) {
-    extendedOptions.subscriptionEndpoint = (options as any).subscriptionsEndpoint
+    extendedOptions.subscriptionEndpoint = filter((options as any).subscriptionsEndpoint || '')
   }
   if (options.config) {
     extendedOptions.configString = JSON.stringify(options.config, null, 2)
@@ -105,6 +127,9 @@ export function renderPlaygroundPage(options: RenderPageOptions) {
       `WARNING: You didn't provide an endpoint and don't have a .graphqlconfig. Make sure you have at least one of them.`,
     )
   }
+  else if (extendedOptions.endpoint) {
+    extendedOptions.endpoint = filter(extendedOptions.endpoint || '')
+  }
 
   return `
   <!DOCTYPE html>
@@ -114,10 +139,9 @@ export function renderPlaygroundPage(options: RenderPageOptions) {
     <meta name="viewport" content="user-scalable=no, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, minimal-ui">
     <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700|Source+Code+Pro:400,700" rel="stylesheet">
     <title>${extendedOptions.title || 'GraphQL Playground'}</title>
-    ${
-      extendedOptions.env === 'react' || extendedOptions.env === 'electron'
-        ? ''
-        : getCdnMarkup(extendedOptions)
+    ${extendedOptions.env === 'react' || extendedOptions.env === 'electron'
+      ? ''
+      : getCdnMarkup(extendedOptions)
     }
   </head>
   <body>
@@ -130,6 +154,10 @@ export function renderPlaygroundPage(options: RenderPageOptions) {
       body {
         margin: 0;
         background: #172a3a;
+      }
+
+      #${CONFIG_ID} {
+        display: none;
       }
   
       .playgroundIn {
@@ -168,6 +196,7 @@ export function renderPlaygroundPage(options: RenderPageOptions) {
       }
     </style>
     ${loading.container}
+    ${renderConfig(extendedOptions)}
     <div id="root" />
     <script type="text/javascript">
       window.addEventListener('load', function (event) {
@@ -175,12 +204,19 @@ export function renderPlaygroundPage(options: RenderPageOptions) {
   
         const root = document.getElementById('root');
         root.classList.add('playgroundIn');
-  
-        GraphQLPlayground.init(root, ${JSON.stringify(
-          extendedOptions,
-          null,
-          2,
-        )})
+        const configText = document.getElementById('${CONFIG_ID}').innerText;
+        
+        if(configText && configText.length) {
+          try {
+            GraphQLPlayground.init(root, JSON.parse(configText));
+          }
+          catch(err) {
+            console.error("could not find config")
+          }
+        }
+        else {
+          GraphQLPlayground.init(root);
+        }
       })
     </script>
   </body>

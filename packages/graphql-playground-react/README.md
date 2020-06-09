@@ -73,7 +73,10 @@ The GraphQL Playground requires **React 16**.
 Including Fonts (`1.`)
 
 ```html
-<link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700|Source+Code+Pro:400,700" rel="stylesheet">
+<link
+  href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700|Source+Code+Pro:400,700"
+  rel="stylesheet"
+/>
 ```
 
 Including stylesheet and the component (`2., 3.`)
@@ -84,7 +87,7 @@ import ReactDOM from 'react-dom'
 import Playground from 'graphql-playground'
 
 ReactDOM.render(
-  <Playground endpoint="https://api.graph.cool/simple/v1/swapi" />,
+  <Playground endpoint='https://api.graph.cool/simple/v1/swapi' />,
   document.body,
 )
 ```
@@ -153,17 +156,17 @@ functions:
   graphql:
     handler: handler.graphqlHandler
     events:
-    - http:
-        path: graphql
-        method: post
-        cors: true
+      - http:
+          path: graphql
+          method: post
+          cors: true
   playground:
     handler: handler.playgroundHandler
     events:
-    - http:
-        path: playground
-        method: get
-        cors: true
+      - http:
+          path: playground
+          method: get
+          cors: true
 ```
 
 ## Development [![npm version](https://badge.fury.io/js/graphql-playground-react.svg)](https://badge.fury.io/js/graphql-playground-react)
