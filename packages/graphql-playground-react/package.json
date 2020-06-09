@@ -75,7 +75,7 @@
     "file-loader": "6.0.0",
     "filesize": "6.1.0",
     "fs-extra": "5.0.0",
-    "graphql-playground-html": "1.5.6",
+    "graphql-playground-html": "1.6.25",
     "gzip-size": "4.1.0",
     "html-webpack-plugin": "4.0.4",
     "http-proxy-middleware": "0.17.4",
