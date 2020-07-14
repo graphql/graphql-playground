@@ -50,21 +50,37 @@ interface ShowRootTypeProps {
 }
 
 function ShowRootType({ name, fields, offset }: ShowRootTypeProps) {
+  const nonDeprecatedFields = fields.filter(data => !data.isDeprecated)
+  const deprecatedFields = fields.filter(data => data.isDeprecated)
+
   return (
     <div>
       <CategoryTitle>{name}</CategoryTitle>
-      {fields
-        .filter(field => !field.isDeprecated)
-        .map((field, index) => (
+      {nonDeprecatedFields.map((field, index) => (
+        <TypeLink
+          key={field.name}
+          type={field}
+          x={0}
+          y={offset + index}
+          collapsable={true}
+          lastActive={false}
+        />
+      ))}
+      {deprecatedFields.length > 0 && <br />}
+      {deprecatedFields.map((field, index) => (
+        <div key={field.name}>
+          <DocsValueComment>
+            # Deprecated: {field.deprecationReason}
+          </DocsValueComment>
           <TypeLink
-            key={field.name}
             type={field}
             x={0}
-            y={offset + index}
+            y={offset + index + nonDeprecatedFields.length}
             collapsable={true}
             lastActive={false}
           />
-        ))}
+        </div>
+      ))}
     </div>
   )
 }
@@ -75,4 +91,10 @@ const DocsRoot = styled.div`
   .doc-category-item .field-name {
     color: #f25c54;
   }
+`
+
+const DocsValueComment = styled.p`
+  color: ${p => p.theme.colours.black50};
+  padding-right: 16px;
+  padding-left: 16px;
 `

@@ -1,0 +1,25 @@
+{
+  "version": "independent",
+  "packages": ["packages/*"],
+  "npmClient": "yarn",
+  "useWorkspaces": true,
+  "command": {
+    "publish": {
+      "allowBranch": ["master"],
+      "preDistTag": "next",
+      "distTag": "latest",
+      "conventionalCommits": true
+    },
+    "version": {
+      "ignoreChanges": [
+        "'__tests__' '**/*.spec.js' '**/*.spec.js' '**/*.spec.ts'",
+        "**/examples/**",
+        "**/public/**",
+        "public/**",
+        "packages/*/yarn.lock",
+        "**/*.md"
+      ],
+      "message": "chore(release): publish"
+    }
+  }
+}
