@@ -1,21 +1,18 @@
-import * as React from 'react'
-import { bindActionCreators } from 'redux'
-import { connect } from 'react-redux'
-import * as keycode from 'keycode'
-import { getLeft } from 'graphiql/dist/utility/elementPosition'
+import { getLeft } from 'graphiql/dist/utility/elementPosition';
+import { GraphQLSchema } from 'graphql';
+import * as keycode from 'keycode';
+import * as React from 'react';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+import { createStructuredSelector } from 'reselect';
+
 import {
-  addStack,
-  toggleDocs,
-  changeWidthDocs,
-  changeKeyMove,
-  setDocsVisible,
-} from '../../../state/docs/actions'
-import { GraphQLSchema } from 'graphql'
-import { getSessionDocs } from '../../../state/docs/selectors'
-import { getSelectedSessionIdFromRoot } from '../../../state/sessions/selectors'
-import { createStructuredSelector } from 'reselect'
-import { styled } from '../../../styled'
-import SideTab from './SideTab'
+    addStack, changeKeyMove, changeWidthDocs, setDocsVisible, toggleDocs
+} from '../../../state/docs/actions';
+import { getSessionDocs } from '../../../state/docs/selectors';
+import { getSelectedSessionIdFromRoot } from '../../../state/sessions/selectors';
+import { styled } from '../../../styled';
+import SideTab from './SideTab';
 
 interface StateFromProps {
   docs: {
@@ -36,16 +33,15 @@ interface DispatchFromProps {
 }
 
 export interface Props {
-  schema: GraphQLSchema
-  sessionId: string
-  children: Array<React.ReactElement<any>>
-  maxWidth: number
+  schema?: GraphQLSchema
+  sessionId?: string
+  children?: React.ReactNode
   setWidth: (props?: any) => any
   setActiveContentRef: (ref: any) => void
 }
 
 export interface SideTabContentProps {
-  schema: GraphQLSchema
+  schema?: GraphQLSchema
   sessionId?: string
   ref?: any
   setWidth?: (props?: any) => any
@@ -271,6 +267,7 @@ const ConnectedGraphDocs = connect<StateFromProps, DispatchFromProps, Props>(
   { forwardRef: true },
 )(SideTabs)
 
+// @ts-ignore
 ConnectedGraphDocs.Tab = SideTab
 
 export default ConnectedGraphDocs
