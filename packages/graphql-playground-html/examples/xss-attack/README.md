@@ -50,6 +50,8 @@ http://localhost:4000/example-3?id=%3C/script%3E%3Cscript%3Ealert('I%20%3C3%20Gr
 
 this one uses static values, so it's safe without any workarounds! (try removing the ?darkMode parameter)
 
+http://localhost:4000/example-4?darkMode=%3C/script%3E%3Cscript%3Ealert('I%20%3C3%20GraphQL.%20Hack%20the%20Planet!!')%3C/script%3E%3Cscript%3E
+
 [XSS Safe using static configuration strings]("http://localhost:4000/example-3?darkMode")
 
 ## More Details

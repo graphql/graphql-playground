@@ -80,7 +80,7 @@ app.get('/example-3', (req, res, next) => {
 
 // Example 4: Safe
 
-app.get('/example-3', (req, res, next) => {
+app.get('/example-4', (req, res, next) => {
   res.write(
     renderPlaygroundPage({
       endpoint: `/graphql`,
