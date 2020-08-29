@@ -1,0 +1,19 @@
+{
+  "name": "xss-attack",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "apollo-server-express": "^2.16.0",
+    "express": "^4.17.1",
+    "graphql": "^15.0.0",
+    "graphql-playground-html": "1.6.20",
+    "xss": "^1.0.6"
+  }
+}

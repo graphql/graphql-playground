@@ -13,9 +13,11 @@ When using
 - `expressPlayground()`
 - `koaPlayground()`
 - `lambdaPlayground()`
-- any downstream dependents that use these functions
+- any downstream dependent packages that use these functions
 
 without sanitization of user input, your application is vulnerable to an XSS Reflecton Attack. This is a serious vulnerability that could allow for exfiltration of data or user credentials, or to disrupt systems.
+
+We've provided ['an example of the xss using the express middleware]('https://github.com/prisma-labs/graphql-playground/tree/master/packages/graphql-playground-middleware-express/examples/xss-attack')
 
 ### Impacted Packages
 
@@ -99,6 +101,8 @@ app.get('/playground', (req) =>
 )
 ```
 
+[See a proof of concept](packages/graphql-playground-html/examples/xss-attack) to understand the vulnerability better
+
 ### Workaround
 
 To fix this issue without the update, you can sanitize however you want.
@@ -130,3 +134,5 @@ app.get('/playground/:id', (req) =>
 app.get('/playground', (req) =>
   expressPlayground(JSON.parse(filter(JSON.stringify(req.query))))
 ```
+
+[See a proof of concept workaround](packages/graphql-playground-html/examples/xss-attack), example #3

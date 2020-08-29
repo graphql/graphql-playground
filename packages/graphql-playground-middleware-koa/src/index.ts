@@ -1,14 +1,15 @@
-import { Context } from 'koa'
+import { Context, Next } from 'koa'
 import {
   MiddlewareOptions,
   renderPlaygroundPage,
 } from 'graphql-playground-html'
 
+export declare type KoaPlaygroundMiddlewareOptions = MiddlewareOptions
+
 /* tslint:disable-next-line */
+export type KoaPlaygroundMiddleware = (ctx: Context, next: Next) => Promise<void>
 
-export type KoaPlaygroundMiddleware = (ctx: Context, next: () => void) => void
-
-export type Register = (options: MiddlewareOptions) => KoaPlaygroundMiddleware
+export type Register = (options: KoaPlaygroundMiddlewareOptions) => KoaPlaygroundMiddleware
 
 const koa: Register = options => {
   return async function voyager(ctx, next) {

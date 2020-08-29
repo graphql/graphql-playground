@@ -65,9 +65,9 @@ function getTypeInstance(type) {
 function addLineBreaks(sdl: string, commentsDisabled: boolean = true) {
   const noNewLines = sdl.replace(/^\s*$(?:\r\n?|\n)/gm, '')
   // Line Break all Brackets
-  const breakBrackets = noNewLines.replace(/[}]/gm, '$&\r\n')
+  const breakBrackets = noNewLines.replace(/^[}]/gm, '$&\r\n')
   // Line Break all Scalars
-  const withLineBreaks = breakBrackets.replace(/(?:scalar )\w+/g, '$&\r\n')
+  const withLineBreaks = breakBrackets.replace(/^(?:scalar )\w+/gm, '$&\r\n')
 
   if (commentsDisabled) {
     return withLineBreaks
