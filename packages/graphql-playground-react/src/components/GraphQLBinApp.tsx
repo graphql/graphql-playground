@@ -53,7 +53,7 @@ class GraphQLBinApp extends React.Component<Props & ReduxProps, State> {
     }
   }
 
-  componentWillMount() {
+  UNSAFE_componentWillMount() {
     if (this.props.match.params.id) {
       if (this.props.match.params.id === 'new') {
         return

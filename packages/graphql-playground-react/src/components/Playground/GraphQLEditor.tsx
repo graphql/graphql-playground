@@ -270,8 +270,11 @@ class GraphQLEditor extends React.PureComponent<Props & ReduxProps> {
           </EditorBar>
         </EditorWrapper>
         <SideTabs
+          sessionId={this.props.sessionId}
+          schema={this.props.schema}
           setActiveContentRef={this.setSideTabActiveContentRef}
           setWidth={this.setDocsWidth}
+          maxWidth={10000}
         >
           <SideTab label="Docs" activeColor="green" tabWidth="49px">
             <GraphDocs
@@ -284,6 +287,7 @@ class GraphQLEditor extends React.PureComponent<Props & ReduxProps> {
               schema={this.props.schema}
               ref={this.setSchemaExplorerRef}
               sessionId={this.props.sessionId}
+              setWidth={this.setDocsWidth}
             />
           </SideTab>
         </SideTabs>

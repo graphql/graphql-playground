@@ -22,7 +22,7 @@ export default class SDLHeader extends React.Component<SDLHeaderProps, State> {
     }
   }
 
-  componentWillMount() {
+  UNSAFE_componentWillMount() {
     document.addEventListener('mousedown', this.handleClick, false)
   }
 
