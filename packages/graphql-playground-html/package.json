@@ -35,5 +35,6 @@
   },
   "dependencies": {
     "xss": "^1.0.6"
-  }
+  },
+  "gitHead": "53d233f9deb9dcc86f99e41268ff92b6367e0713"
 }

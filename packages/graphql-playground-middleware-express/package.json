@@ -39,5 +39,6 @@
   "typings": "dist/index.d.ts",
   "typescript": {
     "definition": "dist/index.d.ts"
-  }
+  },
+  "gitHead": "53d233f9deb9dcc86f99e41268ff92b6367e0713"
 }

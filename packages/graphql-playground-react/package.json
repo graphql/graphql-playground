@@ -1,6 +1,6 @@
 {
   "name": "graphql-playground-react",
-  "version": "1.7.24",
+  "version": "1.7.25",
   "main": "./lib/lib.js",
   "typings": "./lib/lib.d.ts",
   "description": "GraphQL IDE for better development workflows (GraphQL Subscriptions, interactive docs & collaboration).",
@@ -199,5 +199,6 @@
       "js"
     ],
     "testRegex": "(/__tests__/.*|\\.(test|spec))\\.(ts|tsx|js)$"
-  }
+  },
+  "gitHead": "53d233f9deb9dcc86f99e41268ff92b6367e0713"
 }
