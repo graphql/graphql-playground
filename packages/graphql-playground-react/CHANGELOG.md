@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.7.24](https://github.com/graphcool/graphql-playground/compare/graphql-playground-react@1.7.23...graphql-playground-react@1.7.24) (2020-08-30)
+
+
+### Bug Fixes
+
+* 'addLineBreaks' regex in 'createSDL' to avoid line-breaking comment lines ([#1245](https://github.com/graphcool/graphql-playground/issues/1245)) ([f3b1e03](https://github.com/graphcool/graphql-playground/commit/f3b1e03f887a6dec36301577cdaa7184aff50cce))
+* upgrades, schema viewer display & width adjustment ([2bb34bb](https://github.com/graphcool/graphql-playground/commit/2bb34bb8fb8c356e10435727a3f82cd23464b6b6))
+
+
+
+
+
 ## 1.7.23 (2020-06-07)
 
 

@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.7.19](https://github.com/graphcool/graphql-playground/compare/graphql-playground-middleware-express@1.7.15...graphql-playground-middleware-express@1.7.19) (2020-08-30)
+
+**Note:** Version bump only for package graphql-playground-middleware-express
+
+
+
+
+
 ## 1.7.15 (2020-06-07)
 
 

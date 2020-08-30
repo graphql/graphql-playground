@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.6.18](https://github.com/graphcool/graphql-playground/compare/graphql-playground-middleware-koa@1.6.16...graphql-playground-middleware-koa@1.6.18) (2020-08-30)
+
+
+### Bug Fixes
+
+* Koa middleware interface ([#1242](https://github.com/graphcool/graphql-playground/issues/1242)) ([b596775](https://github.com/graphcool/graphql-playground/commit/b5967759f05cc610f615ec73744dfa3cda156fe3))
+
+
+
+
+
 ## 1.6.16 (2020-06-07)
 
 

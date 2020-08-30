@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.6.26](https://github.com/graphcool/graphql-playground/compare/graphql-playground-html@1.6.23...graphql-playground-html@1.6.26) (2020-08-30)
+
+
+### Bug Fixes
+
+* cdn url ([#1238](https://github.com/graphcool/graphql-playground/issues/1238)) ([e574bb6](https://github.com/graphcool/graphql-playground/commit/e574bb69e8adcda816fa62acc7e3adf19f31947a))
+* **examples:** fix examples of reflected XSS attack ([#1256](https://github.com/graphcool/graphql-playground/issues/1256)) ([12b61b9](https://github.com/graphcool/graphql-playground/commit/12b61b9d69286b12a6ac74b12aae705e6b060f3b))
+
+
+
+
+
 ## 1.6.23 (2020-06-07)
 
 

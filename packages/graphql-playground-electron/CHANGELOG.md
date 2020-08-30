@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.8.12](https://github.com/graphcool/graphql-playground/compare/graphql-playground-electron@1.8.11...graphql-playground-electron@1.8.12) (2020-08-30)
+
+
+### Bug Fixes
+
+* upgrades, schema viewer display & width adjustment ([2bb34bb](https://github.com/graphcool/graphql-playground/commit/2bb34bb8fb8c356e10435727a3f82cd23464b6b6))
+
+
+
+
+
 ## 1.8.11 (2020-06-07)
 
 
