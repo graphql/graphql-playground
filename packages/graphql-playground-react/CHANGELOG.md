@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.7.26](https://github.com/graphcool/graphql-playground/compare/graphql-playground-react@1.7.24...graphql-playground-react@1.7.26) (2020-08-30)
+
+**Note:** Version bump only for package graphql-playground-react
+
+
+
+
+
 ## [1.7.24](https://github.com/graphcool/graphql-playground/compare/graphql-playground-react@1.7.23...graphql-playground-react@1.7.24) (2020-08-30)
 
 

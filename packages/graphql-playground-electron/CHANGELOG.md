@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.8.13](https://github.com/graphcool/graphql-playground/compare/graphql-playground-electron@1.8.12...graphql-playground-electron@1.8.13) (2020-08-30)
+
+**Note:** Version bump only for package graphql-playground-electron
+
+
+
+
+
 ## [1.8.12](https://github.com/graphcool/graphql-playground/compare/graphql-playground-electron@1.8.11...graphql-playground-electron@1.8.12) (2020-08-30)
 
 
