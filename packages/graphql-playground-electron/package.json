@@ -5,6 +5,7 @@
   "repository": "graphcool/graphql-playground",
   "description": "GraphQL IDE for better development workflows (GraphQL Subscriptions, interactive docs & collaboration)",
   "version": "1.8.11",
+  "private": true,
   "author": {
     "name": "Graphcool",
     "email": "hello@graph.cool",
