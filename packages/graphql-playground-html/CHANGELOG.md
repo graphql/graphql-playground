@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.6.28](https://github.com/graphcool/graphql-playground/compare/graphql-playground-html@1.6.27...graphql-playground-html@1.6.28) (2020-09-15)
+
+
+### Bug Fixes
+
+* add schema.polling* to ISettings interface. ([#1212](https://github.com/graphcool/graphql-playground/issues/1212)) ([b7e6d4d](https://github.com/graphcool/graphql-playground/commit/b7e6d4d7590766183a77910a517ea946b95f2a84))
+
+
+
+
+
 ## [1.6.27](https://github.com/graphcool/graphql-playground/compare/graphql-playground-html@1.6.26...graphql-playground-html@1.6.27) (2020-08-30)
 
 **Note:** Version bump only for package graphql-playground-html
