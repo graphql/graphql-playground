@@ -27,6 +27,9 @@ export interface ISettings {
   'editor.fontSize': number
   'editor.fontFamily': string
   'request.credentials': string
+  'schema.polling.enable': boolean
+  'schema.polling.endpointFilter': string
+  'schema.polling.interval': number
 }
 
 export interface EditorColours {
