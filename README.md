@@ -371,8 +371,8 @@ In the folder `packages` you'll find the following packages:
 
 <a name="help-and-community" />
 
-## Help & Community [![Slack Status](https://slack.prisma.io/badge.svg)](https://slack.prisma.io)
+## Help & Community [![Discord](https://img.shields.io/discord/586999333447270440.svg)](https://discord.gg/EXUYPaY)
 
-Join our [Slack community](http://slack.graph.cool/) if you run into issues or have questions. We love talking to you!
+Join our [Discord Server](https://discord.gg/EXUYPaY) if you run into issues or have questions. We love talking to you!
 
 <p align="center"><a href="https://oss.prisma.io"><img src="https://imgur.com/IMU2ERq.png" alt="Prisma" height="170px"></a></p>
