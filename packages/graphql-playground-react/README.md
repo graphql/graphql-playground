@@ -184,8 +184,8 @@ Open
 
 <a name="help-and-community" />
 
-## Help & Community [![Slack Status](https://slack.graph.cool/badge.svg)](https://slack.graph.cool)
+## Help & Community [![Discord](https://img.shields.io/discord/586999333447270440.svg)](https://discord.gg/EXUYPaY)
 
-Join our [Slack community](http://slack.graph.cool/) if you run into issues or have questions. We love talking to you!
+Join our [Discord Server](https://discord.gg/EXUYPaY) if you run into issues or have questions. We love talking to you!
 
 [![](http://i.imgur.com/5RHR6Ku.png)](https://www.graph.cool/)
