@@ -5,6 +5,7 @@ import getLoadingMarkup from './get-loading-markup'
 export interface MiddlewareOptions {
   endpoint?: string
   subscriptionEndpoint?: string
+  subscriptionEndpointConnectionTimeout?: number
   workspaceName?: string
   env?: any
   config?: any

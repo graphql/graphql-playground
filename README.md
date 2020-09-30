@@ -132,6 +132,7 @@ The React component `<Playground />` and all middlewares expose the following op
 - `props` (Middlewares & React Component)
   - `endpoint` [`string`](optional) - the GraphQL endpoint url.
   - `subscriptionEndpoint` [`string`](optional) - the GraphQL subscriptions endpoint url.
+  - `subscriptionEndpointConnectionTimeout` [`number`](optional) - the GraphQL subscriptions endpoint connection timeout.
   - `workspaceName` [`string`](optional) - in case you provide a GraphQL Config, you can name your workspace here
   - `config` [`string`](optional) - the JSON of a GraphQL Config. See an example [here](https://github.com/prismagraphql/graphql-playground/blob/master/packages/graphql-playground-react/src/localDevIndex.tsx#L47)
   - `settings` [`ISettings`](optional) - Editor settings in json format as [described here](https://github.com/prismagraphql/graphql-playground#settings)
