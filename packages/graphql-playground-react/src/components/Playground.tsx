@@ -44,6 +44,7 @@ import {
   setLinkCreator,
   schemaFetcher,
   setSubscriptionEndpoint,
+  setSubscriptionEndpointConnectionTimeout,
 } from '../state/sessions/fetchingSagas'
 import { Session } from '../state/sessions/reducers'
 import { getWorkspaceId } from './Playground/util/getWorkspaceId'
@@ -62,6 +63,7 @@ export interface Props {
   endpoint: string
   sessionEndpoint: string
   subscriptionEndpoint?: string
+  subscriptionEndpointConnectionTimeout?: number
   projectId?: string
   shareEnabled?: boolean
   fixedEndpoint?: boolean
@@ -194,6 +196,11 @@ export class Playground extends React.PureComponent<Props & ReduxProps, State> {
     setLinkCreator(props.createApolloLink)
     this.getSchema()
     setSubscriptionEndpoint(props.subscriptionEndpoint)
+    if (props.subscriptionEndpointConnectionTimeout) {
+      setSubscriptionEndpointConnectionTimeout(
+        props.subscriptionEndpointConnectionTimeout,
+      )
+    }
   }
 
   UNSAFE_componentWillMount() {
@@ -262,15 +269,15 @@ export class Playground extends React.PureComponent<Props & ReduxProps, State> {
           props.sessionHeaders && props.sessionHeaders.length > 0
             ? props.sessionHeaders
             : props.headers && Object.keys(props.headers).length > 0
-              ? JSON.stringify(props.headers)
-              : undefined,
+            ? JSON.stringify(props.headers)
+            : undefined,
         credentials: props.settings['request.credentials'],
         useTracingHeader:
           !this.initialSchemaFetch &&
           props.settings['tracing.tracingSupported'],
       }
       const schema = await schemaFetcher.fetch(data)
-      schemaFetcher.subscribe(data, newSchema => {
+      schemaFetcher.subscribe(data, (newSchema) => {
         if (
           data.endpoint === this.props.endpoint ||
           data.endpoint === this.props.sessionEndpoint
@@ -413,24 +420,21 @@ const mapStateToProps = createStructuredSelector({
   sessionEndpoint: getEndpoint,
 })
 
-export default connect(
-  mapStateToProps,
-  {
-    selectTabIndex,
-    selectNextTab,
-    selectPrevTab,
-    newSession,
-    closeSelectedTab,
-    initState,
-    saveSettings,
-    saveConfig,
-    setTracingSupported,
-    injectHeaders,
-    setConfigString,
-    schemaFetchingError,
-    schemaFetchingSuccess,
-  },
-)(Playground)
+export default connect(mapStateToProps, {
+  selectTabIndex,
+  selectNextTab,
+  selectPrevTab,
+  newSession,
+  closeSelectedTab,
+  initState,
+  saveSettings,
+  saveConfig,
+  setTracingSupported,
+  injectHeaders,
+  setConfigString,
+  schemaFetchingError,
+  schemaFetchingSuccess,
+})(Playground)
 
 const PlaygroundContainer = styled.div`
   flex: 1;

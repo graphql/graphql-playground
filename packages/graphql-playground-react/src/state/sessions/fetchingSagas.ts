@@ -41,9 +41,14 @@ import { set } from 'immutable'
 
 // tslint:disable
 let subscriptionEndpoint
+let subscriptionTimeout = 20000
 
 export function setSubscriptionEndpoint(endpoint) {
   subscriptionEndpoint = endpoint
+}
+
+export function setSubscriptionEndpointConnectionTimeout(timeout) {
+  subscriptionTimeout = timeout
 }
 
 export interface LinkCreatorProps {
@@ -78,7 +83,8 @@ export const defaultLinkCreator = (
   }
 
   const subscriptionClient = new SubscriptionClient(subscriptionEndpoint, {
-    timeout: 20000,
+    minTimeout: subscriptionTimeout,
+    timeout: subscriptionTimeout,
     lazy: true,
     connectionParams,
   })
@@ -86,7 +92,7 @@ export const defaultLinkCreator = (
   const webSocketLink = new WebSocketLink(subscriptionClient)
   return {
     link: ApolloLink.split(
-      operation => isSubscription(operation),
+      (operation) => isSubscription(operation),
       webSocketLink as any,
       httpLink,
     ),
@@ -137,7 +143,7 @@ function* runQuerySaga(action) {
   yield put(setCurrentQueryStartTime(new Date()))
 
   let firstResponse = false
-  const channel = eventChannel(emitter => {
+  const channel = eventChannel((emitter) => {
     let closed = false
     if (subscriptionClient && operationIsSubscription) {
       subscriptionClient.onDisconnected(() => {
@@ -151,10 +157,10 @@ function* runQuerySaga(action) {
       })
     }
     const subscription = execute(link, operation).subscribe({
-      next: function(value) {
+      next: function (value) {
         emitter({ value })
       },
-      error: error => {
+      error: (error) => {
         emitter({ error })
         emitter(END)
       },
