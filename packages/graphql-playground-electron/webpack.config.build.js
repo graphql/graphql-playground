@@ -18,6 +18,7 @@ if (!fs.existsSync(appEntrypoint)) {
 
 module.exports = {
   devtool: 'source-map',
+  mode: 'production',
   target: 'electron-renderer',
   entry: {
     app: ['./src/renderer'],
@@ -40,10 +41,10 @@ module.exports = {
         loader: 'tslint-loader',
         exclude: /node_modules/,
       },
-      {
-        test: /\.json$/, // TODO check if still needed
-        loader: 'json-loader',
-      },
+      // {
+      //   test: /\.json$/, // TODO check if still needed
+      //   loader: 'json-loader',
+      // },
       {
         test: /\.css$/,
         loader: 'style-loader!css-loader',
@@ -87,6 +88,15 @@ module.exports = {
         test: /.*\.(png|gif)$/,
         loader: 'file-loader',
       },
+      {
+        test: /\.html$/,
+        loader: 'html-loader',
+      },
+      {
+        test: /\.mjs$/,
+        include: /node_modules/,
+        type: 'javascript/auto',
+      },
     ],
   },
   plugins: [
@@ -117,7 +127,7 @@ module.exports = {
       /\.js$/,
     ),
     new webpack.NormalModuleReplacementPlugin(/\/iconv-loader$/, 'node-noop'),
-    new webpack.optimize.CommonsChunkPlugin('vendor'),
+    // new webpack.optimize.CommonsChunkPlugin('vendor'),
     new webpack.optimize.ModuleConcatenationPlugin(),
     new webpack.LoaderOptionsPlugin({
       options: {
@@ -152,6 +162,6 @@ module.exports = {
   ],
   resolve: {
     modules: [path.resolve('./src'), 'node_modules'],
-    extensions: ['.js', '.ts', '.tsx'],
+    extensions: ['.mjs', '.js', '.ts', '.tsx'],
   },
 }

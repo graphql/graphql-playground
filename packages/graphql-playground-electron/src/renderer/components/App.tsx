@@ -1,4 +1,6 @@
 import * as React from 'react'
+import 'core-js/stable'
+import 'regenerator-runtime/runtime'
 import { remote, ipcRenderer, webFrame } from 'electron'
 import * as cx from 'classnames'
 import { Playground as IPlayground } from 'graphql-playground-react/lib/components/Playground'

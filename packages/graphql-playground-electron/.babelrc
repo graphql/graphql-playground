@@ -1,12 +1,9 @@
 {
   "presets": [
-    ["@babel/preset-env", {
-      "targets": {
-        "esmodules": true
-      }
-    }], "@babel/preset-react"
+    "@babel/preset-env", "@babel/preset-react"
   ],
   "plugins": [
+    // "styled-jsx-postcss/babel",
     "@babel/plugin-proposal-object-rest-spread",
     "babel-plugin-styled-components"
   ]
