@@ -33,10 +33,6 @@ module.exports = [
           loader: 'tslint-loader',
           exclude: /node_modules/,
         },
-        // {
-        //   test: /\.json$/, // TODO check if still needed
-        //   loader: 'json-loader',
-        // },
         {
           test: /\.css$/,
           loader: 'style-loader!css-loader',
@@ -76,11 +72,6 @@ module.exports = [
         {
           test: /\.html$/,
           loader: 'html-loader',
-        },
-        {
-          test: /\.mjs$/,
-          include: /node_modules/,
-          type: 'javascript/auto',
         },
       ],
     },
