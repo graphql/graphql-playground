@@ -27,11 +27,11 @@ export interface ISettings {
   ['prettier.tabWidth']: number
   ['prettier.useTabs']: boolean
   ['request.credentials']: 'omit' | 'include' | 'same-origin'
+  ['request.globalHeaders']: { [key: string]: string }
   ['schema.disableComments']: boolean
   ['schema.polling.enable']: boolean
   ['schema.polling.endpointFilter']: string
   ['schema.polling.interval']: number
   ['tracing.hideTracingResponse']: boolean
-  ['request.globalHeaders']: { [key: string]: string }
   ['tracing.tracingSupported']: boolean
 }
