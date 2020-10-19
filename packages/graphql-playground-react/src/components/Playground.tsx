@@ -255,7 +255,7 @@ export class Playground extends React.PureComponent<Props & ReduxProps, State> {
     const props = propsInput || this.props
     const endpoint = props.sessionEndpoint || props.endpoint
     const currentSchema = this.state.schema
-    const credentials = props.settings['request.credentials']
+    const globalHeaders = props.settings['request.globalHeaders']
 
     try {
       const data = {
@@ -263,11 +263,11 @@ export class Playground extends React.PureComponent<Props & ReduxProps, State> {
         headers:
           props.sessionHeaders && props.sessionHeaders.length > 0
             ? JSON.stringify({
-                ...credentials,
+                ...globalHeaders,
                 ...JSON.parse(props.sessionHeaders),
               })
             : JSON.stringify({
-                ...credentials,
+                ...globalHeaders,
                 ...props.headers,
               }),
         credentials: props.settings['request.credentials'],

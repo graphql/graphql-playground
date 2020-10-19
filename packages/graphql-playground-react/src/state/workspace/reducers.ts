@@ -56,7 +56,7 @@ export const defaultSettings: ISettings = {
   'schema.polling.endpointFilter': '*localhost*',
   'schema.polling.interval': 2000,
   'tracing.hideTracingResponse': true,
-  'request.credentials': {},
+  'request.globalHeaders': {},
   'tracing.tracingSupported': true,
 }
 

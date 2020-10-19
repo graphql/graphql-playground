@@ -37,7 +37,6 @@ import { parse } from 'graphql'
 import { Session } from './reducers'
 import { safely, prettify } from '../../utils'
 import * as queryString from 'query-string'
-import { parseHeaders } from '../../components/Playground/util/parseHeaders'
 
 function* setQueryFacts() {
   // debounce by 100 ms
@@ -129,8 +128,8 @@ function* getSessionWithCredentials() {
   const session = yield select(getSelectedSession)
   const settings = yield select(getSettings)
   const combinedHeaders = {
-    ...settings['request.credentials'],
-    ...parseHeaders(session.headers),
+    ...settings['request.globalHeaders'],
+    ...JSON.parse(session.headers),
   }
 
   return {

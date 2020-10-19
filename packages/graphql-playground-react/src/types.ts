@@ -32,6 +32,6 @@ export interface ISettings {
   ['schema.polling.endpointFilter']: string
   ['schema.polling.interval']: number
   ['tracing.hideTracingResponse']: boolean
-  ['request.credentials']: { [key: string]: string }
+  ['request.globalHeaders']: { [key: string]: string }
   ['tracing.tracingSupported']: boolean
 }
