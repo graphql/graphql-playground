@@ -25,7 +25,7 @@ export interface ISettings {
   'editor.fontSize': number
   'editor.fontFamily': string
   'request.credentials': string
-  'request.globalHeaders': { [key: string]: string; }
+  'request.credentials': { [key: string]: string; }
 }
 
 export interface EditorColours {

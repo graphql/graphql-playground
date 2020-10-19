@@ -130,7 +130,7 @@ class TopBar extends React.Component<Props, {}> {
     } catch (e) {
       //
     }
-    const globalHeaders = this.props.settings['request.globalHeaders']
+    const credentials = this.props.settings['request.credentials']
     const headers = {
       'Accept-Encoding': 'gzip, deflate, br',
       'Content-Type': 'application/json',
@@ -138,7 +138,7 @@ class TopBar extends React.Component<Props, {}> {
       Connection: 'keep-alive',
       DNT: '1',
       Origin: location.origin || session.endpoint,
-      ...globalHeaders,
+      ...credentials,
       ...sessionHeaders,
     }
     const headersString = Object.keys(headers)
