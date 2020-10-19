@@ -1,7 +1,7 @@
 {
   "name": "graphql-playground-middleware-lambda",
-  "version": "1.7.15",
-  "homepage": "https://github.com/graphcool/graphql-playground/tree/master/packages/graphql-playground-middleware-lambada",
+  "version": "1.7.22",
+  "homepage": "https://github.com/graphcool/graphql-playground/tree/master/packages/graphql-playground-middleware-lambda",
   "description": "GraphQL IDE for better development workflows (GraphQL Subscriptions, interactive docs & collaboration).",
   "contributors": [
     "Tim Suchanek <tim@graph.cool>",
@@ -39,6 +39,7 @@
     "definition": "dist/index.d.ts"
   },
   "dependencies": {
-    "graphql-playground-html": "^1.6.19"
-  }
+    "graphql-playground-html": "^1.6.28"
+  },
+  "gitHead": "53d233f9deb9dcc86f99e41268ff92b6367e0713"
 }

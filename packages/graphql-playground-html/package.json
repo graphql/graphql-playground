@@ -1,6 +1,6 @@
 {
   "name": "graphql-playground-html",
-  "version": "1.6.19",
+  "version": "1.6.28",
   "homepage": "https://github.com/graphcool/graphql-playground/tree/master/packages/graphql-playground-html",
   "description": "GraphQL IDE for better development workflows (GraphQL Subscriptions, interactive docs & collaboration).",
   "contributors": [
@@ -33,5 +33,8 @@
   "typescript": {
     "definition": "dist/index.d.ts"
   },
-  "dependencies": {}
+  "dependencies": {
+    "xss": "^1.0.6"
+  },
+  "gitHead": "53d233f9deb9dcc86f99e41268ff92b6367e0713"
 }

@@ -20,3 +20,4 @@ lib
 /middleware
 playground.css
 *.log
+**/examples/*/yarn.lock

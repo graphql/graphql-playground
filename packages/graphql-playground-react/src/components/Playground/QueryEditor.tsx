@@ -207,7 +207,7 @@ export class QueryEditor extends React.PureComponent<Props & ReduxProps, {}> {
     })
   }
 
-  componentWillReceiveProps(nextProps) {
+  UNSAFE_componentWillReceiveProps(nextProps) {
     if (this.props.sessionId !== nextProps.sessionId) {
       this.closeCompletion()
       this.updateSessionScrollTop()

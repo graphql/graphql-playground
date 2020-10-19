@@ -24,7 +24,7 @@ GraphQL Playground uses components of GraphiQL under the hood but is meant as a 
 - Configuration of HTTP headers
 - Tabs
 
-See the following question for more additonal features.
+See the following question for more additional features.
 
 ### What's the difference between the desktop app and the web version?
 
@@ -57,7 +57,7 @@ All interfaces, the React component `<Playground />` and all middlewares expose 
 #### Install
 
 ```sh
-yarn add graphql-playground
+yarn add graphql-playground-react
 ```
 
 #### Use
@@ -73,7 +73,10 @@ The GraphQL Playground requires **React 16**.
 Including Fonts (`1.`)
 
 ```html
-<link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700|Source+Code+Pro:400,700" rel="stylesheet">
+<link
+  href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700|Source+Code+Pro:400,700"
+  rel="stylesheet"
+/>
 ```
 
 Including stylesheet and the component (`2., 3.`)
@@ -84,7 +87,7 @@ import ReactDOM from 'react-dom'
 import Playground from 'graphql-playground'
 
 ReactDOM.render(
-  <Playground endpoint="https://api.graph.cool/simple/v1/swapi" />,
+  <Playground endpoint='https://api.graph.cool/simple/v1/swapi' />,
   document.body,
 )
 ```
@@ -153,20 +156,20 @@ functions:
   graphql:
     handler: handler.graphqlHandler
     events:
-    - http:
-        path: graphql
-        method: post
-        cors: true
+      - http:
+          path: graphql
+          method: post
+          cors: true
   playground:
     handler: handler.playgroundHandler
     events:
-    - http:
-        path: playground
-        method: get
-        cors: true
+      - http:
+          path: playground
+          method: get
+          cors: true
 ```
 
-## Development [![npm version](https://badge.fury.io/js/graphql-playground.svg)](https://badge.fury.io/js/graphql-playground)
+## Development [![npm version](https://badge.fury.io/js/graphql-playground-react.svg)](https://badge.fury.io/js/graphql-playground-react)
 
 This is a mono-repo setup containing packages for the `graphql-playground` and `graphql-playground-electron`.
 
@@ -181,8 +184,8 @@ Open
 
 <a name="help-and-community" />
 
-## Help & Community [![Slack Status](https://slack.graph.cool/badge.svg)](https://slack.graph.cool)
+## Help & Community [![Discord](https://img.shields.io/discord/586999333447270440.svg)](https://discord.gg/EXUYPaY)
 
-Join our [Slack community](http://slack.graph.cool/) if you run into issues or have questions. We love talking to you!
+Join our [Discord Server](https://discord.gg/EXUYPaY) if you run into issues or have questions. We love talking to you!
 
 [![](http://i.imgur.com/5RHR6Ku.png)](https://www.graph.cool/)

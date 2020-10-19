@@ -41,14 +41,14 @@ interface DispatchFromProps {
 }
 
 class SDLView extends React.Component<
-  SideTabContentProps & StateFromProps & DispatchFromProps
+  SideTabContentProps & StateFromProps
 > {
   ref
   constructor(props) {
     super(props)
     ;(window as any).d = this
   }
-  componentWillReceiveProps(nextProps: SideTabContentProps & StateFromProps) {
+  UNSAFE_componentWillReceiveProps(nextProps: SideTabContentProps & StateFromProps) {
     // If user use default column size % columnWidth
     // Make the column follow the clicks
     if (!this.props.schema && nextProps.schema) {

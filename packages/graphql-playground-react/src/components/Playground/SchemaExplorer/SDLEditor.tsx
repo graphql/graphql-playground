@@ -98,15 +98,17 @@ class SDLEditor extends React.PureComponent<Props, { overflowY: boolean }> {
     }
   }
 
-  componentWillReceiveProps(nextProps) {
+  UNSAFE_componentWillReceiveProps(nextProps) {
     if (this.props.sessionId !== nextProps.sessionId) {
       this.editor.scrollTo(0, 0)
     }
   }
 
   componentWillUnmount() {
-    this.editor.off('scroll')
-    this.editor = null
+    if(this.editor) {
+      this.editor.off('scroll')
+      this.editor = null
+    }
   }
 
   handleScroll = e => {
