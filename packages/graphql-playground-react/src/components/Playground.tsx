@@ -255,15 +255,21 @@ export class Playground extends React.PureComponent<Props & ReduxProps, State> {
     const props = propsInput || this.props
     const endpoint = props.sessionEndpoint || props.endpoint
     const currentSchema = this.state.schema
+    const globalHeaders = props.settings['request.globalHeaders']
+
     try {
       const data = {
         endpoint,
         headers:
           props.sessionHeaders && props.sessionHeaders.length > 0
-            ? props.sessionHeaders
-            : props.headers && Object.keys(props.headers).length > 0
-              ? JSON.stringify(props.headers)
-              : undefined,
+            ? JSON.stringify({
+                ...globalHeaders,
+                ...JSON.parse(props.sessionHeaders),
+              })
+            : JSON.stringify({
+                ...globalHeaders,
+                ...props.headers,
+              }),
         credentials: props.settings['request.credentials'],
         useTracingHeader:
           !this.initialSchemaFetch &&
