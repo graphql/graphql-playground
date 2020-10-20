@@ -27,6 +27,7 @@ export interface ISettings {
   'editor.fontSize': number
   'editor.fontFamily': string
   'request.credentials': string
+  'request.globalHeaders': { [key: string]: string; }
   'schema.polling.enable': boolean
   'schema.polling.endpointFilter': string
   'schema.polling.interval': number

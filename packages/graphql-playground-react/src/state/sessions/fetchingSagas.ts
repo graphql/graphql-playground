@@ -129,7 +129,10 @@ function* runQuerySaga(action) {
   }
   const lol = {
     endpoint: session.endpoint,
-    headers,
+    headers: {
+      ...settings['request.globalHeaders'],
+      ...headers,
+    },
     credentials: settings['request.credentials'],
   }
 

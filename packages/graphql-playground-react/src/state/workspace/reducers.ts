@@ -51,6 +51,7 @@ export const defaultSettings: ISettings = {
   'prettier.tabWidth': 2,
   'prettier.useTabs': false,
   'request.credentials': 'omit',
+  'request.globalHeaders': {},
   'schema.disableComments': true,
   'schema.polling.enable': true,
   'schema.polling.endpointFilter': '*localhost*',
