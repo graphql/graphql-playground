@@ -179,26 +179,31 @@ class InitialView extends React.Component<Props & StateFromProps, State> {
           onRequestClose={this.handleRequestClose}
           style={modalStyle}
         >
-          <div className="initial-view-content">
+          <div className="initial-view-content bgWhite flex flexRow">
             {history.size > 0 ? (
-              <div className="initial-view-recent">
-                <div className="initial-view-recent-header">RECENT</div>
-                <div className="initial-view-recent-list">
+              <div className="initial-view-recent br bBlack10 overflowHidden flex flexColumn">
+                <div className="initial-view-recent-header pv10 ph20 bgBlack07 black50 bb bBlack10">
+                  RECENT
+                </div>
+                <div className="initial-view-recent-list flex1">
                   {Object.keys(items)
                     .reverse()
-                    .map(key => {
+                    .map((key) => {
                       const data = items[key]
                       const name = data.folderName || data.endpoint || data.path
                       return (
                         <div
-                          className="list-item"
+                          className="list-item pv10 ph20 bb bBlack10 pointer"
                           // tslint:disable-next-line
                           onClick={() => this.handleClickHistory(data)}
                         >
-                          <div className="list-item-name" title={name}>
+                          <div
+                            className="list-item-name f20 black70 fw6 mb6 toe overflowHidden nowrap"
+                            title={name}
+                          >
                             {name}
                           </div>
-                          <div className="list-item-date">
+                          <div className="list-item-date f12 black40 flex">
                             <Icon
                               src={
                                 data.type === 'local'
@@ -220,21 +225,26 @@ class InitialView extends React.Component<Props & StateFromProps, State> {
                 </div>
               </div>
             ) : (
-              <div className="initial-view-recent">
-                <div className="initial-view-recent-header">EXAMPLES</div>
-                <div className="initial-view-recent-list">
-                  {examples.map(example => (
+              <div className="initial-view-recent br bBlack10 overflowHidden flex flexColumn">
+                <div className="initial-view-recent-header pv10 ph20 bgBlack07 black50 bb bBlack10">
+                  EXAMPLES
+                </div>
+                <div className="initial-view-recent-list flex1">
+                  {examples.map((example) => (
                     <div
                       key={example.endpoint}
-                      className="list-item"
+                      className="list-item pv10 ph20 bb bBlack10 pointer"
                       onClick={() =>
                         this.props.onSelectEndpoint(example.endpoint)
                       }
                     >
-                      <div className="list-item-name" title={example.endpoint}>
+                      <div
+                        className="list-item-name f20 black70 fw6 mb6 toe overflowHidden nowrap"
+                        title={example.endpoint}
+                      >
                         {example.name}
                       </div>
-                      <div className="list-item-date">
+                      <div className="list-item-date f12 black40 flex">
                         <Icon
                           src={require('graphcool-styles/icons/fill/world.svg')}
                           color={$v.gray40}
@@ -248,13 +258,13 @@ class InitialView extends React.Component<Props & StateFromProps, State> {
                 </div>
               </div>
             )}
-            <div className="initial-view-workspace">
-              <h1 className="title">New Workspace</h1>
-              <p className="description">
+            <div className="initial-view-workspace flex1 tc pv20">
+              <h1 className="title flex1 tc pv20">New Workspace</h1>
+              <p className="description maAuto black50 mt16">
                 Either load a local repository with a .graphqlconfig file, or
                 just open a HTTP endpoint
               </p>
-              <div className="toggle">
+              <div className="toggle justifyCenter flex">
                 <Toggle
                   choices={choicesMode}
                   activeChoice={selectedMode}
@@ -262,28 +272,35 @@ class InitialView extends React.Component<Props & StateFromProps, State> {
                 />
               </div>
               {selectedMode === 'url endpoint' && (
-                <form className="container-input" onSubmit={this.handleSubmit}>
+                <form
+                  className="container-input ph10 pv6 mh38 mt20 darkBlue40 ba bBlack10 br2 flex f14"
+                  onSubmit={this.handleSubmit}
+                >
                   <input
-                    className="input"
+                    className="input darkBlue60 w100 f14"
                     placeholder="Enter endpoint url..."
                     value={endpoint}
                     onChange={this.handleChangeEndpoint}
                   />
-                  <button>OPEN</button>
+                  <button className="white br2 pv6 ph10 pointer f14 fw6">
+                    OPEN
+                  </button>
                 </form>
               )}
               {selectedMode === 'local' && (
                 <div
-                  className="container-input"
+                  className="container-input ph10 pv6 mh38 mt20 darkBlue40 ba bBlack10 br2 flex f14"
                   onClick={this.handleClickLocal}
                 >
                   <input
-                    className="input"
+                    className="input darkBlue60 w100 f14"
                     placeholder="Select a folder..."
                     value={endpoint}
                     onChange={this.handleChangeEndpoint}
                   />
-                  <button>OPEN</button>
+                  <button className="white br2 pv6 ph10 pointer f14 fw6">
+                    OPEN
+                  </button>
                 </div>
               )}
             </div>

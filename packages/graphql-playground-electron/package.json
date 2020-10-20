@@ -116,7 +116,8 @@
     "regenerator-runtime": "^0.13.7",
     "reselect": "^3.0.1",
     "semver": "^5.5.0",
-    "styled-jsx-postcss": "^0.2.0",
+    "styled-jsx": "2.2.6",
+    "styled-jsx-postcss": "git+https://github.com/timsuchanek/styled-jsx-postcss#build3",
     "sweetalert2": "^7.21.0",
     "validator": "^9.2.0"
   },
@@ -127,7 +128,7 @@
     "@babel/plugin-proposal-json-strings": "^7.0.0",
     "@babel/plugin-syntax-dynamic-import": "^7.0.0",
     "@babel/plugin-syntax-import-meta": "^7.0.0",
-    "@babel/plugin-transform-runtime": "^7.11.5",
+    "@babel/plugin-transform-runtime": "^7.12.0",
     "@babel/preset-env": "^7.0.0",
     "@babel/preset-react": "^7.0.0",
     "@types/classnames": "2.2.3",

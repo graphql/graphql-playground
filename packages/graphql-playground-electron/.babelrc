@@ -3,7 +3,7 @@
     "@babel/preset-env", "@babel/preset-react"
   ],
   "plugins": [
-    // "styled-jsx-postcss/babel",
+    "styled-jsx-postcss/babel",
     "@babel/plugin-proposal-object-rest-spread",
     "babel-plugin-styled-components"
   ]

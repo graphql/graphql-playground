@@ -84,10 +84,6 @@ module.exports = {
         test: /.*\.(png|gif)$/,
         loader: 'file-loader',
       },
-      {
-        test: /\.html$/,
-        loader: 'html-loader',
-      },
     ],
   },
   plugins: [
