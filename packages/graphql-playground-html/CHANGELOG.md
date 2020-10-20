@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.6.29](https://github.com/graphcool/graphql-playground/compare/graphql-playground-html@1.6.28...graphql-playground-html@1.6.29) (2020-10-20)
+
+**Note:** Version bump only for package graphql-playground-html
+
+
+
+
+
 ## [1.6.28](https://github.com/graphcool/graphql-playground/compare/graphql-playground-html@1.6.27...graphql-playground-html@1.6.28) (2020-09-15)
 
 

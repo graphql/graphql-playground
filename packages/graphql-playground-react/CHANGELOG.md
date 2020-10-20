@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.7.27](https://github.com/graphcool/graphql-playground/compare/graphql-playground-react@1.7.26...graphql-playground-react@1.7.27) (2020-10-20)
+
+
+### Bug Fixes
+
+* bump codemirror graphql ([#1286](https://github.com/graphcool/graphql-playground/issues/1286)) ([4a4ea29](https://github.com/graphcool/graphql-playground/commit/4a4ea299033b59e14ec130cf85e5ddc11a3698d2))
+
+
+
+
+
 ## [1.7.26](https://github.com/graphcool/graphql-playground/compare/graphql-playground-react@1.7.24...graphql-playground-react@1.7.26) (2020-08-30)
 
 **Note:** Version bump only for package graphql-playground-react

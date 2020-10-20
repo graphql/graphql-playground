@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.6.19](https://github.com/graphcool/graphql-playground/compare/graphql-playground-middleware-hapi@1.6.18...graphql-playground-middleware-hapi@1.6.19) (2020-10-20)
+
+**Note:** Version bump only for package graphql-playground-middleware-hapi
+
+
+
+
+
 ## [1.6.18](https://github.com/graphcool/graphql-playground/compare/graphql-playground-middleware-hapi@1.6.17...graphql-playground-middleware-hapi@1.6.18) (2020-09-15)
 
 **Note:** Version bump only for package graphql-playground-middleware-hapi
