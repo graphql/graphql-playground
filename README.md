@@ -4,9 +4,9 @@
 <p align="center"><img src="https://imgur.com/5fzMbyV.png" width="269"></p>
 
 [![npm version](https://badge.fury.io/js/graphql-playground-react.svg)](https://badge.fury.io/js/graphql-playground-react)
-[![prisma-labs](https://circleci.com/gh/prisma-labs/graphql-playground.svg?style=shield)](https://circleci.com/gh/prisma-labs/graphql-playground)
+[![prisma-labs](https://circleci.com/gh/graphql/graphql-playground.svg?style=shield)](https://circleci.com/gh/graphql/graphql-playground)
 
-**Future of this repository**: see [the announcement issue](https://github.com/prisma-labs/graphql-playground/issues/1143) for details.
+**Future of this repository**: see [the announcement issue](https://github.com/graphql/graphql-playground/issues/1143) for details.
 
 ---
 
@@ -40,7 +40,7 @@ $ brew cask install graphql-playground
 -`koaPlayground()`
 -`lambdaPlayground()
 
->  If you used static values, such as `graphql-playground-electron` does in [it's webpack config](https://github.com/prisma-labs/graphql-playground/blob/master/packages/graphql-playground-electron/webpack.config.build.js#L16), as well as the most common middleware implementations out there, they were not vulnerable to the attack.
+>  If you used static values, such as `graphql-playground-electron` does in [it's webpack config](https://github.com/graphql/graphql-playground/blob/master/packages/graphql-playground-electron/webpack.config.build.js#L16), as well as the most common middleware implementations out there, they were not vulnerable to the attack.
 
 The only reason this vulnerability exists is because we are using template strings in `renderPlaygroundPage()` with potentially unsanitized user defined variables. This allows an attacker to inject html and javascript into the page. 
 - [Read more about preventing XSS in react](https://pragmaticwebsecurity.com/files/cheatsheets/reactxss.pdf)
@@ -56,14 +56,14 @@ Common examples may be user-defined path parameters, query string, unsanitized U
 - `graphql-playground-koa` **☔ safe** @ `1.6.15`
 - `graphql-playground-hapi` **☔ safe** @ `1.6.13`
 - `graphql-playground-lambda` **☔ safe** @ `1.7.17`
-- `graphql-playground-electron` has always been **☔ safe** from XSS attacks! This is because configuration is statically defined [it's webpack config](https://github.com/prisma-labs/graphql-playground/blob/master/packages/graphql-playground-electron/webpack.config.build.js#L16)
+- `graphql-playground-electron` has always been **☔ safe** from XSS attacks! This is because configuration is statically defined [it's webpack config](https://github.com/graphql/graphql-playground/blob/master/packages/graphql-playground-electron/webpack.config.build.js#L16)
 - `graphql-playground-react` is safe because it does not use `renderPlaygroundPage()` anywhere, and thus is not susceptible to template string XSS reflection attacks.
 
 ### More Information
 
 See the [security docs](./SECURITY.md) for more details on how your implementation might be impacted by this vulnerability. It contains safe examples, unsafe examples, workarounds, and more details.
 
-We've also provided ['an example of the xss using the express middleware]('https://github.com/prisma-labs/graphql-playground/tree/master/packages/graphql-playground-html/examples/xss-attack')
+We've also provided ['an example of the xss using the express middleware]('https://github.com/graphql/graphql-playground/tree/master/packages/graphql-playground-html/examples/xss-attack')
 
 ## FAQ
 
