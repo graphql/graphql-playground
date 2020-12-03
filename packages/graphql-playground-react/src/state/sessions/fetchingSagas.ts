@@ -81,7 +81,7 @@ export const defaultLinkCreator = (
     retryTimeout: 20000,
     lazy: true,
     connectionParams,
-    url: session.endpoint,
+    url: session.endpoint.replace('http', 'ws'),
   })
 
   const webSocketLink = new WebSocketLink(subscriptionClient)
