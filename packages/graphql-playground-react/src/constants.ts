@@ -7,7 +7,7 @@ export const columnWidth = 300
 
 export const introspectionQuery = getIntrospectionQuery()
 
-export const defaultQuery = '# Write your query or mutation here\n'
+export const defaultQuery = '# Write your query, mutation or subscription here\n'
 
 export const modalStyle = {
   overlay: {
