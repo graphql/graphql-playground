@@ -325,6 +325,16 @@ $ yarn start
 Open
 [localhost:3000/localDev.html?endpoint=https://api.graph.cool/simple/v1/swapi](http://localhost:3000/localDev.html?endpoint=https://api.graph.cool/simple/v1/swapi) for local development!
 
+### Contributing to this project
+
+This repository is managed by EasyCLA. Project participants must sign the free GraphQL Specification Membership agreement ([preview](https://foundation.graphql.org/files/GraphQL_Specification-Individual-Preview.pdf)) before making a contribution. You only need to do this one time.
+
+You can either sign the document as an individual on your own behalf, or your company can do it. If your company has already signed the agreement, you will need to ask your CLA manager to add you to the [list of approved contributors](https://corporate.v1.easycla.lfx.linuxfoundation.org/). If you do not know your CLA manager, please email [operations@graphql.org](mailto:operations@graphql.org) for help.
+
+To initiate the signature process please open a PR. The EasyCLA bot will block merging if we still need a membership agreement from you.
+
+If you have issues, please email [operations@graphql.org](mailto:operations@graphql.org).
+
 ## Custom Theme
 
 From `graphql-playground-react@1.7.0` on you can provide a `codeTheme` property to the React Component to customize your color theme.
