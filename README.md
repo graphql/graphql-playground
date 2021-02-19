@@ -19,7 +19,7 @@ GraphQL IDE for better development workflows (GraphQL Subscriptions, interactive
 ## Installation
 
 ```sh
-$ brew cask install graphql-playground
+$ brew install --cask graphql-playground
 ```
 
 ## Features
