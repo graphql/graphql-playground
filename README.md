@@ -1,5 +1,7 @@
 > **Note:** The primary maintainer @acao is on hiatus until December 2020
 
+> **Note** Playground has joined hands with Graphiql. Read more about it [here](https://github.com/graphql/graphql-playground/issues/1143)
+
 > **SECURITY WARNING:** both `graphql-playground-html` and [all four (4) of it's middleware dependents](#impacted-packages) until `graphql-playground-html@1.6.22` were subject to an  **XSS Reflection attack vulnerability only to unsanitized user input strings** to the functions therein. This was resolved in `graphql-playground-html@^1.6.22`. [More Information](#security-details)
 
 
