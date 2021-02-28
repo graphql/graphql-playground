@@ -2,7 +2,7 @@
 
 [fork]: https://github.com/graphcool/graphql-playground/fork
 [pr]: https://github.com/graphcool/graphql-playground/compare
-[code-of-conduct]: CODE_OF_CONDUCT.md
+[code-of-conduct]: ../CODE_OF_CONDUCT.md
 
 Hi there! We're thrilled that you'd like to contribute to this project. Your help is essential for keeping it great.
 
