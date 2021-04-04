@@ -611,6 +611,15 @@ const EditorWrapper = styled.div`
     width: 20em;
   }
 
+  .CodeMirror-dialog span.CodeMirror-search-label {
+    color: ${p => p.theme.colours.text};
+  }
+
+  .CodeMirror-dialog input.CodeMirror-search-field {
+    color: ${p => p.theme.colours.text};
+    background: ${p => p.theme.colours.background};
+  }
+
   .CodeMirror-dialog button {
     font-size: 70%;
   }
