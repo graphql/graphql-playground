@@ -109,7 +109,7 @@
     "raven": "^2.4.2",
     "react": "16.13.1",
     "react-dom": "^16.4.0",
-    "react-redux": "7.2.1",
+    "react-redux": "^7.2.1",
     "redux": "^4.0.5",
     "redux-localstorage": "^1.0.0-rc5",
     "redux-localstorage-filter": "^0.1.1",
