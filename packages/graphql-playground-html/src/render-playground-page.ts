@@ -8,7 +8,7 @@ export interface MiddlewareOptions {
   workspaceName?: string
   env?: any
   config?: any
-  settings?: ISettings
+  settings?: Partial<ISettings>
   schema?: IntrospectionResult
   tabs?: Tab[]
   codeTheme?: EditorColours

@@ -247,7 +247,7 @@ class GraphQLEditor extends React.PureComponent<Props & ReduxProps> {
               <Results setRef={this.setResultComponent} />
               {!this.props.queryRunning &&
                 (!this.props.responses || this.props.responses.size === 0) && (
-                  <Intro>Hit the Play Button to get a response here</Intro>
+                  <Intro>Press the Play Button to get a response here</Intro>
                 )}
               {this.props.subscriptionActive && (
                 <Listening>Listening &hellip;</Listening>

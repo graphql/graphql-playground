@@ -3,34 +3,34 @@
 exports[`test MiddleWareApp passed default headers 1`] = `
 <div>
   <div
-    class="sc-dEoRIm RziiU"
+    class="sc-jtggT lbSfdq"
   >
     <div
-      class="sc-giadOv bQhkVW playground"
+      class="sc-fONwsr jNppkf playground"
     >
       <div
-        class="sc-gojNiO JVBvg"
+        class="sc-daURTG dROqMf"
       >
         <div
-          class="sc-daURTG cZCkPb"
+          class="sc-bXGyLb dDuAEY"
         >
           <div
-            class="sc-esOvli lhalyo"
+            class="sc-cmthru bfVYLy"
           >
             <div
-              class="sc-cLQEGU kvnLZM"
+              class="sc-gqPbQI SEbZC"
             >
               <div
-                class="sc-gqPbQI cjzsAe"
+                class="sc-hORach fyhdOf"
               />
             </div>
             <div
-              class="sc-cmthru ehXREM"
+              class="sc-hMFtBS gtvAeD"
             >
               New Tab
             </div>
             <div
-              class="sc-cQFLBn bpxnwx close"
+              class="sc-gojNiO izjFJN close"
             >
               <svg
                 height="11"
@@ -57,7 +57,7 @@ exports[`test MiddleWareApp passed default headers 1`] = `
             </div>
           </div>
           <div
-            class="sc-bXGyLb bNndAB"
+            class="sc-lkqHmb hrrKPQ"
           >
             <svg
               height="34"
@@ -85,10 +85,10 @@ exports[`test MiddleWareApp passed default headers 1`] = `
         </div>
       </div>
       <div
-        class="sc-fONwsr hFUbho"
+        class="sc-VJcYb jsBJIl"
       >
         <div
-          class="sc-VJcYb iBSEOK graphiql-wrapper active"
+          class="sc-ipXKqB iPMBQr graphiql-wrapper active"
         >
           <div
             class="sc-EHOje cIypmL"
@@ -136,10 +136,10 @@ exports[`test MiddleWareApp passed default headers 1`] = `
                 </button>
               </div>
               <div
-                class="sc-eXEjpC bdygHZ"
+                class="sc-ibxdXY biDfcz"
               >
                 <div
-                  class="sc-hZSUBg HwDAJ"
+                  class="sc-cMhqgX dUUizb"
                 >
                   <div
                     class="sc-ifAKCX dAtAHQ"
@@ -149,19 +149,19 @@ exports[`test MiddleWareApp passed default headers 1`] = `
                     />
                   </div>
                   <div
-                    class="sc-hrWEMg sc-gwVKww iHIHnA"
+                    class="sc-eTuwsz sc-hXRMBi bihGhC"
                     height="200"
                   >
                     <div
-                      class="sc-eTuwsz rgpvV sc-hXRMBi ilAbNh"
+                      class="sc-gwVKww jmsfqV sc-epnACN cATAit"
                     >
                       <span
-                        class="sc-epnACN czrRzC"
+                        class="sc-iQNlJl bpxsnM"
                       >
                         Query Variables
                       </span>
                       <span
-                        class="sc-epnACN icSOla"
+                        class="sc-iQNlJl gArUSm"
                       >
                         HTTP Headers (1)
                       </span>
@@ -171,14 +171,14 @@ exports[`test MiddleWareApp passed default headers 1`] = `
                     />
                   </div>
                   <div
-                    class="sc-RefOD sc-iQKALj kFhaXe"
+                    class="sc-iQKALj sc-bwCtUz hLmxzl"
                   />
                 </div>
                 <div
-                  class="sc-ibxdXY chknfe"
+                  class="sc-RefOD iqiKGG"
                 >
                   <div
-                    class="sc-RefOD sc-bwCtUz ecnDqC"
+                    class="sc-iQKALj sc-hrWEMg fHZBGP"
                   />
                   <div
                     class="sc-bdVaJa bFURGJ"
@@ -214,19 +214,19 @@ exports[`test MiddleWareApp passed default headers 1`] = `
                     </div>
                   </div>
                   <div
-                    class="sc-cMhqgX NzONc"
+                    class="sc-iuJeZd PkTkM"
                   >
-                    Hit the Play Button to get a response here
+                    Press the Play Button to get a response here
                   </div>
                   <div
-                    class="sc-hrWEMg sc-iQNlJl eDYAQB"
+                    class="sc-eTuwsz sc-bsbRJL jvVfGJ"
                     height="300"
                   >
                     <div
-                      class="sc-eTuwsz rgpvV sc-bsbRJL kbrtay"
+                      class="sc-gwVKww jmsfqV sc-hZSUBg hQHJtw"
                     >
                       <span
-                        class="sc-epnACN czrRzC"
+                        class="sc-iQNlJl bpxsnM"
                       >
                         Tracing
                       </span>
@@ -274,15 +274,14 @@ exports[`test MiddleWareApp passed default headers 1`] = `
                 class="sc-cJSrbW hLWfWH"
               />
             </div>
-            }
           </div>
         </div>
       </div>
       <div
-        class="sc-krDsej iXTGTt"
+        class="sc-dTdPqK emFIyf"
       >
         <div
-          class="sc-dTdPqK jlWbrI"
+          class="sc-itybZL hAFQvt"
         >
           <svg
             height="23"
@@ -313,34 +312,34 @@ exports[`test MiddleWareApp passed default headers 1`] = `
 exports[`test MiddleWareApp with tabs 1`] = `
 <div>
   <div
-    class="sc-dEoRIm RziiU"
+    class="sc-jtggT lbSfdq"
   >
     <div
-      class="sc-giadOv bQhkVW playground"
+      class="sc-fONwsr jNppkf playground"
     >
       <div
-        class="sc-gojNiO JVBvg"
+        class="sc-daURTG dROqMf"
       >
         <div
-          class="sc-daURTG cZCkPb"
+          class="sc-bXGyLb dDuAEY"
         >
           <div
-            class="sc-esOvli lhalyo"
+            class="sc-cmthru bfVYLy"
           >
             <div
-              class="sc-cLQEGU kvnLZM"
+              class="sc-gqPbQI SEbZC"
             >
               <div
-                class="sc-gqPbQI cjzsAe"
+                class="sc-hORach fyhdOf"
               />
             </div>
             <div
-              class="sc-cmthru ehXREM"
+              class="sc-hMFtBS gtvAeD"
             >
               New Tab
             </div>
             <div
-              class="sc-cQFLBn bpxnwx close"
+              class="sc-gojNiO izjFJN close"
             >
               <svg
                 height="11"
@@ -367,7 +366,7 @@ exports[`test MiddleWareApp with tabs 1`] = `
             </div>
           </div>
           <div
-            class="sc-bXGyLb bNndAB"
+            class="sc-lkqHmb hrrKPQ"
           >
             <svg
               height="34"
@@ -395,10 +394,10 @@ exports[`test MiddleWareApp with tabs 1`] = `
         </div>
       </div>
       <div
-        class="sc-fONwsr hFUbho"
+        class="sc-VJcYb jsBJIl"
       >
         <div
-          class="sc-VJcYb iBSEOK graphiql-wrapper active"
+          class="sc-ipXKqB iPMBQr graphiql-wrapper active"
         >
           <div
             class="sc-EHOje cIypmL"
@@ -446,10 +445,10 @@ exports[`test MiddleWareApp with tabs 1`] = `
                 </button>
               </div>
               <div
-                class="sc-eXEjpC bdygHZ"
+                class="sc-ibxdXY biDfcz"
               >
                 <div
-                  class="sc-hZSUBg HwDAJ"
+                  class="sc-cMhqgX dUUizb"
                 >
                   <div
                     class="sc-ifAKCX dAtAHQ"
@@ -459,19 +458,19 @@ exports[`test MiddleWareApp with tabs 1`] = `
                     />
                   </div>
                   <div
-                    class="sc-hrWEMg sc-gwVKww iHIHnA"
+                    class="sc-eTuwsz sc-hXRMBi bihGhC"
                     height="200"
                   >
                     <div
-                      class="sc-eTuwsz rgpvV sc-hXRMBi ilAbNh"
+                      class="sc-gwVKww jmsfqV sc-epnACN cATAit"
                     >
                       <span
-                        class="sc-epnACN czrRzC"
+                        class="sc-iQNlJl bpxsnM"
                       >
                         Query Variables
                       </span>
                       <span
-                        class="sc-epnACN icSOla"
+                        class="sc-iQNlJl gArUSm"
                       >
                         HTTP Headers 
                       </span>
@@ -481,14 +480,14 @@ exports[`test MiddleWareApp with tabs 1`] = `
                     />
                   </div>
                   <div
-                    class="sc-RefOD sc-iQKALj kFhaXe"
+                    class="sc-iQKALj sc-bwCtUz hLmxzl"
                   />
                 </div>
                 <div
-                  class="sc-ibxdXY chknfe"
+                  class="sc-RefOD iqiKGG"
                 >
                   <div
-                    class="sc-RefOD sc-bwCtUz ecnDqC"
+                    class="sc-iQKALj sc-hrWEMg fHZBGP"
                   />
                   <div
                     class="sc-bdVaJa bFURGJ"
@@ -524,19 +523,19 @@ exports[`test MiddleWareApp with tabs 1`] = `
                     </div>
                   </div>
                   <div
-                    class="sc-cMhqgX NzONc"
+                    class="sc-iuJeZd PkTkM"
                   >
-                    Hit the Play Button to get a response here
+                    Press the Play Button to get a response here
                   </div>
                   <div
-                    class="sc-hrWEMg sc-iQNlJl eDYAQB"
+                    class="sc-eTuwsz sc-bsbRJL jvVfGJ"
                     height="300"
                   >
                     <div
-                      class="sc-eTuwsz rgpvV sc-bsbRJL kbrtay"
+                      class="sc-gwVKww jmsfqV sc-hZSUBg hQHJtw"
                     >
                       <span
-                        class="sc-epnACN czrRzC"
+                        class="sc-iQNlJl bpxsnM"
                       >
                         Tracing
                       </span>
@@ -584,15 +583,14 @@ exports[`test MiddleWareApp with tabs 1`] = `
                 class="sc-cJSrbW hLWfWH"
               />
             </div>
-            }
           </div>
         </div>
       </div>
       <div
-        class="sc-krDsej iXTGTt"
+        class="sc-dTdPqK emFIyf"
       >
         <div
-          class="sc-dTdPqK jlWbrI"
+          class="sc-itybZL hAFQvt"
         >
           <svg
             height="23"
@@ -623,34 +621,34 @@ exports[`test MiddleWareApp with tabs 1`] = `
 exports[`test MiddleWareApp without tabs 1`] = `
 <div>
   <div
-    class="sc-dEoRIm RziiU"
+    class="sc-jtggT lbSfdq"
   >
     <div
-      class="sc-giadOv bQhkVW playground"
+      class="sc-fONwsr jNppkf playground"
     >
       <div
-        class="sc-gojNiO JVBvg"
+        class="sc-daURTG dROqMf"
       >
         <div
-          class="sc-daURTG cZCkPb"
+          class="sc-bXGyLb dDuAEY"
         >
           <div
-            class="sc-esOvli lhalyo"
+            class="sc-cmthru bfVYLy"
           >
             <div
-              class="sc-cLQEGU kvnLZM"
+              class="sc-gqPbQI SEbZC"
             >
               <div
-                class="sc-gqPbQI cjzsAe"
+                class="sc-hORach fyhdOf"
               />
             </div>
             <div
-              class="sc-cmthru ehXREM"
+              class="sc-hMFtBS gtvAeD"
             >
               New Tab
             </div>
             <div
-              class="sc-cQFLBn bpxnwx close"
+              class="sc-gojNiO izjFJN close"
             >
               <svg
                 height="11"
@@ -677,7 +675,7 @@ exports[`test MiddleWareApp without tabs 1`] = `
             </div>
           </div>
           <div
-            class="sc-bXGyLb bNndAB"
+            class="sc-lkqHmb hrrKPQ"
           >
             <svg
               height="34"
@@ -705,10 +703,10 @@ exports[`test MiddleWareApp without tabs 1`] = `
         </div>
       </div>
       <div
-        class="sc-fONwsr hFUbho"
+        class="sc-VJcYb jsBJIl"
       >
         <div
-          class="sc-VJcYb iBSEOK graphiql-wrapper active"
+          class="sc-ipXKqB iPMBQr graphiql-wrapper active"
         >
           <div
             class="sc-EHOje cIypmL"
@@ -756,10 +754,10 @@ exports[`test MiddleWareApp without tabs 1`] = `
                 </button>
               </div>
               <div
-                class="sc-eXEjpC bdygHZ"
+                class="sc-ibxdXY biDfcz"
               >
                 <div
-                  class="sc-hZSUBg HwDAJ"
+                  class="sc-cMhqgX dUUizb"
                 >
                   <div
                     class="sc-ifAKCX dAtAHQ"
@@ -769,19 +767,19 @@ exports[`test MiddleWareApp without tabs 1`] = `
                     />
                   </div>
                   <div
-                    class="sc-hrWEMg sc-gwVKww iHIHnA"
+                    class="sc-eTuwsz sc-hXRMBi bihGhC"
                     height="200"
                   >
                     <div
-                      class="sc-eTuwsz rgpvV sc-hXRMBi ilAbNh"
+                      class="sc-gwVKww jmsfqV sc-epnACN cATAit"
                     >
                       <span
-                        class="sc-epnACN czrRzC"
+                        class="sc-iQNlJl bpxsnM"
                       >
                         Query Variables
                       </span>
                       <span
-                        class="sc-epnACN icSOla"
+                        class="sc-iQNlJl gArUSm"
                       >
                         HTTP Headers 
                       </span>
@@ -791,14 +789,14 @@ exports[`test MiddleWareApp without tabs 1`] = `
                     />
                   </div>
                   <div
-                    class="sc-RefOD sc-iQKALj kFhaXe"
+                    class="sc-iQKALj sc-bwCtUz hLmxzl"
                   />
                 </div>
                 <div
-                  class="sc-ibxdXY chknfe"
+                  class="sc-RefOD iqiKGG"
                 >
                   <div
-                    class="sc-RefOD sc-bwCtUz ecnDqC"
+                    class="sc-iQKALj sc-hrWEMg fHZBGP"
                   />
                   <div
                     class="sc-bdVaJa bFURGJ"
@@ -834,19 +832,19 @@ exports[`test MiddleWareApp without tabs 1`] = `
                     </div>
                   </div>
                   <div
-                    class="sc-cMhqgX NzONc"
+                    class="sc-iuJeZd PkTkM"
                   >
-                    Hit the Play Button to get a response here
+                    Press the Play Button to get a response here
                   </div>
                   <div
-                    class="sc-hrWEMg sc-iQNlJl eDYAQB"
+                    class="sc-eTuwsz sc-bsbRJL jvVfGJ"
                     height="300"
                   >
                     <div
-                      class="sc-eTuwsz rgpvV sc-bsbRJL kbrtay"
+                      class="sc-gwVKww jmsfqV sc-hZSUBg hQHJtw"
                     >
                       <span
-                        class="sc-epnACN czrRzC"
+                        class="sc-iQNlJl bpxsnM"
                       >
                         Tracing
                       </span>
@@ -894,15 +892,14 @@ exports[`test MiddleWareApp without tabs 1`] = `
                 class="sc-cJSrbW hLWfWH"
               />
             </div>
-            }
           </div>
         </div>
       </div>
       <div
-        class="sc-krDsej iXTGTt"
+        class="sc-dTdPqK emFIyf"
       >
         <div
-          class="sc-dTdPqK jlWbrI"
+          class="sc-itybZL hAFQvt"
         >
           <svg
             height="23"
