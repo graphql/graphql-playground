@@ -1,4 +1,6 @@
 import * as React from 'react'
+import 'core-js/stable'
+import 'regenerator-runtime/runtime'
 import { remote, ipcRenderer, webFrame } from 'electron'
 import * as cx from 'classnames'
 import { Playground as IPlayground } from 'graphql-playground-react/lib/components/Playground'
@@ -113,8 +115,8 @@ class App extends React.Component<ReduxProps, State> {
       platformToken,
       loading: false,
     }
-    ;(global as any).a = this
-    ;(global as any).r = remote
+      ; (global as any).a = this
+      ; (global as any).r = remote
   }
 
   fileAdded = event => {
@@ -579,7 +581,12 @@ class App extends React.Component<ReduxProps, State> {
     const { theme, endpoint, platformToken, configString, config } = this.state
 
     return (
-      <div className={cx('root', theme, { noConfig: !configString })}>
+      <div
+        className={
+          'flex flexColumn bgDarkestBlue overflowHidden ' +
+          cx('root', theme, { noConfig: !configString })
+        }
+      >
         <style jsx={true} global={true}>{`
           .app-content .left-content {
             letter-spacing: 0.5px;

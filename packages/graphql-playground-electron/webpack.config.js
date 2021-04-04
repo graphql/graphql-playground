@@ -17,11 +17,12 @@ if (!fs.existsSync(appEntrypoint)) {
 
 module.exports = {
   devtool: 'cheap-module-eval-source-map',
+  mode: 'development',
   entry: './src/renderer',
-  target: 'electron',
+  target: 'electron-renderer',
   output: {
     filename: '[name].[hash].js',
-    publicPath: '/',
+    publicPath: '/'
   },
   module: {
     rules: [
@@ -30,10 +31,6 @@ module.exports = {
         test: /\.ts(x?)$/,
         loader: 'tslint-loader',
         exclude: /node_modules/,
-      },
-      {
-        test: /\.json$/, // TODO check if still needed
-        loader: 'json-loader',
       },
       {
         test: /\.css$/,
@@ -78,7 +75,7 @@ module.exports = {
     new ForkTsCheckerWebpackPlugin({}),
     new webpack.DefinePlugin({
       'process.env': {
-        NODE_ENV: JSON.stringify('production'),
+        NODE_ENV: JSON.stringify('development'),
       },
       __EXAMPLE_ADDR__: '"https://dynamic-resources.graph.cool"',
     }),
@@ -113,6 +110,6 @@ module.exports = {
   ],
   resolve: {
     modules: [path.resolve('./src'), 'node_modules'],
-    extensions: ['.js', '.ts', '.tsx'],
+    extensions: ['.mjs', '.js', '.ts', '.tsx'],
   },
 }

@@ -18,6 +18,7 @@ if (!fs.existsSync(appEntrypoint)) {
 
 module.exports = {
   devtool: 'source-map',
+  mode: 'production',
   target: 'electron-renderer',
   entry: {
     app: ['./src/renderer'],
@@ -39,10 +40,6 @@ module.exports = {
         test: /\.ts(x?)$/,
         loader: 'tslint-loader',
         exclude: /node_modules/,
-      },
-      {
-        test: /\.json$/, // TODO check if still needed
-        loader: 'json-loader',
       },
       {
         test: /\.css$/,
@@ -117,7 +114,7 @@ module.exports = {
       /\.js$/,
     ),
     new webpack.NormalModuleReplacementPlugin(/\/iconv-loader$/, 'node-noop'),
-    new webpack.optimize.CommonsChunkPlugin('vendor'),
+    // new webpack.optimize.CommonsChunkPlugin('vendor'),
     new webpack.optimize.ModuleConcatenationPlugin(),
     new webpack.LoaderOptionsPlugin({
       options: {
@@ -152,6 +149,6 @@ module.exports = {
   ],
   resolve: {
     modules: [path.resolve('./src'), 'node_modules'],
-    extensions: ['.js', '.ts', '.tsx'],
+    extensions: ['.mjs', '.js', '.ts', '.tsx'],
   },
 }

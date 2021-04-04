@@ -10,7 +10,7 @@ export interface ToggleProps {
 /* tslint:disable */
 const Toggle = ({ choices, onChange, activeChoice }: ToggleProps) => {
   return (
-    <div className="toggle">
+    <div className="toggle flex">
       <style jsx={true}>{`
         .toggle {
           @p: .flex;
@@ -29,7 +29,12 @@ const Toggle = ({ choices, onChange, activeChoice }: ToggleProps) => {
       `}</style>
       {choices.map((choice, i) => (
         <div
-          className={cn('choice', { active: choice === activeChoice })}
+          className={
+            'f14 ttu br2 mr6 fw6 darkBlue40 pointer ' +
+            cn('choice', {
+              'active darkBlue50 bgDarkBlue10': choice === activeChoice,
+            })
+          }
           key={choice}
           onClick={() => onChange(choice, i)}
         >

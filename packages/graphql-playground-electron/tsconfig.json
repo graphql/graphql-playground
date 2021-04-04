@@ -2,7 +2,7 @@
   "compilerOptions": {
     "removeComments": true,
     "module": "commonjs",
-    "jsx": "preserve",
+    "jsx": "react",
     "sourceMap": true,
     "target": "esnext",
     "moduleResolution": "node",
