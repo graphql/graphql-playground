@@ -108,11 +108,11 @@ yarn add graphql-playground-middleware-lambda
 
 We have a full example for each of the frameworks below:
 
-- **Express:** See [packages/graphql-playground-middleware-express/examples/basic](https://github.com/prisma/graphql-playground/tree/master/packages/graphql-playground-middleware-express/examples/basic)
+- **Express:** See [packages/graphql-playground-middleware-express/examples/basic](https://github.com/prisma/graphql-playground/tree/main/packages/graphql-playground-middleware-express/examples/basic)
 
-- **Hapi:** See [packages/graphql-playground-middleware/examples/hapi](https://github.com/prisma/graphql-playground/tree/master/packages/graphql-playground-middleware-hapi/examples/basic)
+- **Hapi:** See [packages/graphql-playground-middleware/examples/hapi](https://github.com/prisma/graphql-playground/tree/main/packages/graphql-playground-middleware-hapi/examples/basic)
 
-- **Koa:** See [packages/graphql-playground-middleware/examples/koa](https://github.com/prisma/graphql-playground/tree/master/packages/graphql-playground-middleware-koa/examples/basic)
+- **Koa:** See [packages/graphql-playground-middleware/examples/koa](https://github.com/prisma/graphql-playground/tree/main/packages/graphql-playground-middleware-koa/examples/basic)
 
 - **Lambda (as serverless handler):** See [serverless-graphql-apollo](https://github.com/serverless/serverless-graphql-apollo) or a quick example below.
 

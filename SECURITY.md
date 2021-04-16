@@ -17,7 +17,7 @@ When using
 
 without sanitization of user input, your application is vulnerable to an XSS Reflecton Attack. This is a serious vulnerability that could allow for exfiltration of data or user credentials, or to disrupt systems.
 
-We've provided ['an example of the xss using the express middleware]('https://github.com/prisma-labs/graphql-playground/tree/master/packages/graphql-playground-middleware-express/examples/xss-attack')
+We've provided ['an example of the xss using the express middleware]('https://github.com/prisma-labs/graphql-playground/tree/main/packages/graphql-playground-middleware-express/examples/xss-attack')
 
 ### Impacted Packages
 

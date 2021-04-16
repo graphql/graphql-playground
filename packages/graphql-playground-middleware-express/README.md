@@ -19,7 +19,7 @@ npm install graphql-playground-middleware-express --save
 
 ## Usage
 
-See full example in [examples/basic](https://github.com/prisma/graphql-playground/tree/master/packages/graphql-playground-middleware-express/examples/basic).
+See full example in [examples/basic](https://github.com/prisma/graphql-playground/tree/main/packages/graphql-playground-middleware-express/examples/basic).
 
 ```js
 const express = require('express')
@@ -33,7 +33,7 @@ app.get('/playground', expressPlayground({ endpoint: '/graphql' }))
 
 ## Security Notes
 
-All versions before `1.7.16` were vulnerable to user-defined input to `expressPlayground()`. Read more in [the security notes](https://github.com/prisma/graphql-playground/tree/master/SECURITY.md)
+All versions before `1.7.16` were vulnerable to user-defined input to `expressPlayground()`. Read more in [the security notes](https://github.com/prisma/graphql-playground/tree/main/SECURITY.md)
 
 ### Security Upgrade Steps
 
