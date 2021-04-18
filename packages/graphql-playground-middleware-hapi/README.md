@@ -19,7 +19,7 @@ npm install graphql-playground-middleware-hapi --save
 
 ## Usage
 
-See full example in [examples/basic](https://github.com/prisma/graphql-playground/tree/master/packages/graphql-playground-middleware-hapi/examples/basic).
+See full example in [examples/basic](https://github.com/prisma/graphql-playground/tree/main/packages/graphql-playground-middleware-hapi/examples/basic).
 
 minimal example:
 
@@ -44,7 +44,7 @@ app.register(playground)
 
 ## Security Notes
 
-All versions before `1.6.13` were vulnerable to user-defined input to `hapiPlayground()`. Read more in [the security notes](https://github.com/prisma/graphql-playground/tree/master/SECURITY.md)
+All versions before `1.6.13` were vulnerable to user-defined input to `hapiPlayground()`. Read more in [the security notes](https://github.com/prisma/graphql-playground/tree/main/SECURITY.md)
 
 ### Security Upgrade Steps
 

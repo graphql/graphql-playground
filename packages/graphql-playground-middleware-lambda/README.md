@@ -19,7 +19,7 @@ npm install graphql-playground-middleware-lambda --save
 
 ## Usage
 
-See full example in [examples/basic](https://github.com/prisma/graphql-playground/tree/master/packages/graphql-playground-middleware-lambda/examples/basic).
+See full example in [examples/basic](https://github.com/prisma/graphql-playground/tree/main/packages/graphql-playground-middleware-lambda/examples/basic).
 
 minimal example:
 

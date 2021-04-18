@@ -19,7 +19,7 @@ npm install graphql-playground-middleware-koa --save
 
 ## Usage
 
-See full example in [examples/basic](https://github.com/prisma/graphql-playground/tree/master/packages/graphql-playground-middleware-koa/examples/basic).
+See full example in [examples/basic](https://github.com/prisma/graphql-playground/tree/main/packages/graphql-playground-middleware-koa/examples/basic).
 
 ```js
 const koa = require('koa')
@@ -34,7 +34,7 @@ router.all('/playground', koaPlayground({ endpoint: '/graphql' }))
 
 ## Security Notes
 
-All versions before `1.6.15` were vulnerable to user-defined input to `koaPlayground()`. Read more in [the security notes](https://github.com/prisma/graphql-playground/tree/master/SECURITY.md)
+All versions before `1.6.15` were vulnerable to user-defined input to `koaPlayground()`. Read more in [the security notes](https://github.com/prisma/graphql-playground/tree/main/SECURITY.md)
 
 ### Security Upgrade Steps
 
