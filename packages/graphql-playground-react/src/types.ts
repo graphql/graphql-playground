@@ -34,4 +34,5 @@ export interface ISettings {
   ['schema.polling.interval']: number
   ['tracing.hideTracingResponse']: boolean
   ['tracing.tracingSupported']: boolean
+  ['subscriptions.protocol']: 'subscription-transport-ws' | 'graphql-ws'
 }

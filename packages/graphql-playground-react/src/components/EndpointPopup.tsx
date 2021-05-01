@@ -4,6 +4,8 @@ import Popup from './Popup'
 import { throttle } from 'lodash'
 import { Button } from './Button'
 import { styled, css } from '../styled'
+import { createClient } from 'graphql-ws';
+
 
 // @ts-ignore
 import imageSource from '../assets/logo.png'
@@ -20,7 +22,37 @@ export interface State {
 
 export default class EndpointPopup extends React.Component<Props, State> {
   checkEndpoint = throttle(() => {
-    if (this.state.endpoint.match(/^https?:\/\/\w+(\.\w+)*(:[0-9]+)?\/?.*$/)) {
+    if (this.state.endpoint.match(/^(https?|wss?):\/\/\w+(\.\w+)*(:[0-9]+)?\/?.*$/)) {
+      if (this.state.endpoint.match(/^(wss?)/)) {
+        const client = createClient({
+          url: this.state.endpoint,
+          retryAttempts:0
+        });
+        const unsubscribe = client.subscribe(
+          {
+            query: `{
+              __schema {
+                queryType {
+                  kind
+                }
+              }
+            }`,
+          },
+          {
+            next: () => {
+              this.setState({ valid: true })
+              unsubscribe()
+            },
+            error: () => {
+              this.setState({ valid: false });
+              unsubscribe()
+            },
+            complete: () =>  {},
+          },
+        );  
+        return;
+      }
+      
       fetch(this.state.endpoint, {
         method: 'post',
         headers: {

@@ -58,6 +58,7 @@ export const defaultSettings: ISettings = {
   'schema.polling.interval': 2000,
   'tracing.hideTracingResponse': true,
   'tracing.tracingSupported': true,
+  'subscriptions.protocol': 'subscription-transport-ws',
 }
 
 // tslint:disable-next-line:max-classes-per-file
