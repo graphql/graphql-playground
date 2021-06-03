@@ -24,6 +24,7 @@ import SideTab from './ExplorerTabs/SideTab'
 import SideTabs from './ExplorerTabs/SideTabs'
 import SDLView from './SchemaExplorer/SDLView'
 import GraphDocs from './DocExplorer/GraphDocs'
+import QueryTemplates from './QueryTemplates/QueryTemplates'
 
 import { styled } from '../../styled/index'
 
@@ -288,6 +289,12 @@ class GraphQLEditor extends React.PureComponent<Props & ReduxProps> {
               ref={this.setSchemaExplorerRef}
               sessionId={this.props.sessionId}
               setWidth={this.setDocsWidth}
+            />
+          </SideTab>
+          <SideTab label="Query templates" activeColor="red" tabWidth="65px">
+            <QueryTemplates
+              schema={this.props.schema}
+              // setWidth={this.setDocsWidth}
             />
           </SideTab>
         </SideTabs>
