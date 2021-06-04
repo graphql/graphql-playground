@@ -1,19 +1,28 @@
-import { allPropsMarker, formatQuery, IQueryTemplate } from './templateUtils'
+import {
+  allPropsMarker,
+  descriptionMarker,
+  formatQuery,
+  genericTemplates,
+  IQueryTemplate,
+} from './templateUtils'
 
 export const queryTemplates: IQueryTemplate[] = [
   {
     title: 'All videos',
-    description: 'Get all videos',
-    query: `query {
-      videos { ${allPropsMarker}  }
-    }`
+    description: 'Get all existing videos.',
+    query: genericTemplates.getAll('videos'),
   }, {
-    title: 'One Video',
-    description: 'Get all videos',
+    title: 'One video',
+    description: ''
+      + "Get one specific video. \n"
+      + "Change `id_eq` value to select a video by id or set a different lookup parameter.",
+    query: genericTemplates.getOne('videos'),
+  }, {
+    title: 'Featured videos',
+    description: 'Get all featured videos.',
     query: `query {
-      videos(where: { id_eq: 1 }) {
-        id
-      }
-    }`
-  }
+      ${descriptionMarker}
+      videos(where: { isFeatured_eq: true }) { ${allPropsMarker} }
+    }`,
+  },
 ].map(formatQuery)

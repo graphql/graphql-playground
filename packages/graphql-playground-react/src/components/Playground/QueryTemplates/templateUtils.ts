@@ -1,16 +1,36 @@
+// interface for query template
 export interface IQueryTemplate {
   title: string
   description: string
   query: string
 }
 
-const ignoredFields = ['createdAt', 'updatedAt', 'deletedAt', 'createdById', 'updatedById', 'deletedById', 'version']
+// fields ignored in query props expansion
+const ignoredFields = [
+  'createdAt',
+  'updatedAt',
+  'deletedAt',
+  'createdById',
+  'updatedById',
+  'deletedById',
+  'version',
 
+  // Joystream's dataObject `owner` is problematic because it's variant and will need some special handling
+  'owner',
+]
 
+// define markers that can be used in template queries
 export const allPropsMarker = '#allProps#'
-const indent = ' '.repeat(2) // extra spaces in query line start to be removed
-const formatRegex = new RegExp(`^${indent.repeat(2)}`, 'gm')
+export const descriptionMarker = '#description#'
 
+// define indent constants
+const indent = ' '.repeat(2) // extra spaces in query line start to be removed
+const baseIndent = 2 // indent for query content (this correlates to indent in the .ts code)
+const formatRegex = new RegExp(`^${indent.repeat(baseIndent)}`, 'gm') // regex for finding base indent
+
+/*
+  Sets nice formatting to the query template.
+*/
 export function formatQuery(template: IQueryTemplate): IQueryTemplate {
   return {
     ...template,
@@ -18,216 +38,125 @@ export function formatQuery(template: IQueryTemplate): IQueryTemplate {
   }
 }
 
-export function fillPropsToQuery(schema: any, query: string): string {
-  const usedQueryName = query.match(/query *\{[\s]*([a-zA-z]+)/)[1]
-
-  /*
-  const schemaQuery = schema.queries.find(item => item.name === usedQuery)
-  // const fields = findQueryFields(schemaQuery, usedQuery)
-  const fields = findQueryFields(schemaQuery)
-
-  const concatedProps = Object.entries(fields).reduce((acc, [key, value]: [string, {name: string}]) => {
-    /*
-    const content = isEntity(schema, fields, value.name)
-      ? expandEntityProps(value.name)
-      : value.name
-    * /
-
-    // tslint:disable-next-line:no-console
-    console.log(value, '- ', content, createPluralName(content))
-    // return acc + indent.repeat(2) + value.name + ",\n"
-    return acc + indent.repeat(2) + content + ",\n"
-  }, "\n")
-  */
+/*
+  Fills a list of properties to the given query.
+*/
+export function fillPropsToQuery(schema: any, query: string, maxRelationRecursions: number): string {
+  const usedQueryName = query
+    .replace(allPropsMarker, '') // remove all markers
+    .replace(descriptionMarker, '') // remove all markers
+    .match(/query *\{[\s]*([a-zA-z]+)/)[1]
 
   const schemaQuery = schema.queries.find(item => item.name === usedQueryName)
-  const concatedProps = myFieldRecursion(schemaQuery)
+  const concatedProps = concatQueryProps(schemaQuery, maxRelationRecursions)
 
   const result = query.replace(allPropsMarker, concatedProps)
 
   return result
 }
 
+/*
+  Fills query template's description into the query.
+*/
+export function fillDescriptionToQuery(query: string, description: string): string {
+  const formattedDesription = description
+    .replace(/^/gm, indent + '# ')
+    .replace(indent, '') // replace first (extra) indent
 
+  return query.replace(descriptionMarker, formattedDesription)
+}
 
-
-function myFieldRecursion(schemaPart: any, objsSoFar = []): string {
+/*
+  Prepares a list of properties for the given query.
+*/
+function concatQueryProps(schemaPart: any, maxRelationRecursions: number, objsSoFar = []): string {
   const subType = findQuerySubType(schemaPart.type)
-  const tmpResult = myRealRecursionForType(subType)
+  const tmpResult = queryPropsTypeRecursion(subType, maxRelationRecursions)
 
-  // tslint:disable-next-line:no-console
-  console.log('value', tmpResult)
-
-  // const result = tmpResult.join(', ')
   const result = tmpResult
 
   return result
 }
 
-
-function myRealRecursionForType(subType, objsSoFar = []): string {
-  // tslint:disable-next-line:no-console
-  console.log('subType', subType)
-
+/*
+  Recursively walks through query properties and it's relations.
+*/
+function queryPropsTypeRecursion(subType, remainingRecursion: number, objsSoFar = []): string {
   const fields = subType._fields
 
   const concatedProps = Object.entries(fields).reduce((acc, [key, value]: [string, {name: string, type: any}]) => {
+    // skip ignored fields
     if (ignoredFields.includes(value.name)) {
       return acc
     }
 
-    const tmpIndent = indent.repeat(2 + objsSoFar.length)
+    const tmpIndent = indent.repeat(baseIndent + objsSoFar.length)
 
+    // value seems to represent scalar property?
     if (!value.type) {
       return acc + tmpIndent + value.name + ",\n"
     }
 
     const innerType = findQuerySubType(value.type)
-    // tslint:disable-next-line:no-console
-    console.log('innerType', innerType)
 
+    // ensure infinite recursion between relations is prevented
     if (objsSoFar.includes(innerType)) {
-      // return acc + '#recursionStop#' // recursion stop
       return acc // recursion stop
     }
 
-    if (innerType._fields) {
-      return acc + `${tmpIndent}${value.name} {${myRealRecursionForType(innerType, [...objsSoFar, subType])}${tmpIndent}},\n`
+    // skip relation if recursion max was reached
+    if (innerType._fields && !remainingRecursion) {
+      return acc
     }
 
+    // in case of relation expand object properties
+    if (innerType._fields) {
+      const innerContent = queryPropsTypeRecursion(innerType, remainingRecursion - 1, [...objsSoFar, subType])
+      return acc + `${tmpIndent}${value.name} {${innerContent}${tmpIndent}},\n`
+    }
+
+    // return property name if no previous conditions were met (unexpected scenario)
     return acc + tmpIndent + value.name + ",\n"
   }, "\n")
 
   return concatedProps
 }
 
+/*
+  Finds type in query object.
+*/
 function findQuerySubType(schemaPart: any): Record<string, any> {
   let tmp = schemaPart
+
+  // walkthrough subtypes until fields definition is found
   while (!tmp._fields) {
+    // escape if type has no sub type definition
     if (!tmp.type && !tmp.ofType) {
       return {}
     }
 
+    // descend into subtype
     tmp = tmp.type || tmp.ofType
   }
 
   return tmp
 }
 
+// functions for generatic generic query templates
+export const genericTemplates = {
+  // get all records
+  getAll: (queryName: string) => {
+    return `query {
+      ${descriptionMarker}
+      ${queryName} { ${allPropsMarker} }
+    }`
+  },
 
-/*
-const maxIter = 10
-
-function myFieldRecursion(schemaPart: any, iter = 0, objsSoFar = []) {
-  if (iter >= maxIter) {
-    return null
-  }
-
-  const fields = findQueryFields(schemaPart)
-
-  const concatedProps = Object.entries(fields).reduce((acc, [key, value]: [string, {name: string}]) => {
-    if (objsSoFar.includes(value)) {
-      return acc + 'dadada'
-    }
-
-    // tslint:disable-next-line:no-console
-    // console.log('value', value)
-
-    const innerFields = myFieldRecursion(value, iter++, [...objsSoFar, value])
-
-    // tslint:disable-next-line:no-console
-    console.log('innerFields', value.name, typeof innerFields, innerFields)
-
-    const content = innerFields && Object.keys(innerFields).length
-      // ? 'xx' + innerFields + 'xx'
-      ? 'xx' + Object.entries(innerFields).map(([tmpKey, tmpValue]: [string, {name: string}]) => tmpValue.name).join(', ') + 'xx'
-      // : value.name
-      : value.name
-
-    // tslint:disable-next-line:no-console
-    // console.log('cccons', key, value, content)
-
-    // const content = 'tmp'
-
-    return acc + indent.repeat(2) + content + ",\n"
-  }, "\n")
-
-// const concatedProps = 'tralala'
-// tslint:disable-next-line:no-console
-console.log('result', fields)
-// console.log('result', concatedProps)
-
-
-  return concatedProps
+  // get one specific record by it's id
+  getOne: (queryName: string) => {
+    return `query {
+      ${descriptionMarker}
+      ${queryName}(where: { id_eq: 1 }) { ${allPropsMarker} }
+    }`
+  },
 }
-*/
-
-/*
-function isEntity(schema: any, queryFields: Record<string, any>, fieldName: string): boolean {
-
-  // const sameNameQueryExists = Object.entries(schema).find(([key]) => key === fieldName)
-  const sameNameQueryExists = Object.entries(schema.queries).find(([key, value]: [string, {name: string}]) => {
-    const fieldPluralName = createPluralName(fieldName)
-    // tslint:disable-next-line:no-console
-    // console.log('trala', key, value.name, fieldPluralName)
-
-    // return key === fieldName
-    return value.name === fieldPluralName
-  })
-
-  // const tmp = findQueryFields(schema, fieldName)
-
-  // tslint:disable-next-line:no-console
-  console.log('isEntity', sameNameQueryExists, schema, queryFields, fieldName)
-
-  // const tmp = findQueryFields(schema)
-  const tmp = findQueryFields(queryFields[fieldName])
-
-  // tslint:disable-next-line:no-console
-  console.log('tmp', tmp)
-
-  if (tmp && Object.keys(tmp).length) {
-    return true
-  }
-
-
-  // if (tmp) {
-  // if (1) {
-  // if (sameNameQueryExists) {
-  //   return true
-  // }
-
-  return false
-}
-
-function expandEntityProps(fieldName: string): string {
-  return `-x ${fieldName} x-`
-}
-
-*/
-/*
-// function findQueryFields(schemaPart: any, queryName: string): Record<string, any> {
-  // let tmp = schemaPart.type
-function findQueryFields(schemaPart: any): Record<string, any> {
-  let tmp = schemaPart.type
-  while (!tmp._fields) {
-    if (!tmp.type && !tmp.ofType) {
-      return {}
-    }
-
-    tmp = tmp.type || tmp.ofType
-  }
-
-  return tmp._fields
-}
-*/
-/*
-// naive implementation for converting singular to plural from
-function createPluralName(name: string): string {
-  if (name[name.length - 1] === 'y') {
-    return name.substr(0, name.length - 1) + 'ies'
-  }
-
-  return name + 's'
-}
-*/

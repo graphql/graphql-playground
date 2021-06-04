@@ -291,10 +291,9 @@ class GraphQLEditor extends React.PureComponent<Props & ReduxProps> {
               setWidth={this.setDocsWidth}
             />
           </SideTab>
-          <SideTab label="Query templates" activeColor="red" tabWidth="65px">
+          <SideTab label="Queries" activeColor="red" tabWidth="65px">
             <QueryTemplates
               schema={this.props.schema}
-              // setWidth={this.setDocsWidth}
             />
           </SideTab>
         </SideTabs>
