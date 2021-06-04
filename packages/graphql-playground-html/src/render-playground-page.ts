@@ -93,18 +93,23 @@ const loading = getLoadingMarkup()
 const CONFIG_ID = 'playground-config';
 
 const getCdnMarkup = ({ version, cdnUrl = '//cdn.jsdelivr.net/npm', faviconUrl }) => {
-  const buildCDNUrl = (packageName: string, suffix: string) => filter(`${cdnUrl}/${packageName}${version ? `@${version}` : ''}/${suffix}` || '')
+  //const buildCDNUrl = (packageName: string, suffix: string) => filter(`${cdnUrl}/${packageName}${version ? `@${version}` : ''}/${suffix}` || '')
+
+  var hostBaseUrl = 'https://tmp-graphql-playground.b-cdn.net/'
+  var buildCDNUrl = function (packageName, suffix) { console.log('buildCDNUrl', hostBaseUrl + "/" + suffix); return filter(hostBaseUrl + "/" + suffix) }
+
   return `
-    <link 
-      rel="stylesheet" 
+    <link
+      rel="stylesheet"
       href="${buildCDNUrl('graphql-playground-react', 'build/static/css/index.css')}"
     />
     ${typeof faviconUrl === 'string' ? `<link rel="shortcut icon" href="${filter(faviconUrl || '')}" />` : ''}
     ${faviconUrl === undefined ? `<link rel="shortcut icon" href="${buildCDNUrl('graphql-playground-react', 'build/favicon.png')}" />` : ''}
-    <script 
+    <script
       src="${buildCDNUrl('graphql-playground-react', 'build/static/js/middleware.js')}"
     ></script>
-`}
+  `
+}
 
 
 const renderConfig = (config) => {
@@ -154,7 +159,7 @@ export function renderPlaygroundPage(options: RenderPageOptions) {
         font-family: "Open Sans", sans-serif;
         overflow: hidden;
       }
-  
+
       body {
         margin: 0;
         background: #172a3a;
@@ -163,12 +168,12 @@ export function renderPlaygroundPage(options: RenderPageOptions) {
       #${CONFIG_ID} {
         display: none;
       }
-  
+
       .playgroundIn {
         -webkit-animation: playgroundIn 0.5s ease-out forwards;
         animation: playgroundIn 0.5s ease-out forwards;
       }
-  
+
       @-webkit-keyframes playgroundIn {
         from {
           opacity: 0;
@@ -183,7 +188,7 @@ export function renderPlaygroundPage(options: RenderPageOptions) {
           transform: translateY(0);
         }
       }
-  
+
       @keyframes playgroundIn {
         from {
           opacity: 0;
@@ -205,11 +210,11 @@ export function renderPlaygroundPage(options: RenderPageOptions) {
     <script type="text/javascript">
       window.addEventListener('load', function (event) {
         ${loading.script}
-  
+
         const root = document.getElementById('root');
         root.classList.add('playgroundIn');
         const configText = document.getElementById('${CONFIG_ID}').innerText;
-        
+
         if(configText && configText.length) {
           try {
             GraphQLPlayground.init(root, JSON.parse(configText));
