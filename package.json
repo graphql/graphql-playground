@@ -10,6 +10,10 @@
     "release-react": "bash scripts/release-react.sh",
     "prepublishOnly": "yarn build"
   },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/graphql/graphql-playground.git"
+  },
   "devDependencies": {
     "@hapi/hapi": "19.1.1",
     "@types/node": "12.12.34",
