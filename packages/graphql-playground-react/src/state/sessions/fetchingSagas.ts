@@ -96,7 +96,7 @@ export const defaultLinkCreator = (
 
 let linkCreator = defaultLinkCreator
 export let schemaFetcher: SchemaFetcher = new SchemaFetcher(linkCreator)
-;(window as any).schemaFetcher = schemaFetcher
+;(typeof window !== undefined && window as any).schemaFetcher = schemaFetcher
 
 export function setLinkCreator(newLinkCreator) {
   if (newLinkCreator) {
