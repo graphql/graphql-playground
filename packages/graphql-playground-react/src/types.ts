@@ -26,6 +26,7 @@ export interface ISettings {
   ['prettier.printWidth']: number
   ['prettier.tabWidth']: number
   ['prettier.useTabs']: boolean
+  ['tabs.multipleRows']: boolean
   ['request.credentials']: 'omit' | 'include' | 'same-origin'
   ['request.globalHeaders']: { [key: string]: string }
   ['schema.disableComments']: boolean

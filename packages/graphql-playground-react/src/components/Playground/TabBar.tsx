@@ -5,6 +5,7 @@ import Tab, { Props as TabProps } from './Tab'
 import { connect } from 'react-redux'
 import { createStructuredSelector } from 'reselect'
 import {
+  getMultipleRows,
   getSessionsArray,
   getSelectedSessionIdFromRoot,
 } from '../../state/sessions/selectors'
@@ -23,6 +24,7 @@ export interface Props {
 }
 
 export interface ReduxProps {
+  multipleRows: boolean
   sessions: Session[]
   selectedSessionId: string
   reorderTabs: (src: number, dest: number) => void
@@ -38,20 +40,21 @@ class TabBar extends React.PureComponent<Props & ReduxProps, State> {
   state = { sorting: false }
 
   render() {
-    const { sessions, isApp, selectedSessionId, onNewSession } = this.props
+    const { sessions, isApp, selectedSessionId, onNewSession, multipleRows } = this.props
     const { sorting } = this.state
     return (
+        <MultipleRows multiple_rows={multipleRows}>
       <SortableTabBar
         onSortStart={this.onSortStart}
         onSortEnd={this.onSortEnd}
         getHelperDimensions={this.getHelperDimensions}
-        axis="x"
-        lockAxis="x"
+        axis={multipleRows ? 'xy' : 'x'}
+        lockAxis={multipleRows ? 'xy' : 'x'}
         lockToContainerEdges={true}
         distance={10}
         transitionDuration={200}
       >
-        <Tabs isApp={isApp}>
+        <Tabs isApp={isApp} multiple_rows={multipleRows}>
           {sessions.map((session, ndx) => (
             <SortableTab
               key={session.id}
@@ -70,6 +73,7 @@ class TabBar extends React.PureComponent<Props & ReduxProps, State> {
           </Plus>
         </Tabs>
       </SortableTabBar>
+        </MultipleRows>
     )
   }
 
@@ -90,6 +94,7 @@ class TabBar extends React.PureComponent<Props & ReduxProps, State> {
 
 const mapStateToProps = createStructuredSelector({
   sessions: getSessionsArray,
+  multipleRows: getMultipleRows,
   selectedSessionId: getSelectedSessionIdFromRoot,
 })
 
@@ -115,11 +120,22 @@ interface TabsProps {
   isApp?: boolean
 }
 
+const MultipleRows = styled.div`
+  & > div {
+    height: ${(p) => (p.multiple_rows ? 'auto' : '57px')};
+  }
+`
+
 const Tabs = styled<TabsProps, 'div'>('div')`
   display: flex;
   align-items: center;
-  margin-top: 16px;
+  flex-wrap: ${(p) => (p.multiple_rows ? 'wrap' : 'nowrap')};
+  margin-top: ${(p) => (p.multiple_rows ? '8px' : '16px')};
   padding-left: ${p => (p.isApp ? '43px' : '0')};
+
+  & > div {
+    margin-top: ${(p) => (p.multiple_rows ? '8px' : 0)};
+  }
 `
 
 interface PlusProps {

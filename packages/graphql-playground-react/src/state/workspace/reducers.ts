@@ -50,6 +50,7 @@ export const defaultSettings: ISettings = {
   'prettier.printWidth': 80,
   'prettier.tabWidth': 2,
   'prettier.useTabs': false,
+  'tabs.multipleRows': false,
   'request.credentials': 'omit',
   'request.globalHeaders': {},
   'schema.disableComments': true,
