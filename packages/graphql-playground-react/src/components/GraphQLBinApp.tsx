@@ -2,8 +2,7 @@ import * as React from 'react'
 import { Provider, connect } from 'react-redux'
 import createStore from '../state/createStore'
 import 'isomorphic-fetch'
-import EndpointPopup from './EndpointPopup'
-import { styled, ThemeProvider, theme as styledTheme } from '../styled'
+import { styled } from '../styled'
 import { Store } from 'redux'
 import PlaygroundWrapper from './PlaygroundWrapper'
 import { injectState } from '../state/workspace/actions'
@@ -27,6 +26,7 @@ export interface Props {
   history?: any
   match?: any
   headers?: any
+  selectedEnvironment?: 'Development' | 'Production'
 }
 
 export interface State {
@@ -35,6 +35,7 @@ export interface State {
   shareUrl?: string
   loading: boolean
   headers: any
+  selectedEnvironment?: 'Development' | 'Production'
 }
 
 export interface ReduxProps {
@@ -50,6 +51,7 @@ class GraphQLBinApp extends React.Component<Props & ReduxProps, State> {
       subscriptionEndpoint: props.subscriptionEndpoint,
       loading: false,
       headers: props.headers || {},
+      selectedEnvironment: 'Development',
     }
   }
 
@@ -91,8 +93,8 @@ class GraphQLBinApp extends React.Component<Props & ReduxProps, State> {
           variables: { id: this.props.match.params.id },
         }),
       })
-        .then(res => res.json())
-        .then(res => {
+        .then((res) => res.json())
+        .then((res) => {
           if (loadingWrapper) {
             loadingWrapper.classList.add('fadeOut')
           }
@@ -122,35 +124,51 @@ class GraphQLBinApp extends React.Component<Props & ReduxProps, State> {
 
     return (
       <Wrapper>
-        {this.state.loading ? null : !this.state.endpoint ||
-        this.state.endpoint.length === 0 ? (
-          <ThemeProvider theme={styledTheme}>
-            <EndpointPopup
-              onRequestClose={this.handleChangeEndpoint}
-              endpoint={this.state.endpoint || ''}
-            />
-          </ThemeProvider>
-        ) : (
-          <PlaygroundWrapper
-            endpoint={endpoint}
-            headers={this.state.headers}
-            subscriptionEndpoint={subscriptionEndpoint}
-          />
-        )}
+        <div
+          style={{
+            color: 'white',
+            backgroundColor: '#09141c',
+          }}
+        >
+          <select
+            onChange={(data) => {
+              console.log(data.target.value)
+              if (
+                data.target.value == 'Development' ||
+                data.target.value == 'Production'
+              ) {
+                this.setState({ selectedEnvironment: data.target.value })
+              }
+            }}
+          >
+            <option
+              value="Development"
+              selected={this.state.selectedEnvironment == 'Development'}
+            >
+              Development
+            </option>
+            <option
+              value="Production"
+              selected={this.state.selectedEnvironment == 'Production'}
+            >
+              Production
+            </option>
+          </select>
+        </div>
+        <PlaygroundWrapper
+          headers={{
+            'x-gadget-environment': this.state.selectedEnvironment,
+            Authorization: 'Bearer gsk-pa23ZDaiHWiQq6xDeyLX7KWVRBGGE3p4', // placeholder while forking
+          }}
+          endpoint="https://hepda.ggt.pub:3000/api/graphql"
+          subscriptionEndpoint="https://hepda.ggt.pub:3000/api/graphql"
+        />
       </Wrapper>
     )
   }
-
-  private handleChangeEndpoint = endpoint => {
-    this.setState({ endpoint })
-    localStorage.setItem('last-endpoint', endpoint)
-  }
 }
 
-const ConnectedGraphQLBinApp = connect(
-  null,
-  { injectState },
-)(GraphQLBinApp)
+const ConnectedGraphQLBinApp = connect(null, { injectState })(GraphQLBinApp)
 
 // tslint:disable
 export default class GraphQLBinAppHOC extends React.Component<Props> {

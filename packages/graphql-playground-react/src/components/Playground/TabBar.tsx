@@ -93,15 +93,12 @@ const mapStateToProps = createStructuredSelector({
   selectedSessionId: getSelectedSessionIdFromRoot,
 })
 
-export default connect(
-  mapStateToProps,
-  { reorderTabs },
-)(TabBar)
+export default connect(mapStateToProps, { reorderTabs })(TabBar)
 
 const StyledTabBar = styled.div`
   color: white;
   height: 57px;
-  background: ${p => p.theme.editorColours.background};
+  background: ${(p) => p.theme.editorColours.background};
   overflow: hidden;
   -webkit-app-region: drag;
   &:hover {
@@ -119,7 +116,7 @@ const Tabs = styled<TabsProps, 'div'>('div')`
   display: flex;
   align-items: center;
   margin-top: 16px;
-  padding-left: ${p => (p.isApp ? '43px' : '0')};
+  padding-left: ${(p) => (p.isApp ? '43px' : '0')};
 `
 
 interface PlusProps {
@@ -130,18 +127,18 @@ const Plus = styled<PlusProps, 'div'>('div')`
   -webkit-app-region: no-drag;
   box-sizing: border-box;
   display: flex;
-  visibility: ${p => (p.sorting ? 'hidden' : 'visible')}
+  visibility: ${(p) => (p.sorting ? 'hidden' : 'visible')}
   height: 43px;
   width: 43px;
   border-radius: 2px;
-  border-bottom: 2px solid ${p => p.theme.editorColours.navigationBar};
-  background: ${p => p.theme.editorColours.tabInactive};
+  border-bottom: 2px solid ${(p) => p.theme.editorColours.navigationBar};
+  background: ${(p) => p.theme.editorColours.tabInactive};
   justify-content: center;
   align-items: center;
   svg {
-    stroke: ${p => p.theme.editorColours.icon};
+    stroke: ${(p) => p.theme.editorColours.icon};
   }
   &:hover {
-    background: ${p => p.theme.editorColours.tab};
+    background: ${(p) => p.theme.editorColours.tab};
   }
 `

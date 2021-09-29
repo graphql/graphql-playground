@@ -10,6 +10,10 @@ import { GraphQLConfig } from '../graphqlConfig'
 import FileEditor from './FileEditor'
 import { ApolloLink } from 'apollo-link'
 
+import { Provider as StoreProvider } from 'react-redux'
+
+export { StoreProvider }
+
 import * as app from '../../package.json'
 import { connect } from 'react-redux'
 import {
@@ -276,7 +280,7 @@ export class Playground extends React.PureComponent<Props & ReduxProps, State> {
           props.settings['tracing.tracingSupported'],
       }
       const schema = await schemaFetcher.fetch(data)
-      schemaFetcher.subscribe(data, newSchema => {
+      schemaFetcher.subscribe(data, (newSchema) => {
         if (
           data.endpoint === this.props.endpoint ||
           data.endpoint === this.props.sessionEndpoint
@@ -419,24 +423,21 @@ const mapStateToProps = createStructuredSelector({
   sessionEndpoint: getEndpoint,
 })
 
-export default connect(
-  mapStateToProps,
-  {
-    selectTabIndex,
-    selectNextTab,
-    selectPrevTab,
-    newSession,
-    closeSelectedTab,
-    initState,
-    saveSettings,
-    saveConfig,
-    setTracingSupported,
-    injectHeaders,
-    setConfigString,
-    schemaFetchingError,
-    schemaFetchingSuccess,
-  },
-)(Playground)
+export default connect(mapStateToProps, {
+  selectTabIndex,
+  selectNextTab,
+  selectPrevTab,
+  newSession,
+  closeSelectedTab,
+  initState,
+  saveSettings,
+  saveConfig,
+  setTracingSupported,
+  injectHeaders,
+  setConfigString,
+  schemaFetchingError,
+  schemaFetchingSuccess,
+})(Playground)
 
 const PlaygroundContainer = styled.div`
   flex: 1;
@@ -472,7 +473,7 @@ const GraphiqlsContainer = styled.div`
 
 const GraphiqlWrapper = styled.div`
   width: 100%;
-  height: 100%;
+  height: calc(100% - 20px);
   position: relative;
   overflow: hidden;
   visibility: hidden;
