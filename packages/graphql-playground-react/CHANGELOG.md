@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.7.28](https://github.com/graphcool/graphql-playground/compare/graphql-playground-react@1.7.27...graphql-playground-react@1.7.28) (2021-11-04)
+
+
+### Bug Fixes
+
+* Adjust colours of CodeMirror "Find" dialog on "light" background. ([#1051](https://github.com/graphcool/graphql-playground/issues/1051)) ([615b1ae](https://github.com/graphcool/graphql-playground/commit/615b1ae9313b40d7db375b7fc72c399692b46383))
+* electron build  ([#1279](https://github.com/graphcool/graphql-playground/issues/1279)) ([9f5f340](https://github.com/graphcool/graphql-playground/commit/9f5f340afcf002e6862728380143dc5c89371a79))
+
+
+
+
+
 ## [1.7.27](https://github.com/graphcool/graphql-playground/compare/graphql-playground-react@1.7.26...graphql-playground-react@1.7.27) (2020-10-20)
 
 

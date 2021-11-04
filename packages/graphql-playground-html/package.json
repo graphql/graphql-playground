@@ -1,6 +1,6 @@
 {
   "name": "graphql-playground-html",
-  "version": "1.6.29",
+  "version": "1.6.30",
   "homepage": "https://github.com/graphcool/graphql-playground/tree/main/packages/graphql-playground-html",
   "description": "GraphQL IDE for better development workflows (GraphQL Subscriptions, interactive docs & collaboration).",
   "contributors": [
