@@ -5,7 +5,7 @@
   "useWorkspaces": true,
   "command": {
     "publish": {
-      "allowBranch": ["main"],
+      "allowBranch": ["main", "x-main"],
       "preDistTag": "next",
       "distTag": "latest",
       "conventionalCommits": true
