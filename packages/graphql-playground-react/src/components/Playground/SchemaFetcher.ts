@@ -2,9 +2,12 @@ import {
   GraphQLSchema,
   getIntrospectionQuery,
   buildClientSchema,
+  validateSchema,
+  IntrospectionQuery,
 } from 'graphql'
 import { NoSchemaError } from './util/NoSchemaError'
-import { ApolloLink, execute } from 'apollo-link'
+import { InvalidSchemaError } from './util/InvalidSchemaError'
+import { ApolloLink, execute, toPromise } from 'apollo-link'
 import { Map, set } from 'immutable'
 import { makeOperation } from './util/makeOperation'
 import { parseHeaders } from './util/parseHeaders'
@@ -92,75 +95,76 @@ export class SchemaFetcher {
   hash(session: SchemaFetchProps) {
     return `${session.endpoint}~${session.headers || ''}`
   }
-  private getSchema(data: any) {
+  private getSchema(data: IntrospectionQuery) {
     const schemaString = JSON.stringify(data)
     const cachedSchema = this.schemaInstanceCache.get(schemaString)
     if (cachedSchema) {
       return cachedSchema
     }
 
-    const schema = buildClientSchema(data as any)
+    const schema = buildClientSchema(data)
 
+    const validationErrors = validateSchema(schema)
+    if (validationErrors && validationErrors.length > 0) {
+      throw new InvalidSchemaError(validationErrors)
+    }
     this.schemaInstanceCache.set(schemaString, schema)
 
     return schema
   }
-  private fetchSchema(
+  private async fetchSchema(
     session: SchemaFetchProps,
   ): Promise<{ schema: GraphQLSchema; tracingSupported: boolean } | null> {
     const hash = this.hash(session)
-    const { endpoint } = session
-    const headersTracing = {
-      ...parseHeaders(session.headers),
-      'X-Apollo-Tracing': '1',
+    try {
+      const { endpoint } = session
+      const headersTracing = {
+        ...parseHeaders(session.headers),
+        'X-Apollo-Tracing': '1',
+      }
+      const headersNoTracing = {
+        ...parseHeaders(session.headers),
+      }
+      const headers = session.useTracingHeader
+        ? headersTracing
+        : headersNoTracing
+
+      const options = set(session, 'headers', headers) as any
+
+      const { link } = this.linkGetter(options)
+
+      const operation = makeOperation({ query: getIntrospectionQuery() })
+
+      const schemaData = await toPromise(execute(link, operation))
+      if (
+        schemaData &&
+        ((schemaData.errors && schemaData.errors.length > 0) ||
+          !schemaData.data)
+      ) {
+        throw new Error(JSON.stringify(schemaData, null, 2))
+      }
+
+      if (!schemaData) {
+        throw new NoSchemaError(endpoint)
+      }
+
+      const schema = this.getSchema(schemaData.data as IntrospectionQuery)
+
+      const tracingSupported =
+        (schemaData.extensions && Boolean(schemaData.extensions.tracing)) ||
+        false
+      const result: TracingSchemaTuple = {
+        schema,
+        tracingSupported,
+      }
+      this.sessionCache.set(this.hash(session), result)
+      const subscription = this.subscriptions.get(hash)
+      if (subscription) {
+        subscription(result.schema)
+      }
+      return result
+    } finally {
+      this.fetching.remove(hash)
     }
-    const headersNoTracing = {
-      ...parseHeaders(session.headers),
-    }
-    const headers = session.useTracingHeader ? headersTracing : headersNoTracing
-
-    const options = set(session, 'headers', headers) as any
-
-    const { link } = this.linkGetter(options)
-
-    const operation = makeOperation({ query: getIntrospectionQuery() })
-
-    return new Promise((resolve, reject) => {
-      execute(link, operation).subscribe({
-        next: schemaData => {
-          if (
-            schemaData &&
-            ((schemaData.errors && schemaData.errors.length > 0) ||
-              !schemaData.data)
-          ) {
-            throw new Error(JSON.stringify(schemaData, null, 2))
-          }
-
-          if (!schemaData) {
-            throw new NoSchemaError(endpoint)
-          }
-
-          const schema = this.getSchema(schemaData.data as any)
-          const tracingSupported =
-            (schemaData.extensions && Boolean(schemaData.extensions.tracing)) ||
-            false
-          const result: TracingSchemaTuple = {
-            schema,
-            tracingSupported,
-          }
-          this.sessionCache.set(this.hash(session), result)
-          resolve(result)
-          this.fetching = this.fetching.remove(hash)
-          const subscription = this.subscriptions.get(hash)
-          if (subscription) {
-            subscription(result.schema)
-          }
-        },
-        error: err => {
-          reject(err)
-          this.fetching = this.fetching.remove(this.hash(session))
-        },
-      })
-    })
   }
 }

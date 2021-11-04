@@ -27,7 +27,7 @@ import {
 } from '../state/sessions/actions'
 import { setConfigString } from '../state/general/actions'
 import { initState } from '../state/workspace/actions'
-import { GraphQLSchema } from 'graphql'
+import { GraphQLSchema, validateSchema } from 'graphql'
 import { createStructuredSelector } from 'reselect'
 import {
   getIsConfigTab,
@@ -51,6 +51,7 @@ import { getSettings, getSettingsString } from '../state/workspace/reducers'
 import { Backoff } from './Playground/util/fibonacci-backoff'
 import { debounce } from 'lodash'
 import { cachedPrintSchema } from './util'
+import { InvalidSchemaError } from './Playground/util/InvalidSchemaError'
 
 export interface Response {
   resultID: string
@@ -182,6 +183,13 @@ export class Playground extends React.PureComponent<Props & ReduxProps, State> {
   constructor(props: Props & ReduxProps) {
     super(props)
 
+    if (props.schema) {
+      const validationErrors = validateSchema(props.schema)
+      if (validationErrors && validationErrors.length > 0) {
+        throw new InvalidSchemaError(validationErrors);
+      }  
+    }
+
     this.state = {
       schema: props.schema,
     }
@@ -247,6 +255,10 @@ export class Playground extends React.PureComponent<Props & ReduxProps, State> {
       this.props.setConfigString(nextProps.configString)
     }
     if (nextProps.schema !== this.props.schema) {
+      const validationErrors = validateSchema(nextProps.schema)
+      if (validationErrors && validationErrors.length > 0) {
+        throw new InvalidSchemaError(validationErrors);
+      }  
       this.setState({ schema: nextProps.schema })
     }
   }

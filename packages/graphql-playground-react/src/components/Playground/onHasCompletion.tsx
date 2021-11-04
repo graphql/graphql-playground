@@ -6,7 +6,10 @@
  *  LICENSE file in the root directory of this source tree.
  */
 
-import * as marked from 'marked'
+const escapeHTML = require('escape-html');
+import * as MD from 'markdown-it';
+
+const md = new MD();
 
 /**
  * Render a custom UI for CodeMirror's hint which includes additional info
@@ -101,7 +104,7 @@ export default function onHasCompletion(cm, data, onHintInformationRender) {
 
     // Now that the UI has been set up, add info to information.
     const description = ctx.description
-      ? marked(ctx.description, { sanitize: true })
+      ? md.render(ctx.description)
       : ''
     const type =
       ctx.type && ctx.type !== 'undefined'
@@ -117,7 +120,7 @@ export default function onHasCompletion(cm, data, onHintInformationRender) {
 
     if (ctx.isDeprecated) {
       const reason = ctx.deprecationReason
-        ? marked(ctx.deprecationReason, { sanitize: true })
+        ? md.render(ctx.deprecationReason)
         : ''
       deprecation.innerHTML =
         '<span class="deprecation-label">Deprecated</span>' + reason
@@ -134,5 +137,5 @@ export default function onHasCompletion(cm, data, onHintInformationRender) {
 }
 
 function renderType(type) {
-  return `<a class="typeName">${type}</a>`
+  return `<a class="typeName">${escapeHTML(type.toString())}</a>`
 }
