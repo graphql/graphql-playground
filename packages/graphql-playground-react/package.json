@@ -112,11 +112,11 @@
   },
   "dependencies": {
     "@types/lru-cache": "^4.1.1",
-    "apollo-link": "^1.2.13",
-    "apollo-link-http": "^1.5.16",
-    "apollo-link-ws": "^1.0.19",
+    "apollo-link": "^1.2.14",
+    "apollo-link-http": "^1.5.17",
+    "apollo-link-ws": "^1.0.20",
     "calculate-size": "^1.1.1",
-    "codemirror": "^5.58.1",
+    "codemirror": "^5.63.3",
     "codemirror-graphql": "^1.1.0",
     "copy-to-clipboard": "^3.0.8",
     "cryptiles": "4.1.2",
@@ -139,9 +139,9 @@
     "react": "17.0.2",
     "react-addons-shallow-compare": "^15.6.2",
     "react-codemirror": "^1.0.0",
-    "react-copy-to-clipboard": "^5.0.1",
+    "react-copy-to-clipboard": "^5.0.4",
     "react-display-name": "^0.2.3",
-    "react-dom": "^16.13.1",
+    "react-dom": "^17.0.2",
     "react-helmet": "^5.2.0",
     "react-input-autosize": "^2.2.1",
     "react-modal": "^3.1.11",
@@ -202,6 +202,5 @@
       "js"
     ],
     "testRegex": "(/__tests__/.*|\\.(test|spec))\\.(ts|tsx|js)$"
-  },
-  "gitHead": "53d233f9deb9dcc86f99e41268ff92b6367e0713"
+  }
 }

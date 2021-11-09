@@ -40,6 +40,5 @@
   },
   "dependencies": {
     "graphql-playground-html": "^1.6.29"
-  },
-  "gitHead": "53d233f9deb9dcc86f99e41268ff92b6367e0713"
+  }
 }
