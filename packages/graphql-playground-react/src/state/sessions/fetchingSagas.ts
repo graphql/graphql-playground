@@ -1,8 +1,8 @@
 import { ApolloLink, execute } from 'apollo-link'
 import { parseHeaders } from '../../components/Playground/util/parseHeaders'
-import { SubscriptionClient } from 'subscriptions-transport-ws'
+import { createClient as createSubscriptionClient, Client as SubscriptionClient } from 'graphql-ws'
 import { HttpLink } from 'apollo-link-http'
-import { WebSocketLink } from 'apollo-link-ws'
+import { WebSocketLink } from './WebSocketLink'
 import { isSubscription } from '../../components/Playground/util/hasSubscription'
 import {
   takeLatest,
@@ -77,10 +77,11 @@ export const defaultLinkCreator = (
     return { link: httpLink }
   }
 
-  const subscriptionClient = new SubscriptionClient(subscriptionEndpoint, {
-    timeout: 20000,
+  const subscriptionClient = createSubscriptionClient({
+    retryTimeout: 20000,
     lazy: true,
     connectionParams,
+    url: session.endpoint.replace('http', 'ws'),
   })
 
   const webSocketLink = new WebSocketLink(subscriptionClient)
@@ -143,7 +144,7 @@ function* runQuerySaga(action) {
   const channel = eventChannel(emitter => {
     let closed = false
     if (subscriptionClient && operationIsSubscription) {
-      subscriptionClient.onDisconnected(() => {
+      subscriptionClient.on('closed', () => {
         closed = true
         emitter({
           error: new Error(
