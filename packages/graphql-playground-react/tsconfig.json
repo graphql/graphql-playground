@@ -29,6 +29,7 @@
     "lib",
     "dist",
     "examples",
-    "build"
+    "build",
+    "../../node_modules"
   ]
 }
