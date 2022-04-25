@@ -124,6 +124,7 @@
     "escape-html": "^1.0.3",
     "graphiql": "^0.17.5",
     "graphql": "^15.3.0",
+    "graphql-ws": "^4.5.0",
     "immutable": "^4.0.0-rc.9",
     "isomorphic-fetch": "^2.2.1",
     "js-yaml": "^3.10.0",
