@@ -127,6 +127,17 @@ export const getUseTabs = createSelector([getSettings], settings => {
   return false
 })
 
+export const getMultipleRows = createSelector([getSettings], (settings) => {
+  try {
+    const json = JSON.parse(settings)
+    return json['tabs.multipleRows'] || false
+  } catch (e) {
+    //
+  }
+
+  return false
+})
+
 export const getHeadersCount = createSelector([getHeaders], headers => {
   try {
     const json = JSON.parse(headers)
