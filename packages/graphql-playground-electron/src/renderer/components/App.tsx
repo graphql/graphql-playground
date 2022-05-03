@@ -594,6 +594,11 @@ class App extends React.Component<ReduxProps, State> {
           body .root.noConfig .tabs {
             padding-left: 80px;
           }
+          .playground {
+            height: 100vh;
+            padding: 10px 0;
+            box-sizing: border-box;
+          }
         `}</style>
         <style jsx={true}>{`
           .root {
