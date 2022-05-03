@@ -346,7 +346,7 @@ class PlaygroundWrapper extends React.Component<
 
     const { theme } = this.props
     return (
-      <div>
+      <Root>
         {title}
         <ThemeProvider
           theme={{
@@ -405,7 +405,7 @@ class PlaygroundWrapper extends React.Component<
             />
           </App>
         </ThemeProvider>
-      </div>
+      </Root>
     )
   }
 
@@ -566,7 +566,12 @@ const appearIn = keyframes`
 const App = styled.div`
   display: flex;
   width: 100%;
+  height: 100%;
   opacity: 0;
   transform: translateY(10px);
   animation: ${appearIn} 0.5s ease-out forwards 0.2s;
+`
+
+const Root = styled.div`
+  height: 100%;
 `
