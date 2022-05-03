@@ -1,10 +1,10 @@
 import * as lambda from 'aws-lambda'
 import {
-  MiddlewareOptions,
+  RenderPageOptions,
   renderPlaygroundPage,
 } from 'graphql-playground-html'
 
-export default function lambdaPlayground(options: MiddlewareOptions) {
+export default function lambdaPlayground(options: RenderPageOptions) {
   return async (
     _event,
     _lambdaContext: lambda.Context,
