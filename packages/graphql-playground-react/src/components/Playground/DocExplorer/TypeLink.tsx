@@ -163,14 +163,6 @@ class TypeLink extends React.Component<
           </span>
         )}
         <span className="type-name">{renderType(type.type || type)}</span>
-        {type.defaultValue !== undefined ? (
-          <DefaultValue>
-            {' '}
-            = <span>{`${JSON.stringify(type.defaultValue, null, 2)}`}</span>
-          </DefaultValue>
-        ) : (
-          undefined
-        )}
         {clickable && (
           <IconBox>
             <Triangle />
@@ -282,11 +274,4 @@ const IconBox = styled.div`
   right: 10px;
   top: 50%;
   transform: translateY(-50%);
-`
-
-const DefaultValue = styled.span`
-  color: ${p => p.theme.colours.black30};
-  span {
-    color: #1f61a9;
-  }
 `
