@@ -119,7 +119,7 @@
     "styled-jsx": "2.2.6",
     "styled-jsx-postcss": "git+https://github.com/timsuchanek/styled-jsx-postcss#build3",
     "sweetalert2": "^7.21.0",
-    "validator": "^9.2.0"
+    "validator": "^13.7.0"
   },
   "devDependencies": {
     "@babel/cli": "^7.0.0",
