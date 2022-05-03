@@ -9,12 +9,14 @@ const sagaMiddleware = createSagaMiddleware()
 const functions = [applyMiddleware(sagaMiddleware)]
 
 const composeEnhancers =
-  (window as any).__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose
+  (typeof window !== undefined && window as any).__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose
 
 const initialState = deserializeState()
 
 export default (): Store<any> => {
-  const store = createStore(
+  let store = null
+  if (typeof window !== undefined && composeEnhancers) {
+  store = createStore(
     rootReducer,
     initialState,
     composeEnhancers.apply(null, functions),
@@ -27,5 +29,6 @@ export default (): Store<any> => {
   }
 
   sagaMiddleware.run(rootSaga)
+  }
   return store
 }

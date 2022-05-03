@@ -7,9 +7,6 @@ import { styled, css } from '../styled'
 import { createClient } from 'graphql-ws';
 
 
-// @ts-ignore
-import imageSource from '../assets/logo.png'
-
 export interface Props {
   onRequestClose: (endpoint: string) => void
   endpoint: string
@@ -95,7 +92,7 @@ export default class EndpointPopup extends React.Component<Props, State> {
         <Wrapper>
           <LogoWrapper>
             <Logo>
-              <img src={imageSource} alt="" />
+              <img src="../assets/logo.png" alt="" />
               <Heading>GraphQL Playground</Heading>
             </Logo>
           </LogoWrapper>
