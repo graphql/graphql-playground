@@ -90,7 +90,9 @@
     "object-assign": "4.1.1",
     "promise": "8.0.1",
     "raw-loader": "4.0.0",
+    "react": "16.13.1",
     "react-dev-utils": "10.1.0",
+    "react-dom": "^16.13.1",
     "recursive-readdir": "2.2.2",
     "rimraf": "3.0.2",
     "source-map-loader": "0.2.4",
@@ -109,6 +111,10 @@
     "webpack-dev-server": "3.11.0",
     "webpack-manifest-plugin": "2.2.0",
     "why-did-you-update": "0.1.1"
+  },
+  "peerDependencies": {
+    "react": "16.13.1",
+    "react-dom": "^16.13.1"
   },
   "dependencies": {
     "@types/lru-cache": "^4.1.1",
@@ -137,12 +143,10 @@
     "prettier": "2.0.2",
     "prop-types": "^15.7.2",
     "query-string": "5",
-    "react": "16.13.1",
     "react-addons-shallow-compare": "^15.6.2",
     "react-codemirror": "^1.0.0",
     "react-copy-to-clipboard": "^5.0.1",
     "react-display-name": "^0.2.3",
-    "react-dom": "^16.13.1",
     "react-helmet": "^5.2.0",
     "react-input-autosize": "^2.2.1",
     "react-modal": "^3.1.11",
