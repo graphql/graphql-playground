@@ -42,10 +42,6 @@
       "maxSize": "674 kB"
     }
   ],
-  "peerDependencies": {
-    "react": "16.13.1",
-    "react-dom": "^16.13.1"
-  },
   "devDependencies": {
     "@babel/cli": "^7.0.0",
     "@babel/core": "^7.0.0",
@@ -115,6 +111,10 @@
     "webpack-dev-server": "3.11.0",
     "webpack-manifest-plugin": "2.2.0",
     "why-did-you-update": "0.1.1"
+  },
+  "peerDependencies": {
+    "react": "16.13.1",
+    "react-dom": "^16.13.1"
   },
   "dependencies": {
     "@types/lru-cache": "^4.1.1",
