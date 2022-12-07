@@ -3,7 +3,7 @@
 [![npm version](https://badge.fury.io/js/graphql-playground-react.svg)](https://badge.fury.io/js/graphql-playground-react)
 [![graphql](https://circleci.com/gh/graphql/graphql-playground.svg?style=shield)](https://circleci.com/gh/graphql/graphql-playground)
 
-> **SECURITY WARNING:** both `graphql-playground-html` and [all four (4) of it's middleware dependents](#impacted-packages) until `graphql-playground-html@1.6.22` were subject to an  **XSS Reflection attack vulnerability only to unsanitized user input strings** to the functions therein. This was resolved in `graphql-playground-html@^1.6.22`. [More Information](#security-details) [CVE-2020-4038](https://github.com/graphql/graphql-playground/security/advisories/GHSA-4852-vrh7-28rf)
+> **SECURITY WARNING:** both `graphql-playground-html` and [all four (4) of its middleware dependents](#impacted-packages) until `graphql-playground-html@1.6.22` were subject to an  **XSS Reflection attack vulnerability only to unsanitized user input strings** to the functions therein. This was resolved in `graphql-playground-html@^1.6.22`. [More Information](#security-details) [CVE-2020-4038](https://github.com/graphql/graphql-playground/security/advisories/GHSA-4852-vrh7-28rf)
 
 
 **Future of this repository**: See [this issue](https://github.com/graphql/graphql-playground/issues/1366#issuecomment-1062088978) for details.
