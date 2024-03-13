@@ -38,7 +38,7 @@ $ brew install --cask graphql-playground
 -`koaPlayground()`
 -`expressPlayground()`
 -`koaPlayground()`
--`lambdaPlayground()
+-`lambdaPlayground()`
 
 >  If you used static values, such as `graphql-playground-electron` does in [it's webpack config](https://github.com/prisma-labs/graphql-playground/blob/main/packages/graphql-playground-electron/webpack.config.build.js#L16), as well as the most common middleware implementations out there, they were not vulnerable to the attack.
 
