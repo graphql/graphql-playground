@@ -1,3 +1,8 @@
+# 2026-04: This repository is now archived and future GraphQL IDE developments will happen in [GraphiQL](https://github.com/graphql/graphiql/).
+ 
+
+--- 
+
 <p align="center"><img src="https://imgur.com/5fzMbyV.png" width="269"></p>
 
 [![npm version](https://badge.fury.io/js/graphql-playground-react.svg)](https://badge.fury.io/js/graphql-playground-react)
