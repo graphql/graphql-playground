@@ -12,7 +12,7 @@
 
 GraphQL IDE for better development workflows (GraphQL Subscriptions, interactive docs & collaboration). <br />
 
-[![](https://i.imgur.com/AE5W6OW.png)](https://graphqlbin.com/v2/6RQ6TM)
+![](https://i.imgur.com/AE5W6OW.png)
 
 ## Installation
 
