@@ -14,7 +14,7 @@
     "@hapi/hapi": "19.1.1",
     "@types/node": "12.12.34",
     "aws-lambda": "1.0.5",
-    "express": "4.17.1",
+    "express": "4.17.3",
     "koa": "2.11.0",
     "lerna": "^3.22.0",
     "rimraf": "3.0.2"
