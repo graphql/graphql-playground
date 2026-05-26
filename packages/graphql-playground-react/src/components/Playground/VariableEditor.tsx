@@ -132,6 +132,11 @@ class VariableEditor extends React.PureComponent<Props & ReduxProps> {
             this.props.prettifyQuery()
           }
         },
+        'Shift-Cmd-P': () => {
+          if (this.props.prettifyQuery) {
+            this.props.prettifyQuery()
+          }
+        },
 
         // Persistent search box in Query Editor
         'Cmd-F': 'findPersistent',
