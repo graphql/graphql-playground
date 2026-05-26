@@ -3,6 +3,7 @@ import { filterXSS } from 'xss';
 import getLoadingMarkup from './get-loading-markup'
 
 export interface MiddlewareOptions {
+  shareEnabled?: boolean;
   endpoint?: string
   subscriptionEndpoint?: string
   workspaceName?: string
@@ -95,13 +96,13 @@ const CONFIG_ID = 'playground-config';
 const getCdnMarkup = ({ version, cdnUrl = '//cdn.jsdelivr.net/npm', faviconUrl }) => {
   const buildCDNUrl = (packageName: string, suffix: string) => filter(`${cdnUrl}/${packageName}${version ? `@${version}` : ''}/${suffix}` || '')
   return `
-    <link 
-      rel="stylesheet" 
+    <link
+      rel="stylesheet"
       href="${buildCDNUrl('graphql-playground-react', 'build/static/css/index.css')}"
     />
     ${typeof faviconUrl === 'string' ? `<link rel="shortcut icon" href="${filter(faviconUrl || '')}" />` : ''}
     ${faviconUrl === undefined ? `<link rel="shortcut icon" href="${buildCDNUrl('graphql-playground-react', 'build/favicon.png')}" />` : ''}
-    <script 
+    <script
       src="${buildCDNUrl('graphql-playground-react', 'build/static/js/middleware.js')}"
     ></script>
 `}
